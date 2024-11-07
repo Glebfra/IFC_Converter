@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace IFC_Converter.Start.API;
@@ -6,53 +7,44 @@ namespace IFC_Converter.Start.API;
 public class StartAutoServer : IDisposable
 {
     private const string PROG_ID = "CTAPT.AutoServer";
-    
+
     private readonly object _autoServer;
-    
+
     public StartAutoServer()
     {
-        Type type = Type.GetTypeFromProgID(PROG_ID);
-        _autoServer = Activator.CreateInstance(type);
+        Type? type = Type.GetTypeFromProgID(PROG_ID);
+        if (type != null)
+        {
+            _autoServer = Activator.CreateInstance(type);
+        }
+        else
+        {
+            throw new Exception($"Cannot find the prog_id: {PROG_ID}");
+        }
     }
 
-    public string GetFullName()
+    public StartDocument LoadStartDocument(int mode, string filepath)
     {
-        object fullName = _autoServer.GetType().InvokeMember(
-            "FullName", BindingFlags.InvokeMethod, null, _autoServer, null
-        );
-        return (string)fullName;
-    }
-
-    public string GetLastError()
-    {
-        object lastError = _autoServer.GetType().InvokeMember(
-            "LastError", BindingFlags.InvokeMethod, null, _autoServer, null
-        );
-        return (string)lastError;
-    }
-
-    public StartDocument LoadFile(string fileName)
-    {
-        object document = _autoServer.GetType().InvokeMember(
-            "LoadFile", BindingFlags.InvokeMethod, null, _autoServer, new object[] { fileName }
+        object? document = _autoServer.GetType().InvokeMember(
+            "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, _autoServer, new object[] { mode, filepath, 0 }
         );
         return new StartDocument(document);
     }
 
-    public BaseRootDataArray GetDataArray()
+    public string? GetFullName()
     {
-        object dataArray = _autoServer.GetType().InvokeMember(
-            "GetDataArray", BindingFlags.InvokeMethod, null, _autoServer, null
+        object? fullName = _autoServer.GetType().InvokeMember(
+            "FullName", BindingFlags.InvokeMethod, null, _autoServer, null
         );
-        return new BaseRootDataArray(dataArray);
+        return (string?)fullName;
     }
 
-    public object GetDataArrayDispatch()
+    public StartBaseRootDataArray GetDataArrayDispatch()
     {
-        object dataArray = _autoServer.GetType().InvokeMember(
+        object? dataArray = _autoServer.GetType().InvokeMember(
             "GetDataArrayDispatch", BindingFlags.InvokeMethod, null, _autoServer, null
         );
-        return dataArray;
+        return new StartBaseRootDataArray(dataArray);
     }
 
     public void Dispose()
