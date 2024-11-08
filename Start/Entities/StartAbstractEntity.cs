@@ -6,6 +6,7 @@ public abstract class StartAbstractEntity : IDisposable
 {
     public StartBaseRoot entity { get; }
     public StartElementType elementType { get; protected set; }
+    public abstract Dictionary<string, string> GetData();
 
     public StartAbstractEntity(StartBaseRoot entity)
     {

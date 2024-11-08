@@ -12,13 +12,13 @@ public class StartBaseRoot : IDisposable
         _startBaseRoot = startBaseRoot;
     }
 
-    public long GetDataInt(StartBaseRootFunctionKey key)
+    public int GetDataInt(StartBaseRootFunctionKey key)
     {
         object[] args = { key };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetDataInt", BindingFlags.InvokeMethod, null, _startBaseRoot, args
         );
-        return (long)value;
+        return (int)value;
     }
 
     public double GetDataReal(StartBaseRootFunctionKey key)
