@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using IFC_Converter.Start.Entities;
 
 namespace IFC_Converter.Start.API;
 

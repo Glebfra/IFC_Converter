@@ -1,4 +1,5 @@
 ﻿using IFC_Converter.Start.API;
+using IFC_Converter.Start.Entities;
 
 namespace IFC_Converter;
 
@@ -6,37 +7,24 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        string fileName = "D:\\testDemoApi.ctp";
-        
-        using (StartAutoServer startAutoServer = new StartAutoServer())
+        string filePath = "D:\\testDemoApi.ctp";
+
+        using StartAutoServer startAutoServer = new StartAutoServer();
+        using StartDocument document = startAutoServer.LoadStartDocument(0x2, filePath);
+        using StartBaseRootDataArray baseRootDataArray = document.GetDataArrayDispatch();
+
+        int numberOfElements = baseRootDataArray.GetNumberElements(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
+        Console.WriteLine($"Number of elements is: {numberOfElements}");
+
+        for (int i = 0; i < numberOfElements; i++)
         {
-            StartDocument document = startAutoServer.LoadFile(fileName);
-            Console.WriteLine(startAutoServer.GetFullName());
+            StartPipeEntity pipeEntity = new StartPipeEntity(baseRootDataArray.GetElementDispatch(i, StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT));
+            Dictionary<string, string> data = pipeEntity.GetData();
+            foreach (var key in data.Keys)
+            {
+                Console.WriteLine($"{key}: {data[key]}");
+            }
         }
-        
-        /*
-        string fileName = "D:\\testDemoApi.ctp";
-        using (var api = StartApiWrapper.Create(fileName))
-        {
-            //Creating 2 nodes
-            object node1 = api.AddElement(1);
-            int interanlId1 = api.GetNumber(node1);
-            api.SetName(node1, 1);
-            object node2 = api.AddElement(1);
-            int interanlId2 = api.GetNumber(node2);
-            api.SetName(node2, 2);
-
-            // Adding the pipe object between 2 nodes
-            object pipe = api.AddElement(0);
-            api.SetBeginNode(pipe, interanlId1);
-            api.SetEndNode(pipe, interanlId2);
-            api.SetDataReal(pipe, 128, 4);
-            api.SetDataReal(pipe, 129, 0);
-            api.SetDataReal(pipe, 130, 0);
-            api.SetDataReal(pipe, 4, 0.108);
-
-            api.Finish();
-        }*/
 
         /*XbimEditorCredentials editor = new()
         {

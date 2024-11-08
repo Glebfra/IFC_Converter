@@ -23,4 +23,14 @@ public class StartNodeEntity : StartAbstractEntity
     {
         return entity.GetDataChar(StartBaseRootFunctionKey.NODE_DESCRIPTION);
     }
+
+    public override Dictionary<string, string> GetData()
+    {
+        Dictionary<string, string> dictionary = new()
+        {
+            { "Name", GetName() },
+            { "Description", GetDescription() }
+        };
+        return dictionary;
+    }
 }
