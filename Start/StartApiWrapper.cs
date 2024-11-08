@@ -40,7 +40,7 @@ public class StartApiWrapper : IDisposable
     private static string GetFullName()
     {
         InitAutoServer();
-        object fullName = _autoServer.GetType().InvokeMember("FullName", BindingFlags.InvokeMethod, null, _autoServer, 
+        object fullName = _autoServer.GetType().InvokeMember("FullName", BindingFlags.InvokeMethod, null, _autoServer,
             new object[] { });
         return (string)fullName;
     }
@@ -54,13 +54,13 @@ public class StartApiWrapper : IDisposable
 
     private static void InitDocument(int mode, string fileName)
     {
-        _document = _autoServer.GetType().InvokeMember("LoadCTAPTDocument", BindingFlags.InvokeMethod, 
+        _document = _autoServer.GetType().InvokeMember("LoadCTAPTDocument", BindingFlags.InvokeMethod,
             null, _autoServer, new object[] { mode, fileName, 0 });
     }
 
     private static void InitDataArray()
     {
-        _dataArray = _document.GetType().InvokeMember("GetDataArrayDispatch", BindingFlags.InvokeMethod, 
+        _dataArray = _document.GetType().InvokeMember("GetDataArrayDispatch", BindingFlags.InvokeMethod,
             null, _document, null);
     }
 

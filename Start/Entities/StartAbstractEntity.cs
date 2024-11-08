@@ -1,20 +1,19 @@
-﻿using System.Runtime.InteropServices;
-using IFC_Converter.Start.API;
+﻿using IFC_Converter.Start.API;
 
 namespace IFC_Converter.Start.Entities;
 
 public abstract class StartAbstractEntity : IDisposable
 {
-    public object _entity { get; private set; }
+    public StartBaseRoot entity { get; }
     public StartElementType elementType { get; protected set; }
 
-    public StartAbstractEntity(object entity)
+    public StartAbstractEntity(StartBaseRoot entity)
     {
-        _entity = entity;
+        this.entity = entity;
     }
 
     public void Dispose()
     {
-        Marshal.ReleaseComObject(_entity);
+        entity.Dispose();
     }
 }
