@@ -4,7 +4,12 @@ namespace IFC_Converter.Start.Entities;
 
 public static class StartEntityFactory
 {
-    public static StartAbstractEntity CreateEntity(object entity, StartElementType type)
+    public static StartAbstractEntity CreateEntity(StartBaseRoot entity)
+    {
+        return new StartPipeEntity(entity);
+    }
+    
+    public static StartAbstractEntity CreateEntity(StartBaseRoot entity, StartElementType type)
     {
         return type switch
         {
@@ -14,7 +19,7 @@ public static class StartEntityFactory
         };
     }
 
-    public static StartAbstractEntity[] CreateEntities(object[] entities, StartElementType type)
+    public static StartAbstractEntity[] CreateEntities(StartBaseRoot[] entities, StartElementType type)
     {
         StartAbstractEntity[] abstractEntities = new StartAbstractEntity[entities.Length];
         for (int i = 0; i < entities.Length; i++)
