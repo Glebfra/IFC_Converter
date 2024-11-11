@@ -26,8 +26,6 @@ public class IFCConverter : IDisposable
     private readonly ITransaction _transaction;
     private readonly IfcProject _project;
 
-    private List<IDisposable> _disposables = new List<IDisposable>();
-
     public IFCConverter(string name)
     {
         _model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
@@ -42,7 +40,7 @@ public class IFCConverter : IDisposable
 
     public void AddPipe(IfcPipeEntity pipe)
     {
-        pipe.CreatePipe(_model);
+        pipe.CreateAndAddPipe(_model);
     }
 
     public void SaveAs(string filepath)

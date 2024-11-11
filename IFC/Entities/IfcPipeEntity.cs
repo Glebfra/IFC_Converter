@@ -17,29 +17,32 @@ namespace IFC_Converter.IFC.Entities;
 public class IfcPipeEntity
 {
     private readonly StartPipeEntity _pipeEntity;
+    
+    public Vector3 StartCoordinates;
+    public Vector3 EndCoordinates;
+    public Vector3 Direction;
+    public double Diameter;
 
     public IfcPipeEntity(StartPipeEntity pipeEntity)
     {
         _pipeEntity = pipeEntity;
+        StartCoordinates = new Vector3(_pipeEntity.GetXCoord(), _pipeEntity.GetYCoord(), _pipeEntity.GetZCoord());
+        Direction = new Vector3(_pipeEntity.GetProjectionAlongOXAxis(), _pipeEntity.GetProjectionAlongOYAxis(), _pipeEntity.GetProjectionAlongOZAxis());
+        EndCoordinates = StartCoordinates + Direction;
+        Diameter = _pipeEntity.GetOutsideDiameter();
     }
 
-    public void CreatePipe(IModel model)
+    public IfcPipeSegment CreateAndAddPipe(IModel model)
     {
-        Vector3 startPipeCoordinates = new Vector3(_pipeEntity.GetXCoord(), _pipeEntity.GetYCoord(), _pipeEntity.GetZCoord());
-        Vector3 pipeCoordinates = new Vector3(_pipeEntity.GetProjectionAlongOXAxis(), _pipeEntity.GetProjectionAlongOYAxis(), _pipeEntity.GetProjectionAlongOZAxis());
-        Vector3 pipeDirection = pipeCoordinates.Normalized();
-
-        double pipeDiameter = _pipeEntity.GetOutsideDiameter();
-
         IfcLocalPlacement? localPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
         {
             lp.RelativePlacement = model.Instances.New<IfcAxis2Placement3D>(pos =>
             {
                 pos.Location = model.Instances.New<IfcCartesianPoint>(pt => pt.SetXYZ(
-                    startPipeCoordinates.x, startPipeCoordinates.y, startPipeCoordinates.z
+                    StartCoordinates.x, StartCoordinates.y, StartCoordinates.z
                 ));
                 pos.Axis = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
-                    pipeDirection.x, pipeDirection.y, pipeDirection.z
+                    Direction.x, Direction.y, Direction.z
                 ));
             });
         });
@@ -54,14 +57,14 @@ public class IfcPipeEntity
         IfcCircleProfileDef? profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
         {
             c.ProfileType = IfcProfileTypeEnum.AREA;
-            c.Radius = pipeDiameter / 2;
+            c.Radius = Diameter / 2;
         });
 
         IfcExtrudedAreaSolid? extrudedSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = model.Instances.New<IfcDirection>(d => d.SetXYZ(0, 0, 1));
-            s.Depth = pipeCoordinates.Length();
+            s.Depth = Direction.Length();
         });
 
         IfcShapeRepresentation? shapeRep = model.Instances.New<IfcShapeRepresentation>(sr =>
@@ -92,5 +95,7 @@ public class IfcPipeEntity
                 }
             });
         });
+
+        return pipeSegment;
     }
 }
