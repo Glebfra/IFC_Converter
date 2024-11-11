@@ -2,6 +2,7 @@
 
 public enum StartElementType
 {
+    ALL = -1,
     PIPE_ELEMENT = 0,
     NODE = 1,
     PIPE_BEND = 10,
