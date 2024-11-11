@@ -29,7 +29,11 @@ public class StartNodeEntity : StartAbstractEntity
         Dictionary<string, string> dictionary = new()
         {
             { "Name", GetName() },
-            { "Description", GetDescription() }
+            { "Description", GetDescription() },
+            { "XCoordinate", GetXCoord().ToString() },
+            { "YCoordinate", GetYCoord().ToString() },
+            { "ZCoordinate", GetZCoord().ToString() },
+            { "Additional Load from Weight", GetAdditionalLoadFromWeight().ToString() }
         };
         return dictionary;
     }

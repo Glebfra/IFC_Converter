@@ -10,6 +10,7 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
+using IFC_Converter.Math;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -24,40 +25,45 @@ public class IfcPipeEntity
 
     public void CreatePipe(IModel model)
     {
+        Vector3 startPipeCoordinates = new Vector3(_pipeEntity.GetXCoord(), _pipeEntity.GetYCoord(), _pipeEntity.GetZCoord());
+        Vector3 pipeCoordinates = new Vector3(_pipeEntity.GetProjectionAlongOXAxis(), _pipeEntity.GetProjectionAlongOYAxis(), _pipeEntity.GetProjectionAlongOZAxis());
+        Vector3 pipeDirection = pipeCoordinates.Normalized();
+
+        double pipeDiameter = _pipeEntity.GetOutsideDiameter();
+
         IfcLocalPlacement? localPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
         {
             lp.RelativePlacement = model.Instances.New<IfcAxis2Placement3D>(pos =>
             {
                 pos.Location = model.Instances.New<IfcCartesianPoint>(pt => pt.SetXYZ(
-                    _pipeEntity.GetXCoord(), _pipeEntity.GetYCoord(), _pipeEntity.GetZCoord()
+                    startPipeCoordinates.x, startPipeCoordinates.y, startPipeCoordinates.z
                 ));
-                pos.RefDirection = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
-                    _pipeEntity.GetProjectionAlongOXAxis(), _pipeEntity.GetProjectionAlongOYAxis(), _pipeEntity.GetProjectionAlongOZAxis()
+                pos.Axis = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
+                    pipeDirection.x, pipeDirection.y, pipeDirection.z
                 ));
-                pos.Axis = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(0, 0, 1));
             });
         });
-        
+
         IfcPipeSegment? pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
         {
             p.Name = "Example Pipe";
             p.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
         });
         pipeSegment.ObjectPlacement = localPlacement;
-        
+
         IfcCircleProfileDef? profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
         {
             c.ProfileType = IfcProfileTypeEnum.AREA;
-            c.Radius = _pipeEntity.GetOutsideDiameter();
+            c.Radius = pipeDiameter / 2;
         });
 
         IfcExtrudedAreaSolid? extrudedSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = model.Instances.New<IfcDirection>(d => d.SetXYZ(0, 0, 1));
-            s.Depth = 2.0;
+            s.Depth = pipeCoordinates.Length();
         });
-        
+
         IfcShapeRepresentation? shapeRep = model.Instances.New<IfcShapeRepresentation>(sr =>
         {
             sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
@@ -65,7 +71,7 @@ public class IfcPipeEntity
             sr.RepresentationType = "SweptSolid";
             sr.Items.Add(extrudedSolid);
         });
-        
+
         IfcProductDefinitionShape? productDefShape = model.Instances.New<IfcProductDefinitionShape>();
         productDefShape.Representations.Add(shapeRep);
         pipeSegment.Representation = productDefShape;
@@ -76,11 +82,14 @@ public class IfcPipeEntity
             rel.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pipe properties";
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(prop =>
+                foreach (var kvp in _pipeEntity.GetData())
                 {
-                    prop.Name = "Radius";
-                    prop.NominalValue = new IfcPositiveLengthMeasure(1.0);
-                }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(prop =>
+                    {
+                        prop.Name = kvp.Key;
+                        prop.NominalValue = new IfcText(kvp.Value);
+                    }));
+                }
             });
         });
     }
