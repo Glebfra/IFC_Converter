@@ -9,9 +9,6 @@ public class StartProject : IDisposable
     private readonly StartDocument _document;
     private readonly StartBaseRootDataArray _dataArray;
 
-    public List<StartNodeEntity> NodeEntities = new List<StartNodeEntity>();
-    public List<StartPipeEntity> PipeEntities = new List<StartPipeEntity>();
-
     public StartProject(string filepath)
     {
         _autoServer = new StartAutoServer();
@@ -29,6 +26,18 @@ public class StartProject : IDisposable
         }
 
         return pipes;
+    }
+
+    public StartNodeEntity[] GetNodes()
+    {
+        int elementsNumber = _dataArray.GetNumberElements(StartElementType.NODE, StartElementType.NODE);
+        StartNodeEntity[] nodes = new StartNodeEntity[elementsNumber];
+        for (int i = 0; i < elementsNumber; i++)
+        {
+            nodes[i] = new StartNodeEntity(_dataArray.GetElementDispatch(i, StartElementType.NODE, StartElementType.NODE));
+        }
+
+        return nodes;
     }
 
     public void Dispose()
