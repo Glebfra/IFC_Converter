@@ -10,8 +10,6 @@ public static class Program
     {
         string inputFilepath = "D:\\testDemoApi.ctp";
         string outputFilepath = "D:\\testDemoApi.ifc";
-        
-        // IFCConverter.ConvertToIfc("D:\\Test.ifc");
 
         using StartProject startProject = new StartProject(inputFilepath);
         using IFCConverter ifcConverter = new IFCConverter("Ifc Project");

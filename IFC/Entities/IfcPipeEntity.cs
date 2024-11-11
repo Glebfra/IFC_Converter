@@ -19,7 +19,6 @@ public class IfcPipeEntity
     private readonly StartPipeEntity _pipeEntity;
     
     public Vector3 StartCoordinates;
-    public Vector3 EndCoordinates;
     public Vector3 Direction;
     public double Diameter;
 
@@ -28,7 +27,6 @@ public class IfcPipeEntity
         _pipeEntity = pipeEntity;
         StartCoordinates = new Vector3(_pipeEntity.GetXCoord(), _pipeEntity.GetYCoord(), _pipeEntity.GetZCoord());
         Direction = new Vector3(_pipeEntity.GetProjectionAlongOXAxis(), _pipeEntity.GetProjectionAlongOYAxis(), _pipeEntity.GetProjectionAlongOZAxis());
-        EndCoordinates = StartCoordinates + Direction;
         Diameter = _pipeEntity.GetOutsideDiameter();
     }
 
