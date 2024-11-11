@@ -4,10 +4,7 @@ namespace IFC_Converter.Start.Entities;
 
 public class StartNodeEntity : StartAbstractEntity
 {
-    public StartNodeEntity(StartBaseRoot entity) : base(entity)
-    {
-        elementType = StartElementType.NODE;
-    }
+    public StartNodeEntity(StartBaseRoot entity) : base(entity) { }
 
     public double GetAdditionalLoadFromWeight()
     {

@@ -12,6 +12,53 @@ public class StartBaseRoot : IDisposable
         _startBaseRoot = startBaseRoot;
     }
 
+    public int GetNumberConn()
+    {
+        object element = _startBaseRoot.GetType().InvokeMember(
+            "GetNumberConn", BindingFlags.InvokeMethod, null, _startBaseRoot, null
+        );
+        return (int)element;
+    }
+
+    public StartBaseRoot GetConnElemOnType(StartElementType type, int nNumber)
+    {
+        object element = new object();
+        object[] args = { type, nNumber, element };
+        
+        ParameterModifier parameterModifier = new ParameterModifier(3) { [2] = true };
+        ParameterModifier[] modifiers = { parameterModifier };
+        
+        _startBaseRoot.GetType().InvokeMember(
+            "GetElementDispatch", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
+        );
+        
+        return new StartBaseRoot(args[2]);
+    }
+
+    public StartBaseRoot GetStartNode()
+    {
+        object element = _startBaseRoot.GetType().InvokeMember(
+            "GetSNode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
+        );
+        return new StartBaseRoot(element);
+    }
+
+    public StartBaseRoot GetEndNode()
+    {
+        object element = _startBaseRoot.GetType().InvokeMember(
+            "GetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
+        );
+        return new StartBaseRoot(element);
+    }
+
+    public int GetNumber()
+    {
+        object element = _startBaseRoot.GetType().InvokeMember(
+            "GetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
+        );
+        return (int)element;
+    }
+
     public int GetDataInt(StartBaseRootFunctionKey key)
     {
         object[] args = { key };

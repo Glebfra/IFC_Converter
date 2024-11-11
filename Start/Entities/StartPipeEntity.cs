@@ -1,12 +1,20 @@
-﻿using IFC_Converter.Start.API;
+﻿using IFC_Converter.Math;
+using IFC_Converter.Start.API;
 
 namespace IFC_Converter.Start.Entities;
 
 public class StartPipeEntity : StartAbstractEntity
 {
-    public StartPipeEntity(StartBaseRoot entity) : base(entity)
+    public StartPipeEntity(StartBaseRoot entity) : base(entity) { }
+
+    public StartNodeEntity GetStartNode()
     {
-        elementType = StartElementType.PIPE_ELEMENT;
+        return new StartNodeEntity(entity.GetStartNode());
+    }
+
+    public StartNodeEntity GetEndNode()
+    {
+        return new StartNodeEntity(entity.GetEndNode());
     }
 
     public string GetName()
@@ -117,6 +125,11 @@ public class StartPipeEntity : StartAbstractEntity
     public double GetProjectionAlongOZAxis()
     {
         return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OZ_AXIS);
+    }
+
+    public Vector3 GetDirection()
+    {
+        return new Vector3(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
     }
 
     public override Dictionary<string, string> GetData()

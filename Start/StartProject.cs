@@ -29,6 +29,18 @@ public class StartProject : IDisposable
         return pipes;
     }
 
+    public StartNodeEntity[] GetNodes()
+    {
+        int elementsNumber = _dataArray.GetNumberElements(StartElementType.NODE, StartElementType.NODE);
+        StartNodeEntity[] nodes = new StartNodeEntity[elementsNumber];
+        for (int i = 0; i < elementsNumber; i++)
+        {
+            nodes[i] = new StartNodeEntity(_dataArray.GetElementDispatch(i, StartElementType.NODE, StartElementType.NODE));
+        }
+
+        return nodes;
+    }
+
     public void Dispose()
     {
         _dataArray.Dispose();

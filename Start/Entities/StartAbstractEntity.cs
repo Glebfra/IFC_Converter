@@ -1,4 +1,5 @@
-﻿using IFC_Converter.Start.API;
+﻿using IFC_Converter.Math;
+using IFC_Converter.Start.API;
 
 namespace IFC_Converter.Start.Entities;
 
@@ -26,6 +27,11 @@ public abstract class StartAbstractEntity : IDisposable
     public double GetZCoord()
     {
         return entity.GetZCoord();
+    }
+    
+    public Vector3 GetCoordinates()
+    {
+        return new Vector3(GetXCoord(), GetYCoord(), GetZCoord());
     }
 
     public void Dispose()
