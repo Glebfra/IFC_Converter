@@ -38,7 +38,34 @@ public class StartBaseRoot : IDisposable
         );
         return (string)value;
     }
+
+    public double GetXCoord()
+    {
+        object[] args = { 0 };
+        object value = _startBaseRoot.GetType().InvokeMember(
+            "GetCoordX", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+        );
+        return (double)value;
+    }
     
+    public double GetYCoord()
+    {
+        object[] args = { 0 };
+        object value = _startBaseRoot.GetType().InvokeMember(
+            "GetCoordY", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+        );
+        return (double)value;
+    }
+    
+    public double GetZCoord()
+    {
+        object[] args = { 0 };
+        object value = _startBaseRoot.GetType().InvokeMember(
+            "GetCoordZ", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+        );
+        return (double)value;
+    }
+
     public void Dispose()
     {
         Marshal.ReleaseComObject(_startBaseRoot);

@@ -1,5 +1,6 @@
-﻿using IFC_Converter.Start.API;
-using IFC_Converter.Start.Entities;
+﻿using IFC_Converter.IFC;
+using IFC_Converter.IFC.Entities;
+using IFC_Converter.Start;
 
 namespace IFC_Converter;
 
@@ -7,24 +8,22 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        string filePath = "D:\\testDemoApi.ctp";
+        string inputFilepath = "D:\\testDemoApi.ctp";
+        string outputFilepath = "D:\\testDemoApi.ifc";
 
-        using StartAutoServer startAutoServer = new StartAutoServer();
-        using StartDocument document = startAutoServer.LoadStartDocument(0x2, filePath);
-        using StartBaseRootDataArray baseRootDataArray = document.GetDataArrayDispatch();
-
-        int numberOfElements = baseRootDataArray.GetNumberElements(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
-        Console.WriteLine($"Number of elements is: {numberOfElements}");
-
-        for (int i = 0; i < numberOfElements; i++)
+        using StartProject startProject = new StartProject(inputFilepath);
+        using IFCConverter ifcConverter = new IFCConverter("Ifc Project");
+        
+        var startPipeEntities = startProject.GetPipes();
+        foreach (var startPipeEntity in startPipeEntities)
         {
-            StartPipeEntity pipeEntity = new StartPipeEntity(baseRootDataArray.GetElementDispatch(i, StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT));
-            Dictionary<string, string> data = pipeEntity.GetData();
-            foreach (var key in data.Keys)
+            using (startPipeEntity)
             {
-                Console.WriteLine($"{key}: {data[key]}");
+                IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity);
+                ifcConverter.AddPipe(ifcPipeEntity);
             }
         }
+        ifcConverter.SaveAs(outputFilepath);
 
         /*XbimEditorCredentials editor = new()
         {

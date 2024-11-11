@@ -124,6 +124,9 @@ public class StartPipeEntity : StartAbstractEntity
         Dictionary<string, string> dictionary = new()
         {
             { "Name", GetName() },
+            { "XCoordinate", GetXCoord().ToString() },
+            { "YCoordinate", GetYCoord().ToString() },
+            { "ZCoordinate", GetZCoord().ToString() },
             { "Outside Diameter", GetOutsideDiameter().ToString()},
             { "Material Name", GetMaterialName() },
             { "Wall Thickness", GetWallThickness().ToString() },
