@@ -11,7 +11,7 @@ using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
-public class IfcNodeEntity
+public class IfcNodeEntity : IfcAbstractEntity
 {
     private StartNodeEntity _nodeEntity;
     
@@ -27,7 +27,7 @@ public class IfcNodeEntity
 
     public void CreateAndAddNode(IModel model)
     {
-        LocalPlacement = CreateLocalPlacement(model);
+        LocalPlacement = CreateLocalPlacement(model, Coordinates);
         
         Port = model.Instances.New<IfcDistributionPort>(p =>
         {
@@ -38,36 +38,6 @@ public class IfcNodeEntity
             p.PredefinedType = IfcDistributionPortTypeEnum.PIPE;
         });
 
-        IfcRelDefinesByProperties properties = model.Instances.New<IfcRelDefinesByProperties>(rel =>
-        {
-            rel.RelatedObjects.Add(Port);
-            rel.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-            {
-                set.Name = "Node properties";
-                foreach (var kvp in _nodeEntity.GetData())
-                {
-                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(prop =>
-                    {
-                        prop.Name = kvp.Key;
-                        prop.NominalValue = new IfcText(kvp.Value);
-                    }));
-                }
-            });
-        });
-    }
-
-    public IfcLocalPlacement CreateLocalPlacement(IModel model)
-    {
-        IfcLocalPlacement? localStartPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
-        {
-            lp.RelativePlacement = model.Instances.New<IfcAxis2Placement3D>(pos =>
-            {
-                pos.Location = model.Instances.New<IfcCartesianPoint>(pt => pt.SetXYZ(
-                    Coordinates.x, Coordinates.y, Coordinates.z
-                ));
-            });
-        });
-
-        return localStartPlacement;
+        AddProperties(model, Port, _nodeEntity);
     }
 }

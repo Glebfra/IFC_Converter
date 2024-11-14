@@ -21,11 +21,6 @@ public sealed class StartNodeEntity : StartAbstractEntity
         return entity.GetDataChar(StartBaseRootFunctionKey.NODE_DESCRIPTION);
     }
 
-    public int GetNumber()
-    {
-        return entity.GetNumber();
-    }
-    
     public override Dictionary<string, string> GetData()
     {
         var dictionary = base.GetData();
