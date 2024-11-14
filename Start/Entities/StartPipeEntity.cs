@@ -134,34 +134,29 @@ public class StartPipeEntity : StartAbstractEntity
 
     public override Dictionary<string, string> GetData()
     {
-        Dictionary<string, string> dictionary = new()
-        {
-            { "Name", GetName() },
-            { "XCoordinate", GetXCoord().ToString() },
-            { "YCoordinate", GetYCoord().ToString() },
-            { "ZCoordinate", GetZCoord().ToString() },
-            { "Outside Diameter", GetOutsideDiameter().ToString()},
-            { "Material Name", GetMaterialName() },
-            { "Wall Thickness", GetWallThickness().ToString() },
-            { "Mill Tolerance", GetMillTolerance().ToString() },
-            { "Corrosion Allowance", GetCorrosionAllowance().ToString()},
-            { "Pressure", GetPressure().ToString()},
-            { "Test Pressure", GetTestPressure().ToString()},
-            { "Temperature", GetTemperature().ToString()},
-            { "Pipe Unit Weight", GetPipeUnitWeight().ToString()},
-            { "Insulation Unit Weight", GetInsulationUnitWeight().ToString()},
-            { "Product Unit Weight", GetProductUnitWeight().ToString()},
-            { "Manufacturing Technology", GetManufacturingTechnology().ToString()},
-            { "Longitudinal Weld Joint Factor", GetLongitudinalWeldJointFactor().ToString()},
-            { "Strength Factor of the Traverse Weld", GetStrengthFactorOfTheTraverseWeld().ToString()},
-            { "Additional Weight Load", GetAdditionalWeightLoad().ToString()},
-            { "Additional Weight Load along the X Axis", GetAdditionalWeightLoadAlongTheXAxis().ToString()},
-            { "Additional Weight Load along the Y Axis", GetAdditionalWeightLoadAlongTheYAxis().ToString()},
-            { "Additional Weight Load along the Z Axis", GetAdditionalWeightLoadAlongTheZAxis().ToString()},
-            { "Projection Along OX Axis", GetProjectionAlongOXAxis().ToString()},
-            { "Projection Along OY Axis", GetProjectionAlongOYAxis().ToString()},
-            { "Projection Along OZ Axis", GetProjectionAlongOZAxis().ToString()},
-        };
+        var dictionary = base.GetData();
+        dictionary.Add("Name", GetName());
+        dictionary.Add("Outside Diameter", GetOutsideDiameter().ToString());
+        dictionary.Add("Material Name", GetMaterialName());
+        dictionary.Add("Wall Thickness", GetWallThickness().ToString());
+        dictionary.Add("Mill Tolerance", GetMillTolerance().ToString());
+        dictionary.Add("Corrosion Allowance", GetCorrosionAllowance().ToString());
+        dictionary.Add("Pressure", GetPressure().ToString());
+        dictionary.Add("Test Pressure", GetTestPressure().ToString());
+        dictionary.Add("Temperature", GetTemperature().ToString());
+        dictionary.Add("Pipe Unit Weight", GetPipeUnitWeight().ToString());
+        dictionary.Add("Insulation Unit Weight", GetInsulationUnitWeight().ToString());
+        dictionary.Add("Product Unit Weight", GetProductUnitWeight().ToString());
+        dictionary.Add("Manufacturing Technology", GetManufacturingTechnology().ToString());
+        dictionary.Add("Longitudinal Weld Joint Factor", GetLongitudinalWeldJointFactor().ToString());
+        dictionary.Add("Strength Factor of the Traverse Weld", GetStrengthFactorOfTheTraverseWeld().ToString());
+        dictionary.Add("Additional Weight Load", GetAdditionalWeightLoad().ToString());
+        dictionary.Add("Additional Weight Load along the X Axis", GetAdditionalWeightLoadAlongTheXAxis().ToString());
+        dictionary.Add("Additional Weight Load along the Y Axis", GetAdditionalWeightLoadAlongTheYAxis().ToString());
+        dictionary.Add("Additional Weight Load along the Z Axis", GetAdditionalWeightLoadAlongTheZAxis().ToString());
+        dictionary.Add("Projection Along OX Axis", GetProjectionAlongOXAxis().ToString());
+        dictionary.Add("Projection Along OY Axis", GetProjectionAlongOYAxis().ToString());
+        dictionary.Add("Projection Along OZ Axis", GetProjectionAlongOZAxis().ToString());
 
         return dictionary;
     }
