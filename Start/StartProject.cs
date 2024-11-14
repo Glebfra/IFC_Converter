@@ -22,11 +22,22 @@ public class StartProject : IDisposable
         StartPipeEntity[] pipes = new StartPipeEntity[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            pipes[i] = new StartPipeEntity(_dataArray.GetElementDispatch(i, StartElementType.PIPE_ELEMENT,
-                StartElementType.PIPE_ELEMENT));
+            pipes[i] = new StartPipeEntity(_dataArray.GetElementDispatch(i, StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT));
         }
 
         return pipes;
+    }
+    
+    public StartWeldingTeeEntity[] GetWeldingTees()
+    {
+        int elementsNumber = _dataArray.GetNumberElements(StartElementType.WELDING_TEE, StartElementType.WELDING_TEE);
+        StartWeldingTeeEntity[] tees = new StartWeldingTeeEntity[elementsNumber];
+        for (int i = 0; i < elementsNumber; i++)
+        {
+            tees[i] = new StartWeldingTeeEntity(_dataArray.GetElementDispatch(i, StartElementType.WELDING_TEE, StartElementType.WELDING_TEE));
+        }
+
+        return tees;
     }
 
     public StartNodeEntity[] GetNodes()
