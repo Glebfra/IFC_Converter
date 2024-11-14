@@ -38,6 +38,7 @@ public class StartBaseRootDataArray : IDisposable
         _startBaseRootDataArray.GetType().InvokeMember(
             "GetConnDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
         );
+        
         return args[2];
     }
 
@@ -46,6 +47,7 @@ public class StartBaseRootDataArray : IDisposable
         object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
             "GetNumberElements", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, new object[]{minType, maxType}
         );
+        
         return (int)elementsNumber;
     }
 
@@ -54,6 +56,7 @@ public class StartBaseRootDataArray : IDisposable
         object? title = _startBaseRootDataArray.GetType().InvokeMember(
             "GetTitle", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, new object[] { id }
         );
+        
         return (string)title;
     }
 

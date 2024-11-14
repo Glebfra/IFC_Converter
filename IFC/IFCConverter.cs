@@ -43,6 +43,11 @@ public class IFCConverter : IDisposable
         pipe.CreateAndAddPipe(_model);
     }
 
+    public void AddNode(IfcNodeEntity node)
+    {
+        node.CreateAndAddNode(_model);
+    }
+
     public void SaveAs(string filepath)
     {
         _transaction.Commit();

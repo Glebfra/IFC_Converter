@@ -29,10 +29,25 @@ public class StartBaseRoot : IDisposable
         ParameterModifier[] modifiers = { parameterModifier };
         
         _startBaseRoot.GetType().InvokeMember(
-            "GetElementDispatch", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
+            "GetConnElemOnType", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
         );
         
         return new StartBaseRoot(args[2]);
+    }
+    
+    public StartBaseRoot GetConnElemOnIndex(int nNumber)
+    {
+        object element = new object();
+        object[] args = { nNumber, element };
+        
+        ParameterModifier parameterModifier = new ParameterModifier(2) { [1] = true };
+        ParameterModifier[] modifiers = { parameterModifier };
+        
+        _startBaseRoot.GetType().InvokeMember(
+            "GetConnElemOnIndex", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
+        );
+        
+        return new StartBaseRoot(args[1]);
     }
 
     public StartBaseRoot GetStartNode()
@@ -54,7 +69,7 @@ public class StartBaseRoot : IDisposable
     public int GetNumber()
     {
         object element = _startBaseRoot.GetType().InvokeMember(
-            "GetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
+            "GetNumber", BindingFlags.InvokeMethod, null, _startBaseRoot, null
         );
         return (int)element;
     }
