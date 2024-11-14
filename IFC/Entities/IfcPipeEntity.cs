@@ -15,7 +15,7 @@ using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
-public sealed class IfcPipeEntity
+public sealed class IfcPipeEntity : IfcAbstractEntity
 {
     private readonly StartPipeEntity _pipeEntity;
 
@@ -35,8 +35,8 @@ public sealed class IfcPipeEntity
 
     public IfcPipeSegment CreateAndAddPipe(IModel model)
     {
-        IfcLocalPlacement localStartPlacement = CreateLocalPlacement(model, StartCoordinates, Direction);
-        IfcLocalPlacement localEndPlacement = CreateLocalPlacement(model, EndCoordinates, Direction);
+        IfcLocalPlacement localStartPlacement = CreateLocalPlacementAndDirection(model, StartCoordinates, Direction);
+        IfcLocalPlacement localEndPlacement = CreateLocalPlacementAndDirection(model, EndCoordinates, Direction);
 
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
         IfcPipeSegment? pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
@@ -46,7 +46,7 @@ public sealed class IfcPipeEntity
             p.ObjectPlacement = localStartPlacement;
             p.Representation = productDefShape;
         });
-        AddProperties(model, pipeSegment);
+        AddProperties(model, pipeSegment, _pipeEntity);
 
         IfcDistributionPort origin = AddPort(model, localStartPlacement);
         IfcDistributionPort destination = AddPort(model, localEndPlacement);
@@ -61,24 +61,6 @@ public sealed class IfcPipeEntity
         });
 
         return pipeSegment;
-    }
-
-    private static IfcLocalPlacement CreateLocalPlacement(IModel model, Vector3 coordinates, Vector3 direction)
-    {
-        IfcLocalPlacement? localStartPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
-        {
-            lp.RelativePlacement = model.Instances.New<IfcAxis2Placement3D>(pos =>
-            {
-                pos.Location = model.Instances.New<IfcCartesianPoint>(pt => pt.SetXYZ(
-                    coordinates.x, coordinates.y, coordinates.z
-                ));
-                pos.Axis = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
-                    direction.x, direction.y, direction.z
-                ));
-            });
-        });
-        
-        return localStartPlacement;
     }
 
     private static IfcDistributionPort AddPort(IModel model, IfcLocalPlacement localPlacement)
@@ -121,27 +103,5 @@ public sealed class IfcPipeEntity
         IfcProductDefinitionShape? productDefShape = model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
 
         return productDefShape;
-    }
-
-    private IfcRelDefinesByProperties AddProperties(IModel model, IfcPipeSegment pipeSegment)
-    {
-        IfcRelDefinesByProperties properties = model.Instances.New<IfcRelDefinesByProperties>(rel =>
-        {
-            rel.RelatedObjects.Add(pipeSegment);
-            rel.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-            {
-                set.Name = "Pipe properties";
-                foreach (var kvp in _pipeEntity.GetData())
-                {
-                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(prop =>
-                    {
-                        prop.Name = kvp.Key;
-                        prop.NominalValue = new IfcText(kvp.Value);
-                    }));
-                }
-            });
-        });
-
-        return properties;
     }
 }

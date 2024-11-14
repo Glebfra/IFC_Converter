@@ -12,6 +12,26 @@ public abstract class StartAbstractEntity : IDisposable
         this.entity = entity;
     }
 
+    public int GetNumberConn()
+    {
+        return entity.GetNumberConn();
+    }
+
+    public StartBaseRoot GetConnElementOnType(StartElementType type, int id)
+    {
+        return entity.GetConnElemOnType(type, id);
+    }
+
+    public StartBaseRoot GetConnElementOnIndex(int id)
+    {
+        return entity.GetConnElemOnIndex(id);
+    }
+
+    public int GetNumber()
+    {
+        return entity.GetNumber();
+    }
+
     public double GetXCoord()
     {
         return entity.GetXCoord();
