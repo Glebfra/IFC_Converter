@@ -2,7 +2,7 @@
 
 namespace IFC_Converter.Start.Entities;
 
-public class StartNodeEntity : StartAbstractEntity
+public sealed class StartNodeEntity : StartAbstractEntity
 {
     public StartNodeEntity(StartBaseRoot entity) : base(entity) { }
 
@@ -21,17 +21,18 @@ public class StartNodeEntity : StartAbstractEntity
         return entity.GetDataChar(StartBaseRootFunctionKey.NODE_DESCRIPTION);
     }
 
+    public int GetNumber()
+    {
+        return entity.GetNumber();
+    }
+    
     public override Dictionary<string, string> GetData()
     {
-        Dictionary<string, string> dictionary = new()
-        {
-            { "Name", GetName() },
-            { "Description", GetDescription() },
-            { "XCoordinate", GetXCoord().ToString() },
-            { "YCoordinate", GetYCoord().ToString() },
-            { "ZCoordinate", GetZCoord().ToString() },
-            { "Additional Load from Weight", GetAdditionalLoadFromWeight().ToString() }
-        };
+        var dictionary = base.GetData();
+        dictionary.Add("Name", GetName());
+        dictionary.Add("Description", GetDescription());
+        dictionary.Add("Additional Load from Weight", GetAdditionalLoadFromWeight().ToString());
+        
         return dictionary;
     }
 }
