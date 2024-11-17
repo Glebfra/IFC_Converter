@@ -7,6 +7,7 @@ using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
@@ -55,6 +56,17 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
             ifcPipeSegments[i++] = pipeSegment;
         }
 
+        IfcGroup teePipesGroup = model.Instances.New<IfcGroup>(group =>
+        {
+            group.Name = _teeEntity.GetName();
+        });
+
+        IfcRelAssignsToGroup groupAssignment = model.Instances.New<IfcRelAssignsToGroup>(rel =>
+        {
+            rel.RelatedObjects.AddRange(ifcPipeSegments);
+            rel.RelatingGroup = teePipesGroup;
+        });
+
         return ifcPipeSegments;
     }
 
@@ -63,7 +75,7 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
         IfcCircleProfileDef? profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
         {
             c.ProfileType = IfcProfileTypeEnum.AREA;
-            c.Radius = startPipeEntity.GetOutsideDiameter() / 2;
+            c.Radius = startPipeEntity.GetOutsideDiameter() * 1.1 / 2;
         });
 
         IfcExtrudedAreaSolid? extrudedSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
