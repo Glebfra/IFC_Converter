@@ -28,8 +28,8 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
 
         Coordinates = nodeEntity.GetCoordinates();
     }
-
-    public IfcPipeSegment[] CreateAndAddWeldingTee(IModel model)
+    
+    public override void CreateAndAdd(IModel model)
     {
         IfcPipeSegment[] ifcPipeSegments = new IfcPipeSegment[_connPipes.Length];
 
@@ -66,8 +66,6 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
             rel.RelatedObjects.AddRange(ifcPipeSegments);
             rel.RelatingGroup = teePipesGroup;
         });
-
-        return ifcPipeSegments;
     }
 
     private IfcProductDefinitionShape CreatePipeShape(IModel model, StartPipeEntity startPipeEntity)

@@ -12,6 +12,8 @@ namespace IFC_Converter.IFC.Entities;
 
 public abstract class IfcAbstractEntity
 {
+    public abstract void CreateAndAdd(IModel model);
+    
     protected static IfcRelDefinesByProperties AddProperties(IModel model, IfcObject ifcObject, StartAbstractEntity entity)
     {
         IfcRelDefinesByProperties properties = model.Instances.New<IfcRelDefinesByProperties>(rel =>

@@ -32,8 +32,8 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
         EndCoordinates = StartCoordinates + Direction;
         Diameter = _pipeEntity.GetOutsideDiameter();
     }
-
-    public IfcPipeSegment CreateAndAddPipe(IModel model)
+    
+    public override void CreateAndAdd(IModel model)
     {
         IfcLocalPlacement localStartPlacement = CreateLocalPlacementAndDirection(model, StartCoordinates, Direction);
         IfcLocalPlacement localEndPlacement = CreateLocalPlacementAndDirection(model, EndCoordinates, Direction);
@@ -59,8 +59,6 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
             rel.RelatedObjects.Add(origin);
             rel.RelatedObjects.Add(destination);
         });
-
-        return pipeSegment;
     }
 
     private static IfcDistributionPort AddPort(IModel model, IfcLocalPlacement localPlacement)

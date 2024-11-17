@@ -38,19 +38,9 @@ public class IFCConverter : IDisposable
         lengthUnit.Prefix = null;
     }
 
-    public void AddPipe(IfcPipeEntity pipe)
+    public void AddEntity(IfcAbstractEntity entity)
     {
-        pipe.CreateAndAddPipe(_model);
-    }
-
-    public void AddNode(IfcNodeEntity node)
-    {
-        node.CreateAndAddNode(_model);
-    }
-
-    public void AddWeldedTee(IfcWeldingTeeEntity weldingTeeEntity)
-    {
-        weldingTeeEntity.CreateAndAddWeldingTee(_model);
+        entity.CreateAndAdd(_model);
     }
 
     public void SaveAs(string filepath)

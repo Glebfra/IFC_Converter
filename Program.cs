@@ -22,7 +22,7 @@ public static class Program
             Console.WriteLine($"Added node {startNodeEntity.Id}");
 
             IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
-            ifcConverter.AddNode(ifcNodeEntity);
+            ifcConverter.AddEntity(ifcNodeEntity);
         }
 
         var startPipeEntities = startProject.GetPipes();
@@ -31,7 +31,7 @@ public static class Program
             Console.WriteLine($"Added pipe {startPipeEntity.Id}");
 
             IfcPipeEntity ifcNodeEntity = new IfcPipeEntity(startPipeEntity);
-            ifcConverter.AddPipe(ifcNodeEntity);
+            ifcConverter.AddEntity(ifcNodeEntity);
         }
 
         var startWeldedTeeEntities = startProject.GetWeldingTees();
@@ -42,7 +42,7 @@ public static class Program
             StartNodeEntity node = startProject.GetConnNode(startWeldedTee);
             StartPipeEntity[] connPipes = startProject.GetConnPipes(node);
             IfcWeldingTeeEntity ifcWeldingTeeEntity = new(startWeldedTee, node, connPipes);
-            ifcConverter.AddWeldedTee(ifcWeldingTeeEntity);
+            ifcConverter.AddEntity(ifcWeldingTeeEntity);
         }
 
         ifcConverter.SaveAs(outputFilepath);

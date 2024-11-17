@@ -24,8 +24,8 @@ public class IfcNodeEntity : IfcAbstractEntity
         _nodeEntity = nodeEntity;
         Coordinates = _nodeEntity.GetCoordinates();
     }
-
-    public void CreateAndAddNode(IModel model)
+    
+    public override void CreateAndAdd(IModel model)
     {
         LocalPlacement = CreateLocalPlacement(model, Coordinates);
         
