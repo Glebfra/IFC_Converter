@@ -6,9 +6,7 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using IFC_Converter.Math;
 using Xbim.Ifc4.SharedBldgServiceElements;
@@ -33,7 +31,7 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
         Diameter = _pipeEntity.GetOutsideDiameter();
     }
 
-    public IfcPipeSegment CreateAndAddPipe(IModel model)
+    public override void CreateAndAdd(IModel model)
     {
         IfcLocalPlacement localStartPlacement = CreateLocalPlacementAndDirection(model, StartCoordinates, Direction);
         IfcLocalPlacement localEndPlacement = CreateLocalPlacementAndDirection(model, EndCoordinates, Direction);
@@ -50,7 +48,7 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
 
         IfcDistributionPort origin = AddPort(model, localStartPlacement);
         IfcDistributionPort destination = AddPort(model, localEndPlacement);
-        
+
         model.Instances.New<IfcRelNests>(rel =>
         {
             rel.Name = "Pipe Ports";
@@ -59,8 +57,6 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
             rel.RelatedObjects.Add(origin);
             rel.RelatedObjects.Add(destination);
         });
-
-        return pipeSegment;
     }
 
     private static IfcDistributionPort AddPort(IModel model, IfcLocalPlacement localPlacement)
@@ -100,7 +96,8 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
             sr.Items.Add(extrudedSolid);
         });
 
-        IfcProductDefinitionShape? productDefShape = model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
+        IfcProductDefinitionShape? productDefShape =
+            model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
 
         return productDefShape;
     }

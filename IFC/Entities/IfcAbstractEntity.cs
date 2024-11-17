@@ -5,14 +5,16 @@ using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
 
 namespace IFC_Converter.IFC.Entities;
 
 public abstract class IfcAbstractEntity
 {
-    protected static IfcRelDefinesByProperties AddProperties(IModel model, IfcObject ifcObject, StartAbstractEntity entity)
+    public abstract void CreateAndAdd(IModel model);
+
+    protected static IfcRelDefinesByProperties AddProperties(IModel model, IfcObject ifcObject,
+        StartAbstractEntity entity)
     {
         IfcRelDefinesByProperties properties = model.Instances.New<IfcRelDefinesByProperties>(rel =>
         {
@@ -30,11 +32,12 @@ public abstract class IfcAbstractEntity
                 }
             });
         });
-        
+
         return properties;
     }
-    
-    protected static IfcLocalPlacement CreateLocalPlacementAndDirection(IModel model, Vector3 coordinates, Vector3 direction)
+
+    protected static IfcLocalPlacement CreateLocalPlacementAndDirection(IModel model, Vector3 coordinates,
+        Vector3 direction)
     {
         IfcLocalPlacement? localStartPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
         {
@@ -54,7 +57,7 @@ public abstract class IfcAbstractEntity
 
         return localStartPlacement;
     }
-    
+
     protected static IfcLocalPlacement CreateLocalPlacement(IModel model, Vector3 coordinates)
     {
         IfcLocalPlacement? localStartPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
