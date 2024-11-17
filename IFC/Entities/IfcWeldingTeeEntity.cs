@@ -15,24 +15,22 @@ namespace IFC_Converter.IFC.Entities;
 
 public class IfcWeldingTeeEntity : IfcAbstractEntity
 {
-    private StartWeldingTeeEntity _teeEntity;
-    private StartPipeEntity[] _connPipes;
-    private StartNodeEntity _nodeEntity;
+    private readonly StartWeldingTeeEntity _teeEntity;
+    private readonly StartPipeEntity[] _connPipes;
 
     public Vector3 Coordinates;
 
     public IfcWeldingTeeEntity(StartWeldingTeeEntity teeEntity, StartNodeEntity nodeEntity, StartPipeEntity[] connPipes)
     {
         _teeEntity = teeEntity;
-        _nodeEntity = nodeEntity;
         _connPipes = connPipes;
 
-        Coordinates = _nodeEntity.GetCoordinates();
+        Coordinates = nodeEntity.GetCoordinates();
     }
 
-    public IfcProductDefinitionShape[] CreateAndAddWeldingTee(IModel model)
+    public IfcPipeSegment[] CreateAndAddWeldingTee(IModel model)
     {
-        IfcProductDefinitionShape[] productDefinitionShapes = new IfcProductDefinitionShape[_connPipes.Length];
+        IfcPipeSegment[] ifcPipeSegments = new IfcPipeSegment[_connPipes.Length];
 
         int i = 0;
         foreach (var pipeEntity in _connPipes)
@@ -54,10 +52,10 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
             });
             AddProperties(model, pipeSegment, _teeEntity);
 
-            productDefinitionShapes[i++] = productDefShape;
+            ifcPipeSegments[i++] = pipeSegment;
         }
 
-        return productDefinitionShapes;
+        return ifcPipeSegments;
     }
 
     private IfcProductDefinitionShape CreatePipeShape(IModel model, StartPipeEntity startPipeEntity)

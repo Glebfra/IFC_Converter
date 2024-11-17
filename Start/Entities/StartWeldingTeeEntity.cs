@@ -8,17 +8,6 @@ public class StartWeldingTeeEntity : StartAbstractEntity
     {
     }
 
-    public StartPipeEntity[] GetConnPipes()
-    {
-        StartPipeEntity[] pipes = new StartPipeEntity[3];
-        for (int i = 0; i < 3; i++)
-        {
-            pipes[i] = new StartPipeEntity(entity.GetConnElemOnType(StartElementType.PIPE_ELEMENT, i));
-        }
-
-        return pipes;
-    }
-
     public StartNodeEntity GetConnNode()
     {
         return new StartNodeEntity(entity.GetConnElemOnType(StartElementType.PIPE_ELEMENT, 0));
