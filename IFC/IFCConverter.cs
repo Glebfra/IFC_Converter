@@ -32,15 +32,15 @@ public class IFCConverter : IDisposable
         _transaction = _model.BeginTransaction();
         _project = _model.Instances.New<IfcProject>(p => { p.Name = name; });
         _project.Initialize(ProjectUnits.SIUnitsUK);
-        
+
         var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
     }
 
-    public void AddPipe(IfcPipeEntity pipe)
+    public void AddEntity(IfcAbstractEntity entity)
     {
-        pipe.CreateAndAddPipe(_model);
+        entity.CreateAndAdd(_model);
     }
 
     public void SaveAs(string filepath)

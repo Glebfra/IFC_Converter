@@ -12,6 +12,11 @@ public class StartBaseRoot : IDisposable
         _startBaseRoot = startBaseRoot;
     }
 
+    public object GetObject()
+    {
+        return _startBaseRoot;
+    }
+
     public int GetNumberConn()
     {
         object element = _startBaseRoot.GetType().InvokeMember(
@@ -24,15 +29,30 @@ public class StartBaseRoot : IDisposable
     {
         object element = new object();
         object[] args = { type, nNumber, element };
-        
+
         ParameterModifier parameterModifier = new ParameterModifier(3) { [2] = true };
         ParameterModifier[] modifiers = { parameterModifier };
-        
+
         _startBaseRoot.GetType().InvokeMember(
-            "GetElementDispatch", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
+            "GetConnElemOnType", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
         );
-        
+
         return new StartBaseRoot(args[2]);
+    }
+
+    public StartBaseRoot GetConnElemOnIndex(int nNumber)
+    {
+        object element = new object();
+        object[] args = { nNumber, element };
+
+        ParameterModifier parameterModifier = new ParameterModifier(2) { [1] = true };
+        ParameterModifier[] modifiers = { parameterModifier };
+
+        _startBaseRoot.GetType().InvokeMember(
+            "GetConnElemOnIndex", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
+        );
+
+        return new StartBaseRoot(args[1]);
     }
 
     public StartBaseRoot GetStartNode()
@@ -54,7 +74,7 @@ public class StartBaseRoot : IDisposable
     public int GetNumber()
     {
         object element = _startBaseRoot.GetType().InvokeMember(
-            "GetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
+            "GetNumber", BindingFlags.InvokeMethod, null, _startBaseRoot, null
         );
         return (int)element;
     }
@@ -94,7 +114,7 @@ public class StartBaseRoot : IDisposable
         );
         return (double)value;
     }
-    
+
     public double GetYCoord()
     {
         object[] args = { 0 };
@@ -103,7 +123,7 @@ public class StartBaseRoot : IDisposable
         );
         return (double)value;
     }
-    
+
     public double GetZCoord()
     {
         object[] args = { 0 };

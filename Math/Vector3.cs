@@ -22,7 +22,7 @@ public struct Vector3
     {
         return new Vector3(x, y, z) / Length();
     }
-    
+
     public static Vector3 operator +(Vector3 left, Vector3 right)
     {
         return new Vector3(
@@ -49,7 +49,7 @@ public struct Vector3
             left.z * right
         );
     }
-    
+
     public static Vector3 operator /(Vector3 left, double right)
     {
         return new Vector3(
