@@ -5,11 +5,18 @@ namespace IFC_Converter.Start.Entities;
 
 public abstract class StartAbstractEntity : IDisposable
 {
-    protected StartBaseRoot entity { get; }
+    public StartBaseRoot entity { get; }
+    public int Id { get; }
 
     public StartAbstractEntity(StartBaseRoot entity)
     {
         this.entity = entity;
+        Id = entity.GetNumber();
+    }
+
+    public StartBaseRoot GetEntity()
+    {
+        return entity;
     }
 
     public int GetNumberConn()

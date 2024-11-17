@@ -16,16 +16,22 @@ public class StartProject : IDisposable
         _dataArray = _document.GetDataArrayDispatch();
     }
 
-    public StartPipeEntity[] GetPipes()
+    public StartPipeEntity[] GetConnPipes(StartAbstractEntity startAbstractEntity)
     {
-        int elementsNumber = _dataArray.GetNumberElements(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
+        int elementsNumber = _dataArray.GetNumberConns(startAbstractEntity.Id, StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
         StartPipeEntity[] pipes = new StartPipeEntity[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            pipes[i] = new StartPipeEntity(_dataArray.GetElementDispatch(i, StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT));
+            pipes[i] = new StartPipeEntity(startAbstractEntity.entity.GetConnElemOnType(StartElementType.PIPE_ELEMENT, i));
         }
 
         return pipes;
+    }
+
+    public StartNodeEntity GetConnNode(StartAbstractEntity startAbstractEntity)
+    {
+        StartNodeEntity node = new StartNodeEntity(startAbstractEntity.entity.GetConnElemOnType(StartElementType.NODE, 0));
+        return node;
     }
     
     public StartWeldingTeeEntity[] GetWeldingTees()
@@ -50,6 +56,18 @@ public class StartProject : IDisposable
         }
 
         return nodes;
+    }
+    
+    public StartPipeEntity[] GetPipes()
+    {
+        int elementsNumber = _dataArray.GetNumberElements(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
+        StartPipeEntity[] pipes = new StartPipeEntity[elementsNumber];
+        for (int i = 0; i < elementsNumber; i++)
+        {
+            pipes[i] = new StartPipeEntity(_dataArray.GetElementDispatch(i, StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT));
+        }
+
+        return pipes;
     }
 
     public void Dispose()
