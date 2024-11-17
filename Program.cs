@@ -1,7 +1,6 @@
 ﻿using IFC_Converter.IFC;
 using IFC_Converter.IFC.Entities;
 using IFC_Converter.Start;
-using IFC_Converter.Start.API;
 using IFC_Converter.Start.Entities;
 
 namespace IFC_Converter;

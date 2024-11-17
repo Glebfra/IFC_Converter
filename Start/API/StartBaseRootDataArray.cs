@@ -21,14 +21,14 @@ public class StartBaseRootDataArray : IDisposable
     {
         object element = new object();
         object[] args = { id, minType, maxType, element };
-        
+
         ParameterModifier parameterModifier = new ParameterModifier(4) { [3] = true };
         ParameterModifier[] modifiers = { parameterModifier };
-        
+
         _startBaseRootDataArray.GetType().InvokeMember(
             "GetElementDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
         );
-        
+
         return new StartBaseRoot(args[3]);
     }
 
@@ -43,17 +43,18 @@ public class StartBaseRootDataArray : IDisposable
         _startBaseRootDataArray.GetType().InvokeMember(
             "GetConnDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
         );
-        
+
         return new StartBaseRoot(args[2]);
     }
 
-    public int GetNumberElements(StartElementType minType = StartElementType.ALL, StartElementType maxType = StartElementType.ALL)
+    public int GetNumberElements(StartElementType minType = StartElementType.ALL,
+        StartElementType maxType = StartElementType.ALL)
     {
         object[] args = { minType, maxType };
         object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
             "GetNumberElements", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
         );
-        
+
         return (int)elementsNumber;
     }
 
@@ -72,7 +73,7 @@ public class StartBaseRootDataArray : IDisposable
         object? title = _startBaseRootDataArray.GetType().InvokeMember(
             "GetTitle", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
         );
-        
+
         return (string)title;
     }
 

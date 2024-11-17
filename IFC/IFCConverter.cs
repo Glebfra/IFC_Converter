@@ -32,7 +32,7 @@ public class IFCConverter : IDisposable
         _transaction = _model.BeginTransaction();
         _project = _model.Instances.New<IfcProject>(p => { p.Name = name; });
         _project.Initialize(ProjectUnits.SIUnitsUK);
-        
+
         var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;

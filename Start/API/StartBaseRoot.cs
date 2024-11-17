@@ -29,29 +29,29 @@ public class StartBaseRoot : IDisposable
     {
         object element = new object();
         object[] args = { type, nNumber, element };
-        
+
         ParameterModifier parameterModifier = new ParameterModifier(3) { [2] = true };
         ParameterModifier[] modifiers = { parameterModifier };
-        
+
         _startBaseRoot.GetType().InvokeMember(
             "GetConnElemOnType", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
         );
-        
+
         return new StartBaseRoot(args[2]);
     }
-    
+
     public StartBaseRoot GetConnElemOnIndex(int nNumber)
     {
         object element = new object();
         object[] args = { nNumber, element };
-        
+
         ParameterModifier parameterModifier = new ParameterModifier(2) { [1] = true };
         ParameterModifier[] modifiers = { parameterModifier };
-        
+
         _startBaseRoot.GetType().InvokeMember(
             "GetConnElemOnIndex", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
         );
-        
+
         return new StartBaseRoot(args[1]);
     }
 
@@ -114,7 +114,7 @@ public class StartBaseRoot : IDisposable
         );
         return (double)value;
     }
-    
+
     public double GetYCoord()
     {
         object[] args = { 0 };
@@ -123,7 +123,7 @@ public class StartBaseRoot : IDisposable
         );
         return (double)value;
     }
-    
+
     public double GetZCoord()
     {
         object[] args = { 0 };

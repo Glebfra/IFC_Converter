@@ -4,7 +4,9 @@ namespace IFC_Converter.Start.Entities;
 
 public sealed class StartNodeEntity : StartAbstractEntity
 {
-    public StartNodeEntity(StartBaseRoot entity) : base(entity) { }
+    public StartNodeEntity(StartBaseRoot entity) : base(entity)
+    {
+    }
 
     public double GetAdditionalLoadFromWeight()
     {
@@ -20,7 +22,7 @@ public sealed class StartNodeEntity : StartAbstractEntity
     {
         return entity.GetDataChar(StartBaseRootFunctionKey.NODE_DESCRIPTION);
     }
-    
+
 
     public override Dictionary<string, string> GetData()
     {
@@ -28,7 +30,7 @@ public sealed class StartNodeEntity : StartAbstractEntity
         dictionary.Add("Name", GetName());
         dictionary.Add("Description", GetDescription());
         dictionary.Add("Additional Load from Weight", GetAdditionalLoadFromWeight().ToString());
-        
+
         return dictionary;
     }
 }

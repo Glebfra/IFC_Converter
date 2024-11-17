@@ -1,5 +1,4 @@
 ﻿using IFC_Converter.Math;
-using IFC_Converter.Start.API;
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -10,7 +9,6 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -28,7 +26,7 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
 
         Coordinates = nodeEntity.GetCoordinates();
     }
-    
+
     public override void CreateAndAdd(IModel model)
     {
         IfcPipeSegment[] ifcPipeSegments = new IfcPipeSegment[_connPipes.Length];
@@ -39,9 +37,13 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
             Vector3 pipeStartCoordinates = pipeEntity.GetCoordinates();
             Vector3 pipeDirection = pipeEntity.GetDirection();
             Vector3 pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
-            Vector3 weldedTeeBranchDirection = (pipeStartCoordinates - Coordinates).Length() < (pipeEndCoordinates - Coordinates).Length() ? pipeDirection : pipeDirection * -1;
+            Vector3 weldedTeeBranchDirection =
+                (pipeStartCoordinates - Coordinates).Length() < (pipeEndCoordinates - Coordinates).Length()
+                    ? pipeDirection
+                    : pipeDirection * -1;
 
-            IfcLocalPlacement localStartPlacement = CreateLocalPlacementAndDirection(model, Coordinates, weldedTeeBranchDirection);
+            IfcLocalPlacement localStartPlacement =
+                CreateLocalPlacementAndDirection(model, Coordinates, weldedTeeBranchDirection);
 
             IfcProductDefinitionShape productDefShape = CreatePipeShape(model, pipeEntity);
             IfcPipeSegment? pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
@@ -56,10 +58,7 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
             ifcPipeSegments[i++] = pipeSegment;
         }
 
-        IfcGroup teePipesGroup = model.Instances.New<IfcGroup>(group =>
-        {
-            group.Name = _teeEntity.GetName();
-        });
+        IfcGroup teePipesGroup = model.Instances.New<IfcGroup>(group => { group.Name = _teeEntity.GetName(); });
 
         IfcRelAssignsToGroup groupAssignment = model.Instances.New<IfcRelAssignsToGroup>(rel =>
         {
@@ -91,7 +90,8 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
             sr.Items.Add(extrudedSolid);
         });
 
-        IfcProductDefinitionShape? productDefShape = model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
+        IfcProductDefinitionShape? productDefShape =
+            model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
 
         return productDefShape;
     }
