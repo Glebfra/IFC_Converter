@@ -16,7 +16,7 @@ public static class Program
         using StartProject startProject = new StartProject(inputFilepath);
         using IFCConverter ifcConverter = new IFCConverter("Ifc Project");
 
-        /*var startNodeEntities = startProject.GetNodes();
+        var startNodeEntities = startProject.GetNodes();
         foreach (var startNodeEntity in startNodeEntities)
         {
             Console.WriteLine($"Added node {startNodeEntity.Id}");
@@ -32,7 +32,7 @@ public static class Program
 
             IfcPipeEntity ifcNodeEntity = new IfcPipeEntity(startPipeEntity);
             ifcConverter.AddPipe(ifcNodeEntity);
-        }*/
+        }
 
         var startWeldedTeeEntities = startProject.GetWeldingTees();
         foreach (var startWeldedTee in startWeldedTeeEntities)
