@@ -12,6 +12,11 @@ public class StartBaseRootDataArray : IDisposable
         _startBaseRootDataArray = startBaseRootDataArray;
     }
 
+    public object GetObject()
+    {
+        return _startBaseRootDataArray;
+    }
+
     public StartBaseRoot GetElementDispatch(int id, StartElementType minType, StartElementType maxType)
     {
         object element = new object();
@@ -27,7 +32,7 @@ public class StartBaseRootDataArray : IDisposable
         return new StartBaseRoot(args[3]);
     }
 
-    public object GetConnDispatch(int id, int nNumber)
+    public StartBaseRoot GetConnDispatch(int id, int nNumber)
     {
         object element = new object();
         object[] args = { id, nNumber, element };
@@ -39,22 +44,33 @@ public class StartBaseRootDataArray : IDisposable
             "GetConnDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
         );
         
-        return args[2];
+        return new StartBaseRoot(args[2]);
     }
 
     public int GetNumberElements(StartElementType minType = StartElementType.ALL, StartElementType maxType = StartElementType.ALL)
     {
+        object[] args = { minType, maxType };
         object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
-            "GetNumberElements", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, new object[]{minType, maxType}
+            "GetNumberElements", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
         );
         
         return (int)elementsNumber;
     }
 
+    public int GetNumberConns(int id, StartElementType minType, StartElementType maxType)
+    {
+        object[] args = { id, minType, maxType };
+        object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
+            "GetNumberConns", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
+        );
+        return (int)elementsNumber;
+    }
+
     public string GetTitle(int id)
     {
+        object[] args = { id };
         object? title = _startBaseRootDataArray.GetType().InvokeMember(
-            "GetTitle", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, new object[] { id }
+            "GetTitle", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
         );
         
         return (string)title;

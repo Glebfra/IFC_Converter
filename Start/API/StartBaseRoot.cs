@@ -12,6 +12,11 @@ public class StartBaseRoot : IDisposable
         _startBaseRoot = startBaseRoot;
     }
 
+    public object GetObject()
+    {
+        return _startBaseRoot;
+    }
+
     public int GetNumberConn()
     {
         object element = _startBaseRoot.GetType().InvokeMember(

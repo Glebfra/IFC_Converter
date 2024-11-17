@@ -46,6 +46,9 @@ public abstract class IfcAbstractEntity
                 pos.Axis = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
                     direction.x, direction.y, direction.z
                 ));
+                pos.RefDirection = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
+                    direction.y, direction.z, direction.x
+                ));
             });
         });
 

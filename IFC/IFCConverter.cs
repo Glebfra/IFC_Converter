@@ -48,6 +48,11 @@ public class IFCConverter : IDisposable
         node.CreateAndAddNode(_model);
     }
 
+    public void AddWeldedTee(IfcWeldingTeeEntity weldingTeeEntity)
+    {
+        weldingTeeEntity.CreateAndAddWeldingTee(_model);
+    }
+
     public void SaveAs(string filepath)
     {
         _transaction.Commit();

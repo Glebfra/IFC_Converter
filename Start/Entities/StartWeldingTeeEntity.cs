@@ -8,6 +8,11 @@ public class StartWeldingTeeEntity : StartAbstractEntity
     {
     }
 
+    public StartNodeEntity GetConnNode()
+    {
+        return new StartNodeEntity(entity.GetConnElemOnType(StartElementType.PIPE_ELEMENT, 0));
+    }
+
     public string GetName()
     {
         return entity.GetDataChar(StartBaseRootFunctionKey.WELDED_TEE_NAME);
