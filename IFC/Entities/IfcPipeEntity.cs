@@ -59,20 +59,6 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
         });
     }
 
-    private static IfcDistributionPort AddPort(IModel model, IfcLocalPlacement localPlacement)
-    {
-        IfcDistributionPort port = model.Instances.New<IfcDistributionPort>(p =>
-        {
-            p.Name = "Input Port";
-            p.Description = "Description for input port";
-            p.ObjectPlacement = localPlacement;
-            p.FlowDirection = IfcFlowDirectionEnum.NOTDEFINED;
-            p.PredefinedType = IfcDistributionPortTypeEnum.PIPE;
-        });
-
-        return port;
-    }
-
     private IfcProductDefinitionShape CreatePipeShape(IModel model)
     {
         IfcCircleProfileDef? profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
@@ -88,16 +74,8 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
             s.Depth = Direction.Length();
         });
 
-        IfcShapeRepresentation? shapeRep = model.Instances.New<IfcShapeRepresentation>(sr =>
-        {
-            sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            sr.RepresentationIdentifier = "Body";
-            sr.RepresentationType = "SweptSolid";
-            sr.Items.Add(extrudedSolid);
-        });
-
-        IfcProductDefinitionShape? productDefShape =
-            model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
+        IfcShapeRepresentation? shapeRep = CreateShapeRepresentation(model, extrudedSolid);
+        IfcProductDefinitionShape? productDefShape = model.Instances.New<IfcProductDefinitionShape>(repr => repr.Representations.Add(shapeRep));
 
         return productDefShape;
     }

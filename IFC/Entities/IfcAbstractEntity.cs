@@ -3,9 +3,12 @@ using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;
+using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
+using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -71,5 +74,32 @@ public abstract class IfcAbstractEntity
         });
 
         return localStartPlacement;
+    }
+    
+    protected static IfcDistributionPort AddPort(IModel model, IfcLocalPlacement localPlacement)
+    {
+        IfcDistributionPort port = model.Instances.New<IfcDistributionPort>(p =>
+        {
+            p.Name = "Input Port";
+            p.Description = "Description for input port";
+            p.ObjectPlacement = localPlacement;
+            p.FlowDirection = IfcFlowDirectionEnum.NOTDEFINED;
+            p.PredefinedType = IfcDistributionPortTypeEnum.PIPE;
+        });
+
+        return port;
+    }
+
+    protected static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem)
+    {
+        IfcShapeRepresentation? shapeRep = model.Instances.New<IfcShapeRepresentation>(sr =>
+        {
+            sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+            sr.RepresentationIdentifier = "Body";
+            sr.RepresentationType = "SweptSolid";
+            sr.Items.Add(representationItem);
+        });
+
+        return shapeRep;
     }
 }

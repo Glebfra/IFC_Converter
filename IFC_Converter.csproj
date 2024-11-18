@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Xbim.Ifc" Version="6.0.445"/>
-        <PackageReference Include="Xbim.Ifc2x3" Version="6.0.445"/>
-        <PackageReference Include="Xbim.Ifc4" Version="6.0.445"/>
+        <PackageReference Include="Xbim.Ifc" Version="6.0.445" />
+        <PackageReference Include="Xbim.Ifc2x3" Version="6.0.445" />
+        <PackageReference Include="Xbim.Ifc4" Version="6.0.445" />
     </ItemGroup>
 
 </Project>

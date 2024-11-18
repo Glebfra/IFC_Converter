@@ -1,6 +1,8 @@
-﻿using IFC_Converter.IFC;
+﻿using System.Reflection;
+using IFC_Converter.IFC;
 using IFC_Converter.IFC.Entities;
 using IFC_Converter.Start;
+using IFC_Converter.Start.API;
 using IFC_Converter.Start.Entities;
 
 namespace IFC_Converter;
@@ -11,11 +13,16 @@ public static class Program
     {
         string inputFilepath = "D:\\Bend.ctp";
         string outputFilepath = "D:\\Bend.ifc";
-
+        
         using StartProject startProject = new StartProject(inputFilepath);
         using IFCConverter ifcConverter = new IFCConverter("Ifc Project");
 
-        var startNodeEntities = startProject.GetNodes();
+        // foreach (var key in Enum.GetValues<StartElementType>())
+        // {
+        //     Console.WriteLine($"Key: {key}, num: {startProject.GetNumType(key)}");
+        // }
+
+        /*var startNodeEntities = startProject.GetNodes();
         foreach (var startNodeEntity in startNodeEntities)
         {
             Console.WriteLine($"Added node {startNodeEntity.Id}");
@@ -42,6 +49,17 @@ public static class Program
             StartPipeEntity[] connPipes = startProject.GetConnPipes(node);
             IfcWeldingTeeEntity ifcWeldingTeeEntity = new(startWeldedTee, node, connPipes);
             ifcConverter.AddEntity(ifcWeldingTeeEntity);
+        }*/
+
+        var startBends = startProject.GetBends();
+        foreach (var startBend in startBends)
+        {
+            Console.WriteLine($"Added bend: {startBend.Id}");
+        
+            StartNodeEntity node = startProject.GetConnNode(startBend);
+            StartPipeEntity[] connPipes = startProject.GetConnPipes(node);
+            IfcBendEntity ifcBendEntity = new IfcBendEntity(startBend, node, connPipes);
+            ifcConverter.AddEntity(ifcBendEntity);
         }
 
         ifcConverter.SaveAs(outputFilepath);

@@ -42,6 +42,20 @@ public class StartProject : IDisposable
         return node;
     }
 
+    public StartBendEntity[] GetBends()
+    {
+        int elementsNumber =
+            _dataArray.GetNumberElements(StartElementType.NONSTANDARD_EXPANSION_JOINT, StartElementType.FLANGE);
+        StartBendEntity[] bends = new StartBendEntity[elementsNumber];
+        for (int i = 0; i < elementsNumber; i++)
+        {
+            bends[i] = new StartBendEntity(_dataArray.GetElementDispatch(i, StartElementType.NONSTANDARD_EXPANSION_JOINT,
+                StartElementType.FLANGE));
+        }
+
+        return bends;
+    }
+
     public StartWeldingTeeEntity[] GetWeldingTees()
     {
         int elementsNumber = _dataArray.GetNumberElements(StartElementType.WELDING_TEE, StartElementType.WELDING_TEE);
