@@ -141,27 +141,27 @@ public class StartPipeEntity : StartAbstractEntity
     {
         var dictionary = base.GetData();
         dictionary.Add("Name", GetName());
-        dictionary.Add("Outside Diameter", GetOutsideDiameter().ToString());
+        dictionary.Add("Outside Diameter", GetOutsideDiameter().ToString("F"));
         dictionary.Add("Material Name", GetMaterialName());
-        dictionary.Add("Wall Thickness", GetWallThickness().ToString());
-        dictionary.Add("Mill Tolerance", GetMillTolerance().ToString());
-        dictionary.Add("Corrosion Allowance", GetCorrosionAllowance().ToString());
-        dictionary.Add("Pressure", GetPressure().ToString());
-        dictionary.Add("Test Pressure", GetTestPressure().ToString());
-        dictionary.Add("Temperature", GetTemperature().ToString());
-        dictionary.Add("Pipe Unit Weight", GetPipeUnitWeight().ToString());
-        dictionary.Add("Insulation Unit Weight", GetInsulationUnitWeight().ToString());
-        dictionary.Add("Product Unit Weight", GetProductUnitWeight().ToString());
+        dictionary.Add("Wall Thickness", GetWallThickness().ToString("F"));
+        dictionary.Add("Mill Tolerance", GetMillTolerance().ToString("F"));
+        dictionary.Add("Corrosion Allowance", GetCorrosionAllowance().ToString("F"));
+        dictionary.Add("Pressure", GetPressure().ToString("F"));
+        dictionary.Add("Test Pressure", GetTestPressure().ToString("F"));
+        dictionary.Add("Temperature", GetTemperature().ToString("F"));
+        dictionary.Add("Pipe Unit Weight", GetPipeUnitWeight().ToString("F"));
+        dictionary.Add("Insulation Unit Weight", GetInsulationUnitWeight().ToString("F"));
+        dictionary.Add("Product Unit Weight", GetProductUnitWeight().ToString("F"));
         dictionary.Add("Manufacturing Technology", GetManufacturingTechnology().ToString());
-        dictionary.Add("Longitudinal Weld Joint Factor", GetLongitudinalWeldJointFactor().ToString());
-        dictionary.Add("Strength Factor of the Traverse Weld", GetStrengthFactorOfTheTraverseWeld().ToString());
-        dictionary.Add("Additional Weight Load", GetAdditionalWeightLoad().ToString());
-        dictionary.Add("Additional Weight Load along the X Axis", GetAdditionalWeightLoadAlongTheXAxis().ToString());
-        dictionary.Add("Additional Weight Load along the Y Axis", GetAdditionalWeightLoadAlongTheYAxis().ToString());
-        dictionary.Add("Additional Weight Load along the Z Axis", GetAdditionalWeightLoadAlongTheZAxis().ToString());
-        dictionary.Add("Projection Along OX Axis", GetProjectionAlongOXAxis().ToString());
-        dictionary.Add("Projection Along OY Axis", GetProjectionAlongOYAxis().ToString());
-        dictionary.Add("Projection Along OZ Axis", GetProjectionAlongOZAxis().ToString());
+        dictionary.Add("Longitudinal Weld Joint Factor", GetLongitudinalWeldJointFactor().ToString("F"));
+        dictionary.Add("Strength Factor of the Traverse Weld", GetStrengthFactorOfTheTraverseWeld().ToString("F"));
+        dictionary.Add("Additional Weight Load", GetAdditionalWeightLoad().ToString("F"));
+        dictionary.Add("Additional Weight Load along the X Axis", GetAdditionalWeightLoadAlongTheXAxis().ToString("F"));
+        dictionary.Add("Additional Weight Load along the Y Axis", GetAdditionalWeightLoadAlongTheYAxis().ToString("F"));
+        dictionary.Add("Additional Weight Load along the Z Axis", GetAdditionalWeightLoadAlongTheZAxis().ToString("F"));
+        dictionary.Add("Projection Along OX Axis", GetProjectionAlongOXAxis().ToString("F"));
+        dictionary.Add("Projection Along OY Axis", GetProjectionAlongOYAxis().ToString("F"));
+        dictionary.Add("Projection Along OZ Axis", GetProjectionAlongOZAxis().ToString("F"));
 
         return dictionary;
     }
