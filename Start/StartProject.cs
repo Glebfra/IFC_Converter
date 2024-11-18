@@ -16,6 +16,11 @@ public class StartProject : IDisposable
         _dataArray = _document.GetDataArrayDispatch();
     }
 
+    public int GetNumType(StartElementType type)
+    {
+        return _dataArray.GetNumberElements(type, type);
+    }
+
     public StartPipeEntity[] GetConnPipes(StartAbstractEntity startAbstractEntity)
     {
         int elementsNumber = _dataArray.GetNumberConns(startAbstractEntity.Id, StartElementType.PIPE_ELEMENT,
