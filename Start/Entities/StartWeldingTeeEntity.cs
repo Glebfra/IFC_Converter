@@ -67,16 +67,16 @@ public class StartWeldingTeeEntity : StartAbstractEntity
     public override Dictionary<string, string> GetData()
     {
         var dictionary = base.GetData();
-        dictionary.Add("Header thickness", GetHeaderThickness().ToString());
-        dictionary.Add("Mill tolerance", GetMillTolerance().ToString());
-        dictionary.Add("Weight", GetWeight().ToString());
-        dictionary.Add("Header length", GetHeaderLength().ToString());
+        dictionary.Add("Header thickness", GetHeaderThickness().ToString("F"));
+        dictionary.Add("Mill tolerance", GetMillTolerance().ToString("F"));
+        dictionary.Add("Weight", GetWeight().ToString("F"));
+        dictionary.Add("Header length", GetHeaderLength().ToString("F"));
         dictionary.Add("Strength factor of longitudinal weld seam on pressure",
-            GetStrengthFactorOfLongitudinalWeldSeamOnPressure().ToString());
-        dictionary.Add("Branch height", GetBranchHeight().ToString());
-        dictionary.Add("Crotch radius", GetCrotchRadius().ToString());
-        dictionary.Add("Crotch thickness", GetCrotchThickness().ToString());
-        dictionary.Add("Crotch height", GetCrotchHeight().ToString());
+            GetStrengthFactorOfLongitudinalWeldSeamOnPressure().ToString("F"));
+        dictionary.Add("Branch height", GetBranchHeight().ToString("F"));
+        dictionary.Add("Crotch radius", GetCrotchRadius().ToString("F"));
+        dictionary.Add("Crotch thickness", GetCrotchThickness().ToString("F"));
+        dictionary.Add("Crotch height", GetCrotchHeight().ToString("F"));
         dictionary.Add("Name", GetName());
 
         return dictionary;

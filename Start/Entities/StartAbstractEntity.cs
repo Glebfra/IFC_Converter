@@ -63,9 +63,9 @@ public abstract class StartAbstractEntity : IDisposable
     {
         Dictionary<string, string> dictionary = new()
         {
-            { "XCoordinate", GetXCoord().ToString() },
-            { "YCoordinate", GetYCoord().ToString() },
-            { "ZCoordinate", GetZCoord().ToString() }
+            { "XCoordinate", GetXCoord().ToString("F") },
+            { "YCoordinate", GetYCoord().ToString("F") },
+            { "ZCoordinate", GetZCoord().ToString("F") }
         };
 
         return dictionary;
