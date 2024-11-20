@@ -2,9 +2,9 @@
 
 namespace IFC_Converter.Start.Entities;
 
-public class StartWeldingTeeEntity : StartAbstractEntity
+public class StartWeldedTeeEntity : StartAbstractEntity
 {
-    public StartWeldingTeeEntity(StartBaseRoot entity) : base(entity)
+    public StartWeldedTeeEntity(StartBaseRoot entity) : base(entity)
     {
     }
 

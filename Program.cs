@@ -19,7 +19,7 @@ public static class Program
         foreach (var startNodeEntity in startNodeEntities)
         {
             Console.WriteLine($"Added node {startNodeEntity.Id}");
-
+        
             IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
             ifcConverter.AddEntity(ifcNodeEntity);
         }
@@ -37,11 +37,11 @@ public static class Program
         foreach (var startWeldedTee in startWeldedTeeEntities)
         {
             Console.WriteLine($"Added welded tee: {startWeldedTee.Id}");
-
+        
             StartNodeEntity node = startProject.GetConnNode(startWeldedTee);
             StartPipeEntity[] connPipes = startProject.GetConnPipes(node);
-            IfcWeldingTeeEntity ifcWeldingTeeEntity = new(startWeldedTee, node, connPipes);
-            ifcConverter.AddEntity(ifcWeldingTeeEntity);
+            IfcWeldedTeeEntity ifcWeldedTeeEntity = new(startWeldedTee, node, connPipes);
+            ifcConverter.AddEntity(ifcWeldedTeeEntity);
         }
 
         ifcConverter.SaveAs(outputFilepath);

@@ -23,6 +23,11 @@ public struct Vector3
         return new Vector3(x, y, z) / Length();
     }
 
+    public static double Dot(Vector3 fisrt, Vector3 second)
+    {
+        return fisrt.x * second.x + fisrt.y * second.y + fisrt.z * second.z;
+    }
+
     public static Vector3 operator +(Vector3 left, Vector3 right)
     {
         return new Vector3(

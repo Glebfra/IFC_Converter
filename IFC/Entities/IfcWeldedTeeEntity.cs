@@ -12,14 +12,14 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC_Converter.IFC.Entities;
 
-public class IfcWeldingTeeEntity : IfcAbstractEntity
+public class IfcWeldedTeeEntity : IfcAbstractEntity
 {
-    private readonly StartWeldingTeeEntity _teeEntity;
+    private readonly StartWeldedTeeEntity _teeEntity;
     private readonly StartPipeEntity[] _connPipes;
 
     public Vector3 Coordinates;
 
-    public IfcWeldingTeeEntity(StartWeldingTeeEntity teeEntity, StartNodeEntity nodeEntity, StartPipeEntity[] connPipes)
+    public IfcWeldedTeeEntity(StartWeldedTeeEntity teeEntity, StartNodeEntity nodeEntity, StartPipeEntity[] connPipes)
     {
         _teeEntity = teeEntity;
         _connPipes = connPipes;
@@ -30,6 +30,7 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
     public override void CreateAndAdd(IModel model)
     {
         IfcPipeSegment[] ifcPipeSegments = new IfcPipeSegment[_connPipes.Length];
+        IIfcSolidModel? baseGeometry = null;
 
         int i = 0;
         foreach (var pipeEntity in _connPipes)
@@ -58,8 +59,7 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
             ifcPipeSegments[i++] = pipeSegment;
         }
 
-        IfcGroup teePipesGroup = model.Instances.New<IfcGroup>(group => { group.Name = _teeEntity.GetName(); });
-
+        IfcGroup teePipesGroup = model.Instances.New<IfcGroup>(group => group.Name = _teeEntity.GetName());
         IfcRelAssignsToGroup groupAssignment = model.Instances.New<IfcRelAssignsToGroup>(rel =>
         {
             rel.RelatedObjects.AddRange(ifcPipeSegments);
@@ -79,7 +79,7 @@ public class IfcWeldingTeeEntity : IfcAbstractEntity
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = model.Instances.New<IfcDirection>(d => d.SetXYZ(0, 0, 1));
-            s.Depth = _teeEntity.GetBranchHeight();
+            s.Depth = _teeEntity.GetBranchHeight() / 2;
         });
 
         IfcShapeRepresentation? shapeRep = model.Instances.New<IfcShapeRepresentation>(sr =>
