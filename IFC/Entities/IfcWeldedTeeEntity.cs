@@ -42,7 +42,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
                     ? pipeDirection
                     : pipeDirection * -1;
 
-            IfcAxis2Placement3D teeBranchAxis = CreateAxis2Placement3D(model, Coordinates, weldedTeeBranchDirection);
+            IfcAxis2Placement3D teeBranchAxis = CreateAxis2Placement3D(model, new Vector3(), weldedTeeBranchDirection);
             teeExtrudedArea[i++] = CreateTeeBranchShape(model, pipeEntity, teeBranchAxis);
         }
 
@@ -64,6 +64,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             segment.Name = _teeEntity.GetName();
             segment.Representation = productDefinitionShape;
             segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
+            segment.ObjectPlacement = CreateLocalPlacement(model, Coordinates);
         });
 
         AddProperties(model, pipe, _teeEntity);
