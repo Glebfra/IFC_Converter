@@ -1,4 +1,5 @@
-﻿using IFC_Converter.IFC;
+﻿using System.Reflection;
+using IFC_Converter.IFC;
 using IFC_Converter.IFC.Entities;
 using IFC_Converter.Start;
 using IFC_Converter.Start.API;
@@ -12,7 +13,7 @@ public static class Program
     {
         string inputFilepath = "D:\\Bend.ctp";
         string outputFilepath = "D:\\Bend.ifc";
-
+        
         using StartProject startProject = new StartProject(inputFilepath);
         using IFCConverter ifcConverter = new IFCConverter("Ifc Project");
 

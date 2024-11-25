@@ -62,16 +62,8 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
             s.Depth = Direction.Length();
         });
 
-        IfcShapeRepresentation? shapeRep = model.Instances.New<IfcShapeRepresentation>(sr =>
-        {
-            sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            sr.RepresentationIdentifier = "Body";
-            sr.RepresentationType = "SweptSolid";
-            sr.Items.Add(extrudedSolid);
-        });
-
-        IfcProductDefinitionShape? productDefShape =
-            model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
+        IfcShapeRepresentation? shapeRep = CreateShapeRepresentation(model, extrudedSolid);
+        IfcProductDefinitionShape? productDefShape = model.Instances.New<IfcProductDefinitionShape>(repr => repr.Representations.Add(shapeRep));
 
         return productDefShape;
     }
