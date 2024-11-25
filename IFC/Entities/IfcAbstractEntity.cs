@@ -48,7 +48,7 @@ public abstract class IfcAbstractEntity
         return properties;
     }
 
-    protected static IfcLocalPlacement CreateLocalPlacementAndDirection(IModel model, Vector3 coordinates, Vector3 direction)
+    protected static IfcLocalPlacement CreateLocalPlacement(IModel model, Vector3 coordinates, Vector3 direction)
     {
         return model.Instances.New<IfcLocalPlacement>(lp =>
         {

@@ -202,8 +202,8 @@ public static class Program
         {
             Console.WriteLine($"Added pipe {startPipeEntity.Id}");
 
-            IfcPipeEntity ifcNodeEntity = new IfcPipeEntity(startPipeEntity);
-            ifcConverter.AddEntity(ifcNodeEntity);
+            IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity);
+            ifcConverter.AddEntity(ifcPipeEntity);
         }
 
         var startWeldedTeeEntities = startProject.GetWeldingTees();

@@ -33,8 +33,8 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
 
     public override void CreateAndAdd(IModel model)
     {
-        IfcLocalPlacement localStartPlacement = CreateLocalPlacementAndDirection(model, StartCoordinates, Direction);
-        IfcLocalPlacement localEndPlacement = CreateLocalPlacementAndDirection(model, EndCoordinates, Direction);
+        IfcLocalPlacement localStartPlacement = CreateLocalPlacement(model, StartCoordinates, Direction);
+        IfcLocalPlacement localEndPlacement = CreateLocalPlacement(model, EndCoordinates, Direction);
 
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
         IfcPipeSegment? pipeSegment = model.Instances.New<IfcPipeSegment>(p =>

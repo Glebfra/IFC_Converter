@@ -42,9 +42,6 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
                     ? pipeDirection
                     : pipeDirection * -1;
 
-            IfcLocalPlacement localStartPlacement =
-                CreateLocalPlacementAndDirection(model, Coordinates, weldedTeeBranchDirection);
-
             IfcAxis2Placement3D teeBranchAxis = CreateAxis2Placement3D(model, Coordinates, weldedTeeBranchDirection);
             teeExtrudedArea[i++] = CreateTeeBranchShape(model, pipeEntity, teeBranchAxis);
         }
