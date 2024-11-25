@@ -29,10 +29,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
 
     public override void CreateAndAdd(IModel model)
     {
-        StartPipeEntity[] branchPipes;
-        StartPipeEntity headPipe;
-        SortPipes(out branchPipes, out headPipe);
-
+        SortPipes(out StartPipeEntity[] branchPipes, out StartPipeEntity headPipe);
         IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
         
         int i = 0;
@@ -75,7 +72,6 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
     {
         branchPipes = new StartPipeEntity[2];
         headPipe = null;
-        IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
 
         for (int j = 0; j < _connPipes.Length; j++)
         {
