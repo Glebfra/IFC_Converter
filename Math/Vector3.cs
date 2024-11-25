@@ -6,6 +6,10 @@ public struct Vector3
     public double y;
     public double z;
 
+    public Vector3 XYZ => new(x, y, z);
+    public Vector3 YZX => new(y, z, x);
+    public Vector3 ZXY => new(z, x, y);
+
     public Vector3(double x, double y, double z)
     {
         this.x = x;
@@ -21,6 +25,11 @@ public struct Vector3
     public Vector3 Normalized()
     {
         return new Vector3(x, y, z) / Length();
+    }
+
+    public static double Dot(Vector3 fisrt, Vector3 second)
+    {
+        return fisrt.x * second.x + fisrt.y * second.y + fisrt.z * second.z;
     }
 
     public static Vector3 operator +(Vector3 left, Vector3 right)

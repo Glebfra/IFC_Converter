@@ -33,8 +33,8 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
 
     public override void CreateAndAdd(IModel model)
     {
-        IfcLocalPlacement localStartPlacement = CreateLocalPlacementAndDirection(model, StartCoordinates, Direction);
-        IfcLocalPlacement localEndPlacement = CreateLocalPlacementAndDirection(model, EndCoordinates, Direction);
+        IfcLocalPlacement localStartPlacement = CreateLocalPlacement(model, StartCoordinates, Direction);
+        IfcLocalPlacement localEndPlacement = CreateLocalPlacement(model, EndCoordinates, Direction);
 
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
         IfcPipeSegment? pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
@@ -45,32 +45,6 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
             p.Representation = productDefShape;
         });
         AddProperties(model, pipeSegment, _pipeEntity);
-
-        IfcDistributionPort origin = AddPort(model, localStartPlacement);
-        IfcDistributionPort destination = AddPort(model, localEndPlacement);
-
-        model.Instances.New<IfcRelNests>(rel =>
-        {
-            rel.Name = "Pipe Ports";
-            rel.Description = "Connects two ports of pipe";
-            rel.RelatingObject = pipeSegment;
-            rel.RelatedObjects.Add(origin);
-            rel.RelatedObjects.Add(destination);
-        });
-    }
-
-    private static IfcDistributionPort AddPort(IModel model, IfcLocalPlacement localPlacement)
-    {
-        IfcDistributionPort port = model.Instances.New<IfcDistributionPort>(p =>
-        {
-            p.Name = "Input Port";
-            p.Description = "Description for input port";
-            p.ObjectPlacement = localPlacement;
-            p.FlowDirection = IfcFlowDirectionEnum.NOTDEFINED;
-            p.PredefinedType = IfcDistributionPortTypeEnum.PIPE;
-        });
-
-        return port;
     }
 
     private IfcProductDefinitionShape CreatePipeShape(IModel model)
