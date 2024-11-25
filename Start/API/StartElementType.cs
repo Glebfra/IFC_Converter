@@ -8,7 +8,7 @@ public enum StartElementType
     PIPE_BEND = 10,
     MILTER_BEND = 11,
     FABRICATED_TEE = 13,
-    WELDING_TEE = 14,
+    WELDED_TEE = 14,
     VALVE = 15,
     GIMBAL_EXPANSION_JOINT = 16,
     AXIAL_EXPANSION_JOINT = 17,

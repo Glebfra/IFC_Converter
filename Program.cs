@@ -17,12 +17,7 @@ public static class Program
         using StartProject startProject = new StartProject(inputFilepath);
         using IFCConverter ifcConverter = new IFCConverter("Ifc Project");
 
-        // foreach (var key in Enum.GetValues<StartElementType>())
-        // {
-        //     Console.WriteLine($"Key: {key}, num: {startProject.GetNumType(key)}");
-        // }
-
-        /*var startNodeEntities = startProject.GetNodes();
+        var startNodeEntities = startProject.GetEntities<StartNodeEntity>(StartElementType.NODE);
         foreach (var startNodeEntity in startNodeEntities)
         {
             Console.WriteLine($"Added node {startNodeEntity.Id}");
@@ -31,35 +26,24 @@ public static class Program
             ifcConverter.AddEntity(ifcNodeEntity);
         }
 
-        var startPipeEntities = startProject.GetPipes();
+        var startPipeEntities = startProject.GetEntities<StartPipeEntity>(StartElementType.PIPE_ELEMENT);
         foreach (var startPipeEntity in startPipeEntities)
         {
             Console.WriteLine($"Added pipe {startPipeEntity.Id}");
 
-            IfcPipeEntity ifcNodeEntity = new IfcPipeEntity(startPipeEntity);
-            ifcConverter.AddEntity(ifcNodeEntity);
+            IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity);
+            ifcConverter.AddEntity(ifcPipeEntity);
         }
 
-        var startWeldedTeeEntities = startProject.GetWeldingTees();
+        var startWeldedTeeEntities = startProject.GetEntities<StartWeldedTeeEntity>(StartElementType.WELDED_TEE);
         foreach (var startWeldedTee in startWeldedTeeEntities)
         {
             Console.WriteLine($"Added welded tee: {startWeldedTee.Id}");
 
-            StartNodeEntity node = startProject.GetConnNode(startWeldedTee);
-            StartPipeEntity[] connPipes = startProject.GetConnPipes(node);
-            IfcWeldingTeeEntity ifcWeldingTeeEntity = new(startWeldedTee, node, connPipes);
-            ifcConverter.AddEntity(ifcWeldingTeeEntity);
-        }*/
-
-        var startBends = startProject.GetBends();
-        foreach (var startBend in startBends)
-        {
-            Console.WriteLine($"Added bend: {startBend.Id}");
-        
-            StartNodeEntity node = startProject.GetConnNode(startBend);
-            StartPipeEntity[] connPipes = startProject.GetConnPipes(node);
-            IfcBendEntity ifcBendEntity = new IfcBendEntity(startBend, node, connPipes);
-            ifcConverter.AddEntity(ifcBendEntity);
+            StartNodeEntity node = startProject.GetConnEntity<StartNodeEntity>(startWeldedTee, StartElementType.NODE);
+            StartPipeEntity[] connPipes = startProject.GetConnEntities<StartPipeEntity>(node, StartElementType.PIPE_ELEMENT);
+            IfcWeldedTeeEntity ifcWeldedTeeEntity = new(startWeldedTee, node, connPipes);
+            ifcConverter.AddEntity(ifcWeldedTeeEntity);
         }
 
         ifcConverter.SaveAs(outputFilepath);
