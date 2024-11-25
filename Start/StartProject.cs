@@ -17,7 +17,7 @@ public class StartProject : IDisposable
         _dataArray = _document.GetDataArrayDispatch();
     }
 
-    public T[] GetConnEntities<T>(StartAbstractEntity entity, StartElementType type) where T : class
+    public T[] GetConnEntities<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
         int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
         T[] entities = new T[elementsNumber];
@@ -30,19 +30,32 @@ public class StartProject : IDisposable
         return entities;
     }
 
-    public T GetConnEntity<T>(StartAbstractEntity entity, StartElementType type) where T : class
+    public T GetConnEntity<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
         StartBaseRoot baseRoot = entity.entity.GetConnElemOnType(type, 0);
         return (T)Activator.CreateInstance(typeof(T), baseRoot)!;
     }
 
-    public T[] GetEntities<T>(StartElementType type) where T : class
+    public T[] GetEntities<T>(StartElementType type) where T : StartAbstractEntity
     {
         int elementsNumber = _dataArray.GetNumberElements(type, type);
         T[] objs = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
             StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, type, type);
+            objs[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
+        }
+
+        return objs;
+    }
+    
+    public T[] GetEntities<T>(StartElementType minType, StartElementType maxType) where T : StartAbstractEntity
+    {
+        int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
+        T[] objs = new T[elementsNumber];
+        for (int i = 0; i < elementsNumber; i++)
+        {
+            StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, minType, maxType);
             objs[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
 
