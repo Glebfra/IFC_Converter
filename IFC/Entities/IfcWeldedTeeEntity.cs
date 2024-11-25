@@ -29,8 +29,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
 
     public override void CreateAndAdd(IModel model)
     {
-        IfcPipeSegment[] ifcPipeSegments = new IfcPipeSegment[_connPipes.Length];
-        IIfcSolidModel? baseGeometry = null;
+        IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
 
         int i = 0;
         foreach (var pipeEntity in _connPipes)
@@ -46,53 +45,49 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             IfcLocalPlacement localStartPlacement =
                 CreateLocalPlacementAndDirection(model, Coordinates, weldedTeeBranchDirection);
 
-            IfcProductDefinitionShape productDefShape = CreatePipeShape(model, pipeEntity);
-            IfcPipeSegment? pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
-            {
-                p.Name = _teeEntity.GetName();
-                p.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
-                p.ObjectPlacement = localStartPlacement;
-                p.Representation = productDefShape;
-            });
-            AddProperties(model, pipeSegment, _teeEntity);
-
-            ifcPipeSegments[i++] = pipeSegment;
+            IfcAxis2Placement3D teeBranchAxis = CreateAxis2Placement3D(model, Coordinates, weldedTeeBranchDirection);
+            teeExtrudedArea[i++] = CreateTeeBranchShape(model, pipeEntity, teeBranchAxis);
         }
 
-        IfcGroup teePipesGroup = model.Instances.New<IfcGroup>(group => group.Name = _teeEntity.GetName());
-        IfcRelAssignsToGroup groupAssignment = model.Instances.New<IfcRelAssignsToGroup>(rel =>
+        IfcShapeRepresentation shapeRepresentation = model.Instances.New<IfcShapeRepresentation>(representation =>
         {
-            rel.RelatedObjects.AddRange(ifcPipeSegments);
-            rel.RelatingGroup = teePipesGroup;
+            representation.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+            representation.RepresentationIdentifier = "Body";
+            representation.RepresentationType = "SweptSolid";
+            representation.Items.AddRange(teeExtrudedArea);
         });
+
+        IfcProductDefinitionShape productDefinitionShape = model.Instances.New<IfcProductDefinitionShape>(shape =>
+        {
+            shape.Representations.Add(shapeRepresentation);
+        });
+
+        IfcPipeSegment pipe = model.Instances.New<IfcPipeSegment>(segment =>
+        {
+            segment.Name = _teeEntity.GetName();
+            segment.Representation = productDefinitionShape;
+            segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
+        });
+
+        AddProperties(model, pipe, _teeEntity);
     }
 
-    private IfcProductDefinitionShape CreatePipeShape(IModel model, StartPipeEntity startPipeEntity)
+    private IfcExtrudedAreaSolid CreateTeeBranchShape(IModel model, StartPipeEntity startPipeEntity, IfcAxis2Placement3D axis)
     {
-        IfcCircleProfileDef? profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
+        IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
         {
             c.ProfileType = IfcProfileTypeEnum.AREA;
-            c.Radius = startPipeEntity.GetOutsideDiameter() * 1.1 / 2;
+            c.Radius = startPipeEntity.GetOutsideDiameter() / 2 * 1.1;
         });
 
-        IfcExtrudedAreaSolid? extrudedSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
+        IfcExtrudedAreaSolid extrudedAreaSolid = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
         {
-            s.SweptArea = profileDef;
-            s.ExtrudedDirection = model.Instances.New<IfcDirection>(d => d.SetXYZ(0, 0, 1));
-            s.Depth = _teeEntity.GetBranchHeight() / 2;
+            solid.SweptArea = profileDef;
+            solid.ExtrudedDirection = CreateDirection(model, new Vector3(0, 0, 1));
+            solid.Depth = _teeEntity.GetBranchHeight() / 2;
+            solid.Position = axis;
         });
 
-        IfcShapeRepresentation? shapeRep = model.Instances.New<IfcShapeRepresentation>(sr =>
-        {
-            sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            sr.RepresentationIdentifier = "Body";
-            sr.RepresentationType = "SweptSolid";
-            sr.Items.Add(extrudedSolid);
-        });
-
-        IfcProductDefinitionShape? productDefShape =
-            model.Instances.New<IfcProductDefinitionShape>(repr => { repr.Representations.Add(shapeRep); });
-
-        return productDefShape;
+        return extrudedAreaSolid;
     }
 }

@@ -15,6 +15,16 @@ public abstract class IfcAbstractEntity
 {
     public abstract void CreateAndAdd(IModel model);
 
+    protected static IfcCartesianPoint CreatePoint(IModel model, Vector3 coordinates)
+    {
+        return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.x, coordinates.y, coordinates.z));
+    }
+    
+    protected static IfcDirection CreateDirection(IModel model, Vector3 direction)
+    {
+        return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.x, direction.y, direction.z));
+    }
+
     protected static IfcRelDefinesByProperties AddProperties(IModel model, IfcObject ifcObject,
         StartAbstractEntity entity)
     {
@@ -38,86 +48,37 @@ public abstract class IfcAbstractEntity
         return properties;
     }
 
-    protected static IfcLocalPlacement CreateLocalPlacementAndDirection(IModel model, Vector3 coordinates,
-        Vector3 direction)
+    protected static IfcLocalPlacement CreateLocalPlacementAndDirection(IModel model, Vector3 coordinates, Vector3 direction)
     {
-        IfcLocalPlacement? localStartPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
+        return model.Instances.New<IfcLocalPlacement>(lp =>
         {
-            lp.RelativePlacement = model.Instances.New<IfcAxis2Placement3D>(pos =>
-            {
-                pos.Location = model.Instances.New<IfcCartesianPoint>(pt => pt.SetXYZ(
-                    coordinates.x, coordinates.y, coordinates.z
-                ));
-                pos.Axis = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
-                    direction.x, direction.y, direction.z
-                ));
-                pos.RefDirection = model.Instances.New<IfcDirection>(dir => dir.SetXYZ(
-                    direction.y, direction.z, direction.x
-                ));
-            });
+            lp.RelativePlacement = CreateAxis2Placement3D(model, coordinates, direction);
         });
-
-        return localStartPlacement;
     }
 
     protected static IfcLocalPlacement CreateLocalPlacement(IModel model, Vector3 coordinates)
     {
-        IfcLocalPlacement? localStartPlacement = model.Instances.New<IfcLocalPlacement>(lp =>
+        return model.Instances.New<IfcLocalPlacement>(lp =>
         {
-            lp.RelativePlacement = model.Instances.New<IfcAxis2Placement3D>(pos =>
-            {
-                pos.Location = model.Instances.New<IfcCartesianPoint>(pt => pt.SetXYZ(
-                    coordinates.x, coordinates.y, coordinates.z
-                ));
-            });
+            lp.RelativePlacement = CreateAxis2Placement3D(model, coordinates);
         });
-
-        return localStartPlacement;
     }
 
-    protected static IfcGroup GroupElements(IModel model, IfcObject[] elements, string name)
+    protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, Vector3 coordinates, Vector3 direction)
     {
-        IfcGroup group = model.Instances.New<IfcGroup>(group => group.Name = name);
-        IfcRelAssignsToGroup groupAssignment = model.Instances.New<IfcRelAssignsToGroup>(rel =>
+        return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
         {
-            rel.RelatedObjects.AddRange(elements);
-            rel.RelatingGroup = group;
+            placement3D.Location = CreatePoint(model, coordinates);
+            placement3D.Axis = CreateDirection(model, direction.XYZ);
+            placement3D.RefDirection = CreateDirection(model, direction.YZX);
         });
-
-        return group;
     }
-
-    public static IfcBooleanResult CreateCombinedGeometry(IModel model, IEnumerable<IIfcElement> elements, IfcBooleanOperator @operator)
+    
+    protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, Vector3 coordinates)
     {
-        if (!elements.Any())
-            throw new ArgumentException("No elements provided for geometry combination!");
-
-        IfcBooleanOperand? baseGeometry = null;
-
-        foreach (var element in elements)
+        return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
         {
-            var geometry = element.Representation?.Representations
-                .SelectMany(r => r.Items)
-                .OfType<IIfcSolidModel>()
-                .FirstOrDefault();
-            
-            if (geometry == null)
-                throw new InvalidOperationException("Pipe has no valid geometry");
-            
-            if (baseGeometry == null)
-            {
-                baseGeometry = geometry;
-                continue;
-            }
-
-            baseGeometry = model.Instances.New<IfcBooleanResult>(res =>
-            {
-                res.Operator = @operator;
-                res.FirstOperand = baseGeometry;
-                res.SecondOperand = geometry;
-            });
-        }
-        
-        return baseGeometry as IfcBooleanResult;
+            placement3D.Location = CreatePoint(model, coordinates);
+        });
     }
 }
