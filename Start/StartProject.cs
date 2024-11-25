@@ -12,7 +12,7 @@ public class StartProject : IDisposable
     public StartProject(string filepath)
     {
         _autoServer = new StartAutoServer();
-        _document = _autoServer.LoadStartDocument(0x2, filepath);
+        _document = _autoServer.LoadStartDocument(0x4, filepath);
         _dataArray = _document.GetDataArrayDispatch();
     }
 
@@ -37,14 +37,14 @@ public class StartProject : IDisposable
         return node;
     }
 
-    public StartWeldingTeeEntity[] GetWeldingTees()
+    public StartWeldedTeeEntity[] GetWeldingTees()
     {
-        int elementsNumber = _dataArray.GetNumberElements(StartElementType.WELDING_TEE, StartElementType.WELDING_TEE);
-        StartWeldingTeeEntity[] tees = new StartWeldingTeeEntity[elementsNumber];
+        int elementsNumber = _dataArray.GetNumberElements(StartElementType.WELDED_TEE, StartElementType.WELDED_TEE);
+        StartWeldedTeeEntity[] tees = new StartWeldedTeeEntity[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            tees[i] = new StartWeldingTeeEntity(_dataArray.GetElementDispatch(i, StartElementType.WELDING_TEE,
-                StartElementType.WELDING_TEE));
+            tees[i] = new StartWeldedTeeEntity(_dataArray.GetElementDispatch(i, StartElementType.WELDED_TEE,
+                StartElementType.WELDED_TEE));
         }
 
         return tees;

@@ -29,7 +29,7 @@ public sealed class StartNodeEntity : StartAbstractEntity
         var dictionary = base.GetData();
         dictionary.Add("Name", GetName());
         dictionary.Add("Description", GetDescription());
-        dictionary.Add("Additional Load from Weight", GetAdditionalLoadFromWeight().ToString());
+        dictionary.Add("Additional Load from Weight", GetAdditionalLoadFromWeight().ToString("F"));
 
         return dictionary;
     }
