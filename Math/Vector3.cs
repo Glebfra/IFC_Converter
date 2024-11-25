@@ -10,7 +10,7 @@ public struct Vector3
     public Vector3 YZX => new(y, z, x);
     public Vector3 ZXY => new(z, x, y);
 
-    public Vector3(double x, double y, double z)
+    public Vector3(double x=0, double y=0, double z=0)
     {
         this.x = x;
         this.y = y;
