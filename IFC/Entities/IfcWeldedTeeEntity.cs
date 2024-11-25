@@ -29,22 +29,23 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
 
     public override void CreateAndAdd(IModel model)
     {
+        StartPipeEntity[] branchPipes;
+        StartPipeEntity headPipe;
+        SortPipes(out branchPipes, out headPipe);
+
         IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
-
+        
         int i = 0;
-        foreach (var pipeEntity in _connPipes)
+        foreach (var branchPipe in branchPipes)
         {
-            Vector3 pipeStartCoordinates = pipeEntity.GetCoordinates();
-            Vector3 pipeDirection = pipeEntity.GetDirection();
-            Vector3 pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
-            Vector3 weldedTeeBranchDirection =
-                (pipeStartCoordinates - Coordinates).Length() < (pipeEndCoordinates - Coordinates).Length()
-                    ? pipeDirection
-                    : pipeDirection * -1;
-
-            IfcAxis2Placement3D teeBranchAxis = CreateAxis2Placement3D(model, Coordinates, weldedTeeBranchDirection);
-            teeExtrudedArea[i++] = CreateTeeBranchShape(model, pipeEntity, teeBranchAxis);
+            Vector3 weldedTeeBranchDirection = GetTeeItemDirection(branchPipe);
+            IfcAxis2Placement3D teeBranchAxis = CreateAxis2Placement3D(model, new Vector3(), weldedTeeBranchDirection);
+            teeExtrudedArea[i++] = CreateTeeItemShape(model, teeBranchAxis, branchPipe.GetOutsideDiameter() / 2, _teeEntity.GetBranchHeight() / 2);
         }
+        
+        Vector3 teeBranchDirection = GetTeeItemDirection(headPipe);
+        IfcAxis2Placement3D teeHeadAxis = CreateAxis2Placement3D(model, new Vector3(), teeBranchDirection);
+        teeExtrudedArea[i++] = CreateTeeItemShape(model, teeHeadAxis, headPipe.GetOutsideDiameter() / 2, _teeEntity.GetHeaderLength());
 
         IfcShapeRepresentation shapeRepresentation = model.Instances.New<IfcShapeRepresentation>(representation =>
         {
@@ -64,24 +65,58 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             segment.Name = _teeEntity.GetName();
             segment.Representation = productDefinitionShape;
             segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
+            segment.ObjectPlacement = CreateLocalPlacement(model, Coordinates);
         });
 
         AddProperties(model, pipe, _teeEntity);
     }
 
-    private IfcExtrudedAreaSolid CreateTeeBranchShape(IModel model, StartPipeEntity startPipeEntity, IfcAxis2Placement3D axis)
+    private void SortPipes(out StartPipeEntity[] branchPipes, out StartPipeEntity headPipe)
+    {
+        branchPipes = new StartPipeEntity[2];
+        headPipe = null;
+        IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
+
+        for (int j = 0; j < _connPipes.Length; j++)
+        {
+            for (int k = j + 1; k < _connPipes.Length; k++)
+            {
+                Vector3 firstPipeDir = _connPipes[j].GetDirection();
+                Vector3 secondPipeDir = _connPipes[k].GetDirection();
+
+                double angleCos = Vector3.Dot(firstPipeDir, secondPipeDir) / (firstPipeDir.Length() * secondPipeDir.Length());
+
+                if (System.Math.Abs(angleCos) < 0.95) continue;
+                branchPipes[0] = _connPipes[j];
+                branchPipes[1] = _connPipes[k];
+                headPipe = _connPipes[^(j + k)];
+            }
+        }
+    }
+
+    private Vector3 GetTeeItemDirection(StartPipeEntity pipeEntity)
+    {
+        Vector3 pipeStartCoordinates = pipeEntity.GetCoordinates();
+        Vector3 pipeDirection = pipeEntity.GetDirection();
+        Vector3 pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
+        return (pipeStartCoordinates - Coordinates).Length() < (pipeEndCoordinates - Coordinates).Length()
+            ? pipeDirection
+            : pipeDirection * -1;
+    }
+
+    private IfcExtrudedAreaSolid CreateTeeItemShape(IModel model, IfcAxis2Placement3D axis, double radius, double length)
     {
         IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
         {
             c.ProfileType = IfcProfileTypeEnum.AREA;
-            c.Radius = startPipeEntity.GetOutsideDiameter() / 2 * 1.1;
+            c.Radius = radius * 1.1;
         });
 
         IfcExtrudedAreaSolid extrudedAreaSolid = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
         {
             solid.SweptArea = profileDef;
             solid.ExtrudedDirection = CreateDirection(model, new Vector3(0, 0, 1));
-            solid.Depth = _teeEntity.GetBranchHeight() / 2;
+            solid.Depth = length;
             solid.Position = axis;
         });
 
