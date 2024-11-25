@@ -1,4 +1,5 @@
-﻿using IFC_Converter.Start.API;
+﻿using System.Reflection;
+using IFC_Converter.Start.API;
 using IFC_Converter.Start.Entities;
 
 namespace IFC_Converter.Start;
@@ -16,64 +17,49 @@ public class StartProject : IDisposable
         _dataArray = _document.GetDataArrayDispatch();
     }
 
-    public StartPipeEntity[] GetConnPipes(StartAbstractEntity startAbstractEntity)
+    public T[] GetConnEntities<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
-        int elementsNumber = _dataArray.GetNumberConns(startAbstractEntity.Id, StartElementType.PIPE_ELEMENT,
-            StartElementType.PIPE_ELEMENT);
-        StartPipeEntity[] pipes = new StartPipeEntity[elementsNumber];
+        int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
+        T[] entities = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            pipes[i] = new StartPipeEntity(
-                startAbstractEntity.entity.GetConnElemOnType(StartElementType.PIPE_ELEMENT, i));
+            StartBaseRoot baseRoot = entity.entity.GetConnElemOnType(type, i);
+            entities[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
 
-        return pipes;
+        return entities;
     }
 
-    public StartNodeEntity GetConnNode(StartAbstractEntity startAbstractEntity)
+    public T GetConnEntity<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
-        StartNodeEntity node =
-            new StartNodeEntity(startAbstractEntity.entity.GetConnElemOnType(StartElementType.NODE, 0));
-        return node;
+        StartBaseRoot baseRoot = entity.entity.GetConnElemOnType(type, 0);
+        return (T)Activator.CreateInstance(typeof(T), baseRoot)!;
     }
 
-    public StartWeldedTeeEntity[] GetWeldingTees()
+    public T[] GetEntities<T>(StartElementType type) where T : StartAbstractEntity
     {
-        int elementsNumber = _dataArray.GetNumberElements(StartElementType.WELDED_TEE, StartElementType.WELDED_TEE);
-        StartWeldedTeeEntity[] tees = new StartWeldedTeeEntity[elementsNumber];
+        int elementsNumber = _dataArray.GetNumberElements(type, type);
+        T[] objs = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            tees[i] = new StartWeldedTeeEntity(_dataArray.GetElementDispatch(i, StartElementType.WELDED_TEE,
-                StartElementType.WELDED_TEE));
+            StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, type, type);
+            objs[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
 
-        return tees;
+        return objs;
     }
-
-    public StartNodeEntity[] GetNodes()
+    
+    public T[] GetEntities<T>(StartElementType minType, StartElementType maxType) where T : StartAbstractEntity
     {
-        int elementsNumber = _dataArray.GetNumberElements(StartElementType.NODE, StartElementType.NODE);
-        StartNodeEntity[] nodes = new StartNodeEntity[elementsNumber];
+        int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
+        T[] objs = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            nodes[i] = new StartNodeEntity(_dataArray.GetElementDispatch(i, StartElementType.NODE,
-                StartElementType.NODE));
+            StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, minType, maxType);
+            objs[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
 
-        return nodes;
-    }
-
-    public StartPipeEntity[] GetPipes()
-    {
-        int elementsNumber = _dataArray.GetNumberElements(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
-        StartPipeEntity[] pipes = new StartPipeEntity[elementsNumber];
-        for (int i = 0; i < elementsNumber; i++)
-        {
-            pipes[i] = new StartPipeEntity(_dataArray.GetElementDispatch(i, StartElementType.PIPE_ELEMENT,
-                StartElementType.PIPE_ELEMENT));
-        }
-
-        return pipes;
+        return objs;
     }
 
     public void Dispose()
