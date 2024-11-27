@@ -31,13 +31,13 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
         Diameter = _pipeEntity.GetOutsideDiameter();
     }
 
-    public override void CreateAndAdd(IModel model)
+    public override IfcObject CreateAndAdd(IModel model)
     {
         IfcLocalPlacement localStartPlacement = CreateLocalPlacement(model, StartCoordinates, Direction);
         IfcLocalPlacement localEndPlacement = CreateLocalPlacement(model, EndCoordinates, Direction);
 
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
-        IfcPipeSegment? pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
+        IfcPipeSegment pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
         {
             p.Name = _pipeEntity.GetName();
             p.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
@@ -45,25 +45,27 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
             p.Representation = productDefShape;
         });
         AddProperties(model, pipeSegment, _pipeEntity);
+
+        return pipeSegment;
     }
 
     private IfcProductDefinitionShape CreatePipeShape(IModel model)
     {
-        IfcCircleProfileDef? profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
+        IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
         {
             c.ProfileType = IfcProfileTypeEnum.AREA;
             c.Radius = Diameter / 2;
         });
 
-        IfcExtrudedAreaSolid? extrudedSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
+        IfcExtrudedAreaSolid extrudedSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = model.Instances.New<IfcDirection>(d => d.SetXYZ(0, 0, 1));
-            s.Depth = Direction.Length();
+            s.Depth = Direction.Length;
         });
 
-        IfcShapeRepresentation? shapeRep = CreateShapeRepresentation(model, extrudedSolid);
-        IfcProductDefinitionShape? productDefShape = model.Instances.New<IfcProductDefinitionShape>(repr => repr.Representations.Add(shapeRep));
+        IfcShapeRepresentation shapeRep = CreateShapeRepresentation(model, extrudedSolid);
+        IfcProductDefinitionShape productDefShape = CreateProductDefinitionShape(model, shapeRep);
 
         return productDefShape;
     }

@@ -30,7 +30,7 @@ public class IFCConverter : IDisposable
     {
         _model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
         _transaction = _model.BeginTransaction();
-        _project = _model.Instances.New<IfcProject>(p => { p.Name = name; });
+        _project = _model.Instances.New<IfcProject>(p => p.Name = name);
         _project.Initialize(ProjectUnits.SIUnitsUK);
 
         var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
@@ -41,6 +41,14 @@ public class IFCConverter : IDisposable
     public void AddEntity(IfcAbstractEntity entity)
     {
         entity.CreateAndAdd(_model);
+    }
+
+    public void AddEntities(IfcAbstractEntity[] entities)
+    {
+        foreach (var entity in entities)
+        {
+            AddEntity(entity);
+        }
     }
 
     public void SaveAs(string filepath)
