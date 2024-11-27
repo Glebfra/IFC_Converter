@@ -1,6 +1,6 @@
-﻿using IFC_Converter.Math;
-using IFC_Converter.Start.Entities;
+﻿using IFC_Converter.Start.Entities;
 using Xbim.Common;
+using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
@@ -22,27 +22,27 @@ public abstract class IfcAbstractEntity
 
     #region Geometric Axis Representation
 
-    protected static IfcCartesianPoint CreatePoint(IModel model, Vector3 coordinates)
+    protected static IfcCartesianPoint CreatePoint(IModel model, XbimVector3D coordinates)
     {
-        return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.x, coordinates.y, coordinates.z));
+        return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.X, coordinates.Y, coordinates.Z));
     }
     
-    protected static IfcDirection CreateDirection(IModel model, Vector3 direction)
+    protected static IfcDirection CreateDirection(IModel model, XbimVector3D direction)
     {
-        return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.x, direction.y, direction.z));
+        return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.X, direction.Y, direction.Z));
     }
 
-    protected static Vector3 GetRightPipeDirection(StartPipeEntity pipeEntity, Vector3 Coordinates)
+    protected static XbimVector3D GetRightPipeDirection(StartPipeEntity pipeEntity, XbimVector3D Coordinates)
     {
-        Vector3 pipeStartCoordinates = pipeEntity.GetCoordinates();
-        Vector3 pipeDirection = pipeEntity.GetDirection();
-        Vector3 pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
+        XbimVector3D pipeStartCoordinates = pipeEntity.GetCoordinates();
+        XbimVector3D pipeDirection = pipeEntity.GetDirection();
+        XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
         return (pipeStartCoordinates - Coordinates).Length < (pipeEndCoordinates - Coordinates).Length
             ? pipeDirection
             : pipeDirection * -1;
     }
 
-    protected static IfcLocalPlacement CreateLocalPlacement(IModel model, Vector3 coordinates, Vector3 direction)
+    protected static IfcLocalPlacement CreateLocalPlacement(IModel model, XbimVector3D coordinates, XbimVector3D direction)
     {
         return model.Instances.New<IfcLocalPlacement>(lp =>
         {
@@ -50,7 +50,7 @@ public abstract class IfcAbstractEntity
         });
     }
 
-    protected static IfcLocalPlacement CreateLocalPlacement(IModel model, Vector3 coordinates)
+    protected static IfcLocalPlacement CreateLocalPlacement(IModel model, XbimVector3D coordinates)
     {
         return model.Instances.New<IfcLocalPlacement>(lp =>
         {
@@ -58,7 +58,7 @@ public abstract class IfcAbstractEntity
         });
     }
 
-    protected static IfcAxis2Placement2D CreateAxis2Placement2D(IModel model, Vector3 coordinates)
+    protected static IfcAxis2Placement2D CreateAxis2Placement2D(IModel model, XbimVector3D coordinates)
     {
         return model.Instances.New<IfcAxis2Placement2D>(placement2D =>
         {
@@ -66,7 +66,7 @@ public abstract class IfcAbstractEntity
         });
     }
 
-    protected static IfcAxis2Placement2D CreateAxis2Placement2D(IModel model, Vector3 coordinates, Vector3 direction)
+    protected static IfcAxis2Placement2D CreateAxis2Placement2D(IModel model, XbimVector3D coordinates, XbimVector3D direction)
     {
         return model.Instances.New<IfcAxis2Placement2D>(placement2D =>
         {
@@ -75,17 +75,17 @@ public abstract class IfcAbstractEntity
         });
     }
 
-    protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, Vector3 coordinates, Vector3 direction)
+    protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates, XbimVector3D direction)
     {
         return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
         {
             placement3D.Location = CreatePoint(model, coordinates);
-            placement3D.Axis = CreateDirection(model, direction.XYZ);
-            placement3D.RefDirection = CreateDirection(model, direction.YZX);
+            placement3D.Axis = CreateDirection(model, direction);
+            placement3D.RefDirection = CreateDirection(model, new XbimVector3D(direction.Y, direction.Z, direction.X));
         });
     }
     
-    protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, Vector3 coordinates)
+    protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates)
     {
         return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
         {
@@ -97,7 +97,7 @@ public abstract class IfcAbstractEntity
 
     #region Geometric Figures Representation
 
-    protected static IfcPlane CreatePlane(IModel model, Vector3 coordinates, Vector3 direction)
+    protected static IfcPlane CreatePlane(IModel model, XbimVector3D coordinates, XbimVector3D direction)
     {
         return model.Instances.New<IfcPlane>(plane =>
         {
@@ -117,7 +117,7 @@ public abstract class IfcAbstractEntity
         });
     }
 
-    protected static IfcTrimmedCurve CreateTrimmedCurve(IModel model, IfcCurve basicCurve, Vector3 firstPoint, Vector3 secondPoint)
+    protected static IfcTrimmedCurve CreateTrimmedCurve(IModel model, IfcCurve basicCurve, XbimVector3D firstPoint, XbimVector3D secondPoint)
     {
         return model.Instances.New<IfcTrimmedCurve>(curve =>
         {
@@ -129,7 +129,7 @@ public abstract class IfcAbstractEntity
         });
     }
 
-    protected static IfcCircle CreateCircle(IModel model, double radius, Vector3 coordinates, Vector3 direction)
+    protected static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction)
     {
         return model.Instances.New<IfcCircle>(ifcCircle =>
         {
@@ -138,7 +138,7 @@ public abstract class IfcAbstractEntity
         });
     }
     
-    protected static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, Vector3 coordinates, Vector3 direction)
+    protected static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction)
     {
         return model.Instances.New<IfcCircleProfileDef>(def =>
         {

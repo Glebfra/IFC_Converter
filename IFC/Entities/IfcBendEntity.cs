@@ -1,6 +1,6 @@
-﻿using IFC_Converter.Math;
-using IFC_Converter.Start.Entities;
+﻿using IFC_Converter.Start.Entities;
 using Xbim.Common;
+using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
@@ -16,7 +16,7 @@ public class IfcBendEntity : IfcAbstractEntity
     private readonly StartBendEntity _startBendEntity;
     private readonly StartPipeEntity[] _startPipeEntities;
 
-    public Vector3 Coordinates;
+    public XbimVector3D Coordinates;
     
     public IfcBendEntity(StartBendEntity startBendEntity, StartNodeEntity startNodeEntity, StartPipeEntity[] startPipeEntities)
     {
@@ -28,24 +28,24 @@ public class IfcBendEntity : IfcAbstractEntity
     
     public override IfcObject CreateAndAdd(IModel model)
     {
-        Vector3 firstPipeDirection = GetRightPipeDirection(_startPipeEntities[0], Coordinates).Normalized;
-        Vector3 secondPipeDirection = GetRightPipeDirection(_startPipeEntities[1], Coordinates).Normalized;
+        XbimVector3D firstPipeDirection = GetRightPipeDirection(_startPipeEntities[0], Coordinates).Normalized();
+        XbimVector3D secondPipeDirection = GetRightPipeDirection(_startPipeEntities[1], Coordinates).Normalized();
 
-        Vector3 startBendCoordinates = Coordinates + firstPipeDirection * _startBendEntity.GetRadius();
-        Vector3 endBendCoordinates = Coordinates + secondPipeDirection * _startBendEntity.GetRadius();
-        Vector3 circleCenter = (firstPipeDirection + secondPipeDirection) * _startBendEntity.GetRadius();
+        XbimVector3D startBendCoordinates = Coordinates + firstPipeDirection * _startBendEntity.GetRadius();
+        XbimVector3D endBendCoordinates = Coordinates + secondPipeDirection * _startBendEntity.GetRadius();
+        XbimVector3D circleCenter = (firstPipeDirection + secondPipeDirection) * _startBendEntity.GetRadius();
         
-        IfcCircle circle = CreateCircle(model, _startBendEntity.GetRadius(), Vector3.Zero, Vector3.Up);
+        IfcCircle circle = CreateCircle(model, _startBendEntity.GetRadius(), XbimVector3D.Zero, new XbimVector3D(0, 0, 1));
 
-        double angle = Vector3.Angle(firstPipeDirection, secondPipeDirection);
-        IfcTrimmedCurve trimmedCurve = CreateTrimmedCurve(model, circle, 0, angle);
-        IfcPlane plane = CreatePlane(model, Coordinates, Vector3.Up);
+        double pipeAngle = firstPipeDirection.Angle(secondPipeDirection);
+        IfcTrimmedCurve trimmedCurve = CreateTrimmedCurve(model, circle, 0, pipeAngle);
+        IfcPlane plane = CreatePlane(model, Coordinates, new XbimVector3D(0, 0, 1));
 
         IfcCircleProfileDef profileDef = CreateCircleProfileDef(
             model,
             _startPipeEntities[0].GetOutsideDiameter() / 2 * 1.1,
-            Vector3.Zero,
-            Vector3.Forward
+            XbimVector3D.Zero,
+            new XbimVector3D(1, 0, 0)
         );
 
         IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = model.Instances.New<IfcSurfaceCurveSweptAreaSolid>(solid =>

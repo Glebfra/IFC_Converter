@@ -8,7 +8,7 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
-using IFC_Converter.Math;
+using Xbim.Common.Geometry;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
@@ -17,9 +17,9 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
 {
     private readonly StartPipeEntity _pipeEntity;
 
-    public Vector3 StartCoordinates;
-    public Vector3 EndCoordinates;
-    public Vector3 Direction;
+    public XbimVector3D StartCoordinates;
+    public XbimVector3D EndCoordinates;
+    public XbimVector3D Direction;
     public double Diameter;
 
     public IfcPipeEntity(StartPipeEntity pipeEntity)
