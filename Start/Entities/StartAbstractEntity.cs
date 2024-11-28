@@ -1,5 +1,5 @@
-﻿using IFC_Converter.Math;
-using IFC_Converter.Start.API;
+﻿using IFC_Converter.Start.API;
+using Xbim.Common.Geometry;
 
 namespace IFC_Converter.Start.Entities;
 
@@ -54,9 +54,9 @@ public abstract class StartAbstractEntity : IDisposable
         return entity.GetZCoord();
     }
 
-    public Vector3 GetCoordinates()
+    public XbimVector3D GetCoordinates()
     {
-        return new Vector3(GetXCoord(), GetYCoord(), GetZCoord());
+        return new XbimVector3D(GetXCoord(), GetYCoord(), GetZCoord());
     }
 
     public virtual Dictionary<string, string> GetData()
