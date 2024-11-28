@@ -35,12 +35,12 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         int i = 0;
         foreach (var branchPipe in branchPipes)
         {
-            XbimVector3D weldedTeeBranchDirection = GetRightPipeDirection(branchPipe, Coordinates);
+            XbimVector3D weldedTeeBranchDirection = GetDirectionToPipe(branchPipe, Coordinates);
             IfcAxis2Placement3D teeBranchAxis = CreateAxis2Placement3D(model, new XbimVector3D(), weldedTeeBranchDirection);
             teeExtrudedArea[i++] = CreateTeeItemShape(model, teeBranchAxis, branchPipe.GetOutsideDiameter() / 2, _teeEntity.GetBranchHeight() / 2);
         }
         
-        XbimVector3D teeBranchDirection = GetRightPipeDirection(headPipe, Coordinates);
+        XbimVector3D teeBranchDirection = GetDirectionToPipe(headPipe, Coordinates);
         IfcAxis2Placement3D teeHeadAxis = CreateAxis2Placement3D(model, new XbimVector3D(), teeBranchDirection);
         teeExtrudedArea[i++] = CreateTeeItemShape(model, teeHeadAxis, headPipe.GetOutsideDiameter() / 2, _teeEntity.GetHeaderLength());
 

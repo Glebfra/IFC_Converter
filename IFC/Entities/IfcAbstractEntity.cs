@@ -32,7 +32,7 @@ public abstract class IfcAbstractEntity
         return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.X, direction.Y, direction.Z));
     }
 
-    protected static XbimVector3D GetRightPipeDirection(StartPipeEntity pipeEntity, XbimVector3D Coordinates)
+    protected static XbimVector3D GetDirectionToPipe(StartPipeEntity pipeEntity, XbimVector3D Coordinates)
     {
         XbimVector3D pipeStartCoordinates = pipeEntity.GetCoordinates();
         XbimVector3D pipeDirection = pipeEntity.GetDirection();
@@ -74,6 +74,16 @@ public abstract class IfcAbstractEntity
             placement2D.RefDirection = CreateDirection(model, direction);
         });
     }
+    
+    protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
+    {
+        return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
+        {
+            placement3D.Location = CreatePoint(model, coordinates);
+            placement3D.Axis = CreateDirection(model, direction);
+            placement3D.RefDirection = CreateDirection(model, refDirection);
+        });
+    }
 
     protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates, XbimVector3D direction)
     {
@@ -84,7 +94,7 @@ public abstract class IfcAbstractEntity
             placement3D.RefDirection = CreateDirection(model, new XbimVector3D(direction.Y, direction.Z, direction.X));
         });
     }
-    
+
     protected static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates)
     {
         return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
@@ -129,12 +139,12 @@ public abstract class IfcAbstractEntity
         });
     }
 
-    protected static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction)
+    protected static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
     {
         return model.Instances.New<IfcCircle>(ifcCircle =>
         {
             ifcCircle.Radius = radius;
-            ifcCircle.Position = CreateAxis2Placement3D(model, coordinates, direction);
+            ifcCircle.Position = CreateAxis2Placement3D(model, coordinates, direction, refDirection);
         });
     }
     
@@ -232,4 +242,5 @@ public abstract class IfcAbstractEntity
     }
 
     #endregion
+    
 }

@@ -17,25 +17,24 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
 {
     private readonly StartPipeEntity _pipeEntity;
 
-    public XbimVector3D StartCoordinates;
-    public XbimVector3D EndCoordinates;
-    public XbimVector3D Direction;
-    public double Diameter;
+    private readonly XbimVector3D _startCoordinates;
+    private readonly XbimVector3D _direction;
+    private readonly XbimMatrix3D _worldMatrix3D;
+    private readonly double _diameter;
 
     public IfcPipeEntity(StartPipeEntity pipeEntity)
     {
         _pipeEntity = pipeEntity;
-        StartCoordinates = _pipeEntity.GetCoordinates();
-        Direction = _pipeEntity.GetDirection();
-        EndCoordinates = StartCoordinates + Direction;
-        Diameter = _pipeEntity.GetOutsideDiameter();
+        _startCoordinates = _pipeEntity.GetCoordinates();
+        _direction = _pipeEntity.GetDirection();
+        _diameter = _pipeEntity.GetOutsideDiameter();
+        _worldMatrix3D = XbimMatrix3D.CreateWorld(_startCoordinates, _direction.Normalized(), new XbimVector3D(_direction.Y, _direction.Z, _direction.X).Normalized());
     }
 
     public override IfcObject CreateAndAdd(IModel model)
     {
-        IfcLocalPlacement localStartPlacement = CreateLocalPlacement(model, StartCoordinates, Direction);
-        IfcLocalPlacement localEndPlacement = CreateLocalPlacement(model, EndCoordinates, Direction);
-
+        IfcLocalPlacement localStartPlacement = CreateLocalPlacement(model, _startCoordinates);
+        
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
         IfcPipeSegment pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
         {
@@ -51,19 +50,14 @@ public sealed class IfcPipeEntity : IfcAbstractEntity
 
     private IfcProductDefinitionShape CreatePipeShape(IModel model)
     {
-        IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
-        {
-            c.ProfileType = IfcProfileTypeEnum.AREA;
-            c.Radius = Diameter / 2;
-        });
-
+        IfcCircleProfileDef profileDef = CreateCircleProfileDef(model, _diameter / 2, XbimVector3D.Zero, new XbimVector3D(1, 0, 0));
         IfcExtrudedAreaSolid extrudedSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = model.Instances.New<IfcDirection>(d => d.SetXYZ(0, 0, 1));
-            s.Depth = Direction.Length;
+            s.Depth = _direction.Length;
+            s.Position = CreateAxis2Placement3D(model, XbimVector3D.Zero, _worldMatrix3D.Forward);
         });
-
         IfcShapeRepresentation shapeRep = CreateShapeRepresentation(model, extrudedSolid);
         IfcProductDefinitionShape productDefShape = CreateProductDefinitionShape(model, shapeRep);
 
