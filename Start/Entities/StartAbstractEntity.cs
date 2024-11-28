@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using IFC_Converter.Start.API;
+﻿using IFC_Converter.Start.API;
 using Xbim.Common.Geometry;
 
 namespace IFC_Converter.Start.Entities;

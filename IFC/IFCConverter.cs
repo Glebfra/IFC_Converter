@@ -1,5 +1,4 @@
 ﻿using IFC_Converter.IFC.Entities;
-using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
@@ -48,7 +47,7 @@ public class IFCConverter : IDisposable
         return entity.CreateAndAdd(_model);
     }
 
-    public IEnumerable<IfcObject> AddEntities(IfcAbstractEntity[] entities)
+    public IfcObject[] AddEntities(IfcAbstractEntity[] entities)
     {
         return entities.Select(entity => AddEntity(entity)).ToArray();
     }
