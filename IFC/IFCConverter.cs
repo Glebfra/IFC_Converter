@@ -1,4 +1,5 @@
 ﻿using IFC_Converter.IFC.Entities;
+using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
@@ -25,22 +26,31 @@ public class IFCConverter : IDisposable
     private readonly IfcStore _model;
     private readonly ITransaction _transaction;
     private readonly IfcProject _project;
+    
+    private readonly List<IfcObject> _ifcObjects;
 
     public IFCConverter(string name)
     {
         _model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
         _transaction = _model.BeginTransaction();
-        _project = _model.Instances.New<IfcProject>(p => { p.Name = name; });
+        _project = _model.Instances.New<IfcProject>(p => p.Name = name);
         _project.Initialize(ProjectUnits.SIUnitsUK);
 
         var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
+
+        _ifcObjects = new List<IfcObject>();
     }
 
-    public void AddEntity(IfcAbstractEntity entity)
+    public IfcObject AddEntity(IfcAbstractEntity entity)
     {
-        entity.CreateAndAdd(_model);
+        return entity.CreateAndAdd(_model);
+    }
+
+    public IEnumerable<IfcObject> AddEntities(IfcAbstractEntity[] entities)
+    {
+        return entities.Select(entity => AddEntity(entity)).ToArray();
     }
 
     public void SaveAs(string filepath)

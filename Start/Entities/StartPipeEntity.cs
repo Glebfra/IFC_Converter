@@ -1,5 +1,5 @@
-﻿using IFC_Converter.Math;
-using IFC_Converter.Start.API;
+﻿using IFC_Converter.Start.API;
+using Xbim.Common.Geometry;
 
 namespace IFC_Converter.Start.Entities;
 
@@ -132,9 +132,9 @@ public class StartPipeEntity : StartAbstractEntity
         return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OZ_AXIS);
     }
 
-    public Vector3 GetDirection()
+    public XbimVector3D GetDirection()
     {
-        return new Vector3(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
+        return new XbimVector3D(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
     }
 
     public override Dictionary<string, string> GetData()
