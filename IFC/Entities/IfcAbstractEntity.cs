@@ -30,10 +30,10 @@ public abstract class IfcAbstractEntity
         return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.X, direction.Y, direction.Z));
     }
 
-    protected static XbimVector3D GetDirectionToPipe(StartPipeEntity pipeEntity, XbimVector3D Coordinates)
+    protected static XbimVector3D GetDirectionToPipe(IfcPipeEntity pipeEntity, XbimVector3D Coordinates)
     {
-        XbimVector3D pipeStartCoordinates = pipeEntity.GetCoordinates();
-        XbimVector3D pipeDirection = pipeEntity.GetDirection();
+        XbimVector3D pipeStartCoordinates = pipeEntity.StartCoordinates;
+        XbimVector3D pipeDirection = pipeEntity.Direction;
         XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
         return (pipeStartCoordinates - Coordinates).Length < (pipeEndCoordinates - Coordinates).Length
             ? pipeDirection
