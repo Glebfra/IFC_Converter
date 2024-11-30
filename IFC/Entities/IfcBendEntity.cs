@@ -13,23 +13,25 @@ namespace IFC_Converter.IFC.Entities;
 public class IfcBendEntity : IfcAbstractEntity
 {
     private readonly StartBendEntity _startBendEntity;
-    private readonly StartPipeEntity[] _startPipeEntities;
+    private readonly IfcNodeEntity _ifcNodeEntity;
+    private readonly IfcPipeEntity[] _ifcPipeEntities;
 
-    private readonly XbimMatrix3D _objectWorldMatrix;
-    private readonly XbimVector3D[] _pipesDirection;
-    private readonly XbimVector3D[] _directionToPipes;
-    
-    public IfcBendEntity(StartBendEntity startBendEntity, StartNodeEntity startNodeEntity, StartPipeEntity[] startPipeEntities)
+    public XbimMatrix3D ObjectWorldMatrix { get; }
+    public XbimVector3D[] PipesDirection { get; }
+    public XbimVector3D[] DirectionToPipes { get; }
+
+    public IfcBendEntity(StartBendEntity startBendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
     {
         _startBendEntity = startBendEntity;
-        _startPipeEntities = startPipeEntities;
+        _ifcPipeEntities = ifcPipeEntities;
+        _ifcNodeEntity = ifcNodeEntity;
         
-        XbimVector3D coordinates = startNodeEntity.GetCoordinates();
-        _pipesDirection = startPipeEntities.Select(pipe => pipe.GetDirection().Normalized()).ToArray();
-        _directionToPipes = startPipeEntities.Select(pipe => GetDirectionToPipe(pipe, coordinates)).ToArray();
+        XbimVector3D coordinates = _ifcNodeEntity.Coordinates;
+        PipesDirection = ifcPipeEntities.Select(pipe => pipe.Direction.Normalized()).ToArray();
+        DirectionToPipes = ifcPipeEntities.Select(pipe => GetDirectionToPipe(pipe, coordinates)).ToArray();
 
-        XbimVector3D upDirection = XbimVector3D.CrossProduct(_pipesDirection[0], _pipesDirection[1]).Normalized();
-        _objectWorldMatrix = XbimMatrix3D.CreateWorld(coordinates, _directionToPipes[0] * -1, upDirection);
+        XbimVector3D upDirection = XbimVector3D.CrossProduct(PipesDirection[0], PipesDirection[1]).Normalized();
+        ObjectWorldMatrix = XbimMatrix3D.CreateWorld(coordinates, DirectionToPipes[0] * -1, upDirection);
     }
     
     public override IfcObject CreateAndAdd(IModel model)
@@ -37,7 +39,7 @@ public class IfcBendEntity : IfcAbstractEntity
         IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = CreateBendShape(model);
         IfcShapeRepresentation shapeRepresentation = CreateShapeRepresentation(model, sweptAreaSolid);
         IfcProductDefinitionShape shape = CreateProductDefinitionShape(model, shapeRepresentation);
-        IfcPipeSegment pipe = CreatePipeSegment(model, _startBendEntity.GetName(), CreateLocalPlacement(model, _objectWorldMatrix.Translation), shape);
+        IfcPipeSegment pipe = CreatePipeSegment(model, _startBendEntity.GetName(), CreateLocalPlacement(model, ObjectWorldMatrix.Translation), shape);
         AddProperties(model, pipe, _startBendEntity);
 
         return pipe;
@@ -45,16 +47,16 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private IfcSurfaceCurveSweptAreaSolid CreateBendShape(IModel model)
     {
-        double pipeAngle = _pipesDirection[0].Angle(_pipesDirection[1]);
+        double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
         XbimVector3D circleCenter = CalculateCircleCenter(pipeAngle);
         
-        IfcCircle circle = CreateCircle(model, _startBendEntity.GetRadius(), circleCenter, _objectWorldMatrix.Up, _objectWorldMatrix.Right);
+        IfcCircle circle = CreateCircle(model, _startBendEntity.GetRadius(), circleCenter, ObjectWorldMatrix.Up, ObjectWorldMatrix.Right);
         IfcTrimmedCurve trimmedCurve = CreateTrimmedCurve(model, circle, 0, pipeAngle);
-        IfcPlane plane = CreatePlane(model, _objectWorldMatrix.Translation, _objectWorldMatrix.Up);
+        IfcPlane plane = CreatePlane(model, ObjectWorldMatrix.Translation, ObjectWorldMatrix.Up);
 
         IfcCircleProfileDef profileDef = CreateCircleProfileDef(
             model,
-            _startPipeEntities[0].GetOutsideDiameter() / 2 * 1.1,
+            _ifcPipeEntities[0].Diameter / 2 * 1.1,
             XbimVector3D.Zero,
             new XbimVector3D(1, 0, 0)
         );
@@ -69,7 +71,7 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private XbimVector3D CalculateCircleCenter(double pipeAngle)
     {
-        XbimVector3D dirToCenter = (_directionToPipes[0].Normalized() + _directionToPipes[1].Normalized()).Normalized();
+        XbimVector3D dirToCenter = (DirectionToPipes[0].Normalized() + DirectionToPipes[1].Normalized()).Normalized();
         double lengthToCenter = _startBendEntity.GetRadius() / Math.Cos(pipeAngle / 2);
         return dirToCenter * lengthToCenter;
     }
