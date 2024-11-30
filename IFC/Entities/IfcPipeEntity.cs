@@ -50,17 +50,30 @@ public class IfcPipeEntity : IfcAbstractEntity
         return _pipeSegment;
     }
 
+    public void Clip(IModel model, IfcNodeEntity nodeEntity, double clipLength)
+    {
+        if ((nodeEntity.Coordinates - StartCoordinates).Length < (nodeEntity.Coordinates - StartCoordinates - Direction).Length)
+        {
+            _extrudedArea.Position = CreateAxis2Placement3D(model, Direction.Normalized() * clipLength, WorldMatrix3D.Forward);
+            _extrudedArea.Depth -= clipLength;
+        }
+        else
+        {
+            _extrudedArea.Depth -= clipLength;
+        }
+    }
+
     private IfcProductDefinitionShape CreatePipeShape(IModel model)
     {
         IfcCircleProfileDef profileDef = CreateCircleProfileDef(model, Diameter / 2, XbimVector3D.Zero, new XbimVector3D(1, 0, 0));
-        IfcExtrudedAreaSolid extrudedAreaSolid = model.Instances.New<IfcExtrudedAreaSolid>(s =>
+        _extrudedArea = model.Instances.New<IfcExtrudedAreaSolid>(s =>
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = model.Instances.New<IfcDirection>(d => d.SetXYZ(0, 0, 1));
             s.Depth = Direction.Length;
             s.Position = CreateAxis2Placement3D(model, XbimVector3D.Zero, WorldMatrix3D.Forward);
         });
-        IfcShapeRepresentation shapeRep = CreateShapeRepresentation(model, extrudedAreaSolid);
+        IfcShapeRepresentation shapeRep = CreateShapeRepresentation(model, _extrudedArea);
         IfcProductDefinitionShape productDefShape = CreateProductDefinitionShape(model, shapeRep);
 
         return productDefShape;

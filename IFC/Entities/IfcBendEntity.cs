@@ -42,6 +42,13 @@ public class IfcBendEntity : IfcAbstractEntity
         IfcPipeSegment pipe = CreatePipeSegment(model, _startBendEntity.GetName(), CreateLocalPlacement(model, ObjectWorldMatrix.Translation), shape);
         AddProperties(model, pipe, _startBendEntity);
 
+        double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
+        double clipLength = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);
+        foreach (var ifcPipeEntity in _ifcPipeEntities)
+        {
+            ifcPipeEntity.Clip(model, _ifcNodeEntity, clipLength);
+        }
+
         return pipe;
     }
 
@@ -56,7 +63,7 @@ public class IfcBendEntity : IfcAbstractEntity
 
         IfcCircleProfileDef profileDef = CreateCircleProfileDef(
             model,
-            _ifcPipeEntities[0].Diameter / 2 * 1.1,
+            _ifcPipeEntities[0].Diameter / 2,
             XbimVector3D.Zero,
             new XbimVector3D(1, 0, 0)
         );

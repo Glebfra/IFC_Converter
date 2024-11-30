@@ -99,23 +99,4 @@ public static class Program
 
         return dictionary;
     }
-
-    private static Dictionary<T, U> ConvertDependableObjects<T, U>(StartProject startProject, IFCConverter ifcConverter, StartElementType type)
-        where T : StartAbstractEntity where U : IfcAbstractEntity
-    {
-        Dictionary<T, U> dictionary = new Dictionary<T, U>();
-        var objs = startProject.GetEntities<T>(type);
-        foreach (var obj in objs)
-        {
-            Console.WriteLine($"Added {typeof(T).Name} with Id: {obj.Id}");
-            
-            StartNodeEntity nodeObj = startProject.GetConnEntity<StartNodeEntity>(obj, StartElementType.NODE);
-            StartPipeEntity[] pipeObjs = startProject.GetConnEntities<StartPipeEntity>(obj, StartElementType.PIPE_ELEMENT);
-            U ifcObj = (U)Activator.CreateInstance(typeof(U), new { obj, nodeObj, pipeObjs })!;
-            ifcConverter.AddEntity(ifcObj);
-            dictionary.Add(obj, ifcObj);
-        }
-
-        return dictionary;
-    }
 }
