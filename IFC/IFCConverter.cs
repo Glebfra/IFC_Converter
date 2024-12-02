@@ -25,8 +25,6 @@ public class IFCConverter : IDisposable
     private readonly IfcStore _model;
     private readonly ITransaction _transaction;
     private readonly IfcProject _project;
-    
-    private readonly List<IfcObject> _ifcObjects;
 
     public IFCConverter(string name)
     {
@@ -38,8 +36,6 @@ public class IFCConverter : IDisposable
         var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
-
-        _ifcObjects = new List<IfcObject>();
     }
 
     public IfcObject AddEntity(IfcAbstractEntity entity)
