@@ -6,50 +6,15 @@ public class StartBendEntity : StartAbstractEntity
 {
     public StartBendEntity(StartBaseRoot entity) : base(entity) { }
 
-    public string GetName()
-    {
-        return entity.GetDataChar(StartBaseRootFunctionKey.BEND_NAME);
-    }
-
-    public double GetWeight()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.BEND_WEIGHT);
-    }
-
-    public int GetManufacturingTechnology()
-    {
-        return entity.GetDataInt(StartBaseRootFunctionKey.BEND_MANUFACTURING_TECHNOLOGY);
-    }
-
-    public double GetWallThickness()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.BEND_WALL_THICKNESS);
-    }
-    
-    public double GetMillTolerance()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.BEND_MILL_TOLERANCE);
-    }
-    
-    public double GetMillToleranceOutside()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.BEND_MILL_TOLERANCE_OUTSIDE);
-    }
-    
-    public double GetRadius()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.BEND_RADIUS);
-    }
-    
-    public double GetOvalizationCoefficient()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.BEND_OVALIZATION_COEFFICIENT);
-    }
-    
-    public int GetNumberOfMilters()
-    {
-        return entity.GetDataInt(StartBaseRootFunctionKey.BEND_NUMBER_OF_MILTERS);
-    }
+    public string GetName() => Entity.GetDataChar(StartBaseRootFunctionKey.BEND_NAME);
+    public double GetWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_WEIGHT);
+    public int GetManufacturingTechnology() => Entity.GetDataInt(StartBaseRootFunctionKey.BEND_MANUFACTURING_TECHNOLOGY);
+    public double GetWallThickness() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_WALL_THICKNESS);
+    public double GetMillTolerance() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_MILL_TOLERANCE);
+    public double GetMillToleranceOutside() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_MILL_TOLERANCE_OUTSIDE);
+    public double GetRadius() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_RADIUS);
+    public double GetOvalizationCoefficient() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_OVALIZATION_COEFFICIENT);
+    public int GetNumberOfMilters() => Entity.GetDataInt(StartBaseRootFunctionKey.BEND_NUMBER_OF_MILTERS);
 
     public override Dictionary<string, string> GetData()
     {

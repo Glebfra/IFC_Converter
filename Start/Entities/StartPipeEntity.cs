@@ -5,137 +5,42 @@ namespace IFC_Converter.Start.Entities;
 
 public class StartPipeEntity : StartAbstractEntity
 {
-    public StartPipeEntity(StartBaseRoot entity) : base(entity)
-    {
-    }
+    public StartPipeEntity(StartBaseRoot entity) : base(entity) { }
 
     public StartNodeEntity GetStartNode()
     {
-        return new StartNodeEntity(entity.GetStartNode());
+        return new StartNodeEntity(Entity.GetStartNode());
     }
 
     public StartNodeEntity GetEndNode()
     {
-        return new StartNodeEntity(entity.GetEndNode());
+        return new StartNodeEntity(Entity.GetEndNode());
     }
 
-    public string GetName()
-    {
-        return entity.GetDataChar(StartBaseRootFunctionKey.PIPE_NAME);
-    }
+    public string GetName() => Entity.GetDataChar(StartBaseRootFunctionKey.PIPE_NAME);
+    public double GetOutsideDiameter() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_OUTSIDE_DIAMETER);
+    public string GetMaterialName() => Entity.GetDataChar(StartBaseRootFunctionKey.PIPE_MATERIAL_NAME);
+    public double GetWallThickness() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_WALL_THICKNESS);
+    public double GetMillTolerance() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_MILL_TOLERANCE);
+    public double GetCorrosionAllowance() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_CORROSION_ALLOWANCE);
+    public double GetPressure() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PRESSURE);
+    public double GetTestPressure() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_TEST_PRESSURE);
+    public double GetTemperature() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_TEMPERATURE);
+    public double GetPipeUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_UNIT_WEIGHT);
+    public double GetInsulationUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_INSULATION_UNIT_WEIGHT);
+    public double GetProductUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PRODUCT_UNIT_WEIGHT);
+    public long GetManufacturingTechnology() => Entity.GetDataInt(StartBaseRootFunctionKey.PIPE_MANUFACTURING_TECHNOLOGY);
+    public double GetLongitudinalWeldJointFactor() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_LONGITUDINAL_WELD_JOINT_FACTOR);
+    public double GetStrengthFactorOfTheTraverseWeld() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_STRENGTH_FACTOR_OF_THE_TRAVERSE_WELD);
+    public double GetAdditionalWeightLoad() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_WEIGHT_LOAD);
+    public double GetAdditionalWeightLoadAlongTheXAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_X_AXIS);
+    public double GetAdditionalWeightLoadAlongTheYAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Y_AXIS);
+    public double GetAdditionalWeightLoadAlongTheZAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Z_AXIS);
+    public double GetProjectionAlongOXAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OX_AXIS);
+    public double GetProjectionAlongOYAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OY_AXIS);
+    public double GetProjectionAlongOZAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OZ_AXIS);
 
-    public double GetOutsideDiameter()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_OUTSIDE_DIAMETER);
-    }
-
-    public string GetMaterialName()
-    {
-        return entity.GetDataChar(StartBaseRootFunctionKey.PIPE_MATERIAL_NAME);
-    }
-
-    public double GetWallThickness()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_WALL_THICKNESS);
-    }
-
-    public double GetMillTolerance()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_MILL_TOLERANCE);
-    }
-
-    public double GetCorrosionAllowance()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_CORROSION_ALLOWANCE);
-    }
-
-    public double GetPressure()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PRESSURE);
-    }
-
-    public double GetTestPressure()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_TEST_PRESSURE);
-    }
-
-    public double GetTemperature()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_TEMPERATURE);
-    }
-
-    public double GetPipeUnitWeight()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_UNIT_WEIGHT);
-    }
-
-    public double GetInsulationUnitWeight()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_INSULATION_UNIT_WEIGHT);
-    }
-
-    public double GetProductUnitWeight()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PRODUCT_UNIT_WEIGHT);
-    }
-
-    public long GetManufacturingTechnology()
-    {
-        return entity.GetDataInt(StartBaseRootFunctionKey.PIPE_MANUFACTURING_TECHNOLOGY);
-    }
-
-    public double GetLongitudinalWeldJointFactor()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_LONGITUDINAL_WELD_JOINT_FACTOR);
-    }
-
-    public double GetStrengthFactorOfTheTraverseWeld()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_STRENGTH_FACTOR_OF_THE_TRAVERSE_WELD);
-    }
-
-    public double GetAdditionalWeightLoad()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_WEIGHT_LOAD);
-    }
-
-    public double GetAdditionalWeightLoadAlongTheXAxis()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey
-            .PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_X_AXIS);
-    }
-
-    public double GetAdditionalWeightLoadAlongTheYAxis()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey
-            .PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Y_AXIS);
-    }
-
-    public double GetAdditionalWeightLoadAlongTheZAxis()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey
-            .PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Z_AXIS);
-    }
-
-    public double GetProjectionAlongOXAxis()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OX_AXIS);
-    }
-
-    public double GetProjectionAlongOYAxis()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OY_AXIS);
-    }
-
-    public double GetProjectionAlongOZAxis()
-    {
-        return entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OZ_AXIS);
-    }
-
-    public XbimVector3D GetDirection()
-    {
-        return new XbimVector3D(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
-    }
+    public XbimVector3D GetDirection() => new(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
 
     public override Dictionary<string, string> GetData()
     {

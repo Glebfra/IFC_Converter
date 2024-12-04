@@ -53,14 +53,8 @@ public class IfcPipeEntity : IfcAbstractEntity
     public void Clip(IModel model, IfcNodeEntity nodeEntity, double clipLength)
     {
         if ((nodeEntity.Coordinates - StartCoordinates).Length < (nodeEntity.Coordinates - StartCoordinates - Direction).Length)
-        {
-            _extrudedArea.Position = CreateAxis2Placement3D(model, Direction.Normalized() * clipLength, WorldMatrix3D.Forward);
-            _extrudedArea.Depth -= clipLength;
-        }
-        else
-        {
-            _extrudedArea.Depth -= clipLength;
-        }
+            _extrudedArea.Position = CreateAxis2Placement3D(model, WorldMatrix3D.Forward * clipLength, WorldMatrix3D.Forward);
+        _extrudedArea.Depth -= clipLength;
     }
 
     private IfcProductDefinitionShape CreatePipeShape(IModel model)

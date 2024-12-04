@@ -63,11 +63,6 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         return pipe;
     }
 
-    private void ClipPipes(IModel model)
-    {
-        
-    }
-
     private void SortPipes(out IfcPipeEntity[] branchPipes, out IfcPipeEntity headPipe)
     {
         branchPipes = new IfcPipeEntity[2];
