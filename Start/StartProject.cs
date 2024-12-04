@@ -22,7 +22,7 @@ public class StartProject : IDisposable
         T[] entities = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            StartBaseRoot baseRoot = entity.entity.GetConnElemOnType(type, i);
+            StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, i);
             entities[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
 
@@ -31,7 +31,7 @@ public class StartProject : IDisposable
 
     public T GetConnEntity<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
-        StartBaseRoot baseRoot = entity.entity.GetConnElemOnType(type, 0);
+        StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, 0);
         return (T)Activator.CreateInstance(typeof(T), baseRoot)!;
     }
 
