@@ -13,7 +13,7 @@ public static class IfcProperty
         return model.Instances.New<IfcRelDefinesByProperties>(rel =>
         {
             rel.RelatedObjects.Add(ifcObject);
-            rel.RelatingPropertyDefinition = CreatePropertySet(model, "Properties", data);
+            rel.RelatingPropertyDefinition = CreatePropertySet(model, "Pset_PipeSegmentCommon", data);
         });
     }
 

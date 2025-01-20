@@ -7,6 +7,7 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 
@@ -58,8 +59,10 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             fitting.Representation = productDefinitionShape;
             fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
         });
-
         IfcProperty.AddProperties(model, pipeFitting, _teeEntity.GetData());
+        
+        IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
+        ifcBuilding.AddElement(pipeFitting);
 
         return pipeFitting;
     }

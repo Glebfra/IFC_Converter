@@ -34,16 +34,19 @@ public class IFCConverter : IDisposable
         _model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
         _transaction = _model.BeginTransaction();
         _project = _model.Instances.New<IfcProject>(p => p.Name = name);
-        _project.Initialize(ProjectUnits.SIUnitsUK); ;
-
+        _project.Initialize(ProjectUnits.SIUnitsUK);
+        
         var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
-        
-        var site = _model.Instances.New<IfcSite>();
-        var building = _model.Instances.New<IfcBuilding>();
-        _project.AddSite(site);
-        site.AddBuilding(building);
+
+        var building = _model.Instances.New<IfcBuilding>(ifcBuilding =>
+        {
+            ifcBuilding.Name = "Building";
+            ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            ifcBuilding.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+        });
+        _project.AddBuilding(building);
     }
 
     public IfcObject AddEntity(IfcAbstractEntity entity)
@@ -59,7 +62,7 @@ public class IFCConverter : IDisposable
     public void SaveAs(string filepath)
     {
         _transaction.Commit();
-        _model.SaveAs(filepath);
+        _model.SaveAs(filepath, StorageType.Ifc);
     }
 
     public void Dispose()
