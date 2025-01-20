@@ -1,4 +1,5 @@
-﻿using IFC_Converter.Start.Entities;
+﻿using IFC_Converter.IFC.Tools;
+using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -23,9 +24,9 @@ public class IfcNodeEntity : IfcAbstractEntity
 
     public override IfcObject CreateAndAdd(IModel model)
     {
-        LocalPlacement = CreateLocalPlacement(model, Coordinates);
-        Port = CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), LocalPlacement);
-        AddProperties(model, Port, _nodeEntity);
+        LocalPlacement = IfcAxis.CreateLocalPlacement(model, Coordinates);
+        Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), LocalPlacement);
+        IfcProperty.AddProperties(model, Port, _nodeEntity);
 
         return Port;
     }
