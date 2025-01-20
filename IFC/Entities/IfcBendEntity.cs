@@ -1,4 +1,5 @@
-﻿using IFC_Converter.Start.Entities;
+﻿using IFC_Converter.IFC.Tools;
+using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -27,8 +28,8 @@ public class IfcBendEntity : IfcAbstractEntity
         _ifcNodeEntity = ifcNodeEntity;
         
         XbimVector3D coordinates = _ifcNodeEntity.Coordinates;
-        PipesDirection = ifcPipeEntities.Select(pipe => pipe.Direction.Normalized()).ToArray();
-        DirectionToPipes = ifcPipeEntities.Select(pipe => GetDirectionToPipe(pipe, coordinates)).ToArray();
+        PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward.Normalized()).ToArray();
+        DirectionToPipes = ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
 
         XbimVector3D upDirection = XbimVector3D.CrossProduct(PipesDirection[0], PipesDirection[1]).Normalized();
         ObjectWorldMatrix = XbimMatrix3D.CreateWorld(coordinates, DirectionToPipes[0] * -1, upDirection);
@@ -37,10 +38,10 @@ public class IfcBendEntity : IfcAbstractEntity
     public override IfcObject CreateAndAdd(IModel model)
     {
         IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = CreateBendShape(model);
-        IfcShapeRepresentation shapeRepresentation = CreateShapeRepresentation(model, sweptAreaSolid);
-        IfcProductDefinitionShape shape = CreateProductDefinitionShape(model, shapeRepresentation);
-        IfcPipeSegment pipe = CreatePipeSegment(model, _startBendEntity.GetName(), CreateLocalPlacement(model, ObjectWorldMatrix.Translation), shape);
-        AddProperties(model, pipe, _startBendEntity);
+        IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, sweptAreaSolid);
+        IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+        IfcPipeSegment pipe = IfcSegment.CreatePipeSegment(model, _startBendEntity.GetName(), IfcAxis.CreateLocalPlacement(model, ObjectWorldMatrix.Translation), shape);
+        IfcProperty.AddProperties(model, pipe, _startBendEntity.GetData());
 
         double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
         double clipLength = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);
@@ -57,11 +58,11 @@ public class IfcBendEntity : IfcAbstractEntity
         double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
         XbimVector3D circleCenter = CalculateCircleCenter(pipeAngle);
         
-        IfcCircle circle = CreateCircle(model, _startBendEntity.GetRadius(), circleCenter, ObjectWorldMatrix.Up, ObjectWorldMatrix.Right);
-        IfcTrimmedCurve trimmedCurve = CreateTrimmedCurve(model, circle, 0, pipeAngle);
-        IfcPlane plane = CreatePlane(model, ObjectWorldMatrix.Translation, ObjectWorldMatrix.Up);
+        IfcCircle circle = IfcGeometry.CreateCircle(model, _startBendEntity.GetRadius(), circleCenter, ObjectWorldMatrix.Up, ObjectWorldMatrix.Right);
+        IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, pipeAngle);
+        IfcPlane plane = IfcGeometry.CreatePlane(model, ObjectWorldMatrix.Translation, ObjectWorldMatrix.Up);
 
-        IfcCircleProfileDef profileDef = CreateCircleProfileDef(
+        IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(
             model,
             _ifcPipeEntities[0].Diameter / 2,
             XbimVector3D.Zero,

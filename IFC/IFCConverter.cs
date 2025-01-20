@@ -1,10 +1,13 @@
 ﻿using IFC_Converter.IFC.Entities;
+using IFC_Converter.IFC.Tools;
 using Xbim.Common;
+using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.IO;
 
 namespace IFC_Converter.IFC;
@@ -31,11 +34,16 @@ public class IFCConverter : IDisposable
         _model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
         _transaction = _model.BeginTransaction();
         _project = _model.Instances.New<IfcProject>(p => p.Name = name);
-        _project.Initialize(ProjectUnits.SIUnitsUK);
+        _project.Initialize(ProjectUnits.SIUnitsUK); ;
 
         var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
+        
+        var site = _model.Instances.New<IfcSite>();
+        var building = _model.Instances.New<IfcBuilding>();
+        _project.AddSite(site);
+        site.AddBuilding(building);
     }
 
     public IfcObject AddEntity(IfcAbstractEntity entity)

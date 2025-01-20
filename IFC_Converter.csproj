@@ -13,4 +13,31 @@
         <PackageReference Include="Xbim.Ifc4" Version="6.0.445" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Test\**" />
+      <Compile Remove="Converter\**" />
+      <Compile Remove="IFC\bin\**" />
+      <Compile Remove="IFC\obj\**" />
+      <Compile Remove="Start\bin\**" />
+      <Compile Remove="Start\obj\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Test\**" />
+      <EmbeddedResource Remove="Converter\**" />
+      <EmbeddedResource Remove="IFC\bin\**" />
+      <EmbeddedResource Remove="IFC\obj\**" />
+      <EmbeddedResource Remove="Start\bin\**" />
+      <EmbeddedResource Remove="Start\obj\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Test\**" />
+      <None Remove="Converter\**" />
+      <None Remove="IFC\bin\**" />
+      <None Remove="IFC\obj\**" />
+      <None Remove="Start\bin\**" />
+      <None Remove="Start\obj\**" />
+    </ItemGroup>
+
 </Project>
