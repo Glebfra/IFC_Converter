@@ -1,5 +1,4 @@
-﻿using IFC_Converter.Start.Entities;
-using Xbim.Common;
+﻿using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
@@ -8,12 +7,12 @@ namespace IFC_Converter.IFC.Tools;
 
 public static class IfcProperty
 {
-    public static IfcRelDefinesByProperties AddProperties(IModel model, IfcObject ifcObject, Dictionary<string, string> data)
+    public static IfcRelDefinesByProperties AddProperties(IModel model, string name, IfcObject ifcObject, Dictionary<string, string> data)
     {
         return model.Instances.New<IfcRelDefinesByProperties>(rel =>
         {
             rel.RelatedObjects.Add(ifcObject);
-            rel.RelatingPropertyDefinition = CreatePropertySet(model, "Pset_PipeSegmentCommon", data);
+            rel.RelatingPropertyDefinition = CreatePropertySet(model, name, data);
         });
     }
 
