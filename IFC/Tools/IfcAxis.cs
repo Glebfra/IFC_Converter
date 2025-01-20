@@ -20,8 +20,8 @@ public static class IfcAxis
 
     public static XbimVector3D GetDirectionToPipe(IfcPipeEntity pipeEntity, XbimVector3D Coordinates)
     {
-        XbimVector3D pipeStartCoordinates = pipeEntity.StartCoordinates;
-        XbimVector3D pipeDirection = pipeEntity.Direction;
+        XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
+        XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Forward;
         XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
         return (pipeStartCoordinates - Coordinates).Length < (pipeEndCoordinates - Coordinates).Length
             ? pipeDirection

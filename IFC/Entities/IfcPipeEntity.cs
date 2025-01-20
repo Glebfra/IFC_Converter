@@ -15,11 +15,9 @@ namespace IFC_Converter.IFC.Entities;
 public class IfcPipeEntity : IfcAbstractEntity
 {
     public StartPipeEntity PipeEntity { get; }
-
-    public XbimVector3D StartCoordinates { get; }
-    public XbimVector3D Direction { get; }
     public XbimMatrix3D ObjectMatrix3D { get; }
     public double Diameter { get; }
+    public double Depth { get; }
 
     private IfcNodeEntity[] _nodeEntities;
     private IfcExtrudedAreaSolid _extrudedArea;
@@ -29,28 +27,26 @@ public class IfcPipeEntity : IfcAbstractEntity
     {
         PipeEntity = pipeEntity;
         _nodeEntities = ifcNodeEntities;
-        StartCoordinates = PipeEntity.GetCoordinates();
-        Direction = PipeEntity.GetDirection();
+        
+        XbimVector3D direction = PipeEntity.GetDirection();
+        Depth = direction.Length;
         Diameter = PipeEntity.GetOutsideDiameter();
         
-        XbimVector3D forward = Direction.Normalized();
+        XbimVector3D forward = direction.Normalized();
         XbimVector3D up = XbimVector3D.CrossProduct(forward, new XbimVector3D(0, 0, 1));
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(StartCoordinates, forward, up);
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(PipeEntity.GetCoordinates(), forward, up);
     }
 
     public override IfcObject CreateAndAdd(IModel model)
     {
-        IfcLocalPlacement localStartPlacement = IfcAxis.CreateLocalPlacement(model, StartCoordinates);
+        var data = PipeEntity.GetData();
+        data.Add("forward", ObjectMatrix3D.Forward.ToString());
+        data.Add("up", ObjectMatrix3D.Up.ToString());
+        data.Add("right", ObjectMatrix3D.Right.ToString());
         
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
-        _pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
-        {
-            p.Name = PipeEntity.GetName();
-            p.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
-            p.ObjectPlacement = localStartPlacement;
-            p.Representation = productDefShape;
-        });
-        IfcProperty.AddProperties(model, _pipeSegment, PipeEntity);
+        _pipeSegment = CreatePipe(model, productDefShape);
+        IfcProperty.AddProperties(model, _pipeSegment, data);
 
         model.Instances.New<IfcRelNests>(nests =>
         {
@@ -65,8 +61,8 @@ public class IfcPipeEntity : IfcAbstractEntity
 
     public void Clip(IModel model, IfcNodeEntity nodeEntity, double clipLength)
     {
-        if ((nodeEntity.Coordinates - StartCoordinates).Length < (nodeEntity.Coordinates - StartCoordinates - Direction).Length)
-            _extrudedArea.Position = IfcAxis.CreateAxis2Placement3D(model, ObjectMatrix3D.Forward * clipLength, ObjectMatrix3D.Forward);
+        if ((nodeEntity.Coordinates - ObjectMatrix3D.Translation).Length < (nodeEntity.Coordinates - ObjectMatrix3D.Translation - ObjectMatrix3D.Forward * Depth).Length)
+            _extrudedArea.Position = IfcAxis.CreateAxis2Placement3D(model, ObjectMatrix3D.Forward * clipLength, ObjectMatrix3D.Forward, ObjectMatrix3D.Right);
         _extrudedArea.Depth -= clipLength;
     }
 
@@ -77,12 +73,26 @@ public class IfcPipeEntity : IfcAbstractEntity
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
-            s.Depth = Direction.Length;
+            s.Depth = Depth;
             s.Position = IfcAxis.CreateAxis2Placement3D(model, XbimVector3D.Zero, ObjectMatrix3D.Forward, ObjectMatrix3D.Right);
         });
         IfcShapeRepresentation shapeRep = IfcGeometry.CreateShapeRepresentation(model, _extrudedArea);
         IfcProductDefinitionShape productDefShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRep);
 
         return productDefShape;
+    }
+
+    private IfcPipeSegment CreatePipe(IModel model, IfcProductDefinitionShape productDefShape)
+    {
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
+        IfcPipeSegment pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
+        {
+            p.Name = PipeEntity.GetName();
+            p.PredefinedType = IfcPipeSegmentTypeEnum.NOTDEFINED;
+            p.ObjectPlacement = localPlacement;
+            p.Representation = productDefShape;
+        });
+
+        return pipeSegment;
     }
 }

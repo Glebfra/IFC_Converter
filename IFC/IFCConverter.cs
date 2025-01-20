@@ -1,5 +1,7 @@
 ﻿using IFC_Converter.IFC.Entities;
+using IFC_Converter.IFC.Tools;
 using Xbim.Common;
+using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
@@ -38,8 +40,10 @@ public class IFCConverter : IDisposable
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
         
-        var site = _model.Instances.New<IfcSite>(site => site.Name = "Pipes");
+        var site = _model.Instances.New<IfcSite>();
+        var building = _model.Instances.New<IfcBuilding>();
         _project.AddSite(site);
+        site.AddBuilding(building);
     }
 
     public IfcObject AddEntity(IfcAbstractEntity entity)

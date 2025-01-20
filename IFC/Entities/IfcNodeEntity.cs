@@ -26,7 +26,7 @@ public class IfcNodeEntity : IfcAbstractEntity
     {
         LocalPlacement = IfcAxis.CreateLocalPlacement(model, Coordinates);
         Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), LocalPlacement);
-        IfcProperty.AddProperties(model, Port, _nodeEntity);
+        IfcProperty.AddProperties(model, Port, _nodeEntity.GetData());
 
         return Port;
     }

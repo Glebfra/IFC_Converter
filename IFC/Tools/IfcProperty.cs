@@ -8,21 +8,21 @@ namespace IFC_Converter.IFC.Tools;
 
 public static class IfcProperty
 {
-    public static IfcRelDefinesByProperties AddProperties(IModel model, IfcObject ifcObject, StartAbstractEntity entity)
+    public static IfcRelDefinesByProperties AddProperties(IModel model, IfcObject ifcObject, Dictionary<string, string> data)
     {
         return model.Instances.New<IfcRelDefinesByProperties>(rel =>
         {
             rel.RelatedObjects.Add(ifcObject);
-            rel.RelatingPropertyDefinition = CreatePropertySet(model, "Properties", entity);
+            rel.RelatingPropertyDefinition = CreatePropertySet(model, "Properties", data);
         });
     }
 
-    public static IfcPropertySet CreatePropertySet(IModel model, string name, StartAbstractEntity entity)
+    public static IfcPropertySet CreatePropertySet(IModel model, string name, Dictionary<string, string> data)
     {
         return model.Instances.New<IfcPropertySet>(set =>
         {
             set.Name = name;
-            foreach (var kvp in entity.GetData())
+            foreach (var kvp in data)
             {
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(prop =>
                 {

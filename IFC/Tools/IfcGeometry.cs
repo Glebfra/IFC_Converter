@@ -30,18 +30,6 @@ public static class IfcGeometry
         });
     }
 
-    public static IfcTrimmedCurve CreateTrimmedCurve(IModel model, IfcCurve basicCurve, XbimVector3D firstPoint, XbimVector3D secondPoint)
-    {
-        return model.Instances.New<IfcTrimmedCurve>(curve =>
-        {
-            curve.BasisCurve = basicCurve;
-            curve.Trim1.Add(IfcAxis.CreatePoint(model, firstPoint));
-            curve.Trim2.Add(IfcAxis.CreatePoint(model, secondPoint));
-            curve.SenseAgreement = true;
-            curve.MasterRepresentation = IfcTrimmingPreference.CARTESIAN;
-        });
-    }
-
     public static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
     {
         return model.Instances.New<IfcCircle>(ifcCircle =>
