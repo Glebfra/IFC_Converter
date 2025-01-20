@@ -39,14 +39,9 @@ public class IfcPipeEntity : IfcAbstractEntity
 
     public override IfcObject CreateAndAdd(IModel model)
     {
-        var data = PipeEntity.GetData();
-        data.Add("forward", ObjectMatrix3D.Forward.ToString());
-        data.Add("up", ObjectMatrix3D.Up.ToString());
-        data.Add("right", ObjectMatrix3D.Right.ToString());
-        
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
         _pipeSegment = CreatePipe(model, productDefShape);
-        IfcProperty.AddProperties(model, _pipeSegment, data);
+        IfcProperty.AddProperties(model, _pipeSegment, PipeEntity.GetData());
 
         model.Instances.New<IfcRelNests>(nests =>
         {
@@ -88,7 +83,7 @@ public class IfcPipeEntity : IfcAbstractEntity
         IfcPipeSegment pipeSegment = model.Instances.New<IfcPipeSegment>(p =>
         {
             p.Name = PipeEntity.GetName();
-            p.PredefinedType = IfcPipeSegmentTypeEnum.NOTDEFINED;
+            p.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
             p.ObjectPlacement = localPlacement;
             p.Representation = productDefShape;
         });

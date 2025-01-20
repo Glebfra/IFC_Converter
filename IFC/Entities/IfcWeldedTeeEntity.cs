@@ -51,17 +51,17 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
 
         IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
         IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-        IfcPipeSegment pipe = model.Instances.New<IfcPipeSegment>(segment =>
+        IfcPipeFitting pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            segment.Name = _teeEntity.GetName();
-            segment.Representation = productDefinitionShape;
-            segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
-            segment.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
+            fitting.Name = _teeEntity.GetName();
+            fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
+            fitting.Representation = productDefinitionShape;
+            fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
         });
 
-        IfcProperty.AddProperties(model, pipe, _teeEntity.GetData());
+        IfcProperty.AddProperties(model, pipeFitting, _teeEntity.GetData());
 
-        return pipe;
+        return pipeFitting;
     }
 
     private void SortPipes(out IfcPipeEntity[] branchPipes, out IfcPipeEntity headPipe)
