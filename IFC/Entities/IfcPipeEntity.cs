@@ -9,6 +9,7 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.ProductExtension;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -50,6 +51,9 @@ public class IfcPipeEntity : IfcAbstractEntity
             nests.RelatingObject = _pipeSegment;
             nests.RelatedObjects.AddRange(_nodeEntities.Select(nodeEntity => nodeEntity.Port));
         });
+
+        IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
+        ifcBuilding.AddElement(_pipeSegment);
 
         return _pipeSegment;
     }

@@ -4,6 +4,7 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
@@ -27,7 +28,10 @@ public class IfcNodeEntity : IfcAbstractEntity
         LocalPlacement = IfcAxis.CreateLocalPlacement(model, Coordinates);
         Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), LocalPlacement);
         IfcProperty.AddProperties(model, Port, _nodeEntity.GetData());
-
+        
+        IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
+        ifcBuilding.AddElement(Port);
+        
         return Port;
     }
 }
