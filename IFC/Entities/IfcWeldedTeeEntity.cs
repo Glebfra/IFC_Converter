@@ -59,7 +59,15 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             fitting.Representation = productDefinitionShape;
             fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
         });
-        IfcProperty.AddProperties(model, pipeFitting, _teeEntity.GetData());
+        IfcProperty.AddProperties(model, "Pset_PipeFittingCommon", pipeFitting, _teeEntity.GetData());
+        
+        model.Instances.New<IfcRelNests>(nests =>
+        {
+            nests.Name = "Port";
+            nests.Description = "Connects bend and node";
+            nests.RelatingObject = pipeFitting;
+            nests.RelatedObjects.Add(_nodeEntity.Port);
+        });
         
         IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
         ifcBuilding.AddElement(pipeFitting);

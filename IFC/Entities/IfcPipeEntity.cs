@@ -9,7 +9,10 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.PropertyResource;
+using IfcProperty = IFC_Converter.IFC.Tools.IfcProperty;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -42,7 +45,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     {
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
         _pipeSegment = CreatePipe(model, productDefShape);
-        IfcProperty.AddProperties(model, _pipeSegment, PipeEntity.GetData());
+        IfcProperty.AddProperties(model, "Pset_PipeSegmentCommon", _pipeSegment, PipeEntity.GetData());
 
         model.Instances.New<IfcRelNests>(nests =>
         {

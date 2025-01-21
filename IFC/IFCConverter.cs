@@ -16,9 +16,9 @@ public class IFCConverter : IDisposable
 {
     private readonly XbimEditorCredentials editor = new()
     {
-        ApplicationDevelopersName = "Start Developer",
-        ApplicationFullName = "xbim toolkit",
-        ApplicationIdentifier = "xbim",
+        ApplicationDevelopersName = "Start",
+        ApplicationFullName = "Start-Prof",
+        ApplicationIdentifier = "Start",
         ApplicationVersion = "4.0",
         EditorsFamilyName = "Santini Aichel",
         EditorsGivenName = "Johann Blasius",
