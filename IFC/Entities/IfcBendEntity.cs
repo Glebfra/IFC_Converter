@@ -7,7 +7,6 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 
@@ -37,7 +36,7 @@ public class IfcBendEntity : IfcAbstractEntity
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, DirectionToPipes[0] * -1, upDirection);
     }
     
-    public override IfcObject CreateAndAdd(IModel model)
+    public override IfcProduct CreateAndAdd(IModel model)
     {
         IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = CreateBendShape(model);
         IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, sweptAreaSolid);
@@ -59,9 +58,6 @@ public class IfcBendEntity : IfcAbstractEntity
             nests.RelatedObjects.Add(_ifcNodeEntity.Port);
         });
 
-        IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
-        ifcBuilding.AddElement(pipeFitting);
-            
         double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
         double clipLength = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);
         foreach (var ifcPipeEntity in _ifcPipeEntities)

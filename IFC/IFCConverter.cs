@@ -6,6 +6,7 @@ using Xbim.Common.Step21;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MaterialResource;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.IO;
@@ -28,6 +29,11 @@ public class IFCConverter : IDisposable
     private readonly IfcStore _model;
     private readonly ITransaction _transaction;
     private readonly IfcProject _project;
+    private readonly IfcSite _site;
+    private readonly IfcBuilding _building;
+    
+    private readonly IfcSystem _pipeSystem;
+    private readonly List<IfcObject> _ifcObjects;
 
     public IFCConverter(string name)
     {
@@ -36,27 +42,90 @@ public class IFCConverter : IDisposable
         _project = _model.Instances.New<IfcProject>(p => p.Name = name);
         _project.Initialize(ProjectUnits.SIUnitsUK);
         
-        var lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+        IfcSIUnit lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
+        
+        _site = _model.Instances.New<IfcSite>(ifcSite =>
+        {
+            ifcSite.Name = "Site";
+            ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            ifcSite.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+        });
+        _project.AddSite(_site);
+        
+        _building = _model.Instances.New<IfcBuilding>(ifcBuilding =>
+        {
+            ifcBuilding.Name = "Building";
+            ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            ifcBuilding.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+        });
+        _site.AddBuilding(_building);
 
+        _ifcObjects = new List<IfcObject>();
+    }
+
+    public IfcProduct AddEntity(IfcAbstractEntity entity)
+    {
+        IfcProduct @object = entity.CreateAndAdd(_model);
+        _ifcObjects.Add(@object);
+        _building.AddElement(@object);
+        return @object;
+    }
+
+    public IfcProduct[] AddEntities(IfcAbstractEntity[] entities)
+    {
+        return entities.Select(entity => AddEntity(entity)).ToArray();
+    }
+
+    public IfcMaterial AddMaterial(IfcLabel name, IfcLabel category, IfcText description)
+    {
+        return _model.Instances.New<IfcMaterial>(material => 
+        {
+            material.Name = name;
+            material.Category = category;
+            material.Description = description;
+        });
+    }
+
+    private IfcSite AddSite()
+    {
+        var site = _model.Instances.New<IfcSite>(ifcSite =>
+        {
+            ifcSite.Name = "Site";
+            ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            ifcSite.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+        });
+        _project.AddSite(site);
+
+        return site;
+    }
+    
+    private IfcBuilding AddBuilding(IfcSite site)
+    {
         var building = _model.Instances.New<IfcBuilding>(ifcBuilding =>
         {
             ifcBuilding.Name = "Building";
             ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
             ifcBuilding.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
         });
-        _project.AddBuilding(building);
+        site.AddBuilding(building);
+
+        return building;
     }
 
-    public IfcObject AddEntity(IfcAbstractEntity entity)
+    public void GroupObjects(string groupName)
     {
-        return entity.CreateAndAdd(_model);
-    }
-
-    public IfcObject[] AddEntities(IfcAbstractEntity[] entities)
-    {
-        return entities.Select(entity => AddEntity(entity)).ToArray();
+        var pipeSystem = _model.Instances.New<IfcSystem>(sys =>
+        {
+            sys.Name = groupName;
+        });
+        
+        IfcRelAssignsToGroup relAssignsToGroup = _model.Instances.New<IfcRelAssignsToGroup>(rel =>
+        {
+            rel.RelatingGroup = pipeSystem;
+            rel.RelatedObjects.AddRange(_ifcObjects);
+        });
     }
 
     public void SaveAs(string filepath)

@@ -76,8 +76,10 @@ public static class Program
             ifcConverter.AddEntity(ifcWeldedTeeEntity);
             _weldedTeeEntities.Add(startWeldedTeeEntity.Id, ifcWeldedTeeEntity);
         }
-
+        
+        ifcConverter.GroupObjects("Pipe System");
         ifcConverter.SaveAs(outputFilepath);
+        
         Console.WriteLine($"File saved as: {outputFilepath}");
     }
 

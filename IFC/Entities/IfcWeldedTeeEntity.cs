@@ -7,7 +7,6 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 
@@ -30,7 +29,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(_nodeEntity.Coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
     }
 
-    public override IfcObject CreateAndAdd(IModel model)
+    public override IfcProduct CreateAndAdd(IModel model)
     {
         SortPipes(out IfcPipeEntity[] branchPipes, out IfcPipeEntity headPipe);
         IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
@@ -68,9 +67,6 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             nests.RelatingObject = pipeFitting;
             nests.RelatedObjects.Add(_nodeEntity.Port);
         });
-        
-        IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
-        ifcBuilding.AddElement(pipeFitting);
 
         return pipeFitting;
     }

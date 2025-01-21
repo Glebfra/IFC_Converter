@@ -10,9 +10,7 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
-using IfcProperty = IFC_Converter.IFC.Tools.IfcProperty;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -41,11 +39,11 @@ public class IfcPipeEntity : IfcAbstractEntity
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(PipeEntity.GetCoordinates(), forward, up);
     }
 
-    public override IfcObject CreateAndAdd(IModel model)
+    public override IfcProduct CreateAndAdd(IModel model)
     {
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model);
         _pipeSegment = CreatePipe(model, productDefShape);
-        IfcProperty.AddProperties(model, "Pset_PipeSegmentCommon", _pipeSegment, PipeEntity.GetData());
+        AddProperties(model);
 
         model.Instances.New<IfcRelNests>(nests =>
         {
@@ -54,9 +52,6 @@ public class IfcPipeEntity : IfcAbstractEntity
             nests.RelatingObject = _pipeSegment;
             nests.RelatedObjects.AddRange(_nodeEntities.Select(nodeEntity => nodeEntity.Port));
         });
-
-        IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
-        ifcBuilding.AddElement(_pipeSegment);
 
         return _pipeSegment;
     }
@@ -96,5 +91,38 @@ public class IfcPipeEntity : IfcAbstractEntity
         });
 
         return pipeSegment;
+    }
+
+    private void AddProperties(IModel model)
+    {
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(_pipeSegment);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "Pset_PipeSegmentCommon";
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "InnerDiameter";
+                    value.NominalValue = new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter() - PipeEntity.GetWallThickness());
+                }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "OuterDiameter";
+                    value.NominalValue = new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter());
+                }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "WorkingPressure";
+                    value.NominalValue = new IfcPressureMeasure(PipeEntity.GetPressure());
+                }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertyBoundedValue>(value =>
+                {
+                    value.Name = "PressureRange";
+                    value.LowerBoundValue = new IfcPressureMeasure(PipeEntity.GetPressure());
+                    value.UpperBoundValue = new IfcPressureMeasure(PipeEntity.GetTestPressure());
+                }));
+            });
+        });
     }
 }
