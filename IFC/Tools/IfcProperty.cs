@@ -7,7 +7,8 @@ namespace IFC_Converter.IFC.Tools;
 
 public static class IfcProperty
 {
-    public static IfcRelDefinesByProperties AddProperties(IModel model, string name, IfcObject ifcObject, Dictionary<string, string> data)
+    public static IfcRelDefinesByProperties AddProperties(IModel model, string name, IfcObject ifcObject,
+        Dictionary<string, string> data)
     {
         return model.Instances.New<IfcRelDefinesByProperties>(rel =>
         {

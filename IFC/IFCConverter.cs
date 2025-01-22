@@ -31,7 +31,7 @@ public class IFCConverter : IDisposable
     private readonly IfcProject _project;
     private readonly IfcSite _site;
     private readonly IfcBuilding _building;
-    
+
     private readonly IfcSystem _pipeSystem;
     private readonly List<IfcObject> _ifcObjects;
 
@@ -41,11 +41,12 @@ public class IFCConverter : IDisposable
         _transaction = _model.BeginTransaction();
         _project = _model.Instances.New<IfcProject>(p => p.Name = name);
         _project.Initialize(ProjectUnits.SIUnitsUK);
-        
-        IfcSIUnit lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+
+        IfcSIUnit lengthUnit =
+            _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
-        
+
         _site = _model.Instances.New<IfcSite>(ifcSite =>
         {
             ifcSite.Name = "Site";
@@ -53,7 +54,7 @@ public class IFCConverter : IDisposable
             ifcSite.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
         });
         _project.AddSite(_site);
-        
+
         _building = _model.Instances.New<IfcBuilding>(ifcBuilding =>
         {
             ifcBuilding.Name = "Building";
@@ -80,7 +81,7 @@ public class IFCConverter : IDisposable
 
     public IfcMaterial AddMaterial(IfcLabel name, IfcLabel category, IfcText description)
     {
-        return _model.Instances.New<IfcMaterial>(material => 
+        return _model.Instances.New<IfcMaterial>(material =>
         {
             material.Name = name;
             material.Category = category;
@@ -100,7 +101,7 @@ public class IFCConverter : IDisposable
 
         return site;
     }
-    
+
     private IfcBuilding AddBuilding(IfcSite site)
     {
         var building = _model.Instances.New<IfcBuilding>(ifcBuilding =>
@@ -116,11 +117,8 @@ public class IFCConverter : IDisposable
 
     public void GroupObjects(string groupName)
     {
-        var pipeSystem = _model.Instances.New<IfcSystem>(sys =>
-        {
-            sys.Name = groupName;
-        });
-        
+        var pipeSystem = _model.Instances.New<IfcSystem>(sys => { sys.Name = groupName; });
+
         IfcRelAssignsToGroup relAssignsToGroup = _model.Instances.New<IfcRelAssignsToGroup>(rel =>
         {
             rel.RelatingGroup = pipeSystem;

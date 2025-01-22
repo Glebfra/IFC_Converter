@@ -9,7 +9,8 @@ namespace IFC_Converter.IFC.Tools;
 
 public static class IfcSegment
 {
-    public static IfcDistributionPort CreatePort(IModel model, string name, string description, IfcLocalPlacement placement)
+    public static IfcDistributionPort CreatePort(IModel model, string name, string description,
+        IfcLocalPlacement placement)
     {
         return model.Instances.New<IfcDistributionPort>(p =>
         {

@@ -29,11 +29,11 @@ public class IfcPipeEntity : IfcAbstractEntity
     {
         PipeEntity = pipeEntity;
         _nodeEntities = ifcNodeEntities;
-        
+
         XbimVector3D direction = PipeEntity.GetDirection();
         Depth = direction.Length;
         Diameter = PipeEntity.GetOutsideDiameter();
-        
+
         XbimVector3D forward = direction.Normalized();
         XbimVector3D up = XbimVector3D.CrossProduct(forward, new XbimVector3D(0, 0, 1));
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(PipeEntity.GetCoordinates(), forward, up);
@@ -104,7 +104,8 @@ public class IfcPipeEntity : IfcAbstractEntity
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "InnerDiameter";
-                    value.NominalValue = new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter() - PipeEntity.GetWallThickness());
+                    value.NominalValue =
+                        new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter() - PipeEntity.GetWallThickness());
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {

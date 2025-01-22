@@ -5,7 +5,9 @@ namespace IFC_Converter.Start.Entities;
 
 public class StartPipeEntity : StartAbstractEntity
 {
-    public StartPipeEntity(StartBaseRoot entity) : base(entity) { }
+    public StartPipeEntity(StartBaseRoot entity) : base(entity)
+    {
+    }
 
     public StartNodeEntity GetStartNode()
     {
@@ -29,18 +31,38 @@ public class StartPipeEntity : StartAbstractEntity
     public double GetPipeUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_UNIT_WEIGHT);
     public double GetInsulationUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_INSULATION_UNIT_WEIGHT);
     public double GetProductUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PRODUCT_UNIT_WEIGHT);
-    public long GetManufacturingTechnology() => Entity.GetDataInt(StartBaseRootFunctionKey.PIPE_MANUFACTURING_TECHNOLOGY);
-    public double GetLongitudinalWeldJointFactor() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_LONGITUDINAL_WELD_JOINT_FACTOR);
-    public double GetStrengthFactorOfTheTraverseWeld() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_STRENGTH_FACTOR_OF_THE_TRAVERSE_WELD);
-    public double GetAdditionalWeightLoad() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_WEIGHT_LOAD);
-    public double GetAdditionalWeightLoadAlongTheXAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_X_AXIS);
-    public double GetAdditionalWeightLoadAlongTheYAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Y_AXIS);
-    public double GetAdditionalWeightLoadAlongTheZAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Z_AXIS);
-    public double GetProjectionAlongOXAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OX_AXIS);
-    public double GetProjectionAlongOYAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OY_AXIS);
-    public double GetProjectionAlongOZAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OZ_AXIS);
 
-    public XbimVector3D GetDirection() => new(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
+    public long GetManufacturingTechnology() =>
+        Entity.GetDataInt(StartBaseRootFunctionKey.PIPE_MANUFACTURING_TECHNOLOGY);
+
+    public double GetLongitudinalWeldJointFactor() =>
+        Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_LONGITUDINAL_WELD_JOINT_FACTOR);
+
+    public double GetStrengthFactorOfTheTraverseWeld() =>
+        Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_STRENGTH_FACTOR_OF_THE_TRAVERSE_WELD);
+
+    public double GetAdditionalWeightLoad() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_WEIGHT_LOAD);
+
+    public double GetAdditionalWeightLoadAlongTheXAxis() => Entity.GetDataReal(StartBaseRootFunctionKey
+        .PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_X_AXIS);
+
+    public double GetAdditionalWeightLoadAlongTheYAxis() => Entity.GetDataReal(StartBaseRootFunctionKey
+        .PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Y_AXIS);
+
+    public double GetAdditionalWeightLoadAlongTheZAxis() => Entity.GetDataReal(StartBaseRootFunctionKey
+        .PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Z_AXIS);
+
+    public double GetProjectionAlongOXAxis() =>
+        Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OX_AXIS);
+
+    public double GetProjectionAlongOYAxis() =>
+        Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OY_AXIS);
+
+    public double GetProjectionAlongOZAxis() =>
+        Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OZ_AXIS);
+
+    public XbimVector3D GetDirection() =>
+        new(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
 
     public override Dictionary<string, string> GetData()
     {

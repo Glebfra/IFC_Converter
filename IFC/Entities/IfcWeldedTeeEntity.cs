@@ -17,7 +17,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
     private readonly StartWeldedTeeEntity _teeEntity;
     private readonly IfcPipeEntity[] _connPipes;
     private readonly IfcNodeEntity _nodeEntity;
-    
+
     public XbimMatrix3D ObjectMatrix3D { get; }
 
     public IfcWeldedTeeEntity(StartWeldedTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes)
@@ -25,32 +25,37 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         _teeEntity = teeEntity;
         _connPipes = connPipes;
         _nodeEntity = nodeEntity;
-        
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(_nodeEntity.Coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
+
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(_nodeEntity.Coordinates, new XbimVector3D(1, 0, 0),
+            new XbimVector3D(0, 0, 1));
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
         SortPipes(out IfcPipeEntity[] branchPipes, out IfcPipeEntity headPipe);
         IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
-        
+
         int i = 0;
         foreach (var branchPipe in branchPipes)
         {
             XbimVector3D weldedTeeBranchDirection = IfcAxis.GetDirectionToPipe(branchPipe, ObjectMatrix3D.Translation);
-            IfcAxis2Placement3D teeBranchAxis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), weldedTeeBranchDirection);
-            teeExtrudedArea[i++] = CreateTeeItemShape(model, teeBranchAxis, branchPipe.Diameter / 2, _teeEntity.GetBranchHeight() / 2);
-            
+            IfcAxis2Placement3D teeBranchAxis =
+                IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), weldedTeeBranchDirection);
+            teeExtrudedArea[i++] = CreateTeeItemShape(model, teeBranchAxis, branchPipe.Diameter / 2,
+                _teeEntity.GetBranchHeight() / 2);
+
             branchPipe.Clip(model, _nodeEntity, _teeEntity.GetBranchHeight() / 2);
         }
-        
+
         XbimVector3D teeBranchDirection = IfcAxis.GetDirectionToPipe(headPipe, ObjectMatrix3D.Translation);
         IfcAxis2Placement3D teeHeadAxis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), teeBranchDirection);
-        teeExtrudedArea[i++] = CreateTeeItemShape(model, teeHeadAxis, headPipe.Diameter / 2, _teeEntity.GetHeaderLength());
+        teeExtrudedArea[i++] =
+            CreateTeeItemShape(model, teeHeadAxis, headPipe.Diameter / 2, _teeEntity.GetHeaderLength());
         headPipe.Clip(model, _nodeEntity, _teeEntity.GetHeaderLength());
 
         IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
-        IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+        IfcProductDefinitionShape productDefinitionShape =
+            IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         IfcPipeFitting pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _teeEntity.GetName();
@@ -59,7 +64,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
         });
         IfcProperty.AddProperties(model, "Pset_PipeFittingCommon", pipeFitting, _teeEntity.GetData());
-        
+
         model.Instances.New<IfcRelNests>(nests =>
         {
             nests.Name = "Port";
@@ -83,7 +88,8 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
                 XbimVector3D firstPipeDir = _connPipes[j].ObjectMatrix3D.Forward;
                 XbimVector3D secondPipeDir = _connPipes[k].ObjectMatrix3D.Forward;
 
-                double angleCos = XbimVector3D.DotProduct(firstPipeDir, secondPipeDir) / (firstPipeDir.Length * secondPipeDir.Length);
+                double angleCos = XbimVector3D.DotProduct(firstPipeDir, secondPipeDir) /
+                                  (firstPipeDir.Length * secondPipeDir.Length);
 
                 if (System.Math.Abs(angleCos) < 0.95) continue;
                 branchPipes[0] = _connPipes[j];
@@ -93,7 +99,8 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         }
     }
 
-    private IfcExtrudedAreaSolid CreateTeeItemShape(IModel model, IfcAxis2Placement3D axis, double radius, double length)
+    private IfcExtrudedAreaSolid CreateTeeItemShape(IModel model, IfcAxis2Placement3D axis, double radius,
+        double length)
     {
         IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
         {

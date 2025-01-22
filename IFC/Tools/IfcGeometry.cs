@@ -1,5 +1,6 @@
 ﻿using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
@@ -17,8 +18,9 @@ public static class IfcGeometry
             plane.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, direction);
         });
     }
-    
-    public static IfcTrimmedCurve CreateTrimmedCurve(IModel model, IfcCurve basicCurve, double firstParameter, double secondParameter)
+
+    public static IfcTrimmedCurve CreateTrimmedCurve(IModel model, IfcCurve basicCurve, double firstParameter,
+        double secondParameter)
     {
         return model.Instances.New<IfcTrimmedCurve>(curve =>
         {
@@ -30,7 +32,8 @@ public static class IfcGeometry
         });
     }
 
-    public static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
+    public static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction,
+        XbimVector3D refDirection)
     {
         return model.Instances.New<IfcCircle>(ifcCircle =>
         {
@@ -38,8 +41,9 @@ public static class IfcGeometry
             ifcCircle.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, direction, refDirection);
         });
     }
-    
-    public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction)
+
+    public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates,
+        XbimVector3D direction)
     {
         return model.Instances.New<IfcCircleProfileDef>(def =>
         {
@@ -48,7 +52,7 @@ public static class IfcGeometry
             def.Position = IfcAxis.CreateAxis2Placement2D(model, coordinates, direction);
         });
     }
-    
+
     public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates)
     {
         return model.Instances.New<IfcCircleProfileDef>(def =>
@@ -59,7 +63,8 @@ public static class IfcGeometry
         });
     }
 
-    public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem)
+    public static IfcShapeRepresentation CreateShapeRepresentation(IModel model,
+        IfcRepresentationItem representationItem)
     {
         return model.Instances.New<IfcShapeRepresentation>(sr =>
         {
@@ -70,7 +75,8 @@ public static class IfcGeometry
         });
     }
 
-    public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem[] representationItems)
+    public static IfcShapeRepresentation CreateShapeRepresentation(IModel model,
+        IfcRepresentationItem[] representationItems)
     {
         return model.Instances.New<IfcShapeRepresentation>(sr =>
         {
@@ -81,7 +87,8 @@ public static class IfcGeometry
         });
     }
 
-    public static IfcProductDefinitionShape CreateProductDefinitionShape(IModel model, IfcShapeRepresentation shapeRepresentation)
+    public static IfcProductDefinitionShape CreateProductDefinitionShape(IModel model,
+        IfcShapeRepresentation shapeRepresentation)
     {
         return model.Instances.New<IfcProductDefinitionShape>(shape => shape.Representations.Add(shapeRepresentation));
     }
