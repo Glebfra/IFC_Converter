@@ -145,6 +145,27 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private void AddProperties(IModel model)
     {
+        #region Pset_PipeFittingStart
+
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(_pipeFitting);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "Pset_PipeFittingStart";
+                foreach (var kvp in _startBendEntity.GetData())
+                {
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = kvp.Key;
+                        value.NominalValue = new IfcText(kvp.Value);
+                    }));
+                }
+            });
+        });
+
+        #endregion
+        
         #region DEBUG
 
         #if DEBUG

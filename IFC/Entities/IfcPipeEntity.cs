@@ -1,5 +1,6 @@
 ﻿using IFC_Converter.IFC.Tools;
 using IFC_Converter.Start.Entities;
+using Microsoft.Isam.Esent.Interop;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
@@ -121,6 +122,27 @@ public class IfcPipeEntity : IfcAbstractEntity
 
     private void AddProperties(IModel model)
     {
+        #region Pset_PipeSegmentStart
+
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(_pipeSegment);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "Pset_PipeSegmentStart";
+                foreach (var kvp in PipeEntity.GetData())
+                {
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = kvp.Key;
+                        value.NominalValue = new IfcText(kvp.Value);
+                    }));
+                }
+            });
+        });
+
+        #endregion
+        
         #region Pset_PipeSegmentCommon
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
