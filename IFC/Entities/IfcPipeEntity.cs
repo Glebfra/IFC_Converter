@@ -10,7 +10,9 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
+using Xbim.Ifc4.QuantityResource;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -19,11 +21,17 @@ public class IfcPipeEntity : IfcAbstractEntity
     public StartPipeEntity PipeEntity { get; }
     public XbimMatrix3D ObjectMatrix3D { get; }
     public double Diameter { get; }
-    public double Depth { get; }
+
+    public double Depth { get; private set; }
 
     private IfcNodeEntity[] _nodeEntities;
-    private IfcExtrudedAreaSolid _extrudedArea;
     private IfcPipeSegment _pipeSegment;
+    
+    private delegate void DepthChanged(double newDepth);
+    private delegate void CoordinatesChanged(XbimVector3D newCoordinates);
+    
+    private event DepthChanged _depthChanged;
+    private event CoordinatesChanged _coordinatesChanged;
 
     public IfcPipeEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] ifcNodeEntities)
     {
@@ -31,14 +39,17 @@ public class IfcPipeEntity : IfcAbstractEntity
         _nodeEntities = ifcNodeEntities;
 
         XbimVector3D direction = PipeEntity.GetDirection();
-        Depth = direction.Length;
         Diameter = PipeEntity.GetOutsideDiameter();
+        
+        Depth = direction.Length;
+        _depthChanged += depth => Depth = depth;
 
-        XbimVector3D WorldUp = new(0, 0, 1);
+        XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
         XbimVector3D forward = direction.Normalized();
-        if (forward == WorldUp || forward == -1 * WorldUp)
+        if (forward == WorldUp || forward == -1 * WorldUp) 
             WorldUp = new XbimVector3D(0, 1, 0);
         XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
+        
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(PipeEntity.GetCoordinates(), forward, up);
     }
 
@@ -59,18 +70,18 @@ public class IfcPipeEntity : IfcAbstractEntity
         return _pipeSegment;
     }
 
-    public void Clip(IModel model, IfcNodeEntity nodeEntity, double clipLength)
+    public void Clip(IfcNodeEntity nodeEntity, double clipLength)
     {
         if (IsStartNode(nodeEntity))
-            _extrudedArea.Position = IfcAxis.CreateAxis2Placement3D(model, ObjectMatrix3D.Forward * clipLength, ObjectMatrix3D.Forward, ObjectMatrix3D.Right);
-        _extrudedArea.Depth -= clipLength;
+            _coordinatesChanged?.Invoke(ObjectMatrix3D.Forward * clipLength);
+        _depthChanged?.Invoke(Depth - clipLength);
     }
 
     private bool IsStartNode(IfcNodeEntity nodeEntity)
     {
-        XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
+        XbimVector3D nodeCoordinates = nodeEntity.Coordinates;
         XbimVector3D startPipeCoordinates = ObjectMatrix3D.Translation;
-        XbimVector3D endPipeCoordinates = ObjectMatrix3D.Translation - ObjectMatrix3D.Forward * Depth;
+        XbimVector3D endPipeCoordinates = ObjectMatrix3D.Translation + ObjectMatrix3D.Forward * Depth;
 
         return (nodeCoordinates - startPipeCoordinates).Length < (nodeCoordinates - endPipeCoordinates).Length;
     }
@@ -78,14 +89,17 @@ public class IfcPipeEntity : IfcAbstractEntity
     private IfcProductDefinitionShape CreatePipeShape(IModel model)
     {
         IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, Diameter / 2, XbimVector3D.Zero);
-        _extrudedArea = model.Instances.New<IfcExtrudedAreaSolid>(s =>
+        IfcExtrudedAreaSolid extrudedArea = model.Instances.New<IfcExtrudedAreaSolid>(s =>
         {
             s.SweptArea = profileDef;
             s.ExtrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
             s.Depth = Depth;
             s.Position = IfcAxis.CreateAxis2Placement3D(model, XbimVector3D.Zero, ObjectMatrix3D.Forward, ObjectMatrix3D.Right);
+            
+            _depthChanged += depth => s.Depth = depth;
+            _coordinatesChanged += coordinates => s.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, ObjectMatrix3D.Forward, ObjectMatrix3D.Right);
         });
-        IfcShapeRepresentation shapeRep = IfcGeometry.CreateShapeRepresentation(model, _extrudedArea);
+        IfcShapeRepresentation shapeRep = IfcGeometry.CreateShapeRepresentation(model, extrudedArea);
         IfcProductDefinitionShape productDefShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRep);
 
         return productDefShape;
@@ -107,6 +121,8 @@ public class IfcPipeEntity : IfcAbstractEntity
 
     private void AddProperties(IModel model)
     {
+        #region Pset_PipeSegmentCommon
+
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
             properties.RelatedObjects.Add(_pipeSegment);
@@ -135,8 +151,43 @@ public class IfcPipeEntity : IfcAbstractEntity
                     value.LowerBoundValue = new IfcPressureMeasure(PipeEntity.GetPressure());
                     value.UpperBoundValue = new IfcPressureMeasure(PipeEntity.GetTestPressure());
                 }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertyBoundedValue>(value =>
+                {
+                    value.Name = "TemperatureRange";
+                    value.LowerBoundValue = new IfcThermodynamicTemperatureMeasure(PipeEntity.GetTemperature());
+                    value.UpperBoundValue = new IfcThermodynamicTemperatureMeasure(PipeEntity.GetTemperature());
+                }));
             });
         });
+
+        #endregion
+
+        #region Qto_PipeSegmentBaseQuantities
+
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(_pipeSegment);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
+            {
+                quantity.Name = "Qto_PipeSegmentBaseQuantities";
+                quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
+                {
+                    length.Name = "Length";
+                    length.LengthValue = new IfcLengthMeasure(Depth);
+                    
+                    _depthChanged += depth => length.LengthValue = new IfcLengthMeasure(depth);
+                }));
+                quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
+                {
+                    weight.Name = "NetWeight";
+                    weight.WeightValue = new IfcMassMeasure(PipeEntity.GetPipeUnitWeight() * Depth);
+                    
+                    _depthChanged += depth => weight.WeightValue = new IfcMassMeasure(PipeEntity.GetPipeUnitWeight() * depth);
+                }));
+            });
+        });
+
+        #endregion
 
         #region DEBUG
 

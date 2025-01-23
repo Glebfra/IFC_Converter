@@ -47,7 +47,7 @@ public class IfcBendEntity : IfcAbstractEntity
         IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         _pipeFitting = CreateBend(model, shape);
         AddProperties(model);
-        ClipConnectedPipes(model);
+        ClipConnectedPipes();
         ConnectPorts(model);
 
         return _pipeFitting;
@@ -89,13 +89,13 @@ public class IfcBendEntity : IfcAbstractEntity
         return dirToCenter * lengthToCenter;
     }
 
-    private void ClipConnectedPipes(IModel model)
+    private void ClipConnectedPipes()
     {
         double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
         double clipLength = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);
         foreach (var ifcPipeEntity in _ifcPipeEntities)
         {
-            ifcPipeEntity.Clip(model, _ifcNodeEntity, clipLength);
+            ifcPipeEntity.Clip(_ifcNodeEntity, clipLength);
         }
     }
 

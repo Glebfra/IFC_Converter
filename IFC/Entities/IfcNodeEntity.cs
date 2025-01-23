@@ -12,11 +12,12 @@ namespace IFC_Converter.IFC.Entities;
 
 public class IfcNodeEntity : IfcAbstractEntity
 {
-    private StartNodeEntity _nodeEntity;
-
-    public XbimMatrix3D ObjectMatrix3D { get; private set; }
-    public IfcLocalPlacement LocalPlacement { get; private set; }
+    public readonly XbimMatrix3D ObjectMatrix3D;
+    
+    public XbimVector3D Coordinates => ObjectMatrix3D.Translation;
     public IfcDistributionPort Port { get; private set; }
+    
+    private StartNodeEntity _nodeEntity;
 
     public IfcNodeEntity(StartNodeEntity nodeEntity)
     {
@@ -26,8 +27,8 @@ public class IfcNodeEntity : IfcAbstractEntity
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
-        LocalPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
-        Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), LocalPlacement);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
+        Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), localPlacement);
         AddProperties(model);
 
         return Port;

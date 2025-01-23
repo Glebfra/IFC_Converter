@@ -72,7 +72,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         XbimVector3D direction = IfcAxis.GetDirectionToPipe(pipeEntity, ObjectMatrix3D.Translation);
         IfcAxis2Placement3D axis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), direction);
         IfcExtrudedAreaSolid extrudedAreaSolid = CreateTeeItemShape(model, axis, pipeEntity.Diameter / 2, length);
-        pipeEntity.Clip(model, _nodeEntity, length);
+        pipeEntity.Clip(_nodeEntity, length);
         return extrudedAreaSolid;
     }
 
