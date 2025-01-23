@@ -18,8 +18,7 @@ public class StartBendEntity : StartAbstractEntity
     public double GetMillToleranceOutside() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_MILL_TOLERANCE_OUTSIDE);
     public double GetRadius() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_RADIUS);
 
-    public double GetOvalizationCoefficient() =>
-        Entity.GetDataReal(StartBaseRootFunctionKey.BEND_OVALIZATION_COEFFICIENT);
+    public double GetOvalizationCoefficient() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_OVALIZATION_COEFFICIENT);
 
     public int GetNumberOfMilters() => Entity.GetDataInt(StartBaseRootFunctionKey.BEND_NUMBER_OF_MILTERS);
 

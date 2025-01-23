@@ -16,7 +16,7 @@ public static class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Write a ctp file location: ");
-        string inputFilepath = "D:\\Работа\\Bend.ctp";
+        string inputFilepath = "D:\\Работа\\testDemoApi.ctp";
         //string inputFilepath = Console.ReadLine();
         string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
         Console.WriteLine($"Input file is: {inputFilepath}");

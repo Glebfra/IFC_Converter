@@ -4,6 +4,8 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
@@ -12,22 +14,60 @@ public class IfcNodeEntity : IfcAbstractEntity
 {
     private StartNodeEntity _nodeEntity;
 
-    public XbimVector3D Coordinates { get; private set; }
+    public XbimMatrix3D ObjectMatrix3D { get; private set; }
     public IfcLocalPlacement LocalPlacement { get; private set; }
     public IfcDistributionPort Port { get; private set; }
 
     public IfcNodeEntity(StartNodeEntity nodeEntity)
     {
         _nodeEntity = nodeEntity;
-        Coordinates = _nodeEntity.GetCoordinates();
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(_nodeEntity.GetCoordinates(), new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
-        LocalPlacement = IfcAxis.CreateLocalPlacement(model, Coordinates);
+        LocalPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
         Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), LocalPlacement);
-        IfcProperty.AddProperties(model, "Pset_PortCommon", Port, _nodeEntity.GetData());
+        AddProperties(model);
 
         return Port;
+    }
+    
+    private void AddProperties(IModel model)
+    {
+        #region DEBUG
+
+        #if DEBUG
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(Port);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "Debug Properties";
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "Coordinates";
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Translation.ToString());
+                }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "Forward direction";
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Forward.ToString());
+                }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "Right direction";
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Right.ToString());
+                }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "Up direction";
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
+                }));
+            });
+        });
+        #endif
+
+        #endregion
     }
 }
