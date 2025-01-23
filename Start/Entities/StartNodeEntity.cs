@@ -4,9 +4,13 @@ namespace IFC_Converter.Start.Entities;
 
 public sealed class StartNodeEntity : StartAbstractEntity
 {
-    public StartNodeEntity(StartBaseRoot entity) : base(entity) { }
+    public StartNodeEntity(StartBaseRoot entity) : base(entity)
+    {
+    }
 
-    public double GetAdditionalLoadFromWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.NODE_ADDITIONAL_LOAD_FROM_WEIGHT);
+    public double GetAdditionalLoadFromWeight() =>
+        Entity.GetDataReal(StartBaseRootFunctionKey.NODE_ADDITIONAL_LOAD_FROM_WEIGHT);
+
     public string GetName() => Entity.GetDataChar(StartBaseRootFunctionKey.NODE_NAME);
     public string GetDescription() => Entity.GetDataChar(StartBaseRootFunctionKey.NODE_DESCRIPTION);
 

@@ -5,5 +5,5 @@ namespace IFC_Converter.IFC.Entities;
 
 public abstract class IfcAbstractEntity
 {
-    public abstract IfcObject CreateAndAdd(IModel model);
+    public abstract IfcProduct CreateAndAdd(IModel model);
 }

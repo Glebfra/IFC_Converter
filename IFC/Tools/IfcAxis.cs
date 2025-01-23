@@ -12,7 +12,7 @@ public static class IfcAxis
     {
         return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.X, coordinates.Y, coordinates.Z));
     }
-    
+
     public static IfcDirection CreateDirection(IModel model, XbimVector3D direction)
     {
         return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.X, direction.Y, direction.Z));
@@ -44,6 +44,15 @@ public static class IfcAxis
         });
     }
 
+    public static IfcAxis1Placement CreateAxis1Placement(IModel model, XbimVector3D coordinates, XbimVector3D direction)
+    {
+        return model.Instances.New<IfcAxis1Placement>(placement =>
+        {
+            placement.Location = CreatePoint(model, coordinates);
+            placement.Axis = CreateDirection(model, direction);
+        });
+    }
+
     public static IfcAxis2Placement2D CreateAxis2Placement2D(IModel model, XbimVector3D coordinates)
     {
         return model.Instances.New<IfcAxis2Placement2D>(placement2D =>
@@ -52,7 +61,8 @@ public static class IfcAxis
         });
     }
 
-    public static IfcAxis2Placement2D CreateAxis2Placement2D(IModel model, XbimVector3D coordinates, XbimVector3D direction)
+    public static IfcAxis2Placement2D CreateAxis2Placement2D(IModel model, XbimVector3D coordinates,
+        XbimVector3D direction)
     {
         return model.Instances.New<IfcAxis2Placement2D>(placement2D =>
         {
@@ -60,8 +70,9 @@ public static class IfcAxis
             placement2D.RefDirection = CreateDirection(model, direction);
         });
     }
-    
-    public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
+
+    public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates,
+        XbimVector3D direction, XbimVector3D refDirection)
     {
         return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
         {
@@ -71,7 +82,8 @@ public static class IfcAxis
         });
     }
 
-    public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates, XbimVector3D direction)
+    public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates,
+        XbimVector3D direction)
     {
         return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
         {

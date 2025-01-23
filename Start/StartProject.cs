@@ -47,7 +47,7 @@ public class StartProject : IDisposable
 
         return objs;
     }
-    
+
     public T[] GetEntities<T>(StartElementType minType, StartElementType maxType) where T : StartAbstractEntity
     {
         int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
