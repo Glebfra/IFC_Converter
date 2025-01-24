@@ -50,6 +50,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _teeEntity.GetName();
+            fitting.Tag = "WeldedTee";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
             fitting.Representation = productDefinitionShape;
             fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);

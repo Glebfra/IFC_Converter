@@ -22,7 +22,7 @@ public static class Program
         Console.WriteLine($"Input file is: {inputFilepath}");
 
         using StartProject startProject = new StartProject(inputFilepath);
-        using IFCConverter ifcConverter = new IFCConverter("Ifc Project");
+        using IFCConverter ifcConverter = new IFCConverter("StartToIfc");
 
         StartNodeEntity[] startNodeEntities = startProject.GetEntities<StartNodeEntity>(StartElementType.NODE);
         foreach (var startNodeEntity in startNodeEntities)

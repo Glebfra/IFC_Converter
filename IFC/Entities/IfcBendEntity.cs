@@ -8,9 +8,12 @@ using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
+using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -21,6 +24,8 @@ public class IfcBendEntity : IfcAbstractEntity
     private readonly IfcPipeEntity[] _ifcPipeEntities;
 
     private IfcPipeFitting _pipeFitting;
+    
+    private readonly double _pipeAngle;
 
     public XbimMatrix3D ObjectMatrix3D { get; }
     public XbimVector3D[] PipesDirection { get; }
@@ -38,6 +43,8 @@ public class IfcBendEntity : IfcAbstractEntity
 
         XbimVector3D upDirection = XbimVector3D.CrossProduct(PipesDirection[0], PipesDirection[1]).Normalized();
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, DirectionToPipes[0] * -1, upDirection);
+        
+        _pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
@@ -58,6 +65,7 @@ public class IfcBendEntity : IfcAbstractEntity
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _startBendEntity.GetName();
+            fitting.Tag = "Elbow";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
             fitting.Representation = shape;
             fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
@@ -66,11 +74,10 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private IfcSurfaceCurveSweptAreaSolid CreateBendShape(IModel model)
     {
-        double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
-        XbimVector3D circleCenter = CalculateCircleCenter(pipeAngle);
+        XbimVector3D circleCenter = CalculateCircleCenter(_pipeAngle);
         
         IfcCircle circle = IfcGeometry.CreateCircle(model, _startBendEntity.GetRadius(), circleCenter, ObjectMatrix3D.Up, ObjectMatrix3D.Right);
-        IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, pipeAngle);
+        IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, _pipeAngle);
         IfcPlane plane = IfcGeometry.CreatePlane(model, ObjectMatrix3D.Translation, ObjectMatrix3D.Up);
         IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, _ifcPipeEntities[0].Diameter / 2, XbimVector3D.Zero, new XbimVector3D(1, 0, 0));
 
@@ -91,8 +98,7 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private void ClipConnectedPipes()
     {
-        double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
-        double clipLength = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);
+        double clipLength = _startBendEntity.GetRadius() * Math.Tan(_pipeAngle / 2);
         foreach (var ifcPipeEntity in _ifcPipeEntities)
         {
             ifcPipeEntity.Clip(_ifcNodeEntity, clipLength);
@@ -120,8 +126,7 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private IfcRevolvedAreaSolid CreateAlternateBendShape(IModel model)
     {
-        double pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
-        XbimVector3D circleCenter = CalculateAlternateCircleCenter(pipeAngle);
+        XbimVector3D circleCenter = CalculateAlternateCircleCenter(_pipeAngle);
 
         IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(
             model,
@@ -130,13 +135,13 @@ public class IfcBendEntity : IfcAbstractEntity
             new XbimVector3D(1, 0, 0)
         );
         
-        double lengthToCenter = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);
+        double lengthToCenter = _startBendEntity.GetRadius() * Math.Tan(_pipeAngle / 2);
 
         IfcRevolvedAreaSolid sweptAreaSolid = model.Instances.New<IfcRevolvedAreaSolid>(solid =>
         {
             solid.SweptArea = profileDef;
             solid.Axis = IfcAxis.CreateAxis1Placement(model, circleCenter, new XbimVector3D(0, -1, 0));
-            solid.Angle = new IfcPlaneAngleMeasure(pipeAngle);
+            solid.Angle = new IfcPlaneAngleMeasure(_pipeAngle);
             solid.Position = IfcAxis.CreateAxis2Placement3D(model, DirectionToPipes[0] * lengthToCenter, ObjectMatrix3D.Forward, ObjectMatrix3D.Right);
         });
 
@@ -145,14 +150,14 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private void AddProperties(IModel model)
     {
-        #region Pset_PipeFittingStart
+        #region Pset_PipeFittingTypeStart
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
             properties.RelatedObjects.Add(_pipeFitting);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
-                set.Name = "Pset_PipeFittingStart";
+                set.Name = "Pset_PipeFittingTypeStart";
                 foreach (var kvp in _startBendEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
@@ -161,6 +166,30 @@ public class IfcBendEntity : IfcAbstractEntity
                         value.NominalValue = new IfcText(kvp.Value);
                     }));
                 }
+            });
+        });
+
+        #endregion
+
+        #region Qto_PipeFittingBaseQuantities
+
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(_pipeFitting);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
+            {
+                quantity.Name = "Qto_PipeFittingBaseQuantities";
+                quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
+                {
+                    length.Name = "Length";
+                    length.LengthValue = _pipeAngle * _startBendEntity.GetRadius();
+                    length.Formula = "radius*angle; [angle]=rad, [radius]=metre";
+                }));
+                quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
+                {
+                    weight.Name = "NetWeight";
+                    weight.WeightValue = _startBendEntity.GetWeight();
+                }));
             });
         });
 
