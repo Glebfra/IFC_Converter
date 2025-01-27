@@ -2,6 +2,7 @@
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
@@ -14,6 +15,7 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -58,6 +60,25 @@ public class IfcBendEntity : IfcAbstractEntity
         ConnectPorts(model);
 
         return _pipeFitting;
+    }
+
+    private IfcRelConnectsPorts ConnectPorts(IModel model)
+    {
+        var closestPorts = (
+            from port in _ifcPipeEntities.SelectMany(pipe => pipe.Ports)
+            let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
+            orderby distance
+            select port
+        ).Take(2).ToArray();
+
+        return model.Instances.New<IfcRelConnectsPorts>(ports =>
+        {
+            ports.Name = $"{closestPorts[0].GlobalId}|{closestPorts[1].GlobalId}";
+            ports.Description = "Flow";
+            ports.RelatingPort = closestPorts[0];
+            ports.RelatedPort = closestPorts[1];
+            ports.RealizingElement = _pipeFitting;
+        });
     }
 
     private IfcPipeFitting CreateBend(IModel model, IfcProductDefinitionShape shape)
@@ -109,17 +130,6 @@ public class IfcBendEntity : IfcAbstractEntity
         }
     }
 
-    private void ConnectPorts(IModel model)
-    {
-        model.Instances.New<IfcRelNests>(nests =>
-        {
-            nests.Name = "Port";
-            nests.Description = "Connects bend and node";
-            nests.RelatingObject = _pipeFitting;
-            nests.RelatedObjects.Add(_ifcNodeEntity.Port);
-        });
-    }
-    
     private XbimVector3D CalculateAlternateCircleCenter(double pipeAngle)
     {
         double lengthToCenter = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);

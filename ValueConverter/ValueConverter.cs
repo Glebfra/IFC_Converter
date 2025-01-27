@@ -16,7 +16,7 @@ public static class ValueConverter
 
     public static double TfToN(double value)
     {
-        return value * 1000;
+        return value * 1000 * g;
     }
     
     public static double TfToKg(double value)

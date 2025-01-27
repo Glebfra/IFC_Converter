@@ -58,10 +58,8 @@ public static class Program
             Console.WriteLine($"Added bend {startBendEntity.Id}");
             #endif
 
-            StartNodeEntity connNodeEntity =
-                startProject.GetConnEntity<StartNodeEntity>(startBendEntity, StartElementType.NODE);
-            StartPipeEntity[] connPipeEntities =
-                startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
+            StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startBendEntity, StartElementType.NODE);
+            StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
 
             IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
             IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
@@ -78,15 +76,12 @@ public static class Program
             Console.WriteLine($"Added welded tee {startWeldedTeeEntity.Id}");
             #endif
 
-            StartNodeEntity connNodeEntity =
-                startProject.GetConnEntity<StartNodeEntity>(startWeldedTeeEntity, StartElementType.NODE);
-            StartPipeEntity[] connPipeEntities =
-                startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
+            StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startWeldedTeeEntity, StartElementType.NODE);
+            StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
 
             IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
             IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
-            IfcWeldedTeeEntity ifcWeldedTeeEntity =
-                new IfcWeldedTeeEntity(startWeldedTeeEntity, ifcConnNodeEntity, ifcConnPipeEntities);
+            IfcWeldedTeeEntity ifcWeldedTeeEntity = new IfcWeldedTeeEntity(startWeldedTeeEntity, ifcConnNodeEntity, ifcConnPipeEntities);
 
             ifcConverter.AddEntity(ifcWeldedTeeEntity);
             _weldedTeeEntities.Add(startWeldedTeeEntity.Id, ifcWeldedTeeEntity);

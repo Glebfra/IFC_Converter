@@ -2,6 +2,7 @@
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
@@ -9,6 +10,7 @@ using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
@@ -61,16 +63,39 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             fitting.ObjectPlacement = localPlacement;
         });
         AddProperties(model);
-
-        model.Instances.New<IfcRelNests>(nests =>
-        {
-            nests.Name = "Port";
-            nests.Description = "Connects bend and node";
-            nests.RelatingObject = _pipeFitting;
-            nests.RelatedObjects.Add(_nodeEntity.Port);
-        });
+        ConnectPorts(model);
 
         return _pipeFitting;
+    }
+
+    private IfcRelConnectsPorts[] ConnectPorts(IModel model)
+    {
+        IfcRelConnectsPorts[] connectsPorts = new IfcRelConnectsPorts[3];
+        
+        var closestPorts = (
+            from port in _connPipes.SelectMany(pipe => pipe.Ports)
+            let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
+            orderby distance
+            select port
+        ).Take(3).ToArray();
+
+        int index = 0;
+        for (int i = 0; i < closestPorts.Length; i++)
+        {
+            for(int j = i+1; j < closestPorts.Length; j++)
+            {
+                connectsPorts[index++] = model.Instances.New<IfcRelConnectsPorts>(ports =>
+                {
+                    ports.Name = $"{closestPorts[i].GlobalId}|{closestPorts[j].GlobalId}";
+                    ports.Description = "Flow";
+                    ports.RelatingPort = closestPorts[i];
+                    ports.RelatedPort = closestPorts[j];
+                    ports.RealizingElement = _pipeFitting;
+                });
+            }
+        }
+
+        return connectsPorts;
     }
 
     private IfcExtrudedAreaSolid CreateTeeBranchShape(IModel model, IfcPipeEntity pipeEntity, double length)

@@ -25,6 +25,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     public StartPipeEntity PipeEntity { get; }
     public XbimMatrix3D ObjectMatrix3D { get; }
     public double Diameter { get; }
+    public IfcDistributionPort[] Ports { get; }
     
     public double Depth
     {
@@ -74,6 +75,8 @@ public class IfcPipeEntity : IfcAbstractEntity
         
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(PipeEntity.GetCoordinates(), forward, up);
         Coordinates = ObjectMatrix3D.Translation;
+
+        Ports = new IfcDistributionPort[2];
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
@@ -95,13 +98,13 @@ public class IfcPipeEntity : IfcAbstractEntity
         _pipeSegment = CreatePipe(model, productDefShape, startLocalPlacement);
         AddProperties(model);
 
-        IfcDistributionPort startPort = CreatePort(model, startLocalPlacement);
-        IfcDistributionPort endPort = CreatePort(model, endLocalPlacement);
-        IfcRelConnectsPorts connectPorts = ConnectPorts(model, startPort, endPort);
+        Ports[0] = CreatePort(model, startLocalPlacement);
+        Ports[1] = CreatePort(model, endLocalPlacement);
+        IfcRelConnectsPorts connectPorts = ConnectPorts(model, Ports[0], Ports[1]);
 
         IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
-        ifcBuilding.AddElement(startPort);
-        ifcBuilding.AddElement(endPort);
+        ifcBuilding.AddElement(Ports[0]);
+        ifcBuilding.AddElement(Ports[1]);
 
         return _pipeSegment;
     }
