@@ -2,12 +2,15 @@
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
+using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
@@ -35,6 +38,10 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
+        IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
+        
         SortPipes(out IfcPipeEntity[] branchPipes, out IfcPipeEntity headPipe);
         IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
 
@@ -50,21 +57,45 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _teeEntity.GetName();
+            fitting.Tag = "WeldedTee";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
             fitting.Representation = productDefinitionShape;
-            fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
+            fitting.ObjectPlacement = localPlacement;
         });
         AddProperties(model);
-
-        model.Instances.New<IfcRelNests>(nests =>
-        {
-            nests.Name = "Port";
-            nests.Description = "Connects bend and node";
-            nests.RelatingObject = _pipeFitting;
-            nests.RelatedObjects.Add(_nodeEntity.Port);
-        });
+        ConnectPorts(model);
 
         return _pipeFitting;
+    }
+
+    private IfcRelConnectsPorts[] ConnectPorts(IModel model)
+    {
+        IfcRelConnectsPorts[] connectsPorts = new IfcRelConnectsPorts[3];
+        
+        var closestPorts = (
+            from port in _connPipes.SelectMany(pipe => pipe.Ports)
+            let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
+            orderby distance
+            select port
+        ).Take(3).ToArray();
+
+        int index = 0;
+        for (int i = 0; i < closestPorts.Length; i++)
+        {
+            for(int j = i+1; j < closestPorts.Length; j++)
+            {
+                connectsPorts[index++] = model.Instances.New<IfcRelConnectsPorts>(ports =>
+                {
+                    ports.Name = $"{closestPorts[i].GlobalId}|{closestPorts[j].GlobalId}";
+                    ports.Description = "Flow";
+                    ports.RelatingPort = closestPorts[i];
+                    ports.RelatedPort = closestPorts[j];
+                    ports.RealizingElement = _pipeFitting;
+                });
+            }
+        }
+
+        return connectsPorts;
     }
 
     private IfcExtrudedAreaSolid CreateTeeBranchShape(IModel model, IfcPipeEntity pipeEntity, double length)
@@ -72,7 +103,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         XbimVector3D direction = IfcAxis.GetDirectionToPipe(pipeEntity, ObjectMatrix3D.Translation);
         IfcAxis2Placement3D axis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), direction);
         IfcExtrudedAreaSolid extrudedAreaSolid = CreateTeeItemShape(model, axis, pipeEntity.Diameter / 2, length);
-        pipeEntity.Clip(model, _nodeEntity, length);
+        pipeEntity.Clip(_nodeEntity, length);
         return extrudedAreaSolid;
     }
 
@@ -120,6 +151,27 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
     
     private void AddProperties(IModel model)
     {
+        #region Pset_PipeFittingStart
+
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(_pipeFitting);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "Pset_PipeFittingStart";
+                foreach (var kvp in _teeEntity.GetData())
+                {
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = kvp.Key;
+                        value.NominalValue = new IfcText(kvp.Value);
+                    }));
+                }
+            });
+        });
+
+        #endregion
+        
         #region DEBUG
 
         #if DEBUG

@@ -4,11 +4,13 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
+using Xbim.Ifc4.GeometricConstraintResource;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MaterialResource;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.IO;
 
 namespace IFC_Converter.IFC;
@@ -33,7 +35,7 @@ public class IFCConverter : IDisposable
     private readonly IfcBuilding _building;
 
     private readonly IfcSystem _pipeSystem;
-    private readonly List<IfcObject> _ifcObjects;
+    private readonly List<IfcProduct> _ifcObjects;
 
     public IFCConverter(string name)
     {
@@ -42,16 +44,19 @@ public class IFCConverter : IDisposable
         _project = _model.Instances.New<IfcProject>(p => p.Name = name);
         _project.Initialize(ProjectUnits.SIUnitsUK);
 
-        IfcSIUnit lengthUnit =
-            _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+        IfcSIUnit lengthUnit = _model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
+
+        IfcCartesianPoint point = IfcAxis.CreatePoint(_model, XbimVector3D.Zero);
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(_model, point);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(_model, axis2Placement3D);
 
         _site = _model.Instances.New<IfcSite>(ifcSite =>
         {
             ifcSite.Name = "Site";
             ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            ifcSite.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+            ifcSite.ObjectPlacement = localPlacement;
         });
         _project.AddSite(_site);
 
@@ -59,11 +64,11 @@ public class IFCConverter : IDisposable
         {
             ifcBuilding.Name = "Building";
             ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            ifcBuilding.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+            ifcBuilding.ObjectPlacement = localPlacement;
         });
         _site.AddBuilding(_building);
 
-        _ifcObjects = new List<IfcObject>();
+        _ifcObjects = new List<IfcProduct>();
     }
 
     public IfcProduct AddEntity(IfcAbstractEntity entity)
@@ -77,42 +82,6 @@ public class IFCConverter : IDisposable
     public IfcProduct[] AddEntities(IfcAbstractEntity[] entities)
     {
         return entities.Select(entity => AddEntity(entity)).ToArray();
-    }
-
-    public IfcMaterial AddMaterial(IfcLabel name, IfcLabel category, IfcText description)
-    {
-        return _model.Instances.New<IfcMaterial>(material =>
-        {
-            material.Name = name;
-            material.Category = category;
-            material.Description = description;
-        });
-    }
-
-    private IfcSite AddSite()
-    {
-        var site = _model.Instances.New<IfcSite>(ifcSite =>
-        {
-            ifcSite.Name = "Site";
-            ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            ifcSite.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
-        });
-        _project.AddSite(site);
-
-        return site;
-    }
-
-    private IfcBuilding AddBuilding(IfcSite site)
-    {
-        var building = _model.Instances.New<IfcBuilding>(ifcBuilding =>
-        {
-            ifcBuilding.Name = "Building";
-            ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            ifcBuilding.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
-        });
-        site.AddBuilding(building);
-
-        return building;
     }
 
     public void GroupObjects(string groupName)
