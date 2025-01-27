@@ -2,6 +2,7 @@
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
@@ -35,6 +36,10 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
+        IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
+        
         SortPipes(out IfcPipeEntity[] branchPipes, out IfcPipeEntity headPipe);
         IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
 
@@ -53,7 +58,7 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
             fitting.Tag = "WeldedTee";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
             fitting.Representation = productDefinitionShape;
-            fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
+            fitting.ObjectPlacement = localPlacement;
         });
         AddProperties(model);
 

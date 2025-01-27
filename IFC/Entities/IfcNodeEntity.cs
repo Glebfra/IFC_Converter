@@ -27,11 +27,8 @@ public class IfcNodeEntity : IfcAbstractEntity
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
-        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
-        Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), localPlacement);
         AddProperties(model);
-
-        return Port;
+        return null;
     }
     
     private void AddProperties(IModel model)

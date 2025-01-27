@@ -43,8 +43,7 @@ public static class Program
             Console.WriteLine($"Added pipe {startPipeEntity.Id}");
             #endif
             
-            StartNodeEntity[] connNodeEntities =
-                startProject.GetConnEntities<StartNodeEntity>(startPipeEntity, StartElementType.NODE);
+            StartNodeEntity[] connNodeEntities = startProject.GetConnEntities<StartNodeEntity>(startPipeEntity, StartElementType.NODE);
             IfcNodeEntity[] ifcConnNodeEntities = connNodeEntities.Select(item => _nodeEntities[item.Id]).ToArray();
 
             IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity, ifcConnNodeEntities);

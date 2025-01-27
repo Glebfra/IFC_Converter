@@ -2,6 +2,7 @@
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
@@ -13,7 +14,6 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -62,13 +62,17 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private IfcPipeFitting CreateBend(IModel model, IfcProductDefinitionShape shape)
     {
+        IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
+        
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _startBendEntity.GetName();
             fitting.Tag = "Elbow";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
             fitting.Representation = shape;
-            fitting.ObjectPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
+            fitting.ObjectPlacement = localPlacement;
         });
     }
 

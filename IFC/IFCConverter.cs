@@ -4,10 +4,13 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
+using Xbim.Ifc4.GeometricConstraintResource;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.IO;
 
 namespace IFC_Converter.IFC;
@@ -45,11 +48,15 @@ public class IFCConverter : IDisposable
         lengthUnit.Name = IfcSIUnitName.METRE;
         lengthUnit.Prefix = null;
 
+        IfcCartesianPoint point = IfcAxis.CreatePoint(_model, XbimVector3D.Zero);
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(_model, point);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(_model, axis2Placement3D);
+
         _site = _model.Instances.New<IfcSite>(ifcSite =>
         {
             ifcSite.Name = "Site";
             ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            ifcSite.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+            ifcSite.ObjectPlacement = localPlacement;
         });
         _project.AddSite(_site);
 
@@ -57,7 +64,7 @@ public class IFCConverter : IDisposable
         {
             ifcBuilding.Name = "Building";
             ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            ifcBuilding.ObjectPlacement = IfcAxis.CreateLocalPlacement(_model, XbimVector3D.Zero);
+            ifcBuilding.ObjectPlacement = localPlacement;
         });
         _site.AddBuilding(_building);
 
