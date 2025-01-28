@@ -29,7 +29,8 @@ public static class IfcAxis
     {
         XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
         XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Forward;
-        XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection;
+        double pipeLength = pipeEntity.Depth;
+        XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection * pipeLength;
         return (pipeStartCoordinates - Coordinates).Length < (pipeEndCoordinates - Coordinates).Length
             ? pipeDirection
             : pipeDirection * -1;
