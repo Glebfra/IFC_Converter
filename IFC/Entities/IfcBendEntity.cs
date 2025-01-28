@@ -99,7 +99,7 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private IfcSurfaceCurveSweptAreaSolid CreateBendShape(IModel model)
     {
-        XbimVector3D circleCenter = CalculateCircleCenter(_pipeAngle);
+        XbimVector3D circleCenter = CalculateCircleCenter();
         
         IfcCircle circle = IfcGeometry.CreateCircle(model, _startBendEntity.GetRadius(), circleCenter, ObjectMatrix3D.Up, ObjectMatrix3D.Right);
         IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, _pipeAngle);
@@ -114,10 +114,10 @@ public class IfcBendEntity : IfcAbstractEntity
         });
     }
 
-    private XbimVector3D CalculateCircleCenter(double pipeAngle)
+    private XbimVector3D CalculateCircleCenter()
     {
         XbimVector3D dirToCenter = (DirectionToPipes[0].Normalized() + DirectionToPipes[1].Normalized()).Normalized();
-        double lengthToCenter = _startBendEntity.GetRadius() / Math.Cos(pipeAngle / 2);
+        double lengthToCenter = _startBendEntity.GetRadius() / Math.Cos(_pipeAngle / 2);
         return dirToCenter * lengthToCenter;
     }
 
@@ -130,9 +130,9 @@ public class IfcBendEntity : IfcAbstractEntity
         }
     }
 
-    private XbimVector3D CalculateAlternateCircleCenter(double pipeAngle)
+    private XbimVector3D CalculateAlternateCircleCenter()
     {
-        double lengthToCenter = _startBendEntity.GetRadius() * Math.Tan(pipeAngle / 2);
+        double lengthToCenter = _startBendEntity.GetRadius() * Math.Tan(_pipeAngle / 2);
         XbimVector3D dirToCenter = new XbimVector3D(-1, 0, 0);
         
         return dirToCenter * lengthToCenter;
@@ -140,7 +140,7 @@ public class IfcBendEntity : IfcAbstractEntity
 
     private IfcRevolvedAreaSolid CreateAlternateBendShape(IModel model)
     {
-        XbimVector3D circleCenter = CalculateAlternateCircleCenter(_pipeAngle);
+        XbimVector3D circleCenter = CalculateAlternateCircleCenter();
 
         IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(
             model,
