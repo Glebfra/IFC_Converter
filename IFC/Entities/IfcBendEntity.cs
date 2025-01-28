@@ -40,10 +40,10 @@ public class IfcBendEntity : IfcAbstractEntity
         _ifcNodeEntity = ifcNodeEntity;
 
         XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
-        PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward.Normalized()).ToArray();
+        PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
         DirectionToPipes = ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
 
-        XbimVector3D upDirection = XbimVector3D.CrossProduct(PipesDirection[0], PipesDirection[1]).Normalized();
+        XbimVector3D upDirection = XbimVector3D.CrossProduct(DirectionToPipes[0] * -1, DirectionToPipes[1]).Normalized();
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, DirectionToPipes[0] * -1, upDirection);
         
         _pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
