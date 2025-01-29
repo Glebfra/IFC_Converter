@@ -1,4 +1,5 @@
-﻿using IFC_Converter.Start.API;
+﻿using System.Reflection;
+using IFC_Converter.Start.API;
 using IFC_Converter.Start.Entities;
 
 namespace IFC_Converter.Start;
@@ -59,6 +60,11 @@ public class StartProject : IDisposable
         }
 
         return objs;
+    }
+
+    public int GetNumberElements(StartElementType minType, StartElementType maxType)
+    {
+        return _dataArray.GetNumberElements(minType, maxType);
     }
 
     public void Dispose()

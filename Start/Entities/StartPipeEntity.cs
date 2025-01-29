@@ -63,10 +63,19 @@ public class StartPipeEntity : StartAbstractEntity
 
     public XbimVector3D GetDirection() =>
         new(GetProjectionAlongOXAxis(), GetProjectionAlongOYAxis(), GetProjectionAlongOZAxis());
+    
+    public double GetXCoord() => Entity.GetXCoord();
+    public double GetYCoord() => Entity.GetYCoord();
+    public double GetZCoord() => Entity.GetZCoord();
+    
+    public XbimVector3D GetCoordinates() => new(GetXCoord(), GetYCoord(), GetZCoord());
 
     public override Dictionary<string, string> GetData()
     {
         var dictionary = base.GetData();
+        dictionary.Add("X Coordinate", GetXCoord().ToString("F"));
+        dictionary.Add("Y Coordinate", GetYCoord().ToString("F"));
+        dictionary.Add("Z Coordinate", GetZCoord().ToString("F"));
         dictionary.Add("Name", GetName());
         dictionary.Add("Outside Diameter", GetOutsideDiameter().ToString("F"));
         dictionary.Add("Material Name", GetMaterialName());
