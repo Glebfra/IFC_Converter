@@ -27,7 +27,9 @@ public class IfcMilterJointEntity : IfcAbstractEntity
     private IfcPipeFitting _pipeFitting;
 
     private double _pipeAngle;
-    
+
+    public double Length => 2 * Depth;
+
     public XbimMatrix3D ObjectMatrix3D { get; }
     public XbimVector3D[] PipesDirection { get; }
     public XbimVector3D[] DirectionToPipes { get; }
@@ -174,13 +176,13 @@ public class IfcMilterJointEntity : IfcAbstractEntity
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
                 {
                     length.Name = "Length";
-                    length.LengthValue = _pipeAngle * _startMilterJointEntity.GetRadius();
+                    length.LengthValue = Length;
                     length.Formula = "radius*angle; [angle]=rad, [radius]=metre";
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                 {
                     weight.Name = "NetWeight";
-                    weight.WeightValue = _startMilterJointEntity.GetWeight();
+                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_startMilterJointEntity.GetWeight()) * Length;
                 }));
             });
         });

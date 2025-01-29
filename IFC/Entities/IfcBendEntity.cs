@@ -33,6 +33,8 @@ public class IfcBendEntity : IfcAbstractEntity
     public XbimVector3D[] PipesDirection { get; }
     public XbimVector3D[] DirectionToPipes { get; }
 
+    public double Length => _pipeAngle * _startBendEntity.GetRadius();
+
     public IfcBendEntity(StartBendEntity startBendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
     {
         _startBendEntity = startBendEntity;
@@ -196,13 +198,13 @@ public class IfcBendEntity : IfcAbstractEntity
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
                 {
                     length.Name = "Length";
-                    length.LengthValue = _pipeAngle * _startBendEntity.GetRadius();
+                    length.LengthValue = Length;
                     length.Formula = "radius*angle; [angle]=rad, [radius]=metre";
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                 {
                     weight.Name = "NetWeight";
-                    weight.WeightValue = _startBendEntity.GetWeight();
+                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_startBendEntity.GetWeight()) * Length;
                 }));
             });
         });
