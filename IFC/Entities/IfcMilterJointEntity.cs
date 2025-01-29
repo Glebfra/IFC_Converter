@@ -77,6 +77,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
         IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         _pipeFitting = CreateMilterJoint(model, shape, objectPlacement);
         ConnectPorts(model);
+        AddProperties(model);
 
         return _pipeFitting;
     }
