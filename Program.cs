@@ -51,7 +51,12 @@ public static class Program
             _pipeEntities.Add(startPipeEntity.Id, ifcPipeEntity);
         }
 
-        StartBendEntity[] startBendEntities = startProject.GetEntities<StartBendEntity>(StartElementType.ELBOW);
+        List<StartBendEntity> startBendEntities = new List<StartBendEntity>();
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.PIPE_BEND));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.ELBOW));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.MILTER_BEND));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.WELDED_BEND));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.LONG_RADIUS_PIPE_BEND));
         foreach (var startBendEntity in startBendEntities)
         {
             #if DEBUG
@@ -67,6 +72,23 @@ public static class Program
 
             ifcConverter.AddEntity(ifcBendEntity);
             _bendEntities.Add(startBendEntity.Id, ifcBendEntity);
+        }
+
+        StartMilterJointEntity[] startMilterJointEntities = startProject.GetEntities<StartMilterJointEntity>(StartElementType.MILTER_JOINT);
+        foreach (var startMilterJointEntity in startMilterJointEntities)
+        {
+            #if DEBUG
+            Console.WriteLine($"Added milter joint {startMilterJointEntity.Id}");
+            #endif
+            
+            StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startMilterJointEntity, StartElementType.NODE);
+            StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
+            
+            IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
+            IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
+            IfcMilterJointEntity ifcMilterJointEntity = new IfcMilterJointEntity(startMilterJointEntity, ifcConnNodeEntity, ifcConnPipeEntities);
+
+            ifcConverter.AddEntity(ifcMilterJointEntity);
         }
 
         StartWeldedTeeEntity[] startWeldedTeeEntities = startProject.GetEntities<StartWeldedTeeEntity>(StartElementType.WELDED_TEE);

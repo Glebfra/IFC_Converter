@@ -18,6 +18,7 @@ public enum StartElementType
     NONSTANDARD_TEE = 41,
     LONG_RADIUS_PIPE_BEND = 43,
     PRE_STRESSED_PIPE_BEND = 44,
+    WELDED_BEND = 45,
     ELBOW = 46,
     CAP = 47,
     MILTER_JOINT = 48,
