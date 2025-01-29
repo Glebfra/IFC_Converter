@@ -57,6 +57,7 @@ public static class Program
         startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.MILTER_BEND));
         startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.WELDED_BEND));
         startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.LONG_RADIUS_PIPE_BEND));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.PRE_STRESSED_PIPE_BEND));
         foreach (var startBendEntity in startBendEntities)
         {
             #if DEBUG
