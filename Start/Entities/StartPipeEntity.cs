@@ -1,4 +1,5 @@
 ﻿using IFC_Converter.Start.API;
+using IFC_Converter.Start.Entities.Abstract;
 using Xbim.Common.Geometry;
 
 namespace IFC_Converter.Start.Entities;

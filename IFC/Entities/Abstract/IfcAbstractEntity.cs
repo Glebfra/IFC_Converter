@@ -1,7 +1,7 @@
 ﻿using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC_Converter.IFC.Entities.Abstract;
 
 public abstract class IfcAbstractEntity
 {

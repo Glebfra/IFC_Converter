@@ -5,16 +5,16 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC_Converter.IFC.Entities;
 
-public class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
+public class IfcStubInEntity : IfcAbstractTeeEntity
 {
     public readonly double Length;
     public readonly double Height;
-
-    public IfcFabricatedTeeEntity(StartFabricatedTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
+    
+    public IfcStubInEntity(StartStubInEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
         : base(teeEntity, nodeEntity, connPipes)
     {
-        Length = teeEntity.GetHeaderLength();
-        Height = teeEntity.GetBranchHeight() + _branchPipes[0].Diameter / 2;
+        Length = _headPipe.Diameter;
+        Height = _branchPipes[0].Diameter / 2;
     }
 
     public override IfcProduct CreateAndAdd(IModel model)

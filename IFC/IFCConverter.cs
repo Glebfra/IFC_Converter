@@ -1,4 +1,4 @@
-﻿using IFC_Converter.IFC.Entities;
+﻿using IFC_Converter.IFC.Entities.Abstract;
 using IFC_Converter.IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
