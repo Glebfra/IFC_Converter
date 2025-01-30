@@ -92,7 +92,8 @@ public static class Program
             ifcConverter.AddEntity(ifcMilterJointEntity);
         }
 
-        StartWeldedTeeEntity[] startWeldedTeeEntities = startProject.GetEntities<StartWeldedTeeEntity>(StartElementType.WELDED_TEE);
+        List<StartWeldedTeeEntity> startWeldedTeeEntities = new List<StartWeldedTeeEntity>();
+        startWeldedTeeEntities.AddRange(startProject.GetEntities<StartWeldedTeeEntity>(StartElementType.WELDED_TEE));
         foreach (var startWeldedTeeEntity in startWeldedTeeEntities)
         {
             #if DEBUG
@@ -108,6 +109,24 @@ public static class Program
 
             ifcConverter.AddEntity(ifcWeldedTeeEntity);
             _weldedTeeEntities.Add(startWeldedTeeEntity.Id, ifcWeldedTeeEntity);
+        }
+        
+        List<StartFabricatedTeeEntity> startFabricatedTeeEntities = new List<StartFabricatedTeeEntity>();
+        startFabricatedTeeEntities.AddRange(startProject.GetEntities<StartFabricatedTeeEntity>(StartElementType.FABRICATED_TEE));
+        foreach (var startFabricatedTeeEntity in startFabricatedTeeEntities)
+        {
+            #if DEBUG
+            Console.WriteLine($"Added fabricated tee {startFabricatedTeeEntity.Id}");
+            #endif
+
+            StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startFabricatedTeeEntity, StartElementType.NODE);
+            StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
+
+            IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
+            IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
+            IfcFabricatedTeeEntity ifcFabricatedTeeEntity = new IfcFabricatedTeeEntity(startFabricatedTeeEntity, ifcConnNodeEntity, ifcConnPipeEntities);
+
+            ifcConverter.AddEntity(ifcFabricatedTeeEntity);
         }
 
         ifcConverter.GroupObjects("Pipe System");
