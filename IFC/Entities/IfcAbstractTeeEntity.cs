@@ -3,6 +3,7 @@ using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
+using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
@@ -12,6 +13,7 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
+using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC_Converter.IFC.Entities;
 
@@ -26,14 +28,20 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
     protected IfcPipeEntity _headPipe;
 
     public XbimMatrix3D ObjectMatrix3D { get; protected set; }
-    public double Length { get; protected set; }
-    public double Height { get; protected set; }
-    public string Name { get; protected set; }
+    
+    public abstract double Length { get; protected init; }
+    public abstract double Height { get; protected init; }
+    public abstract string Name { get; protected init; }
 
-    public IfcAbstractTeeEntity(IfcPipeEntity[] connPipes)
+    public IfcAbstractTeeEntity(StartAbstractEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes)
     {
         _connPipes = connPipes;
+        _teeEntity = teeEntity;
+        _nodeEntity = nodeEntity;
+        
         SortPipes();
+        
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(_nodeEntity.ObjectMatrix3D.Translation, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
     }
 
     protected IfcRelConnectsPorts[] ConnectPorts(IModel model)
@@ -65,6 +73,36 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
 
         return connectsPorts;
     }
+
+    protected IfcPipeFitting CreateTeeEntity(IModel model, double length, double height)
+    {
+        IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
+        IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_connPipes.Length];
+
+        int i = 0;
+        foreach (var branchPipe in _branchPipes)
+        {
+            teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, length / 2);
+        }
+        teeExtrudedArea[i++] = CreateTeeBranchShape(model, _headPipe, height);
+
+        IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
+        IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+        _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
+        {
+            fitting.Name = Name;
+            fitting.Tag = "WeldedTee";
+            fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
+            fitting.Representation = productDefinitionShape;
+            fitting.ObjectPlacement = localPlacement;
+        });
+        AddProperties(model);
+        ConnectPorts(model);
+
+        return _pipeFitting;
+    }
     
     protected IfcExtrudedAreaSolid CreateTeeBranchShape(IModel model, IfcPipeEntity pipeEntity, double length)
     {
@@ -72,6 +110,25 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
         IfcAxis2Placement3D axis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), direction);
         IfcExtrudedAreaSolid extrudedAreaSolid = CreateTeeItemShape(model, axis, pipeEntity.Diameter / 2, length);
         pipeEntity.Clip(_nodeEntity, length);
+        return extrudedAreaSolid;
+    }
+    
+    protected IfcExtrudedAreaSolid CreateTeeItemShape(IModel model, IfcAxis2Placement3D axis, double radius, double length)
+    {
+        IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
+        {
+            c.ProfileType = IfcProfileTypeEnum.AREA;
+            c.Radius = radius;
+        });
+
+        IfcExtrudedAreaSolid extrudedAreaSolid = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
+        {
+            solid.SweptArea = profileDef;
+            solid.ExtrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
+            solid.Depth = length;
+            solid.Position = axis;
+        });
+
         return extrudedAreaSolid;
     }
     
@@ -95,25 +152,6 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
                 _headPipe = _connPipes[^(j + k)];
             }
         }
-    }
-    
-    protected IfcExtrudedAreaSolid CreateTeeItemShape(IModel model, IfcAxis2Placement3D axis, double radius, double length)
-    {
-        IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
-        {
-            c.ProfileType = IfcProfileTypeEnum.AREA;
-            c.Radius = radius;
-        });
-
-        IfcExtrudedAreaSolid extrudedAreaSolid = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
-        {
-            solid.SweptArea = profileDef;
-            solid.ExtrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
-            solid.Depth = length;
-            solid.Position = axis;
-        });
-
-        return extrudedAreaSolid;
     }
     
     protected void AddProperties(IModel model)
