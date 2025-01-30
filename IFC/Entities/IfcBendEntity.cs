@@ -1,4 +1,5 @@
-﻿using IFC_Converter.IFC.Tools;
+﻿using IFC_Converter.IFC.Entities.Abstract;
+using IFC_Converter.IFC.Tools;
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -15,7 +16,6 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC_Converter.IFC.Entities;
 
