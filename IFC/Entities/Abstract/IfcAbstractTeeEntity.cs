@@ -1,5 +1,5 @@
 ﻿using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+using IFC_Converter.Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
@@ -19,7 +19,7 @@ namespace IFC_Converter.IFC.Entities.Abstract;
 
 public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
 {
-    protected StartAbstractEntity _teeEntity;
+    protected StartAbstractTeeEntity _teeEntity;
     protected IfcPipeEntity[] _connPipes;
     protected IfcNodeEntity _nodeEntity;
     protected IfcPipeFitting _pipeFitting;
@@ -28,12 +28,8 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
     protected IfcPipeEntity _headPipe;
 
     public XbimMatrix3D ObjectMatrix3D { get; protected set; }
-    
-    public abstract double Length { get; protected init; }
-    public abstract double Height { get; protected init; }
-    public abstract string Name { get; protected init; }
 
-    public IfcAbstractTeeEntity(StartAbstractEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes)
+    public IfcAbstractTeeEntity(StartAbstractTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes)
     {
         _connPipes = connPipes;
         _teeEntity = teeEntity;
@@ -92,7 +88,7 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
         IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            fitting.Name = Name;
+            fitting.Name = _teeEntity.GetName();
             fitting.Tag = "WeldedTee";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
             fitting.Representation = productDefinitionShape;

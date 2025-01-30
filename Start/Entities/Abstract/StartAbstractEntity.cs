@@ -1,7 +1,7 @@
 ﻿using IFC_Converter.Start.API;
 using Xbim.Common.Geometry;
 
-namespace IFC_Converter.Start.Entities;
+namespace IFC_Converter.Start.Entities.Abstract;
 
 public abstract class StartAbstractEntity : IDisposable
 {

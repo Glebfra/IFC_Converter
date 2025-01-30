@@ -7,16 +7,14 @@ namespace IFC_Converter.IFC.Entities;
 
 public class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
 {
-    public sealed override double Length { get; protected init; }
-    public sealed override double Height { get; protected init; }
-    public sealed override string Name { get; protected init; }
-    
+    public readonly double Length;
+    public readonly double Height;
+
     public IfcFabricatedTeeEntity(StartFabricatedTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
         : base(teeEntity, nodeEntity, connPipes)
     {
         Length = teeEntity.GetHeaderLength();
         Height = teeEntity.GetBranchHeight() + _branchPipes[0].Diameter / 2;
-        Name = teeEntity.GetName();
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
