@@ -48,9 +48,9 @@ public class IfcWeldedTeeEntity : IfcAbstractEntity
         int i = 0;
         foreach (var branchPipe in branchPipes)
         {
-            teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, _teeEntity.GetBranchHeight() / 2);
+            teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, _teeEntity.GetHeaderLength() / 2);
         }
-        teeExtrudedArea[i++] = CreateTeeBranchShape(model, headPipe, _teeEntity.GetHeaderLength());
+        teeExtrudedArea[i++] = CreateTeeBranchShape(model, headPipe, _teeEntity.GetCrotchHeight() + branchPipes[0].Diameter / 2);
 
         IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
         IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
