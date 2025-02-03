@@ -37,6 +37,8 @@ public static class Program
         AddFabricatedTees(startProject, ifcConverter);
         AddStubIns(startProject, ifcConverter);
 
+        AddReducers(startProject, ifcConverter);
+
         ifcConverter.GroupObjects("Pipe System");
         ifcConverter.SaveAs(outputFilepath);
 
@@ -85,6 +87,9 @@ public static class Program
         startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.WELDED_BEND));
         startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.LONG_RADIUS_PIPE_BEND));
         startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.PRE_STRESSED_PIPE_BEND));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.SADDLE_BEND));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.WELDOLET));
+        startBendEntities.AddRange(startProject.GetEntities<StartBendEntity>(StartElementType.SWEEPOLET));
         foreach (var startBendEntity in startBendEntities)
         {
             #if DEBUG
@@ -100,6 +105,11 @@ public static class Program
 
             ifcConverter.AddEntity(ifcBendEntity);
             _bendEntities.Add(startBendEntity.Id, ifcBendEntity);
+        }
+
+        foreach (var startBendEntity in startBendEntities)
+        {
+            Console.WriteLine($"Weight {startBendEntity.GetWeight()}");
         }
     }
 
@@ -184,6 +194,27 @@ public static class Program
             IfcStubInEntity ifcStubInEntity = new IfcStubInEntity(startStubInEntity, ifcConnNodeEntity, ifcConnPipeEntities);
 
             ifcConverter.AddEntity(ifcStubInEntity);
+        }
+    }
+
+    private static void AddReducers(StartProject startProject, IFCConverter ifcConverter)
+    {
+        List<StartReducerConcentricEntity> startReducerConcentricEntities = new List<StartReducerConcentricEntity>();
+        startReducerConcentricEntities.AddRange(startProject.GetEntities<StartReducerConcentricEntity>(StartElementType.REDUCER_CONCENTRIC));
+        foreach (var startReducerConcentricEntity in startReducerConcentricEntities)
+        {
+            #if DEBUG
+            Console.WriteLine($"Added concentric reducer {startReducerConcentricEntity.Id}");
+            #endif
+            
+            StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startReducerConcentricEntity, StartElementType.NODE);
+            StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
+            
+            IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
+            IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
+            IfcReducerConcentricEntity ifcReducerConcentricEntity = new IfcReducerConcentricEntity(startReducerConcentricEntity, ifcConnNodeEntity, ifcConnPipeEntities);
+
+            ifcConverter.AddEntity(ifcReducerConcentricEntity);
         }
     }
 
