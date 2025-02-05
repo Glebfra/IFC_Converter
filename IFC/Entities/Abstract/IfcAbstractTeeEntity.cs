@@ -152,14 +152,14 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
     
     protected void AddProperties(IModel model)
     {
-        #region Pset_PipeFittingStart
+        #region Pset_PipeFittingTypeStart
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
             properties.RelatedObjects.Add(_pipeFitting);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
-                set.Name = "Pset_PipeFittingStart";
+                set.Name = "Pset_PipeFittingTypeStart";
                 foreach (var kvp in _teeEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>

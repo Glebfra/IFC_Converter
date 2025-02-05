@@ -62,6 +62,10 @@ public class IfcPipeEntity : IfcAbstractEntity
     {
         PipeEntity = pipeEntity;
         _nodeEntities = ifcNodeEntities;
+        foreach (IfcNodeEntity ifcNodeEntity in _nodeEntities)
+        {
+            ifcNodeEntity.connEntities.Add(this);
+        }
 
         XbimVector3D direction = PipeEntity.GetDirection();
         Diameter = PipeEntity.GetOutsideDiameter();

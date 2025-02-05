@@ -69,6 +69,15 @@ public static class IfcAxis
             placement3D.Location = point;
         });
     }
+    
+    public static IfcAxis1Placement CreateAxis1Placement(IModel model, IfcCartesianPoint location, IfcDirection axis)
+    {
+        return model.Instances.New<IfcAxis1Placement>(placement =>
+        {
+            placement.Location = location;
+            placement.Axis = axis;
+        });
+    }
 
     public static IfcAxis1Placement CreateAxis1Placement(IModel model, XbimVector3D coordinates, XbimVector3D direction)
     {
