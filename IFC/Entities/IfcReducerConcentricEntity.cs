@@ -38,6 +38,7 @@ public class IfcReducerConcentricEntity : IfcAbstractEntity
         _startReducerConcentric = startReducerConcentric;
         _nodeEntity = nodeEntity;
         _pipeEntities = pipeEntities;
+        _nodeEntity.connEntities.Add(this);
 
         XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
@@ -83,9 +84,10 @@ public class IfcReducerConcentricEntity : IfcAbstractEntity
             fitting.Tag = "Reducer";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
         });
-
-        AddProperties(model);
         _pipeEntities[1].Clip(_nodeEntity, Length);
+        
+        AddProperties(model);
+        ConnectPorts(model);
 
         return _pipeFitting;
     }

@@ -40,6 +40,7 @@ public class IfcBendEntity : IfcAbstractEntity
         _startBendEntity = startBendEntity;
         _ifcPipeEntities = ifcPipeEntities;
         _ifcNodeEntity = ifcNodeEntity;
+        _ifcNodeEntity.connEntities.Add(this);
 
         XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
         PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();

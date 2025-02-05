@@ -1,9 +1,7 @@
 ﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
@@ -14,6 +12,7 @@ namespace IFC_Converter.IFC.Entities;
 public class IfcNodeEntity : IfcAbstractEntity
 {
     public readonly XbimMatrix3D ObjectMatrix3D;
+    public readonly List<IfcAbstractEntity> connEntities = new List<IfcAbstractEntity>();
     
     public XbimVector3D Coordinates => ObjectMatrix3D.Translation;
     public IfcDistributionPort Port { get; private set; }
@@ -31,7 +30,7 @@ public class IfcNodeEntity : IfcAbstractEntity
         AddProperties(model);
         return null;
     }
-    
+
     private void AddProperties(IModel model)
     {
         #region Pset_PipeFittingStart

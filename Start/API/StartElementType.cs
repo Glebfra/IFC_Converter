@@ -24,7 +24,7 @@ public enum StartElementType
     MILTER_JOINT = 48,
     FLANGE = 49,
     REDUCER_CONCENTRIC = 63,
-    REDUCER_EXCENTRIC = 64,
+    REDUCER_ECCENTRIC = 64,
     WELDOLET = 72,
     SWEEPOLET = 73,
     EXTRUDED_TEE = 74,

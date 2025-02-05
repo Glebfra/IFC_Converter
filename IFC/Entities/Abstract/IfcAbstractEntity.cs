@@ -1,4 +1,5 @@
 ﻿using Xbim.Common;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Kernel;
 
 namespace IFC_Converter.IFC.Entities.Abstract;
