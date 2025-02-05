@@ -3,51 +3,26 @@ using IFC_Converter.IFC.Tools;
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC_Converter.IFC.Entities;
 
-public class IfcReducerEccentricEntity : IfcAbstractEntity
+public class IfcReducerEccentricEntity : IfcAbstractReducerEntity
 {
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
-    
-    private readonly StartReducerEccentricEntity _startReducerEccentric;
-    private readonly IfcPipeEntity[] _pipeEntities;
-    private readonly IfcNodeEntity _nodeEntity;
+    protected override IfcPipeFitting? _pipeFitting { get; set; }
 
-    private IfcPipeFitting? _pipeFitting;
-
-    public readonly XbimMatrix3D ObjectMatrix3D;
-    public readonly double Length;
-    
-    public IfcReducerEccentricEntity(StartReducerEccentricEntity startReducerEccentric, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+    public IfcReducerEccentricEntity(StartReducerEccentricEntity startReducerEccentric, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities) 
+        : base(startReducerEccentric, nodeEntity, pipeEntities)
     {
-        _startReducerEccentric = startReducerEccentric;
-        _nodeEntity = nodeEntity;
-        _pipeEntities = pipeEntities;
-        _nodeEntity.connEntities.Add(this);
-
-        XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-        XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
-        
-        XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
-        XbimVector3D forward = directionToPipe.Normalized();
-        if (forward == WorldUp || forward == -1 * WorldUp)
-            WorldUp = new XbimVector3D(0, 1, 0);
-        XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp).Normalized();
-
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, WorldUp);
-        Length = _startReducerEccentric.GetLengthOfConicalPart();
     }
     
     public override IfcProduct CreateAndAdd(IModel model)
@@ -73,30 +48,15 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             fitting.ObjectPlacement = localPlacement;
             fitting.Representation = shape;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
+            fitting.Tag = "Reducer";
+            fitting.Name = _startReducer.GetName();
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
+        
+        AddProperties(model);
         ConnectPorts(model);
 
         return _pipeFitting;
-    }
-    
-    private IfcRelConnectsPorts ConnectPorts(IModel model)
-    {
-        var closestPorts = (
-            from port in _pipeEntities.SelectMany(pipe => pipe.Ports)
-            let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
-            orderby distance
-            select port
-        ).Take(2).ToArray();
-
-        return model.Instances.New<IfcRelConnectsPorts>(ports =>
-        {
-            ports.Name = $"{closestPorts[0].GlobalId}|{closestPorts[1].GlobalId}";
-            ports.Description = "Flow";
-            ports.RelatingPort = closestPorts[0];
-            ports.RelatedPort = closestPorts[1];
-            ports.RealizingElement = _pipeFitting;
-        });
     }
 
     private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height, double displacement)
