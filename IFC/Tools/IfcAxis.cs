@@ -36,6 +36,20 @@ public static class IfcAxis
             : pipeDirection * -1;
     }
 
+    public static XbimVector3D GetDirectionToPipe(IfcPipeEntity pipeEntity, IfcNodeEntity nodeEntity)
+    {
+        XbimVector3D nodeCoordinates = nodeEntity.Coordinates;
+        XbimVector3D startPipeCoordinates = pipeEntity.Coordinates;
+        XbimVector3D endPipeCoordinates = startPipeCoordinates + pipeEntity.ObjectMatrix3D.Forward * pipeEntity.Depth;
+
+        XbimVector3D startDisplacement = startPipeCoordinates - nodeCoordinates;
+        XbimVector3D endDisplacement = endPipeCoordinates - nodeCoordinates;
+
+        return startDisplacement.Length < endDisplacement.Length
+            ? startDisplacement.Normalized()
+            : endDisplacement.Normalized();
+    }
+
     #endregion
 
     #region LocalPlacement

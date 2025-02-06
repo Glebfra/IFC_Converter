@@ -37,7 +37,7 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
         if (forward == WorldUp || forward == -1 * WorldUp)
             WorldUp = new XbimVector3D(0, 1, 0);
         XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp).Normalized();
-
+        
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, WorldUp);
         Length = _startReducer.GetLengthOfConicalPart();
     }
