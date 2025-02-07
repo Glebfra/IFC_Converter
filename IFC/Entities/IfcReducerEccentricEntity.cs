@@ -1,4 +1,5 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
+﻿using System.Numerics;
+using IFC_Converter.IFC.Entities.Abstract;
 using IFC_Converter.IFC.Tools;
 using IFC_Converter.Start.Entities;
 using Xbim.Common;
@@ -18,11 +19,15 @@ public class IfcReducerEccentricEntity : IfcAbstractReducerEntity
 {
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
+
+    private readonly double _angle;
+
     protected override IfcPipeFitting? _pipeFitting { get; set; }
 
     public IfcReducerEccentricEntity(StartReducerEccentricEntity startReducerEccentric, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities) 
         : base(startReducerEccentric, nodeEntity, pipeEntities)
     {
+        _angle = startReducerEccentric.GetAngleBetweenEccentricityVectorAndZmAxis();
     }
     
     public override IfcProduct CreateAndAdd(IModel model)
@@ -52,7 +57,7 @@ public class IfcReducerEccentricEntity : IfcAbstractReducerEntity
             fitting.Name = _startReducer.GetName();
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
-        
+
         AddProperties(model);
         ConnectPorts(model);
 
@@ -64,14 +69,18 @@ public class IfcReducerEccentricEntity : IfcAbstractReducerEntity
         IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
         for (int i = 0; i < _numSegments; i++)
         {
-            XbimVector3D point = new XbimVector3D(radius * Math.Cos(_angleStep * i), radius * Math.Sin(_angleStep * i) - displacement, height);
+            XbimVector3D point = new XbimVector3D(
+                radius * Math.Cos(_angleStep * i) - displacement * Math.Cos(_angle),
+                radius * Math.Sin(_angleStep * i) - displacement * Math.Sin(_angle),
+                height
+            );
             points[i] = IfcAxis.CreatePoint(model, point);
         }
 
         return points;
     }
 
-    private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] lowerPoints, IfcCartesianPoint[] upperPoints)
+    private static IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] lowerPoints, IfcCartesianPoint[] upperPoints)
     {
         IfcFace[] faces = new IfcFace[_numSegments + 2];
         int facesIndex = 0;

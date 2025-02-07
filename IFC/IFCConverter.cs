@@ -10,7 +10,6 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.IO;
 
 namespace IFC_Converter.IFC;

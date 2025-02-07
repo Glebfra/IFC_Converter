@@ -34,11 +34,13 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
         
         XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
         XbimVector3D forward = directionToPipe.Normalized();
-        if (forward == WorldUp || forward == -1 * WorldUp)
+        if (forward == WorldUp)
             WorldUp = new XbimVector3D(0, 1, 0);
+        else if (forward == -1 * WorldUp)
+            WorldUp = new XbimVector3D(0, -1, 0);
         XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp).Normalized();
         
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, WorldUp);
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         Length = _startReducer.GetLengthOfConicalPart();
     }
     
@@ -115,6 +117,11 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
                 {
                     value.Name = "Up direction";
                     value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
+                }));
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "Matrix";
+                    value.NominalValue = new IfcText(ObjectMatrix3D.ToString());
                 }));
             });
         });

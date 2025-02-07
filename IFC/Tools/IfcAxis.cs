@@ -46,8 +46,8 @@ public static class IfcAxis
         XbimVector3D endDisplacement = endPipeCoordinates - nodeCoordinates;
 
         return startDisplacement.Length < endDisplacement.Length
-            ? startDisplacement.Normalized()
-            : endDisplacement.Normalized();
+            ? startDisplacement
+            : endDisplacement;
     }
 
     #endregion
