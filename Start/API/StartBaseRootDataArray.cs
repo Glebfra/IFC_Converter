@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace IFC_Converter.Start.API;
+namespace Start.API;
 
 public class StartBaseRootDataArray : IDisposable
 {
@@ -10,11 +10,6 @@ public class StartBaseRootDataArray : IDisposable
     public StartBaseRootDataArray(object startBaseRootDataArray)
     {
         _startBaseRootDataArray = startBaseRootDataArray;
-    }
-
-    public object GetObject()
-    {
-        return _startBaseRootDataArray;
     }
 
     public StartBaseRoot GetElementDispatch(int id, StartElementType minType, StartElementType maxType)

@@ -1,5 +1,5 @@
-﻿using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities.Abstract;
+﻿using IFC.Tools;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
@@ -9,7 +9,7 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
 
-namespace IFC_Converter.IFC.Entities.Abstract;
+namespace IFC.Entities.Abstract;
 
 public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
 {
@@ -18,8 +18,8 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
     protected readonly StartAbstractReducerEntity _startReducer;
     protected readonly IfcPipeEntity[] _pipeEntities;
     protected readonly IfcNodeEntity _nodeEntity;
-
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Length { get; }
 
     protected IfcAbstractReducerEntity(StartAbstractReducerEntity startReducer, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
@@ -27,21 +27,23 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
         _startReducer = startReducer;
         _nodeEntity = nodeEntity;
         _pipeEntities = pipeEntities;
-        _nodeEntity.connEntities.Add(this);
+        _nodeEntity.ConnEntities.Add(this);
         
         XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
         
         XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
         XbimVector3D forward = directionToPipe.Normalized();
-        if (forward == WorldUp || forward == -1 * WorldUp)
+        if (forward == WorldUp)
             WorldUp = new XbimVector3D(0, 1, 0);
+        else if (forward == -1 * WorldUp)
+            WorldUp = new XbimVector3D(0, -1, 0);
         XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp).Normalized();
-
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, WorldUp);
+        
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         Length = _startReducer.GetLengthOfConicalPart();
     }
-    
+
     protected IfcRelConnectsPorts ConnectPorts(IModel model)
     {
         var closestPorts = (

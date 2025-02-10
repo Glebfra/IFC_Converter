@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Start\Start.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Xbim.Ifc" Version="6.0.493" />
+      <PackageReference Include="Xbim.Ifc4" Version="6.0.493" />
+      <PackageReference Include="Xbim.IO.MemoryModel" Version="6.0.493" />
+    </ItemGroup>
+
+</Project>

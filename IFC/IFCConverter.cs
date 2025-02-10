@@ -1,5 +1,5 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
+﻿using IFC.Entities.Abstract;
+using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
@@ -10,10 +10,9 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.IO;
 
-namespace IFC_Converter.IFC;
+namespace IFC;
 
 public class IFCConverter : IDisposable
 {

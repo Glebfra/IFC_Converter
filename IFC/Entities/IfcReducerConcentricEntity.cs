@@ -1,6 +1,6 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+﻿using IFC.Entities.Abstract;
+using IFC.Tools;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -9,15 +9,17 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.TopologyResource;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
 {
+    private const int _numSegments = 32;
+    private const double _angleStep = 2 * Math.PI / _numSegments;
+    
     protected override IfcPipeFitting? _pipeFitting { get; set; }
 
     public IfcCartesianPoint? Location { get; private set; }
@@ -31,55 +33,67 @@ public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
+        double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
+        
         Location = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
         Axis = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
         RefDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
-
-        IfcCartesianPoint connShapePoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
-        IfcDirection connShapeAxis = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
-        IfcAxis1Placement connShapePlacement = IfcAxis.CreateAxis1Placement(model, connShapePoint, connShapeAxis);
-        IfcAxis2Placement3D objectPlacement3D = IfcAxis.CreateAxis2Placement3D(model, Location, Axis, RefDirection);
-        IfcLocalPlacement objectPlacement = IfcAxis.CreateLocalPlacement(model, objectPlacement3D);
-
-        IfcPolyline polyline = CreateTrapezoid(model);
-        IfcArbitraryClosedProfileDef profileDef = IfcGeometry.CreateProfile(model, polyline);
-        IfcRevolvedAreaSolid coneShape = model.Instances.New<IfcRevolvedAreaSolid>(solid =>
-        {
-            solid.SweptArea = profileDef;
-            solid.Axis = connShapePlacement;
-            solid.Angle = Math.PI * 2;
-        });
-
-        IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, coneShape);
+        
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, Location, Axis, RefDirection);
+        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
+        
+        IfcCartesianPoint[] lowerCircle = CreateCircle(model, radiuses[0], 0);
+        IfcCartesianPoint[] upperCircle = CreateCircle(model, radiuses[1], Length);
+        IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
+        IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep);
         IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+        
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            fitting.Name = _startReducer.GetName();
+            fitting.ObjectPlacement = localPlacement;
             fitting.Representation = shape;
-            fitting.ObjectPlacement = objectPlacement;
-            fitting.Tag = "Reducer";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
+            fitting.Tag = "Reducer";
+            fitting.Name = _startReducer.GetName();
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
-        
+
         AddProperties(model);
         ConnectPorts(model);
 
         return _pipeFitting;
     }
-
-    private IfcPolyline CreateTrapezoid(IModel model)
+    
+    private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height)
     {
-        double startRadius = _pipeEntities[0].Diameter / 2;
-        double endRadius = _pipeEntities[1].Diameter / 2;
-        
-        return model.Instances.New<IfcPolyline>(polyline =>
+        IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
+        for (int i = 0; i < _numSegments; i++)
         {
-            polyline.Points.Add(model.Instances.New<IfcCartesianPoint>(point => point.SetXYZ(0, 0, 0)));
-            polyline.Points.Add(model.Instances.New<IfcCartesianPoint>(point => point.SetXYZ(startRadius, 0, 0)));
-            polyline.Points.Add(model.Instances.New<IfcCartesianPoint>(point => point.SetXYZ(endRadius, 0, Length)));
-            polyline.Points.Add(model.Instances.New<IfcCartesianPoint>(point => point.SetXYZ(0, 0, Length)));
-            polyline.Points.Add(model.Instances.New<IfcCartesianPoint>(point => point.SetXYZ(0, 0, 0)));
+            XbimVector3D point = new XbimVector3D(radius * Math.Cos(_angleStep * i), radius * Math.Sin(_angleStep * i), height);
+            points[i] = IfcAxis.CreatePoint(model, point);
+        }
+
+        return points;
+    }
+    
+    private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] lowerPoints, IfcCartesianPoint[] upperPoints)
+    {
+        IfcFace[] faces = new IfcFace[_numSegments + 2];
+        int facesIndex = 0;
+        for (int i = 0; i < _numSegments; i++)
+        {
+            IfcCartesianPoint p1 = lowerPoints[i];
+            IfcCartesianPoint p2 = lowerPoints[(i + 1) % _numSegments];
+            IfcCartesianPoint p3 = upperPoints[(i + 1) % _numSegments];
+            IfcCartesianPoint p4 = upperPoints[i];
+            faces[facesIndex++] = IfcGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
+        }
+        faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, lowerPoints);
+        faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, upperPoints);
+
+        return model.Instances.New<IfcFacetedBrep>(brep =>
+        {
+            brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
         });
     }
 }

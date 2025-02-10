@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace IFC_Converter.Start.API;
+namespace Start.API;
 
 public class StartDocument : IDisposable
 {

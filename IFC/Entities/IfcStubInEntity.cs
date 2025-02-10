@@ -1,9 +1,9 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.Start.Entities;
+﻿using IFC.Entities.Abstract;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcStubInEntity : IfcAbstractTeeEntity
 {
@@ -15,7 +15,7 @@ public class IfcStubInEntity : IfcAbstractTeeEntity
     {
         Length = _headPipe.Diameter;
         Height = _branchPipes[0].Diameter / 2;
-        _nodeEntity.connEntities.Add(this);
+        _nodeEntity.ConnEntities.Add(this);
     }
 
     public override IfcProduct CreateAndAdd(IModel model)

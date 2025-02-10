@@ -1,4 +1,4 @@
-﻿namespace IFC_Converter.Start.API;
+﻿namespace Start.API;
 
 public enum StartBaseRootFunctionKey
 {

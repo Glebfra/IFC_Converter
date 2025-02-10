@@ -1,7 +1,7 @@
-﻿using IFC_Converter.Start.API;
-using IFC_Converter.Start.Entities.Abstract;
+﻿using Start.API;
+using Start.Entities.Abstract;
 
-namespace IFC_Converter.Start;
+namespace Start;
 
 public class StartProject : IDisposable
 {
@@ -9,56 +9,73 @@ public class StartProject : IDisposable
     private readonly StartDocument _document;
     private readonly StartBaseRootDataArray _dataArray;
 
-    public StartProject(string filepath)
+    private List<StartAbstractEntity> _abstractEntities;
+
+    public StartProject(StartAutoServer autoServer, StartDocument document, StartBaseRootDataArray dataArray)
     {
-        _autoServer = new StartAutoServer();
-        _document = _autoServer.LoadStartDocument(0x4, filepath);
-        _dataArray = _document.GetDataArrayDispatch();
+        _autoServer = autoServer;
+        _document = document;
+        _dataArray = dataArray;
+
+        _abstractEntities = new List<StartAbstractEntity>();
+    }
+
+    public static StartProject OpenProject(string filepath, int mode = 0x4)
+    {
+        StartAutoServer autoServer = new StartAutoServer();
+        StartDocument document = autoServer.LoadStartDocument(mode, filepath);
+        StartBaseRootDataArray baseRootDataArray = document.GetDataArrayDispatch();
+
+        return new StartProject(autoServer, document, baseRootDataArray);
     }
 
     public T[] GetConnEntities<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
         int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
-        T[] entities = new T[elementsNumber];
+        T[] objects = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
             StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, i);
-            entities[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
+            objects[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
+        _abstractEntities.AddRange(objects);
 
-        return entities;
+        return objects;
     }
 
     public T GetConnEntity<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
         StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, 0);
-        return (T)Activator.CreateInstance(typeof(T), baseRoot)!;
+        T @object = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
+        _abstractEntities.Add(@object);
+        
+        return @object;
     }
 
     public T[] GetEntities<T>(StartElementType type) where T : StartAbstractEntity
     {
         int elementsNumber = _dataArray.GetNumberElements(type, type);
-        T[] objs = new T[elementsNumber];
+        T[] objects = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
             StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, type, type);
-            objs[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
+            objects[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
 
-        return objs;
+        return objects;
     }
 
     public T[] GetEntities<T>(StartElementType minType, StartElementType maxType) where T : StartAbstractEntity
     {
         int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
-        T[] objs = new T[elementsNumber];
+        T[] objects = new T[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
             StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, minType, maxType);
-            objs[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
+            objects[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
 
-        return objs;
+        return objects;
     }
 
     public int GetNumberElements(StartElementType minType, StartElementType maxType)
@@ -68,6 +85,11 @@ public class StartProject : IDisposable
 
     public void Dispose()
     {
+        foreach (StartAbstractEntity entity in _abstractEntities)
+        {
+            entity.Dispose();
+        }
+        
         _dataArray.Dispose();
         _document.Dispose();
         _autoServer.Dispose();
