@@ -1,6 +1,6 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+﻿using IFC.Entities.Abstract;
+using IFC.Tools;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
@@ -16,7 +16,7 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcReducerEccentricEntity : IfcAbstractEntity
 {
@@ -31,7 +31,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
     private readonly IfcPipeEntity[] _pipeEntities;
     private readonly IfcNodeEntity _nodeEntity;
 
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Length { get; }
 
     public IfcReducerEccentricEntity(StartReducerEccentricEntity startReducerEccentric, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
@@ -39,7 +39,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
         _startReducer = startReducerEccentric;
         _nodeEntity = nodeEntity;
         _pipeEntities = pipeEntities;
-        _nodeEntity.connEntities.Add(this);
+        _nodeEntity.ConnEntities.Add(this);
         
         XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);

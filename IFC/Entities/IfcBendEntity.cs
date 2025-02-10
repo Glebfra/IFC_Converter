@@ -1,6 +1,6 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+﻿using IFC.Entities.Abstract;
+using IFC.Tools;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
@@ -17,9 +17,9 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
-public class IfcBendEntity : IfcAbstractEntity
+public sealed class IfcBendEntity : IfcAbstractEntity
 {
     private readonly StartBendEntity _startBendEntity;
     private readonly IfcNodeEntity _ifcNodeEntity;
@@ -29,7 +29,7 @@ public class IfcBendEntity : IfcAbstractEntity
     
     private readonly double _pipeAngle;
 
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public XbimVector3D[] PipesDirection { get; }
     public XbimVector3D[] DirectionToPipes { get; }
 
@@ -40,7 +40,7 @@ public class IfcBendEntity : IfcAbstractEntity
         _startBendEntity = startBendEntity;
         _ifcPipeEntities = ifcPipeEntities;
         _ifcNodeEntity = ifcNodeEntity;
-        _ifcNodeEntity.connEntities.Add(this);
+        _ifcNodeEntity.ConnEntities.Add(this);
 
         XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
         PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();

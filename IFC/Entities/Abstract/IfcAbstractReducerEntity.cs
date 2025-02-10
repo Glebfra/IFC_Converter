@@ -1,5 +1,5 @@
-﻿using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities.Abstract;
+﻿using IFC.Tools;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
@@ -9,7 +9,7 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
 
-namespace IFC_Converter.IFC.Entities.Abstract;
+namespace IFC.Entities.Abstract;
 
 public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
 {
@@ -18,8 +18,8 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
     protected readonly StartAbstractReducerEntity _startReducer;
     protected readonly IfcPipeEntity[] _pipeEntities;
     protected readonly IfcNodeEntity _nodeEntity;
-
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Length { get; }
 
     protected IfcAbstractReducerEntity(StartAbstractReducerEntity startReducer, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
@@ -27,7 +27,7 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
         _startReducer = startReducer;
         _nodeEntity = nodeEntity;
         _pipeEntities = pipeEntities;
-        _nodeEntity.connEntities.Add(this);
+        _nodeEntity.ConnEntities.Add(this);
         
         XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
@@ -43,7 +43,7 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         Length = _startReducer.GetLengthOfConicalPart();
     }
-    
+
     protected IfcRelConnectsPorts ConnectPorts(IModel model)
     {
         var closestPorts = (

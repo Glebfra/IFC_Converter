@@ -1,4 +1,4 @@
-﻿namespace IFC_Converter.ValueConverter;
+﻿namespace IFC.ValueConverter;
 
 public static class ValueConverter
 {

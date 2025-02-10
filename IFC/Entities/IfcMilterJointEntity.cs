@@ -1,6 +1,6 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+﻿using IFC.Entities.Abstract;
+using IFC.Tools;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
@@ -17,7 +17,7 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcMilterJointEntity : IfcAbstractEntity
 {
@@ -31,7 +31,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
 
     public double Length => 2 * Depth;
 
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public XbimVector3D[] PipesDirection { get; }
     public XbimVector3D[] DirectionToPipes { get; }
     
@@ -42,7 +42,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
         _startMilterJointEntity = startMilterJointEntity;
         _ifcNodeEntity = ifcNodeEntity;
         _ifcPipeEntities = ifcPipeEntities;
-        _ifcNodeEntity.connEntities.Add(this);
+        _ifcNodeEntity.ConnEntities.Add(this);
         
         XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
         PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();

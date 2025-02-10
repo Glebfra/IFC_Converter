@@ -1,8 +1,7 @@
-﻿using IFC_Converter.Start.API;
-using IFC_Converter.Start.Entities.Abstract;
-using Xbim.Common.Geometry;
+﻿using Start.API;
+using Start.Entities.Abstract;
 
-namespace IFC_Converter.Start.Entities;
+namespace Start.Entities;
 
 public sealed class StartNodeEntity : StartAbstractEntity
 {
@@ -19,8 +18,6 @@ public sealed class StartNodeEntity : StartAbstractEntity
     public double GetXCoord() => Entity.GetXCoord();
     public double GetYCoord() => Entity.GetYCoord();
     public double GetZCoord() => Entity.GetZCoord();
-    
-    public XbimVector3D GetCoordinates() => new(GetXCoord(), GetYCoord(), GetZCoord());
 
 
     public override Dictionary<string, string> GetData()

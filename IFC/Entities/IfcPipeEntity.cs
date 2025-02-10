@@ -1,6 +1,6 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+﻿using IFC.Entities.Abstract;
+using IFC.Tools;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
@@ -17,14 +17,14 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcPipeEntity : IfcAbstractEntity
 {
     #region Fields
 
     public StartPipeEntity PipeEntity { get; }
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Diameter { get; }
     public IfcDistributionPort[] Ports { get; }
     
@@ -64,12 +64,21 @@ public class IfcPipeEntity : IfcAbstractEntity
         _nodeEntities = ifcNodeEntities;
         foreach (IfcNodeEntity ifcNodeEntity in _nodeEntities)
         {
-            ifcNodeEntity.connEntities.Add(this);
+            ifcNodeEntity.ConnEntities.Add(this);
         }
 
-        XbimVector3D direction = PipeEntity.GetDirection();
-        Diameter = PipeEntity.GetOutsideDiameter();
+        XbimVector3D coordinates = new XbimVector3D(
+            PipeEntity.GetXCoord(),
+            PipeEntity.GetYCoord(),
+            PipeEntity.GetZCoord()
+        );
+        XbimVector3D direction = new XbimVector3D(
+            PipeEntity.GetProjectionAlongOXAxis(),
+            PipeEntity.GetProjectionAlongOYAxis(),
+            PipeEntity.GetProjectionAlongOZAxis()
+        );
         
+        Diameter = PipeEntity.GetOutsideDiameter();
         Depth = direction.Length;
 
         XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
@@ -78,7 +87,7 @@ public class IfcPipeEntity : IfcAbstractEntity
             WorldUp = new XbimVector3D(0, 1, 0);
         XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
         
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(PipeEntity.GetCoordinates(), forward, up);
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         Coordinates = ObjectMatrix3D.Translation;
 
         Ports = new IfcDistributionPort[2];
