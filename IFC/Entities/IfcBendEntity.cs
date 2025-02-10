@@ -19,7 +19,7 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC_Converter.IFC.Entities;
 
-public class IfcBendEntity : IfcAbstractEntity
+public sealed class IfcBendEntity : IfcAbstractEntity
 {
     private readonly StartBendEntity _startBendEntity;
     private readonly IfcNodeEntity _ifcNodeEntity;
@@ -29,7 +29,7 @@ public class IfcBendEntity : IfcAbstractEntity
     
     private readonly double _pipeAngle;
 
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public XbimVector3D[] PipesDirection { get; }
     public XbimVector3D[] DirectionToPipes { get; }
 

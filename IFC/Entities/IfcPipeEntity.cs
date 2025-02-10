@@ -24,7 +24,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     #region Fields
 
     public StartPipeEntity PipeEntity { get; }
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Diameter { get; }
     public IfcDistributionPort[] Ports { get; }
     

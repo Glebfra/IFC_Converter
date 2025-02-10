@@ -31,7 +31,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
 
     public double Length => 2 * Depth;
 
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public XbimVector3D[] PipesDirection { get; }
     public XbimVector3D[] DirectionToPipes { get; }
     

@@ -26,8 +26,8 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
 
     protected IfcPipeEntity[] _branchPipes;
     protected IfcPipeEntity _headPipe;
-
-    public XbimMatrix3D ObjectMatrix3D { get; protected set; }
+    
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
     public IfcAbstractTeeEntity(StartAbstractTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes)
     {

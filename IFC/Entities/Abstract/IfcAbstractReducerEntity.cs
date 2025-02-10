@@ -18,8 +18,8 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
     protected readonly StartAbstractReducerEntity _startReducer;
     protected readonly IfcPipeEntity[] _pipeEntities;
     protected readonly IfcNodeEntity _nodeEntity;
-
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Length { get; }
 
     protected IfcAbstractReducerEntity(StartAbstractReducerEntity startReducer, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
@@ -43,7 +43,7 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         Length = _startReducer.GetLengthOfConicalPart();
     }
-    
+
     protected IfcRelConnectsPorts ConnectPorts(IModel model)
     {
         var closestPorts = (

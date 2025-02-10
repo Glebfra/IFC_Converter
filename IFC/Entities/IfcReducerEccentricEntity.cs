@@ -31,7 +31,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
     private readonly IfcPipeEntity[] _pipeEntities;
     private readonly IfcNodeEntity _nodeEntity;
 
-    public XbimMatrix3D ObjectMatrix3D { get; }
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Length { get; }
 
     public IfcReducerEccentricEntity(StartReducerEccentricEntity startReducerEccentric, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
