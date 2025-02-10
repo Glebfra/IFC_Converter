@@ -12,8 +12,9 @@ namespace IFC_Converter.IFC.Entities;
 public class IfcNodeEntity : IfcAbstractEntity
 {
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-    public readonly List<IfcAbstractEntity> connEntities = new List<IfcAbstractEntity>();
     
+    public readonly List<IfcAbstractEntity> ConnEntities = new List<IfcAbstractEntity>();
+
     public XbimVector3D Coordinates => ObjectMatrix3D.Translation;
     public IfcDistributionPort Port { get; private set; }
     

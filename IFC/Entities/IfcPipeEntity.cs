@@ -64,7 +64,7 @@ public class IfcPipeEntity : IfcAbstractEntity
         _nodeEntities = ifcNodeEntities;
         foreach (IfcNodeEntity ifcNodeEntity in _nodeEntities)
         {
-            ifcNodeEntity.connEntities.Add(this);
+            ifcNodeEntity.ConnEntities.Add(this);
         }
 
         XbimVector3D direction = PipeEntity.GetDirection();

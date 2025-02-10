@@ -42,7 +42,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
         _startMilterJointEntity = startMilterJointEntity;
         _ifcNodeEntity = ifcNodeEntity;
         _ifcPipeEntities = ifcPipeEntities;
-        _ifcNodeEntity.connEntities.Add(this);
+        _ifcNodeEntity.ConnEntities.Add(this);
         
         XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
         PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();

@@ -12,11 +12,6 @@ public class StartBaseRootDataArray : IDisposable
         _startBaseRootDataArray = startBaseRootDataArray;
     }
 
-    public object GetObject()
-    {
-        return _startBaseRootDataArray;
-    }
-
     public StartBaseRoot GetElementDispatch(int id, StartElementType minType, StartElementType maxType)
     {
         object element = new object();

@@ -15,7 +15,7 @@ public class IfcWeldedTeeEntity : IfcAbstractTeeEntity
     {
         Length = teeEntity.GetHeaderLength();
         Height = teeEntity.GetCrotchHeight() + _branchPipes[0].Diameter / 2;
-        _nodeEntity.connEntities.Add(this);
+        _nodeEntity.ConnEntities.Add(this);
     }
 
     public override IfcProduct CreateAndAdd(IModel model)

@@ -39,7 +39,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
         _startReducer = startReducerEccentric;
         _nodeEntity = nodeEntity;
         _pipeEntities = pipeEntities;
-        _nodeEntity.connEntities.Add(this);
+        _nodeEntity.ConnEntities.Add(this);
         
         XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);

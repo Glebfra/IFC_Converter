@@ -21,7 +21,7 @@ public static class Program
         string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
         Console.WriteLine($"Input file is: {inputFilepath}");
 
-        using StartProject startProject = new StartProject(inputFilepath);
+        using StartProject startProject = StartProject.OpenProject(inputFilepath);
         using IFCConverter ifcConverter = new IFCConverter("StartToIfc");
 
         AddNodes(startProject, ifcConverter);
@@ -53,7 +53,7 @@ public static class Program
     private static void AddNodes(StartProject startProject, IFCConverter ifcConverter)
     {
         StartNodeEntity[] startNodeEntities = startProject.GetEntities<StartNodeEntity>(StartElementType.NODE);
-        foreach (var startNodeEntity in startNodeEntities)
+        foreach (StartNodeEntity startNodeEntity in startNodeEntities)
         {
             #if DEBUG
             Console.WriteLine($"Added node {startNodeEntity.Id}");
@@ -68,7 +68,7 @@ public static class Program
     private static void AddPipes(StartProject startProject, IFCConverter ifcConverter)
     {
         StartPipeEntity[] startPipeEntities = startProject.GetEntities<StartPipeEntity>(StartElementType.PIPE_ELEMENT);
-        foreach (var startPipeEntity in startPipeEntities)
+        foreach (StartPipeEntity startPipeEntity in startPipeEntities)
         {
             #if DEBUG
             Console.WriteLine($"Added pipe {startPipeEntity.Id}");
