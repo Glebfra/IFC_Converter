@@ -1,10 +1,10 @@
 ﻿using IFC_Converter.IFC;
 using IFC_Converter.IFC.Entities;
 using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.Start;
-using IFC_Converter.Start.API;
-using IFC_Converter.Start.Entities;
-using IFC_Converter.Start.Entities.Abstract;
+using Start;
+using Start.API;
+using Start.Entities;
+using Start.Entities.Abstract;
 
 namespace IFC_Converter;
 

@@ -1,5 +1,5 @@
 ﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.Start.Entities;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;

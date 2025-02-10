@@ -1,6 +1,6 @@
-﻿using IFC_Converter.Start.API;
+﻿using Start.API;
 
-namespace IFC_Converter.Start.Entities;
+namespace Start.Entities;
 
 public class StartMilterJointEntity : StartBendEntity
 {

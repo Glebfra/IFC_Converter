@@ -1,6 +1,6 @@
 ﻿using IFC_Converter.IFC.Entities.Abstract;
 using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;

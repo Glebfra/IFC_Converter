@@ -20,6 +20,8 @@
         <Compile Remove="Start\bin\**" />
         <Compile Remove="Start\obj\**" />
         <Compile Remove="Test\**" />
+        <Compile Remove="Start1\bin\**" />
+        <Compile Remove="Start1\obj\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -29,6 +31,8 @@
         <EmbeddedResource Remove="Start\bin\**" />
         <EmbeddedResource Remove="Start\obj\**" />
         <EmbeddedResource Remove="Test\**" />
+        <EmbeddedResource Remove="Start1\bin\**" />
+        <EmbeddedResource Remove="Start1\obj\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -38,6 +42,12 @@
         <None Remove="Start\bin\**" />
         <None Remove="Start\obj\**" />
         <None Remove="Test\**" />
+        <None Remove="Start1\bin\**" />
+        <None Remove="Start1\obj\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Start1\" />
     </ItemGroup>
 
 </Project>

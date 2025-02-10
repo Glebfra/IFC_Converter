@@ -1,7 +1,7 @@
-﻿using IFC_Converter.Start.API;
-using IFC_Converter.Start.Entities.Abstract;
+﻿using Start.API;
+using Start.Entities.Abstract;
 
-namespace IFC_Converter.Start.Entities;
+namespace Start.Entities;
 
 public class StartStubInEntity : StartAbstractTeeEntity
 {
