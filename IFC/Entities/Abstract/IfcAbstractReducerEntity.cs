@@ -118,11 +118,6 @@ public abstract class IfcAbstractReducerEntity : IfcAbstractEntity
                     value.Name = "Up direction";
                     value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
                 }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Matrix";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.ToString());
-                }));
             });
         });
         #endif
