@@ -8,7 +8,7 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC_Converter.IFC.Tools;
+namespace IFC.Tools;
 
 public static class IfcGeometry
 {

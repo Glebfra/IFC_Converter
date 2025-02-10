@@ -1,10 +1,10 @@
-﻿using IFC_Converter.IFC.Entities;
+﻿using IFC.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;
 
-namespace IFC_Converter.IFC.Tools;
+namespace IFC.Tools;
 
 public static class IfcAxis
 {

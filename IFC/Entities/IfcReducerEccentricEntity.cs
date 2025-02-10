@@ -1,5 +1,5 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
-using IFC_Converter.IFC.Tools;
+﻿using IFC.Entities.Abstract;
+using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -16,7 +16,7 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcReducerEccentricEntity : IfcAbstractEntity
 {

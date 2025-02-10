@@ -1,12 +1,12 @@
-﻿using IFC_Converter.IFC;
-using IFC_Converter.IFC.Entities;
-using IFC_Converter.IFC.Entities.Abstract;
+﻿using IFC;
+using IFC.Entities;
+using IFC.Entities.Abstract;
 using Start;
 using Start.API;
 using Start.Entities;
 using Start.Entities.Abstract;
 
-namespace IFC_Converter;
+namespace StartConverter;
 
 public static class Program
 {
@@ -17,7 +17,7 @@ public static class Program
     {
         Console.WriteLine("Write a ctp file location: ");
         //string inputFilepath = Console.ReadLine();
-        string inputFilepath = "D:\\Работа\\Reducer.ctp";
+        string inputFilepath = "D:\\Работа\\Bend.ctp";
         string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
         Console.WriteLine($"Input file is: {inputFilepath}");
 

@@ -1,9 +1,9 @@
-﻿using IFC_Converter.IFC.Entities.Abstract;
+﻿using IFC.Entities.Abstract;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcStubInEntity : IfcAbstractTeeEntity
 {

@@ -5,7 +5,7 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
-namespace IFC_Converter.IFC.Tools;
+namespace IFC.Tools;
 
 public static class IfcSegment
 {

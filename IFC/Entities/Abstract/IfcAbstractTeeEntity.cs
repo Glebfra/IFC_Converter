@@ -1,4 +1,4 @@
-﻿using IFC_Converter.IFC.Tools;
+﻿using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -15,7 +15,7 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 
-namespace IFC_Converter.IFC.Entities.Abstract;
+namespace IFC.Entities.Abstract;
 
 public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
 {
