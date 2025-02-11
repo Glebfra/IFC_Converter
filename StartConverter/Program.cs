@@ -29,24 +29,24 @@ public static class Program
         AddNodes(startProject, ifcProject);
         AddPipes(startProject, ifcProject);
 
-        ConvertObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PIPE_BEND);
-        ConvertObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.ELBOW);
-        ConvertObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.MILTER_BEND);
-        ConvertObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.WELDED_BEND);
-        ConvertObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.LONG_RADIUS_PIPE_BEND);
-        ConvertObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PRE_STRESSED_PIPE_BEND);
-        ConvertObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.SADDLE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PIPE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.ELBOW);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.MILTER_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.WELDED_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.LONG_RADIUS_PIPE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PRE_STRESSED_PIPE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.SADDLE_BEND);
 
-        ConvertObjects<StartMilterJointEntity, IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
+        ConvertDependedObjects<StartMilterJointEntity, IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
         
-        ConvertObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
-        ConvertObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDOLET);
-        ConvertObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
-        ConvertObjects<StartFabricatedTeeEntity, IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
-        ConvertObjects<StartStubInEntity, IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
+        ConvertDependedObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
+        ConvertDependedObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDOLET);
+        ConvertDependedObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
+        ConvertDependedObjects<StartFabricatedTeeEntity, IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
+        ConvertDependedObjects<StartStubInEntity, IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
         
-        ConvertObjects<StartReducerConcentricEntity, IfcReducerConcentricEntity>(startProject, ifcProject, StartElementType.REDUCER_CONCENTRIC);
-        ConvertObjects<StartReducerEccentricEntity, IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
+        ConvertDependedObjects<StartReducerConcentricEntity, IfcReducerConcentricEntity>(startProject, ifcProject, StartElementType.REDUCER_CONCENTRIC);
+        ConvertDependedObjects<StartReducerEccentricEntity, IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
 
         ifcProject.GroupObjects("Pipe System");
         ifcProject.SaveAs(outputFilepath);
@@ -88,7 +88,24 @@ public static class Program
         }
     }
 
-    private static void ConvertObjects<T, U>(StartProject startProject, IFCProject ifcProject, StartElementType type) 
+    private static Dictionary<int, U> ConvertBaseObjects<T, U>(StartProject startProject, IFCProject ifcProject, StartElementType type)
+        where T : StartAbstractEntity
+        where U : IfcAbstractEntity
+    {
+        Dictionary<int, U> dictionary = new Dictionary<int, U>();
+        foreach (T obj in startProject.GetEntities<T>(type))
+        {
+            Console.WriteLine($"Added {typeof(T).Name} with Id: {obj.Id}");
+
+            U ifcObj = (U)Activator.CreateInstance(typeof(U), obj)!;
+            ifcProject.AddEntity(ifcObj);
+            dictionary.Add(obj.Id, ifcObj);
+        }
+
+        return dictionary;
+    }
+
+    private static void ConvertDependedObjects<T, U>(StartProject startProject, IFCProject ifcProject, StartElementType type) 
         where T : StartAbstractEntity
         where U : IfcAbstractEntity
     {
