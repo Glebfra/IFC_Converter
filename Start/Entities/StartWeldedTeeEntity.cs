@@ -15,11 +15,11 @@ public class StartWeldedTeeEntity : StartAbstractTeeEntity
 
     public override Dictionary<string, string> GetData()
     {
-        var dictionary = base.GetData();
-        dictionary.Add("Crotch radius", GetCrotchRadius().ToString("F"));
-        dictionary.Add("Crotch thickness", GetCrotchThickness().ToString("F"));
-        dictionary.Add("Crotch height", GetCrotchHeight().ToString("F"));
+        Dictionary<string, string> data = base.GetData();
+        data.Add("Crotch radius", GetCrotchRadius().ToString("F"));
+        data.Add("Crotch thickness", GetCrotchThickness().ToString("F"));
+        data.Add("Crotch height", GetCrotchHeight().ToString("F"));
 
-        return dictionary;
+        return data;
     }
 }

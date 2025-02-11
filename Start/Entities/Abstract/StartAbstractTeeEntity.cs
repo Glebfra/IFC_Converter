@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Start.API;
+﻿using Start.API;
 
 namespace Start.Entities.Abstract;
 
