@@ -1,36 +1,44 @@
-﻿using Start.API;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities;
 
+public class StartBendProperties
+{
+    [JsonPropertyName("9")] public double WallThickness { get; set; }
+    [JsonPropertyName("13")] public double MillTolerance { get; set; }
+    [JsonPropertyName("34")] public double Weight { get; set; }
+    [JsonPropertyName("37")] public int ManufacturingTechnology { get; set; }
+    [JsonPropertyName("70")] public double Radius { get; set; }
+    [JsonPropertyName("71")] public double OvalizationCoefficient { get; set; }
+    [JsonPropertyName("177")] public int NumberOfMilters { get; set; }
+    [JsonPropertyName("216")] public double MillToleranceOutside { get; set; }
+    [JsonPropertyName("225")] public string Name { get; set; }
+}
+
 public class StartBendEntity : StartAbstractEntity
 {
+    public readonly StartBendProperties Properties;
+    
     public StartBendEntity(StartBaseRoot entity) : base(entity)
     {
+        Properties = JsonSerializer.Deserialize<StartBendProperties>(entity.GetDataJson())!;
     }
-
-    public string GetName() => Entity.GetDataChar(StartBaseRootFunctionKey.BEND_NAME);
-    public double GetWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_WEIGHT);
-    public int GetManufacturingTechnology() => Entity.GetDataInt(StartBaseRootFunctionKey.BEND_MANUFACTURING_TECHNOLOGY);
-    public double GetWallThickness() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_WALL_THICKNESS);
-    public double GetMillTolerance() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_MILL_TOLERANCE);
-    public double GetMillToleranceOutside() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_MILL_TOLERANCE_OUTSIDE);
-    public double GetRadius() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_RADIUS);
-    public double GetOvalizationCoefficient() => Entity.GetDataReal(StartBaseRootFunctionKey.BEND_OVALIZATION_COEFFICIENT);
-    public int GetNumberOfMilters() => Entity.GetDataInt(StartBaseRootFunctionKey.BEND_NUMBER_OF_MILTERS);
 
     public override Dictionary<string, string> GetData()
     {
-        var data = base.GetData();
-        data.Add("Name", GetName());
-        data.Add("Weight", GetWeight().ToString("F"));
-        data.Add("Manufacturing Technology", GetManufacturingTechnology().ToString());
-        data.Add("Wall Thickness", GetWallThickness().ToString("F"));
-        data.Add("Mill Tolerance", GetMillTolerance().ToString("F"));
-        data.Add("Mill Tolerance Outside", GetMillToleranceOutside().ToString("F"));
-        data.Add("Radius", GetRadius().ToString("F"));
-        data.Add("Ovalization Coefficient", GetOvalizationCoefficient().ToString("F"));
-        data.Add("Number of Milters", GetNumberOfMilters().ToString());
+        Dictionary<string, string> data = base.GetData();
+        data.Add("Name", Properties.Name);
+        data.Add("Weight", Properties.Weight.ToString("F5"));
+        data.Add("Manufacturing Technology", Properties.ManufacturingTechnology.ToString());
+        data.Add("Wall Thickness", Properties.WallThickness.ToString("F5"));
+        data.Add("Mill Tolerance", Properties.MillTolerance.ToString("F5"));
+        data.Add("Mill Tolerance Outside", Properties.MillToleranceOutside.ToString("F5"));
+        data.Add("Radius", Properties.Radius.ToString("F5"));
+        data.Add("Ovalization Coefficient", Properties.OvalizationCoefficient.ToString("F5"));
+        data.Add("Number of Milters", Properties.NumberOfMilters.ToString());
 
         return data;
     }

@@ -15,9 +15,11 @@ public static class Program
 
     public static void Main(string[] args)
     {
-        Console.WriteLine("Write a ctp file location: ");
-        //string inputFilepath = Console.ReadLine();
-        string inputFilepath = "D:\\Работа\\Bend.ctp";
+        Console.Write("Write a ctp file location: ");
+        string? inputFilepath = Console.ReadLine();
+        if (inputFilepath == null)
+            throw new Exception("The input filepath cannot be null");
+        
         string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
         Console.WriteLine($"Input file is: {inputFilepath}");
 
@@ -38,6 +40,8 @@ public static class Program
         ConvertDependedObjects<StartMilterJointEntity, IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
         
         ConvertDependedObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
+        ConvertDependedObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDOLET);
+        ConvertDependedObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
         ConvertDependedObjects<StartFabricatedTeeEntity, IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
         ConvertDependedObjects<StartStubInEntity, IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
         
@@ -48,6 +52,7 @@ public static class Program
         ifcProject.SaveAs(outputFilepath);
 
         Console.WriteLine($"File saved as: {outputFilepath}");
+        //Console.ReadKey();
     }
 
     private static void AddNodes(StartProject startProject, IFCProject ifcProject)

@@ -114,6 +114,15 @@ public class StartBaseRoot : IDisposable
         return (string)value;
     }
 
+    public string GetDataJson(int mode = 0, int key = 0)
+    {
+        object[] args = { mode, key };
+        object value = _startBaseRoot.GetType().InvokeMember(
+            "GetDataJson", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+        );
+        return (string)value;
+    }
+
     public double GetXCoord(int mode = 0)
     {
         object[] args = { mode };

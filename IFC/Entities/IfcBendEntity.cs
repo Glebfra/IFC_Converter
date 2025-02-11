@@ -33,7 +33,7 @@ public sealed class IfcBendEntity : IfcAbstractEntity
     public XbimVector3D[] PipesDirection { get; }
     public XbimVector3D[] DirectionToPipes { get; }
 
-    public double Length => _pipeAngle * _startBendEntity.GetRadius();
+    public double Length => _pipeAngle * _startBendEntity.Properties.Radius;
 
     public IfcBendEntity(StartBendEntity startBendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
     {
@@ -92,7 +92,7 @@ public sealed class IfcBendEntity : IfcAbstractEntity
         
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            fitting.Name = _startBendEntity.GetName();
+            fitting.Name = _startBendEntity.Properties.Name;
             fitting.Tag = "Elbow";
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
             fitting.Representation = shape;
@@ -104,7 +104,7 @@ public sealed class IfcBendEntity : IfcAbstractEntity
     {
         XbimVector3D circleCenter = CalculateCircleCenter();
         
-        IfcCircle circle = IfcGeometry.CreateCircle(model, _startBendEntity.GetRadius(), circleCenter, ObjectMatrix3D.Up, ObjectMatrix3D.Right);
+        IfcCircle circle = IfcGeometry.CreateCircle(model, _startBendEntity.Properties.Radius, circleCenter, ObjectMatrix3D.Up, ObjectMatrix3D.Right);
         IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, _pipeAngle);
         IfcPlane plane = IfcGeometry.CreatePlane(model, ObjectMatrix3D.Translation, ObjectMatrix3D.Up);
         IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, _ifcPipeEntities[0].Diameter / 2, XbimVector3D.Zero, new XbimVector3D(1, 0, 0));
@@ -120,13 +120,13 @@ public sealed class IfcBendEntity : IfcAbstractEntity
     private XbimVector3D CalculateCircleCenter()
     {
         XbimVector3D dirToCenter = (DirectionToPipes[0].Normalized() + DirectionToPipes[1].Normalized()).Normalized();
-        double lengthToCenter = _startBendEntity.GetRadius() / Math.Cos(_pipeAngle / 2);
+        double lengthToCenter = _startBendEntity.Properties.Radius / Math.Cos(_pipeAngle / 2);
         return dirToCenter * lengthToCenter;
     }
 
     private void ClipConnectedPipes()
     {
-        double clipLength = _startBendEntity.GetRadius() * Math.Tan(_pipeAngle / 2);
+        double clipLength = _startBendEntity.Properties.Radius * Math.Tan(_pipeAngle / 2);
         foreach (var ifcPipeEntity in _ifcPipeEntities)
         {
             ifcPipeEntity.Clip(_ifcNodeEntity, clipLength);
@@ -135,7 +135,7 @@ public sealed class IfcBendEntity : IfcAbstractEntity
 
     private XbimVector3D CalculateAlternateCircleCenter()
     {
-        double lengthToCenter = _startBendEntity.GetRadius() * Math.Tan(_pipeAngle / 2);
+        double lengthToCenter = _startBendEntity.Properties.Radius * Math.Tan(_pipeAngle / 2);
         XbimVector3D dirToCenter = new XbimVector3D(-1, 0, 0);
         
         return dirToCenter * lengthToCenter;
@@ -152,7 +152,7 @@ public sealed class IfcBendEntity : IfcAbstractEntity
             new XbimVector3D(1, 0, 0)
         );
         
-        double lengthToCenter = _startBendEntity.GetRadius() * Math.Tan(_pipeAngle / 2);
+        double lengthToCenter = _startBendEntity.Properties.Radius * Math.Tan(_pipeAngle / 2);
 
         IfcRevolvedAreaSolid sweptAreaSolid = model.Instances.New<IfcRevolvedAreaSolid>(solid =>
         {
@@ -205,7 +205,7 @@ public sealed class IfcBendEntity : IfcAbstractEntity
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                 {
                     weight.Name = "NetWeight";
-                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_startBendEntity.GetWeight() * Length);
+                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_startBendEntity.Properties.Weight * Length);
                 }));
             });
         });

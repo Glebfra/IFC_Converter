@@ -1,4 +1,6 @@
-﻿using Start.API;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Start.API;
 
 namespace Start.Entities.Abstract;
 
@@ -12,12 +14,6 @@ public abstract class StartAbstractEntity : IDisposable
         Entity = entity;
         Id = entity.GetNumber();
     }
-
-    public int GetNumberConn() => Entity.GetNumberConn();
-    public int GetNumber() => Entity.GetNumber();
-
-    public StartBaseRoot GetConnElementOnType(StartElementType type, int id) => Entity.GetConnElemOnType(type, id);
-    public StartBaseRoot GetConnElementOnIndex(int id) => Entity.GetConnElemOnIndex(id);
 
     public virtual Dictionary<string, string> GetData()
     {

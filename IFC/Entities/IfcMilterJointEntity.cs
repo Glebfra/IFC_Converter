@@ -91,7 +91,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.ObjectPlacement = placement;
-            fitting.Name = _startMilterJointEntity.GetName();
+            fitting.Name = _startMilterJointEntity.Properties.Name;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
             fitting.Representation = shape;
         });
@@ -184,7 +184,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                 {
                     weight.Name = "NetWeight";
-                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_startMilterJointEntity.GetWeight()) * Length;
+                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_startMilterJointEntity.Properties.Weight) * Length;
                 }));
             });
         });
