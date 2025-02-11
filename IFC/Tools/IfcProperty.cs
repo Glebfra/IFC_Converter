@@ -3,7 +3,7 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 
-namespace IFC_Converter.IFC.Tools;
+namespace IFC.Tools;
 
 public static class IfcProperty
 {

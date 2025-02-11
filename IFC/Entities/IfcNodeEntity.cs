@@ -1,40 +1,61 @@
-﻿using IFC_Converter.IFC.Tools;
-using IFC_Converter.Start.Entities;
+﻿using IFC.Entities.Abstract;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
-namespace IFC_Converter.IFC.Entities;
+namespace IFC.Entities;
 
 public class IfcNodeEntity : IfcAbstractEntity
 {
-    private StartNodeEntity _nodeEntity;
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
+    
+    public readonly List<IfcAbstractEntity> ConnEntities = new List<IfcAbstractEntity>();
 
-    public XbimMatrix3D ObjectMatrix3D { get; private set; }
-    public IfcLocalPlacement LocalPlacement { get; private set; }
+    public XbimVector3D Coordinates => ObjectMatrix3D.Translation;
     public IfcDistributionPort Port { get; private set; }
+    
+    private StartNodeEntity _nodeEntity;
 
     public IfcNodeEntity(StartNodeEntity nodeEntity)
     {
         _nodeEntity = nodeEntity;
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(_nodeEntity.GetCoordinates(), new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
+        XbimVector3D coordinates = new XbimVector3D(nodeEntity.GetXCoord(), nodeEntity.GetYCoord(), nodeEntity.GetZCoord());
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
-        LocalPlacement = IfcAxis.CreateLocalPlacement(model, ObjectMatrix3D.Translation);
-        Port = IfcSegment.CreatePort(model, _nodeEntity.GetName(), _nodeEntity.GetDescription(), LocalPlacement);
         AddProperties(model);
-
-        return Port;
+        return null;
     }
-    
+
     private void AddProperties(IModel model)
     {
+        #region Pset_PipeFittingStart
+
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(Port);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "Pset_PipeFittingStart";
+                foreach (var kvp in _nodeEntity.GetData())
+                {
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = kvp.Key;
+                        value.NominalValue = new IfcText(kvp.Value);
+                    }));
+                }
+            });
+        });
+
+        #endregion
+        
         #region DEBUG
 
         #if DEBUG

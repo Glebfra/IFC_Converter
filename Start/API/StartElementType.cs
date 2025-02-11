@@ -1,4 +1,4 @@
-﻿namespace IFC_Converter.Start.API;
+﻿namespace Start.API;
 
 public enum StartElementType
 {
@@ -18,12 +18,13 @@ public enum StartElementType
     NONSTANDARD_TEE = 41,
     LONG_RADIUS_PIPE_BEND = 43,
     PRE_STRESSED_PIPE_BEND = 44,
+    WELDED_BEND = 45,
     ELBOW = 46,
     CAP = 47,
     MILTER_JOINT = 48,
     FLANGE = 49,
     REDUCER_CONCENTRIC = 63,
-    REDUCER_EXCENTRIC = 64,
+    REDUCER_ECCENTRIC = 64,
     WELDOLET = 72,
     SWEEPOLET = 73,
     EXTRUDED_TEE = 74,
@@ -66,5 +67,6 @@ public enum StartElementType
     NODE_DISPLACEMENT = 102,
     EXPANSION_JOINT_DEFORMATION = 103,
     SPRING_HANGER_PROPERTIES = 104,
-    CODE_STRESS = 110
+    CODE_STRESS = 110,
+    SADDLE_BEND = 96
 }

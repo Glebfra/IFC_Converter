@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace IFC_Converter.Start.API;
+namespace Start.API;
 
 public class StartBaseRoot : IDisposable
 {
@@ -15,6 +15,14 @@ public class StartBaseRoot : IDisposable
     public object GetObject()
     {
         return _startBaseRoot;
+    }
+
+    public int GetName()
+    {
+        object name = _startBaseRoot.GetType().InvokeMember(
+            "GetName", BindingFlags.InvokeMethod, null, _startBaseRoot, null
+        );
+        return (int)name;
     }
 
     public int GetNumberConn()
@@ -106,27 +114,27 @@ public class StartBaseRoot : IDisposable
         return (string)value;
     }
 
-    public double GetXCoord()
+    public double GetXCoord(int mode = 0)
     {
-        object[] args = { 0 };
+        object[] args = { mode };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetCoordX", BindingFlags.InvokeMethod, null, _startBaseRoot, args
         );
         return (double)value;
     }
 
-    public double GetYCoord()
+    public double GetYCoord(int mode = 0)
     {
-        object[] args = { 0 };
+        object[] args = { mode };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetCoordY", BindingFlags.InvokeMethod, null, _startBaseRoot, args
         );
         return (double)value;
     }
 
-    public double GetZCoord()
+    public double GetZCoord(int mode = 0)
     {
-        object[] args = { 0 };
+        object[] args = { mode };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetCoordZ", BindingFlags.InvokeMethod, null, _startBaseRoot, args
         );

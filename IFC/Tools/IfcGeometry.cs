@@ -6,11 +6,57 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.TopologyResource;
 
-namespace IFC_Converter.IFC.Tools;
+namespace IFC.Tools;
 
 public static class IfcGeometry
 {
+    public static IfcFace CreateRectangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3, IfcCartesianPoint p4)
+    {
+        return model.Instances.New<IfcFace>(f =>
+        {
+            f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
+            {
+                b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                {
+                    pl.Polygon.AddRange(new[] { p1, p2, p3, p4 });
+                });
+                b.Orientation = true;
+            }));
+        });
+    }
+    
+    public static IfcFace CreateTriangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3)
+    {
+        return model.Instances.New<IfcFace>(f =>
+        {
+            f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
+            {
+                b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                {
+                    pl.Polygon.AddRange(new[] { p1, p2, p3 });
+                });
+                b.Orientation = true;
+            }));
+        });
+    }
+    
+    public static IfcFace CreatePolygonFace(IModel model, IfcCartesianPoint[] points)
+    {
+        return model.Instances.New<IfcFace>(f =>
+        {
+            f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
+            {
+                b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                {
+                    pl.Polygon.AddRange(points);
+                });
+                b.Orientation = true;
+            }));
+        });
+    }
+    
     public static IfcPlane CreatePlane(IModel model, XbimVector3D coordinates, XbimVector3D direction)
     {
         return model.Instances.New<IfcPlane>(plane =>
@@ -80,6 +126,15 @@ public static class IfcGeometry
             sr.RepresentationIdentifier = "Body";
             sr.RepresentationType = "SweptSolid";
             sr.Items.AddRange(representationItems);
+        });
+    }
+    
+    public static IfcArbitraryClosedProfileDef CreateProfile(IModel model, IfcCurve polyline)
+    {
+        return model.Instances.New<IfcArbitraryClosedProfileDef>(profile =>
+        {
+            profile.ProfileType = IfcProfileTypeEnum.AREA;
+            profile.OuterCurve = polyline;
         });
     }
 
