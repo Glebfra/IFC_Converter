@@ -60,8 +60,19 @@ public class IfcValveEntity : IfcAbstractEntity
         IfcDirection rightDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
         IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
         IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
-
-        IfcBooleanResult result = CreateValve(model);
+        
+        IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
+        IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2);
+        IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
+        IfcFacetedBrep lowerBrep = CreateFacetedBrep(model, firstCircle, topPoint);
+        IfcFacetedBrep upperBrep = CreateFacetedBrep(model, secondCircle, topPoint);
+        
+        IfcBooleanResult result = model.Instances.New<IfcBooleanResult>(booleanResult =>
+        {
+            booleanResult.Operator = IfcBooleanOperator.UNION;
+            booleanResult.FirstOperand = lowerBrep;
+            booleanResult.SecondOperand = upperBrep;
+        });
         IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, result);
         IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
@@ -116,22 +127,6 @@ public class IfcValveEntity : IfcAbstractEntity
         });
     }
 
-    private IfcBooleanResult CreateValve(IModel model)
-    {
-        IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
-        IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2);
-        IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
-        IfcFacetedBrep lowerBrep = CreateFacetedBrep(model, firstCircle, topPoint);
-        IfcFacetedBrep upperBrep = CreateFacetedBrep(model, secondCircle, topPoint);
-
-        return model.Instances.New<IfcBooleanResult>(booleanResult =>
-        {
-            booleanResult.Operator = IfcBooleanOperator.UNION;
-            booleanResult.FirstOperand = lowerBrep;
-            booleanResult.SecondOperand = upperBrep;
-        });
-    }
-    
     private static IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] points, IfcCartesianPoint topPoint)
     {
         IfcFace[] faces = new IfcFace[_numSegments + 1];

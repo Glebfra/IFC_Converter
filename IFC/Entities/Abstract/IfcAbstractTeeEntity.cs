@@ -19,6 +19,8 @@ namespace IFC.Entities.Abstract;
 
 public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
 {
+    protected abstract IfcIdentifier Tag { get; set; }
+    
     protected StartAbstractTeeEntity _teeEntity;
     protected IfcPipeEntity[] _connPipes;
     protected IfcNodeEntity _nodeEntity;
@@ -89,7 +91,7 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _teeEntity.GetName();
-            fitting.Tag = "WeldedTee";
+            fitting.Tag = Tag;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
             fitting.Representation = productDefinitionShape;
             fitting.ObjectPlacement = localPlacement;

@@ -51,6 +51,8 @@ public static class Program
         ConvertDependedObjects<StartMilterJointEntity, IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
         
         ConvertDependedObjects<StartWeldedTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
+        ConvertDependedObjects<StartWeldoletEntity, IfcWeldoletEntity>(startProject, ifcProject, StartElementType.WELDOLET);
+        ConvertDependedObjects<StartSweepoletEntity, IfcSweepoletEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
         ConvertDependedObjects<StartFabricatedTeeEntity, IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
         ConvertDependedObjects<StartStubInEntity, IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
         
