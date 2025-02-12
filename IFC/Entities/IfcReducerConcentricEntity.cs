@@ -58,7 +58,7 @@ public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
 
-        AddProperties(model);
+        AddProperties(model, _pipeFitting);
         ConnectPorts(model);
 
         return _pipeFitting;

@@ -23,12 +23,12 @@ public sealed class StartNodeEntity : StartAbstractEntity
     public override Dictionary<string, string> GetData()
     {
         var dictionary = base.GetData();
-        dictionary.Add("X Coordinate", GetXCoord().ToString("F"));
-        dictionary.Add("Y Coordinate", GetYCoord().ToString("F"));
-        dictionary.Add("Z Coordinate", GetZCoord().ToString("F"));
+        dictionary.Add("X Coordinate", GetXCoord().ToString("F5"));
+        dictionary.Add("Y Coordinate", GetYCoord().ToString("F5"));
+        dictionary.Add("Z Coordinate", GetZCoord().ToString("F5"));
         dictionary.Add("Name", GetName());
         dictionary.Add("Description", GetDescription());
-        dictionary.Add("Additional Load from Weight", GetAdditionalLoadFromWeight().ToString("F"));
+        dictionary.Add("Additional Load from Weight", GetAdditionalLoadFromWeight().ToString("F5"));
 
         return dictionary;
     }

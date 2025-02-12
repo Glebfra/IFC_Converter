@@ -86,7 +86,7 @@ public class IFCProject : IDisposable
         return @object;
     }
 
-    public IfcProduct[] AddEntities(IfcAbstractEntity[] entities)
+    public IfcProduct[] AddEntities(IEnumerable<IfcAbstractEntity> entities)
     {
         return entities.Select(entity => AddEntity(entity)).ToArray();
     }

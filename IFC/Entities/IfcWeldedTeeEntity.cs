@@ -2,11 +2,14 @@
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities;
 
 public class IfcWeldedTeeEntity : IfcAbstractTeeEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Welded tee";
+    
     public readonly double Length;
     public readonly double Height;
 

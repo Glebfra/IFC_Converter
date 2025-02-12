@@ -3,11 +3,14 @@ using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities;
 
 public class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Fabricated Tee";
+    
     public readonly double Length;
     public readonly double Height;
 
