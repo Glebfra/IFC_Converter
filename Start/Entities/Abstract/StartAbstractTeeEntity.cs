@@ -20,12 +20,12 @@ public abstract class StartAbstractTeeEntity : StartAbstractEntity
     {
         var data = base.GetData();
         data.Add("Name", GetName());
-        data.Add("Header Thickness", GetHeaderThickness().ToString("F"));
-        data.Add("Mill Tolerance", GetMillTolerance().ToString("F"));
-        data.Add("Header Length", GetHeaderLength().ToString("F"));
-        data.Add("Branch Height", GetBranchHeight().ToString("F"));
-        data.Add("Weight", GetWeight().ToString("F"));
-        data.Add("Strength Factor Of Longitudinal Weld Seam On Pressure", GetStrengthFactorOfLongitudinalWeldSeamOnPressure().ToString("F"));
+        data.Add("Header Thickness", GetHeaderThickness().ToString("F5"));
+        data.Add("Mill Tolerance", GetMillTolerance().ToString("F5"));
+        data.Add("Header Length", GetHeaderLength().ToString("F5"));
+        data.Add("Branch Height", GetBranchHeight().ToString("F5"));
+        data.Add("Weight", GetWeight().ToString("F5"));
+        data.Add("Strength Factor Of Longitudinal Weld Seam On Pressure", GetStrengthFactorOfLongitudinalWeldSeamOnPressure().ToString("F5"));
         
         return data;
     }

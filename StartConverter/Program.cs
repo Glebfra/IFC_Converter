@@ -16,7 +16,8 @@ public static class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Write a ctp file location: ");
-        string inputFilepath = Console.ReadLine();
+        //string inputFilepath = Console.ReadLine();
+        string inputFilepath = "D:\\Работа\\Bend.ctp";
         string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
         Console.WriteLine($"Input file is: {inputFilepath}");
 
@@ -42,6 +43,8 @@ public static class Program
         
         ConvertDependedObjects<StartReducerConcentricEntity, IfcReducerConcentricEntity>(startProject, ifcProject, StartElementType.REDUCER_CONCENTRIC);
         ConvertDependedObjects<StartReducerEccentricEntity, IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
+
+        ConvertDependedObjects<StartValveEntity, IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
 
         ifcProject.GroupObjects("Pipe System");
         ifcProject.SaveAs(outputFilepath);

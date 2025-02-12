@@ -23,13 +23,13 @@ public class StartBendEntity : StartAbstractEntity
     {
         var data = base.GetData();
         data.Add("Name", GetName());
-        data.Add("Weight", GetWeight().ToString("F"));
+        data.Add("Weight", GetWeight().ToString("F5"));
         data.Add("Manufacturing Technology", GetManufacturingTechnology().ToString());
-        data.Add("Wall Thickness", GetWallThickness().ToString("F"));
-        data.Add("Mill Tolerance", GetMillTolerance().ToString("F"));
-        data.Add("Mill Tolerance Outside", GetMillToleranceOutside().ToString("F"));
-        data.Add("Radius", GetRadius().ToString("F"));
-        data.Add("Ovalization Coefficient", GetOvalizationCoefficient().ToString("F"));
+        data.Add("Wall Thickness", GetWallThickness().ToString("F5"));
+        data.Add("Mill Tolerance", GetMillTolerance().ToString("F5"));
+        data.Add("Mill Tolerance Outside", GetMillToleranceOutside().ToString("F5"));
+        data.Add("Radius", GetRadius().ToString("F5"));
+        data.Add("Ovalization Coefficient", GetOvalizationCoefficient().ToString("F5"));
         data.Add("Number of Milters", GetNumberOfMilters().ToString());
 
         return data;
