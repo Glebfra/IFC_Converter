@@ -21,7 +21,7 @@ public class StartBaseRoot : IDisposable
     {
         object name = _startBaseRoot.GetType().InvokeMember(
             "GetName", BindingFlags.InvokeMethod, null, _startBaseRoot, null
-        );
+        )!;
         return (int)name;
     }
 
@@ -29,7 +29,7 @@ public class StartBaseRoot : IDisposable
     {
         object element = _startBaseRoot.GetType().InvokeMember(
             "GetNumberConn", BindingFlags.InvokeMethod, null, _startBaseRoot, null
-        );
+        )!;
         return (int)element;
     }
 
@@ -67,7 +67,7 @@ public class StartBaseRoot : IDisposable
     {
         object element = _startBaseRoot.GetType().InvokeMember(
             "GetSNode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
-        );
+        )!;
         return new StartBaseRoot(element);
     }
 
@@ -75,7 +75,7 @@ public class StartBaseRoot : IDisposable
     {
         object element = _startBaseRoot.GetType().InvokeMember(
             "GetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
-        );
+        )!;
         return new StartBaseRoot(element);
     }
 
@@ -83,7 +83,7 @@ public class StartBaseRoot : IDisposable
     {
         object element = _startBaseRoot.GetType().InvokeMember(
             "GetNumber", BindingFlags.InvokeMethod, null, _startBaseRoot, null
-        );
+        )!;
         return (int)element;
     }
 
@@ -92,7 +92,7 @@ public class StartBaseRoot : IDisposable
         object[] args = { key };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetDataInt", BindingFlags.InvokeMethod, null, _startBaseRoot, args
-        );
+        )!;
         return (int)value;
     }
 
@@ -101,7 +101,7 @@ public class StartBaseRoot : IDisposable
         object[] args = { key };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetDataReal", BindingFlags.InvokeMethod, null, _startBaseRoot, args
-        );
+        )!;
         return (double)value;
     }
 
@@ -110,7 +110,7 @@ public class StartBaseRoot : IDisposable
         object[] args = { key };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetDataChar", BindingFlags.InvokeMethod, null, _startBaseRoot, args
-        );
+        )!;
         return (string)value;
     }
 
@@ -119,7 +119,7 @@ public class StartBaseRoot : IDisposable
         object[] args = { mode };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetCoordX", BindingFlags.InvokeMethod, null, _startBaseRoot, args
-        );
+        )!;
         return (double)value;
     }
 
@@ -128,7 +128,7 @@ public class StartBaseRoot : IDisposable
         object[] args = { mode };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetCoordY", BindingFlags.InvokeMethod, null, _startBaseRoot, args
-        );
+        )!;
         return (double)value;
     }
 
@@ -137,8 +137,17 @@ public class StartBaseRoot : IDisposable
         object[] args = { mode };
         object value = _startBaseRoot.GetType().InvokeMember(
             "GetCoordZ", BindingFlags.InvokeMethod, null, _startBaseRoot, args
-        );
+        )!;
         return (double)value;
+    }
+
+    public string GetDataJson(int mode = 0, int key = 0)
+    {
+        object[] args = { mode, key };
+        object value = _startBaseRoot.GetType().InvokeMember(
+            "GetDataJson", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+        )!;
+        return (string)value;
     }
 
     public void Dispose()

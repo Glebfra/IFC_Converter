@@ -50,7 +50,7 @@ public class IfcValveEntity : IfcAbstractEntity
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
 
         Length = _startValveEntity.GetLength();
-        Diameter = _startValveEntity.GetGasketEffectiveDiameter();
+        Diameter = _startValveEntity.GetOutsideDiameter();
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
@@ -60,20 +60,8 @@ public class IfcValveEntity : IfcAbstractEntity
         IfcDirection rightDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
         IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
         IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
-        
-        IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
-        IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2);
-        IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
-        IfcFacetedBrep lowerBrep = CreateFacetedBrep(model, firstCircle, topPoint);
-        IfcFacetedBrep upperBrep = CreateFacetedBrep(model, secondCircle, topPoint);
 
-        IfcBooleanResult result = model.Instances.New<IfcBooleanResult>(booleanResult =>
-        {
-            booleanResult.Operator = IfcBooleanOperator.UNION;
-            booleanResult.FirstOperand = lowerBrep;
-            booleanResult.SecondOperand = upperBrep;
-        });
-
+        IfcBooleanResult result = CreateValve(model);
         IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, result);
         IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
@@ -88,6 +76,7 @@ public class IfcValveEntity : IfcAbstractEntity
         _ifcPipeEntities[1].Clip(_ifcNodeEntity, Length / 2);
         
         AddProperties(model, _pipeFitting);
+        ConnectPorts(model);
 
         return _pipeFitting;
     }
@@ -124,6 +113,22 @@ public class IfcValveEntity : IfcAbstractEntity
             ports.RelatingPort = closestPorts[0];
             ports.RelatedPort = closestPorts[1];
             ports.RealizingElement = _pipeFitting;
+        });
+    }
+
+    private IfcBooleanResult CreateValve(IModel model)
+    {
+        IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
+        IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2);
+        IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
+        IfcFacetedBrep lowerBrep = CreateFacetedBrep(model, firstCircle, topPoint);
+        IfcFacetedBrep upperBrep = CreateFacetedBrep(model, secondCircle, topPoint);
+
+        return model.Instances.New<IfcBooleanResult>(booleanResult =>
+        {
+            booleanResult.Operator = IfcBooleanOperator.UNION;
+            booleanResult.FirstOperand = lowerBrep;
+            booleanResult.SecondOperand = upperBrep;
         });
     }
     
