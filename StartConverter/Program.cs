@@ -37,6 +37,12 @@ public static class Program
         using StartProject startProject = StartProject.OpenProject(inputFilepath);
         using IFCProject ifcProject = IFCProject.CreateProject("StartToIfc");
 
+        // StartBaseRoot[] flanges = startProject.GetEntitiesRaw(StartElementType.FLANGE, StartElementType.FLANGE);
+        // foreach (var flange in flanges)
+        // {
+        //     Console.WriteLine(flange.GetDataJson());
+        // }
+
         _nodeEntities = AddNodes(startProject, ifcProject);
         _pipeEntities = AddPipes(startProject, ifcProject);
 
@@ -60,7 +66,7 @@ public static class Program
         ConvertDependedObjects<StartReducerEccentricEntity, IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
 
         ConvertDependedObjects<StartValveEntity, IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
-        ConvertDependedObjects<StartValveEntity, IfcValveEntity>(startProject, ifcProject, StartElementType.FLANGE);
+        ConvertDependedObjects<StartFlangeEntity, IfcFlangeEntity>(startProject, ifcProject, StartElementType.FLANGE);
 
         ifcProject.GroupObjects("Pipe System");
         ifcProject.SaveAs(outputFilepath);

@@ -21,6 +21,8 @@ namespace IFC.Entities;
 
 public class IfcMilterJointEntity : IfcAbstractEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Milter Joint";
+    
     private readonly StartMilterJointEntity _startMilterJointEntity;
     private readonly IfcNodeEntity _ifcNodeEntity;
     private readonly IfcPipeEntity[] _ifcPipeEntities;
@@ -90,8 +92,9 @@ public class IfcMilterJointEntity : IfcAbstractEntity
     {
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            fitting.ObjectPlacement = placement;
             fitting.Name = _startMilterJointEntity.GetName();
+            fitting.Tag = Tag;
+            fitting.ObjectPlacement = placement;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
             fitting.Representation = shape;
         });

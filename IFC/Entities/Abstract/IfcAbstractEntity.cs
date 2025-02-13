@@ -11,6 +11,8 @@ public abstract class IfcAbstractEntity
     public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
     
     public abstract IfcProduct CreateAndAdd(IModel model);
+    
+    protected abstract IfcIdentifier Tag { get; set; }
 
     protected virtual void AddProperties(IModel model, IfcProduct product)
     {

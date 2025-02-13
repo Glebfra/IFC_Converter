@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -20,6 +21,8 @@ namespace IFC.Entities;
 
 public class IfcValveEntity : IfcAbstractEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Valve";
+    
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
     
@@ -29,8 +32,9 @@ public class IfcValveEntity : IfcAbstractEntity
 
     private IfcPipeFitting? _pipeFitting;
 
-    private double Length;
-    private double Diameter;
+    public readonly double Angle;
+    public readonly double Length;
+    public readonly double Diameter;
 
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
@@ -46,11 +50,16 @@ public class IfcValveEntity : IfcAbstractEntity
         if (forward == WorldUp || forward == -1 * WorldUp) 
             WorldUp = new XbimVector3D(0, 1, 0);
         XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
-
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
 
         Length = _startValveEntity.GetLength();
-        Diameter = _startValveEntity.GetOutsideDiameter();
+        Diameter = Math.Max(_ifcPipeEntities[0].Diameter, _ifcPipeEntities[1].Diameter) * 1.5;
+        
+        XbimVector3D[] directionToPipes = _ifcPipeEntities.Select(entity => IfcAxis.GetDirectionToPipe(entity, ObjectMatrix3D.Translation)).ToArray();
+        directionToPipes[0] = directionToPipes[0].Negated();
+        Angle = XbimVector3D.DotProduct(directionToPipes[1], ObjectMatrix3D.Up) < 0
+            ? directionToPipes[0].Angle(directionToPipes[1])
+            : -directionToPipes[0].Angle(directionToPipes[1]);
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
@@ -62,7 +71,7 @@ public class IfcValveEntity : IfcAbstractEntity
         IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
         
         IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
-        IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2);
+        IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2, Angle);
         IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
         IfcFacetedBrep lowerBrep = CreateFacetedBrep(model, firstCircle, topPoint);
         IfcFacetedBrep upperBrep = CreateFacetedBrep(model, secondCircle, topPoint);
@@ -80,7 +89,7 @@ public class IfcValveEntity : IfcAbstractEntity
             fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
             fitting.Name = _startValveEntity.GetName();
             fitting.Representation = shape;
-            fitting.Tag = "Valve";
+            fitting.Tag = Tag;
             fitting.ObjectPlacement = localPlacement;
         });
         _ifcPipeEntities[0].Clip(_ifcNodeEntity, Length / 2);
@@ -92,9 +101,10 @@ public class IfcValveEntity : IfcAbstractEntity
         return _pipeFitting;
     }
     
-    private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height)
+    private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height, double angle = 0)
     {
         IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
+        XbimMatrix3D Mx = MatrixExtensions.Mx(angle);
         for (int i = 0; i < _numSegments; i++)
         {
             XbimVector3D point = new XbimVector3D(
@@ -102,6 +112,8 @@ public class IfcValveEntity : IfcAbstractEntity
                 radius * Math.Sin(_angleStep * i),
                 height
             );
+            if (angle != 0)
+                point = XbimVector3D.Multiply(point, Mx);
             points[i] = IfcAxis.CreatePoint(model, point);
         }
 
@@ -168,6 +180,26 @@ public class IfcValveEntity : IfcAbstractEntity
                 }
             });
         });
+
+        #endregion
+
+        #region VALVE DEBUG
+
+        #if DEBUG
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(product);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "VALVE DEBUG";
+                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                {
+                    value.Name = "Angle";
+                    value.NominalValue = new IfcText(Angle.ToString("F5"));
+                }));
+            });
+        });
+        #endif
 
         #endregion
     }

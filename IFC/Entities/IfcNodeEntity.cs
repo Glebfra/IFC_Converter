@@ -11,6 +11,8 @@ namespace IFC.Entities;
 
 public class IfcNodeEntity : IfcAbstractEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Node";
+    
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     
     public readonly List<IfcAbstractEntity> ConnEntities = new List<IfcAbstractEntity>();

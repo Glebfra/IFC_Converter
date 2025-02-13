@@ -22,6 +22,8 @@ namespace IFC.Entities;
 public class IfcPipeEntity : IfcAbstractEntity
 {
     #region Fields
+    
+    protected override IfcIdentifier Tag { get; set; } = "Pipe";
 
     public StartPipeEntity PipeEntity { get; }
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
@@ -215,7 +217,7 @@ public class IfcPipeEntity : IfcAbstractEntity
         return model.Instances.New<IfcPipeSegment>(segment =>
         {
             segment.Name = PipeEntity.GetName();
-            segment.Tag = "Pipe";
+            segment.Tag = Tag;
             segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
             segment.ObjectPlacement = localPlacement;
             segment.Representation = productDefShape;

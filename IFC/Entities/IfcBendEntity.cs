@@ -21,6 +21,8 @@ namespace IFC.Entities;
 
 public sealed class IfcBendEntity : IfcAbstractEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Bend";
+    
     private readonly StartBendEntity _startBendEntity;
     private readonly IfcNodeEntity _ifcNodeEntity;
     private readonly IfcPipeEntity[] _ifcPipeEntities;
@@ -93,7 +95,7 @@ public sealed class IfcBendEntity : IfcAbstractEntity
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _startBendEntity.GetName();
-            fitting.Tag = "Elbow";
+            fitting.Tag = Tag;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
             fitting.Representation = shape;
             fitting.ObjectPlacement = localPlacement;
