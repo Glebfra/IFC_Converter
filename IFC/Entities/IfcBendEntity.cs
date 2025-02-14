@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿#region
+
 using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;
@@ -18,6 +18,8 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
+
+#endregion
 
 namespace IFC.Entities;
 

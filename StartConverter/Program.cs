@@ -1,10 +1,6 @@
-﻿#if PARALLEL
-using System.Collections.Concurrent;
-#endif
+﻿
+#region
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract;
@@ -12,6 +8,11 @@ using Start;
 using Start.API;
 using Start.Entities;
 using Start.Entities.Abstract;
+#if PARALLEL
+using System.Collections.Concurrent;
+#endif
+
+#endregion
 
 namespace StartConverter;
 

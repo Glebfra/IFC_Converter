@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#region
+
 using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
@@ -9,6 +10,8 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
+
+#endregion
 
 namespace IFC.Entities.Abstract;
 
