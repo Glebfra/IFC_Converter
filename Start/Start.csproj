@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <Configurations>Debug;Release;Parallel</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Parallel' ">

@@ -20,6 +20,8 @@ namespace IFC.Entities;
 
 public class IfcReducerEccentricEntity : IfcAbstractEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Reducer Eccentric";
+    
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
 
@@ -78,7 +80,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             fitting.ObjectPlacement = localPlacement;
             fitting.Representation = shape;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
-            fitting.Tag = "Reducer";
+            fitting.Tag = Tag;
             fitting.Name = _startReducer.GetName();
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);

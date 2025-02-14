@@ -19,8 +19,6 @@ namespace IFC.Entities.Abstract;
 
 public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
 {
-    protected abstract IfcIdentifier Tag { get; set; }
-    
     protected StartAbstractTeeEntity _teeEntity;
     protected IfcPipeEntity[] _connPipes;
     protected IfcNodeEntity _nodeEntity;
