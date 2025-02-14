@@ -1,4 +1,5 @@
-﻿using IFC.Tools;
+﻿using System.Linq;
+using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;

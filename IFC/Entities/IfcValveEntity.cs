@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;

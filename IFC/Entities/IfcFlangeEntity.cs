@@ -1,9 +1,10 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using System.Linq;
+using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;

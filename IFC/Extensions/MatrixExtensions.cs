@@ -1,4 +1,5 @@
-﻿using Xbim.Common.Geometry;
+﻿using System;
+using Xbim.Common.Geometry;
 
 namespace IFC.Extensions;
 

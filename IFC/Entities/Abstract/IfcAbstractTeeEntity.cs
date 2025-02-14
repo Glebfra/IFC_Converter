@@ -1,4 +1,5 @@
-﻿using IFC.Tools;
+﻿using System.Linq;
+using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -145,7 +146,7 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
                 if (System.Math.Abs(angleCos) < 0.95) continue;
                 _branchPipes[0] = _connPipes[j];
                 _branchPipes[1] = _connPipes[k];
-                _headPipe = _connPipes[^(j + k)];
+                _headPipe = _connPipes[_connPipes.Length - (j + k)];
             }
         }
     }
