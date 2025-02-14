@@ -7,15 +7,16 @@
         <Nullable>enable</Nullable>
         <Configurations>Debug;Release;Parallel</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Parallel' ">
-      <DefineConstants>TRACE;DEBUG</DefineConstants>
+        <DefineConstants>TRACE;DEBUG</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\IFC\IFC.csproj" />
-      <ProjectReference Include="..\Start\Start.csproj" />
+        <ProjectReference Include="..\IFC\IFC.csproj" />
+        <ProjectReference Include="..\Start\Start.csproj" />
     </ItemGroup>
 
 </Project>

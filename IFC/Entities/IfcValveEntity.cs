@@ -4,72 +4,43 @@ using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc.Extensions;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities;
 
-public class IfcValveEntity : IfcAbstractEntity
+public class IfcValveEntity : IfcAbstractPipeFittingEntity
 {
-    protected override IfcIdentifier Tag { get; set; } = "Valve";
-    
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
     
+    protected override IfcIdentifier Tag { get; set; } = "Valve";
+    protected override IfcPipeFitting? _pipeFitting { get; set; }
+
     private readonly StartValveEntity _startValveEntity;
-    private readonly IfcNodeEntity _ifcNodeEntity;
-    private readonly IfcPipeEntity[] _ifcPipeEntities;
 
-    private IfcPipeFitting? _pipeFitting;
-
-    public readonly double Angle;
     public readonly double Length;
     public readonly double Diameter;
 
-    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-
     public IfcValveEntity(StartValveEntity startValveEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+        : base(nodeEntity, pipeEntities)
     {
         _startValveEntity = startValveEntity;
-        _ifcNodeEntity = nodeEntity;
-        _ifcPipeEntities = pipeEntities;
-
-        XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
-        XbimVector3D forward = _ifcPipeEntities[0].ObjectMatrix3D.Forward;
-        XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
-        if (forward == WorldUp || forward == -1 * WorldUp) 
-            WorldUp = new XbimVector3D(0, 1, 0);
-        XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
-        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-
         Length = _startValveEntity.GetLength();
-        Diameter = Math.Max(_ifcPipeEntities[0].Diameter, _ifcPipeEntities[1].Diameter) * 1.5;
-        
-        XbimVector3D[] directionToPipes = _ifcPipeEntities.Select(entity => IfcAxis.GetDirectionToPipe(entity, ObjectMatrix3D.Translation)).ToArray();
-        directionToPipes[0] = directionToPipes[0].Negated();
-        Angle = XbimVector3D.DotProduct(directionToPipes[1], ObjectMatrix3D.Up) < 0
-            ? directionToPipes[0].Angle(directionToPipes[1])
-            : -directionToPipes[0].Angle(directionToPipes[1]);
+        Diameter = Math.Max(_pipeEntities[0].Diameter, _pipeEntities[1].Diameter) * 1.5;
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
-        IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
-        IfcDirection forwardDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
-        IfcDirection rightDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
-        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
-        IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
-        
+        base.CreateAndAdd(model);
+
         IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
         IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2, Angle);
         IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
@@ -90,10 +61,11 @@ public class IfcValveEntity : IfcAbstractEntity
             fitting.Name = _startValveEntity.GetName();
             fitting.Representation = shape;
             fitting.Tag = Tag;
-            fitting.ObjectPlacement = localPlacement;
+            fitting.ObjectPlacement = _localPlacement;
         });
-        _ifcPipeEntities[0].Clip(_ifcNodeEntity, Length / 2);
-        _ifcPipeEntities[1].Clip(_ifcNodeEntity, Length / 2);
+        
+        _pipeEntities[0].Clip(_nodeEntity, Length / 2);
+        _pipeEntities[1].Clip(_nodeEntity, Length / 2);
         
         AddProperties(model, _pipeFitting);
         ConnectPorts(model);
@@ -104,7 +76,7 @@ public class IfcValveEntity : IfcAbstractEntity
     private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height, double angle = 0)
     {
         IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
-        XbimMatrix3D Mx = MatrixExtensions.Mx(angle);
+        XbimMatrix3D My = MatrixExtensions.My(angle);
         for (int i = 0; i < _numSegments; i++)
         {
             XbimVector3D point = new XbimVector3D(
@@ -113,30 +85,11 @@ public class IfcValveEntity : IfcAbstractEntity
                 height
             );
             if (angle != 0)
-                point = XbimVector3D.Multiply(point, Mx);
+                point = XbimVector3D.Multiply(point, My);
             points[i] = IfcAxis.CreatePoint(model, point);
         }
 
         return points;
-    }
-    
-    protected IfcRelConnectsPorts ConnectPorts(IModel model)
-    {
-        var closestPorts = (
-            from port in _ifcPipeEntities.SelectMany(pipe => pipe.Ports)
-            let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
-            orderby distance
-            select port
-        ).Take(2).ToArray();
-
-        return model.Instances.New<IfcRelConnectsPorts>(ports =>
-        {
-            ports.Name = $"{closestPorts[0].GlobalId}|{closestPorts[1].GlobalId}";
-            ports.Description = "Flow";
-            ports.RelatingPort = closestPorts[0];
-            ports.RelatedPort = closestPorts[1];
-            ports.RealizingElement = _pipeFitting;
-        });
     }
 
     private static IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] points, IfcCartesianPoint topPoint)
