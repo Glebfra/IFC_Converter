@@ -33,8 +33,7 @@ public static class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Write a ctp file location: ");
-        //string inputFilepath = Console.ReadLine();
-        string inputFilepath = "D:\\Работа\\Bend.ctp";
+        string inputFilepath = Console.ReadLine();
         string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
         Console.WriteLine($"Input file is: {inputFilepath}");
 
