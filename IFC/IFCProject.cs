@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#region
+
 using IFC.Entities.Abstract;
 using IFC.Tools;
 using Xbim.Common;
@@ -14,6 +13,8 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.IO;
+
+#endregion
 
 namespace IFC;
 

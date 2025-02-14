@@ -1,10 +1,6 @@
-﻿#if PARALLEL
-using System.Collections.Concurrent;
-#endif
+﻿
+#region
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract;
@@ -12,6 +8,11 @@ using Start;
 using Start.API;
 using Start.Entities;
 using Start.Entities.Abstract;
+#if PARALLEL
+using System.Collections.Concurrent;
+#endif
+
+#endregion
 
 namespace StartConverter;
 
@@ -32,8 +33,7 @@ public static class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Write a ctp file location: ");
-        //string inputFilepath = Console.ReadLine();
-        string inputFilepath = "D:\\Работа\\Bend.ctp";
+        string inputFilepath = Console.ReadLine();
         string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
         Console.WriteLine($"Input file is: {inputFilepath}");
 

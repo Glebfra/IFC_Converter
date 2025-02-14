@@ -1,8 +1,12 @@
-﻿using IFC.Entities.Abstract;
+﻿#region
+
+using IFC.Entities.Abstract;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+
+#endregion
 
 namespace IFC.Entities;
 

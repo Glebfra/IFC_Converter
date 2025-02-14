@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿#region
+
 using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;
@@ -14,6 +14,8 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
+
+#endregion
 
 namespace IFC.Entities;
 
