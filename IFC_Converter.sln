@@ -13,20 +13,27 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Parallel|Any CPU = Parallel|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2152410D-1566-48C4-9590-E82B84C30170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2152410D-1566-48C4-9590-E82B84C30170}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2152410D-1566-48C4-9590-E82B84C30170}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2152410D-1566-48C4-9590-E82B84C30170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2152410D-1566-48C4-9590-E82B84C30170}.Parallel|Any CPU.ActiveCfg = Parallel|Any CPU
+		{2152410D-1566-48C4-9590-E82B84C30170}.Parallel|Any CPU.Build.0 = Parallel|Any CPU
 		{9DCBF990-A302-41DD-AA45-787D939888D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9DCBF990-A302-41DD-AA45-787D939888D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DCBF990-A302-41DD-AA45-787D939888D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DCBF990-A302-41DD-AA45-787D939888D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DCBF990-A302-41DD-AA45-787D939888D6}.Parallel|Any CPU.ActiveCfg = Parallel|Any CPU
+		{9DCBF990-A302-41DD-AA45-787D939888D6}.Parallel|Any CPU.Build.0 = Parallel|Any CPU
 		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Parallel|Any CPU.ActiveCfg = Parallel|Any CPU
+		{6D7B5E22-A74F-41F4-8B08-810BF49017F8}.Parallel|Any CPU.Build.0 = Parallel|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,8 +15,8 @@ public class StartStubInEntity : StartAbstractTeeEntity
     public override Dictionary<string, string> GetData()
     {
         var data = base.GetData();
-        data.Add("Pad Thickness", GetPadThickness().ToString("F"));
-        data.Add("Pad Width", GetPadWidth().ToString("F"));
+        data.Add("Pad Thickness", GetPadThickness().ToString("F5"));
+        data.Add("Pad Width", GetPadWidth().ToString("F5"));
 
         return data;
     }

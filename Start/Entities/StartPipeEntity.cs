@@ -39,31 +39,31 @@ public class StartPipeEntity : StartAbstractEntity
     public override Dictionary<string, string> GetData()
     {
         var dictionary = base.GetData();
-        dictionary.Add("X Coordinate", GetXCoord().ToString("F"));
-        dictionary.Add("Y Coordinate", GetYCoord().ToString("F"));
-        dictionary.Add("Z Coordinate", GetZCoord().ToString("F"));
+        dictionary.Add("X Coordinate", GetXCoord().ToString("F5"));
+        dictionary.Add("Y Coordinate", GetYCoord().ToString("F5"));
+        dictionary.Add("Z Coordinate", GetZCoord().ToString("F5"));
         dictionary.Add("Name", GetName());
-        dictionary.Add("Outside Diameter", GetOutsideDiameter().ToString("F"));
+        dictionary.Add("Outside Diameter", GetOutsideDiameter().ToString("F5"));
         dictionary.Add("Material Name", GetMaterialName());
-        dictionary.Add("Wall Thickness", GetWallThickness().ToString("F"));
-        dictionary.Add("Mill Tolerance", GetMillTolerance().ToString("F"));
-        dictionary.Add("Corrosion Allowance", GetCorrosionAllowance().ToString("F"));
-        dictionary.Add("Pressure", GetPressure().ToString("F"));
-        dictionary.Add("Test Pressure", GetTestPressure().ToString("F"));
-        dictionary.Add("Temperature", GetTemperature().ToString("F"));
-        dictionary.Add("Pipe Unit Weight", GetPipeUnitWeight().ToString("F"));
-        dictionary.Add("Insulation Unit Weight", GetInsulationUnitWeight().ToString("F"));
-        dictionary.Add("Product Unit Weight", GetProductUnitWeight().ToString("F"));
+        dictionary.Add("Wall Thickness", GetWallThickness().ToString("F5"));
+        dictionary.Add("Mill Tolerance", GetMillTolerance().ToString("F5"));
+        dictionary.Add("Corrosion Allowance", GetCorrosionAllowance().ToString("F5"));
+        dictionary.Add("Pressure", GetPressure().ToString("F5"));
+        dictionary.Add("Test Pressure", GetTestPressure().ToString("F5"));
+        dictionary.Add("Temperature", GetTemperature().ToString("F5"));
+        dictionary.Add("Pipe Unit Weight", GetPipeUnitWeight().ToString("F5"));
+        dictionary.Add("Insulation Unit Weight", GetInsulationUnitWeight().ToString("F5"));
+        dictionary.Add("Product Unit Weight", GetProductUnitWeight().ToString("F5"));
         dictionary.Add("Manufacturing Technology", GetManufacturingTechnology().ToString());
-        dictionary.Add("Longitudinal Weld Joint Factor", GetLongitudinalWeldJointFactor().ToString("F"));
-        dictionary.Add("Strength Factor of the Traverse Weld", GetStrengthFactorOfTheTraverseWeld().ToString("F"));
-        dictionary.Add("Additional Weight Load", GetAdditionalWeightLoad().ToString("F"));
-        dictionary.Add("Additional Weight Load along the X Axis", GetAdditionalWeightLoadAlongTheXAxis().ToString("F"));
-        dictionary.Add("Additional Weight Load along the Y Axis", GetAdditionalWeightLoadAlongTheYAxis().ToString("F"));
-        dictionary.Add("Additional Weight Load along the Z Axis", GetAdditionalWeightLoadAlongTheZAxis().ToString("F"));
-        dictionary.Add("Projection Along OX Axis", GetProjectionAlongOXAxis().ToString("F"));
-        dictionary.Add("Projection Along OY Axis", GetProjectionAlongOYAxis().ToString("F"));
-        dictionary.Add("Projection Along OZ Axis", GetProjectionAlongOZAxis().ToString("F"));
+        dictionary.Add("Longitudinal Weld Joint Factor", GetLongitudinalWeldJointFactor().ToString("F5"));
+        dictionary.Add("Strength Factor of the Traverse Weld", GetStrengthFactorOfTheTraverseWeld().ToString("F5"));
+        dictionary.Add("Additional Weight Load", GetAdditionalWeightLoad().ToString("F5"));
+        dictionary.Add("Additional Weight Load along the X Axis", GetAdditionalWeightLoadAlongTheXAxis().ToString("F5"));
+        dictionary.Add("Additional Weight Load along the Y Axis", GetAdditionalWeightLoadAlongTheYAxis().ToString("F5"));
+        dictionary.Add("Additional Weight Load along the Z Axis", GetAdditionalWeightLoadAlongTheZAxis().ToString("F5"));
+        dictionary.Add("Projection Along OX Axis", GetProjectionAlongOXAxis().ToString("F5"));
+        dictionary.Add("Projection Along OY Axis", GetProjectionAlongOYAxis().ToString("F5"));
+        dictionary.Add("Projection Along OZ Axis", GetProjectionAlongOZAxis().ToString("F5"));
 
         return dictionary;
     }

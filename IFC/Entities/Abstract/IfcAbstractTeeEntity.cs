@@ -1,4 +1,5 @@
-﻿using IFC.Tools;
+﻿using System.Linq;
+using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -89,12 +90,12 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.Name = _teeEntity.GetName();
-            fitting.Tag = "WeldedTee";
+            fitting.Tag = Tag;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
             fitting.Representation = productDefinitionShape;
             fitting.ObjectPlacement = localPlacement;
         });
-        AddProperties(model);
+        AddProperties(model, _pipeFitting);
         ConnectPorts(model);
 
         return _pipeFitting;
@@ -145,18 +146,20 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
                 if (System.Math.Abs(angleCos) < 0.95) continue;
                 _branchPipes[0] = _connPipes[j];
                 _branchPipes[1] = _connPipes[k];
-                _headPipe = _connPipes[^(j + k)];
+                _headPipe = _connPipes[_connPipes.Length - (j + k)];
             }
         }
     }
     
-    protected void AddProperties(IModel model)
+    protected override void AddProperties(IModel model, IfcProduct product)
     {
+        base.AddProperties(model, product);
+        
         #region Pset_PipeFittingTypeStart
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
-            properties.RelatedObjects.Add(_pipeFitting);
+            properties.RelatedObjects.Add(product);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
@@ -170,41 +173,6 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
                 }
             });
         });
-
-        #endregion
-        
-        #region DEBUG
-
-        #if DEBUG
-        model.Instances.New<IfcRelDefinesByProperties>(properties =>
-        {
-            properties.RelatedObjects.Add(_pipeFitting);
-            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-            {
-                set.Name = "Debug Properties";
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Coordinates";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Translation.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Forward direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Forward.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Right direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Right.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Up direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
-                }));
-            });
-        });
-        #endif
 
         #endregion
     }

@@ -1,4 +1,6 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using System.Linq;
+using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -21,6 +23,8 @@ namespace IFC.Entities;
 
 public class IfcMilterJointEntity : IfcAbstractEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Milter Joint";
+    
     private readonly StartMilterJointEntity _startMilterJointEntity;
     private readonly IfcNodeEntity _ifcNodeEntity;
     private readonly IfcPipeEntity[] _ifcPipeEntities;
@@ -81,7 +85,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
         IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         _pipeFitting = CreateMilterJoint(model, shape, objectPlacement);
         ConnectPorts(model);
-        AddProperties(model);
+        AddProperties(model, _pipeFitting);
 
         return _pipeFitting;
     }
@@ -90,8 +94,9 @@ public class IfcMilterJointEntity : IfcAbstractEntity
     {
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            fitting.ObjectPlacement = placement;
             fitting.Name = _startMilterJointEntity.GetName();
+            fitting.Tag = Tag;
+            fitting.ObjectPlacement = placement;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
             fitting.Representation = shape;
         });
@@ -144,13 +149,15 @@ public class IfcMilterJointEntity : IfcAbstractEntity
         });
     }
     
-    private void AddProperties(IModel model)
+    protected override void AddProperties(IModel model, IfcProduct product)
     {
+        base.AddProperties(model, product);
+        
         #region Pset_PipeFittingTypeStart
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
-            properties.RelatedObjects.Add(_pipeFitting);
+            properties.RelatedObjects.Add(product);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
@@ -171,7 +178,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
-            properties.RelatedObjects.Add(_pipeFitting);
+            properties.RelatedObjects.Add(product);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
             {
                 quantity.Name = "Qto_PipeFittingBaseQuantities";
@@ -188,41 +195,6 @@ public class IfcMilterJointEntity : IfcAbstractEntity
                 }));
             });
         });
-
-        #endregion
-        
-        #region DEBUG
-
-        #if DEBUG
-        model.Instances.New<IfcRelDefinesByProperties>(properties =>
-        {
-            properties.RelatedObjects.Add(_pipeFitting);
-            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-            {
-                set.Name = "Debug Properties";
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Coordinates";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Translation.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Forward direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Forward.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Right direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Right.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Up direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
-                }));
-            });
-        });
-        #endif
 
         #endregion
     }

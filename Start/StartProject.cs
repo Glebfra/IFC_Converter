@@ -9,15 +9,11 @@ public class StartProject : IDisposable
     private readonly StartDocument _document;
     private readonly StartBaseRootDataArray _dataArray;
 
-    private List<StartAbstractEntity> _abstractEntities;
-
     public StartProject(StartAutoServer autoServer, StartDocument document, StartBaseRootDataArray dataArray)
     {
         _autoServer = autoServer;
         _document = document;
         _dataArray = dataArray;
-
-        _abstractEntities = new List<StartAbstractEntity>();
     }
 
     public static StartProject OpenProject(string filepath, int mode = 0x4)
@@ -29,6 +25,19 @@ public class StartProject : IDisposable
         return new StartProject(autoServer, document, baseRootDataArray);
     }
 
+    public StartBaseRoot[] GetEntitiesRaw(StartElementType minType, StartElementType maxType)
+    {
+        int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
+        StartBaseRoot[] objects = new StartBaseRoot[elementsNumber];
+        for (int i = 0; i < elementsNumber; i++)
+        {
+            StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, minType, maxType);
+            objects[i] = baseRoot;
+        }
+
+        return objects;
+    }
+
     public T[] GetConnEntities<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
     {
         int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
@@ -38,7 +47,6 @@ public class StartProject : IDisposable
             StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, i);
             objects[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
         }
-        _abstractEntities.AddRange(objects);
 
         return objects;
     }
@@ -47,8 +55,7 @@ public class StartProject : IDisposable
     {
         StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, 0);
         T @object = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
-        _abstractEntities.Add(@object);
-        
+
         return @object;
     }
 
@@ -85,11 +92,6 @@ public class StartProject : IDisposable
 
     public void Dispose()
     {
-        foreach (StartAbstractEntity entity in _abstractEntities)
-        {
-            entity.Dispose();
-        }
-        
         _dataArray.Dispose();
         _document.Dispose();
         _autoServer.Dispose();

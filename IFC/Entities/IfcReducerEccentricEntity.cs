@@ -1,4 +1,6 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using System.Linq;
+using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -20,6 +22,8 @@ namespace IFC.Entities;
 
 public class IfcReducerEccentricEntity : IfcAbstractEntity
 {
+    protected override IfcIdentifier Tag { get; set; } = "Reducer Eccentric";
+    
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
 
@@ -78,12 +82,12 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             fitting.ObjectPlacement = localPlacement;
             fitting.Representation = shape;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
-            fitting.Tag = "Reducer";
+            fitting.Tag = Tag;
             fitting.Name = _startReducer.GetName();
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
 
-        AddProperties(model);
+        AddProperties(model, _pipeFitting);
         ConnectPorts(model);
 
         return _pipeFitting;
@@ -144,17 +148,16 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             ports.RealizingElement = _pipeFitting;
         });
     }
-    
-    protected void AddProperties(IModel model)
+
+    protected override void AddProperties(IModel model, IfcProduct product)
     {
-        if (_pipeFitting == null)
-            throw new Exception("The required field is null. First call the CreateAndAdd method");
+        base.AddProperties(model, product);
         
         #region Pset_PipeFittingTypeStart
         
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
-            properties.RelatedObjects.Add(_pipeFitting);
+            properties.RelatedObjects.Add(product);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
@@ -168,41 +171,6 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
                 }
             });
         });
-
-        #endregion
-        
-        #region DEBUG
-        
-        #if DEBUG
-        model.Instances.New<IfcRelDefinesByProperties>(properties =>
-        {
-            properties.RelatedObjects.Add(_pipeFitting);
-            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-            {
-                set.Name = "Debug Properties";
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Coordinates";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Translation.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Forward direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Forward.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Right direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Right.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Up direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
-                }));
-            });
-        });
-        #endif
 
         #endregion
     }

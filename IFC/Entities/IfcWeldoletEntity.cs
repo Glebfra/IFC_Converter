@@ -6,18 +6,17 @@ using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities;
 
-public class IfcStubInEntity : IfcAbstractTeeEntity
+public class IfcWeldoletEntity : IfcAbstractTeeEntity
 {
-    protected override IfcIdentifier Tag { get; set; } = "Stub-in";
+    protected override IfcIdentifier Tag { get; set; } = "Weldolet";
     
-    public readonly double Length;
-    public readonly double Height;
+    private double Length;
+    private double Height;
     
-    public IfcStubInEntity(StartStubInEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
-        : base(teeEntity, nodeEntity, connPipes)
+    public IfcWeldoletEntity(StartWeldoletEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) : base(teeEntity, nodeEntity, connPipes)
     {
         Length = _headPipe.Diameter;
-        Height = _branchPipes[0].Diameter / 2;
+        Height = _branchPipes[0].Diameter / 2 + teeEntity.GetBranchHeight();
         _nodeEntity.ConnEntities.Add(this);
     }
 

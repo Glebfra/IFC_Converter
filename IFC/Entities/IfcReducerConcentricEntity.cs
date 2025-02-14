@@ -1,4 +1,6 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using System.Linq;
+using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -9,6 +11,7 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
@@ -19,6 +22,8 @@ public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
 {
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
+    
+    protected override IfcIdentifier Tag { get; set; } = "Reducer Conentric";
     
     protected override IfcPipeFitting? _pipeFitting { get; set; }
 
@@ -53,12 +58,12 @@ public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
             fitting.ObjectPlacement = localPlacement;
             fitting.Representation = shape;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
-            fitting.Tag = "Reducer";
+            fitting.Tag = Tag;
             fitting.Name = _startReducer.GetName();
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
 
-        AddProperties(model);
+        AddProperties(model, _pipeFitting);
         ConnectPorts(model);
 
         return _pipeFitting;

@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -22,6 +23,8 @@ namespace IFC.Entities;
 public class IfcPipeEntity : IfcAbstractEntity
 {
     #region Fields
+    
+    protected override IfcIdentifier Tag { get; set; } = "Pipe";
 
     public StartPipeEntity PipeEntity { get; }
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
@@ -110,7 +113,7 @@ public class IfcPipeEntity : IfcAbstractEntity
         IfcDirection extrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
         IfcProductDefinitionShape productDefShape = CreatePipeShape(model, extrudedDirection);
         _pipeSegment = CreatePipe(model, productDefShape, startLocalPlacement);
-        AddProperties(model);
+        AddProperties(model, _pipeSegment);
 
         Ports[0] = CreatePort(model, startLocalPlacement);
         Ports[1] = CreatePort(model, endLocalPlacement);
@@ -215,20 +218,22 @@ public class IfcPipeEntity : IfcAbstractEntity
         return model.Instances.New<IfcPipeSegment>(segment =>
         {
             segment.Name = PipeEntity.GetName();
-            segment.Tag = "Pipe";
+            segment.Tag = Tag;
             segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
             segment.ObjectPlacement = localPlacement;
             segment.Representation = productDefShape;
         });
     }
 
-    private void AddProperties(IModel model)
+    protected override void AddProperties(IModel model, IfcProduct product)
     {
+        base.AddProperties(model, product);
+        
         #region Pset_PipeSegmentTypeStart
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
-            properties.RelatedObjects.Add(_pipeSegment);
+            properties.RelatedObjects.Add(product);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeSegmentTypeStart";
@@ -249,7 +254,7 @@ public class IfcPipeEntity : IfcAbstractEntity
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
-            properties.RelatedObjects.Add(_pipeSegment);
+            properties.RelatedObjects.Add(product);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeSegmentTypeCommon";
@@ -278,7 +283,7 @@ public class IfcPipeEntity : IfcAbstractEntity
 
         model.Instances.New<IfcRelDefinesByProperties>(properties =>
         {
-            properties.RelatedObjects.Add(_pipeSegment);
+            properties.RelatedObjects.Add(product);
             properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
             {
                 quantity.Name = "Qto_PipeSegmentBaseQuantities";
@@ -306,41 +311,6 @@ public class IfcPipeEntity : IfcAbstractEntity
                 }));
             });
         });
-
-        #endregion
-
-        #region DEBUG
-
-        #if DEBUG
-        model.Instances.New<IfcRelDefinesByProperties>(properties =>
-        {
-            properties.RelatedObjects.Add(_pipeSegment);
-            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-            {
-                set.Name = "Debug Properties";
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Coordinates";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Translation.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Forward direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Forward.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Right direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Right.ToString());
-                }));
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                {
-                    value.Name = "Up direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
-                }));
-            });
-        });
-        #endif
 
         #endregion
     }

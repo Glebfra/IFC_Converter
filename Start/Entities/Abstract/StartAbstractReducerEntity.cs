@@ -25,16 +25,16 @@ public class StartAbstractReducerEntity : StartAbstractEntity
         var data = base.GetData();
         
         data.Add("Name", GetName());
-        data.Add("Weight", GetWeight().ToString("F"));
+        data.Add("Weight", GetWeight().ToString("F5"));
         data.Add("Manufacturing Technology", GetManufacturingTechnology().ToString());
-        data.Add("Mill Tolerance At D Max", GetMillToleranceAtDMax().ToString("F"));
-        data.Add("Mill Tolerance At D Min", GetMillToleranceAtDMin().ToString("F"));
-        data.Add("Mill Tolerance", GetMillTolerance().ToString("F"));
-        data.Add("Length Of Conical Part", GetLengthOfConicalPart().ToString("F"));
-        data.Add("Max Diameter", GetMaxDiameter().ToString("F"));
-        data.Add("Min Diameter", GetMinDiameter().ToString("F"));
-        data.Add("Thickness At Max Diameter Point", GetThicknessAtMaxDiameterPoint().ToString("F"));
-        data.Add("Angle Between Eccentricity Vector And Zm Axis", GetAngleBetweenEccentricityVectorAndZmAxis().ToString("F"));
+        data.Add("Mill Tolerance At D Max", GetMillToleranceAtDMax().ToString("F5"));
+        data.Add("Mill Tolerance At D Min", GetMillToleranceAtDMin().ToString("F5"));
+        data.Add("Mill Tolerance", GetMillTolerance().ToString("F5"));
+        data.Add("Length Of Conical Part", GetLengthOfConicalPart().ToString("F5"));
+        data.Add("Max Diameter", GetMaxDiameter().ToString("F5"));
+        data.Add("Min Diameter", GetMinDiameter().ToString("F5"));
+        data.Add("Thickness At Max Diameter Point", GetThicknessAtMaxDiameterPoint().ToString("F5"));
+        data.Add("Angle Between Eccentricity Vector And Zm Axis", GetAngleBetweenEccentricityVectorAndZmAxis().ToString("F5"));
 
         return data;
     }
