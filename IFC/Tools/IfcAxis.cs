@@ -1,8 +1,12 @@
-﻿using IFC.Entities;
+﻿#region
+
+using IFC.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;
+
+#endregion
 
 namespace IFC.Tools;
 

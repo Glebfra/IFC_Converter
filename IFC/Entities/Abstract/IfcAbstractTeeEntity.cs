@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#region
+
 using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
@@ -15,6 +16,8 @@ using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
+
+#endregion
 
 namespace IFC.Entities.Abstract;
 
@@ -143,7 +146,7 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
                 double angleCos = XbimVector3D.DotProduct(firstPipeDir, secondPipeDir) /
                                   (firstPipeDir.Length * secondPipeDir.Length);
 
-                if (System.Math.Abs(angleCos) < 0.95) continue;
+                if (Math.Abs(angleCos) < 0.95) continue;
                 _branchPipes[0] = _connPipes[j];
                 _branchPipes[1] = _connPipes[k];
                 _headPipe = _connPipes[_connPipes.Length - (j + k)];

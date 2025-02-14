@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿#region
+
 using IFC.Entities.Abstract;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
+
+#endregion
 
 namespace IFC.Entities;
 

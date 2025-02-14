@@ -1,5 +1,8 @@
-﻿using System;
+﻿#region
+
 using Xbim.Common.Geometry;
+
+#endregion
 
 namespace IFC.Extensions;
 

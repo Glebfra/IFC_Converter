@@ -1,5 +1,9 @@
-﻿using Start.API;
+﻿#region
+
+using Start.API;
 using Start.Entities.Abstract;
+
+#endregion
 
 namespace Start.Entities;
 

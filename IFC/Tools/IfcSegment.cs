@@ -1,9 +1,11 @@
-﻿using Xbim.Common;
+﻿#region
+
+using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
-using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
+
+#endregion
 
 namespace IFC.Tools;
 
