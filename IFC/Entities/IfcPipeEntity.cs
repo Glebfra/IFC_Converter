@@ -29,7 +29,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     
     protected override IfcIdentifier Tag { get; set; } = "Pipe";
 
-    public StartPipeEntity PipeEntity { get; }
+    public StartPipeEntityProperties Properties { get; }
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Diameter { get; }
     public IfcDistributionPort[] Ports { get; }
@@ -64,9 +64,9 @@ public class IfcPipeEntity : IfcAbstractEntity
 
     #endregion
     
-    public IfcPipeEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] ifcNodeEntities)
+    public IfcPipeEntity(StartPipeEntityProperties properties, IfcNodeEntity[] ifcNodeEntities)
     {
-        PipeEntity = pipeEntity;
+        Properties = properties;
         _nodeEntities = ifcNodeEntities;
         foreach (IfcNodeEntity ifcNodeEntity in _nodeEntities)
         {
@@ -74,17 +74,17 @@ public class IfcPipeEntity : IfcAbstractEntity
         }
 
         XbimVector3D coordinates = new XbimVector3D(
-            PipeEntity.GetXCoord(),
-            PipeEntity.GetYCoord(),
-            PipeEntity.GetZCoord()
+            Properties.XCoord,
+            Properties.YCoord,
+            Properties.ZCoord
         );
         XbimVector3D direction = new XbimVector3D(
-            PipeEntity.GetProjectionAlongOXAxis(),
-            PipeEntity.GetProjectionAlongOYAxis(),
-            PipeEntity.GetProjectionAlongOZAxis()
+            Properties.ProjectionAlongOXAxis,
+            Properties.ProjectionAlongOYAxis,
+            Properties.ProjectionAlongOZAxis
         );
         
-        Diameter = PipeEntity.GetOutsideDiameter();
+        Diameter = Properties.Diameter;
         Depth = direction.Length;
 
         XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
@@ -164,7 +164,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     
     private bool IsStartNode(IfcNodeEntity nodeEntity)
     {
-        XbimVector3D nodeCoordinates = nodeEntity.Coordinates;
+        XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D startPipeCoordinates = ObjectMatrix3D.Translation;
         XbimVector3D endPipeCoordinates = ObjectMatrix3D.Translation + ObjectMatrix3D.Forward * Depth;
 
@@ -220,7 +220,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     {
         return model.Instances.New<IfcPipeSegment>(segment =>
         {
-            segment.Name = PipeEntity.GetName();
+            segment.Name = Properties.Name;
             segment.Tag = Tag;
             segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
             segment.ObjectPlacement = localPlacement;
@@ -240,7 +240,7 @@ public class IfcPipeEntity : IfcAbstractEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeSegmentTypeStart";
-                foreach (var kvp in PipeEntity.GetData())
+                foreach (var kvp in Properties.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
@@ -265,17 +265,17 @@ public class IfcPipeEntity : IfcAbstractEntity
                 {
                     value.Name = "InnerDiameter";
                     value.NominalValue =
-                        new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter() - PipeEntity.GetWallThickness());
+                        new IfcPositiveLengthMeasure(Properties.Diameter - Properties.WallThickness);
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "OuterDiameter";
-                    value.NominalValue = new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter());
+                    value.NominalValue = new IfcPositiveLengthMeasure(Properties.Diameter);
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "WorkingPressure";
-                    value.NominalValue = new IfcPressureMeasure(ValueConverter.ValueConverter.T_m2ToPa(PipeEntity.GetPressure()));
+                    value.NominalValue = new IfcPressureMeasure(ValueConverter.ValueConverter.T_m2ToPa(Properties.Pressure));
                 }));
             });
         });
@@ -300,13 +300,13 @@ public class IfcPipeEntity : IfcAbstractEntity
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                 {
                     weight.Name = "NetWeight";
-                    weight.WeightValue = new IfcMassMeasure(ValueConverter.ValueConverter.TfToKg(PipeEntity.GetPipeUnitWeight()) * Depth);
+                    weight.WeightValue = new IfcMassMeasure(ValueConverter.ValueConverter.TfToKg(Properties.PipeUnitWeight) * Depth);
                     
-                    _onDepthChanged += () => weight.WeightValue = new IfcMassMeasure(PipeEntity.GetPipeUnitWeight() * Depth);
+                    _onDepthChanged += () => weight.WeightValue = new IfcMassMeasure(Properties.PipeUnitWeight * Depth);
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityArea>(area =>
                 {
-                    double circumference = Math.PI * PipeEntity.GetOutsideDiameter();
+                    double circumference = Math.PI * Properties.Diameter;
                     area.Name = "OuterSurfaceArea";
                     area.AreaValue = new IfcAreaMeasure(circumference * Depth);
 

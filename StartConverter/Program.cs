@@ -32,10 +32,7 @@ public static class Program
 
     public static void Main(string[] args)
     {
-        Console.WriteLine("Write a ctp file location: ");
-        string inputFilepath = Console.ReadLine();
-        string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
-        Console.WriteLine($"Input file is: {inputFilepath}");
+        GetFilepath(out string inputFilepath, out string outputFilepath);
 
         using StartProject startProject = StartProject.OpenProject(inputFilepath);
         using IFCProject ifcProject = IFCProject.CreateProject("StartToIfc");
@@ -71,22 +68,16 @@ public static class Program
         Console.WriteLine($"File saved as: {outputFilepath}");
     }
 
-    private static Dictionary<int, U> ConvertBaseObjects<T, U>(StartProject startProject, IFCProject ifcProject,
-        StartElementType type)
-        where T : StartAbstractEntity
-        where U : IfcAbstractEntity
+    private static void GetFilepath(out string inputFilepath, out string outputFilepath)
     {
-        Dictionary<int, U> dictionary = new Dictionary<int, U>();
-        foreach (T obj in startProject.GetEntities<T>(type))
-        {
-            Console.WriteLine($"Added {typeof(T).Name} with Id: {obj.Id}");
-
-            U ifcObj = (U)Activator.CreateInstance(typeof(U), obj)!;
-            ifcProject.AddEntity(ifcObj);
-            dictionary.Add(obj.Id, ifcObj);
-        }
-
-        return dictionary;
+        Console.Write("Write a ctp file location: ");
+        inputFilepath = Console.ReadLine();
+        if (inputFilepath == null)
+            throw new Exception("Input filepath cannot be null");
+        
+        inputFilepath = inputFilepath.Replace("\"", "");
+        outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
+        Console.WriteLine($"Input file is: {inputFilepath}");
     }
 
     private static void ConvertDependedObjects<T, U>(StartProject startProject, IFCProject ifcProject,
@@ -94,20 +85,18 @@ public static class Program
         where T : StartAbstractEntity
         where U : IfcAbstractEntity
     {
-        foreach (T obj in startProject.GetEntities<T>(type))
+        foreach (T @object in startProject.GetEntities<T>(type))
         {
             #if DEBUG
-            Console.WriteLine($"Added {typeof(T).Name} with Id: {obj.Id}");
+            Console.WriteLine($"Added {typeof(T).Name} with Id: {@object.Id}");
             #endif
 
-            StartNodeEntity connNodeEntity =
-                startProject.GetConnEntity<StartNodeEntity>(obj, StartElementType.NODE);
-            StartPipeEntity[] connPipeEntities =
-                startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
+            StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(@object, StartElementType.NODE);
+            StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
             IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
             IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
 
-            U ifcObj = (U)Activator.CreateInstance(typeof(U), obj, ifcConnNodeEntity, ifcConnPipeEntities)!;
+            U ifcObj = (U)Activator.CreateInstance(typeof(U), @object, ifcConnNodeEntity, ifcConnPipeEntities)!;
             ifcProject.AddEntity(ifcObj);
         }
     }
@@ -162,13 +151,16 @@ public static class Program
         Dictionary<int, IfcNodeEntity> nodeEntities = new Dictionary<int, IfcNodeEntity>();
         foreach (StartNodeEntity startNodeEntity in startNodeEntities)
         {
-            #if DEBUG
-            Console.WriteLine($"Added node {startNodeEntity.Id}");
-            #endif
+            using (startNodeEntity)
+            {
+                #if DEBUG
+                Console.WriteLine($"Added node {startNodeEntity.Id}");
+                #endif
 
-            IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
-            ifcProject.AddEntity(ifcNodeEntity);
-            nodeEntities.Add(startNodeEntity.Id, ifcNodeEntity);
+                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity.Properties);
+                ifcProject.AddEntity(ifcNodeEntity);
+                nodeEntities.Add(startNodeEntity.Id, ifcNodeEntity);
+            }
         }
 
         return nodeEntities;
@@ -176,22 +168,23 @@ public static class Program
 
     private static Dictionary<int, IfcPipeEntity> AddPipes(StartProject startProject, IFCProject ifcProject)
     {
-        StartPipeEntity[] startPipeEntities =
-            startProject.GetEntities<StartPipeEntity>(StartElementType.PIPE_ELEMENT);
+        StartPipeEntity[] startPipeEntities = startProject.GetEntities<StartPipeEntity>(StartElementType.PIPE_ELEMENT);
         Dictionary<int, IfcPipeEntity> pipeEntities = new Dictionary<int, IfcPipeEntity>();
         foreach (StartPipeEntity startPipeEntity in startPipeEntities)
         {
-            #if DEBUG
-            Console.WriteLine($"Added pipe {startPipeEntity.Id}");
-            #endif
+            using (startPipeEntity)
+            {
+                #if DEBUG
+                Console.WriteLine($"Added pipe {startPipeEntity.Id}");
+                #endif
 
-            StartNodeEntity[] connNodeEntities =
-                startProject.GetConnEntities<StartNodeEntity>(startPipeEntity, StartElementType.NODE);
-            IfcNodeEntity[] ifcConnNodeEntities = connNodeEntities.Select(item => _nodeEntities[item.Id]).ToArray();
+                StartNodeEntity[] connNodeEntities = startProject.GetConnEntities<StartNodeEntity>(startPipeEntity, StartElementType.NODE);
+                IfcNodeEntity[] ifcConnNodeEntities = connNodeEntities.Select(item => _nodeEntities[item.Id]).ToArray();
 
-            IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity, ifcConnNodeEntities);
-            ifcProject.AddEntity(ifcPipeEntity);
-            pipeEntities.Add(startPipeEntity.Id, ifcPipeEntity);
+                IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity.Properties, ifcConnNodeEntities);
+                ifcProject.AddEntity(ifcPipeEntity);
+                pipeEntities.Add(startPipeEntity.Id, ifcPipeEntity);
+            }
         }
 
         return pipeEntities;

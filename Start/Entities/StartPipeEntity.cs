@@ -1,5 +1,6 @@
 ﻿#region
 
+using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
 
@@ -7,68 +8,80 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities;
 
-public class StartPipeEntity : StartAbstractEntity
+public struct StartPipeEntityProperties
 {
-    public StartPipeEntity(StartBaseRoot entity) : base(entity)
+    #region Fields
+    
+    [JsonProperty("225")] public string Name { get; set; }
+    [JsonProperty("4")] public double Diameter { get; set; }
+    [JsonProperty("7")] public string MaterialName { get; set; }
+    [JsonProperty("9")] public double WallThickness { get; set; }
+    [JsonProperty("13")] public double MillTolerance { get; set; }
+    [JsonProperty("14")] public double CorrosionAllowance { get; set; }
+    [JsonProperty("27")] public double Pressure { get; set; }
+    [JsonProperty("29")] public double TestPressure { get; set; }
+    [JsonProperty("30")] public double Temperature { get; set; }
+    [JsonProperty("34")] public double PipeUnitWeight { get; set; }
+    [JsonProperty("35")] public double InsulationUnitWeight { get; set; }
+    [JsonProperty("36")] public double ProductUnitWeight { get; set; }
+    [JsonProperty("37")] public int ManufacturingTechnology { get; set; }
+    [JsonProperty("38")] public double LongitudinalWeldJointFactor { get; set; }
+    [JsonProperty("39")] public double StrengthFactorOfTheTraverseWeld { get; set; }
+    [JsonProperty("61")] public double AdditionalWeightLoad { get; set; }
+    [JsonProperty("64")] public double AdditionalWeightLoadAlongTheXAxis { get; set; }
+    [JsonProperty("65")] public double AdditionalWeightLoadAlongTheYAxis { get; set; }
+    [JsonProperty("66")] public double AdditionalWeightLoadAlongTheZAxis { get; set; }
+    [JsonProperty("128")] public double ProjectionAlongOXAxis { get; set; }
+    [JsonProperty("129")] public double ProjectionAlongOYAxis { get; set; }
+    [JsonProperty("130")] public double ProjectionAlongOZAxis { get; set; }
+
+    public double XCoord;
+    public double YCoord;
+    public double ZCoord;
+    
+    #endregion
+
+    public Dictionary<string, string> GetData()
     {
-    }
-
-    public string GetName() => Entity.GetDataChar(StartBaseRootFunctionKey.PIPE_NAME);
-    public double GetOutsideDiameter() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_OUTSIDE_DIAMETER);
-    public string GetMaterialName() => Entity.GetDataChar(StartBaseRootFunctionKey.PIPE_MATERIAL_NAME);
-    public double GetWallThickness() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_WALL_THICKNESS);
-    public double GetMillTolerance() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_MILL_TOLERANCE);
-    public double GetCorrosionAllowance() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_CORROSION_ALLOWANCE);
-    public double GetPressure() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PRESSURE);
-    public double GetTestPressure() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_TEST_PRESSURE);
-    public double GetTemperature() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_TEMPERATURE);
-    public double GetPipeUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_UNIT_WEIGHT);
-    public double GetInsulationUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_INSULATION_UNIT_WEIGHT);
-    public double GetProductUnitWeight() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PRODUCT_UNIT_WEIGHT);
-    public long GetManufacturingTechnology() => Entity.GetDataInt(StartBaseRootFunctionKey.PIPE_MANUFACTURING_TECHNOLOGY);
-    public double GetLongitudinalWeldJointFactor() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_LONGITUDINAL_WELD_JOINT_FACTOR);
-    public double GetStrengthFactorOfTheTraverseWeld() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_STRENGTH_FACTOR_OF_THE_TRAVERSE_WELD);
-    public double GetAdditionalWeightLoad() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_WEIGHT_LOAD);
-    public double GetAdditionalWeightLoadAlongTheXAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_X_AXIS);
-    public double GetAdditionalWeightLoadAlongTheYAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Y_AXIS);
-    public double GetAdditionalWeightLoadAlongTheZAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_ADDITIONAL_NON_WEIGHT_LOAD_ON_THE_ABOVE_GROUND_SECTION_ALONG_Z_AXIS);
-    public double GetProjectionAlongOXAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OX_AXIS);
-    public double GetProjectionAlongOYAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OY_AXIS);
-    public double GetProjectionAlongOZAxis() => Entity.GetDataReal(StartBaseRootFunctionKey.PIPE_PROJECTION_ALONG_OZ_AXIS);
-
-    public double GetXCoord() => Entity.GetXCoord();
-    public double GetYCoord() => Entity.GetYCoord();
-    public double GetZCoord() => Entity.GetZCoord();
-
-    public override Dictionary<string, string> GetData()
-    {
-        var dictionary = base.GetData();
-        dictionary.Add("X Coordinate", GetXCoord().ToString("F5"));
-        dictionary.Add("Y Coordinate", GetYCoord().ToString("F5"));
-        dictionary.Add("Z Coordinate", GetZCoord().ToString("F5"));
-        dictionary.Add("Name", GetName());
-        dictionary.Add("Outside Diameter", GetOutsideDiameter().ToString("F5"));
-        dictionary.Add("Material Name", GetMaterialName());
-        dictionary.Add("Wall Thickness", GetWallThickness().ToString("F5"));
-        dictionary.Add("Mill Tolerance", GetMillTolerance().ToString("F5"));
-        dictionary.Add("Corrosion Allowance", GetCorrosionAllowance().ToString("F5"));
-        dictionary.Add("Pressure", GetPressure().ToString("F5"));
-        dictionary.Add("Test Pressure", GetTestPressure().ToString("F5"));
-        dictionary.Add("Temperature", GetTemperature().ToString("F5"));
-        dictionary.Add("Pipe Unit Weight", GetPipeUnitWeight().ToString("F5"));
-        dictionary.Add("Insulation Unit Weight", GetInsulationUnitWeight().ToString("F5"));
-        dictionary.Add("Product Unit Weight", GetProductUnitWeight().ToString("F5"));
-        dictionary.Add("Manufacturing Technology", GetManufacturingTechnology().ToString());
-        dictionary.Add("Longitudinal Weld Joint Factor", GetLongitudinalWeldJointFactor().ToString("F5"));
-        dictionary.Add("Strength Factor of the Traverse Weld", GetStrengthFactorOfTheTraverseWeld().ToString("F5"));
-        dictionary.Add("Additional Weight Load", GetAdditionalWeightLoad().ToString("F5"));
-        dictionary.Add("Additional Weight Load along the X Axis", GetAdditionalWeightLoadAlongTheXAxis().ToString("F5"));
-        dictionary.Add("Additional Weight Load along the Y Axis", GetAdditionalWeightLoadAlongTheYAxis().ToString("F5"));
-        dictionary.Add("Additional Weight Load along the Z Axis", GetAdditionalWeightLoadAlongTheZAxis().ToString("F5"));
-        dictionary.Add("Projection Along OX Axis", GetProjectionAlongOXAxis().ToString("F5"));
-        dictionary.Add("Projection Along OY Axis", GetProjectionAlongOYAxis().ToString("F5"));
-        dictionary.Add("Projection Along OZ Axis", GetProjectionAlongOZAxis().ToString("F5"));
+        Dictionary<string, string> dictionary = new()
+        {
+            { "Name", Name },
+            { "Outside Diameter", Diameter.ToString("F5") },
+            { "Material Name", MaterialName },
+            { "Wall Thickness", WallThickness.ToString("F5") },
+            { "Mill Tolerance", MillTolerance.ToString("F5") },
+            { "Corrosion Allowance", CorrosionAllowance.ToString("F5") },
+            { "Pressure", Pressure.ToString("F5") },
+            { "Test Pressure", TestPressure.ToString("F5") },
+            { "Temperature", Temperature.ToString("F5") },
+            { "Pipe Unit Weight", PipeUnitWeight.ToString("F5") },
+            { "Insulation Unit Weight", InsulationUnitWeight.ToString("F5") },
+            { "Product Unit Weight", ProductUnitWeight.ToString("F5") },
+            { "Manufacturing Technology", ManufacturingTechnology.ToString() },
+            { "Longitudinal Weld Joint Factor", LongitudinalWeldJointFactor.ToString("F5") },
+            { "Strength Factor of the Traverse Weld", StrengthFactorOfTheTraverseWeld.ToString("F5") },
+            { "Additional Weight Load", AdditionalWeightLoad.ToString("F5") },
+            { "Additional Weight Load along the X Axis", AdditionalWeightLoadAlongTheXAxis.ToString("F5") },
+            { "Additional Weight Load along the Y Axis", AdditionalWeightLoadAlongTheYAxis.ToString("F5") },
+            { "Additional Weight Load along the Z Axis", AdditionalWeightLoadAlongTheZAxis.ToString("F5") },
+            { "Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5") },
+            { "Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5") },
+            { "Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5") }
+        };
 
         return dictionary;
+    }
+}
+
+public class StartPipeEntity : StartAbstractEntity
+{
+    public readonly StartPipeEntityProperties Properties;
+    
+    public StartPipeEntity(StartBaseRoot entity) : base(entity)
+    {
+        Properties = JsonConvert.DeserializeObject<StartPipeEntityProperties>(entity.GetDataJson())!;
+        Properties.XCoord = entity.GetXCoord();
+        Properties.YCoord = entity.GetYCoord();
+        Properties.ZCoord = entity.GetZCoord();
     }
 }

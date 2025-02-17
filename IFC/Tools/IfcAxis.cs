@@ -42,7 +42,7 @@ public static class IfcAxis
 
     public static XbimVector3D GetDirectionToPipe(IfcPipeEntity pipeEntity, IfcNodeEntity nodeEntity)
     {
-        XbimVector3D nodeCoordinates = nodeEntity.Coordinates;
+        XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D startPipeCoordinates = pipeEntity.Coordinates;
         XbimVector3D endPipeCoordinates = startPipeCoordinates + pipeEntity.ObjectMatrix3D.Forward * pipeEntity.Depth;
 
