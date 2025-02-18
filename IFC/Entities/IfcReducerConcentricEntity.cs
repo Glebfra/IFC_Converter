@@ -29,7 +29,7 @@ public class IfcReducerConcentricEntity : IfcAbstractEntity
 
     private IfcPipeFitting? _pipeFitting;
     
-    private readonly StartReducerEntityProperties _properties;
+    private readonly StartReducerEntity _reducerEntity;
     private readonly IfcPipeEntity[] _pipeEntities;
     private readonly IfcNodeEntity _nodeEntity;
     
@@ -38,9 +38,9 @@ public class IfcReducerConcentricEntity : IfcAbstractEntity
     
     protected override IfcIdentifier Tag { get; set; } = "Reducer Conentric";
 
-    public IfcReducerConcentricEntity(StartReducerEntityProperties properties, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+    public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
     {
-        _properties = properties;
+        _reducerEntity = reducerEntity;
         _nodeEntity = nodeEntity;
         _pipeEntities = pipeEntities;
         _nodeEntity.ConnEntities.Add(this);
@@ -57,7 +57,7 @@ public class IfcReducerConcentricEntity : IfcAbstractEntity
         XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp).Normalized();
         
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-        Length = _properties.LengthOfConicalPart;
+        Length = _reducerEntity.LengthOfConicalPart;
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
@@ -83,7 +83,7 @@ public class IfcReducerConcentricEntity : IfcAbstractEntity
             fitting.Representation = shape;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
             fitting.Tag = Tag;
-            fitting.Name = _properties.Name;
+            fitting.Name = _reducerEntity.Name;
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
 
@@ -157,7 +157,7 @@ public class IfcReducerConcentricEntity : IfcAbstractEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
-                foreach (var kvp in _properties.GetData())
+                foreach (var kvp in _reducerEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {

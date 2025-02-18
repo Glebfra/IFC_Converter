@@ -1,24 +1,12 @@
 ﻿#region
 
+using Newtonsoft.Json;
 using Start.API;
 
 #endregion
 
 namespace Start.Entities.Abstract;
 
-public abstract class StartAbstractEntity : IDisposable
+public abstract class StartAbstractEntity
 {
-    public readonly StartBaseRoot Entity;
-    public readonly int Id;
-    
-    protected StartAbstractEntity(StartBaseRoot entity)
-    {
-        Entity = entity;
-        Id = entity.GetNumber();
-    }
-
-    public void Dispose()
-    {
-        Entity.Dispose();
-    }
 }

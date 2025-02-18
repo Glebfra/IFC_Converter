@@ -26,18 +26,18 @@ public class IfcFlangeEntity : IfcAbstractPipeFittingEntity
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
     
-    private readonly StartArmatureEntityProperties _properties;
+    private readonly StartArmatureEntity _armatureEntity;
 
     public readonly double Length;
     public readonly double[] Radiuses;
 
     protected override IfcPipeFitting? _pipeFitting { get; set; }
 
-    public IfcFlangeEntity(StartArmatureEntityProperties properties, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
+    public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
         : base(ifcNodeEntity, ifcPipeEntities)
     {
-        _properties = properties;
-        Length = _properties.Length;
+        _armatureEntity = armatureEntity;
+        Length = _armatureEntity.Length;
         Radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
     }
     
@@ -68,7 +68,7 @@ public class IfcFlangeEntity : IfcAbstractPipeFittingEntity
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
-            fitting.Name = _properties.Name;
+            fitting.Name = _armatureEntity.Name;
             fitting.Tag = Tag;
             fitting.ObjectPlacement = _localPlacement;
             fitting.Representation = shape;
@@ -129,7 +129,7 @@ public class IfcFlangeEntity : IfcAbstractPipeFittingEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
-                foreach (var kvp in _properties.GetData())
+                foreach (var kvp in _armatureEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {

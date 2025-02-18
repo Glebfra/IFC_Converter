@@ -17,8 +17,8 @@ public class IfcStubInEntity : IfcAbstractTeeEntity
     public readonly double Length;
     public readonly double Height;
     
-    public IfcStubInEntity(StartTeeEntityProperties properties, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
-        : base(properties, nodeEntity, connPipes)
+    public IfcStubInEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
+        : base(teeEntity, nodeEntity, connPipes)
     {
         Length = _headPipe.Diameter;
         Height = _branchPipes[0].Diameter / 2;

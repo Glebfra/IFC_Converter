@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities;
 
-public struct StartArmatureEntityProperties
+public class StartArmatureEntity : StartAbstractEntity
 {
     #region Fields
 
@@ -19,7 +18,7 @@ public struct StartArmatureEntityProperties
 
     #endregion
     
-    public readonly Dictionary<string, string> GetData()
+    public Dictionary<string, string> GetData()
     {
         Dictionary<string, string> dictionary = new()
         {
@@ -34,16 +33,5 @@ public struct StartArmatureEntityProperties
         };
 
         return dictionary;
-    }
-    
-}
-
-public class StartArmatureEntity : StartAbstractEntity
-{
-    public StartArmatureEntityProperties Properties;
-    
-    public StartArmatureEntity(StartBaseRoot entity) : base(entity)
-    {
-        Properties = JsonConvert.DeserializeObject<StartArmatureEntityProperties>(entity.GetDataJson())!;
     }
 }

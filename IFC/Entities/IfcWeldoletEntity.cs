@@ -17,11 +17,11 @@ public class IfcWeldoletEntity : IfcAbstractTeeEntity
     private double Length;
     private double Height;
     
-    public IfcWeldoletEntity(StartTeeEntityProperties properties, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
-        : base(properties, nodeEntity, connPipes)
+    public IfcWeldoletEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
+        : base(teeEntity, nodeEntity, connPipes)
     {
         Length = _headPipe.Diameter;
-        Height = _branchPipes[0].Diameter / 2 + properties.BranchHeight;
+        Height = _branchPipes[0].Diameter / 2 + teeEntity.BranchHeight;
         _nodeEntity.ConnEntities.Add(this);
     }
 

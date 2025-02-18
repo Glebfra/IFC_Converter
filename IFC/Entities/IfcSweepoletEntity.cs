@@ -17,8 +17,8 @@ public class IfcSweepoletEntity : IfcAbstractTeeEntity
     private double Length;
     private double Height;
     
-    public IfcSweepoletEntity(StartTeeEntityProperties properties, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
-        : base(properties, nodeEntity, connPipes)
+    public IfcSweepoletEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
+        : base(teeEntity, nodeEntity, connPipes)
     {
         Length = _headPipe.Diameter;
         Height = _branchPipes[0].Diameter / 2;

@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.CodeDom;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract;
@@ -40,27 +39,27 @@ public static class Program
 
         _nodeEntities = AddNodes(startProject, ifcProject);
         _pipeEntities = AddPipes(startProject, ifcProject);
-
-        AddBends<IfcBendEntity>(startProject, ifcProject, StartElementType.PIPE_BEND);
-        AddBends<IfcBendEntity>(startProject, ifcProject, StartElementType.ELBOW);
-        AddBends<IfcBendEntity>(startProject, ifcProject, StartElementType.MILTER_BEND);
-        AddBends<IfcBendEntity>(startProject, ifcProject, StartElementType.WELDED_BEND);
-        AddBends<IfcBendEntity>(startProject, ifcProject, StartElementType.LONG_RADIUS_PIPE_BEND);
-        AddBends<IfcBendEntity>(startProject, ifcProject, StartElementType.PRE_STRESSED_PIPE_BEND);
-        AddBends<IfcBendEntity>(startProject, ifcProject, StartElementType.SADDLE_BEND);
-        AddBends<IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
         
-        AddTees<IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
-        AddTees<IfcWeldoletEntity>(startProject, ifcProject, StartElementType.WELDOLET);
-        AddTees<IfcSweepoletEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
-        AddTees<IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
-        AddTees<IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PIPE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.ELBOW);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.MILTER_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.WELDED_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.LONG_RADIUS_PIPE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PRE_STRESSED_PIPE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.SADDLE_BEND);
+        ConvertDependedObjects<StartBendEntity, IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
         
-        AddReducers<IfcReducerConcentricEntity>(startProject, ifcProject, StartElementType.REDUCER_CONCENTRIC);
-        AddReducers<IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
+        ConvertDependedObjects<StartTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
+        ConvertDependedObjects<StartTeeEntity, IfcWeldoletEntity>(startProject, ifcProject, StartElementType.WELDOLET);
+        ConvertDependedObjects<StartTeeEntity, IfcSweepoletEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
+        ConvertDependedObjects<StartTeeEntity, IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
+        ConvertDependedObjects<StartTeeEntity, IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
         
-        AddArmatures<IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
-        AddArmatures<IfcFlangeEntity>(startProject, ifcProject, StartElementType.FLANGE);
+        ConvertDependedObjects<StartReducerEntity, IfcReducerConcentricEntity>(startProject, ifcProject, StartElementType.REDUCER_CONCENTRIC);
+        ConvertDependedObjects<StartReducerEntity, IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
+        
+        ConvertDependedObjects<StartArmatureEntity, IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
+        ConvertDependedObjects<StartArmatureEntity, IfcFlangeEntity>(startProject, ifcProject, StartElementType.FLANGE);
 
         ifcProject.GroupObjects("Pipe System");
         ifcProject.SaveAs(outputFilepath);
@@ -86,9 +85,6 @@ public static class Program
     {
         foreach (StartBaseRoot @object in startProject.GetEntities(type, type))
         {
-            bool IsFitting;
-            bool IsPipe;
-            
             using (@object)
             {
                 #if DEBUG
@@ -114,121 +110,34 @@ public static class Program
                 }
 
                 T startObject = JsonConvert.DeserializeObject<T>(@object.GetDataJson())!;
-                U ifcObject = (U)Activator.CreateInstance(typeof(U), @object, ifcConnNodeEntity, ifcConnPipeEntities)!;
+                U ifcObject = (U)Activator.CreateInstance(typeof(U), startObject, ifcConnNodeEntity, ifcConnPipeEntities)!;
                 ifcProject.AddEntity(ifcObject);
             }
         }
     }
 
-    private static void AddBends<T>(StartProject startProject, IFCProject ifcProject, StartElementType type)
-        where T : IfcAbstractEntity
-    {
-        StartBendEntity[] startBendEntities = startProject.GetEntities<StartBendEntity>(type);
-        foreach (StartBendEntity startBendEntity in startBendEntities)
-        {
-            using (startBendEntity)
-            {
-                #if DEBUG
-                Console.WriteLine($"Added StartBendEntity with Id: {startBendEntity.Id}");
-                #endif
-                
-                StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startBendEntity, StartElementType.NODE);
-                StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
-                IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
-                IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
-
-                T ifcObj = (T)Activator.CreateInstance(typeof(T), startBendEntity.Properties, ifcConnNodeEntity, ifcConnPipeEntities);
-                ifcProject.AddEntity(ifcObj);
-            }
-        }
-    }
-
-    private static void AddTees<T>(StartProject startProject, IFCProject ifcProject, StartElementType type)
-        where T : IfcAbstractEntity
-    {
-        StartTeeEntity[] startTeeEntities = startProject.GetEntities<StartTeeEntity>(type);
-        foreach (StartTeeEntity startTeeEntity in startTeeEntities)
-        {
-            using (startTeeEntity)
-            {
-                #if DEBUG
-                Console.WriteLine($"Added StartBendEntity with Id: {startTeeEntity.Id}");
-                #endif
-                
-                StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startTeeEntity, StartElementType.NODE);
-                StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
-                IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
-                IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
-
-                T ifcObj = (T)Activator.CreateInstance(typeof(T), startTeeEntity.Properties, ifcConnNodeEntity, ifcConnPipeEntities);
-                ifcProject.AddEntity(ifcObj);
-            }
-        }
-    }
-
-    private static void AddReducers<T>(StartProject startProject, IFCProject ifcProject, StartElementType type)
-        where T : IfcAbstractEntity
-    {
-        StartReducerEntity[] startReducerEntities = startProject.GetEntities<StartReducerEntity>(type);
-        foreach (StartReducerEntity startReducerEntity in startReducerEntities)
-        {
-            using (startReducerEntity)
-            {
-                #if DEBUG
-                Console.WriteLine($"Added StartReducerEntity with Id: {startReducerEntity.Id}");
-                #endif
-                
-                StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startReducerEntity, StartElementType.NODE);
-                StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
-                IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
-                IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
-
-                T ifcObj = (T)Activator.CreateInstance(typeof(T), startReducerEntity.Properties, ifcConnNodeEntity, ifcConnPipeEntities);
-                ifcProject.AddEntity(ifcObj);
-            }
-        }
-    }
-
-    private static void AddArmatures<T>(StartProject startProject, IFCProject ifcProject, StartElementType type)
-        where T : IfcAbstractEntity
-    {
-        StartArmatureEntity[] startArmatureEntities = startProject.GetEntities<StartArmatureEntity>(type);
-        foreach (StartArmatureEntity startArmatureEntity in startArmatureEntities)
-        {
-            using (startArmatureEntity)
-            {
-                #if DEBUG
-                Console.WriteLine($"Added StartReducerEntity with Id: {startArmatureEntity.Id}");
-                #endif
-                
-                StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(startArmatureEntity, StartElementType.NODE);
-                StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
-                IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
-                IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
-
-                T ifcObj = (T)Activator.CreateInstance(typeof(T), startArmatureEntity.Properties, ifcConnNodeEntity, ifcConnPipeEntities);
-                ifcProject.AddEntity(ifcObj);
-            }
-        }
-    }
-    
     #region PipesAndNodes
 
     #if PARALLEL
     private static ConcurrentDictionary<int, IfcNodeEntity> AddNodes(StartProject startProject, IFCProject ifcProject)
     {
-        StartNodeEntity[] startNodeEntities = startProject.GetEntities<StartNodeEntity>(StartElementType.NODE);
+        StartBaseRoot[] objects = startProject.GetEntities(StartElementType.NODE, StartElementType.NODE);
         ConcurrentDictionary<int, IfcNodeEntity> ifcNodeEntities = new();
-        Parallel.ForEach(startNodeEntities, startNodeEntity =>
+        Parallel.ForEach(objects, @object =>
         {
-            using (startNodeEntity)
+            using (@object)
             {
                 #if DEBUG
-                Console.WriteLine($"Added node {startNodeEntity.Id}");
+                Console.WriteLine($"Added StartNodeEntity with Id: {@object.Id}");
                 #endif
 
-                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity.Properties);
-                ifcNodeEntities.TryAdd(startNodeEntity.Id, ifcNodeEntity);
+                StartNodeEntity startNodeEntity = JsonConvert.DeserializeObject<StartNodeEntity>(@object.GetDataJson())!;
+                startNodeEntity.XCoord = @object.GetXCoord();
+                startNodeEntity.YCoord = @object.GetYCoord();
+                startNodeEntity.ZCoord = @object.GetZCoord();
+                
+                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
+                ifcNodeEntities.TryAdd(@object.Id, ifcNodeEntity);
             }
         });
         ifcProject.AddEntities(ifcNodeEntities.Values);
@@ -238,20 +147,33 @@ public static class Program
     
     private static ConcurrentDictionary<int, IfcPipeEntity> AddPipes(StartProject startProject, IFCProject ifcProject)
     {
-        StartPipeEntity[] startPipeEntities = startProject.GetEntities<StartPipeEntity>(StartElementType.PIPE_ELEMENT);
+        StartBaseRoot[] objects = startProject.GetEntities(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
         ConcurrentDictionary<int, IfcPipeEntity> ifcPipeEntities = new();
-        Parallel.ForEach(startPipeEntities, startPipeEntity =>
+        Parallel.ForEach(objects, @object =>
         {
-            using (startPipeEntity)
+            using (@object)
             {
                 #if DEBUG
-                Console.WriteLine($"Added pipe {startPipeEntity.Id}");
+                Console.WriteLine($"Added StartPipeEntity with Id: {@object.Id}");
                 #endif
 
-                StartNodeEntity[] connNodeEntities = startProject.GetConnEntities<StartNodeEntity>(startPipeEntity, StartElementType.NODE);
-                IfcNodeEntity[] ifcConnNodeEntities = connNodeEntities.Select(item => _nodeEntities[item.Id]).ToArray();
-                IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity.Properties, ifcConnNodeEntities);
-                ifcPipeEntities.TryAdd(startPipeEntity.Id, ifcPipeEntity);
+                StartBaseRoot[] connNodeEntities = startProject.GetConnEntities(@object, StartElementType.NODE);
+                IfcNodeEntity[] ifcConnNodeEntities = new IfcNodeEntity[connNodeEntities.Length];
+                for (int i = 0; i < connNodeEntities.Length; i++)
+                {
+                    using (connNodeEntities[i])
+                    {
+                        ifcConnNodeEntities[i] = _nodeEntities[connNodeEntities[i].Id];
+                    }
+                }
+                
+                StartPipeEntity startPipeEntity = JsonConvert.DeserializeObject<StartPipeEntity>(@object.GetDataJson())!;
+                startPipeEntity.XCoord = @object.GetXCoord();
+                startPipeEntity.YCoord = @object.GetYCoord();
+                startPipeEntity.ZCoord = @object.GetZCoord();
+                
+                IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity, ifcConnNodeEntities);
+                ifcPipeEntities.TryAdd(@object.Id, ifcPipeEntity);
             }
         });
         ifcProject.AddEntities(ifcPipeEntities.Values);
@@ -261,19 +183,24 @@ public static class Program
     #else
     private static Dictionary<int, IfcNodeEntity> AddNodes(StartProject startProject, IFCProject ifcProject)
     {
-        StartNodeEntity[] startNodeEntities = startProject.GetEntities<StartNodeEntity>(StartElementType.NODE);
+        StartBaseRoot[] objects = startProject.GetEntities(StartElementType.NODE, StartElementType.NODE);
         Dictionary<int, IfcNodeEntity> nodeEntities = new Dictionary<int, IfcNodeEntity>();
-        foreach (StartNodeEntity startNodeEntity in startNodeEntities)
+        foreach (StartBaseRoot @object in objects)
         {
-            using (startNodeEntity)
+            using (@object)
             {
                 #if DEBUG
-                Console.WriteLine($"Added node {startNodeEntity.Id}");
+                Console.WriteLine($"Added StartNodeEntity with Id: {@object.Id}");
                 #endif
 
-                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity.Properties);
+                StartNodeEntity startNodeEntity = JsonConvert.DeserializeObject<StartNodeEntity>(@object.GetDataJson())!;
+                startNodeEntity.XCoord = @object.GetXCoord();
+                startNodeEntity.YCoord = @object.GetYCoord();
+                startNodeEntity.ZCoord = @object.GetZCoord();
+                
+                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
                 ifcProject.AddEntity(ifcNodeEntity);
-                nodeEntities.Add(startNodeEntity.Id, ifcNodeEntity);
+                nodeEntities.Add(@object.Id, ifcNodeEntity);
             }
         }
 
@@ -282,22 +209,34 @@ public static class Program
 
     private static Dictionary<int, IfcPipeEntity> AddPipes(StartProject startProject, IFCProject ifcProject)
     {
-        StartPipeEntity[] startPipeEntities = startProject.GetEntities<StartPipeEntity>(StartElementType.PIPE_ELEMENT);
+        StartBaseRoot[] objects = startProject.GetEntities(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
         Dictionary<int, IfcPipeEntity> pipeEntities = new Dictionary<int, IfcPipeEntity>();
-        foreach (StartPipeEntity startPipeEntity in startPipeEntities)
+        foreach (StartBaseRoot @object in objects)
         {
-            using (startPipeEntity)
+            using (@object)
             {
                 #if DEBUG
-                Console.WriteLine($"Added pipe {startPipeEntity.Id}");
+                Console.WriteLine($"Added StartPipeEntity with Id: {@object.Id}");
                 #endif
 
-                StartNodeEntity[] connNodeEntities = startProject.GetConnEntities<StartNodeEntity>(startPipeEntity, StartElementType.NODE);
-                IfcNodeEntity[] ifcConnNodeEntities = connNodeEntities.Select(item => _nodeEntities[item.Id]).ToArray();
+                StartBaseRoot[] connNodeEntities = startProject.GetConnEntities(@object, StartElementType.NODE);
+                IfcNodeEntity[] ifcConnNodeEntities = new IfcNodeEntity[connNodeEntities.Length];
+                for (int i = 0; i < connNodeEntities.Length; i++)
+                {
+                    using (connNodeEntities[i])
+                    {
+                        ifcConnNodeEntities[i] = _nodeEntities[connNodeEntities[i].Id];
+                    }
+                }
 
-                IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity.Properties, ifcConnNodeEntities);
+                StartPipeEntity startPipeEntity = JsonConvert.DeserializeObject<StartPipeEntity>(@object.GetDataJson())!;
+                startPipeEntity.XCoord = @object.GetXCoord();
+                startPipeEntity.YCoord = @object.GetYCoord();
+                startPipeEntity.ZCoord = @object.GetZCoord();
+                
+                IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity, ifcConnNodeEntities);
                 ifcProject.AddEntity(ifcPipeEntity);
-                pipeEntities.Add(startPipeEntity.Id, ifcPipeEntity);
+                pipeEntities.Add(@object.Id, ifcPipeEntity);
             }
         }
 

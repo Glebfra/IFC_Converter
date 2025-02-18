@@ -8,7 +8,7 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities;
 
-public struct StartBendEntityProperties
+public class StartBendEntity : StartAbstractEntity
 {
     #region Fields
 
@@ -24,7 +24,7 @@ public struct StartBendEntityProperties
 
     #endregion
     
-    public readonly Dictionary<string, string> GetData()
+    public Dictionary<string, string> GetData()
     {
         Dictionary<string, string> dictionary = new()
         {
@@ -40,15 +40,5 @@ public struct StartBendEntityProperties
         };
 
         return dictionary;
-    }
-}
-
-public class StartBendEntity : StartAbstractEntity
-{
-    public StartBendEntityProperties Properties;
-    
-    public StartBendEntity(StartBaseRoot entity) : base(entity)
-    {
-        Properties = JsonConvert.DeserializeObject<StartBendEntityProperties>(entity.GetDataJson())!;
     }
 }

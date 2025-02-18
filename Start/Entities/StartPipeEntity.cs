@@ -8,7 +8,7 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities;
 
-public struct StartPipeEntityProperties
+public class StartPipeEntity : StartAbstractEntity
 {
     #region Fields
     
@@ -40,8 +40,8 @@ public struct StartPipeEntityProperties
     public double ZCoord;
     
     #endregion
-
-    public readonly Dictionary<string, string> GetData()
+    
+    public Dictionary<string, string> GetData()
     {
         Dictionary<string, string> dictionary = new()
         {
@@ -70,18 +70,5 @@ public struct StartPipeEntityProperties
         };
 
         return dictionary;
-    }
-}
-
-public class StartPipeEntity : StartAbstractEntity
-{
-    public StartPipeEntityProperties Properties;
-    
-    public StartPipeEntity(StartBaseRoot entity) : base(entity)
-    {
-        Properties = JsonConvert.DeserializeObject<StartPipeEntityProperties>(entity.GetDataJson())!;
-        Properties.XCoord = entity.GetXCoord();
-        Properties.YCoord = entity.GetYCoord();
-        Properties.ZCoord = entity.GetZCoord();
     }
 }

@@ -29,19 +29,6 @@ public class StartProject : IDisposable
         return new StartProject(autoServer, document, baseRootDataArray);
     }
 
-    public T[] GetConnEntities<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
-    {
-        int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
-        T[] objects = new T[elementsNumber];
-        for (int i = 0; i < elementsNumber; i++)
-        {
-            StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, i);
-            objects[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
-        }
-
-        return objects;
-    }
-    
     public StartBaseRoot[] GetConnEntities(StartBaseRoot entity, StartElementType type)
     {
         int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
@@ -52,14 +39,6 @@ public class StartProject : IDisposable
         }
 
         return objects;
-    }
-
-    public T GetConnEntity<T>(StartAbstractEntity entity, StartElementType type) where T : StartAbstractEntity
-    {
-        StartBaseRoot baseRoot = entity.Entity.GetConnElemOnType(type, 0);
-        T @object = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
-
-        return @object;
     }
 
     public T[] GetEntities<T>(StartElementType type) where T : StartAbstractEntity
@@ -105,11 +84,6 @@ public class StartProject : IDisposable
         return _dataArray.GetNumberElements(minType, maxType);
     }
 
-    public StartBaseRoot GetConnEntity(StartAbstractEntity entity, StartElementType type)
-    {
-        return entity.Entity.GetConnElemOnType(type, 0);
-    }
-    
     public StartBaseRoot GetConnEntity(StartBaseRoot entity, StartElementType type)
     {
         return entity.GetConnElemOnType(type, 0);

@@ -24,7 +24,7 @@ namespace IFC.Entities.Abstract;
 
 public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
 {
-    protected StartTeeEntityProperties _properties;
+    protected StartTeeEntity _teeEntity;
     protected IfcPipeEntity[] _connPipes;
     protected IfcNodeEntity _nodeEntity;
     protected IfcPipeFitting _pipeFitting;
@@ -34,10 +34,10 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
     
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
-    public IfcAbstractTeeEntity(StartTeeEntityProperties properties, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes)
+    public IfcAbstractTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes)
     {
         _connPipes = connPipes;
-        _properties = properties;
+        _teeEntity = teeEntity;
         _nodeEntity = nodeEntity;
         
         SortPipes();
@@ -93,7 +93,7 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
         IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            fitting.Name = _properties.Name;
+            fitting.Name = _teeEntity.Name;
             fitting.Tag = Tag;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
             fitting.Representation = productDefinitionShape;
@@ -167,7 +167,7 @@ public abstract class IfcAbstractTeeEntity : IfcAbstractEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
-                foreach (var kvp in _properties.GetData())
+                foreach (var kvp in _teeEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {

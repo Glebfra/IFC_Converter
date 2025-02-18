@@ -20,12 +20,12 @@ public class IfcNodeEntity : IfcAbstractEntity
     
     public readonly List<IfcAbstractEntity> ConnEntities = new List<IfcAbstractEntity>();
 
-    public IfcNodeEntity(StartNodeEntityProperties nodeEntityProperties)
+    public IfcNodeEntity(StartNodeEntity nodeEntity)
     {
         XbimVector3D coordinates = new XbimVector3D(
-            nodeEntityProperties.XCoord,
-            nodeEntityProperties.YCoord,
-            nodeEntityProperties.ZCoord
+            nodeEntity.XCoord,
+            nodeEntity.YCoord,
+            nodeEntity.ZCoord
         );
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
     }
