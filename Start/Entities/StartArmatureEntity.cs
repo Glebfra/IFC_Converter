@@ -17,6 +17,8 @@ public struct StartArmatureEntityProperties
     [JsonProperty("722")] public double NominalPressure { get; set; }
     [JsonProperty("387")] public double GasketCrossection { get; set; }
 
+    #endregion
+    
     public readonly Dictionary<string, string> GetData()
     {
         Dictionary<string, string> dictionary = new()
@@ -28,13 +30,11 @@ public struct StartArmatureEntityProperties
             { "Leakage Check", LeakageCheck.ToString() },
             { "Gasket Effective Diameter", GasketEffectiveDiameter.ToString("F5") },
             { "Nominal Pressure", NominalPressure.ToString("F5") },
-            { "Gasket Crossection", GasketCrossection.ToString() }
+            { "Gasket Crossection", GasketCrossection.ToString("F5") }
         };
 
         return dictionary;
     }
-
-    #endregion
     
 }
 

@@ -17,11 +17,6 @@ public abstract class StartAbstractEntity : IDisposable
         Id = entity.GetNumber();
     }
 
-    public virtual Dictionary<string, string> GetData()
-    {
-        return new Dictionary<string, string>();
-    }
-
     public void Dispose()
     {
         Entity.Dispose();

@@ -1,8 +1,10 @@
 ﻿#region
 
+using System.CodeDom;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract;
+using Newtonsoft.Json;
 using Start;
 using Start.API;
 using Start.Entities;
@@ -59,9 +61,6 @@ public static class Program
         
         AddArmatures<IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
         AddArmatures<IfcFlangeEntity>(startProject, ifcProject, StartElementType.FLANGE);
-        
-        // ConvertDependedObjects<StartValveEntity, IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
-        // ConvertDependedObjects<StartFlangeEntity, IfcFlangeEntity>(startProject, ifcProject, StartElementType.FLANGE);
 
         ifcProject.GroupObjects("Pipe System");
         ifcProject.SaveAs(outputFilepath);
@@ -85,21 +84,38 @@ public static class Program
         where T : StartAbstractEntity
         where U : IfcAbstractEntity
     {
-        foreach (T @object in startProject.GetEntities<T>(type))
+        foreach (StartBaseRoot @object in startProject.GetEntities(type, type))
         {
+            bool IsFitting;
+            bool IsPipe;
+            
             using (@object)
             {
                 #if DEBUG
                 Console.WriteLine($"Added {typeof(T).Name} with Id: {@object.Id}");
                 #endif
 
-                StartNodeEntity connNodeEntity = startProject.GetConnEntity<StartNodeEntity>(@object, StartElementType.NODE);
-                StartPipeEntity[] connPipeEntities = startProject.GetConnEntities<StartPipeEntity>(connNodeEntity, StartElementType.PIPE_ELEMENT);
-                IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
-                IfcPipeEntity[] ifcConnPipeEntities = connPipeEntities.Select(item => _pipeEntities[item.Id]).ToArray();
-                
-                U ifcObj = (U)Activator.CreateInstance(typeof(U), @object, ifcConnNodeEntity, ifcConnPipeEntities)!;
-                ifcProject.AddEntity(ifcObj);
+                StartBaseRoot connNodeEntity = startProject.GetConnEntity(@object, StartElementType.NODE);
+                StartBaseRoot[] connPipeEntities = startProject.GetConnEntities(connNodeEntity, StartElementType.PIPE_ELEMENT);
+
+                IfcNodeEntity ifcConnNodeEntity;
+                using (connNodeEntity)
+                {
+                    ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
+                }
+
+                IfcPipeEntity[] ifcConnPipeEntities = new IfcPipeEntity[connPipeEntities.Length];
+                for (int i = 0; i < connPipeEntities.Length; i++)
+                {
+                    using (connPipeEntities[i])
+                    {
+                        ifcConnPipeEntities[i] = _pipeEntities[connPipeEntities[i].Id];
+                    }
+                }
+
+                T startObject = JsonConvert.DeserializeObject<T>(@object.GetDataJson())!;
+                U ifcObject = (U)Activator.CreateInstance(typeof(U), @object, ifcConnNodeEntity, ifcConnPipeEntities)!;
+                ifcProject.AddEntity(ifcObject);
             }
         }
     }
