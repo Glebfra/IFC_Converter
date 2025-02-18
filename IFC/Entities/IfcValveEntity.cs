@@ -28,16 +28,16 @@ public class IfcValveEntity : IfcAbstractPipeFittingEntity
     protected override IfcIdentifier Tag { get; set; } = "Valve";
     protected override IfcPipeFitting? _pipeFitting { get; set; }
 
-    private readonly StartValveEntity _startValveEntity;
+    private readonly StartArmatureEntityProperties _properties;
 
     public readonly double Length;
     public readonly double Diameter;
 
-    public IfcValveEntity(StartValveEntity startValveEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+    public IfcValveEntity(StartArmatureEntityProperties properties, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
         : base(nodeEntity, pipeEntities)
     {
-        _startValveEntity = startValveEntity;
-        Length = _startValveEntity.GetLength();
+        _properties = properties;
+        Length = _properties.Length;
         Diameter = Math.Max(_pipeEntities[0].Diameter, _pipeEntities[1].Diameter) * 1.5;
     }
 
@@ -62,7 +62,7 @@ public class IfcValveEntity : IfcAbstractPipeFittingEntity
         _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
         {
             fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
-            fitting.Name = _startValveEntity.GetName();
+            fitting.Name = _properties.Name;
             fitting.Representation = shape;
             fitting.Tag = Tag;
             fitting.ObjectPlacement = _localPlacement;
@@ -127,7 +127,7 @@ public class IfcValveEntity : IfcAbstractPipeFittingEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
-                foreach (var kvp in _startValveEntity.GetData())
+                foreach (var kvp in _properties.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {

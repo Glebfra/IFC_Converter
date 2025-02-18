@@ -41,7 +41,7 @@ public struct StartPipeEntityProperties
     
     #endregion
 
-    public Dictionary<string, string> GetData()
+    public readonly Dictionary<string, string> GetData()
     {
         Dictionary<string, string> dictionary = new()
         {
@@ -75,7 +75,7 @@ public struct StartPipeEntityProperties
 
 public class StartPipeEntity : StartAbstractEntity
 {
-    public readonly StartPipeEntityProperties Properties;
+    public StartPipeEntityProperties Properties;
     
     public StartPipeEntity(StartBaseRoot entity) : base(entity)
     {

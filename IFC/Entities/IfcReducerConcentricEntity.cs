@@ -5,6 +5,7 @@ using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
@@ -12,6 +13,8 @@ using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
@@ -19,33 +22,53 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities;
 
-public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
+public class IfcReducerConcentricEntity : IfcAbstractEntity
 {
     private const int _numSegments = 32;
     private const double _angleStep = 2 * Math.PI / _numSegments;
+
+    private IfcPipeFitting? _pipeFitting;
+    
+    private readonly StartReducerEntityProperties _properties;
+    private readonly IfcPipeEntity[] _pipeEntities;
+    private readonly IfcNodeEntity _nodeEntity;
+    
+    public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
+    public double Length { get; }
     
     protected override IfcIdentifier Tag { get; set; } = "Reducer Conentric";
-    
-    protected override IfcPipeFitting? _pipeFitting { get; set; }
 
-    public IfcCartesianPoint? Location { get; private set; }
-    public IfcDirection? Axis { get; private set; }
-    public IfcDirection? RefDirection { get; private set; }
-    
-    public IfcReducerConcentricEntity(StartReducerConcentricEntity startReducerConcentric, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities) 
-        : base(startReducerConcentric, nodeEntity, pipeEntities)
+    public IfcReducerConcentricEntity(StartReducerEntityProperties properties, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
     {
+        _properties = properties;
+        _nodeEntity = nodeEntity;
+        _pipeEntities = pipeEntities;
+        _nodeEntity.ConnEntities.Add(this);
+        
+        XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
+        XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
+        
+        XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
+        XbimVector3D forward = directionToPipe.Normalized();
+        if (forward == WorldUp)
+            WorldUp = new XbimVector3D(0, 1, 0);
+        else if (forward == -1 * WorldUp)
+            WorldUp = new XbimVector3D(0, -1, 0);
+        XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp).Normalized();
+        
+        ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+        Length = _properties.LengthOfConicalPart;
     }
 
     public override IfcProduct CreateAndAdd(IModel model)
     {
         double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
         
-        Location = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
-        Axis = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
-        RefDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
+        IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
+        IfcDirection axis = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
+        IfcDirection refDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
         
-        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, Location, Axis, RefDirection);
+        IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, axis, refDirection);
         IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
         
         IfcCartesianPoint[] lowerCircle = CreateCircle(model, radiuses[0], 0);
@@ -60,7 +83,7 @@ public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
             fitting.Representation = shape;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
             fitting.Tag = Tag;
-            fitting.Name = _startReducer.GetName();
+            fitting.Name = _properties.Name;
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
 
@@ -101,5 +124,50 @@ public class IfcReducerConcentricEntity : IfcAbstractReducerEntity
         {
             brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
         });
+    }
+    
+    private IfcRelConnectsPorts ConnectPorts(IModel model)
+    {
+        var closestPorts = (
+            from port in _pipeEntities.SelectMany(pipe => pipe.Ports)
+            let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
+            orderby distance
+            select port
+        ).Take(2).ToArray();
+
+        return model.Instances.New<IfcRelConnectsPorts>(ports =>
+        {
+            ports.Name = $"{closestPorts[0].GlobalId}|{closestPorts[1].GlobalId}";
+            ports.Description = "Flow";
+            ports.RelatingPort = closestPorts[0];
+            ports.RelatedPort = closestPorts[1];
+            ports.RealizingElement = _pipeFitting;
+        });
+    }
+    
+    protected override void AddProperties(IModel model, IfcProduct product)
+    {
+        base.AddProperties(model, product);
+        
+        #region Pset_PipeFittingTypeStart
+        
+        model.Instances.New<IfcRelDefinesByProperties>(properties =>
+        {
+            properties.RelatedObjects.Add(product);
+            properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = "Pset_PipeFittingTypeStart";
+                foreach (var kvp in _properties.GetData())
+                {
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = kvp.Key;
+                        value.NominalValue = new IfcText(kvp.Value);
+                    }));
+                }
+            });
+        });
+
+        #endregion
     }
 }

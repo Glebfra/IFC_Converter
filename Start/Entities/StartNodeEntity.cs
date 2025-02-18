@@ -22,7 +22,7 @@ public struct StartNodeEntityProperties
 
     #endregion
     
-    public Dictionary<string, string> GetData()
+    public readonly Dictionary<string, string> GetData()
     {
         Dictionary<string, string> dictionary = new Dictionary<string, string>
         {

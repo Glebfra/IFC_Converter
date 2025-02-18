@@ -72,7 +72,7 @@ public class IfcPipeEntity : IfcAbstractEntity
         {
             ifcNodeEntity.ConnEntities.Add(this);
         }
-
+        
         XbimVector3D coordinates = new XbimVector3D(
             Properties.XCoord,
             Properties.YCoord,
