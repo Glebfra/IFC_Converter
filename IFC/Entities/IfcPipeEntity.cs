@@ -26,10 +26,16 @@ namespace IFC.Entities;
 public class IfcPipeEntity : IfcAbstractEntity
 {
     #region Fields
-    
-    protected override IfcIdentifier Tag { get; set; } = "Pipe";
 
-    public StartPipeEntity PipeEntity { get; }
+    private StartPipeEntity _pipeEntity;
+    private IfcNodeEntity[] _nodeEntities;
+    private IfcPipeSegment _pipeSegment;
+
+    private event Action? _onDepthChanged;
+    private event Action? _onCoordinatesChanged;
+
+    protected override IfcIdentifier Tag { get; set; } = "Pipe";
+    
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Diameter { get; }
     public IfcDistributionPort[] Ports { get; }
@@ -52,39 +58,33 @@ public class IfcPipeEntity : IfcAbstractEntity
             _onCoordinatesChanged?.Invoke();
         }
     }
-
-    private IfcNodeEntity[] _nodeEntities;
-    private IfcPipeSegment _pipeSegment;
-
-    private event Action? _onDepthChanged;
-    private event Action? _onCoordinatesChanged;
-
+    
     private double _depth;
     private XbimVector3D _coordinates;
-
+    
     #endregion
     
     public IfcPipeEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] ifcNodeEntities)
     {
-        PipeEntity = pipeEntity;
+        _pipeEntity = pipeEntity;
         _nodeEntities = ifcNodeEntities;
         foreach (IfcNodeEntity ifcNodeEntity in _nodeEntities)
         {
             ifcNodeEntity.ConnEntities.Add(this);
         }
-
+        
         XbimVector3D coordinates = new XbimVector3D(
-            PipeEntity.GetXCoord(),
-            PipeEntity.GetYCoord(),
-            PipeEntity.GetZCoord()
+            _pipeEntity.XCoord,
+            _pipeEntity.YCoord,
+            _pipeEntity.ZCoord
         );
         XbimVector3D direction = new XbimVector3D(
-            PipeEntity.GetProjectionAlongOXAxis(),
-            PipeEntity.GetProjectionAlongOYAxis(),
-            PipeEntity.GetProjectionAlongOZAxis()
+            _pipeEntity.ProjectionAlongOXAxis,
+            _pipeEntity.ProjectionAlongOYAxis,
+            _pipeEntity.ProjectionAlongOZAxis
         );
         
-        Diameter = PipeEntity.GetOutsideDiameter();
+        Diameter = _pipeEntity.Diameter;
         Depth = direction.Length;
 
         XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
@@ -164,7 +164,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     
     private bool IsStartNode(IfcNodeEntity nodeEntity)
     {
-        XbimVector3D nodeCoordinates = nodeEntity.Coordinates;
+        XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
         XbimVector3D startPipeCoordinates = ObjectMatrix3D.Translation;
         XbimVector3D endPipeCoordinates = ObjectMatrix3D.Translation + ObjectMatrix3D.Forward * Depth;
 
@@ -220,7 +220,7 @@ public class IfcPipeEntity : IfcAbstractEntity
     {
         return model.Instances.New<IfcPipeSegment>(segment =>
         {
-            segment.Name = PipeEntity.GetName();
+            segment.Name = _pipeEntity.Name;
             segment.Tag = Tag;
             segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
             segment.ObjectPlacement = localPlacement;
@@ -240,7 +240,7 @@ public class IfcPipeEntity : IfcAbstractEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeSegmentTypeStart";
-                foreach (var kvp in PipeEntity.GetData())
+                foreach (var kvp in _pipeEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
@@ -265,17 +265,17 @@ public class IfcPipeEntity : IfcAbstractEntity
                 {
                     value.Name = "InnerDiameter";
                     value.NominalValue =
-                        new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter() - PipeEntity.GetWallThickness());
+                        new IfcPositiveLengthMeasure(_pipeEntity.Diameter - _pipeEntity.WallThickness);
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "OuterDiameter";
-                    value.NominalValue = new IfcPositiveLengthMeasure(PipeEntity.GetOutsideDiameter());
+                    value.NominalValue = new IfcPositiveLengthMeasure(_pipeEntity.Diameter);
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "WorkingPressure";
-                    value.NominalValue = new IfcPressureMeasure(ValueConverter.ValueConverter.T_m2ToPa(PipeEntity.GetPressure()));
+                    value.NominalValue = new IfcPressureMeasure(ValueConverter.ValueConverter.T_m2ToPa(_pipeEntity.Pressure));
                 }));
             });
         });
@@ -300,13 +300,13 @@ public class IfcPipeEntity : IfcAbstractEntity
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                 {
                     weight.Name = "NetWeight";
-                    weight.WeightValue = new IfcMassMeasure(ValueConverter.ValueConverter.TfToKg(PipeEntity.GetPipeUnitWeight()) * Depth);
+                    weight.WeightValue = new IfcMassMeasure(ValueConverter.ValueConverter.TfToKg(_pipeEntity.PipeUnitWeight) * Depth);
                     
-                    _onDepthChanged += () => weight.WeightValue = new IfcMassMeasure(PipeEntity.GetPipeUnitWeight() * Depth);
+                    _onDepthChanged += () => weight.WeightValue = new IfcMassMeasure(_pipeEntity.PipeUnitWeight * Depth);
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityArea>(area =>
                 {
-                    double circumference = Math.PI * PipeEntity.GetOutsideDiameter();
+                    double circumference = Math.PI * _pipeEntity.Diameter;
                     area.Name = "OuterSurfaceArea";
                     area.AreaValue = new IfcAreaMeasure(circumference * Depth);
 

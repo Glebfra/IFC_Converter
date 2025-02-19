@@ -27,7 +27,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
 {
     protected override IfcIdentifier Tag { get; set; } = "Milter Joint";
     
-    private readonly StartMilterJointEntity _startMilterJointEntity;
+    private readonly StartBendEntity _bendEntity;
     private readonly IfcNodeEntity _ifcNodeEntity;
     private readonly IfcPipeEntity[] _ifcPipeEntities;
 
@@ -43,9 +43,9 @@ public class IfcMilterJointEntity : IfcAbstractEntity
     
     public double Depth { get; }
 
-    public IfcMilterJointEntity(StartMilterJointEntity startMilterJointEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
+    public IfcMilterJointEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
     {
-        _startMilterJointEntity = startMilterJointEntity;
+        _bendEntity = bendEntity;
         _ifcNodeEntity = ifcNodeEntity;
         _ifcPipeEntities = ifcPipeEntities;
         _ifcNodeEntity.ConnEntities.Add(this);
@@ -96,7 +96,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
     {
         return model.Instances.New<IfcPipeFitting>(fitting =>
         {
-            fitting.Name = _startMilterJointEntity.GetName();
+            fitting.Name = _bendEntity.Name;
             fitting.Tag = Tag;
             fitting.ObjectPlacement = placement;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
@@ -163,7 +163,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
-                foreach (var kvp in _startMilterJointEntity.GetData())
+                foreach (var kvp in _bendEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
@@ -193,7 +193,7 @@ public class IfcMilterJointEntity : IfcAbstractEntity
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                 {
                     weight.Name = "NetWeight";
-                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_startMilterJointEntity.GetWeight()) * Length;
+                    weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_bendEntity.Weight) * Length;
                 }));
             });
         });

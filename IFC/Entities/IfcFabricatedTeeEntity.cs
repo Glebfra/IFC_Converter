@@ -17,11 +17,11 @@ public class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
     public readonly double Length;
     public readonly double Height;
 
-    public IfcFabricatedTeeEntity(StartFabricatedTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
+    public IfcFabricatedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
         : base(teeEntity, nodeEntity, connPipes)
     {
-        Length = teeEntity.GetHeaderLength();
-        Height = teeEntity.GetBranchHeight() + _branchPipes[0].Diameter / 2;
+        Length = teeEntity.HeaderLength;
+        Height = teeEntity.BranchHeight + _branchPipes[0].Diameter / 2;
         _nodeEntity.ConnEntities.Add(this);
     }
 

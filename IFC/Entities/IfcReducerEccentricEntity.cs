@@ -33,16 +33,16 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
     
     private IfcPipeFitting? _pipeFitting { get; set; }
     
-    private readonly StartReducerEccentricEntity _startReducer;
+    private readonly StartReducerEntity _reducerEntity;
     private readonly IfcPipeEntity[] _pipeEntities;
     private readonly IfcNodeEntity _nodeEntity;
 
     public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
     public double Length { get; }
 
-    public IfcReducerEccentricEntity(StartReducerEccentricEntity startReducerEccentric, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+    public IfcReducerEccentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
     {
-        _startReducer = startReducerEccentric;
+        _reducerEntity = reducerEntity;
         _nodeEntity = nodeEntity;
         _pipeEntities = pipeEntities;
         _nodeEntity.ConnEntities.Add(this);
@@ -56,9 +56,9 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             ? ObjectMatrices[1].Translation - ObjectMatrices[0].Translation
             : ObjectMatrices[0].Translation - ObjectMatrices[1].Translation;
         ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-        Length = _startReducer.GetLengthOfConicalPart();
+        Length = _reducerEntity.LengthOfConicalPart;
         
-        _angle = startReducerEccentric.GetAngleBetweenEccentricityVectorAndZmAxis();
+        _angle = reducerEntity.AngleBetweenEccentricityVectorAndZmAxis;
     }
     
     public override IfcProduct CreateAndAdd(IModel model)
@@ -85,7 +85,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             fitting.Representation = shape;
             fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
             fitting.Tag = Tag;
-            fitting.Name = _startReducer.GetName();
+            fitting.Name = _reducerEntity.Name;
         });
         _pipeEntities[1].Clip(_nodeEntity, Length);
 
@@ -163,7 +163,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
             {
                 set.Name = "Pset_PipeFittingTypeStart";
-                foreach (var kvp in _startReducer.GetData())
+                foreach (var kvp in _reducerEntity.GetData())
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {

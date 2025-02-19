@@ -13,4 +13,8 @@
       <DefineConstants>TRACE;DEBUG</DefineConstants>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="JsonConverter.Newtonsoft.Json" Version="0.7.1" />
+    </ItemGroup>
+
 </Project>

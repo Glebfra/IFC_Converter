@@ -11,6 +11,8 @@ public class StartBaseRoot : IDisposable
 {
     private readonly object _startBaseRoot;
 
+    public int Id => GetNumber();
+
     public StartBaseRoot(object startBaseRoot)
     {
         _startBaseRoot = startBaseRoot;

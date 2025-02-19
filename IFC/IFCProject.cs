@@ -31,13 +31,9 @@ public class IFCProject : IDisposable
     {
         XbimEditorCredentials editor = new()
         {
-            ApplicationDevelopersName = "Start",
-            ApplicationFullName = "Start-Prof",
-            ApplicationIdentifier = "Start",
-            ApplicationVersion = "4.0",
-            EditorsFamilyName = "Santini Aichel",
-            EditorsGivenName = "Johann Blasius",
-            EditorsOrganisationName = "Independent Architecture"
+            ApplicationFullName = "PASS Start-Prof",
+            ApplicationIdentifier = "Start-Prof",
+            ApplicationVersion = "04.86 R4",
         };
         
         IfcStore model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
@@ -98,12 +94,12 @@ public class IFCProject : IDisposable
     public void GroupObjects(string groupName)
     {
         IfcSystem pipeSystem = _model.Instances.New<IfcSystem>(sys => { sys.Name = groupName; });
-
         IfcRelAssignsToGroup relAssignsToGroup = _model.Instances.New<IfcRelAssignsToGroup>(rel =>
         {
             rel.RelatingGroup = pipeSystem;
             rel.RelatedObjects.AddRange(_ifcObjects);
         });
+        _ifcObjects.Clear();
     }
 
     public void SaveAs(string filepath)
