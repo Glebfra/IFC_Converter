@@ -1,5 +1,7 @@
 ﻿#region
 
+using System;
+using System.Linq;
 using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities;

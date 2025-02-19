@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Linq;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;

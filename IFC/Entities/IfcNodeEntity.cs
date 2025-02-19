@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections.Generic;
 using IFC.Entities.Abstract;
 using Start.Entities;
 using Xbim.Common;

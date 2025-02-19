@@ -1,5 +1,8 @@
 ﻿#region
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract;
 using IFC.Tools;
 using Xbim.Common;
@@ -78,17 +81,19 @@ public class IFCProject : IDisposable
         _ifcObjects = new List<IfcProduct>();
     }
 
-    public IfcProduct AddEntity(IfcAbstractEntity entity)
+    public void AddEntity(IfcAbstractEntity entity)
     {
         IfcProduct @object = entity.CreateAndAdd(_model);
         _ifcObjects.Add(@object);
         _building.AddElement(@object);
-        return @object;
     }
 
-    public IfcProduct[] AddEntities(IEnumerable<IfcAbstractEntity> entities)
+    public void AddEntities(IEnumerable<IfcAbstractEntity> entities)
     {
-        return entities.Select(entity => AddEntity(entity)).ToArray();
+        foreach (IfcAbstractEntity? entity in entities)
+        {
+            AddEntity(entity);
+        }
     }
 
     public void GroupObjects(string groupName)

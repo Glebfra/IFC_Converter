@@ -1,7 +1,7 @@
 ﻿#region
 
+using System;
 using Start.API;
-using Start.Entities.Abstract;
 
 #endregion
 
@@ -41,32 +41,6 @@ public class StartProject : IDisposable
         return objects;
     }
 
-    public T[] GetEntities<T>(StartElementType type) where T : StartAbstractEntity
-    {
-        int elementsNumber = _dataArray.GetNumberElements(type, type);
-        T[] objects = new T[elementsNumber];
-        for (int i = 0; i < elementsNumber; i++)
-        {
-            StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, type, type);
-            objects[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
-        }
-
-        return objects;
-    }
-
-    public T[] GetEntities<T>(StartElementType minType, StartElementType maxType) where T : StartAbstractEntity
-    {
-        int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
-        T[] objects = new T[elementsNumber];
-        for (int i = 0; i < elementsNumber; i++)
-        {
-            StartBaseRoot baseRoot = _dataArray.GetElementDispatch(i, minType, maxType);
-            objects[i] = (T)Activator.CreateInstance(typeof(T), baseRoot)!;
-        }
-
-        return objects;
-    }
-    
     public StartBaseRoot[] GetEntities(StartElementType minType, StartElementType maxType)
     {
         int elementsNumber = _dataArray.GetNumberElements(minType, maxType);

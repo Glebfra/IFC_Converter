@@ -1,5 +1,7 @@
 ﻿#region
 
+using System;
+using System.Collections.Generic;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract;
@@ -40,26 +42,26 @@ public static class Program
         _nodeEntities = AddNodes(startProject, ifcProject);
         _pipeEntities = AddPipes(startProject, ifcProject);
         
-        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PIPE_BEND);
-        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.ELBOW);
-        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.MILTER_BEND);
-        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.WELDED_BEND);
-        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.LONG_RADIUS_PIPE_BEND);
-        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PRE_STRESSED_PIPE_BEND);
-        ConvertDependedObjects<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.SADDLE_BEND);
-        ConvertDependedObjects<StartBendEntity, IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
+        ConvertPipeFittings<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PIPE_BEND);
+        ConvertPipeFittings<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.ELBOW);
+        ConvertPipeFittings<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.MILTER_BEND);
+        ConvertPipeFittings<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.WELDED_BEND);
+        ConvertPipeFittings<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.LONG_RADIUS_PIPE_BEND);
+        ConvertPipeFittings<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.PRE_STRESSED_PIPE_BEND);
+        ConvertPipeFittings<StartBendEntity, IfcBendEntity>(startProject, ifcProject, StartElementType.SADDLE_BEND);
+        ConvertPipeFittings<StartBendEntity, IfcMilterJointEntity>(startProject, ifcProject, StartElementType.MILTER_JOINT);
         
-        ConvertDependedObjects<StartTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
-        ConvertDependedObjects<StartTeeEntity, IfcWeldoletEntity>(startProject, ifcProject, StartElementType.WELDOLET);
-        ConvertDependedObjects<StartTeeEntity, IfcSweepoletEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
-        ConvertDependedObjects<StartTeeEntity, IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
-        ConvertDependedObjects<StartTeeEntity, IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
+        ConvertPipeFittings<StartTeeEntity, IfcWeldedTeeEntity>(startProject, ifcProject, StartElementType.WELDED_TEE);
+        ConvertPipeFittings<StartTeeEntity, IfcWeldoletEntity>(startProject, ifcProject, StartElementType.WELDOLET);
+        ConvertPipeFittings<StartTeeEntity, IfcSweepoletEntity>(startProject, ifcProject, StartElementType.SWEEPOLET);
+        ConvertPipeFittings<StartTeeEntity, IfcFabricatedTeeEntity>(startProject, ifcProject, StartElementType.FABRICATED_TEE);
+        ConvertPipeFittings<StartTeeEntity, IfcStubInEntity>(startProject, ifcProject, StartElementType.STUB_IN);
         
-        ConvertDependedObjects<StartReducerEntity, IfcReducerConcentricEntity>(startProject, ifcProject, StartElementType.REDUCER_CONCENTRIC);
-        ConvertDependedObjects<StartReducerEntity, IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
+        ConvertPipeFittings<StartReducerEntity, IfcReducerConcentricEntity>(startProject, ifcProject, StartElementType.REDUCER_CONCENTRIC);
+        ConvertPipeFittings<StartReducerEntity, IfcReducerEccentricEntity>(startProject, ifcProject, StartElementType.REDUCER_ECCENTRIC);
         
-        ConvertDependedObjects<StartArmatureEntity, IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
-        ConvertDependedObjects<StartArmatureEntity, IfcFlangeEntity>(startProject, ifcProject, StartElementType.FLANGE);
+        ConvertPipeFittings<StartArmatureEntity, IfcValveEntity>(startProject, ifcProject, StartElementType.VALVE);
+        ConvertPipeFittings<StartArmatureEntity, IfcFlangeEntity>(startProject, ifcProject, StartElementType.FLANGE);
 
         ifcProject.GroupObjects("Pipe System");
         ifcProject.SaveAs(outputFilepath);
@@ -79,7 +81,7 @@ public static class Program
         Console.WriteLine($"Input file is: {inputFilepath}");
     }
 
-    private static void ConvertDependedObjects<T, U>(StartProject startProject, IFCProject ifcProject, StartElementType type)
+    private static void ConvertPipeFittings<T, U>(StartProject startProject, IFCProject ifcProject, StartElementType type)
         where T : StartAbstractEntity
         where U : IfcAbstractEntity
     {
