@@ -65,8 +65,9 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
     
     public override IfcProduct CreateAndAdd(IModel model)
     {
-        double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
-        double minRadius = Math.Min(radiuses[0], radiuses[1]);
+        double firstRadius = _pipeEntities[0].Diameter / 2;
+        double secondRadius = _pipeEntities[1].Diameter / 2;
+        double minRadius = Math.Min(firstRadius, secondRadius);
         
         IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
         IfcDirection forwardDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
@@ -74,10 +75,8 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
         IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
         IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
         
-        double displacement1 = radiuses[1] < radiuses[0] ? -Length : 0;
-        double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;
-        IfcCartesianPoint[] lowerCircle = CreateCircle(model, radiuses[0], displacement1, radiuses[0] - minRadius);
-        IfcCartesianPoint[] upperCircle = CreateCircle(model, radiuses[1], displacement2, radiuses[1] - minRadius);
+        IfcCartesianPoint[] lowerCircle = CreateCircle(model, firstRadius, 0, firstRadius - minRadius);
+        IfcCartesianPoint[] upperCircle = CreateCircle(model, secondRadius, Length, secondRadius - minRadius);
         IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
         IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep);
         IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
@@ -90,8 +89,7 @@ public class IfcReducerEccentricEntity : IfcAbstractEntity
             fitting.Tag = Tag;
             fitting.Name = _reducerEntity.Name;
         });
-        _pipeEntities[0].Clip(_nodeEntity, -displacement1);
-        _pipeEntities[0].Clip(_nodeEntity, displacement2);
+        _pipeEntities[1].Clip(_nodeEntity, Length);
 
         AddProperties(model, _pipeFitting);
         ConnectPorts(model);
