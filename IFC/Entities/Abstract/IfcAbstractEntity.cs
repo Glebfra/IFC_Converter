@@ -19,7 +19,7 @@ namespace IFC.Entities.Abstract
         protected IfcDirection? _rightDirection;
         protected IfcAxis2Placement3D? _axis2Placement3D;
         protected IfcLocalPlacement? _localPlacement;
-
+        
         public virtual IfcProduct? CreateAndAdd(IModel model)
         {
             _point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);

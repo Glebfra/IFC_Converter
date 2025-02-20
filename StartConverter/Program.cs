@@ -65,56 +65,51 @@ namespace StartConverter
             where T : StartAbstractEntity
             where U : IfcAbstractEntity
         {
-            StartBaseRoot[] startBaseRoots = startProject.GetEntities(type, type);
-            foreach (StartBaseRoot startBaseRoot in startBaseRoots)
+            StartBaseRoot[] startEntities = startProject.GetEntities(type, type);
+            foreach (StartBaseRoot startEntity in startEntities)
             {
-                using (startBaseRoot)
+                #if DEBUG
+                Console.WriteLine($"Added {typeof(T).Name} with Id: {startEntity.Id}");
+                #endif
+                
+                StartBaseRoot connNodeEntity = startProject.GetConnEntity(startEntity, StartElementType.NODE);
+                StartBaseRoot[] connPipeEntities = startProject.GetConnEntities(connNodeEntity, StartElementType.PIPE_ELEMENT);
+                IfcNodeEntity ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
+                
+                IfcPipeEntity[] ifcConnPipeEntities = new IfcPipeEntity[connPipeEntities.Length];
+                for (int i = 0; i < connPipeEntities.Length; i++)
                 {
-                    #if DEBUG
-                    Console.WriteLine($"Added {typeof(T).Name} with Id: {startBaseRoot.Id}");
-                    #endif
-
-                    StartBaseRoot connNodeEntity = startProject.GetConnEntity(startBaseRoot, StartElementType.NODE);
-                    StartBaseRoot[] connPipeEntities = startProject.GetConnEntities(connNodeEntity, StartElementType.PIPE_ELEMENT);
-
-                    IfcNodeEntity ifcConnNodeEntity;
-                    using (connNodeEntity)
-                    {
-                        ifcConnNodeEntity = _nodeEntities[connNodeEntity.Id];
-                    }
-
-                    IfcPipeEntity[] ifcConnPipeEntities = new IfcPipeEntity[connPipeEntities.Length];
-                    for (int i = 0; i < connPipeEntities.Length; i++)
-                    {
-                        using (connPipeEntities[i])
-                        {
-                            ifcConnPipeEntities[i] = _pipeEntities[connPipeEntities[i].Id];
-                        }
-                    }
-                    
-                    T startObject = StartAbstractEntity.CreateFromStartObject<T>(startBaseRoot);
-                    U ifcObject = (U)Activator.CreateInstance(typeof(U), startObject, ifcConnNodeEntity, ifcConnPipeEntities)!;
-                    ifcProject.AddEntity(ifcObject);
+                    ifcConnPipeEntities[i] = _pipeEntities[connPipeEntities[i].Id];
                 }
+                
+                T startAbstractEntity = StartAbstractEntity.CreateFromStartObject<T>(startEntity);
+                U ifcAbstractEntity = (U)Activator.CreateInstance(typeof(U), startAbstractEntity, ifcConnNodeEntity, ifcConnPipeEntities)!;
+                ifcProject.AddEntity(ifcAbstractEntity);
+                
+                foreach (StartBaseRoot connPipeEntity in connPipeEntities)
+                {
+                    connNodeEntity.Dispose();
+                }
+                startEntity.Dispose();
+                connNodeEntity.Dispose();
             }
         }
     
         private static Dictionary<int, IfcNodeEntity> AddNodes(StartProject startProject, IFCProject ifcProject)
         {
-            StartBaseRoot[] startBaseRoots = startProject.GetEntities(StartElementType.NODE, StartElementType.NODE);
+            StartBaseRoot[] startEntities = startProject.GetEntities(StartElementType.NODE, StartElementType.NODE);
             Dictionary<int, IfcNodeEntity> nodeEntities = new Dictionary<int, IfcNodeEntity>();
-            foreach (StartBaseRoot startBaseRoot in startBaseRoots)
+            foreach (StartBaseRoot startEntity in startEntities)
             {
-                using (startBaseRoot)
-                {
-                    StartNodeEntity startNodeEntity = StartAbstractEntity.CreateFromStartObject<StartNodeEntity>(startBaseRoot);
-                    startNodeEntity.XCoord = startBaseRoot.GetXCoord();
-                    startNodeEntity.YCoord = startBaseRoot.GetYCoord();
-                    startNodeEntity.ZCoord = startBaseRoot.GetZCoord();
+                StartNodeEntity startNodeEntity = StartAbstractEntity.CreateFromStartObject<StartNodeEntity>(startEntity);
+                startNodeEntity.XCoord = startEntity.GetXCoord();
+                startNodeEntity.YCoord = startEntity.GetYCoord();
+                startNodeEntity.ZCoord = startEntity.GetZCoord();
                 
-                    IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
-                    nodeEntities.Add(startBaseRoot.Id, ifcNodeEntity);
-                }
+                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
+                nodeEntities.Add(startEntity.Id, ifcNodeEntity);
+                
+                startEntity.Dispose();
             }
 
             return nodeEntities;
@@ -122,25 +117,24 @@ namespace StartConverter
 
         private static Dictionary<int, IfcPipeEntity> AddPipes(StartProject startProject, IFCProject ifcProject)
         {
-            StartBaseRoot[] startBaseRoots = startProject.GetEntities(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
+            StartBaseRoot[] startEntities = startProject.GetEntities(StartElementType.PIPE_ELEMENT, StartElementType.PIPE_ELEMENT);
             Dictionary<int, IfcPipeEntity> pipeEntities = new Dictionary<int, IfcPipeEntity>();
-            foreach (StartBaseRoot startBaseRoot in startBaseRoots)
+            foreach (StartBaseRoot startEntity in startEntities)
             {
-                using (startBaseRoot)
-                {
-                    #if DEBUG
-                    Console.WriteLine($"Added StartPipeEntity with Id: {startBaseRoot.Id}");
-                    #endif
+                #if DEBUG
+                Console.WriteLine($"Added StartPipeEntity with Id: {startEntity.Id}");
+                #endif
 
-                    StartPipeEntity startPipeEntity = StartAbstractEntity.CreateFromStartObject<StartPipeEntity>(startBaseRoot);
-                    startPipeEntity.XCoord = startBaseRoot.GetXCoord();
-                    startPipeEntity.YCoord = startBaseRoot.GetYCoord();
-                    startPipeEntity.ZCoord = startBaseRoot.GetZCoord();
+                StartPipeEntity startPipeEntity = StartAbstractEntity.CreateFromStartObject<StartPipeEntity>(startEntity);
+                startPipeEntity.XCoord = startEntity.GetXCoord();
+                startPipeEntity.YCoord = startEntity.GetYCoord();
+                startPipeEntity.ZCoord = startEntity.GetZCoord();
                 
-                    IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity);
-                    ifcProject.AddEntity(ifcPipeEntity);
-                    pipeEntities.Add(startBaseRoot.Id, ifcPipeEntity);
-                }
+                IfcPipeEntity ifcPipeEntity = new IfcPipeEntity(startPipeEntity);
+                ifcProject.AddEntity(ifcPipeEntity);
+                pipeEntities.Add(startEntity.Id, ifcPipeEntity);
+                
+                startEntity.Dispose();
             }
 
             return pipeEntities;

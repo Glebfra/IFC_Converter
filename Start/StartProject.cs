@@ -28,35 +28,35 @@ public class StartProject : IDisposable
     public StartBaseRoot[] GetConnEntities(StartBaseRoot entity, StartElementType type)
     {
         int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
-        StartBaseRoot[] objects = new StartBaseRoot[elementsNumber];
+        StartBaseRoot[] startEntities = new StartBaseRoot[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            objects[i] = entity.GetConnElemOnType(type, i);
+            startEntities[i] = entity.GetConnElemOnType(type, i);
         }
 
-        return objects;
+        return startEntities;
+    }
+    
+    public StartBaseRoot GetConnEntity(StartBaseRoot entity, StartElementType type)
+    {
+        return entity.GetConnElemOnType(type, 0);
     }
 
     public StartBaseRoot[] GetEntities(StartElementType minType, StartElementType maxType)
     {
         int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
-        StartBaseRoot[] objects = new StartBaseRoot[elementsNumber];
+        StartBaseRoot[] startEntities = new StartBaseRoot[elementsNumber];
         for (int i = 0; i < elementsNumber; i++)
         {
-            objects[i] = _dataArray.GetElementDispatch(i, minType, maxType);
+            startEntities[i] = _dataArray.GetElementDispatch(i, minType, maxType);
         }
 
-        return objects;
+        return startEntities;
     }
 
     public int GetNumberElements(StartElementType minType, StartElementType maxType)
     {
         return _dataArray.GetNumberElements(minType, maxType);
-    }
-
-    public StartBaseRoot GetConnEntity(StartBaseRoot entity, StartElementType type)
-    {
-        return entity.GetConnElemOnType(type, 0);
     }
 
     public void Dispose()
