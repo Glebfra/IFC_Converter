@@ -18,7 +18,6 @@ namespace IFC.Entities
         {
             Length = teeEntity.HeaderLength;
             Height = teeEntity.CrotchHeight + _branchPipes[0].Diameter / 2;
-            _nodeEntity.ConnEntities.Add(this);
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

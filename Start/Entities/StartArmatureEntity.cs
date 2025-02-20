@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Start.Entities
 {
-    public class StartArmatureEntity : IStartEntity
+    public class StartArmatureEntity : StartAbstractEntity
     {
         [JsonProperty("225")] 
         public string Name { get; set; }
@@ -29,7 +29,7 @@ namespace Start.Entities
         [JsonProperty("387")] 
         public double GasketCrossection { get; set; }
 
-        public Dictionary<string, string> GetData()
+        public override Dictionary<string, string> GetData()
         {
             Dictionary<string, string> dictionary = new()
             {

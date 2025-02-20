@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Start.Entities
 {
-    public class StartPipeEntity : IStartEntity
+    public class StartPipeEntity : StartAbstractEntity
     {
         [JsonProperty("225")] 
         public string Name { get; set; }
@@ -75,7 +75,7 @@ namespace Start.Entities
         public double YCoord;
         public double ZCoord;
 
-        public Dictionary<string, string> GetData()
+        public override Dictionary<string, string> GetData()
         {
             Dictionary<string, string> dictionary = new()
             {

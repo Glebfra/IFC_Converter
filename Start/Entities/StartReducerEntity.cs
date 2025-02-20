@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Start.Entities
 {
-    public class StartReducerEntity : IStartEntity
+    public class StartReducerEntity : StartAbstractEntity
     {
         [JsonProperty("2")]
         public double LengthOfConicalPart { get; set; }
@@ -38,7 +38,7 @@ namespace Start.Entities
         [JsonProperty("455")]
         public double MillTolerance { get; set; }
 
-        public Dictionary<string, string> GetData()
+        public override Dictionary<string, string> GetData()
         {
             Dictionary<string, string> dictionary = new()
             {

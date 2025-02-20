@@ -17,7 +17,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities
 {
-    public class IfcFlangeEntity : IfcAbstractPipeFittingEntity
+    public class IfcFlangeEntity : IfcAbstractArmatureEntity
     {
         protected override IfcIdentifier Tag { get; set; } = "Flange";
     

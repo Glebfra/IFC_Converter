@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Start.Entities
 {
-    public class StartNodeEntity : IStartEntity
+    public class StartNodeEntity : StartAbstractEntity
     {
         [JsonProperty("61")] 
         public double AdditionalLoadFromWeight { get; set; }
@@ -18,7 +18,7 @@ namespace Start.Entities
         public double YCoord;
         public double ZCoord;
 
-        public Dictionary<string, string> GetData()
+        public override Dictionary<string, string> GetData()
         {
             Dictionary<string, string> dictionary = new Dictionary<string, string>
             {

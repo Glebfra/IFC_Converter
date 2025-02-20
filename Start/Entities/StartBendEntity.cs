@@ -3,24 +3,24 @@ using Newtonsoft.Json;
 
 namespace Start.Entities
 {
-    public class StartBendEntity : IStartEntity
+    public class StartBendEntity : StartAbstractEntity
     {
         [JsonProperty("9")]
         public double WallThickness { get; set; }
     
-        [JsonProperty("13")] 
+        [JsonProperty("13")]
         public double MillTolerance { get; set; }
     
-        [JsonProperty("34")] 
+        [JsonProperty("34")]
         public double Weight { get; set; }
     
-        [JsonProperty("37")] 
+        [JsonProperty("37")]
         public int ManufacturingTechnology { get; set; }
     
-        [JsonProperty("70")] 
+        [JsonProperty("70")]
         public double Radius { get; set; }
     
-        [JsonProperty("71")] 
+        [JsonProperty("71")]
         public double OvalizationCoefficient { get; set; }
     
         [JsonProperty("177")]
@@ -32,7 +32,7 @@ namespace Start.Entities
         [JsonProperty("225")]
         public string Name { get; set; }
 
-        public Dictionary<string, string> GetData()
+        public override Dictionary<string, string> GetData()
         {
             Dictionary<string, string> dictionary = new()
             {

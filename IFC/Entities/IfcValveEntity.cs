@@ -17,7 +17,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities
 {
-    public class IfcValveEntity : IfcAbstractPipeFittingEntity
+    public class IfcValveEntity : IfcAbstractArmatureEntity
     {
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;

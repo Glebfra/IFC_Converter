@@ -46,8 +46,7 @@ namespace IFC.Entities
             _bendEntity = bendEntity;
             _ifcNodeEntity = ifcNodeEntity;
             _ifcPipeEntities = ifcPipeEntities;
-            _ifcNodeEntity.ConnEntities.Add(this);
-        
+
             XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
             PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
             DirectionToPipes = ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Start.Entities
 {
-    public class StartTeeEntity : IStartEntity
+    public class StartTeeEntity : StartAbstractEntity
     {
         [JsonProperty("9")] 
         public double HeaderThickness { get; set; }
@@ -47,7 +47,7 @@ namespace Start.Entities
         [JsonProperty("225")]
         public string Name { get; set; }
 
-        public Dictionary<string, string> GetData()
+        public override Dictionary<string, string> GetData()
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {

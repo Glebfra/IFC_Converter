@@ -41,8 +41,7 @@ namespace IFC.Entities
             _reducerEntity = reducerEntity;
             _nodeEntity = nodeEntity;
             _pipeEntities = pipeEntities;
-            _nodeEntity.ConnEntities.Add(this);
-        
+
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
         
@@ -69,8 +68,10 @@ namespace IFC.Entities
             IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, axis, refDirection);
             IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
 
-            IfcCartesianPoint[] lowerCircle = CreateCircle(model, radiuses[0], 0);
-            IfcCartesianPoint[] upperCircle = CreateCircle(model, radiuses[1], Length);
+            double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
+            double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;
+            IfcCartesianPoint[] lowerCircle = CreateCircle(model, radiuses[0], displacement1);
+            IfcCartesianPoint[] upperCircle = CreateCircle(model, radiuses[1], displacement2);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
@@ -83,7 +84,8 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            _pipeEntities[1].Clip(_nodeEntity, Length);
+            _pipeEntities[0].Clip(_nodeEntity, Math.Abs(displacement1));
+            _pipeEntities[1].Clip(_nodeEntity, Math.Abs(displacement2));
 
             AddProperties(model, _pipeFitting);
             ConnectPorts(model);

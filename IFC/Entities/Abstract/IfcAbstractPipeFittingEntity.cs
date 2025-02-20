@@ -9,7 +9,7 @@ using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC.Entities.Abstract
 {
-    public abstract class IfcAbstractPipeFittingEntity : IfcAbstractEntity
+    public abstract class IfcAbstractArmatureEntity : IfcAbstractEntity
     {
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
@@ -19,7 +19,7 @@ namespace IFC.Entities.Abstract
 
         protected abstract IfcPipeFitting? _pipeFitting { get; set; }
 
-        protected IfcAbstractPipeFittingEntity(IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+        protected IfcAbstractArmatureEntity(IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
         {
             _nodeEntity = nodeEntity;
             _pipeEntities = pipeEntities;

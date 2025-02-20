@@ -23,7 +23,6 @@ namespace IFC.Entities
     public class IfcPipeEntity : IfcAbstractEntity
     {
         private StartPipeEntity _pipeEntity;
-        private IfcNodeEntity[] _nodeEntities;
         private IfcPipeSegment _pipeSegment;
 
         private event Action? _onDepthChanged;
@@ -57,15 +56,10 @@ namespace IFC.Entities
         private double _depth;
         private XbimVector3D _coordinates;
 
-        public IfcPipeEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] ifcNodeEntities)
+        public IfcPipeEntity(StartPipeEntity pipeEntity)
         {
             _pipeEntity = pipeEntity;
-            _nodeEntities = ifcNodeEntities;
-            foreach (IfcNodeEntity ifcNodeEntity in _nodeEntities)
-            {
-                ifcNodeEntity.ConnEntities.Add(this);
-            }
-        
+
             XbimVector3D coordinates = new XbimVector3D(
                 _pipeEntity.XCoord,
                 _pipeEntity.YCoord,
@@ -177,7 +171,7 @@ namespace IFC.Entities
         {
             return model.Instances.New<IfcCartesianPoint>(point =>
             {
-                var endCoordinates = Coordinates + ObjectMatrix3D.Forward * Depth;
+                XbimVector3D endCoordinates = Coordinates + ObjectMatrix3D.Forward * Depth;
                 point.SetXYZ(endCoordinates.X, endCoordinates.Y, endCoordinates.Z);
             
                 _onCoordinatesChanged += () =>
@@ -257,8 +251,7 @@ namespace IFC.Entities
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "InnerDiameter";
-                        value.NominalValue =
-                            new IfcPositiveLengthMeasure(_pipeEntity.Diameter - _pipeEntity.WallThickness);
+                        value.NominalValue = new IfcPositiveLengthMeasure(_pipeEntity.Diameter - _pipeEntity.WallThickness);
                     }));
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
