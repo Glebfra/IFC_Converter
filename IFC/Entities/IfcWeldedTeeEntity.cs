@@ -1,33 +1,30 @@
-﻿#region
-
-using IFC.Entities.Abstract;
+﻿using IFC.Entities.Abstract;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 
-#endregion
-
-namespace IFC.Entities;
-
-public class IfcWeldedTeeEntity : IfcAbstractTeeEntity
+namespace IFC.Entities
 {
-    protected override IfcIdentifier Tag { get; set; } = "Welded tee";
+    public class IfcWeldedTeeEntity : IfcAbstractTeeEntity
+    {
+        protected override IfcIdentifier Tag { get; set; } = "Welded tee";
     
-    public readonly double Length;
-    public readonly double Height;
+        public readonly double Length;
+        public readonly double Height;
 
-    public IfcWeldedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
-        : base(teeEntity, nodeEntity, connPipes)
-    {
-        Length = teeEntity.HeaderLength;
-        Height = teeEntity.CrotchHeight + _branchPipes[0].Diameter / 2;
-        _nodeEntity.ConnEntities.Add(this);
-    }
+        public IfcWeldedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
+            : base(teeEntity, nodeEntity, connPipes)
+        {
+            Length = teeEntity.HeaderLength;
+            Height = teeEntity.CrotchHeight + _branchPipes[0].Diameter / 2;
+            _nodeEntity.ConnEntities.Add(this);
+        }
 
-    public override IfcProduct CreateAndAdd(IModel model)
-    {
-        _pipeFitting = CreateTeeEntity(model, Length, Height);
-        return _pipeFitting;
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            _pipeFitting = CreateTeeEntity(model, Length, Height);
+            return _pipeFitting;
+        }
     }
 }

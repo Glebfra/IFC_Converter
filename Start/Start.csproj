@@ -44,10 +44,9 @@
         <Compile Include="API\StartAutoServer.cs" />
         <Compile Include="API\StartBaseRoot.cs" />
         <Compile Include="API\StartBaseRootDataArray.cs" />
-        <Compile Include="API\StartBaseRootFunctionKey.cs" />
         <Compile Include="API\StartDocument.cs" />
         <Compile Include="API\StartElementType.cs" />
-        <Compile Include="Entities\Abstract\StartAbstractEntity.cs" />
+        <Compile Include="Entities\IStartEntity.cs" />
         <Compile Include="Entities\StartArmatureEntity.cs" />
         <Compile Include="Entities\StartBendEntity.cs" />
         <Compile Include="Entities\StartNodeEntity.cs" />

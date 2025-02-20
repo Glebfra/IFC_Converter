@@ -1,32 +1,29 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-#endregion
-
-namespace Start.API;
-
-public class StartDocument : IDisposable
+namespace Start.API
 {
-    private object _document;
-
-    public StartDocument(object document)
+    public class StartDocument : IDisposable
     {
-        _document = document;
-    }
+        private object _document;
 
-    public StartBaseRootDataArray GetDataArrayDispatch()
-    {
-        object? dataArray = _document.GetType().InvokeMember(
-            "GetDataArrayDispatch", BindingFlags.InvokeMethod, null, _document, null
-        );
-        return new StartBaseRootDataArray(dataArray);
-    }
+        public StartDocument(object document)
+        {
+            _document = document;
+        }
 
-    public void Dispose()
-    {
-        Marshal.ReleaseComObject(_document);
+        public StartBaseRootDataArray GetDataArrayDispatch()
+        {
+            object? dataArray = _document.GetType().InvokeMember(
+                "GetDataArrayDispatch", BindingFlags.InvokeMethod, null, _document, null
+            );
+            return new StartBaseRootDataArray(dataArray);
+        }
+
+        public void Dispose()
+        {
+            Marshal.ReleaseComObject(_document);
+        }
     }
 }

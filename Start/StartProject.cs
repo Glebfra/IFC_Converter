@@ -1,9 +1,5 @@
-﻿#region
-
-using System;
+﻿using System;
 using Start.API;
-
-#endregion
 
 namespace Start;
 

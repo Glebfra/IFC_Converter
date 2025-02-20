@@ -1,6 +1,4 @@
-﻿#region
-
-using System.Linq;
+﻿using System.Linq;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
@@ -10,140 +8,139 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
-#endregion
-
-namespace IFC.Tools;
-
-public static class IfcGeometry
+namespace IFC.Tools
 {
-    public static IfcFace CreateRectangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3, IfcCartesianPoint p4)
+    public static class IfcGeometry
     {
-        return model.Instances.New<IfcFace>(f =>
+        public static IfcFace CreateRectangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3, IfcCartesianPoint p4)
         {
-            f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
+            return model.Instances.New<IfcFace>(f =>
             {
-                b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
                 {
-                    pl.Polygon.AddRange(new[] { p1, p2, p3, p4 });
-                });
-                b.Orientation = true;
-            }));
-        });
-    }
+                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                    {
+                        pl.Polygon.AddRange(new[] { p1, p2, p3, p4 });
+                    });
+                    b.Orientation = true;
+                }));
+            });
+        }
     
-    public static IfcFace CreateTriangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3)
-    {
-        return model.Instances.New<IfcFace>(f =>
+        public static IfcFace CreateTriangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3)
         {
-            f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
+            return model.Instances.New<IfcFace>(f =>
             {
-                b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
                 {
-                    pl.Polygon.AddRange(new[] { p1, p2, p3 });
-                });
-                b.Orientation = true;
-            }));
-        });
-    }
+                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                    {
+                        pl.Polygon.AddRange(new[] { p1, p2, p3 });
+                    });
+                    b.Orientation = true;
+                }));
+            });
+        }
     
-    public static IfcFace CreatePolygonFace(IModel model, IfcCartesianPoint[] points)
-    {
-        return model.Instances.New<IfcFace>(f =>
+        public static IfcFace CreatePolygonFace(IModel model, IfcCartesianPoint[] points)
         {
-            f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
+            return model.Instances.New<IfcFace>(f =>
             {
-                b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
                 {
-                    pl.Polygon.AddRange(points);
-                });
-                b.Orientation = true;
-            }));
-        });
-    }
+                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
+                    {
+                        pl.Polygon.AddRange(points);
+                    });
+                    b.Orientation = true;
+                }));
+            });
+        }
     
-    public static IfcPlane CreatePlane(IModel model, XbimVector3D coordinates, XbimVector3D direction)
-    {
-        return model.Instances.New<IfcPlane>(plane =>
+        public static IfcPlane CreatePlane(IModel model, XbimVector3D coordinates, XbimVector3D direction)
         {
-            plane.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, direction);
-        });
-    }
+            return model.Instances.New<IfcPlane>(plane =>
+            {
+                plane.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, direction);
+            });
+        }
 
-    public static IfcTrimmedCurve CreateTrimmedCurve(IModel model, IfcCurve basicCurve, double firstParameter, double secondParameter)
-    {
-        return model.Instances.New<IfcTrimmedCurve>(curve =>
+        public static IfcTrimmedCurve CreateTrimmedCurve(IModel model, IfcCurve basicCurve, double firstParameter, double secondParameter)
         {
-            curve.BasisCurve = basicCurve;
-            curve.Trim1.Add(new IfcParameterValue(firstParameter));
-            curve.Trim2.Add(new IfcParameterValue(secondParameter));
-            curve.SenseAgreement = true;
-            curve.MasterRepresentation = IfcTrimmingPreference.PARAMETER;
-        });
-    }
+            return model.Instances.New<IfcTrimmedCurve>(curve =>
+            {
+                curve.BasisCurve = basicCurve;
+                curve.Trim1.Add(new IfcParameterValue(firstParameter));
+                curve.Trim2.Add(new IfcParameterValue(secondParameter));
+                curve.SenseAgreement = true;
+                curve.MasterRepresentation = IfcTrimmingPreference.PARAMETER;
+            });
+        }
 
-    public static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
-    {
-        return model.Instances.New<IfcCircle>(ifcCircle =>
+        public static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
         {
-            ifcCircle.Radius = radius;
-            ifcCircle.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, direction, refDirection);
-        });
-    }
+            return model.Instances.New<IfcCircle>(ifcCircle =>
+            {
+                ifcCircle.Radius = radius;
+                ifcCircle.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, direction, refDirection);
+            });
+        }
 
-    public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates,
-        XbimVector3D direction)
-    {
-        return model.Instances.New<IfcCircleProfileDef>(def =>
+        public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates,
+            XbimVector3D direction)
         {
-            def.ProfileType = IfcProfileTypeEnum.AREA;
-            def.Radius = radius;
-            def.Position = IfcAxis.CreateAxis2Placement2D(model, coordinates, direction);
-        });
-    }
+            return model.Instances.New<IfcCircleProfileDef>(def =>
+            {
+                def.ProfileType = IfcProfileTypeEnum.AREA;
+                def.Radius = radius;
+                def.Position = IfcAxis.CreateAxis2Placement2D(model, coordinates, direction);
+            });
+        }
 
-    public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates)
-    {
-        return model.Instances.New<IfcCircleProfileDef>(def =>
+        public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates)
         {
-            def.ProfileType = IfcProfileTypeEnum.AREA;
-            def.Radius = radius;
-            def.Position = IfcAxis.CreateAxis2Placement2D(model, coordinates);
-        });
-    }
+            return model.Instances.New<IfcCircleProfileDef>(def =>
+            {
+                def.ProfileType = IfcProfileTypeEnum.AREA;
+                def.Radius = radius;
+                def.Position = IfcAxis.CreateAxis2Placement2D(model, coordinates);
+            });
+        }
 
-    public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem)
-    {
-        return model.Instances.New<IfcShapeRepresentation>(sr =>
+        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem)
         {
-            sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            sr.RepresentationIdentifier = "Body";
-            sr.RepresentationType = "SweptSolid";
-            sr.Items.Add(representationItem);
-        });
-    }
+            return model.Instances.New<IfcShapeRepresentation>(sr =>
+            {
+                sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+                sr.RepresentationIdentifier = "Body";
+                sr.RepresentationType = "SweptSolid";
+                sr.Items.Add(representationItem);
+            });
+        }
 
-    public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem[] representationItems)
-    {
-        return model.Instances.New<IfcShapeRepresentation>(sr =>
+        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem[] representationItems)
         {
-            sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            sr.RepresentationIdentifier = "Body";
-            sr.RepresentationType = "SweptSolid";
-            sr.Items.AddRange(representationItems);
-        });
-    }
+            return model.Instances.New<IfcShapeRepresentation>(sr =>
+            {
+                sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+                sr.RepresentationIdentifier = "Body";
+                sr.RepresentationType = "SweptSolid";
+                sr.Items.AddRange(representationItems);
+            });
+        }
     
-    public static IfcArbitraryClosedProfileDef CreateProfile(IModel model, IfcCurve polyline)
-    {
-        return model.Instances.New<IfcArbitraryClosedProfileDef>(profile =>
+        public static IfcArbitraryClosedProfileDef CreateProfile(IModel model, IfcCurve polyline)
         {
-            profile.ProfileType = IfcProfileTypeEnum.AREA;
-            profile.OuterCurve = polyline;
-        });
-    }
+            return model.Instances.New<IfcArbitraryClosedProfileDef>(profile =>
+            {
+                profile.ProfileType = IfcProfileTypeEnum.AREA;
+                profile.OuterCurve = polyline;
+            });
+        }
 
-    public static IfcProductDefinitionShape CreateProductDefinitionShape(IModel model, IfcShapeRepresentation shapeRepresentation)
-    {
-        return model.Instances.New<IfcProductDefinitionShape>(shape => shape.Representations.Add(shapeRepresentation));
+        public static IfcProductDefinitionShape CreateProductDefinitionShape(IModel model, IfcShapeRepresentation shapeRepresentation)
+        {
+            return model.Instances.New<IfcProductDefinitionShape>(shape => shape.Representations.Add(shapeRepresentation));
+        }
     }
 }

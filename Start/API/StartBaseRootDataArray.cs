@@ -1,84 +1,81 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-#endregion
-
-namespace Start.API;
-
-public class StartBaseRootDataArray : IDisposable
+namespace Start.API
 {
-    private readonly object _startBaseRootDataArray;
-
-    public StartBaseRootDataArray(object startBaseRootDataArray)
+    public class StartBaseRootDataArray : IDisposable
     {
-        _startBaseRootDataArray = startBaseRootDataArray;
-    }
+        private readonly object _startBaseRootDataArray;
 
-    public StartBaseRoot GetElementDispatch(int id, StartElementType minType, StartElementType maxType)
-    {
-        object element = new object();
-        object[] args = { id, minType, maxType, element };
+        public StartBaseRootDataArray(object startBaseRootDataArray)
+        {
+            _startBaseRootDataArray = startBaseRootDataArray;
+        }
 
-        ParameterModifier parameterModifier = new ParameterModifier(4) { [3] = true };
-        ParameterModifier[] modifiers = { parameterModifier };
+        public StartBaseRoot GetElementDispatch(int id, StartElementType minType, StartElementType maxType)
+        {
+            object element = new object();
+            object[] args = { id, minType, maxType, element };
 
-        _startBaseRootDataArray.GetType().InvokeMember(
-            "GetElementDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
-        );
+            ParameterModifier parameterModifier = new ParameterModifier(4) { [3] = true };
+            ParameterModifier[] modifiers = { parameterModifier };
 
-        return new StartBaseRoot(args[3]);
-    }
+            _startBaseRootDataArray.GetType().InvokeMember(
+                "GetElementDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
+            );
 
-    public StartBaseRoot GetConnDispatch(int id, int nNumber)
-    {
-        object element = new object();
-        object[] args = { id, nNumber, element };
+            return new StartBaseRoot(args[3]);
+        }
 
-        ParameterModifier parameterModifier = new ParameterModifier(3) { [2] = true };
-        ParameterModifier[] modifiers = { parameterModifier };
+        public StartBaseRoot GetConnDispatch(int id, int nNumber)
+        {
+            object element = new object();
+            object[] args = { id, nNumber, element };
 
-        _startBaseRootDataArray.GetType().InvokeMember(
-            "GetConnDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
-        );
+            ParameterModifier parameterModifier = new ParameterModifier(3) { [2] = true };
+            ParameterModifier[] modifiers = { parameterModifier };
 
-        return new StartBaseRoot(args[2]);
-    }
+            _startBaseRootDataArray.GetType().InvokeMember(
+                "GetConnDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
+            );
 
-    public int GetNumberElements(StartElementType minType = StartElementType.ALL,
-        StartElementType maxType = StartElementType.ALL)
-    {
-        object[] args = { minType, maxType };
-        object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
-            "GetNumberElements", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
-        );
+            return new StartBaseRoot(args[2]);
+        }
 
-        return (int)elementsNumber;
-    }
+        public int GetNumberElements(StartElementType minType = StartElementType.ALL,
+            StartElementType maxType = StartElementType.ALL)
+        {
+            object[] args = { minType, maxType };
+            object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
+                "GetNumberElements", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
+            );
 
-    public int GetNumberConns(int id, StartElementType minType, StartElementType maxType)
-    {
-        object[] args = { id, minType, maxType };
-        object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
-            "GetNumberConns", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
-        );
-        return (int)elementsNumber;
-    }
+            return (int)elementsNumber;
+        }
 
-    public string GetTitle(int id)
-    {
-        object[] args = { id };
-        object? title = _startBaseRootDataArray.GetType().InvokeMember(
-            "GetTitle", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
-        );
+        public int GetNumberConns(int id, StartElementType minType, StartElementType maxType)
+        {
+            object[] args = { id, minType, maxType };
+            object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
+                "GetNumberConns", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
+            );
+            return (int)elementsNumber;
+        }
 
-        return (string)title;
-    }
+        public string GetTitle(int id)
+        {
+            object[] args = { id };
+            object? title = _startBaseRootDataArray.GetType().InvokeMember(
+                "GetTitle", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
+            );
 
-    public void Dispose()
-    {
-        Marshal.ReleaseComObject(_startBaseRootDataArray);
+            return (string)title;
+        }
+
+        public void Dispose()
+        {
+            Marshal.ReleaseComObject(_startBaseRootDataArray);
+        }
     }
 }
