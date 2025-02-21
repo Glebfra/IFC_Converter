@@ -1,25 +1,22 @@
-﻿#region
-
-using Xbim.Common;
+﻿using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
-#endregion
-
-namespace IFC.Tools;
-
-public static class IfcSegment
+namespace IFC.Tools
 {
-    public static IfcDistributionPort CreatePort(IModel model, string name, string description, IfcLocalPlacement placement)
+    public static class IfcSegment
     {
-        return model.Instances.New<IfcDistributionPort>(p =>
+        public static IfcDistributionPort CreatePort(IModel model, string name, string description, IfcLocalPlacement placement)
         {
-            p.Name = name;
-            p.Description = description;
-            p.ObjectPlacement = placement;
-            p.FlowDirection = IfcFlowDirectionEnum.SOURCEANDSINK;
-            p.PredefinedType = IfcDistributionPortTypeEnum.PIPE;
-        });
+            return model.Instances.New<IfcDistributionPort>(p =>
+            {
+                p.Name = name;
+                p.Description = description;
+                p.ObjectPlacement = placement;
+                p.FlowDirection = IfcFlowDirectionEnum.SOURCEANDSINK;
+                p.PredefinedType = IfcDistributionPortTypeEnum.PIPE;
+            });
+        }
     }
 }

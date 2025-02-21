@@ -1,39 +1,37 @@
-﻿#region
-
+﻿using System.Collections.Generic;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 
-#endregion
-
-namespace IFC.Tools;
-
-public static class IfcProperty
+namespace IFC.Tools
 {
-    public static IfcRelDefinesByProperties AddProperties(IModel model, string name, IfcObject ifcObject,
-        Dictionary<string, string> data)
+    public static class IfcProperty
     {
-        return model.Instances.New<IfcRelDefinesByProperties>(rel =>
+        public static IfcRelDefinesByProperties AddProperties(IModel model, string name, IfcObject ifcObject,
+            Dictionary<string, string> data)
         {
-            rel.RelatedObjects.Add(ifcObject);
-            rel.RelatingPropertyDefinition = CreatePropertySet(model, name, data);
-        });
-    }
-
-    public static IfcPropertySet CreatePropertySet(IModel model, string name, Dictionary<string, string> data)
-    {
-        return model.Instances.New<IfcPropertySet>(set =>
-        {
-            set.Name = name;
-            foreach (var kvp in data)
+            return model.Instances.New<IfcRelDefinesByProperties>(rel =>
             {
-                set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(prop =>
+                rel.RelatedObjects.Add(ifcObject);
+                rel.RelatingPropertyDefinition = CreatePropertySet(model, name, data);
+            });
+        }
+
+        public static IfcPropertySet CreatePropertySet(IModel model, string name, Dictionary<string, string> data)
+        {
+            return model.Instances.New<IfcPropertySet>(set =>
+            {
+                set.Name = name;
+                foreach (var kvp in data)
                 {
-                    prop.Name = kvp.Key;
-                    prop.NominalValue = new IfcText(kvp.Value);
-                }));
-            }
-        });
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(prop =>
+                    {
+                        prop.Name = kvp.Key;
+                        prop.NominalValue = new IfcText(kvp.Value);
+                    }));
+                }
+            });
+        }
     }
 }
