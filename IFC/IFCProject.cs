@@ -79,7 +79,7 @@ namespace IFC
 
         public void AddEntity(IfcAbstractEntity entity)
         {
-            IfcProduct ifcProduct = entity.CreateAndAdd(_model) ?? throw new NullReferenceException("Object cannot be null");
+            IfcProduct ifcProduct = entity.CreateAndAdd(_model);
             _ifcObjects.Add(ifcProduct);
             _building.AddElement(ifcProduct);
         }

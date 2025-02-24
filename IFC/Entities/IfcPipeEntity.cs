@@ -24,6 +24,7 @@ namespace IFC.Entities
     {
         private StartPipeEntity _pipeEntity;
         private IfcPipeSegment _pipeSegment;
+        private IfcNodeEntity[] _nodeEntities;
 
         private event Action? _onDepthChanged;
         private event Action? _onCoordinatesChanged;
@@ -82,6 +83,34 @@ namespace IFC.Entities
         
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
             Coordinates = ObjectMatrix3D.Translation;
+
+            Ports = new IfcDistributionPort[2];
+        }
+        
+        public IfcPipeEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
+        {
+            _pipeEntity = pipeEntity;
+            _nodeEntities = nodeEntities;
+
+            XbimVector3D coordinates = nodeEntities[0].ObjectMatrix3D.Translation;
+            XbimVector3D endCoordinates = nodeEntities[1].ObjectMatrix3D.Translation;
+            XbimVector3D direction = new XbimVector3D(
+                _pipeEntity.ProjectionAlongOXAxis,
+                _pipeEntity.ProjectionAlongOYAxis,
+                _pipeEntity.ProjectionAlongOZAxis
+            );
+
+            XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
+            XbimVector3D forward = direction.Normalized();
+            if (forward == WorldUp || forward == -1 * WorldUp) 
+                WorldUp = new XbimVector3D(0, 1, 0);
+            XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
+        
+            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+            Coordinates = ObjectMatrix3D.Translation;
+            
+            Diameter = _pipeEntity.Diameter;
+            Depth = direction.Length;
 
             Ports = new IfcDistributionPort[2];
         }
@@ -300,6 +329,31 @@ namespace IFC.Entities
                     }));
                 });
             });
+
+            #endregion
+
+            #region DEBUG1
+            
+            #if DEBUG
+            model.Instances.New<IfcRelDefinesByProperties>(properties =>
+            {
+                properties.RelatedObjects.Add(product);
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+                {
+                    set.Name = "DEBUG1";
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "Node 1 Coordinates";
+                        value.NominalValue = new IfcText(_nodeEntities[0].ObjectMatrix3D.Translation.ToString());
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "Node 2 Coordinates";
+                        value.NominalValue = new IfcText(_nodeEntities[1].ObjectMatrix3D.Translation.ToString());
+                    }));
+                });
+            });
+            #endif
 
             #endregion
         }

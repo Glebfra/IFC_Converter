@@ -109,6 +109,7 @@
         <Compile Include="Entities\Abstract\IfcAbstractPipeFittingEntity.cs" />
         <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
         <Compile Include="Entities\IfcBendEntity.cs" />
+        <Compile Include="Entities\IfcEntityFactory.cs" />
         <Compile Include="Entities\IfcFabricatedTeeEntity.cs" />
         <Compile Include="Entities\IfcFlangeEntity.cs" />
         <Compile Include="Entities\IfcMilterJointEntity.cs" />

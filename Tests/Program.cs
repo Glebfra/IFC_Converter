@@ -8,23 +8,21 @@ using Start;
 using Start.API;
 using Start.Entities;
 
-namespace StartConverter
+namespace Tests
 {
-    public static class Program
+    internal class Program
     {
-        private static Dictionary<int, IfcNodeEntity> _nodeEntities;
-        private static Dictionary<int, IfcPipeEntity> _pipeEntities;
-
         public static void Main(string[] args)
         {
-            GetFilepath(out string inputFilepath, out string outputFilepath);
-
+            const string inputFilepath = @"D:\Работа\Bend.ctp";
+            const string outputFilepath = @"D:\Работа\Bend.ifc";
+            
             Dictionary<int, IfcNodeEntity> ifcNodeEntities = new Dictionary<int, IfcNodeEntity>();
             Dictionary<int, IfcPipeEntity> ifcPipeEntities = new Dictionary<int, IfcPipeEntity>();
             Dictionary<int, List<IfcPipeEntity>> ifcPipeToNodeRelations = new Dictionary<int, List<IfcPipeEntity>>();
             
             using StartProject startProject = StartProject.OpenProject(inputFilepath);
-            using IFCProject ifcProject = IFCProject.CreateProject("StartToIfc");
+            using IFCProject ifcProject = IFCProject.CreateProject("Test");
             
             StartDataArrayItem[] startDataArrayItems = GetArrayData(startProject);
             GroupObjects(
@@ -41,9 +39,7 @@ namespace StartConverter
                 IfcNodeEntity ifcNodeEntity = IfcEntityFactory.CreateEntity<IfcNodeEntity>(nodeEntity.Value);
                 ifcNodeEntities.Add(nodeEntity.Key, ifcNodeEntity);
                 ifcProject.AddEntity(ifcNodeEntity);
-                #if DEBUG
                 Console.WriteLine($"Added StartNodeEntity with Id: {nodeEntity.Key}");
-                #endif
             }
             
             foreach (KeyValuePair<int, StartAbstractEntity> pipeEntity in pipeEntities)
@@ -63,9 +59,7 @@ namespace StartConverter
                 }
                 
                 ifcProject.AddEntity(ifcPipeEntity);
-                #if DEBUG
                 Console.WriteLine($"Added StartPipeEntity with Id: {pipeEntity.Key}");
-                #endif
             }
 
             foreach (KeyValuePair<int, StartAbstractEntity> fittingEntity in fittingEntities)
@@ -76,17 +70,13 @@ namespace StartConverter
                     ifcPipeToNodeRelations[fittingRelations[fittingEntity.Key]].ToArray()
                 );
                 ifcProject.AddEntity(ifcFittingEntity);
-                #if DEBUG
                 Console.WriteLine($"Added StartFittingEntity with Id: {fittingEntity.Key}");
-                #endif
             }
             
             ifcProject.GroupObjects("Pipe system");
             ifcProject.SaveAs(outputFilepath);
-            
-            Console.WriteLine($"File saved as: {outputFilepath}");
         }
-        
+
         private static StartDataArrayItem[] GetArrayData(StartProject startProject)
         {
             return startProject.GetDataArrayItems() ?? throw new Exception("Data array is null");
@@ -127,16 +117,6 @@ namespace StartConverter
                         break;
                 }
             }
-        }
-
-        private static void GetFilepath(out string inputFilepath, out string outputFilepath)
-        {
-            Console.Write("Write a ctp file location: ");
-            inputFilepath = Console.ReadLine() ?? throw new NullReferenceException("Input filepath cannot be null");
-
-            inputFilepath = inputFilepath.Replace("\"", "");
-            outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
-            Console.WriteLine($"Input file is: {inputFilepath}");
         }
     }
 }

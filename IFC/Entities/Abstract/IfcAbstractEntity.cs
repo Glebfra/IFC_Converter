@@ -40,7 +40,7 @@ namespace IFC.Entities.Abstract
                 properties.RelatedObjects.Add(product);
                 properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
                 {
-                    set.Name = "Debug Properties";
+                    set.Name = "DEBUG";
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "Coordinates";
