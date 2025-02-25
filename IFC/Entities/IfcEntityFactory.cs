@@ -21,7 +21,7 @@ namespace IFC.Entities
             return (T)Activator.CreateInstance(typeof(T), startAbstractEntity, ifcNodeEntities)!;
         }
     
-        public static IfcAbstractEntity CreateFittingEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity? ifcNodeEntity = null, IfcPipeEntity[]? ifcPipeEntities = null)
+        public static IfcAbstractEntity CreateFittingEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
         {
             switch (startAbstractEntity.Type)
             {

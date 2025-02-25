@@ -140,7 +140,6 @@ namespace IFC.Entities
         
         private void MovePipe(IfcPipeEntity pipeEntity)
         {
-            // Check if the first node is closer to the node entity than the second node
             // TODO Как-то назвать метод
             if ((pipeEntity.NodeEntities[0].ObjectMatrix3D.Translation - _nodeEntity.ObjectMatrix3D.Translation).Length <
                 (pipeEntity.NodeEntities[1].ObjectMatrix3D.Translation - _nodeEntity.ObjectMatrix3D.Translation).Length)

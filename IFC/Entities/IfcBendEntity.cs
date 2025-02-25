@@ -32,11 +32,11 @@ namespace IFC.Entities
         private IfcPipeFitting _pipeFitting;
     
         private readonly double _pipeAngle;
-        private double Length => _pipeAngle * _bendEntity.Radius;
         private XbimVector3D[] PipesDirection { get; }
         private XbimVector3D[] DirectionToPipes { get; }
 
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
+        public double Length => _pipeAngle * _bendEntity.Radius;
         
         public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
         {
@@ -56,7 +56,7 @@ namespace IFC.Entities
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = CreateBendShape(model);
+            IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = CreateBendShape(model, ObjectMatrix3D, _pipeAngle, _ifcPipeEntities[0].Diameter / 2);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, sweptAreaSolid);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             _pipeFitting = CreateBend(model, shape);
@@ -86,6 +86,23 @@ namespace IFC.Entities
             });
         }
 
+        private IfcSurfaceCurveSweptAreaSolid CreateBendShape(IModel model, XbimMatrix3D ObjectPlacement, double angle, double radius)
+        {
+            XbimVector3D circleCenter = CalculateCircleCenter();
+            
+            IfcCircle circle = IfcGeometry.CreateCircle(model, _bendEntity.Radius, circleCenter, ObjectPlacement.Up, ObjectPlacement.Right);
+            IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, angle);
+            IfcPlane plane = IfcGeometry.CreatePlane(model, ObjectPlacement.Translation, ObjectPlacement.Up);
+            IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, radius, XbimVector3D.Zero, new XbimVector3D(1, 0, 0));
+
+            return model.Instances.New<IfcSurfaceCurveSweptAreaSolid>(solid =>
+            {
+                solid.SweptArea = profileDef;
+                solid.Directrix = trimmedCurve;
+                solid.ReferenceSurface = plane;
+            });
+        }
+
         private IfcPipeFitting CreateBend(IModel model, IfcProductDefinitionShape shape)
         {
             IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
@@ -99,23 +116,6 @@ namespace IFC.Entities
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
                 fitting.Representation = shape;
                 fitting.ObjectPlacement = localPlacement;
-            });
-        }
-
-        private IfcSurfaceCurveSweptAreaSolid CreateBendShape(IModel model)
-        {
-            XbimVector3D circleCenter = CalculateCircleCenter();
-        
-            IfcCircle circle = IfcGeometry.CreateCircle(model, _bendEntity.Radius, circleCenter, ObjectMatrix3D.Up, ObjectMatrix3D.Right);
-            IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, _pipeAngle);
-            IfcPlane plane = IfcGeometry.CreatePlane(model, ObjectMatrix3D.Translation, ObjectMatrix3D.Up);
-            IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, _ifcPipeEntities[0].Diameter / 2, XbimVector3D.Zero, new XbimVector3D(1, 0, 0));
-
-            return model.Instances.New<IfcSurfaceCurveSweptAreaSolid>(solid =>
-            {
-                solid.SweptArea = profileDef;
-                solid.Directrix = trimmedCurve;
-                solid.ReferenceSurface = plane;
             });
         }
 
@@ -133,38 +133,6 @@ namespace IFC.Entities
             {
                 ifcPipeEntity.Clip(_ifcNodeEntity, clipLength);
             }
-        }
-
-        private XbimVector3D CalculateAlternateCircleCenter()
-        {
-            double lengthToCenter = _bendEntity.Radius * Math.Tan(_pipeAngle / 2);
-            XbimVector3D dirToCenter = new XbimVector3D(-1, 0, 0);
-        
-            return dirToCenter * lengthToCenter;
-        }
-
-        private IfcRevolvedAreaSolid CreateAlternateBendShape(IModel model)
-        {
-            XbimVector3D circleCenter = CalculateAlternateCircleCenter();
-
-            IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(
-                model,
-                _ifcPipeEntities[0].Diameter / 2,
-                XbimVector3D.Zero,
-                new XbimVector3D(1, 0, 0)
-            );
-        
-            double lengthToCenter = _bendEntity.Radius* Math.Tan(_pipeAngle / 2);
-
-            IfcRevolvedAreaSolid sweptAreaSolid = model.Instances.New<IfcRevolvedAreaSolid>(solid =>
-            {
-                solid.SweptArea = profileDef;
-                solid.Axis = IfcAxis.CreateAxis1Placement(model, circleCenter, new XbimVector3D(0, -1, 0));
-                solid.Angle = new IfcPlaneAngleMeasure(_pipeAngle);
-                solid.Position = IfcAxis.CreateAxis2Placement3D(model, DirectionToPipes[0] * lengthToCenter, ObjectMatrix3D.Forward, ObjectMatrix3D.Right);
-            });
-
-            return sweptAreaSolid;
         }
 
         protected override void AddProperties(IModel model, IfcProduct product)

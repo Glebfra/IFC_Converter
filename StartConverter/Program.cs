@@ -82,10 +82,12 @@ namespace StartConverter
 
             foreach (KeyValuePair<int, StartAbstractEntity> fittingEntity in fittingEntities)
             {
+                int fittingId = fittingEntity.Key;
+                StartAbstractEntity fitting = fittingEntity.Value;
                 IfcAbstractEntity ifcFittingEntity = IfcEntityFactory.CreateFittingEntity(
-                    fittingEntity.Value,
-                    ifcNodeEntities[fittingRelations[fittingEntity.Key]],
-                    ifcPipeToNodeRelations[fittingRelations[fittingEntity.Key]].ToArray()
+                    fitting,
+                    ifcNodeEntities[fittingRelations[fittingId]],
+                    ifcPipeToNodeRelations[fittingRelations[fittingId]].ToArray()
                 );
                 ifcProject.AddEntity(ifcFittingEntity);
                 #if DEBUG
