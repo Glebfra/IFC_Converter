@@ -21,16 +21,10 @@ namespace IFC.Entities
             return (T)Activator.CreateInstance(typeof(T), startAbstractEntity, ifcNodeEntities)!;
         }
     
-        public static IfcAbstractEntity CreateEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity? ifcNodeEntity = null, IfcPipeEntity[]? ifcPipeEntities = null)
+        public static IfcAbstractEntity CreateFittingEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity? ifcNodeEntity = null, IfcPipeEntity[]? ifcPipeEntities = null)
         {
             switch (startAbstractEntity.Type)
             {
-                case StartElementType.PIPE_ELEMENT:
-                    return new IfcPipeEntity((StartPipeEntity)startAbstractEntity);
-            
-                case StartElementType.NODE:
-                    return new IfcNodeEntity((StartNodeEntity)startAbstractEntity);
-            
                 case StartElementType.ELBOW:
                 case StartElementType.PIPE_BEND:
                 case StartElementType.MILTER_BEND:
@@ -120,27 +114,6 @@ namespace IFC.Entities
                 default:
                     throw new Exception("Unknown entity type");
             }
-        }
-
-        public static IfcAbstractEntity[] CreateEntities(StartAbstractEntity[] startAbstractEntity, IfcNodeEntity[]? ifcNodeEntities = null, IfcPipeEntity[][]? ifcPipeEntities = null)
-        {
-            IfcAbstractEntity[] ifcAbstractEntities = new IfcAbstractEntity[startAbstractEntity.Length];
-            if (ifcNodeEntities != null && ifcPipeEntities != null)
-            {
-                for (int i = 0; i < ifcAbstractEntities.Length; i++)
-                {
-                    ifcAbstractEntities[i] = CreateEntity(startAbstractEntity[i], ifcNodeEntities[i], ifcPipeEntities[i]);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < ifcAbstractEntities.Length; i++)
-                {
-                    ifcAbstractEntities[i] = CreateEntity(startAbstractEntity[i]);
-                }
-            }
-
-            return ifcAbstractEntities;
         }
     }
 }

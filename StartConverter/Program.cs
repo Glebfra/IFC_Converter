@@ -17,6 +17,11 @@ namespace StartConverter
 
         public static void Main(string[] args)
         {
+            #if DEBUG
+            DateTime start = DateTime.Now;
+            Console.WriteLine($"Started at: {start}");
+            #endif
+            
             GetFilepath(out string inputFilepath, out string outputFilepath);
 
             Dictionary<int, IfcNodeEntity> ifcNodeEntities = new Dictionary<int, IfcNodeEntity>();
@@ -27,6 +32,10 @@ namespace StartConverter
             using IFCProject ifcProject = IFCProject.CreateProject("StartToIfc");
             
             StartDataArrayItem[] startDataArrayItems = GetArrayData(startProject);
+            
+            #if DEBUG
+            DateTime groupTask = DateTime.Now;
+            #endif
             GroupObjects(
                 startDataArrayItems,
                 out Dictionary<int, StartAbstractEntity> nodeEntities,
@@ -36,6 +45,9 @@ namespace StartConverter
                 out Dictionary<int, int> fittingRelations
             );
 
+            #if DEBUG
+            DateTime convertTask = DateTime.Now;
+            #endif
             foreach (KeyValuePair<int, StartAbstractEntity> nodeEntity in nodeEntities)
             {
                 IfcNodeEntity ifcNodeEntity = IfcEntityFactory.CreateEntity<IfcNodeEntity>(nodeEntity.Value);
@@ -70,7 +82,7 @@ namespace StartConverter
 
             foreach (KeyValuePair<int, StartAbstractEntity> fittingEntity in fittingEntities)
             {
-                IfcAbstractEntity ifcFittingEntity = IfcEntityFactory.CreateEntity(
+                IfcAbstractEntity ifcFittingEntity = IfcEntityFactory.CreateFittingEntity(
                     fittingEntity.Value,
                     ifcNodeEntities[fittingRelations[fittingEntity.Key]],
                     ifcPipeToNodeRelations[fittingRelations[fittingEntity.Key]].ToArray()
@@ -85,6 +97,14 @@ namespace StartConverter
             ifcProject.SaveAs(outputFilepath);
             
             Console.WriteLine($"File saved as: {outputFilepath}");
+            
+            #if DEBUG
+            DateTime end = DateTime.Now;
+            Console.WriteLine($"Ended at: {end}");
+            Console.WriteLine($"Total time consumed: {end - start}");
+            Console.WriteLine($"Group task time consumed: {convertTask - groupTask}");
+            Console.WriteLine($"Convert task time consumed: {end - convertTask}");
+            #endif
         }
         
         private static StartDataArrayItem[] GetArrayData(StartProject startProject)

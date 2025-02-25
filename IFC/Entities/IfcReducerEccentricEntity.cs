@@ -6,7 +6,6 @@ using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
@@ -56,23 +55,17 @@ namespace IFC.Entities
     
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
+            base.CreateAndAdd(model);
 
-            IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
-            IfcDirection forwardDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
-            IfcDirection rightDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
-            IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
-            IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
-            
-            IfcCartesianPoint[] lowerCircle = CreateCircle(model, radiuses[0], 0, 0);
-            IfcCartesianPoint[] upperCircle = CreateCircle(model, radiuses[1], Length, _pipeDisplacement);
+            IfcCartesianPoint[] lowerCircle = CreateCircle(model, _pipeEntities[0].Diameter / 2, 0, 0);
+            IfcCartesianPoint[] upperCircle = CreateCircle(model, _pipeEntities[1].Diameter / 2, Length, _pipeDisplacement);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
-                fitting.ObjectPlacement = localPlacement;
+                fitting.ObjectPlacement = _localPlacement;
                 fitting.Representation = shape;
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
                 fitting.Tag = Tag;
@@ -80,12 +73,8 @@ namespace IFC.Entities
             });
             
             _pipeEntities[1].Clip(_nodeEntity, Length);
-            if ((_pipeEntities[1].NodeEntities[0].ObjectMatrix3D.Translation - _nodeEntity.ObjectMatrix3D.Translation).Length <
-                (_pipeEntities[1].NodeEntities[1].ObjectMatrix3D.Translation - _nodeEntity.ObjectMatrix3D.Translation).Length)
-            {
-                _pipeEntities[1].Coordinates += ObjectMatrix3D.Up * _pipeDisplacement;
-            }
             
+            MovePipe(_pipeEntities[1]);
             AddProperties(model, _pipeFitting);
             ConnectPorts(model);
 
@@ -127,6 +116,7 @@ namespace IFC.Entities
             return points;
         }
 
+        // TODO Кинуть в общий класс
         private static IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] lowerPoints, IfcCartesianPoint[] upperPoints)
         {
             IfcFace[] faces = new IfcFace[_numSegments + 2];
@@ -146,6 +136,17 @@ namespace IFC.Entities
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
+        }
+        
+        private void MovePipe(IfcPipeEntity pipeEntity)
+        {
+            // Check if the first node is closer to the node entity than the second node
+            // TODO Как-то назвать метод
+            if ((pipeEntity.NodeEntities[0].ObjectMatrix3D.Translation - _nodeEntity.ObjectMatrix3D.Translation).Length <
+                (pipeEntity.NodeEntities[1].ObjectMatrix3D.Translation - _nodeEntity.ObjectMatrix3D.Translation).Length)
+            {
+                pipeEntity.Coordinates += ObjectMatrix3D.Up * _pipeDisplacement;
+            }
         }
 
         private IfcRelConnectsPorts ConnectPorts(IModel model)

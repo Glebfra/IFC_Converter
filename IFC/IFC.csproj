@@ -129,7 +129,6 @@
         <Compile Include="Tools\IfcAxis.cs" />
         <Compile Include="Tools\IfcGeometry.cs" />
         <Compile Include="Tools\IfcProperty.cs" />
-        <Compile Include="Tools\IfcSegment.cs" />
         <Compile Include="ValueConverter\ValueConverter.cs" />
     </ItemGroup>
     <ItemGroup>

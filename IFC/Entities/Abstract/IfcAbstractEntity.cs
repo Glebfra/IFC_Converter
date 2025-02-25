@@ -1,11 +1,15 @@
-﻿using IFC.Tools;
+﻿using System.Linq;
+using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC.Entities.Abstract
 {

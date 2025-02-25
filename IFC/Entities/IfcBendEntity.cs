@@ -32,13 +32,12 @@ namespace IFC.Entities
         private IfcPipeFitting _pipeFitting;
     
         private readonly double _pipeAngle;
+        private double Length => _pipeAngle * _bendEntity.Radius;
+        private XbimVector3D[] PipesDirection { get; }
+        private XbimVector3D[] DirectionToPipes { get; }
 
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        public XbimVector3D[] PipesDirection { get; }
-        public XbimVector3D[] DirectionToPipes { get; }
-
-        public double Length => _pipeAngle * _bendEntity.Radius;
-
+        
         public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
         {
             _bendEntity = bendEntity;
