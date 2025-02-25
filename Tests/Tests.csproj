@@ -49,6 +49,9 @@
         <Reference Include="Dia2Lib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
           <HintPath>..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.1.8\lib\netstandard2.0\Dia2Lib.dll</HintPath>
         </Reference>
+        <Reference Include="Esent.Interop, Version=1.9.4.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+          <HintPath>..\packages\Microsoft.Database.ManagedEsent.2.0.3\lib\netstandard2.0\Esent.Interop.dll</HintPath>
+        </Reference>
         <Reference Include="Gee.External.Capstone, Version=2.3.0.0, Culture=neutral, PublicKeyToken=b117d7a2dc33ffa6, processorArchitecture=MSIL">
           <HintPath>..\packages\Gee.External.Capstone.2.3.0\lib\netstandard2.0\Gee.External.Capstone.dll</HintPath>
         </Reference>
@@ -87,6 +90,9 @@
         </Reference>
         <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
           <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.1.1\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
           <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
@@ -155,8 +161,30 @@
         <Reference Include="TraceReloggerLib, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
           <HintPath>..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.1.8\lib\netstandard2.0\TraceReloggerLib.dll</HintPath>
         </Reference>
+        <Reference Include="Xbim.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+          <HintPath>..\packages\Xbim.Common.6.0.493\lib\netstandard2.0\Xbim.Common.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.Ifc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+          <HintPath>..\packages\Xbim.Ifc.5.1.341\lib\net46\Xbim.Ifc.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.Ifc2x3, Version=6.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+          <HintPath>..\packages\Xbim.Ifc2x3.6.0.493\lib\netstandard2.0\Xbim.Ifc2x3.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.Ifc4, Version=6.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+          <HintPath>..\packages\Xbim.Ifc4.6.0.493\lib\netstandard2.0\Xbim.Ifc4.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.Ifc4x3, Version=6.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+          <HintPath>..\packages\Xbim.Ifc4x3.6.0.493\lib\netstandard2.0\Xbim.Ifc4x3.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.IO.Esent, Version=6.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+          <HintPath>..\packages\Xbim.IO.Esent.6.0.493\lib\netstandard2.0\Xbim.IO.Esent.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.IO.MemoryModel, Version=6.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+          <HintPath>..\packages\Xbim.IO.MemoryModel.6.0.493\lib\netstandard2.0\Xbim.IO.MemoryModel.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="IfcTorus.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

@@ -24,7 +24,8 @@ namespace IFC.Entities
     {
         private StartPipeEntity _pipeEntity;
         private IfcPipeSegment _pipeSegment;
-        private IfcNodeEntity[] _nodeEntities;
+        
+        public IfcNodeEntity[] NodeEntities;
 
         private event Action? _onDepthChanged;
         private event Action? _onCoordinatesChanged;
@@ -34,6 +35,7 @@ namespace IFC.Entities
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public double Diameter { get; }
         public IfcDistributionPort[] Ports { get; }
+        public XbimVector3D Direction { get; }
     
         public double Depth
         {
@@ -66,17 +68,17 @@ namespace IFC.Entities
                 _pipeEntity.YCoord,
                 _pipeEntity.ZCoord
             );
-            XbimVector3D direction = new XbimVector3D(
+            Direction = new XbimVector3D(
                 _pipeEntity.ProjectionAlongOXAxis,
                 _pipeEntity.ProjectionAlongOYAxis,
                 _pipeEntity.ProjectionAlongOZAxis
             );
         
             Diameter = _pipeEntity.Diameter;
-            Depth = direction.Length;
+            Depth = Direction.Length;
 
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
-            XbimVector3D forward = direction.Normalized();
+            XbimVector3D forward = Direction.Normalized();
             if (forward == WorldUp || forward == -1 * WorldUp) 
                 WorldUp = new XbimVector3D(0, 1, 0);
             XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
@@ -90,7 +92,7 @@ namespace IFC.Entities
         public IfcPipeEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
         {
             _pipeEntity = pipeEntity;
-            _nodeEntities = nodeEntities;
+            NodeEntities = nodeEntities;
 
             XbimVector3D coordinates = nodeEntities[0].ObjectMatrix3D.Translation;
             XbimVector3D endCoordinates = nodeEntities[1].ObjectMatrix3D.Translation;
@@ -344,12 +346,12 @@ namespace IFC.Entities
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "Node 1 Coordinates";
-                        value.NominalValue = new IfcText(_nodeEntities[0].ObjectMatrix3D.Translation.ToString());
+                        value.NominalValue = new IfcText(NodeEntities[0].ObjectMatrix3D.Translation.ToString());
                     }));
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "Node 2 Coordinates";
-                        value.NominalValue = new IfcText(_nodeEntities[1].ObjectMatrix3D.Translation.ToString());
+                        value.NominalValue = new IfcText(NodeEntities[1].ObjectMatrix3D.Translation.ToString());
                     }));
                 });
             });
