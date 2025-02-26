@@ -1,11 +1,7 @@
 ﻿using System.Linq;
 using IFC.Tools;
-using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.HvacDomain;
-using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC.Entities.Abstract
 {
