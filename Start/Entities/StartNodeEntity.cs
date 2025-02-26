@@ -1,39 +1,41 @@
-﻿#region
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
-using Start.API;
-using Start.Entities.Abstract;
-
-#endregion
-
-namespace Start.Entities;
-
-public sealed class StartNodeEntity : StartAbstractEntity
+namespace Start.Entities
 {
-    public StartNodeEntity(StartBaseRoot entity) : base(entity)
+    public class StartNodeEntity : StartAbstractEntity
     {
-    }
+        [JsonProperty("61")] 
+        public double AdditionalLoadFromWeight { get; set; }
+        
+        [JsonProperty("225")] 
+        public string Name { get; set; }
+        
+        [JsonProperty("227")] 
+        public string Description { get; set; }
 
-    public double GetAdditionalLoadFromWeight() =>
-        Entity.GetDataReal(StartBaseRootFunctionKey.NODE_ADDITIONAL_LOAD_FROM_WEIGHT);
+        [JsonProperty("404")]
+        public double XCoord;
+        
+        [JsonProperty("405")]
+        public double YCoord;
+        
+        [JsonProperty("406")]
+        public double ZCoord;
 
-    public string GetName() => Entity.GetDataChar(StartBaseRootFunctionKey.NODE_NAME);
-    public string GetDescription() => Entity.GetDataChar(StartBaseRootFunctionKey.NODE_DESCRIPTION);
-    
-    public double GetXCoord() => Entity.GetXCoord();
-    public double GetYCoord() => Entity.GetYCoord();
-    public double GetZCoord() => Entity.GetZCoord();
+        public override Dictionary<string, string> GetData()
+        {
+            Dictionary<string, string> dictionary = new Dictionary<string, string>
+            {
+                { "Name", Name },
+                { "Description", Description },
+                { "Additional Load from Weight", AdditionalLoadFromWeight.ToString("F5") },
+                { "X Coordinate", XCoord.ToString("F5") },
+                { "Y Coordinate", YCoord.ToString("F5") },
+                { "Z Coordinate", ZCoord.ToString("F5") }
+            };
 
-
-    public override Dictionary<string, string> GetData()
-    {
-        var dictionary = base.GetData();
-        dictionary.Add("X Coordinate", GetXCoord().ToString("F5"));
-        dictionary.Add("Y Coordinate", GetYCoord().ToString("F5"));
-        dictionary.Add("Z Coordinate", GetZCoord().ToString("F5"));
-        dictionary.Add("Name", GetName());
-        dictionary.Add("Description", GetDescription());
-        dictionary.Add("Additional Load from Weight", GetAdditionalLoadFromWeight().ToString("F5"));
-
-        return dictionary;
+            return dictionary;
+        }
     }
 }
