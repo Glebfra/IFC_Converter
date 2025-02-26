@@ -1,6 +1,5 @@
 ﻿using System;
 using IFC.Entities.Abstract;
-using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
