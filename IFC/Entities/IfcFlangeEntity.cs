@@ -5,6 +5,7 @@ using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
@@ -41,8 +42,16 @@ namespace IFC.Entities
     
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            base.CreateAndAdd(model);
-        
+            CreateObjectPlacement(
+                model,
+                ObjectMatrix3D,
+                out IfcCartesianPoint point,
+                out IfcDirection forwardDirection,
+                out IfcDirection rightDirection,
+                out IfcAxis2Placement3D axis2Placement3D,
+                out IfcLocalPlacement localPlacement
+            );
+
             IfcCartesianPoint[] firstCircleConnection = CreateCircle(model, Radiuses[0], -0.5 * Length);
             IfcCartesianPoint[] firstCircleExtension = CreateCircle(model, Radiuses[0] * 1.1, -0.3 * Length);
             IfcCartesianPoint[] firstCircleStartFlange = CreateCircle(model, Radiuses[0] * 1.5, -0.3 * Length);
@@ -68,7 +77,7 @@ namespace IFC.Entities
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
                 fitting.Name = _armatureEntity.Name;
                 fitting.Tag = Tag;
-                fitting.ObjectPlacement = _localPlacement;
+                fitting.ObjectPlacement = localPlacement;
                 fitting.Representation = shape;
             });
             AddProperties(model, _pipeFitting);

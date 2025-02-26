@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using IFC.Entities.Abstract;
-using Start.Entities;
+﻿using Start.Entities;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities
 {
-    public class IfcNodeEntity : IfcAbstractEntity
+    public class IfcNodeEntity
     {
-        protected override IfcIdentifier Tag { get; set; }
-        public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
+        public readonly XbimMatrix3D ObjectMatrix3D;
 
         public IfcNodeEntity(StartNodeEntity nodeEntity)
         {

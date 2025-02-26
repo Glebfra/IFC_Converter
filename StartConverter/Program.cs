@@ -12,9 +12,6 @@ namespace StartConverter
 {
     public static class Program
     {
-        private static Dictionary<int, IfcNodeEntity> _nodeEntities;
-        private static Dictionary<int, IfcPipeEntity> _pipeEntities;
-
         public static void Main(string[] args)
         {
             #if DEBUG
@@ -36,23 +33,25 @@ namespace StartConverter
             #if DEBUG
             DateTime groupTask = DateTime.Now;
             #endif
+            
             GroupObjects(
                 startDataArrayItems,
                 out Dictionary<int, StartAbstractEntity> nodeEntities,
                 out Dictionary<int, StartAbstractEntity> pipeEntities,
                 out Dictionary<int, StartAbstractEntity> fittingEntities,
-                out Dictionary<int, int[]> pipeRelations,
-                out Dictionary<int, int> fittingRelations
+                out Dictionary<int, int[]> pipeNodeRelations,
+                out Dictionary<int, int> fittingNodeRelations
             );
 
             #if DEBUG
             DateTime convertTask = DateTime.Now;
             #endif
+            
             foreach (KeyValuePair<int, StartAbstractEntity> nodeEntity in nodeEntities)
             {
-                IfcNodeEntity ifcNodeEntity = IfcEntityFactory.CreateEntity<IfcNodeEntity>(nodeEntity.Value);
+                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity((StartNodeEntity)nodeEntity.Value);
                 ifcNodeEntities.Add(nodeEntity.Key, ifcNodeEntity);
-                ifcProject.AddEntity(ifcNodeEntity);
+                
                 #if DEBUG
                 Console.WriteLine($"Added StartNodeEntity with Id: {nodeEntity.Key}");
                 #endif
@@ -60,7 +59,7 @@ namespace StartConverter
             
             foreach (KeyValuePair<int, StartAbstractEntity> pipeEntity in pipeEntities)
             {
-                int[] nodeIds = pipeRelations[pipeEntity.Key];
+                int[] nodeIds = pipeNodeRelations[pipeEntity.Key];
                 IfcNodeEntity[] ifcConnNodeEntities = nodeIds.Select(nodeId => ifcNodeEntities[nodeId]).ToArray();
                 IfcPipeEntity ifcPipeEntity = IfcEntityFactory.CreateEntity<IfcPipeEntity>(pipeEntity.Value, ifcConnNodeEntities);
                 ifcPipeEntities.Add(pipeEntity.Key, ifcPipeEntity);
@@ -75,6 +74,7 @@ namespace StartConverter
                 }
                 
                 ifcProject.AddEntity(ifcPipeEntity);
+                
                 #if DEBUG
                 Console.WriteLine($"Added StartPipeEntity with Id: {pipeEntity.Key}");
                 #endif
@@ -86,10 +86,11 @@ namespace StartConverter
                 StartAbstractEntity fitting = fittingEntity.Value;
                 IfcAbstractEntity ifcFittingEntity = IfcEntityFactory.CreateFittingEntity(
                     fitting,
-                    ifcNodeEntities[fittingRelations[fittingId]],
-                    ifcPipeToNodeRelations[fittingRelations[fittingId]].ToArray()
+                    ifcNodeEntities[fittingNodeRelations[fittingId]],
+                    ifcPipeToNodeRelations[fittingNodeRelations[fittingId]].ToArray()
                 );
                 ifcProject.AddEntity(ifcFittingEntity);
+                
                 #if DEBUG
                 Console.WriteLine($"Added StartFittingEntity with Id: {fittingEntity.Key}");
                 #endif
@@ -119,15 +120,15 @@ namespace StartConverter
             out Dictionary<int, StartAbstractEntity> nodeEntities,
             out Dictionary<int, StartAbstractEntity> pipeEntities,
             out Dictionary<int, StartAbstractEntity> fittingEntities,
-            out Dictionary<int, int[]> pipeRelations,
-            out Dictionary<int, int> fittingRelations
+            out Dictionary<int, int[]> pipeNodeRelations,
+            out Dictionary<int, int> fittingNodeRelations
         )
         {
             nodeEntities = new Dictionary<int, StartAbstractEntity>();
             pipeEntities = new Dictionary<int, StartAbstractEntity>();
             fittingEntities = new Dictionary<int, StartAbstractEntity>();
-            pipeRelations = new Dictionary<int, int[]>();
-            fittingRelations = new Dictionary<int, int>();
+            pipeNodeRelations = new Dictionary<int, int[]>();
+            fittingNodeRelations = new Dictionary<int, int>();
 
             foreach (StartDataArrayItem startDataArrayItem in startDataArrayItems)
             {
@@ -141,11 +142,11 @@ namespace StartConverter
                         break;
                     case StartElementType.PIPE_ELEMENT:
                         pipeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        pipeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds);
+                        pipeNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds);
                         break;
                     default:
                         fittingEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        fittingRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds[0]);
+                        fittingNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds[0]);
                         break;
                 }
             }

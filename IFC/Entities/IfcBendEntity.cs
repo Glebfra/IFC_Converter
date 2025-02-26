@@ -28,12 +28,9 @@ namespace IFC.Entities
         private readonly StartBendEntity _bendEntity;
         private readonly IfcNodeEntity _ifcNodeEntity;
         private readonly IfcPipeEntity[] _ifcPipeEntities;
-
         private IfcPipeFitting _pipeFitting;
-    
+        private readonly XbimVector3D[] _directionToPipes;
         private readonly double _pipeAngle;
-        private XbimVector3D[] PipesDirection { get; }
-        private XbimVector3D[] DirectionToPipes { get; }
 
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public double Length => _pipeAngle * _bendEntity.Radius;
@@ -45,21 +42,40 @@ namespace IFC.Entities
             _ifcNodeEntity = ifcNodeEntity;
 
             XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
-            PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
-            DirectionToPipes = ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
+            _directionToPipes = ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
 
-            XbimVector3D upDirection = XbimVector3D.CrossProduct(DirectionToPipes[0] * -1, DirectionToPipes[1]).Normalized();
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, DirectionToPipes[0] * -1, upDirection);
+            XbimVector3D upDirection = XbimVector3D.CrossProduct(_directionToPipes[0] * -1, _directionToPipes[1]).Normalized();
+            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, _directionToPipes[0] * -1, upDirection);
         
-            _pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
+            XbimVector3D[] pipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
+            _pipeAngle = pipesDirection[0].Angle(pipesDirection[1]);
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
+            CreateObjectPlacement(
+                model,
+                ObjectMatrix3D,
+                out IfcCartesianPoint point,
+                out IfcDirection forwardDirection,
+                out IfcDirection rightDirection,
+                out IfcAxis2Placement3D axis2Placement3D,
+                out IfcLocalPlacement localPlacement
+            );
+
             IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = CreateBendShape(model, ObjectMatrix3D, _pipeAngle, _ifcPipeEntities[0].Diameter / 2);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, sweptAreaSolid);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            _pipeFitting = CreateBend(model, shape);
+            
+            _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
+            {
+                fitting.Name = _bendEntity.Name;
+                fitting.Tag = Tag;
+                fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
+                fitting.Representation = shape;
+                fitting.ObjectPlacement = localPlacement;
+            });
+            
             AddProperties(model, _pipeFitting);
             ClipConnectedPipes();
             ConnectPorts(model);
@@ -103,25 +119,9 @@ namespace IFC.Entities
             });
         }
 
-        private IfcPipeFitting CreateBend(IModel model, IfcProductDefinitionShape shape)
-        {
-            IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
-            IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point);
-            IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
-        
-            return model.Instances.New<IfcPipeFitting>(fitting =>
-            {
-                fitting.Name = _bendEntity.Name;
-                fitting.Tag = Tag;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
-                fitting.Representation = shape;
-                fitting.ObjectPlacement = localPlacement;
-            });
-        }
-
         private XbimVector3D CalculateCircleCenter()
         {
-            XbimVector3D dirToCenter = (DirectionToPipes[0].Normalized() + DirectionToPipes[1].Normalized()).Normalized();
+            XbimVector3D dirToCenter = (_directionToPipes[0].Normalized() + _directionToPipes[1].Normalized()).Normalized();
             double lengthToCenter = _bendEntity.Radius / Math.Cos(_pipeAngle / 2);
             return dirToCenter * lengthToCenter;
         }
