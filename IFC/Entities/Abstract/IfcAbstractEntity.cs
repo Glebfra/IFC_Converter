@@ -16,23 +16,6 @@ namespace IFC.Entities.Abstract
 
         public abstract IfcProduct CreateAndAdd(IModel model);
 
-        protected static void CreateObjectPlacement(
-            IModel model,
-            XbimMatrix3D ObjectMatrix3D,
-            out IfcCartesianPoint point,
-            out IfcDirection forwardDirection,
-            out IfcDirection rightDirection,
-            out IfcAxis2Placement3D axis2Placement3D,
-            out IfcLocalPlacement localPlacement
-        )
-        {
-            point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
-            forwardDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
-            rightDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
-            axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
-            localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
-        }
-
         protected virtual void AddProperties(IModel model, IfcProduct product)
         {
             #region DEBUG 

@@ -14,6 +14,7 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities
@@ -41,7 +42,7 @@ namespace IFC.Entities
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            CreateObjectPlacement(
+            IfcAxis.CreateObjectPlacement(
                 model,
                 ObjectMatrix3D,
                 out IfcCartesianPoint point,
@@ -73,12 +74,13 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.ObjectPlacement = localPlacement;
             });
+            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
+            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
         
             _pipeEntities[0].Clip(_nodeEntity, Length / 2);
             _pipeEntities[1].Clip(_nodeEntity, Length / 2);
         
             AddProperties(model, _pipeFitting);
-            ConnectPorts(model);
 
             return _pipeFitting;
         }

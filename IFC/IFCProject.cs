@@ -86,7 +86,7 @@ namespace IFC
 
         public void AddEntities(IEnumerable<IfcAbstractEntity> entities)
         {
-            foreach (IfcAbstractEntity? entity in entities)
+            foreach (IfcAbstractEntity entity in entities)
             {
                 AddEntity(entity);
             }

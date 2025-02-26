@@ -16,6 +16,7 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities
@@ -56,7 +57,7 @@ namespace IFC.Entities
     
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            CreateObjectPlacement(
+            IfcAxis.CreateObjectPlacement(
                 model,
                 ObjectMatrix3D,
                 out IfcCartesianPoint point,
@@ -80,12 +81,13 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
+            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
+            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
             
             _pipeEntities[1].Clip(_nodeEntity, Length);
             
             MovePipe(_pipeEntities[1]);
             AddProperties(model, _pipeFitting);
-            ConnectPorts(model);
 
             return _pipeFitting;
         }
@@ -155,25 +157,6 @@ namespace IFC.Entities
             {
                 pipeEntity.Coordinates += ObjectMatrix3D.Up * _pipeDisplacement;
             }
-        }
-
-        private IfcRelConnectsPorts ConnectPorts(IModel model)
-        {
-            var closestPorts = (
-                from port in _pipeEntities.SelectMany(pipe => pipe.Ports)
-                let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
-                orderby distance
-                select port
-            ).Take(2).ToArray();
-
-            return model.Instances.New<IfcRelConnectsPorts>(ports =>
-            {
-                ports.Name = $"{closestPorts[0].GlobalId}|{closestPorts[1].GlobalId}";
-                ports.Description = "Flow";
-                ports.RelatingPort = closestPorts[0];
-                ports.RelatedPort = closestPorts[1];
-                ports.RealizingElement = _pipeFitting;
-            });
         }
 
         protected override void AddProperties(IModel model, IfcProduct product)

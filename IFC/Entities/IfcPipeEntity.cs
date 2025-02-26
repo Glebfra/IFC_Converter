@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -105,7 +106,7 @@ namespace IFC.Entities
 
             Ports[0] = CreatePort(model, startLocalPlacement);
             Ports[1] = CreatePort(model, endLocalPlacement);
-            ConnectPorts(model, Ports[0], Ports[1]);
+            IfcPortConnection.ConnectPorts(model, Ports, _pipeSegment);
 
             return _pipeSegment;
         }
@@ -129,20 +130,6 @@ namespace IFC.Entities
             });
         }
 
-        private IfcRelConnectsPorts ConnectPorts(IModel model, IfcDistributionPort startPort, IfcDistributionPort endPort)
-        {
-            IfcRelConnectsPorts connectPorts = model.Instances.New<IfcRelConnectsPorts>(connects =>
-            {
-                connects.Name = $"{startPort.GlobalId}|{endPort.GlobalId}";
-                connects.Description = "Flow";
-                connects.RelatingPort = startPort;
-                connects.RelatedPort = endPort;
-                connects.RealizingElement = _pipeSegment;
-            });
-
-            return connectPorts;
-        }
-    
         private bool IsStartNode(IfcNodeEntity nodeEntity)
         {
             XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
