@@ -8,17 +8,40 @@ namespace IFC.Tools
 {
     public static class IfcAxis
     {
-
-        #region Point
-
+        public static void CreateObjectPlacement(
+            IModel model,
+            XbimMatrix3D ObjectMatrix3D,
+            out IfcCartesianPoint point,
+            out IfcDirection forwardDirection,
+            out IfcDirection rightDirection,
+            out IfcAxis2Placement3D axis2Placement3D,
+            out IfcLocalPlacement localPlacement
+        )
+        {
+            point = CreatePoint(model, ObjectMatrix3D.Translation);
+            forwardDirection = CreateDirection(model, ObjectMatrix3D.Forward);
+            rightDirection = CreateDirection(model, ObjectMatrix3D.Right);
+            axis2Placement3D = CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
+            localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+        }
+        
+        public static void CreateObjectPlacement(
+            IModel model,
+            XbimMatrix3D ObjectMatrix3D,
+            out IfcCartesianPoint point,
+            out IfcAxis2Placement3D axis2Placement3D,
+            out IfcLocalPlacement localPlacement
+        )
+        {
+            point = CreatePoint(model, ObjectMatrix3D.Translation);
+            axis2Placement3D = CreateAxis2Placement3D(model, point);
+            localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+        }
+        
         public static IfcCartesianPoint CreatePoint(IModel model, XbimVector3D coordinates)
         {
             return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.X, coordinates.Y, coordinates.Z));
         }
-
-        #endregion
-
-        #region Direction
 
         public static IfcDirection CreateDirection(IModel model, XbimVector3D direction)
         {
@@ -36,24 +59,6 @@ namespace IFC.Tools
                 : pipeDirection * -1;
         }
 
-        public static XbimVector3D GetDirectionToPipe(IfcPipeEntity pipeEntity, IfcNodeEntity nodeEntity)
-        {
-            XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D startPipeCoordinates = pipeEntity.Coordinates;
-            XbimVector3D endPipeCoordinates = startPipeCoordinates + pipeEntity.ObjectMatrix3D.Forward * pipeEntity.Depth;
-
-            XbimVector3D startDisplacement = startPipeCoordinates - nodeCoordinates;
-            XbimVector3D endDisplacement = endPipeCoordinates - nodeCoordinates;
-
-            return startDisplacement.Length < endDisplacement.Length
-                ? startDisplacement
-                : endDisplacement;
-        }
-
-        #endregion
-
-        #region LocalPlacement
-
         public static IfcLocalPlacement CreateLocalPlacement(IModel model, IfcAxis2Placement3D axis2Placement3D)
         {
             return model.Instances.New<IfcLocalPlacement>(lp =>
@@ -62,10 +67,6 @@ namespace IFC.Tools
             });
         }
 
-        #endregion
-
-        #region Axis
-    
         public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, IfcCartesianPoint point, IfcDirection axis, IfcDirection refDirection)
         {
             return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
@@ -81,24 +82,6 @@ namespace IFC.Tools
             return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
             {
                 placement3D.Location = point;
-            });
-        }
-    
-        public static IfcAxis1Placement CreateAxis1Placement(IModel model, IfcCartesianPoint location, IfcDirection axis)
-        {
-            return model.Instances.New<IfcAxis1Placement>(placement =>
-            {
-                placement.Location = location;
-                placement.Axis = axis;
-            });
-        }
-
-        public static IfcAxis1Placement CreateAxis1Placement(IModel model, XbimVector3D coordinates, XbimVector3D direction)
-        {
-            return model.Instances.New<IfcAxis1Placement>(placement =>
-            {
-                placement.Location = CreatePoint(model, coordinates);
-                placement.Axis = CreateDirection(model, direction);
             });
         }
 
@@ -138,18 +121,9 @@ namespace IFC.Tools
             {
                 placement3D.Location = CreatePoint(model, coordinates);
                 placement3D.Axis = CreateDirection(model, direction);
-                placement3D.RefDirection = CreateDirection(model, new XbimVector3D(direction.Y, direction.Z, direction.X));
+                placement3D.RefDirection =
+                    CreateDirection(model, new XbimVector3D(direction.Y, direction.Z, direction.X));
             });
         }
-
-        public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates)
-        {
-            return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
-            {
-                placement3D.Location = CreatePoint(model, coordinates);
-            });
-        }
-
-        #endregion
     }
 }

@@ -13,8 +13,8 @@ namespace IFC.Entities
         private double Length;
         private double Height;
     
-        public IfcSweepoletEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
-            : base(teeEntity, nodeEntity, connPipes)
+        public IfcSweepoletEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] ifcPipeEntities) 
+            : base(teeEntity, nodeEntity, ifcPipeEntities)
         {
             Length = _headPipe.Diameter;
             Height = _branchPipes[0].Diameter / 2;

@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -22,18 +23,19 @@ namespace IFC.Entities
 {
     public class IfcPipeEntity : IfcAbstractEntity
     {
-        private StartPipeEntity _pipeEntity;
-        private IfcPipeSegment _pipeSegment;
-
         private event Action? _onDepthChanged;
         private event Action? _onCoordinatesChanged;
 
+        private StartPipeEntity _pipeEntity;
+        private IfcPipeSegment _pipeSegment;
+        
         protected override IfcIdentifier Tag { get; set; } = "Pipe";
-    
+        
+        public IfcNodeEntity[] NodeEntities { get; }
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public double Diameter { get; }
         public IfcDistributionPort[] Ports { get; }
-    
+
         public double Depth
         {
             get => _depth;
@@ -56,32 +58,29 @@ namespace IFC.Entities
         private double _depth;
         private XbimVector3D _coordinates;
 
-        public IfcPipeEntity(StartPipeEntity pipeEntity)
+        public IfcPipeEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
         {
             _pipeEntity = pipeEntity;
+            NodeEntities = nodeEntities;
 
-            XbimVector3D coordinates = new XbimVector3D(
-                _pipeEntity.XCoord,
-                _pipeEntity.YCoord,
-                _pipeEntity.ZCoord
-            );
-            XbimVector3D direction = new XbimVector3D(
+            XbimVector3D coordinates = nodeEntities[0].ObjectMatrix3D.Translation;
+            XbimVector3D pipeProjection = new XbimVector3D(
                 _pipeEntity.ProjectionAlongOXAxis,
                 _pipeEntity.ProjectionAlongOYAxis,
                 _pipeEntity.ProjectionAlongOZAxis
             );
-        
-            Diameter = _pipeEntity.Diameter;
-            Depth = direction.Length;
 
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
-            XbimVector3D forward = direction.Normalized();
+            XbimVector3D forward = pipeProjection.Normalized();
             if (forward == WorldUp || forward == -1 * WorldUp) 
                 WorldUp = new XbimVector3D(0, 1, 0);
             XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
         
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
             Coordinates = ObjectMatrix3D.Translation;
+            
+            Diameter = _pipeEntity.Diameter;
+            Depth = pipeProjection.Length;
 
             Ports = new IfcDistributionPort[2];
         }
@@ -107,11 +106,7 @@ namespace IFC.Entities
 
             Ports[0] = CreatePort(model, startLocalPlacement);
             Ports[1] = CreatePort(model, endLocalPlacement);
-            IfcRelConnectsPorts connectPorts = ConnectPorts(model, Ports[0], Ports[1]);
-
-            IfcBuilding ifcBuilding = model.Instances.FirstOrDefault<IfcBuilding>();
-            ifcBuilding.AddElement(Ports[0]);
-            ifcBuilding.AddElement(Ports[1]);
+            IfcPortConnection.ConnectPorts(model, Ports, _pipeSegment);
 
             return _pipeSegment;
         }
@@ -135,20 +130,6 @@ namespace IFC.Entities
             });
         }
 
-        private IfcRelConnectsPorts ConnectPorts(IModel model, IfcDistributionPort startPort, IfcDistributionPort endPort)
-        {
-            IfcRelConnectsPorts connectPorts = model.Instances.New<IfcRelConnectsPorts>(connects =>
-            {
-                connects.Name = $"{startPort.GlobalId}|{endPort.GlobalId}";
-                connects.Description = "Flow";
-                connects.RelatingPort = startPort;
-                connects.RelatedPort = endPort;
-                connects.RealizingElement = _pipeSegment;
-            });
-
-            return connectPorts;
-        }
-    
         private bool IsStartNode(IfcNodeEntity nodeEntity)
         {
             XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;

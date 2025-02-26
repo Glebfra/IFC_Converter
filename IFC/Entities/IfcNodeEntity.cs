@@ -5,7 +5,7 @@ namespace IFC.Entities
 {
     public class IfcNodeEntity
     {
-        public XbimMatrix3D ObjectMatrix3D { get; protected set; }
+        public readonly XbimMatrix3D ObjectMatrix3D;
 
         public IfcNodeEntity(StartNodeEntity nodeEntity)
         {

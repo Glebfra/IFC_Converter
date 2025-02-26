@@ -18,6 +18,7 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC.Entities
 {
@@ -36,9 +37,6 @@ namespace IFC.Entities
         public double Length => 2 * Depth;
 
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        public XbimVector3D[] PipesDirection { get; }
-        public XbimVector3D[] DirectionToPipes { get; }
-    
         public double Depth { get; }
 
         public IfcMilterJointEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
@@ -47,24 +45,22 @@ namespace IFC.Entities
             _ifcNodeEntity = ifcNodeEntity;
             _ifcPipeEntities = ifcPipeEntities;
 
-            XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
-            PipesDirection = ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
-            DirectionToPipes = ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
-        
-            XbimVector3D upDirection = XbimVector3D.CrossProduct(DirectionToPipes[0] * -1, DirectionToPipes[1]).Normalized();
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, DirectionToPipes[0] * -1, upDirection);
-
+            XbimVector3D[] directionToPipes = CalculateDirectionToPipes();
+            ObjectMatrix3D = CreateObjectMatrix(directionToPipes);
+            
+            _pipeAngle = CalculateBendAngle();
             Depth = Math.Min(ifcPipeEntities[0].Depth, ifcPipeEntities[1].Depth) * 0.1;
-            _pipeAngle = PipesDirection[0].Angle(PipesDirection[1]);
         }
     
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcDirection upDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Up);
-        
-            IfcCartesianPoint objectPoint = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
-            IfcAxis2Placement3D objectAxis = IfcAxis.CreateAxis2Placement3D(model, objectPoint);
-            IfcLocalPlacement objectPlacement = IfcAxis.CreateLocalPlacement(model, objectAxis);
+            IfcAxis.CreateObjectPlacement(
+                model,
+                ObjectMatrix3D,
+                out IfcCartesianPoint point,
+                out IfcAxis2Placement3D axis2Placement3D,
+                out IfcLocalPlacement localPlacement
+            );
 
             IfcRepresentationItem[] ifcRepresentationItems = new IfcRepresentationItem[_ifcPipeEntities.Length + 1];
             for (int i = 0; i < _ifcPipeEntities.Length; i++)
@@ -82,23 +78,43 @@ namespace IFC.Entities
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            _pipeFitting = CreateMilterJoint(model, shape, objectPlacement);
-            ConnectPorts(model);
+            
+            _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
+            {
+                fitting.Name = _bendEntity.Name;
+                fitting.Tag = Tag;
+                fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
+                fitting.ObjectPlacement = localPlacement;
+                fitting.Representation = shape;
+            });
+
+            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcPipeEntities);
+            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
+            
             AddProperties(model, _pipeFitting);
 
             return _pipeFitting;
         }
-
-        private IfcPipeFitting CreateMilterJoint(IModel model, IfcProductDefinitionShape shape, IfcLocalPlacement placement)
+        
+        private XbimMatrix3D CreateObjectMatrix(XbimVector3D[] directionToPipes)
         {
-            return model.Instances.New<IfcPipeFitting>(fitting =>
-            {
-                fitting.Name = _bendEntity.Name;
-                fitting.Tag = Tag;
-                fitting.ObjectPlacement = placement;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
-                fitting.Representation = shape;
-            });
+            XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D up = XbimVector3D.CrossProduct(directionToPipes[0] * -1, directionToPipes[1]).Normalized();
+            XbimVector3D forward = directionToPipes[0] * -1;
+            
+            return XbimMatrix3D.CreateWorld(coordinates, forward, up);
+        }
+        
+        private XbimVector3D[] CalculateDirectionToPipes()
+        {
+            XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
+            return _ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
+        }
+        
+        private double CalculateBendAngle()
+        {
+            XbimVector3D[] pipesDirection = _ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
+            return pipesDirection[0].Angle(pipesDirection[1]);
         }
 
         private IfcExtrudedAreaSolid CreateExtrudedAreaSolid(IModel model, IfcPipeEntity ifcPipeEntity, double displacement)
@@ -128,26 +144,7 @@ namespace IFC.Entities
                 solid.Position = placement3D;
             });
         }
-    
-        private IfcRelConnectsPorts ConnectPorts(IModel model)
-        {
-            var closestPorts = (
-                from port in _ifcPipeEntities.SelectMany(pipe => pipe.Ports)
-                let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
-                orderby distance
-                select port
-            ).Take(2).ToArray();
 
-            return model.Instances.New<IfcRelConnectsPorts>(ports =>
-            {
-                ports.Name = $"{closestPorts[0].GlobalId}|{closestPorts[1].GlobalId}";
-                ports.Description = "Flow";
-                ports.RelatingPort = closestPorts[0];
-                ports.RelatedPort = closestPorts[1];
-                ports.RealizingElement = _pipeFitting;
-            });
-        }
-    
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);

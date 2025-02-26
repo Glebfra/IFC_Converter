@@ -13,8 +13,8 @@ namespace IFC.Entities
         public readonly double Length;
         public readonly double Height;
 
-        public IfcFabricatedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] connPipes) 
-            : base(teeEntity, nodeEntity, connPipes)
+        public IfcFabricatedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] ifcPipeEntities) 
+            : base(teeEntity, nodeEntity, ifcPipeEntities)
         {
             Length = teeEntity.HeaderLength;
             Height = teeEntity.BranchHeight + _branchPipes[0].Diameter / 2;

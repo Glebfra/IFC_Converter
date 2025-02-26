@@ -14,8 +14,13 @@ namespace Start.Entities
         [JsonProperty("227")] 
         public string Description { get; set; }
 
+        [JsonProperty("404")]
         public double XCoord;
+        
+        [JsonProperty("405")]
         public double YCoord;
+        
+        [JsonProperty("406")]
         public double ZCoord;
 
         public override Dictionary<string, string> GetData()
