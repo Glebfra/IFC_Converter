@@ -5,7 +5,6 @@ using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
@@ -13,9 +12,9 @@ using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities
@@ -59,14 +58,17 @@ namespace IFC.Entities
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
+            IfcAxis.CreateObjectPlacement(
+                model,
+                ObjectMatrix3D,
+                out IfcCartesianPoint point,
+                out IfcDirection forwardDirection,
+                out IfcDirection rightDirection,
+                out IfcAxis2Placement3D axis2Placement3D,
+                out IfcLocalPlacement localPlacement
+            );
+            
             double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
-        
-            IfcCartesianPoint point = IfcAxis.CreatePoint(model, ObjectMatrix3D.Translation);
-            IfcDirection axis = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
-            IfcDirection refDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
-        
-            IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, axis, refDirection);
-            IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
 
             double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
             double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;
@@ -84,11 +86,13 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
+            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
+            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
+            
             _pipeEntities[0].Clip(_nodeEntity, Math.Abs(displacement1));
             _pipeEntities[1].Clip(_nodeEntity, Math.Abs(displacement2));
 
             AddProperties(model, _pipeFitting);
-            ConnectPorts(model);
 
             return _pipeFitting;
         }
@@ -125,26 +129,7 @@ namespace IFC.Entities
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
         }
-    
-        private IfcRelConnectsPorts ConnectPorts(IModel model)
-        {
-            var closestPorts = (
-                from port in _pipeEntities.SelectMany(pipe => pipe.Ports)
-                let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
-                orderby distance
-                select port
-            ).Take(2).ToArray();
 
-            return model.Instances.New<IfcRelConnectsPorts>(ports =>
-            {
-                ports.Name = $"{closestPorts[0].GlobalId}|{closestPorts[1].GlobalId}";
-                ports.Description = "Flow";
-                ports.RelatingPort = closestPorts[0];
-                ports.RelatedPort = closestPorts[1];
-                ports.RealizingElement = _pipeFitting;
-            });
-        }
-    
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);

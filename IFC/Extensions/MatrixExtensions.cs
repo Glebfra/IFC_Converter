@@ -53,5 +53,15 @@ namespace IFC.Extensions
                 translation.X, translation.Y, translation.Z, 1
             );
         }
+
+        public static XbimMatrix3D Translate(this XbimMatrix3D matrix3D, XbimVector3D translationVector)
+        {
+            return new XbimMatrix3D(
+                matrix3D.M11, matrix3D.M12, matrix3D.M13, matrix3D.M14,
+                matrix3D.M21, matrix3D.M22, matrix3D.M23, matrix3D.M24,
+                matrix3D.M31, matrix3D.M32, matrix3D.M33, matrix3D.M34,
+                matrix3D.OffsetX + translationVector.X, matrix3D.OffsetY + translationVector.Y, matrix3D.OffsetZ + translationVector.Z, matrix3D.M44
+            );
+        }
     }
 }

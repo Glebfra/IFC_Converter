@@ -11,6 +11,8 @@ namespace Start.Entities
         
         public abstract Dictionary<string, string> GetData();
 
+        public StartElementType Type = StartElementType.ALL;
+
         public static T CreateFromJson<T>(string json, int id = 0)
             where T : StartAbstractEntity
         {

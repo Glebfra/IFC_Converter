@@ -1,11 +1,7 @@
 ﻿using System.Linq;
 using IFC.Tools;
-using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.HvacDomain;
-using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC.Entities.Abstract
 {
@@ -51,36 +47,6 @@ namespace IFC.Entities.Abstract
             }
 
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-        }
-
-        protected IfcRelConnectsPorts[] ConnectPorts(IModel model)
-        {
-            IfcRelConnectsPorts[] connectedPorts = new IfcRelConnectsPorts[Enumerable.Range(1, _pipeEntities.Length).Sum()];
-        
-            IfcDistributionPort[] closestPorts = (
-                from port in _pipeEntities.SelectMany(pipe => pipe.Ports)
-                let distance = (port.ObjectPlacement.ToMatrix3D().Translation - ObjectMatrix3D.Translation).Length
-                orderby distance
-                select port
-            ).Take(_pipeEntities.Length).ToArray();
-
-            int index = 0;
-            for (int i = 0; i < closestPorts.Length; i++)
-            {
-                for(int j = i+1; j < closestPorts.Length; j++)
-                {
-                    connectedPorts[index++] = model.Instances.New<IfcRelConnectsPorts>(ports =>
-                    {
-                        ports.Name = $"{closestPorts[i].GlobalId}|{closestPorts[j].GlobalId}";
-                        ports.Description = "Flow";
-                        ports.RelatingPort = closestPorts[i];
-                        ports.RelatedPort = closestPorts[j];
-                        ports.RealizingElement = _pipeFitting;
-                    });
-                }
-            }
-
-            return connectedPorts;
         }
     }
 }

@@ -73,6 +73,16 @@ namespace Start.API
             return (string)title;
         }
 
+        public string GetDataJson(StartElementType minType, StartElementType maxType, int mode = 0)
+        {
+            object[] args = { mode, minType, maxType };
+            object? dataJson = _startBaseRootDataArray.GetType().InvokeMember(
+                "GetInputDataJsonArray", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
+            );
+            
+            return (string)dataJson ?? "{}";
+        }
+
         public void Dispose()
         {
             Marshal.ReleaseComObject(_startBaseRootDataArray);

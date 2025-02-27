@@ -128,15 +128,6 @@ namespace IFC.Tools
                 sr.Items.AddRange(representationItems);
             });
         }
-    
-        public static IfcArbitraryClosedProfileDef CreateProfile(IModel model, IfcCurve polyline)
-        {
-            return model.Instances.New<IfcArbitraryClosedProfileDef>(profile =>
-            {
-                profile.ProfileType = IfcProfileTypeEnum.AREA;
-                profile.OuterCurve = polyline;
-            });
-        }
 
         public static IfcProductDefinitionShape CreateProductDefinitionShape(IModel model, IfcShapeRepresentation shapeRepresentation)
         {
