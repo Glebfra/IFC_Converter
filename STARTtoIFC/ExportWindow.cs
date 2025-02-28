@@ -1,21 +1,43 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Start.API;
 
 namespace STARTtoIFC
 {
-    public partial class ExportWindowForm : Form
+    internal partial class ExportWindowForm : Form
     {
-        private ExportDataContainer _exportDataContainer;
-        
-        public ExportWindowForm(ExportDataContainer exportDataContainer)
+        private ExportContainer _exportContainer;
+        private StartDocument _startDocument;
+
+        public ExportWindowForm(ExportContainer exportContainer)
         {
             InitializeComponent();
+            _exportContainer = exportContainer;
             
-            _exportDataContainer = exportDataContainer;
-            
-            inputFilepathTextbox.Text = _exportDataContainer.InputFilepath;
-            outputFilepathTextbox.Text = _exportDataContainer.OutputFilepath;
+            _startDocument = new StartDocument(exportContainer.StartDocumentObject);
+
+            string inputFilepath = _startDocument.GetPathName();
+            string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
+            inputFilepathTextbox.Text = inputFilepath;
+            outputFilepathTextbox.Text = outputFilepath;
+
+            Logger.OnLogsChanged += logTextbox.AppendText;
+            EventBus.OnExportFinished += ShowExportSuccessWindow;
+        }
+
+        private void ShowExportSuccessWindow(ConversionResult result)
+        {
+            if (result == ConversionResult.Success)
+            {
+                DialogResult = DialogResult.OK;
+                MessageBox.Show("Экспорт завершен", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (result == ConversionResult.Fail)
+            {
+                DialogResult = DialogResult.Abort;
+                MessageBox.Show("Экспорт не заверешен из-за внутренней ошибки", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ExportButton_Click(object sender, EventArgs e)
@@ -31,9 +53,7 @@ namespace STARTtoIFC
                 MessageBox.Show("Выберите корректное расположение файла", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            _exportDataContainer.OutputFilepath = outputFilepath;
-            DialogResult = DialogResult.OK;
+            EventBus.OnExport?.Invoke(_startDocument, outputFilepath);
         }
 
         private void selectOutputFilepathButton_Click(object sender, EventArgs e)

@@ -1,9 +1,11 @@
-﻿namespace STARTtoIFC
+﻿using System;
+using Start.API;
+
+namespace STARTtoIFC
 {
-    public class ExportDataContainer
+    internal class ExportContainer
     {
-        public string OutputFilepath { get; set; }
-        public string InputFilepath { get; set; }
+        public object StartDocumentObject { get; set; }
         public int LanguageId { get; set; }
     }
 }

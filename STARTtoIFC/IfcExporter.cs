@@ -11,6 +11,9 @@ namespace STARTtoIFC
     [Guid("8023137E-9E17-41A7-96AE-7D7688F1EC14")]
     public class IfcExporter : IIfcExporter
     {
+        private Action<StartDocument, string, Action<ConversionResult>?>? OnExport;
+        private Action<ConversionResult>? OnExportFinished;
+
         public int Test()
         {
             MessageBox.Show("DLL is connected.");
@@ -21,32 +24,26 @@ namespace STARTtoIFC
         [STAThread]
         public int Export(object startDocument, int languageId)
         {
-            StartDocument startDocumentObject = new StartDocument(startDocument);
-            string inputFilepath = startDocumentObject.GetPathName();
-            string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
-            
-            ExportDataContainer exportDataContainer = new ExportDataContainer
+            ExportContainer exportContainer = new ExportContainer()
             {
-                LanguageId = languageId,
-                InputFilepath = inputFilepath,
-                OutputFilepath = outputFilepath
+                StartDocumentObject = startDocument,
+                LanguageId = languageId
             };
+            EventBus.OnExport += IfcGenerator.Convert;
 
             DialogResult dialogResult;
-            using (ExportWindowForm exportWindowForm = new ExportWindowForm(exportDataContainer))
+            using (ExportWindowForm exportWindowForm = new ExportWindowForm(exportContainer))
             {
                 dialogResult = exportWindowForm.ShowDialog();
             }
-            if (dialogResult == DialogResult.Cancel) return (int)ConversionResult.Canceled;
 
-            try
+            if (dialogResult == DialogResult.OK)
             {
-                IfcGenerator.Convert(startDocumentObject, exportDataContainer.OutputFilepath);
                 return (int)ConversionResult.Success;
-            } 
-            catch (Exception e)
+            }
+            else
             {
-                return (int)ConversionResult.Fail;
+                return (int)ConversionResult.Canceled;
             }
         }
 

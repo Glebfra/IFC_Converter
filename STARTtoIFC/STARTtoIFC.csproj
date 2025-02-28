@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContainer.cs" />
+    <Compile Include="EventBus.cs" />
     <Compile Include="ExportWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +60,7 @@
     <Compile Include="ConversionResult.cs" />
     <Compile Include="IfcExporter.cs" />
     <Compile Include="IIfcExporter.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

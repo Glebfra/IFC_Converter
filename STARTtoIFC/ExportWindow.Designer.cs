@@ -2,7 +2,7 @@
 
 namespace STARTtoIFC
 {
-    partial class ExportWindowForm
+    internal partial class ExportWindowForm
     {
         /// <summary>
         /// Required designer variable.
@@ -35,13 +35,16 @@ namespace STARTtoIFC
             this.inputFilepathTextbox = new System.Windows.Forms.TextBox();
             this.outputFilepathTextbox = new System.Windows.Forms.TextBox();
             this.selectOutputFilepathButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.inputFilepathLabel = new System.Windows.Forms.Label();
+            this.outputFilepathLabel = new System.Windows.Forms.Label();
+            this.logTextbox = new System.Windows.Forms.TextBox();
+            this.logsLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // exportButton
             // 
-            this.exportButton.Location = new System.Drawing.Point(148, 99);
+            this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.exportButton.Location = new System.Drawing.Point(138, 269);
             this.exportButton.Name = "exportButton";
             this.exportButton.Size = new System.Drawing.Size(106, 38);
             this.exportButton.TabIndex = 0;
@@ -51,6 +54,7 @@ namespace STARTtoIFC
             // 
             // inputFilepathTextbox
             // 
+            this.inputFilepathTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.inputFilepathTextbox.Location = new System.Drawing.Point(98, 12);
             this.inputFilepathTextbox.Name = "inputFilepathTextbox";
             this.inputFilepathTextbox.ReadOnly = true;
@@ -59,6 +63,7 @@ namespace STARTtoIFC
             // 
             // outputFilepathTextbox
             // 
+            this.outputFilepathTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.outputFilepathTextbox.Location = new System.Drawing.Point(98, 51);
             this.outputFilepathTextbox.Name = "outputFilepathTextbox";
             this.outputFilepathTextbox.Size = new System.Drawing.Size(282, 20);
@@ -74,31 +79,52 @@ namespace STARTtoIFC
             this.selectOutputFilepathButton.UseVisualStyleBackColor = true;
             this.selectOutputFilepathButton.Click += new System.EventHandler(this.selectOutputFilepathButton_Click);
             // 
-            // label1
+            // inputFilepathLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Input filepath";
+            this.inputFilepathLabel.Location = new System.Drawing.Point(24, 12);
+            this.inputFilepathLabel.Name = "inputFilepathLabel";
+            this.inputFilepathLabel.Size = new System.Drawing.Size(68, 20);
+            this.inputFilepathLabel.TabIndex = 5;
+            this.inputFilepathLabel.Text = "Input filepath";
+            this.inputFilepathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label2
+            // outputFilepathLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 54);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Output filepath";
+            this.outputFilepathLabel.Location = new System.Drawing.Point(16, 51);
+            this.outputFilepathLabel.Name = "outputFilepathLabel";
+            this.outputFilepathLabel.Size = new System.Drawing.Size(76, 20);
+            this.outputFilepathLabel.TabIndex = 6;
+            this.outputFilepathLabel.Text = "Output filepath";
+            this.outputFilepathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // logTextbox
+            // 
+            this.logTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.logTextbox.Location = new System.Drawing.Point(12, 120);
+            this.logTextbox.Multiline = true;
+            this.logTextbox.Name = "logTextbox";
+            this.logTextbox.ReadOnly = true;
+            this.logTextbox.Size = new System.Drawing.Size(366, 143);
+            this.logTextbox.TabIndex = 7;
+            // 
+            // logsLabel
+            // 
+            this.logsLabel.Location = new System.Drawing.Point(12, 94);
+            this.logsLabel.Name = "logsLabel";
+            this.logsLabel.Size = new System.Drawing.Size(366, 23);
+            this.logsLabel.TabIndex = 8;
+            this.logsLabel.Text = "Logs";
+            this.logsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ExportWindowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(390, 149);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(390, 319);
+            this.Controls.Add(this.logsLabel);
+            this.Controls.Add(this.logTextbox);
+            this.Controls.Add(this.outputFilepathLabel);
+            this.Controls.Add(this.inputFilepathLabel);
             this.Controls.Add(this.selectOutputFilepathButton);
             this.Controls.Add(this.outputFilepathTextbox);
             this.Controls.Add(this.inputFilepathTextbox);
@@ -109,9 +135,13 @@ namespace STARTtoIFC
             this.PerformLayout();
         }
 
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label logsLabel;
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox logTextbox;
+
+        private System.Windows.Forms.Label outputFilepathLabel;
+
+        private System.Windows.Forms.Label inputFilepathLabel;
 
         private System.Windows.Forms.TextBox outputFilepathTextbox;
         

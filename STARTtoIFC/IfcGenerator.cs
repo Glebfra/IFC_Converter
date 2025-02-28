@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IFC;
 using IFC.Entities;
@@ -12,6 +13,19 @@ namespace STARTtoIFC
     internal static class IfcGenerator
     {
         public static void Convert(StartDocument startDocument, string outputFilepath)
+        {
+            try
+            {
+                TryConvert(startDocument, outputFilepath);
+                EventBus.OnExportFinished?.Invoke(ConversionResult.Success);
+            } catch (Exception e)
+            {
+                Logger.Log(e.Message);
+                EventBus.OnExportFinished?.Invoke(ConversionResult.Fail);
+            }
+        }
+
+        private static void TryConvert(StartDocument startDocument, string outputFilepath)
         {
             StartDataArrayItem[] startDataArrayItems;
             using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
@@ -27,6 +41,7 @@ namespace STARTtoIFC
                 out Dictionary<int, int[]> pipeNodeRelations,
                 out Dictionary<int, int> fittingNodeRelations
             );
+            Logger.Log($"Successfully grouped objects. Total count is: {startDataArrayItems.Length}");
             
             Dictionary<int, IfcNodeEntity> ifcNodeEntities = new Dictionary<int, IfcNodeEntity>();
             Dictionary<int, IfcPipeEntity> ifcPipeEntities = new Dictionary<int, IfcPipeEntity>();
@@ -36,6 +51,7 @@ namespace STARTtoIFC
             {
                 IfcNodeEntity ifcNodeEntity = new IfcNodeEntity((StartNodeEntity)nodeEntity.Value);
                 ifcNodeEntities.Add(nodeEntity.Key, ifcNodeEntity);
+                Logger.Log($"Added {nodeEntity.Value.GetType().Name} with id {nodeEntity.Key} to IFC.");
             }
 
             using (IFCProject ifcProject = IFCProject.CreateProject("StartToIfc"))
@@ -57,6 +73,7 @@ namespace STARTtoIFC
                     }
                 
                     ifcProject.AddEntity(ifcPipeEntity);
+                    Logger.Log($"Added {pipeEntity.Value.GetType().Name} with id {pipeEntity.Key} to IFC.");
                 }
             
                 foreach (KeyValuePair<int, StartAbstractEntity> fittingEntity in fittingEntities)
@@ -69,6 +86,7 @@ namespace STARTtoIFC
                         ifcPipeToNodeRelations[fittingNodeRelations[fittingId]].ToArray()
                     );
                     ifcProject.AddEntity(ifcFittingEntity);
+                    Logger.Log($"Added {fittingEntity.Value.GetType().Name} with id {fittingEntity.Key} to IFC.");
                 }
             
                 ifcProject.GroupObjects("Pipe system");
