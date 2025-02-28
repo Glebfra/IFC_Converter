@@ -15,7 +15,7 @@ namespace StartConverter
             {
                 object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filepath);
                 if (startDocument == null) throw new NullReferenceException("Object ref is null");
-                int code = ifcExporter.Export(startDocument, 0);
+                int code = ifcExporter.Export(startDocument, 1);
                 Console.WriteLine($"Output code: {code}");
             }
         }

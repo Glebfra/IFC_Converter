@@ -1,0 +1,50 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ExportWindowForm_ShowExportResultWindow_Success" xml:space="preserve">
+        <value>Экспорт завершен</value>
+    </data>
+    <data name="ExportWindowForm_ShowExportResultWindow_Failure" xml:space="preserve">
+        <value>Экспорт не заверешен</value>
+    </data>
+    <data name="MessageBox_Title_Error" xml:space="preserve">
+        <value>Ошибка</value>
+    </data>
+    <data name="MessageBox_Title_Success" xml:space="preserve">
+        <value>Успех</value>
+    </data>
+    <data name="ExportWindowForm_ExportButton_Click_NullPath" xml:space="preserve">
+        <value>Путь не может быть пустым</value>
+    </data>
+    <data name="ExportWindowForm_ExportButton_Click_InvalidPath" xml:space="preserve">
+        <value>Выберите корректное расположение файла</value>
+    </data>
+    <data name="ExportWindowForm_selectOutputFilepathButton_Click_SelectFile" xml:space="preserve">
+        <value>Выберите файл для экспорта</value>
+    </data>
+    <data name="ExportButton_Text" xml:space="preserve">
+        <value>Экспорт</value>
+    </data>
+    <data name="ExportWindowForm_Text" xml:space="preserve">
+        <value>Экспорт в IFC</value>
+    </data>
+    <data name="ExportWindowForm_InputFilepath_Label" xml:space="preserve">
+        <value>Путь до .ctp файла</value>
+    </data>
+    <data name="ExportWindowForm_OutputFilepath_Label" xml:space="preserve">
+        <value>Путь до .ifc файла</value>
+    </data>
+    <data name="ExportWindowForm_Log_Label" xml:space="preserve">
+        <value>Логи</value>
+    </data>
+</root>

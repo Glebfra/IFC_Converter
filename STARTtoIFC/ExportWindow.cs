@@ -13,30 +13,40 @@ namespace STARTtoIFC
         public ExportWindowForm(ExportContainer exportContainer)
         {
             InitializeComponent();
-            _exportContainer = exportContainer;
+            LocalizeComponents();
             
+            _exportContainer = exportContainer;
             _startDocument = new StartDocument(exportContainer.StartDocumentObject);
 
             string inputFilepath = _startDocument.GetPathName();
             string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
             inputFilepathTextbox.Text = inputFilepath;
             outputFilepathTextbox.Text = outputFilepath;
-
+            
             Logger.OnLogsChanged += logTextbox.AppendText;
-            EventBus.OnExportFinished += ShowExportSuccessWindow;
+            EventBus.OnExportFinished += ShowExportResultWindow;
         }
 
-        private void ShowExportSuccessWindow(ConversionResult result)
+        private void LocalizeComponents()
+        {
+            Text = LocalizationResource.ExportWindowForm_Text;
+            exportButton.Text = LocalizationResource.ExportButton_Text;
+            inputFilepathLabel.Text = LocalizationResource.ExportWindowForm_InputFilepath_Label;
+            outputFilepathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilepath_Label;
+            logsLabel.Text = LocalizationResource.ExportWindowForm_Log_Label;
+        }
+
+        private void ShowExportResultWindow(ConversionResult result)
         {
             if (result == ConversionResult.Success)
             {
                 DialogResult = DialogResult.OK;
-                MessageBox.Show("Экспорт завершен", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(LocalizationResource.ExportWindowForm_ShowExportResultWindow_Success, LocalizationResource.MessageBox_Title_Success, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (result == ConversionResult.Fail)
             {
                 DialogResult = DialogResult.Abort;
-                MessageBox.Show("Экспорт не заверешен из-за внутренней ошибки", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.ExportWindowForm_ShowExportResultWindow_Failure, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -45,12 +55,12 @@ namespace STARTtoIFC
             string outputFilepath = outputFilepathTextbox.Text;
             if (string.IsNullOrEmpty(outputFilepath))
             {
-                MessageBox.Show("Путь не может быть пустым", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.ExportWindowForm_ExportButton_Click_NullPath, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (outputFilepath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
             {
-                MessageBox.Show("Выберите корректное расположение файла", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.ExportWindowForm_ExportButton_Click_InvalidPath, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             EventBus.OnExport?.Invoke(_startDocument, outputFilepath);
@@ -60,7 +70,7 @@ namespace STARTtoIFC
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Title = @"Выберите файл для экспорта";
+                openFileDialog.Title = LocalizationResource.ExportWindowForm_selectOutputFilepathButton_Click_SelectFile;
                 openFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
                 openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 

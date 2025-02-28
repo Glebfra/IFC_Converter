@@ -37,13 +37,14 @@ namespace STARTtoIFC
                 dialogResult = exportWindowForm.ShowDialog();
             }
 
-            if (dialogResult == DialogResult.OK)
+            switch (dialogResult)
             {
-                return (int)ConversionResult.Success;
-            }
-            else
-            {
-                return (int)ConversionResult.Canceled;
+                case DialogResult.OK:
+                    return (int)ConversionResult.Success;
+                case DialogResult.Cancel:
+                    return (int)ConversionResult.Canceled;
+                default:
+                    return (int)ConversionResult.Fail;
             }
         }
 

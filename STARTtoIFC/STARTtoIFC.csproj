@@ -60,6 +60,11 @@
     <Compile Include="ConversionResult.cs" />
     <Compile Include="IfcExporter.cs" />
     <Compile Include="IIfcExporter.cs" />
+    <Compile Include="LocalizationResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LocalizationResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,8 +79,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ExportWindow.resx">
-      <DependentUpon>ExportWindow.cs</DependentUpon>
+    <EmbeddedResource Include="LocalizationResource.en.resx">
+      <DependentUpon>LocalizationResource.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalizationResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalizationResource.ru.resx">
+      <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
