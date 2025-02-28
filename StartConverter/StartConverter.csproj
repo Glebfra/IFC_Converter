@@ -41,6 +41,7 @@
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
+        <Reference Include="System.Windows.Forms" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Program.cs" />
@@ -50,6 +51,10 @@
       <ProjectReference Include="..\IFC\IFC.csproj">
         <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
         <Name>IFC</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\STARTtoIFC\STARTtoIFC.csproj">
+        <Project>{e9de248d-90bc-408e-9489-22d172c7b514}</Project>
+        <Name>STARTtoIFC</Name>
       </ProjectReference>
       <ProjectReference Include="..\Start\Start.csproj">
         <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>

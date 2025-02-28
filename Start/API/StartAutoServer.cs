@@ -30,6 +30,14 @@ namespace Start.API
             );
             return new StartDocument(document);
         }
+        
+        public object? LoadStartDocumentRaw(int mode, string filepath)
+        {
+            object? document = _autoServer.GetType().InvokeMember(
+                "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, _autoServer, new object[] { mode, filepath, 0 }
+            );
+            return document;
+        }
 
         public string? GetFullName()
         {

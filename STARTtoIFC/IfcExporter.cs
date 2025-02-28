@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using Start.API;
 
 namespace STARTtoIFC
 {
@@ -16,16 +17,37 @@ namespace STARTtoIFC
 
             return 1;
         }
-
+        
+        [STAThread]
         public int Export(object startDocument, int languageId)
         {
-            MessageBox.Show("Здесь будет окно эксопрта в IFC");
+            StartDocument startDocumentObject = new StartDocument(startDocument);
+            string inputFilepath = startDocumentObject.GetPathName();
+            string outputFilepath = inputFilepath.Replace(".ctp", ".ifc");
+            
+            ExportDataContainer exportDataContainer = new ExportDataContainer
+            {
+                LanguageId = languageId,
+                InputFilepath = inputFilepath,
+                OutputFilepath = outputFilepath
+            };
 
-            if (startDocument != null)
-                Marshal.ReleaseComObject(startDocument);
-            startDocument = null;
-
-            return (int)ConversionResult.Success;
+            DialogResult dialogResult;
+            using (ExportWindowForm exportWindowForm = new ExportWindowForm(exportDataContainer))
+            {
+                dialogResult = exportWindowForm.ShowDialog();
+            }
+            if (dialogResult == DialogResult.Cancel) return (int)ConversionResult.Canceled;
+            
+            try
+            {
+                IfcGenerator.Convert(startDocumentObject, exportDataContainer.OutputFilepath);
+                return (int)ConversionResult.Success;
+            } 
+            catch (Exception e)
+            {
+                return (int)ConversionResult.Fail;
+            }
         }
 
         private void Localize(int languageId)

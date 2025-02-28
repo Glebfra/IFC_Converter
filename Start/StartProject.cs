@@ -6,15 +6,21 @@ namespace Start
 {
     public class StartProject : IDisposable
     {
-        public readonly StartAutoServer AutoServer;
-        public readonly StartDocument Document;
-        public readonly StartBaseRootDataArray DataArray;
+        private readonly StartAutoServer? _autoServer;
+        private readonly StartDocument _document;
+        private readonly StartBaseRootDataArray _dataArray;
 
-        public StartProject(StartAutoServer autoServer, StartDocument document, StartBaseRootDataArray dataArray)
+        public StartProject(StartAutoServer? autoServer, StartDocument document, StartBaseRootDataArray dataArray)
         {
-            AutoServer = autoServer;
-            Document = document;
-            DataArray = dataArray;
+            _autoServer = autoServer;
+            _document = document;
+            _dataArray = dataArray;
+        }
+
+        public static StartProject OpenFromDocument(StartDocument document)
+        {
+            StartBaseRootDataArray baseRootDataArray = document.GetDataArrayDispatch();
+            return new StartProject(null, document, baseRootDataArray);
         }
 
         public static StartProject OpenProject(string filepath, int mode = 0x4)
@@ -28,7 +34,7 @@ namespace Start
 
         public StartBaseRoot[] GetConnEntities(StartBaseRoot entity, StartElementType type)
         {
-            int elementsNumber = DataArray.GetNumberConns(entity.Id, type, type);
+            int elementsNumber = _dataArray.GetNumberConns(entity.Id, type, type);
             StartBaseRoot[] startEntities = new StartBaseRoot[elementsNumber];
             for (int i = 0; i < elementsNumber; i++)
             {
@@ -45,11 +51,11 @@ namespace Start
 
         public StartBaseRoot[] GetEntities(StartElementType minType, StartElementType maxType)
         {
-            int elementsNumber = DataArray.GetNumberElements(minType, maxType);
+            int elementsNumber = _dataArray.GetNumberElements(minType, maxType);
             StartBaseRoot[] startEntities = new StartBaseRoot[elementsNumber];
             for (int i = 0; i < elementsNumber; i++)
             {
-                startEntities[i] = DataArray.GetElementDispatch(i, minType, maxType);
+                startEntities[i] = _dataArray.GetElementDispatch(i, minType, maxType);
             }
 
             return startEntities;
@@ -57,12 +63,12 @@ namespace Start
 
         public int GetNumberElements(StartElementType minType, StartElementType maxType)
         {
-            return DataArray.GetNumberElements(minType, maxType);
+            return _dataArray.GetNumberElements(minType, maxType);
         }
 
         public string GetDataJson()
         {
-            return DataArray.GetDataJson(StartElementType.ALL, StartElementType.ALL);
+            return _dataArray.GetDataJson(StartElementType.ALL, StartElementType.ALL);
         }
         
         public StartDataArrayItem[]? GetDataArrayItems()
@@ -72,9 +78,9 @@ namespace Start
 
         public void Dispose()
         {
-            DataArray.Dispose();
-            Document.Dispose();
-            AutoServer.Dispose();
+            _dataArray.Dispose();
+            _document.Dispose();
+            _autoServer?.Dispose();
         }
     }
 }

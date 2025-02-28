@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>default</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,11 +48,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataContainer.cs" />
+    <Compile Include="ExportWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportWindow.Designer.cs">
+      <DependentUpon>ExportWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="IfcGenerator.cs" />
     <Compile Include="ConversionResult.cs" />
     <Compile Include="IfcExporter.cs" />
     <Compile Include="IIfcExporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IFC\IFC.csproj">
+      <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
+      <Name>IFC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Start\Start.csproj">
+      <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
+      <Name>Start</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExportWindow.resx">
+      <DependentUpon>ExportWindow.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
