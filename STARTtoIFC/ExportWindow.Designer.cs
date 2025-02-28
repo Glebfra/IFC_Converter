@@ -35,14 +35,15 @@ namespace STARTtoIFC
             this.inputFilepathTextbox = new System.Windows.Forms.TextBox();
             this.outputFilepathTextbox = new System.Windows.Forms.TextBox();
             this.selectOutputFilepathButton = new System.Windows.Forms.Button();
-            this.inputFilepathTextboxName = new System.Windows.Forms.TextBox();
-            this.outputFilepathTextboxName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // exportButton
             // 
-            this.exportButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.exportButton.Location = new System.Drawing.Point(159, 102);
+            this.exportButton.Location = new System.Drawing.Point(145, 215);
             this.exportButton.Name = "exportButton";
             this.exportButton.Size = new System.Drawing.Size(106, 38);
             this.exportButton.TabIndex = 0;
@@ -52,7 +53,7 @@ namespace STARTtoIFC
             // 
             // inputFilepathTextbox
             // 
-            this.inputFilepathTextbox.Location = new System.Drawing.Point(130, 11);
+            this.inputFilepathTextbox.Location = new System.Drawing.Point(98, 12);
             this.inputFilepathTextbox.Name = "inputFilepathTextbox";
             this.inputFilepathTextbox.ReadOnly = true;
             this.inputFilepathTextbox.Size = new System.Drawing.Size(282, 20);
@@ -60,14 +61,14 @@ namespace STARTtoIFC
             // 
             // outputFilepathTextbox
             // 
-            this.outputFilepathTextbox.Location = new System.Drawing.Point(130, 50);
+            this.outputFilepathTextbox.Location = new System.Drawing.Point(98, 51);
             this.outputFilepathTextbox.Name = "outputFilepathTextbox";
             this.outputFilepathTextbox.Size = new System.Drawing.Size(282, 20);
             this.outputFilepathTextbox.TabIndex = 3;
             // 
             // selectOutputFilepathButton
             // 
-            this.selectOutputFilepathButton.Location = new System.Drawing.Point(383, 50);
+            this.selectOutputFilepathButton.Location = new System.Drawing.Point(351, 51);
             this.selectOutputFilepathButton.Name = "selectOutputFilepathButton";
             this.selectOutputFilepathButton.Size = new System.Drawing.Size(29, 20);
             this.selectOutputFilepathButton.TabIndex = 4;
@@ -75,34 +76,51 @@ namespace STARTtoIFC
             this.selectOutputFilepathButton.UseVisualStyleBackColor = true;
             this.selectOutputFilepathButton.Click += new System.EventHandler(this.selectOutputFilepathButton_Click);
             // 
-            // inputFilepathTextboxName
+            // label1
             // 
-            this.inputFilepathTextboxName.Location = new System.Drawing.Point(12, 11);
-            this.inputFilepathTextboxName.Name = "inputFilepathTextboxName";
-            this.inputFilepathTextboxName.ReadOnly = true;
-            this.inputFilepathTextboxName.Size = new System.Drawing.Size(112, 20);
-            this.inputFilepathTextboxName.TabIndex = 5;
-            this.inputFilepathTextboxName.Text = "Input filepath";
-            this.inputFilepathTextboxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(24, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Input filepath";
             // 
-            // outputFilepathTextboxName
+            // label2
             // 
-            this.outputFilepathTextboxName.BackColor = System.Drawing.SystemColors.Control;
-            this.outputFilepathTextboxName.Location = new System.Drawing.Point(12, 50);
-            this.outputFilepathTextboxName.Name = "outputFilepathTextboxName";
-            this.outputFilepathTextboxName.ReadOnly = true;
-            this.outputFilepathTextboxName.Size = new System.Drawing.Size(112, 20);
-            this.outputFilepathTextboxName.TabIndex = 6;
-            this.outputFilepathTextboxName.Text = "Output filepath";
-            this.outputFilepathTextboxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(16, 54);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Output filepath";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(16, 98);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(364, 111);
+            this.textBox1.TabIndex = 7;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(183, 82);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(30, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Logs";
             // 
             // ExportWindowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(422, 152);
-            this.Controls.Add(this.outputFilepathTextboxName);
-            this.Controls.Add(this.inputFilepathTextboxName);
+            this.ClientSize = new System.Drawing.Size(390, 265);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.selectOutputFilepathButton);
             this.Controls.Add(this.outputFilepathTextbox);
             this.Controls.Add(this.inputFilepathTextbox);
@@ -113,14 +131,18 @@ namespace STARTtoIFC
             this.PerformLayout();
         }
 
-        private System.Windows.Forms.TextBox outputFilepathTextboxName;
+        private System.Windows.Forms.Label label3;
 
-        private System.Windows.Forms.TextBox inputFilepathTextboxName;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox1;
+
+        private System.Windows.Forms.Label label1;
 
         private System.Windows.Forms.TextBox outputFilepathTextbox;
-        private System.Windows.Forms.Button selectOutputFilepathButton;
-
+        
         private System.Windows.Forms.TextBox inputFilepathTextbox;
+        
+        private System.Windows.Forms.Button selectOutputFilepathButton;
 
         private System.Windows.Forms.Button exportButton;
 

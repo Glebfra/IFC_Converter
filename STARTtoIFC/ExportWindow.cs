@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace STARTtoIFC
@@ -19,10 +20,20 @@ namespace STARTtoIFC
 
         private void ExportButton_Click(object sender, EventArgs e)
         {
-            _exportDataContainer.InputFilepath = inputFilepathTextbox.Text;
-            _exportDataContainer.OutputFilepath = outputFilepathTextbox.Text;
-            
-            Close();
+            string outputFilepath = outputFilepathTextbox.Text;
+            if (string.IsNullOrEmpty(outputFilepath))
+            {
+                MessageBox.Show("Путь не может быть пустым", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (outputFilepath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
+            {
+                MessageBox.Show("Выберите корректное расположение файла", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            _exportDataContainer.OutputFilepath = outputFilepath;
+            DialogResult = DialogResult.OK;
         }
 
         private void selectOutputFilepathButton_Click(object sender, EventArgs e)

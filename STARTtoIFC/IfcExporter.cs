@@ -32,13 +32,17 @@ namespace STARTtoIFC
                 OutputFilepath = outputFilepath
             };
 
-            DialogResult dialogResult;
             using (ExportWindowForm exportWindowForm = new ExportWindowForm(exportDataContainer))
             {
-                dialogResult = exportWindowForm.ShowDialog();
+                DialogResult dialogResult;
+                do
+                {
+                    dialogResult = exportWindowForm.ShowDialog();
+                    if (dialogResult == DialogResult.Cancel) return (int)ConversionResult.Canceled;
+                    
+                } while (dialogResult != DialogResult.OK);
             }
-            if (dialogResult == DialogResult.Cancel) return (int)ConversionResult.Canceled;
-            
+
             try
             {
                 IfcGenerator.Convert(startDocumentObject, exportDataContainer.OutputFilepath);
