@@ -17,6 +17,7 @@ namespace STARTtoIFC
             try
             {
                 TryConvert(startDocument, outputFilepath);
+                throw new Exception("myEx");
                 EventBus.OnExportFinished?.Invoke(ConversionResult.Success);
             } catch (Exception e)
             {
@@ -94,6 +95,11 @@ namespace STARTtoIFC
             }
         }
 
+        //TODO: Вот это дело дурновато пахнет.
+        //Если ты делаешь out столько всего, при этом у тебя void, это значит, надо возвращать один объект, который всё это содержит.
+        //Или же, чтобы это писалось в поля текущего класса.
+        //Ещё мне не очень нравится, что мы в статическом методе оперируем какими-то состояниями
+        //И вообще, может это ответственность проекта Start? Будешь оттуда получать какой-нибудь startProject, или startModel или pipingModel
         private static void GroupObjects(
             StartDataArrayItem[] startDataArrayItems,
             out Dictionary<int, StartAbstractEntity> nodeEntities,
