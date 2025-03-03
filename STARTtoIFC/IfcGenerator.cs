@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IFC;
 using IFC.Entities;
@@ -13,17 +12,6 @@ namespace STARTtoIFC
     internal static class IfcGenerator
     {
         public static void Convert(StartDocument startDocument, string outputFilepath)
-        {
-            try
-            {
-                TryConvert(startDocument, outputFilepath);
-            } catch (Exception e)
-            {
-                Logger.Log(e.Message);
-            }
-        }
-
-        private static void TryConvert(StartDocument startDocument, string outputFilepath)
         {
             StartDataArrayItem[] startDataArrayItems;
             using (StartProject startProject = StartProject.OpenFromDocument(startDocument))

@@ -78,25 +78,16 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the correct file path.
+        ///   Looks up a localized string similar to The path to .ifc file cannot be empty.
         /// </summary>
-        internal static string ExportWindowForm_ExportButton_Click_InvalidPath {
+        internal static string ExportWindowForm_outputFilePath_Empty_Error {
             get {
-                return ResourceManager.GetString("ExportWindowForm_ExportButton_Click_InvalidPath", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_outputFilePath_Empty_Error", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Path cannot be empty.
-        /// </summary>
-        internal static string ExportWindowForm_ExportButton_Click_NullPath {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_ExportButton_Click_NullPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Path to .ifc file.
+        ///   Looks up a localized string similar to Enter a full path of IFC file to be saved.
         /// </summary>
         internal static string ExportWindowForm_OutputFilepath_Label {
             get {
@@ -114,6 +105,15 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse....
+        /// </summary>
+        internal static string ExportWindowForm_selectOutputFilePathButton_Text {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_selectOutputFilePathButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to IFC.
         /// </summary>
         internal static string ExportWindowForm_Text {
@@ -123,7 +123,7 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to You do not have sufficient permissions to write to this directory..
         /// </summary>
         internal static string ExportWindowForm_UnauthorizedAccess_Error {
             get {

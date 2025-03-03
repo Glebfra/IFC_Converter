@@ -25,11 +25,19 @@ namespace STARTtoIFC
         {
             Text = LocalizationResource.ExportWindowForm_Text;
             exportButton.Text = LocalizationResource.ExportButton_Text;
+            selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
+            outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilepath_Label;
         }
 
         private void ExportButton_Click(object sender, EventArgs e)
         {
             string outputFilePath = outputFilePathTextbox.Text;
+            if (string.IsNullOrEmpty(outputFilePath))
+            {
+                MessageBox.Show(LocalizationResource.ExportWindowForm_outputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
             string outputDirectoryPath = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
             if (!Directory.Exists(outputDirectoryPath))
             {

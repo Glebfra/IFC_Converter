@@ -21,12 +21,6 @@
     <data name="MessageBox_Title_Error" xml:space="preserve">
         <value>Error</value>
     </data>
-    <data name="ExportWindowForm_ExportButton_Click_NullPath" xml:space="preserve">
-        <value>Path cannot be empty</value>
-    </data>
-    <data name="ExportWindowForm_ExportButton_Click_InvalidPath" xml:space="preserve">
-        <value>Select the correct file path</value>
-    </data>
     <data name="ExportWindowForm_selectOutputFilepathButton_Click_SelectFile" xml:space="preserve">
         <value>Select file for export</value>
     </data>
@@ -37,12 +31,18 @@
         <value>Export to IFC</value>
     </data>
     <data name="ExportWindowForm_OutputFilepath_Label" xml:space="preserve">
-        <value>Path to .ifc file</value>
+        <value>Enter a full path of IFC file to be saved</value>
     </data>
     <data name="ExportWindowForm_DirectoryDoesNotExists_Error" xml:space="preserve">
         <value>Selected directory does not exist</value>
     </data>
     <data name="ExportWindowForm_UnauthorizedAccess_Error" xml:space="preserve">
-        <value />
+        <value>You do not have sufficient permissions to write to this directory.</value>
+    </data>
+    <data name="ExportWindowForm_selectOutputFilePathButton_Text" xml:space="preserve">
+        <value>Browse...</value>
+    </data>
+    <data name="ExportWindowForm_outputFilePath_Empty_Error" xml:space="preserve">
+        <value>The path to .ifc file cannot be empty</value>
     </data>
 </root>

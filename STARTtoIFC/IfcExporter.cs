@@ -49,6 +49,7 @@ namespace STARTtoIFC
             }
             catch (Exception e)
             {
+                Logger.Log(e.Message);
                 return (int)ConversionResult.Fail;
             }
         }

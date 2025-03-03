@@ -16,7 +16,7 @@ namespace StartConverter
             IfcExporter ifcExporter = new IfcExporter();
             
             #if DEBUG
-            string filePath = @"D:\Работа\Bend.ctp";
+            string filePath = @"D:\Работа\BendTest.ctp";
             //string filePath = @"C:\Users\nechitailenko\Desktop\CTAPT1.ctp";
             #else
             Console.WriteLine("Write the path to .ctp file");
@@ -27,7 +27,7 @@ namespace StartConverter
             {
                 object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filePath);
                 if (startDocument == null) throw new NullReferenceException("Object ref is null");
-                int code = ifcExporter.Export(startDocument, _russianCode);
+                int code = ifcExporter.Export(startDocument, _englishCode);
                 Console.WriteLine($"Output code: {code}");
             }
         }
