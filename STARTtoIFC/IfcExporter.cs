@@ -11,10 +11,6 @@ namespace STARTtoIFC
     [Guid("8023137E-9E17-41A7-96AE-7D7688F1EC14")]
     public class IfcExporter : IIfcExporter
     {
-        //TODO: Не используется? Давай уберём
-        private Action<StartDocument, string, Action<ConversionResult>?>? OnExport;
-        private Action<ConversionResult>? OnExportFinished;
-
         public int Test()
         {
             MessageBox.Show("DLL is connected.");
@@ -23,35 +19,40 @@ namespace STARTtoIFC
         }
         
         [STAThread]
-        public int Export(object startDocument, int languageId)
+        public int Export(object startDocumentObject, int languageId)
         {
-            //TODO: Давай это назовём иначе класс и переменную. ExportContainer не очень нравится. Можно что-то вроде dataContainer, startData, startDTO (на выбор)
-            ExportContainer exportContainer = new ExportContainer()
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            
+            Localize(languageId);
+            
+            StartDocument startDocument = new StartDocument(startDocumentObject);
+            DataContainer dataContainer = new DataContainer()
             {
-                StartDocumentObject = startDocument,
+                InputFilePath = startDocument.GetPathName(),
                 LanguageId = languageId
             };
-            EventBus.OnExport += IfcGenerator.Convert;
-
+            
             DialogResult dialogResult;
-            using (ExportWindowForm exportWindowForm = new ExportWindowForm(exportContainer))
+            using (ExportWindowForm exportWindowForm = new ExportWindowForm(dataContainer))
             {
                 dialogResult = exportWindowForm.ShowDialog();
             }
 
-            switch (dialogResult)
+            if (dialogResult == DialogResult.Cancel)
+                return (int)ConversionResult.Canceled;
+
+            try
             {
-                case DialogResult.OK:
-                    return (int)ConversionResult.Success;
-                case DialogResult.Cancel:
-                    return (int)ConversionResult.Canceled;
-                default:
-                    return (int)ConversionResult.Fail;
+                IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath);
+                return (int)ConversionResult.Success;
+            }
+            catch (Exception e)
+            {
+                return (int)ConversionResult.Fail;
             }
         }
-
-        //TODO: С помощью этого метода можно устанавливать культуру потока. номер культуры мы будем получать от старта.
-        //Если ты не хочешь устанавливать культуру здесь, то унеси метод в то место, где будешь использовать
+        
         private void Localize(int languageId)
         {
             var ci = new System.Globalization.CultureInfo(languageId);

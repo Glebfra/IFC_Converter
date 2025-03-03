@@ -69,11 +69,11 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Selected directory does not exist.
         /// </summary>
-        internal static string ExportWindow_Text {
+        internal static string ExportWindowForm_DirectoryDoesNotExists_Error {
             get {
-                return ResourceManager.GetString("ExportWindow_Text", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_DirectoryDoesNotExists_Error", resourceCulture);
             }
         }
         
@@ -96,24 +96,6 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Path to .ctp file.
-        /// </summary>
-        internal static string ExportWindowForm_InputFilepath_Label {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_InputFilepath_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logs.
-        /// </summary>
-        internal static string ExportWindowForm_Log_Label {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_Log_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Path to .ifc file.
         /// </summary>
         internal static string ExportWindowForm_OutputFilepath_Label {
@@ -132,24 +114,6 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export cannot be done.
-        /// </summary>
-        internal static string ExportWindowForm_ShowExportResultWindow_Failure {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_ShowExportResultWindow_Failure", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Export done.
-        /// </summary>
-        internal static string ExportWindowForm_ShowExportResultWindow_Success {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_ShowExportResultWindow_Success", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Export to IFC.
         /// </summary>
         internal static string ExportWindowForm_Text {
@@ -159,20 +123,20 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string ExportWindowForm_UnauthorizedAccess_Error {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_UnauthorizedAccess_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string MessageBox_Title_Error {
             get {
                 return ResourceManager.GetString("MessageBox_Title_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Success.
-        /// </summary>
-        internal static string MessageBox_Title_Success {
-            get {
-                return ResourceManager.GetString("MessageBox_Title_Success", resourceCulture);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace STARTtoIFC
     [Guid("2649402A-A530-4CB8-A0C3-22661C463823")]
     public interface IIfcExporter
     {
-        int Export(object startDocument, int languageId);
+        int Export(object startDocumentObject, int languageId);
 
         int Test();
     }

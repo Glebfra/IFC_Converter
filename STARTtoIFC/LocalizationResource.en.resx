@@ -11,20 +11,11 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="MessageBox_Title_Success" xml:space="preserve">
-        <value>Success</value>
-    </data>
     <data name="MessageBox_Title_Error" xml:space="preserve">
         <value>Error</value>
     </data>
     <data name="ExportWindowForm_ExportButton_Click_NullPath" xml:space="preserve">
         <value>Path cannot be empty</value>
-    </data>
-    <data name="ExportWindowForm_ShowExportResultWindow_Failure" xml:space="preserve">
-        <value>Export cannot be done</value>
-    </data>
-    <data name="ExportWindowForm_ShowExportResultWindow_Success" xml:space="preserve">
-        <value>Export done</value>
     </data>
     <data name="ExportWindowForm_ExportButton_Click_InvalidPath" xml:space="preserve">
         <value>Select the correct file path</value>
@@ -38,13 +29,10 @@
     <data name="ExportWindowForm_Text" xml:space="preserve">
         <value>Export to IFC</value>
     </data>
-    <data name="ExportWindowForm_InputFilepath_Label" xml:space="preserve">
-        <value>Path to .ctp file</value>
-    </data>
     <data name="ExportWindowForm_OutputFilepath_Label" xml:space="preserve">
         <value>Path to .ifc file</value>
     </data>
-    <data name="ExportWindowForm_Log_Label" xml:space="preserve">
-        <value>Logs</value>
+    <data name="ExportWindowForm_DirectoryDoesNotExists_Error" xml:space="preserve">
+        <value>Selected directory does not exist</value>
     </data>
 </root>

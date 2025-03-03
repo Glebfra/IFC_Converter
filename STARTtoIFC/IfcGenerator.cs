@@ -17,12 +17,9 @@ namespace STARTtoIFC
             try
             {
                 TryConvert(startDocument, outputFilepath);
-                throw new Exception("myEx");
-                EventBus.OnExportFinished?.Invoke(ConversionResult.Success);
             } catch (Exception e)
             {
                 Logger.Log(e.Message);
-                EventBus.OnExportFinished?.Invoke(ConversionResult.Fail);
             }
         }
 

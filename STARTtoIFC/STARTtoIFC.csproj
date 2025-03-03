@@ -49,7 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContainer.cs" />
-    <Compile Include="EventBus.cs" />
     <Compile Include="ExportWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +78,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ExportWindow.resx">
+      <DependentUpon>ExportWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LocalizationResource.en.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
