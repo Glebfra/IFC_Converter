@@ -11,7 +11,7 @@ namespace STARTtoIFC
 {
     internal static class IfcGenerator
     {
-        public static void Convert(StartDocument startDocument, string outputFilepath)
+        public static void Convert(StartDocument startDocument, string outputFilePath)
         {
             StartDataArrayItem[] startDataArrayItems;
             using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
@@ -76,7 +76,7 @@ namespace STARTtoIFC
                 }
             
                 ifcProject.GroupObjects("Pipe system");
-                ifcProject.SaveAs(outputFilepath);
+                ifcProject.SaveAs(outputFilePath);
             }
         }
 
