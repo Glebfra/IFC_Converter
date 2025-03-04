@@ -21,8 +21,8 @@
     <data name="MessageBox_Title_Error" xml:space="preserve">
         <value>Error</value>
     </data>
-    <data name="ExportWindowForm_selectOutputFilepathButton_Click_SelectFile" xml:space="preserve">
-        <value>Select file for export</value>
+    <data name="ExportWindowForm_selectOutputFilePathButton_Click_SelectFile" xml:space="preserve">
+        <value>Select the file to be saved</value>
     </data>
     <data name="ExportWindowForm_ExportButton_Text" xml:space="preserve">
         <value>Export</value>
@@ -30,7 +30,7 @@
     <data name="ExportWindowForm_Text" xml:space="preserve">
         <value>Export to IFC</value>
     </data>
-    <data name="ExportWindowForm_OutputFilepath_Label" xml:space="preserve">
+    <data name="ExportWindowForm_OutputFilePath_Label" xml:space="preserve">
         <value>Enter a full path of IFC file to be saved</value>
     </data>
     <data name="DirectoryDoesNotExists_Error" xml:space="preserve">
@@ -42,7 +42,7 @@
     <data name="ExportWindowForm_selectOutputFilePathButton_Text" xml:space="preserve">
         <value>Browse...</value>
     </data>
-    <data name="ExportWindowForm_outputFilePath_Empty_Error" xml:space="preserve">
+    <data name="ExportWindowForm_OutputFilePath_Empty_Error" xml:space="preserve">
         <value>The path to .ifc file cannot be empty</value>
     </data>
 </root>

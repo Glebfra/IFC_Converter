@@ -14,8 +14,8 @@
     <data name="MessageBox_Title_Error" xml:space="preserve">
         <value>Ошибка</value>
     </data>
-    <data name="ExportWindowForm_selectOutputFilepathButton_Click_SelectFile" xml:space="preserve">
-        <value>Выберите файл для экспорта</value>
+    <data name="ExportWindowForm_selectOutputFilePathButton_Click_SelectFile" xml:space="preserve">
+        <value>Выберите файл для сохранения</value>
     </data>
     <data name="ExportWindowForm_ExportButton_Text" xml:space="preserve">
         <value>Экспорт</value>
@@ -23,8 +23,8 @@
     <data name="ExportWindowForm_Text" xml:space="preserve">
         <value>Экспорт в IFC</value>
     </data>
-    <data name="ExportWindowForm_OutputFilepath_Label" xml:space="preserve">
-        <value>Введите полный путь к файлу IFC, который необходимо сохранить.</value>
+    <data name="ExportWindowForm_OutputFilePath_Label" xml:space="preserve">
+        <value>Укажите полный путь для сохранения .ifc файла</value>
     </data>
     <data name="DirectoryDoesNotExists_Error" xml:space="preserve">
         <value>Выбранного каталога не существует</value>
@@ -35,7 +35,7 @@
     <data name="ExportWindowForm_selectOutputFilePathButton_Text" xml:space="preserve">
         <value>Обзор...</value>
     </data>
-    <data name="ExportWindowForm_outputFilePath_Empty_Error" xml:space="preserve">
+    <data name="ExportWindowForm_OutputFilePath_Empty_Error" xml:space="preserve">
         <value>Путь к файлу .ifc не может быть пустым.</value>
     </data>
 </root>

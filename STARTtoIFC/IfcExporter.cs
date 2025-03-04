@@ -22,8 +22,7 @@ namespace STARTtoIFC
         public int Export(object startDocumentObject, int languageId)
         {
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            
+
             Localize(languageId);
             
             StartDocument startDocument = new StartDocument(startDocumentObject);

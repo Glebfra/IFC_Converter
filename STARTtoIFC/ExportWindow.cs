@@ -13,7 +13,7 @@ namespace STARTtoIFC
         {
             InitializeComponent();
             LocalizeComponents();
-            
+
             _dataContainer = dataContainer;
 
             string inputFilePath = _dataContainer.InputFilePath;
@@ -26,7 +26,7 @@ namespace STARTtoIFC
             Text = LocalizationResource.ExportWindowForm_Text;
             exportButton.Text = LocalizationResource.ExportWindowForm_ExportButton_Text;
             selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
-            outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilepath_Label;
+            outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilePath_Label;
         }
 
         private void ExportButton_Click(object sender, EventArgs e)
@@ -34,7 +34,7 @@ namespace STARTtoIFC
             string outputFilePath = outputFilePathTextbox.Text;
             if (string.IsNullOrEmpty(outputFilePath))
             {
-                MessageBox.Show(LocalizationResource.ExportWindowForm_outputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.ExportWindowForm_OutputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             
@@ -63,7 +63,7 @@ namespace STARTtoIFC
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                saveFileDialog.Title = LocalizationResource.ExportWindowForm_selectOutputFilepathButton_Click_SelectFile;
+                saveFileDialog.Title = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Click_SelectFile;
                 saveFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
                 saveFileDialog.DefaultExt = ".IFC";
                 saveFileDialog.RestoreDirectory = true;

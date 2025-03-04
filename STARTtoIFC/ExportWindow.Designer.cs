@@ -99,6 +99,8 @@ namespace STARTtoIFC
             this.Controls.Add(this.exportButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ExportWindowForm";
             this.Text = "ExportWindow";
             this.panel1.ResumeLayout(false);

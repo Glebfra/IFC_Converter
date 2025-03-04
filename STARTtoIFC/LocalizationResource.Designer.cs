@@ -80,27 +80,27 @@ namespace STARTtoIFC {
         /// <summary>
         ///   Looks up a localized string similar to The path to .ifc file cannot be empty.
         /// </summary>
-        internal static string ExportWindowForm_outputFilePath_Empty_Error {
+        internal static string ExportWindowForm_OutputFilePath_Empty_Error {
             get {
-                return ResourceManager.GetString("ExportWindowForm_outputFilePath_Empty_Error", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_OutputFilePath_Empty_Error", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Enter a full path of IFC file to be saved.
         /// </summary>
-        internal static string ExportWindowForm_OutputFilepath_Label {
+        internal static string ExportWindowForm_OutputFilePath_Label {
             get {
-                return ResourceManager.GetString("ExportWindowForm_OutputFilepath_Label", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_OutputFilePath_Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select file for export.
+        ///   Looks up a localized string similar to Select the file to be saved.
         /// </summary>
-        internal static string ExportWindowForm_selectOutputFilepathButton_Click_SelectFile {
+        internal static string ExportWindowForm_selectOutputFilePathButton_Click_SelectFile {
             get {
-                return ResourceManager.GetString("ExportWindowForm_selectOutputFilepathButton_Click_SelectFile", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_selectOutputFilePathButton_Click_SelectFile", resourceCulture);
             }
         }
         
