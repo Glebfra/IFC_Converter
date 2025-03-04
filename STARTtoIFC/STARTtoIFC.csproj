@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLIDLanguage.cs" />
     <Compile Include="DataContainer.cs" />
     <Compile Include="ExportWindow.cs">
       <SubType>Form</SubType>
@@ -60,15 +59,16 @@
     <Compile Include="ConversionResult.cs" />
     <Compile Include="IfcExporter.cs" />
     <Compile Include="IIfcExporter.cs" />
-    <Compile Include="LanguageConverter.cs" />
-    <Compile Include="LocalizationResource.Designer.cs">
+    <Compile Include="Localization\CLIDLanguage.cs" />
+    <Compile Include="Localization\LanguageConverter.cs" />
+    <Compile Include="Localization\LocalizationResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Localization\StartLanguage.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartLanguage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IFC\IFC.csproj">
@@ -84,14 +84,14 @@
     <EmbeddedResource Include="ExportWindow.resx">
       <DependentUpon>ExportWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LocalizationResource.en.resx">
+    <EmbeddedResource Include="Localization\LocalizationResource.en.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LocalizationResource.resx">
+    <EmbeddedResource Include="Localization\LocalizationResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="LocalizationResource.ru.resx">
+    <EmbeddedResource Include="Localization\LocalizationResource.ru.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

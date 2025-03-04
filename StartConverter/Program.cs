@@ -2,6 +2,7 @@
 using System.IO;
 using Start.API;
 using STARTtoIFC;
+using STARTtoIFC.Localization;
 
 namespace StartConverter
 {

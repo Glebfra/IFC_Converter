@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Start.API;
+using STARTtoIFC.Localization;
 
 namespace STARTtoIFC
 {
@@ -55,7 +56,7 @@ namespace STARTtoIFC
                 return (int)ConversionResult.Fail;
             }
         }
-        
+
         private void Localize(int languageId)
         {
             CLIDLanguage clidLanguage = LanguageConverter.ConvertLanguage((StartLanguage)languageId);

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace STARTtoIFC {
+namespace STARTtoIFC.Localization {
     using System;
     
     

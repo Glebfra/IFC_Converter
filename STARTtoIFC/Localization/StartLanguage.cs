@@ -1,4 +1,4 @@
-﻿namespace STARTtoIFC
+﻿namespace STARTtoIFC.Localization
 {
     public enum StartLanguage
     {

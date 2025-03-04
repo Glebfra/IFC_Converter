@@ -1,4 +1,4 @@
-﻿namespace STARTtoIFC
+﻿namespace STARTtoIFC.Localization
 {
     public static class LanguageConverter
     {

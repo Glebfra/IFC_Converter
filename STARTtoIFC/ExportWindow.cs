@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.AccessControl;
 using System.Windows.Forms;
+using STARTtoIFC.Localization;
 
 namespace STARTtoIFC
 {
