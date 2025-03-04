@@ -61,8 +61,7 @@ namespace STARTtoIFC
 
         private void selectOutputFilePathButton_Click(object sender, EventArgs e)
         {
-            //TODO: Ты не реализовал через SaveFileDialog, а оставил OpenFileDialog. Давай поменяем?
-            using (OpenFileDialog saveFileDialog = new OpenFileDialog())
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Title = LocalizationResource.ExportWindowForm_selectOutputFilepathButton_Click_SelectFile;
                 saveFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
