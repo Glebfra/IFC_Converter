@@ -22,7 +22,7 @@ namespace STARTtoIFC
         public int Export(object startDocumentObject, int languageId)
         {
             Application.EnableVisualStyles();
-
+            
             Localize(languageId);
             
             StartDocument startDocument = new StartDocument(startDocumentObject);
@@ -58,7 +58,9 @@ namespace STARTtoIFC
         
         private void Localize(int languageId)
         {
-            var ci = new System.Globalization.CultureInfo(languageId);
+            CLIDLanguage clidLanguage = LanguageConverter.ConvertLanguage((StartLanguage)languageId);
+            
+            var ci = new System.Globalization.CultureInfo((int)clidLanguage);
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
         }

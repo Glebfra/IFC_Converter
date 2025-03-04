@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.AccessControl;
 using Start.API;
 using STARTtoIFC;
 
@@ -8,10 +7,6 @@ namespace StartConverter
 {
     public static class Program
     {
-        private const int _russianCode = 0x0419;
-        private const int _englishCode = 0x0409;
-        private const int _germanCode = 0x0407;
-        
         [STAThread]
         public static void Main(string[] args)
         {
@@ -33,6 +28,12 @@ namespace StartConverter
                     Console.WriteLine("FilePath cannot be empty");
                     continue;
                 }
+
+                if (!filePath.EndsWith(".ctp"))
+                {
+                    Console.WriteLine("Input file should be .ctp formatted");
+                    continue;
+                }
                 
                 if (!File.Exists(filePath))
                 {
@@ -48,7 +49,7 @@ namespace StartConverter
             {
                 object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filePath);
                 if (startDocument == null) throw new NullReferenceException("Object ref is null");
-                int code = ifcExporter.Export(startDocument, _russianCode);
+                int code = ifcExporter.Export(startDocument, (int)StartLanguage.EN);
                 Console.WriteLine($"Output code: {code}");
             }
         }
