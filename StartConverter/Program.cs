@@ -34,23 +34,12 @@ namespace StartConverter
                     continue;
                 }
                 
-                string outputDirectoryPath = Path.GetDirectoryName(filePath) ?? string.Empty;
-                if (!Directory.Exists(outputDirectoryPath))
+                if (!File.Exists(filePath))
                 {
-                    Console.WriteLine("Directory does not exist");
+                    Console.WriteLine("File does not exist");
                     continue;
                 }
-                
-                try
-                {
-                    DirectorySecurity ds = Directory.GetAccessControl(outputDirectoryPath);
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    Console.WriteLine("You do not have a rights to this directory");
-                    continue;
-                }
-                
+
                 break;
             }
             #endif
