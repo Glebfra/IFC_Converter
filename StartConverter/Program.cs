@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Security.AccessControl;
 using Start.API;
 using STARTtoIFC;
 
@@ -19,8 +21,38 @@ namespace StartConverter
             string filePath = @"D:\Работа\BendTest.ctp";
             //string filePath = @"C:\Users\nechitailenko\Desktop\CTAPT1.ctp";
             #else
-            Console.WriteLine("Write the path to .ctp file");
-            string filePath = Console.ReadLine();
+            string filePath;
+            while (true)
+            {
+                Console.WriteLine("Write the path to .ctp file");
+                filePath = Console.ReadLine();
+                filePath = filePath.Replace("\"", "");
+                
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    Console.WriteLine("FilePath cannot be empty");
+                    continue;
+                }
+                
+                string outputDirectoryPath = Path.GetDirectoryName(filePath) ?? string.Empty;
+                if (!Directory.Exists(outputDirectoryPath))
+                {
+                    Console.WriteLine("Directory does not exist");
+                    continue;
+                }
+                
+                try
+                {
+                    DirectorySecurity ds = Directory.GetAccessControl(outputDirectoryPath);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    Console.WriteLine("You do not have a rights to this directory");
+                    continue;
+                }
+                
+                break;
+            }
             #endif
             
             using (StartAutoServer startAutoServer = new StartAutoServer())
