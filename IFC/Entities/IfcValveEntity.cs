@@ -16,6 +16,7 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
+using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
 namespace IFC.Entities
 {
@@ -42,15 +43,7 @@ namespace IFC.Entities
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcAxis.CreateObjectPlacement(
-                model,
-                ObjectMatrix3D,
-                out IfcCartesianPoint point,
-                out IfcDirection forwardDirection,
-                out IfcDirection rightDirection,
-                out IfcAxis2Placement3D axis2Placement3D,
-                out IfcLocalPlacement localPlacement
-            );
+            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
             IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
             IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2, Angle);
@@ -72,7 +65,7 @@ namespace IFC.Entities
                 fitting.Name = _armatureEntity.Name;
                 fitting.Representation = shape;
                 fitting.Tag = Tag;
-                fitting.ObjectPlacement = localPlacement;
+                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
             IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
             IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);

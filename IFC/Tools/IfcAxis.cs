@@ -8,36 +8,38 @@ namespace IFC.Tools
 {
     public static class IfcAxis
     {
-        public static void CreateObjectPlacement(
-            IModel model,
-            XbimMatrix3D ObjectMatrix3D,
-            out IfcCartesianPoint point,
-            out IfcDirection forwardDirection,
-            out IfcDirection rightDirection,
-            out IfcAxis2Placement3D axis2Placement3D,
-            out IfcLocalPlacement localPlacement
-        )
+        public static IfcObjectPlacement CreatePointObjectPlacement(IModel model, XbimMatrix3D ObjectMatrix3D)
         {
-            point = CreatePoint(model, ObjectMatrix3D.Translation);
-            forwardDirection = CreateDirection(model, ObjectMatrix3D.Forward);
-            rightDirection = CreateDirection(model, ObjectMatrix3D.Right);
-            axis2Placement3D = CreateAxis2Placement3D(model, point, forwardDirection, rightDirection);
-            localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+            IfcCartesianPoint point = CreatePoint(model, ObjectMatrix3D.Translation);
+            IfcAxis2Placement3D axis2Placement3D = CreateAxis2Placement3D(model, point);
+            IfcLocalPlacement localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+            
+            return new IfcObjectPlacement()
+            {
+                Point = point,
+                Axis2Placement3D = axis2Placement3D,
+                LocalPlacement = localPlacement
+            };
         }
-        
-        public static void CreateObjectPlacement(
-            IModel model,
-            XbimMatrix3D ObjectMatrix3D,
-            out IfcCartesianPoint point,
-            out IfcAxis2Placement3D axis2Placement3D,
-            out IfcLocalPlacement localPlacement
-        )
+
+        public static IfcObjectPlacement CreatePointAndDirectionsObjectPlacement(IModel model, XbimMatrix3D ObjectMatrix3D)
         {
-            point = CreatePoint(model, ObjectMatrix3D.Translation);
-            axis2Placement3D = CreateAxis2Placement3D(model, point);
-            localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+            IfcCartesianPoint point = CreatePoint(model, ObjectMatrix3D.Translation);
+            IfcDirection forward = CreateDirection(model, ObjectMatrix3D.Forward);
+            IfcDirection right = CreateDirection(model, ObjectMatrix3D.Right);
+            IfcAxis2Placement3D axis2Placement3D = CreateAxis2Placement3D(model, point, forward, right);
+            IfcLocalPlacement localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+            
+            return new IfcObjectPlacement()
+            {
+                Point = point,
+                Forward = forward,
+                Right = right,
+                Axis2Placement3D = axis2Placement3D,
+                LocalPlacement = localPlacement
+            };
         }
-        
+
         public static IfcCartesianPoint CreatePoint(IModel model, XbimVector3D coordinates)
         {
             return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.X, coordinates.Y, coordinates.Z));

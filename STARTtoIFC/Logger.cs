@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace STARTtoIFC
 {
@@ -10,9 +11,24 @@ namespace STARTtoIFC
         
         public static void Log(string message)
         {
-            string formattedMessage = message + "\n";
+            string formattedMessage = $"[LOG] {message} \n";
             Logs += formattedMessage;
             OnLogsChanged?.Invoke(formattedMessage);
+        }
+
+        public static void Error(string message)
+        {
+            string formattedMessage = $"[ERROR] {message} \n";
+            Logs += formattedMessage;
+            OnLogsChanged?.Invoke(formattedMessage);
+        }
+
+        public static void SaveAs(string filePath)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath))
+            {
+                sw.Write(Logs);
+            }
         }
     }
 }

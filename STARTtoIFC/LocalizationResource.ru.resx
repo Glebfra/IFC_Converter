@@ -17,7 +17,7 @@
     <data name="ExportWindowForm_selectOutputFilepathButton_Click_SelectFile" xml:space="preserve">
         <value>Выберите файл для экспорта</value>
     </data>
-    <data name="ExportButton_Text" xml:space="preserve">
+    <data name="ExportWindowForm_ExportButton_Text" xml:space="preserve">
         <value>Экспорт</value>
     </data>
     <data name="ExportWindowForm_Text" xml:space="preserve">
@@ -26,10 +26,10 @@
     <data name="ExportWindowForm_OutputFilepath_Label" xml:space="preserve">
         <value>Введите полный путь к файлу IFC, который необходимо сохранить.</value>
     </data>
-    <data name="ExportWindowForm_DirectoryDoesNotExists_Error" xml:space="preserve">
+    <data name="DirectoryDoesNotExists_Error" xml:space="preserve">
         <value>Выбранного каталога не существует</value>
     </data>
-    <data name="ExportWindowForm_UnauthorizedAccess_Error" xml:space="preserve">
+    <data name="UnauthorizedAccess_Error" xml:space="preserve">
         <value>У вас недостаточно прав для записи в данную директорию</value>
     </data>
     <data name="ExportWindowForm_selectOutputFilePathButton_Text" xml:space="preserve">

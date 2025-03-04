@@ -40,16 +40,19 @@ namespace STARTtoIFC
             }
 
             if (dialogResult == DialogResult.Cancel)
+            {
                 return (int)ConversionResult.Canceled;
+            }
 
             try
             {
                 IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath);
+                Logger.Log("Convert is successfully ended");
                 return (int)ConversionResult.Success;
             }
             catch (Exception e)
             {
-                Logger.Log(e.Message);
+                Logger.Error(e.Message);
                 return (int)ConversionResult.Fail;
             }
         }

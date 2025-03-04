@@ -47,6 +47,7 @@
         <Compile Include="API\StartDataArrayItem.cs" />
         <Compile Include="API\StartDocument.cs" />
         <Compile Include="API\StartElementType.cs" />
+        <Compile Include="Entities\GroupedEntities.cs" />
         <Compile Include="Entities\StartAbstractEntity.cs" />
         <Compile Include="Entities\StartArmatureEntity.cs" />
         <Compile Include="Entities\StartBendEntity.cs" />

@@ -14,6 +14,7 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
+using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
 namespace IFC.Entities.Abstract
 {
@@ -41,14 +42,8 @@ namespace IFC.Entities.Abstract
 
         protected IfcPipeFitting CreateTeeEntity(IModel model, double length, double height)
         {
-            IfcAxis.CreateObjectPlacement(
-                model,
-                ObjectMatrix3D,
-                out IfcCartesianPoint point,
-                out IfcAxis2Placement3D axis2Placement3D,
-                out IfcLocalPlacement localPlacement
-            );
-            
+            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
+
             IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_ifcPipeEntities.Length];
 
             int i = 0;
@@ -66,7 +61,7 @@ namespace IFC.Entities.Abstract
                 fitting.Tag = Tag;
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
                 fitting.Representation = productDefinitionShape;
-                fitting.ObjectPlacement = localPlacement;
+                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
             
             IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcPipeEntities);

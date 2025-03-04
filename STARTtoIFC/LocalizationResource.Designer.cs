@@ -60,20 +60,20 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export.
+        ///   Looks up a localized string similar to Selected directory does not exist.
         /// </summary>
-        internal static string ExportButton_Text {
+        internal static string DirectoryDoesNotExists_Error {
             get {
-                return ResourceManager.GetString("ExportButton_Text", resourceCulture);
+                return ResourceManager.GetString("DirectoryDoesNotExists_Error", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected directory does not exist.
+        ///   Looks up a localized string similar to Export.
         /// </summary>
-        internal static string ExportWindowForm_DirectoryDoesNotExists_Error {
+        internal static string ExportWindowForm_ExportButton_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_DirectoryDoesNotExists_Error", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_ExportButton_Text", resourceCulture);
             }
         }
         
@@ -123,20 +123,20 @@ namespace STARTtoIFC {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have sufficient permissions to write to this directory..
-        /// </summary>
-        internal static string ExportWindowForm_UnauthorizedAccess_Error {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_UnauthorizedAccess_Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string MessageBox_Title_Error {
             get {
                 return ResourceManager.GetString("MessageBox_Title_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have sufficient permissions to write to this directory..
+        /// </summary>
+        internal static string UnauthorizedAccess_Error {
+            get {
+                return ResourceManager.GetString("UnauthorizedAccess_Error", resourceCulture);
             }
         }
     }

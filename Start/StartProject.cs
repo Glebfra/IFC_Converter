@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Start.API;
+using Start.Entities;
 
 namespace Start
 {
@@ -74,6 +76,45 @@ namespace Start
         public StartDataArrayItem[]? GetDataArrayItems()
         {
             return JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
+        }
+
+        public GroupedEntities GroupEntities(StartDataArrayItem[] startDataArrayItems)
+        {
+            Dictionary<int, StartAbstractEntity> nodeEntities = new Dictionary<int, StartAbstractEntity>();
+            Dictionary<int, StartAbstractEntity> pipeEntities = new Dictionary<int, StartAbstractEntity>();
+            Dictionary<int, StartAbstractEntity> fittingEntities = new Dictionary<int, StartAbstractEntity>();
+            Dictionary<int, int[]> pipeNodeRelations = new Dictionary<int, int[]>();
+            Dictionary<int, int> fittingNodeRelations = new Dictionary<int, int>();
+
+            foreach (StartDataArrayItem startDataArrayItem in startDataArrayItems)
+            {
+                StartAbstractEntity? startAbstractEntity = StartEntityFactory.CreateEntity(startDataArrayItem);
+                if (startAbstractEntity == null) continue;
+
+                switch (startAbstractEntity.Type)
+                {
+                    case StartElementType.NODE:
+                        nodeEntities.Add(startDataArrayItem.NodeIds[0], startAbstractEntity);
+                        break;
+                    case StartElementType.PIPE_ELEMENT:
+                        pipeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
+                        pipeNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds);
+                        break;
+                    default:
+                        fittingEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
+                        fittingNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds[0]);
+                        break;
+                }
+            }
+
+            return new GroupedEntities()
+            {
+                NodeEntities = nodeEntities,
+                PipeEntities = pipeEntities,
+                FittingEntities = fittingEntities,
+                PipeNodeRelations = pipeNodeRelations,
+                FittingNodeRelations = fittingNodeRelations
+            };
         }
 
         public void Dispose()

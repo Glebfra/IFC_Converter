@@ -17,7 +17,7 @@
     <data name="ExportWindowForm_selectOutputFilepathButton_Click_SelectFile" xml:space="preserve">
         <value>Select file for export</value>
     </data>
-    <data name="ExportButton_Text" xml:space="preserve">
+    <data name="ExportWindowForm_ExportButton_Text" xml:space="preserve">
         <value>Export</value>
     </data>
     <data name="ExportWindowForm_Text" xml:space="preserve">
@@ -26,10 +26,10 @@
     <data name="ExportWindowForm_OutputFilepath_Label" xml:space="preserve">
         <value>Enter a full path of IFC file to be saved</value>
     </data>
-    <data name="ExportWindowForm_DirectoryDoesNotExists_Error" xml:space="preserve">
+    <data name="DirectoryDoesNotExists_Error" xml:space="preserve">
         <value>Selected directory does not exist</value>
     </data>
-    <data name="ExportWindowForm_UnauthorizedAccess_Error" xml:space="preserve">
+    <data name="UnauthorizedAccess_Error" xml:space="preserve">
         <value>You do not have sufficient permissions to write to this directory.</value>
     </data>
     <data name="ExportWindowForm_selectOutputFilePathButton_Text" xml:space="preserve">

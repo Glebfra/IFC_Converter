@@ -24,7 +24,7 @@ namespace STARTtoIFC
         private void LocalizeComponents()
         {
             Text = LocalizationResource.ExportWindowForm_Text;
-            exportButton.Text = LocalizationResource.ExportButton_Text;
+            exportButton.Text = LocalizationResource.ExportWindowForm_ExportButton_Text;
             selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
             outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilepath_Label;
         }
@@ -41,7 +41,7 @@ namespace STARTtoIFC
             string outputDirectoryPath = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
             if (!Directory.Exists(outputDirectoryPath))
             {
-                MessageBox.Show(LocalizationResource.ExportWindowForm_DirectoryDoesNotExists_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.DirectoryDoesNotExists_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -51,7 +51,7 @@ namespace STARTtoIFC
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show(LocalizationResource.ExportWindowForm_UnauthorizedAccess_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.UnauthorizedAccess_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
