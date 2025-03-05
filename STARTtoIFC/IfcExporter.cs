@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Start.API;
-using STARTtoIFC.Localization;
 
 namespace STARTtoIFC
 {
