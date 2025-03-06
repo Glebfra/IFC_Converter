@@ -17,7 +17,6 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
-using IFC.Tools;
 
 namespace IFC.Entities
 {
