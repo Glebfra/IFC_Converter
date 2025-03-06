@@ -16,6 +16,7 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
+using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
 namespace IFC.Entities
 {
@@ -58,16 +59,8 @@ namespace IFC.Entities
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcAxis.CreateObjectPlacement(
-                model,
-                ObjectMatrix3D,
-                out IfcCartesianPoint point,
-                out IfcDirection forwardDirection,
-                out IfcDirection rightDirection,
-                out IfcAxis2Placement3D axis2Placement3D,
-                out IfcLocalPlacement localPlacement
-            );
-            
+            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
+
             double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
@@ -80,7 +73,7 @@ namespace IFC.Entities
         
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
-                fitting.ObjectPlacement = localPlacement;
+                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
                 fitting.Representation = shape;
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.TRANSITION;
                 fitting.Tag = Tag;

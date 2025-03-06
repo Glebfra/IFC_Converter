@@ -18,6 +18,7 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
+using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
 namespace IFC.Entities
 {
@@ -53,13 +54,7 @@ namespace IFC.Entities
     
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcAxis.CreateObjectPlacement(
-                model,
-                ObjectMatrix3D,
-                out IfcCartesianPoint point,
-                out IfcAxis2Placement3D axis2Placement3D,
-                out IfcLocalPlacement localPlacement
-            );
+            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
 
             IfcRepresentationItem[] ifcRepresentationItems = new IfcRepresentationItem[_ifcPipeEntities.Length + 1];
             for (int i = 0; i < _ifcPipeEntities.Length; i++)
@@ -83,7 +78,7 @@ namespace IFC.Entities
                 fitting.Name = _bendEntity.Name;
                 fitting.Tag = Tag;
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
-                fitting.ObjectPlacement = localPlacement;
+                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
                 fitting.Representation = shape;
             });
 
