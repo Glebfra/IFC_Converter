@@ -64,9 +64,11 @@ namespace STARTtoIFC
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
+                // TODO: Предлагаю вообще убрать Title(он автоматически задаётся с учётом локализации) и добавить это:
+                //saveFileDialog.FileName = Имя файла старт;
                 saveFileDialog.Title = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Click_SelectFile;
                 saveFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
-                saveFileDialog.DefaultExt = ".IFC";
+                saveFileDialog.DefaultExt = ".ifc";
                 saveFileDialog.RestoreDirectory = true;
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
