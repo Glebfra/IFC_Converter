@@ -2,24 +2,13 @@
 {
     public static class LanguageConverter
     {
-        public static CLIDLanguage ConvertLanguage(StartLanguage startLanguage)
+        public static int ConvertLanguage(int languageId)
         {
-            return startLanguage switch
+            return languageId switch
             {
-                StartLanguage.RU => CLIDLanguage.RU,
-                StartLanguage.EN => CLIDLanguage.EN,
-                _ => CLIDLanguage.EN
-            };
-        }
-
-        //TODO: Нам точно нужен этот метод?
-        public static StartLanguage ConvertLanguage(CLIDLanguage clidLanguage)
-        {
-            return clidLanguage switch
-            {
-                CLIDLanguage.RU => StartLanguage.RU,
-                CLIDLanguage.EN => StartLanguage.EN,
-                _ => StartLanguage.EN
+                1033 => 0x0409,
+                1049 => 0x0419,
+                _ => 0x0409
             };
         }
     }

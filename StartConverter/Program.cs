@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Start.API;
 using STARTtoIFC;
 
@@ -49,7 +48,7 @@ namespace StartConverter
             {
                 object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filePath);
                 if (startDocument == null) throw new NullReferenceException("Object ref is null");
-                int code = ifcExporter.Export(startDocument, (int)StartLanguage.EN);
+                int code = ifcExporter.Export(startDocument, 1049);
                 Console.WriteLine($"Output code: {code}");
             }
         }

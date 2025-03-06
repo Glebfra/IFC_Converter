@@ -58,9 +58,9 @@ namespace STARTtoIFC
 
         private void Localize(int languageId)
         {
-            CLIDLanguage clidLanguage = LanguageConverter.ConvertLanguage((StartLanguage)languageId);
+            int convertedLanguageId = LanguageConverter.ConvertLanguage(languageId);
             
-            var ci = new System.Globalization.CultureInfo((int)clidLanguage);
+            var ci = new System.Globalization.CultureInfo(convertedLanguageId);
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
         }
