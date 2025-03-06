@@ -1,6 +1,7 @@
 ﻿using System;
 using Start.API;
 using STARTtoIFC;
+using System.IO;
 
 namespace StartConverter
 {
@@ -11,10 +12,6 @@ namespace StartConverter
         {
             IfcExporter ifcExporter = new IfcExporter();
             
-            #if DEBUG
-            string filePath = @"D:\Работа\BendTest.ctp";
-            //string filePath = @"C:\Users\nechitailenko\Desktop\CTAPT1.ctp";
-            #else
             string filePath;
             while (true)
             {
@@ -42,8 +39,7 @@ namespace StartConverter
 
                 break;
             }
-            #endif
-            
+
             using (StartAutoServer startAutoServer = new StartAutoServer())
             {
                 object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filePath);
