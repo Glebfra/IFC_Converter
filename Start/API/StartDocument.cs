@@ -21,6 +21,22 @@ namespace Start.API
             return new StartBaseRootDataArray(dataArray);
         }
 
+        public string GetTitle()
+        {
+            object? title = _document.GetType().InvokeMember(
+                "GetTitle", BindingFlags.InvokeMethod, null, _document, null
+            );
+            return (string)title;
+        }
+        
+        public string GetPathName()
+        {
+            object? title = _document.GetType().InvokeMember(
+                "GetPathName", BindingFlags.InvokeMethod, null, _document, null
+            );
+            return (string)title;
+        }
+
         public void Dispose()
         {
             Marshal.ReleaseComObject(_document);
