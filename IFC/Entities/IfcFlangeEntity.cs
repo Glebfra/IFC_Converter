@@ -34,7 +34,7 @@ namespace IFC.Entities
 
         protected override IfcPipeFitting? _pipeFitting { get; set; }
 
-        public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
+        public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcPipeEntities)
             : base(ifcNodeEntity, ifcPipeEntities)
         {
             _armatureEntity = armatureEntity;

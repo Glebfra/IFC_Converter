@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using IFC.Entities;
+using IFC.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
+using Xbim.Ifc4.GeometricConstraintResource;
+using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
@@ -10,7 +13,7 @@ namespace IFC.Tools
 {
     public static class IfcPortConnection
     {
-        public static IfcDistributionPort[] GetPipeClosestPorts(XbimMatrix3D ObjectMatrix3D, IfcPipeEntity[] pipeEntities)
+        public static IfcDistributionPort[] GetPipeClosestPorts(XbimMatrix3D ObjectMatrix3D, IfcAbstractSegmentEntity[] pipeEntities)
         {
             return (
                 from port in pipeEntities.SelectMany(pipe => pipe.Ports)
@@ -18,6 +21,18 @@ namespace IFC.Tools
                 orderby distance
                 select port
             ).Take(pipeEntities.Length).ToArray();
+        }
+        
+        public static IfcDistributionPort CreatePort(IModel model, IfcLocalPlacement localPlacement)
+        {
+            return model.Instances.New<IfcDistributionPort>(port =>
+            {
+                port.Name = "Port";
+                port.ObjectPlacement = localPlacement;
+                port.PredefinedType = IfcDistributionPortTypeEnum.PIPE;
+                port.FlowDirection = IfcFlowDirectionEnum.SOURCEANDSINK;
+                port.SystemType = IfcDistributionSystemEnum.FUEL;
+            });
         }
         
         public static IfcRelConnectsPorts[] ConnectPorts(IModel model, IfcDistributionPort[] ports, IfcElement realizingElement)

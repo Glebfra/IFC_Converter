@@ -28,7 +28,7 @@ namespace IFC.Entities
         private IfcPipeFitting? _pipeFitting;
     
         private readonly StartReducerEntity _reducerEntity;
-        private readonly IfcPipeEntity[] _pipeEntities;
+        private readonly IfcAbstractSegmentEntity[] _ifcAbstractSegmentEntities;
         private readonly IfcNodeEntity _nodeEntity;
     
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
@@ -36,14 +36,14 @@ namespace IFC.Entities
     
         protected override IfcIdentifier Tag { get; set; } = "Reducer Conentric";
 
-        public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+        public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
         {
             _reducerEntity = reducerEntity;
             _nodeEntity = nodeEntity;
-            _pipeEntities = pipeEntities;
+            _ifcAbstractSegmentEntities = ifcAbstractSegmentEntities;
 
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
+            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(ifcAbstractSegmentEntities[1], coordinates);
         
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = directionToPipe.Normalized();
@@ -61,7 +61,7 @@ namespace IFC.Entities
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
+            double[] radiuses = _ifcAbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
             double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;
@@ -79,11 +79,11 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
+            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcAbstractSegmentEntities);
             IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
             
-            _pipeEntities[0].Clip(_nodeEntity, Math.Abs(displacement1));
-            _pipeEntities[1].Clip(_nodeEntity, Math.Abs(displacement2));
+            _ifcAbstractSegmentEntities[0].Clip(_nodeEntity, Math.Abs(displacement1));
+            _ifcAbstractSegmentEntities[1].Clip(_nodeEntity, Math.Abs(displacement2));
 
             AddProperties(model, _pipeFitting);
 

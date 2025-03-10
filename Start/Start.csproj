@@ -149,10 +149,12 @@
     <Compile Include="Entities\StartAbstractEntity.cs" />
     <Compile Include="Entities\StartArmatureEntity.cs" />
     <Compile Include="Entities\StartBendEntity.cs" />
+    <Compile Include="Entities\StartEntityContainer.cs" />
     <Compile Include="Entities\StartEntityFactory.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
     <Compile Include="Entities\StartPipeEntity.cs" />
     <Compile Include="Entities\StartReducerEntity.cs" />
+    <Compile Include="Entities\StartRigidElementEntity.cs" />
     <Compile Include="Entities\StartTeeEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartProject.cs" />

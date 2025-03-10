@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Start.API;
 using Start.Entities;
@@ -80,11 +81,15 @@ namespace Start
 
         public GroupedEntities GroupEntities(StartDataArrayItem[] startDataArrayItems)
         {
+            List<StartEntityContainer> twoNodeEntitiesContainers = new List<StartEntityContainer>();
+            List<StartEntityContainer> oneNodeEntitiesContainers = new List<StartEntityContainer>();
+            List<StartEntityContainer> nodeEntitiesContainers = new List<StartEntityContainer>();
+
             Dictionary<int, StartAbstractEntity> nodeEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, StartAbstractEntity> pipeEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, StartAbstractEntity> fittingEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, int[]> pipeNodeRelations = new Dictionary<int, int[]>();
-            Dictionary<int, int> fittingNodeRelations = new Dictionary<int, int>();
+            Dictionary<int, StartAbstractEntity> twoNodeEntities = new Dictionary<int, StartAbstractEntity>();
+            Dictionary<int, StartAbstractEntity> oneNodeEntities = new Dictionary<int, StartAbstractEntity>();
+            Dictionary<int, int[]> twoNodeEntitiesRelations = new Dictionary<int, int[]>();
+            Dictionary<int, int> oneNodeEntitiesRelations = new Dictionary<int, int>();
 
             foreach (StartDataArrayItem startDataArrayItem in startDataArrayItems)
             {
@@ -94,26 +99,48 @@ namespace Start
                 switch (startAbstractEntity.Type)
                 {
                     case StartElementType.NODE:
+                        nodeEntitiesContainers.Add(new StartEntityContainer()
+                        {
+                            ID = startDataArrayItem.NodeIds[0],
+                            Entity = startAbstractEntity,
+                        });
                         nodeEntities.Add(startDataArrayItem.NodeIds[0], startAbstractEntity);
                         break;
+                    case StartElementType.RIGID_ELEMENT:
                     case StartElementType.PIPE_ELEMENT:
-                        pipeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        pipeNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds);
+                        twoNodeEntitiesContainers.Add(new StartEntityContainer()
+                        {
+                            ID = startDataArrayItem.DataArrayIndex,
+                            Entity = startAbstractEntity,
+                            NodeIDs = startDataArrayItem.NodeIds
+                        });
+                        twoNodeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
+                        twoNodeEntitiesRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds);
                         break;
                     default:
-                        fittingEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        fittingNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds[0]);
+                        oneNodeEntitiesContainers.Add(new StartEntityContainer()
+                        {
+                            ID = startDataArrayItem.DataArrayIndex,
+                            Entity = startAbstractEntity,
+                            NodeIDs = startDataArrayItem.NodeIds
+                        });
+                        oneNodeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
+                        oneNodeEntitiesRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds[0]);
                         break;
                 }
             }
 
             return new GroupedEntities()
             {
+                twoNodeEntitiesContainers = twoNodeEntitiesContainers.ToArray(),
+                oneNodeEntitiesContainers = oneNodeEntitiesContainers.ToArray(),
+                nodeEntitiesContainers = nodeEntitiesContainers.ToArray(),
+                
                 NodeEntities = nodeEntities,
-                PipeEntities = pipeEntities,
-                FittingEntities = fittingEntities,
-                PipeNodeRelations = pipeNodeRelations,
-                FittingNodeRelations = fittingNodeRelations
+                TwoNodeEntities = twoNodeEntities,
+                OneNodeEntities = oneNodeEntities,
+                TwoNodeEntitiesRelations = twoNodeEntitiesRelations,
+                OneNodeEntitiesRelations = oneNodeEntitiesRelations
             };
         }
 

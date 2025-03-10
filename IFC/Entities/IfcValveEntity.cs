@@ -33,7 +33,7 @@ namespace IFC.Entities
         public readonly double Length;
         public readonly double Diameter;
 
-        public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+        public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
             : base(nodeEntity, pipeEntities)
         {
             _armatureEntity = armatureEntity;

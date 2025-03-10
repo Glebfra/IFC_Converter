@@ -140,7 +140,11 @@
   <ItemGroup>
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractPipeFittingEntity.cs" />
+    <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
+    <Compile Include="Entities\Abstract\IIfcClippable.cs" />
+    <Compile Include="Entities\Abstract\IIfcOneNodeEntity.cs" />
+    <Compile Include="Entities\Abstract\IIfcTwoNodeEntity.cs" />
     <Compile Include="Entities\IfcBendEntity.cs" />
     <Compile Include="Entities\IfcEntityFactory.cs" />
     <Compile Include="Entities\IfcFabricatedTeeEntity.cs" />
@@ -150,6 +154,7 @@
     <Compile Include="Entities\IfcPipeEntity.cs" />
     <Compile Include="Entities\IfcReducerConcentricEntity.cs" />
     <Compile Include="Entities\IfcReducerEccentricEntity.cs" />
+    <Compile Include="Entities\IfcRigidElementEntity.cs" />
     <Compile Include="Entities\IfcStubInEntity.cs" />
     <Compile Include="Entities\IfcSweepoletEntity.cs" />
     <Compile Include="Entities\IfcValveEntity.cs" />

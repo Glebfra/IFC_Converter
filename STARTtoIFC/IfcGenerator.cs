@@ -23,8 +23,8 @@ namespace STARTtoIFC
             Logger.Log($"Successfully grouped objects. Total count is: {startDataArrayItems.Length}");
             
             Dictionary<int, IfcNodeEntity> ifcNodeEntities = new Dictionary<int, IfcNodeEntity>();
-            Dictionary<int, IfcPipeEntity> ifcPipeEntities = new Dictionary<int, IfcPipeEntity>();
-            Dictionary<int, List<IfcPipeEntity>> ifcPipeToNodeRelations = new Dictionary<int, List<IfcPipeEntity>>();
+            Dictionary<int, IfcAbstractSegmentEntity> ifcTwoNodeEntities = new Dictionary<int, IfcAbstractSegmentEntity>();
+            Dictionary<int, List<IfcAbstractSegmentEntity>> ifcTwoNodeEntitiesRelations = new Dictionary<int, List<IfcAbstractSegmentEntity>>();
 
             foreach (KeyValuePair<int, StartAbstractEntity> nodeEntity in groupedEntities.NodeEntities)
             {
@@ -35,37 +35,37 @@ namespace STARTtoIFC
 
             using (IFCProject ifcProject = IFCProject.CreateProject("StartToIfc"))
             {
-                foreach (KeyValuePair<int, StartAbstractEntity> pipeEntity in groupedEntities.PipeEntities)
+                foreach (KeyValuePair<int, StartAbstractEntity> twoNodeEntity in groupedEntities.TwoNodeEntities)
                 {
-                    int[] nodeIds = groupedEntities.PipeNodeRelations[pipeEntity.Key];
+                    int[] nodeIds = groupedEntities.TwoNodeEntitiesRelations[twoNodeEntity.Key];
                     IfcNodeEntity[] ifcConnNodeEntities = nodeIds.Select(nodeId => ifcNodeEntities[nodeId]).ToArray();
-                    IfcPipeEntity ifcPipeEntity = IfcEntityFactory.CreateEntity<IfcPipeEntity>(pipeEntity.Value, ifcConnNodeEntities);
-                    ifcPipeEntities.Add(pipeEntity.Key, ifcPipeEntity);
+                    IfcAbstractSegmentEntity ifcTwoNodeEntity = (IfcAbstractSegmentEntity)IfcEntityFactory.CreateEntity(twoNodeEntity.Value, ifcConnNodeEntities);
+                    ifcTwoNodeEntities.Add(twoNodeEntity.Key, ifcTwoNodeEntity);
                 
                     foreach (int nodeId in nodeIds)
                     {
-                        if (!ifcPipeToNodeRelations.ContainsKey(nodeId))
+                        if (!ifcTwoNodeEntitiesRelations.ContainsKey(nodeId))
                         {
-                            ifcPipeToNodeRelations.Add(nodeId, new List<IfcPipeEntity>());
+                            ifcTwoNodeEntitiesRelations.Add(nodeId, new List<IfcAbstractSegmentEntity>());
                         }
-                        ifcPipeToNodeRelations[nodeId].Add(ifcPipeEntity);
+                        ifcTwoNodeEntitiesRelations[nodeId].Add(ifcTwoNodeEntity);
                     }
                 
-                    ifcProject.AddEntity(ifcPipeEntity);
-                    Logger.Log($"Added {pipeEntity.Value.GetType().Name} with id {pipeEntity.Key} to IFC.");
+                    ifcProject.AddEntity(ifcTwoNodeEntity);
+                    Logger.Log($"Added {twoNodeEntity.Value.GetType().Name} with id {twoNodeEntity.Key} to IFC.");
                 }
             
-                foreach (KeyValuePair<int, StartAbstractEntity> fittingEntity in groupedEntities.FittingEntities)
+                foreach (KeyValuePair<int, StartAbstractEntity> oneNodeEntity in groupedEntities.OneNodeEntities)
                 {
-                    int fittingId = fittingEntity.Key;
-                    StartAbstractEntity fitting = fittingEntity.Value;
-                    IfcAbstractEntity ifcFittingEntity = IfcEntityFactory.CreateFittingEntity(
+                    int fittingId = oneNodeEntity.Key;
+                    StartAbstractEntity fitting = oneNodeEntity.Value;
+                    IfcAbstractEntity ifcFittingEntity = IfcEntityFactory.CreateEntity(
                         fitting,
-                        ifcNodeEntities[groupedEntities.FittingNodeRelations[fittingId]],
-                        ifcPipeToNodeRelations[groupedEntities.FittingNodeRelations[fittingId]].ToArray()
+                        ifcNodeEntities[groupedEntities.OneNodeEntitiesRelations[fittingId]],
+                        ifcTwoNodeEntitiesRelations[groupedEntities.OneNodeEntitiesRelations[fittingId]].ToArray()
                     );
                     ifcProject.AddEntity(ifcFittingEntity);
-                    Logger.Log($"Added {fittingEntity.Value.GetType().Name} with id {fittingEntity.Key} to IFC.");
+                    Logger.Log($"Added {oneNodeEntity.Value.GetType().Name} with id {oneNodeEntity.Key} to IFC.");
                 }
             
                 ifcProject.GroupObjects("Pipe system");
