@@ -54,10 +54,7 @@ namespace IFC.Entities
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            _pipeSegment = (IfcPipeSegment)base.CreateAndAdd(model);
-            _pipeSegment.Name = _startRigidElementEntity.Name;
-            _pipeSegment.PredefinedType = IfcPipeSegmentTypeEnum.RIGIDSEGMENT;
-
+            _pipeSegment = CreatePipeSegment(model, _startRigidElementEntity.Name, IfcPipeSegmentTypeEnum.RIGIDSEGMENT);
             return _pipeSegment;
         }
     }

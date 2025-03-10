@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -60,7 +61,7 @@ namespace STARTtoIFC
         {
             int convertedLanguageId = LanguageConverter.ConvertLanguage(languageId);
             
-            var ci = new System.Globalization.CultureInfo(convertedLanguageId);
+            var ci = new CultureInfo(convertedLanguageId);
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
         }

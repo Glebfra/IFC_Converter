@@ -7,7 +7,6 @@ using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
@@ -56,7 +55,7 @@ namespace IFC.Entities.Abstract
             Ports = new IfcDistributionPort[2];
         }
 
-        public override IfcProduct CreateAndAdd(IModel model)
+        protected IfcPipeSegment CreatePipeSegment(IModel model, string name, IfcPipeSegmentTypeEnum type)
         {
             IfcCartesianPoint startPoint = CreateStartPoint(model);
             IfcCartesianPoint endPoint = CreateEndPoint(model);
@@ -72,7 +71,7 @@ namespace IFC.Entities.Abstract
             
             IfcDirection extrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
             IfcProductDefinitionShape productDefShape = CreatePipeShape(model, extrudedDirection);
-            _pipeSegment = CreatePipe(model, productDefShape, startLocalPlacement);
+            _pipeSegment = CreatePipe(model, productDefShape, startLocalPlacement, name, type);
             
             Ports[0] = IfcPortConnection.CreatePort(model, startLocalPlacement);
             Ports[1] = IfcPortConnection.CreatePort(model, endLocalPlacement);
@@ -80,7 +79,7 @@ namespace IFC.Entities.Abstract
 
             return _pipeSegment;
         }
-        
+
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
         {
             if (IsStartNode(nodeEntity))
@@ -88,12 +87,13 @@ namespace IFC.Entities.Abstract
             Length -= clipLength;
         }
         
-        private IfcPipeSegment CreatePipe(IModel model, IfcProductDefinitionShape productDefShape, IfcLocalPlacement localPlacement)
+        private IfcPipeSegment CreatePipe(IModel model, IfcProductDefinitionShape productDefShape, IfcLocalPlacement localPlacement, string name, IfcPipeSegmentTypeEnum type)
         {
             return model.Instances.New<IfcPipeSegment>(segment =>
             {
                 segment.Tag = Tag;
-                segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
+                segment.Name = name;
+                segment.PredefinedType = type;
                 segment.ObjectPlacement = localPlacement;
                 segment.Representation = productDefShape;
             });

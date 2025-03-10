@@ -3,6 +3,7 @@ using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
+using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
@@ -44,9 +45,8 @@ namespace IFC.Entities
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            _pipeSegment = (IfcPipeSegment)base.CreateAndAdd(model);
-            _pipeSegment.Name = _startPipeEntity.Name;
-
+            _pipeSegment = CreatePipeSegment(model, _startPipeEntity.Name, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);
+            AddProperties(model, _pipeSegment);
             return _pipeSegment;
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
-using STARTtoIFC;
 using System.IO;
-using Start;
+using Start.API;
+using STARTtoIFC;
 
 namespace StartConverter
 {
@@ -40,38 +40,13 @@ namespace StartConverter
                 break;
             }
 
-            using (StartProject startProject = StartProject.OpenProject(filePath))
+            using (StartAutoServer startAutoServer = new StartAutoServer())
             {
-                /*Array values = Enum.GetValues(typeof(StartElementType));
-                foreach (StartElementType value in values)
-                {
-                    Console.WriteLine($@"{value} : {startProject.GetNumberElements(value, value)}");
-                }
-                string dataJson = startProject.GetDataJson();
-                StartDataArrayItem[]? dataArrayItems = JsonConvert.DeserializeObject<StartDataArrayItem[]>(dataJson);
-                if (dataArrayItems == null) throw new NullReferenceException("Object is null");
-                foreach (StartDataArrayItem startDataArrayItem in dataArrayItems)
-                {
-                    StartAbstractEntity? abstractEntity = StartEntityFactory.CreateEntity(startDataArrayItem);
-                    if (abstractEntity == null) continue;
-                    if (abstractEntity.Type == StartElementType.RIGID_ELEMENT)
-                    {
-                        StartRigidElementEntity rigidEntity = (StartRigidElementEntity)abstractEntity;
-                        foreach (PropertyInfo propertyInfo in rigidEntity.GetType().GetProperties())
-                        {
-                            Console.WriteLine($"{propertyInfo.Name} : {propertyInfo.GetValue(rigidEntity)}");
-                        }
-                    }
-                }*/
+                object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filePath);
+                if (startDocument == null) throw new NullReferenceException("Object ref is null");
+                int code = ifcExporter.Export(startDocument, 1049);
+                Console.WriteLine($"Output code: {code}");
             }
-            
-            // using (StartAutoServer startAutoServer = new StartAutoServer())
-            // {
-            //     object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filePath);
-            //     if (startDocument == null) throw new NullReferenceException("Object ref is null");
-            //     int code = ifcExporter.Export(startDocument, 1049);
-            //     Console.WriteLine($"Output code: {code}");
-            // }
         }
     }
 }
