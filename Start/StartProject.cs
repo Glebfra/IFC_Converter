@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 using Start.API;
 using Start.Entities;
+using Start.Extensions;
 
 namespace Start
 {
@@ -73,74 +76,23 @@ namespace Start
             return _dataArray.GetDataJson(StartElementType.ALL, StartElementType.ALL);
         }
         
-        public StartDataArrayItem[]? GetDataArrayItems()
+        public StartDataArrayItem[] GetDataArrayItems()
         {
-            return JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
-        }
-
-        public GroupedEntities GroupEntities(StartDataArrayItem[] startDataArrayItems)
-        {
-            List<StartEntityContainer> twoNodeEntitiesContainers = new List<StartEntityContainer>();
-            List<StartEntityContainer> oneNodeEntitiesContainers = new List<StartEntityContainer>();
-            List<StartEntityContainer> nodeEntitiesContainers = new List<StartEntityContainer>();
-
-            Dictionary<int, StartAbstractEntity> nodeEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, StartAbstractEntity> twoNodeEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, StartAbstractEntity> oneNodeEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, int[]> twoNodeEntitiesRelations = new Dictionary<int, int[]>();
-            Dictionary<int, int> oneNodeEntitiesRelations = new Dictionary<int, int>();
-
-            foreach (StartDataArrayItem startDataArrayItem in startDataArrayItems)
+            StartDataArrayItem[]? allDataArrayItems = JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
+            if (allDataArrayItems == null) throw new NullReferenceException("Cannot deserialize objects");
+            StartDataArrayItem[] dataArrayItems = allDataArrayItems.Select(item =>
             {
-                StartAbstractEntity? startAbstractEntity = StartEntityFactory.CreateEntity(startDataArrayItem);
-                if (startAbstractEntity == null) continue;
-
-                switch (startAbstractEntity.Type)
+                StartAbstractEntity? entity = StartEntityFactory.CreateEntity(item);
+                if (entity != null)
                 {
-                    case StartElementType.NODE:
-                        nodeEntitiesContainers.Add(new StartEntityContainer()
-                        {
-                            ID = startDataArrayItem.NodeIds[0],
-                            Entity = startAbstractEntity,
-                        });
-                        nodeEntities.Add(startDataArrayItem.NodeIds[0], startAbstractEntity);
-                        break;
-                    case StartElementType.RIGID_ELEMENT:
-                    case StartElementType.PIPE_ELEMENT:
-                        twoNodeEntitiesContainers.Add(new StartEntityContainer()
-                        {
-                            ID = startDataArrayItem.DataArrayIndex,
-                            Entity = startAbstractEntity,
-                            NodeIDs = startDataArrayItem.NodeIds
-                        });
-                        twoNodeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        twoNodeEntitiesRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds);
-                        break;
-                    default:
-                        oneNodeEntitiesContainers.Add(new StartEntityContainer()
-                        {
-                            ID = startDataArrayItem.DataArrayIndex,
-                            Entity = startAbstractEntity,
-                            NodeIDs = startDataArrayItem.NodeIds
-                        });
-                        oneNodeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        oneNodeEntitiesRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds[0]);
-                        break;
+                    item.Entity = entity;
+                    item.Entity.ID = item.Type == StartElementType.NODE ? item.NodeIds[0] : item.DataArrayIndex;
+                    item.Entity.Type = item.Type;
                 }
-            }
+                return item;
+            }).Where(item => item.Entity != null).ToArray();
 
-            return new GroupedEntities()
-            {
-                twoNodeEntitiesContainers = twoNodeEntitiesContainers.ToArray(),
-                oneNodeEntitiesContainers = oneNodeEntitiesContainers.ToArray(),
-                nodeEntitiesContainers = nodeEntitiesContainers.ToArray(),
-                
-                NodeEntities = nodeEntities,
-                TwoNodeEntities = twoNodeEntities,
-                OneNodeEntities = oneNodeEntities,
-                TwoNodeEntitiesRelations = twoNodeEntitiesRelations,
-                OneNodeEntitiesRelations = oneNodeEntitiesRelations
-            };
+            return dataArrayItems;
         }
 
         public void Dispose()

@@ -21,16 +21,12 @@ namespace IFC.Entities
         private StartRigidElementEntity _startRigidElementEntity;
         private IfcPipeSegment _pipeSegment;
 
-        public IfcRigidElementEntity(StartRigidElementEntity startRigidElementEntity, IfcNodeEntity[] ifcNodeEntities, IfcAbstractSegmentEntity[]? abstractSegmentEntities = null) 
+        public IfcRigidElementEntity(StartRigidElementEntity startRigidElementEntity, IfcNodeEntity[] ifcNodeEntities) 
             : base(ifcNodeEntities)
         {
             _startRigidElementEntity = startRigidElementEntity;
             Coordinates = ifcNodeEntities[0].ObjectMatrix3D.Translation;
-            Direction = new XbimVector3D(
-                _startRigidElementEntity.ProjectionAlongOXAxis,
-                _startRigidElementEntity.ProjectionAlongOYAxis,
-                _startRigidElementEntity.ProjectionAlongOZAxis
-            );
+            Direction = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             Length = Direction.Length;
 
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
@@ -41,15 +37,7 @@ namespace IFC.Entities
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
 
-            if (abstractSegmentEntities != null)
-            {
-                Diameter = Math.Min(abstractSegmentEntities[0].Diameter, abstractSegmentEntities[1].Diameter);
-                if (Diameter > 0.05) Diameter = 0.05;
-            }
-            else
-            {
-                Diameter = 0.05;
-            }
+            Diameter = 0.05;
         }
         
         public override IfcProduct CreateAndAdd(IModel model)

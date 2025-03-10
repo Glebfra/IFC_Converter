@@ -142,9 +142,6 @@
     <Compile Include="Entities\Abstract\IfcAbstractPipeFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
-    <Compile Include="Entities\Abstract\IIfcClippable.cs" />
-    <Compile Include="Entities\Abstract\IIfcOneNodeEntity.cs" />
-    <Compile Include="Entities\Abstract\IIfcTwoNodeEntity.cs" />
     <Compile Include="Entities\IfcBendEntity.cs" />
     <Compile Include="Entities\IfcEntityFactory.cs" />
     <Compile Include="Entities\IfcFabricatedTeeEntity.cs" />
@@ -160,6 +157,9 @@
     <Compile Include="Entities\IfcValveEntity.cs" />
     <Compile Include="Entities\IfcWeldedTeeEntity.cs" />
     <Compile Include="Entities\IfcWeldoletEntity.cs" />
+    <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
+    <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
+    <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />

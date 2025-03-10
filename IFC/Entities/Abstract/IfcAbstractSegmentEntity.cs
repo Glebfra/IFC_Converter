@@ -1,4 +1,5 @@
 ﻿using System;
+using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -54,6 +55,13 @@ namespace IFC.Entities.Abstract
             NodeEntities = ifcNodeEntities;
             Ports = new IfcDistributionPort[2];
         }
+        
+        public void Clip(IfcNodeEntity nodeEntity, double clipLength)
+        {
+            if (IsStartNode(nodeEntity))
+                Coordinates += ObjectMatrix3D.Forward * clipLength;
+            Length -= clipLength;
+        }
 
         protected IfcPipeSegment CreatePipeSegment(IModel model, string name, IfcPipeSegmentTypeEnum type)
         {
@@ -80,13 +88,6 @@ namespace IFC.Entities.Abstract
             return _pipeSegment;
         }
 
-        public void Clip(IfcNodeEntity nodeEntity, double clipLength)
-        {
-            if (IsStartNode(nodeEntity))
-                Coordinates += ObjectMatrix3D.Forward * clipLength;
-            Length -= clipLength;
-        }
-        
         private IfcPipeSegment CreatePipe(IModel model, IfcProductDefinitionShape productDefShape, IfcLocalPlacement localPlacement, string name, IfcPipeSegmentTypeEnum type)
         {
             return model.Instances.New<IfcPipeSegment>(segment =>
@@ -156,7 +157,7 @@ namespace IFC.Entities.Abstract
             });
         }
         
-        private bool IsStartNode(IfcNodeEntity nodeEntity)
+        protected bool IsStartNode(IfcNodeEntity nodeEntity)
         {
             XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D startPipeCoordinates = ObjectMatrix3D.Translation;

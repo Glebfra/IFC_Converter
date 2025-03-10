@@ -26,11 +26,7 @@ namespace IFC.Entities
         {
             _startPipeEntity = startPipeEntity;
             Coordinates = ifcNodeEntities[0].ObjectMatrix3D.Translation;
-            Direction = new XbimVector3D(
-                _startPipeEntity.ProjectionAlongOXAxis,
-                _startPipeEntity.ProjectionAlongOYAxis,
-                _startPipeEntity.ProjectionAlongOZAxis
-            );
+            Direction = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             Length = Direction.Length;
             
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);

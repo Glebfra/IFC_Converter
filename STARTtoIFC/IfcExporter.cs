@@ -23,6 +23,7 @@ namespace STARTtoIFC
         public int Export(object startDocumentObject, int languageId)
         {
             Application.EnableVisualStyles();
+            Logger.Initialize();
             
             Localize(languageId);
             
@@ -48,11 +49,13 @@ namespace STARTtoIFC
             {
                 IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath);
                 Logger.Log("Convert is successfully ended");
+                Logger.SaveAs(dataContainer.OutputFilePath + ".log");
                 return (int)ConversionResult.Success;
             }
             catch (Exception e)
             {
-                Logger.Error(e.Message);
+                Logger.Error(e.ToString());
+                Logger.SaveAs(dataContainer.OutputFilePath + ".log");
                 return (int)ConversionResult.Fail;
             }
         }

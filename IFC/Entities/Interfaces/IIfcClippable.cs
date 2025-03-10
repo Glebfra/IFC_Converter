@@ -1,6 +1,6 @@
 ﻿using Xbim.Common.Geometry;
 
-namespace IFC.Entities.Abstract
+namespace IFC.Entities.Interfaces
 {
     public interface IIfcClippable
     {

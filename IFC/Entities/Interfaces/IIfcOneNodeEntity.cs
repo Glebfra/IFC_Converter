@@ -1,4 +1,4 @@
-﻿namespace IFC.Entities.Abstract
+﻿namespace IFC.Entities.Interfaces
 {
     public interface IIfcOneNodeEntity
     {
