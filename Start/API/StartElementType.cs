@@ -7,6 +7,7 @@
         NODE = 1,
         RIGID_ELEMENT = 2,
         CYLINDRICAL_SHELL = 3,
+        FLEXIBLE_ELEMENT = 5,
         PIPE_BEND = 10,
         MILTER_BEND = 11,
         FABRICATED_TEE = 13,

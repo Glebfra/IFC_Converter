@@ -70,27 +70,20 @@ namespace IFC.Entities.Abstract
         protected IfcPipeSegment CreatePipeSegment(IModel model, string name, IfcPipeSegmentTypeEnum type)
         {
             IfcCartesianPoint startPoint = CreateStartPoint(model);
-            IfcCartesianPoint endPoint = CreateEndPoint(model);
-        
             IfcDirection forwardDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Forward);
             IfcDirection rightDirection = IfcAxis.CreateDirection(model, ObjectMatrix3D.Right);
 
             IfcAxis2Placement3D startAxis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, startPoint, forwardDirection, rightDirection);
-            IfcAxis2Placement3D endAxis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, endPoint, forwardDirection, rightDirection);
+            IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, startAxis2Placement3D);
 
-            IfcLocalPlacement startLocalPlacement = IfcAxis.CreateLocalPlacement(model, startAxis2Placement3D);
-            IfcLocalPlacement endLocalPlacement = IfcAxis.CreateLocalPlacement(model, endAxis2Placement3D);
-            
             IfcDirection extrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
             IfcProductDefinitionShape productDefShape = CreatePipeShape(model, extrudedDirection);
-            _pipeSegment = CreatePipe(model, productDefShape, startLocalPlacement, name, type);
-            
-            AddProperties(model, _pipeSegment);
+            _pipeSegment = CreatePipe(model, productDefShape, localPlacement, name, type);
 
             return _pipeSegment;
         }
 
-        private IfcPipeSegment CreatePipe(IModel model, IfcProductDefinitionShape productDefShape, IfcLocalPlacement localPlacement, string name, IfcPipeSegmentTypeEnum type)
+        protected IfcPipeSegment CreatePipe(IModel model, IfcProductDefinitionShape productDefShape, IfcLocalPlacement localPlacement, string name, IfcPipeSegmentTypeEnum type)
         {
             return model.Instances.New<IfcPipeSegment>(segment =>
             {
@@ -102,7 +95,7 @@ namespace IFC.Entities.Abstract
             });
         }
         
-        private IfcProductDefinitionShape CreatePipeShape(IModel model, IfcDirection extrudedDirection)
+        protected IfcProductDefinitionShape CreatePipeShape(IModel model, IfcDirection extrudedDirection)
         {
             IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, Diameter / 2, XbimVector3D.Zero);
             IfcExtrudedAreaSolid extrudedArea = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
@@ -118,19 +111,7 @@ namespace IFC.Entities.Abstract
             return IfcGeometry.CreateProductDefinitionShape(model, shapeRep);
         }
 
-        private IfcPipeSegment CreatePipeSegment(IModel model, string name, IfcLocalPlacement localPlacement, IfcProductRepresentation representation)
-        {
-            return model.Instances.New<IfcPipeSegment>(segment =>
-            {
-                segment.Name = name;
-                segment.Tag = Tag;
-                segment.PredefinedType = IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
-                segment.ObjectPlacement = localPlacement;
-                segment.Representation = representation;
-            });
-        }
-        
-        private IfcCartesianPoint CreateStartPoint(IModel model)
+        protected IfcCartesianPoint CreateStartPoint(IModel model)
         {
             return model.Instances.New<IfcCartesianPoint>(point =>
             {
@@ -139,26 +120,6 @@ namespace IFC.Entities.Abstract
             });
         }
 
-        private IfcCartesianPoint CreateEndPoint(IModel model)
-        {
-            return model.Instances.New<IfcCartesianPoint>(point =>
-            {
-                XbimVector3D endCoordinates = Coordinates + ObjectMatrix3D.Forward * Length;
-                point.SetXYZ(endCoordinates.X, endCoordinates.Y, endCoordinates.Z);
-            
-                _CoordinatesChanged += () =>
-                {
-                    endCoordinates = Coordinates + ObjectMatrix3D.Forward * Length;
-                    point.SetXYZ(endCoordinates.X, endCoordinates.Y, endCoordinates.Z);
-                };
-                _LengthChanged += () =>
-                {
-                    endCoordinates = Coordinates + ObjectMatrix3D.Forward * Length;
-                    point.SetXYZ(endCoordinates.X, endCoordinates.Y, endCoordinates.Z);
-                };
-            });
-        }
-        
         protected bool IsStartNode(IfcNodeEntity nodeEntity)
         {
             XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;

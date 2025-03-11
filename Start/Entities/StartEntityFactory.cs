@@ -16,6 +16,10 @@ namespace Start.Entities
                 case StartElementType.CYLINDRICAL_SHELL:
                     abstractEntity = JsonConvert.DeserializeObject<StartPipeEntity>(dataString)!;
                     break;
+                
+                case StartElementType.FLEXIBLE_ELEMENT:
+                    abstractEntity = JsonConvert.DeserializeObject<StartFlexibleElementEntity>(dataString)!;
+                    break;
             
                 case StartElementType.NODE:
                     abstractEntity = JsonConvert.DeserializeObject<StartNodeEntity>(dataString)!; 
