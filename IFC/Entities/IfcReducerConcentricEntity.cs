@@ -31,10 +31,9 @@ namespace IFC.Entities
     
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public double Length { get; }
-    
-        public override IfcIdentifier Tag { get; protected set; } = "Reducer Conentric";
 
         public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(reducerEntity)
         {
             _reducerEntity = reducerEntity;
             _nodeEntity = nodeEntity;

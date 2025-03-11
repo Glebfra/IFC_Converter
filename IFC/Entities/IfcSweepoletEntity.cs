@@ -8,8 +8,6 @@ namespace IFC.Entities
 {
     public class IfcSweepoletEntity : IfcAbstractTeeEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Sweepolet";
-    
         private double Length;
         private double Height;
     

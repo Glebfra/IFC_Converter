@@ -22,8 +22,6 @@ namespace IFC.Entities
 {
     public class IfcBendEntity : IfcAbstractEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Bend";
-    
         private readonly StartBendEntity _bendEntity;
         private readonly IfcNodeEntity _ifcNodeEntity;
         private readonly IfcAbstractSegmentEntity[] _ifcPipeEntities;
@@ -36,6 +34,7 @@ namespace IFC.Entities
         public double Length => _bendAngle * _bendEntity.Radius;
         
         public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcPipeEntities)
+            : base(bendEntity)
         {
             _bendEntity = bendEntity;
             _ifcPipeEntities = ifcPipeEntities;

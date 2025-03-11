@@ -29,6 +29,7 @@ namespace IFC.Entities.Abstract
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
         public IfcAbstractTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(teeEntity)
         {
             _ifcAbstractSegmentEntities = ifcAbstractSegmentEntities;
             _teeEntity = teeEntity;

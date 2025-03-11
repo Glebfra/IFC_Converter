@@ -22,8 +22,6 @@ namespace IFC.Entities
 {
     public class IfcMilterJointEntity : IfcAbstractEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Milter Joint";
-    
         private readonly StartBendEntity _bendEntity;
         private readonly IfcNodeEntity _ifcNodeEntity;
         private readonly IfcAbstractSegmentEntity[] _ifcAbstractSegments;
@@ -38,6 +36,7 @@ namespace IFC.Entities
         public double Depth { get; }
 
         public IfcMilterJointEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegments)
+            : base(bendEntity)
         {
             _bendEntity = bendEntity;
             _ifcNodeEntity = ifcNodeEntity;

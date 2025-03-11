@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using IFC.Tools;
+using Start.Entities;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
+using Xbim.IO.Xml.BsConf;
 
 namespace IFC.Entities.Abstract
 {
@@ -15,7 +17,8 @@ namespace IFC.Entities.Abstract
 
         protected abstract IfcPipeFitting? _pipeFitting { get; set; }
 
-        protected IfcAbstractArmatureEntity(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
+        protected IfcAbstractArmatureEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
+            : base(entity)
         {
             _nodeEntity = nodeEntity;
             _pipeEntities = pipeEntities;

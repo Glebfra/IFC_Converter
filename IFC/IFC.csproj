@@ -143,16 +143,13 @@
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\IfcBendEntity.cs" />
-    <Compile Include="Entities\IfcCylindricalShellEntity.cs" />
     <Compile Include="Entities\IfcEntityFactory.cs" />
     <Compile Include="Entities\IfcFabricatedTeeEntity.cs" />
     <Compile Include="Entities\IfcFlangeEntity.cs" />
     <Compile Include="Entities\IfcMilterJointEntity.cs" />
     <Compile Include="Entities\IfcNodeEntity.cs" />
-    <Compile Include="Entities\IfcPipeEntity.cs" />
     <Compile Include="Entities\IfcReducerConcentricEntity.cs" />
     <Compile Include="Entities\IfcReducerEccentricEntity.cs" />
-    <Compile Include="Entities\IfcRigidElementEntity.cs" />
     <Compile Include="Entities\IfcStubInEntity.cs" />
     <Compile Include="Entities\IfcSweepoletEntity.cs" />
     <Compile Include="Entities\IfcValveEntity.cs" />
@@ -161,6 +158,9 @@
     <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
+    <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />
+    <Compile Include="Entities\Segments\IfcPipeEntity.cs" />
+    <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />
@@ -178,6 +178,9 @@
       <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
       <Name>Start</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\Fittings\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

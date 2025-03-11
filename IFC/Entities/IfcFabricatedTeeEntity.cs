@@ -8,8 +8,6 @@ namespace IFC.Entities
 {
     public class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Fabricated Tee";
-    
         public readonly double Length;
         public readonly double Height;
 

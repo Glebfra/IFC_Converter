@@ -20,8 +20,6 @@ namespace IFC.Entities
 {
     public class IfcFlangeEntity : IfcAbstractArmatureEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Flange";
-    
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
     
@@ -33,7 +31,7 @@ namespace IFC.Entities
         protected override IfcPipeFitting? _pipeFitting { get; set; }
 
         public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcPipeEntities)
-            : base(ifcNodeEntity, ifcPipeEntities)
+            : base(armatureEntity, ifcNodeEntity, ifcPipeEntities)
         {
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;

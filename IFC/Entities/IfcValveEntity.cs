@@ -20,19 +20,17 @@ namespace IFC.Entities
 {
     public class IfcValveEntity : IfcAbstractArmatureEntity
     {
-        private const int _numSegments = 32;
-        private const double _angleStep = 2 * Math.PI / _numSegments;
-    
-        public override IfcIdentifier Tag { get; protected set; } = "Valve";
         protected override IfcPipeFitting? _pipeFitting { get; set; }
-
-        private readonly StartArmatureEntity _armatureEntity;
 
         public readonly double Length;
         public readonly double Diameter;
+        
+        private const int _numSegments = 32;
+        private const double _angleStep = 2 * Math.PI / _numSegments;
+        private readonly StartArmatureEntity _armatureEntity;
 
         public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
-            : base(nodeEntity, pipeEntities)
+            : base(armatureEntity, nodeEntity, pipeEntities)
         {
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;

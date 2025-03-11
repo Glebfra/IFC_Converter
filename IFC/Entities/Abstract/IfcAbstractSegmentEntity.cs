@@ -1,6 +1,7 @@
 ﻿using System;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
+using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -52,7 +53,8 @@ namespace IFC.Entities.Abstract
         
         private IfcPipeSegment _pipeSegment;
 
-        public IfcAbstractSegmentEntity(IfcNodeEntity[] ifcNodeEntities)
+        public IfcAbstractSegmentEntity(StartAbstractEntity entity, IfcNodeEntity[] ifcNodeEntities)
+            : base(entity)
         {
             NodeEntities = ifcNodeEntities;
         }
