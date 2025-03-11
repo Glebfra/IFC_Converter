@@ -1,4 +1,5 @@
-﻿using Xbim.Common.Geometry;
+﻿using IFC.Entities.Fittings;
+using Xbim.Common.Geometry;
 using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC.Entities.Interfaces

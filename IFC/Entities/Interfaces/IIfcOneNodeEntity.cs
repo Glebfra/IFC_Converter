@@ -1,4 +1,6 @@
-﻿namespace IFC.Entities.Interfaces
+﻿using IFC.Entities.Fittings;
+
+namespace IFC.Entities.Interfaces
 {
     public interface IIfcOneNodeEntity
     {

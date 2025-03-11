@@ -13,10 +13,9 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
     public class IfcReducerConcentricEntity : IfcAbstractEntity
     {
@@ -31,10 +30,9 @@ namespace IFC.Entities
     
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public double Length { get; }
-    
-        public override IfcIdentifier Tag { get; protected set; } = "Reducer Conentric";
 
         public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(reducerEntity)
         {
             _reducerEntity = reducerEntity;
             _nodeEntity = nodeEntity;

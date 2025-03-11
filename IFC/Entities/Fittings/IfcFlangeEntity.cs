@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using IFC.Entities.Abstract;
-using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
@@ -13,70 +13,73 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
-    public class IfcValveEntity : IfcAbstractArmatureEntity
+    public class IfcFlangeEntity : IfcAbstractArmatureEntity
     {
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
     
-        public override IfcIdentifier Tag { get; protected set; } = "Valve";
-        protected override IfcPipeFitting? _pipeFitting { get; set; }
-
         private readonly StartArmatureEntity _armatureEntity;
 
         public readonly double Length;
-        public readonly double Diameter;
+        public readonly double[] Radiuses;
 
-        public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
-            : base(nodeEntity, pipeEntities)
+        protected override IfcPipeFitting? _pipeFitting { get; set; }
+
+        public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcPipeEntities)
+            : base(armatureEntity, ifcNodeEntity, ifcPipeEntities)
         {
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;
-            Diameter = Math.Max(_pipeEntities[0].Diameter, _pipeEntities[1].Diameter) * 1.5;
+            Radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
-
+    
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
-            IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2, Angle);
-            IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
-            IfcFacetedBrep lowerBrep = CreateFacetedBrep(model, firstCircle, topPoint);
-            IfcFacetedBrep upperBrep = CreateFacetedBrep(model, secondCircle, topPoint);
+            IfcCartesianPoint[] firstCircleConnection = CreateCircle(model, Radiuses[0], -0.5 * Length);
+            IfcCartesianPoint[] firstCircleExtension = CreateCircle(model, Radiuses[0] * 1.1, -0.3 * Length);
+            IfcCartesianPoint[] firstCircleStartFlange = CreateCircle(model, Radiuses[0] * 1.5, -0.3 * Length);
+            IfcCartesianPoint[] firstCircleEndFlange = CreateCircle(model, Radiuses[0] * 1.5, -0.1 * Length);
         
-            IfcBooleanResult result = model.Instances.New<IfcBooleanResult>(booleanResult =>
-            {
-                booleanResult.Operator = IfcBooleanOperator.UNION;
-                booleanResult.FirstOperand = lowerBrep;
-                booleanResult.SecondOperand = upperBrep;
-            });
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, result);
+            IfcCartesianPoint[] secondCircleConnection = CreateCircle(model, Radiuses[1], 0.5 * Length);
+            IfcCartesianPoint[] secondCircleExtension = CreateCircle(model, Radiuses[1] * 1.1, 0.3 * Length);
+            IfcCartesianPoint[] secondCircleStartFlange = CreateCircle(model, Radiuses[1] * 1.5, 0.3 * Length);
+            IfcCartesianPoint[] secondCircleEndFlange = CreateCircle(model, Radiuses[1] * 1.5, 0.1 * Length);
+
+            IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[6];
+            facetedBreps[0] = CreateFacetedBrep(model, firstCircleConnection, firstCircleExtension);
+            facetedBreps[1] = CreateFacetedBrep(model, firstCircleExtension, firstCircleStartFlange);
+            facetedBreps[2] = CreateFacetedBrep(model, firstCircleStartFlange, firstCircleEndFlange);
+            facetedBreps[3] = CreateFacetedBrep(model, secondCircleConnection, secondCircleExtension);
+            facetedBreps[4] = CreateFacetedBrep(model, secondCircleExtension, secondCircleStartFlange);
+            facetedBreps[5] = CreateFacetedBrep(model, secondCircleStartFlange, secondCircleEndFlange);
+        
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBreps);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
                 fitting.Name = _armatureEntity.Name;
-                fitting.Representation = shape;
                 fitting.Tag = Tag;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
+                fitting.Representation = shape;
             });
-            _pipeEntities[0].Clip(_nodeEntity, Length / 2);
-            _pipeEntities[1].Clip(_nodeEntity, Length / 2);
-        
-            AddProperties(model, _pipeFitting);
 
+            AddProperties(model, _pipeFitting);
+            _pipeEntities[0].Clip(_nodeEntity, 0.5 * Length);
+            _pipeEntities[1].Clip(_nodeEntity, 0.5 * Length);
+        
             return _pipeFitting;
         }
     
-        private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height, double angle = 0)
+        private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height)
         {
             IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
-            XbimMatrix3D My = MatrixExtensions.My(angle);
             for (int i = 0; i < _numSegments; i++)
             {
                 XbimVector3D point = new XbimVector3D(
@@ -84,33 +87,33 @@ namespace IFC.Entities
                     radius * Math.Sin(_angleStep * i),
                     height
                 );
-                if (angle != 0)
-                    point = XbimVector3D.Multiply(point, My);
                 points[i] = IfcAxis.CreatePoint(model, point);
             }
 
             return points;
         }
-
-        private static IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] points, IfcCartesianPoint topPoint)
+    
+        private static IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] firstPoints, IfcCartesianPoint[] secondPoints)
         {
-            IfcFace[] faces = new IfcFace[_numSegments + 1];
+            IfcFace[] faces = new IfcFace[_numSegments + 2];
             int facesIndex = 0;
             for (int i = 0; i < _numSegments; i++)
             {
-                IfcCartesianPoint p1 = points[i];
-                IfcCartesianPoint p2 = points[(i + 1) % _numSegments];
-                IfcCartesianPoint p3 = topPoint;
-                faces[facesIndex++] = IfcGeometry.CreateTriangleFace(model, p1, p2, p3);
+                IfcCartesianPoint p1 = firstPoints[i];
+                IfcCartesianPoint p2 = firstPoints[(i + 1) % _numSegments];
+                IfcCartesianPoint p3 = secondPoints[(i + 1) % _numSegments];
+                IfcCartesianPoint p4 = secondPoints[i];
+                faces[facesIndex++] = IfcGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
             }
-            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, points);
+            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, firstPoints);
+            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, secondPoints);
 
             return model.Instances.New<IfcFacetedBrep>(brep =>
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
         }
-    
+
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);
@@ -133,26 +136,6 @@ namespace IFC.Entities
                     }
                 });
             });
-
-            #endregion
-
-            #region VALVE DEBUG
-
-#if DEBUG
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "VALVE DEBUG";
-                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                    {
-                        value.Name = "Angle";
-                        value.NominalValue = new IfcText(Angle.ToString("F5"));
-                    }));
-                });
-            });
-#endif
 
             #endregion
         }

@@ -2,22 +2,19 @@
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
-    public class IfcStubInEntity : IfcAbstractTeeEntity
+    public class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Stub-in";
-    
         public readonly double Length;
         public readonly double Height;
-    
-        public IfcStubInEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
+
+        public IfcFabricatedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
             : base(teeEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
-            Length = _headPipe.Diameter;
-            Height = _branchPipes[0].Diameter / 2;
+            Length = teeEntity.HeaderLength;
+            Height = teeEntity.BranchHeight + _branchPipes[0].Diameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

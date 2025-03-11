@@ -13,15 +13,12 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
     public class IfcReducerEccentricEntity : IfcAbstractEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Reducer Eccentric";
-    
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
         
@@ -37,6 +34,7 @@ namespace IFC.Entities
         public double Length { get; }
 
         public IfcReducerEccentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(reducerEntity)
         {
             _reducerEntity = reducerEntity;
             _nodeEntity = nodeEntity;

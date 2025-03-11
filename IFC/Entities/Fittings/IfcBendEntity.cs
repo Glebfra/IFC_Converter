@@ -16,75 +16,70 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
-    public class IfcMilterJointEntity : IfcAbstractEntity
+    public class IfcBendEntity : IfcAbstractEntity
     {
-        public override IfcIdentifier Tag { get; protected set; } = "Milter Joint";
-    
         private readonly StartBendEntity _bendEntity;
         private readonly IfcNodeEntity _ifcNodeEntity;
-        private readonly IfcAbstractSegmentEntity[] _ifcAbstractSegments;
-
+        private readonly IfcAbstractSegmentEntity[] _ifcPipeEntities;
+        private readonly XbimVector3D[] _directionToPipes;
+        private readonly double _bendAngle;
+        
         private IfcPipeFitting _pipeFitting;
 
-        private double _pipeAngle;
-
-        public double Length => 2 * Depth;
-
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        public double Depth { get; }
-
-        public IfcMilterJointEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegments)
+        public double Length => _bendAngle * _bendEntity.Radius;
+        
+        public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcPipeEntities)
+            : base(bendEntity)
         {
             _bendEntity = bendEntity;
+            _ifcPipeEntities = ifcPipeEntities;
             _ifcNodeEntity = ifcNodeEntity;
-            _ifcAbstractSegments = ifcAbstractSegments;
 
-            XbimVector3D[] directionToPipes = CalculateDirectionToPipes();
-            ObjectMatrix3D = CreateObjectMatrix(directionToPipes);
+            _directionToPipes = CalculateDirectionToPipes();
+            _bendAngle = CalculateBendAngle();
             
-            _pipeAngle = CalculateBendAngle();
-            Depth = Math.Min(ifcAbstractSegments[0].Length, ifcAbstractSegments[1].Length) * 0.1;
+            ObjectMatrix3D = CreateObjectMatrix(_directionToPipes);
         }
-    
+
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
 
-            IfcRepresentationItem[] ifcRepresentationItems = new IfcRepresentationItem[_ifcAbstractSegments.Length + 1];
-            for (int i = 0; i < _ifcAbstractSegments.Length; i++)
-            {
-                ifcRepresentationItems[i] = CreateExtrudedAreaSolid(model, _ifcAbstractSegments[i], 0);
-                _ifcAbstractSegments[i].Clip(_ifcNodeEntity, Depth);
-            }
-
-            ifcRepresentationItems[_ifcAbstractSegments.Length] = model.Instances.New<IfcBooleanResult>(result =>
-            {
-                result.Operator = IfcBooleanOperator.INTERSECTION;
-                result.FirstOperand = CreateExtrudedAreaSolid(model, _ifcAbstractSegments[0], Depth);
-                result.SecondOperand = CreateExtrudedAreaSolid(model, _ifcAbstractSegments[1], Depth);
-            });
-
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems);
+            IfcSurfaceCurveSweptAreaSolid sweptAreaSolid = CreateBendShape(model, ObjectMatrix3D, _bendAngle, _ifcPipeEntities[0].Diameter / 2);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, sweptAreaSolid);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            
+
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.Name = _bendEntity.Name;
                 fitting.Tag = Tag;
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
-                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
                 fitting.Representation = shape;
+                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
-            
+
             AddProperties(model, _pipeFitting);
+            ClipConnectedPipes();
 
             return _pipeFitting;
         }
-        
+
+        private double CalculateBendAngle()
+        {
+            XbimVector3D[] pipesDirection = _ifcPipeEntities.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
+            return pipesDirection[0].Angle(pipesDirection[1]);
+        }
+
+        private XbimVector3D[] CalculateDirectionToPipes()
+        {
+            XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
+            return _ifcPipeEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
+        }
+
         private XbimMatrix3D CreateObjectMatrix(XbimVector3D[] directionToPipes)
         {
             XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
@@ -93,45 +88,38 @@ namespace IFC.Entities
             
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
-        
-        private XbimVector3D[] CalculateDirectionToPipes()
-        {
-            XbimVector3D coordinates = _ifcNodeEntity.ObjectMatrix3D.Translation;
-            return _ifcAbstractSegments.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
-        }
-        
-        private double CalculateBendAngle()
-        {
-            XbimVector3D[] pipesDirection = _ifcAbstractSegments.Select(pipe => pipe.ObjectMatrix3D.Forward).ToArray();
-            return pipesDirection[0].Angle(pipesDirection[1]);
-        }
 
-        private IfcExtrudedAreaSolid CreateExtrudedAreaSolid(IModel model, IfcAbstractSegmentEntity ifcAbstractSegment, double displacement)
+        private IfcSurfaceCurveSweptAreaSolid CreateBendShape(IModel model, XbimMatrix3D ObjectPlacement, double angle, double radius)
         {
-            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(ifcAbstractSegment, ObjectMatrix3D.Translation).Normalized();
-            XbimVector3D localUp = ObjectMatrix3D.Up;
-        
-            IfcCartesianPoint point = IfcAxis.CreatePoint(model, XbimVector3D.Zero - directionToPipe * displacement);
-            IfcDirection extrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
+            XbimVector3D circleCenter = CalculateCircleCenter();
+            
+            IfcCircle circle = IfcGeometry.CreateCircle(model, _bendEntity.Radius, circleCenter, ObjectPlacement.Up, ObjectPlacement.Right);
+            IfcTrimmedCurve trimmedCurve = IfcGeometry.CreateTrimmedCurve(model, circle, 0, angle);
+            IfcPlane plane = IfcGeometry.CreatePlane(model, ObjectPlacement.Translation, ObjectPlacement.Up);
+            IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, radius, XbimVector3D.Zero, new XbimVector3D(1, 0, 0));
 
-            IfcDirection ifcDirectionToPipe = IfcAxis.CreateDirection(model, directionToPipe);
-            IfcDirection ifcLocalUp = IfcAxis.CreateDirection(model, localUp);
-            IfcAxis2Placement3D placement3D = IfcAxis.CreateAxis2Placement3D(model, point, ifcDirectionToPipe, ifcLocalUp);
-        
-            IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(
-                model,
-                ifcAbstractSegment.Diameter / 2,
-                XbimVector3D.Zero,
-                new XbimVector3D(1, 0, 0)
-            );
-
-            return model.Instances.New<IfcExtrudedAreaSolid>(solid =>
+            return model.Instances.New<IfcSurfaceCurveSweptAreaSolid>(solid =>
             {
                 solid.SweptArea = profileDef;
-                solid.ExtrudedDirection = extrudedDirection;
-                solid.Depth = Depth;
-                solid.Position = placement3D;
+                solid.Directrix = trimmedCurve;
+                solid.ReferenceSurface = plane;
             });
+        }
+
+        private XbimVector3D CalculateCircleCenter()
+        {
+            XbimVector3D dirToCenter = (_directionToPipes[0].Normalized() + _directionToPipes[1].Normalized()).Normalized();
+            double lengthToCenter = _bendEntity.Radius / Math.Cos(_bendAngle / 2);
+            return dirToCenter * lengthToCenter;
+        }
+
+        private void ClipConnectedPipes()
+        {
+            double clipLength = _bendEntity.Radius * Math.Tan(_bendAngle / 2);
+            foreach (var ifcPipeEntity in _ifcPipeEntities)
+            {
+                ifcPipeEntity.Clip(_ifcNodeEntity, clipLength);
+            }
         }
 
         protected override void AddProperties(IModel model, IfcProduct product)
@@ -176,7 +164,7 @@ namespace IFC.Entities
                     quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                     {
                         weight.Name = "NetWeight";
-                        weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_bendEntity.Weight) * Length;
+                        weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_bendEntity.Weight * Length);
                     }));
                 });
             });
