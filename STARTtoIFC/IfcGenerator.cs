@@ -31,12 +31,13 @@ namespace STARTtoIFC
                 StartNodeEntity startNodeEntity = (StartNodeEntity)nodeItem.Entity;
                 IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
                 nodeEntities.Add(startNodeEntity.ID, ifcNodeEntity);
-                Logger.Log($"Added {startNodeEntity.GetType().Name} with id {startNodeEntity.ID} to IFC.");
+                Logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
             }
 
             using (IFCProject ifcProject = IFCProject.CreateProject("IFC"))
             {
                 ConvertTwoNodeObjects<StartPipeEntity, IfcPipeEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, ref twoNodeEntities);
+                ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, ref twoNodeEntities);
                 ConvertTwoNodeObjects<StartRigidElementEntity, IfcRigidElementEntity>(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, ref twoNodeEntities);
                 
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.ELBOW, nodeEntities, twoNodeEntities);
@@ -93,7 +94,7 @@ namespace STARTtoIFC
                 U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities);
                 ifcProject.AddEntity(ifcObjectEntity);
                 twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
-                Logger.Log($"Added {startObjectEntity.GetType().Name} with id {startObjectEntity.ID} to IFC.");
+                Logger.Log($"Added {ifcObjectEntity.Tag} with id {startObjectEntity.ID} to IFC.");
             }
         }
 
@@ -125,7 +126,7 @@ namespace STARTtoIFC
 
                 U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcNodeEntity, ifcAbstractSegmentEntities);
                 ifcProject.AddEntity(ifcObjectEntity);
-                Logger.Log($"Added {startObjectEntity.GetType().Name} with id {startObjectEntity.ID} to IFC.");
+                Logger.Log($"Added {ifcObjectEntity.Tag} with id {startObjectEntity.ID} to IFC.");
             }
         }
     }

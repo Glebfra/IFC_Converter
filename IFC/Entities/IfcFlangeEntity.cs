@@ -20,7 +20,7 @@ namespace IFC.Entities
 {
     public class IfcFlangeEntity : IfcAbstractArmatureEntity
     {
-        protected override IfcIdentifier Tag { get; set; } = "Flange";
+        public override IfcIdentifier Tag { get; protected set; } = "Flange";
     
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
@@ -73,9 +73,6 @@ namespace IFC.Entities
                 fitting.Representation = shape;
             });
 
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-            
             AddProperties(model, _pipeFitting);
             _pipeEntities[0].Clip(_nodeEntity, 0.5 * Length);
             _pipeEntities[1].Clip(_nodeEntity, 0.5 * Length);

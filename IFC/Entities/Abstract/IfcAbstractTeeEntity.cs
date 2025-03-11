@@ -61,10 +61,7 @@ namespace IFC.Entities.Abstract
                 fitting.Representation = productDefinitionShape;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
-            
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcAbstractSegmentEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-            
+
             AddProperties(model, _pipeFitting);
 
             return _pipeFitting;

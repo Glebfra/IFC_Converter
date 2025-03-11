@@ -8,7 +8,7 @@ namespace IFC.Entities
 {
     public class IfcWeldoletEntity : IfcAbstractTeeEntity
     {
-        protected override IfcIdentifier Tag { get; set; } = "Weldolet";
+        public override IfcIdentifier Tag { get; protected set; } = "Weldolet";
     
         private double Length;
         private double Height;

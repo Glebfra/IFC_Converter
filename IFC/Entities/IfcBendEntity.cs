@@ -22,7 +22,7 @@ namespace IFC.Entities
 {
     public class IfcBendEntity : IfcAbstractEntity
     {
-        protected override IfcIdentifier Tag { get; set; } = "Bend";
+        public override IfcIdentifier Tag { get; protected set; } = "Bend";
     
         private readonly StartBendEntity _bendEntity;
         private readonly IfcNodeEntity _ifcNodeEntity;
@@ -63,10 +63,7 @@ namespace IFC.Entities
                 fitting.Representation = shape;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
-            
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcPipeEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-            
+
             AddProperties(model, _pipeFitting);
             ClipConnectedPipes();
 

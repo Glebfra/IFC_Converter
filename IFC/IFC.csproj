@@ -143,6 +143,7 @@
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\IfcBendEntity.cs" />
+    <Compile Include="Entities\IfcCylindricalShellEntity.cs" />
     <Compile Include="Entities\IfcEntityFactory.cs" />
     <Compile Include="Entities\IfcFabricatedTeeEntity.cs" />
     <Compile Include="Entities\IfcFlangeEntity.cs" />
@@ -167,7 +168,6 @@
     <Compile Include="Tools\IfcAxis.cs" />
     <Compile Include="Tools\IfcGeometry.cs" />
     <Compile Include="Tools\IfcObjectPlacement.cs" />
-    <Compile Include="Tools\IfcPortConnection.cs" />
     <Compile Include="ValueConverter\ValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
