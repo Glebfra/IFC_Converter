@@ -2,20 +2,19 @@
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
-    public class IfcWeldedTeeEntity : IfcAbstractTeeEntity
+    public class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
     {
         public readonly double Length;
         public readonly double Height;
 
-        public IfcWeldedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
+        public IfcFabricatedTeeEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
             : base(teeEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
             Length = teeEntity.HeaderLength;
-            Height = teeEntity.CrotchHeight + _branchPipes[0].Diameter / 2;
+            Height = teeEntity.BranchHeight + _branchPipes[0].Diameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

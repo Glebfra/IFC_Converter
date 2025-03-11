@@ -16,9 +16,8 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
     public class IfcBendEntity : IfcAbstractEntity
     {

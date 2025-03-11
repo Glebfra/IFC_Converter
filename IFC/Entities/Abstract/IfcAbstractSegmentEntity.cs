@@ -1,4 +1,5 @@
 ﻿using System;
+using IFC.Entities.Fittings;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Start.Entities;

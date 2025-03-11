@@ -142,19 +142,19 @@
     <Compile Include="Entities\Abstract\IfcAbstractPipeFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
-    <Compile Include="Entities\IfcBendEntity.cs" />
-    <Compile Include="Entities\IfcEntityFactory.cs" />
-    <Compile Include="Entities\IfcFabricatedTeeEntity.cs" />
-    <Compile Include="Entities\IfcFlangeEntity.cs" />
-    <Compile Include="Entities\IfcMilterJointEntity.cs" />
-    <Compile Include="Entities\IfcNodeEntity.cs" />
-    <Compile Include="Entities\IfcReducerConcentricEntity.cs" />
-    <Compile Include="Entities\IfcReducerEccentricEntity.cs" />
-    <Compile Include="Entities\IfcStubInEntity.cs" />
-    <Compile Include="Entities\IfcSweepoletEntity.cs" />
-    <Compile Include="Entities\IfcValveEntity.cs" />
-    <Compile Include="Entities\IfcWeldedTeeEntity.cs" />
-    <Compile Include="Entities\IfcWeldoletEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcBendEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcEntityFactory.cs" />
+    <Compile Include="Entities\Fittings\IfcFabricatedTeeEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcFlangeEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcMilterJointEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcNodeEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcReducerConcentricEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcReducerEccentricEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcStubInEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcSweepoletEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcValveEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcWeldedTeeEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcWeldoletEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
@@ -178,9 +178,6 @@
       <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
       <Name>Start</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\Fittings\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

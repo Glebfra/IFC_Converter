@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Fittings;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;

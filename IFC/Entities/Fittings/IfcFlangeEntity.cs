@@ -13,10 +13,9 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
     public class IfcFlangeEntity : IfcAbstractArmatureEntity
     {

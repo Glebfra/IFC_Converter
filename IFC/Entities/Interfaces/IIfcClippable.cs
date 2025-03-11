@@ -1,4 +1,5 @@
-﻿using Xbim.Common.Geometry;
+﻿using IFC.Entities.Fittings;
+using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Interfaces
 {

@@ -2,16 +2,15 @@
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
-    public class IfcSweepoletEntity : IfcAbstractTeeEntity
+    public class IfcStubInEntity : IfcAbstractTeeEntity
     {
-        private double Length;
-        private double Height;
+        public readonly double Length;
+        public readonly double Height;
     
-        public IfcSweepoletEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
+        public IfcStubInEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
             : base(teeEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
             Length = _headPipe.Diameter;

@@ -2,9 +2,8 @@
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
     public class IfcWeldoletEntity : IfcAbstractTeeEntity
     {
