@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
 using Start.API;
 using STARTtoIFC;
-using System.IO;
 
 namespace StartConverter
 {

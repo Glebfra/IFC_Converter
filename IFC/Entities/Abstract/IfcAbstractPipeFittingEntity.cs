@@ -10,12 +10,12 @@ namespace IFC.Entities.Abstract
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
         protected readonly IfcNodeEntity _nodeEntity;
-        protected readonly IfcPipeEntity[] _pipeEntities;
+        protected readonly IfcAbstractSegmentEntity[] _pipeEntities;
         protected readonly double Angle;
 
         protected abstract IfcPipeFitting? _pipeFitting { get; set; }
 
-        protected IfcAbstractArmatureEntity(IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+        protected IfcAbstractArmatureEntity(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
         {
             _nodeEntity = nodeEntity;
             _pipeEntities = pipeEntities;

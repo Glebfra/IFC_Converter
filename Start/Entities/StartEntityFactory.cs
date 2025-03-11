@@ -8,17 +8,22 @@ namespace Start.Entities
         public static StartAbstractEntity? CreateEntity(StartDataArrayItem arrayItem)
         {
             StartAbstractEntity abstractEntity;
+            string dataString = arrayItem.Data.ToString();
 
             switch (arrayItem.Type)
             {
                 case StartElementType.PIPE_ELEMENT:
-                    abstractEntity = JsonConvert.DeserializeObject<StartPipeEntity>(arrayItem.Data.ToString())!;
+                    abstractEntity = JsonConvert.DeserializeObject<StartPipeEntity>(dataString)!;
                     break;
             
                 case StartElementType.NODE:
-                    abstractEntity = JsonConvert.DeserializeObject<StartNodeEntity>(arrayItem.Data.ToString())!; 
+                    abstractEntity = JsonConvert.DeserializeObject<StartNodeEntity>(dataString)!; 
                     break;
-            
+                
+                case StartElementType.RIGID_ELEMENT:
+                    abstractEntity = JsonConvert.DeserializeObject<StartRigidElementEntity>(dataString)!;
+                    break;
+                
                 case StartElementType.ELBOW:
                 case StartElementType.PIPE_BEND:
                 case StartElementType.MILTER_BEND:
@@ -27,7 +32,7 @@ namespace Start.Entities
                 case StartElementType.PRE_STRESSED_PIPE_BEND:
                 case StartElementType.SADDLE_BEND:
                 case StartElementType.MILTER_JOINT:
-                    abstractEntity = JsonConvert.DeserializeObject<StartBendEntity>(arrayItem.Data.ToString())!;
+                    abstractEntity = JsonConvert.DeserializeObject<StartBendEntity>(dataString)!;
                     break;
             
                 case StartElementType.WELDED_TEE:
@@ -35,17 +40,17 @@ namespace Start.Entities
                 case StartElementType.SWEEPOLET:
                 case StartElementType.FABRICATED_TEE:
                 case StartElementType.STUB_IN:
-                    abstractEntity = JsonConvert.DeserializeObject<StartTeeEntity>(arrayItem.Data.ToString())!;
+                    abstractEntity = JsonConvert.DeserializeObject<StartTeeEntity>(dataString)!;
                     break;
             
                 case StartElementType.REDUCER_CONCENTRIC:
                 case StartElementType.REDUCER_ECCENTRIC:
-                    abstractEntity = JsonConvert.DeserializeObject<StartReducerEntity>(arrayItem.Data.ToString())!;
+                    abstractEntity = JsonConvert.DeserializeObject<StartReducerEntity>(dataString)!;
                     break;
             
                 case StartElementType.VALVE:
                 case StartElementType.FLANGE:
-                    abstractEntity = JsonConvert.DeserializeObject<StartArmatureEntity>(arrayItem.Data.ToString())!;
+                    abstractEntity = JsonConvert.DeserializeObject<StartArmatureEntity>(dataString)!;
                     break;
             
                 default:

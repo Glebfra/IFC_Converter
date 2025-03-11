@@ -26,7 +26,7 @@ namespace IFC.Entities
     
         private readonly StartBendEntity _bendEntity;
         private readonly IfcNodeEntity _ifcNodeEntity;
-        private readonly IfcPipeEntity[] _ifcPipeEntities;
+        private readonly IfcAbstractSegmentEntity[] _ifcPipeEntities;
         private readonly XbimVector3D[] _directionToPipes;
         private readonly double _bendAngle;
         
@@ -35,7 +35,7 @@ namespace IFC.Entities
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public double Length => _bendAngle * _bendEntity.Radius;
         
-        public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
+        public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcPipeEntities)
         {
             _bendEntity = bendEntity;
             _ifcPipeEntities = ifcPipeEntities;

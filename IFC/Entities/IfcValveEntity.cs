@@ -5,7 +5,6 @@ using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
@@ -16,7 +15,6 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
-using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
 namespace IFC.Entities
 {
@@ -33,7 +31,7 @@ namespace IFC.Entities
         public readonly double Length;
         public readonly double Diameter;
 
-        public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+        public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
             : base(nodeEntity, pipeEntities)
         {
             _armatureEntity = armatureEntity;

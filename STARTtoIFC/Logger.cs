@@ -8,6 +8,11 @@ namespace STARTtoIFC
         public static Action<string>? OnLogsChanged;
         
         public static string Logs { get; private set; }
+
+        public static void Initialize()
+        {
+            Logs = "";
+        }
         
         public static void Log(string message)
         {

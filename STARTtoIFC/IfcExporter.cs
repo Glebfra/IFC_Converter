@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -22,6 +23,7 @@ namespace STARTtoIFC
         public int Export(object startDocumentObject, int languageId)
         {
             Application.EnableVisualStyles();
+            Logger.Initialize();
             
             Localize(languageId);
             
@@ -47,11 +49,13 @@ namespace STARTtoIFC
             {
                 IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath);
                 Logger.Log("Convert is successfully ended");
+                Logger.SaveAs(dataContainer.OutputFilePath + ".log");
                 return (int)ConversionResult.Success;
             }
             catch (Exception e)
             {
-                Logger.Error(e.Message);
+                Logger.Error(e.ToString());
+                Logger.SaveAs(dataContainer.OutputFilePath + ".log");
                 return (int)ConversionResult.Fail;
             }
         }
@@ -60,7 +64,7 @@ namespace STARTtoIFC
         {
             int convertedLanguageId = LanguageConverter.ConvertLanguage(languageId);
             
-            var ci = new System.Globalization.CultureInfo(convertedLanguageId);
+            var ci = new CultureInfo(convertedLanguageId);
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
         }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 using Start.API;
 using Start.Entities;
+using Start.Extensions;
 
 namespace Start
 {
@@ -73,48 +76,23 @@ namespace Start
             return _dataArray.GetDataJson(StartElementType.ALL, StartElementType.ALL);
         }
         
-        public StartDataArrayItem[]? GetDataArrayItems()
+        public StartDataArrayItem[] GetDataArrayItems()
         {
-            return JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
-        }
-
-        public GroupedEntities GroupEntities(StartDataArrayItem[] startDataArrayItems)
-        {
-            Dictionary<int, StartAbstractEntity> nodeEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, StartAbstractEntity> pipeEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, StartAbstractEntity> fittingEntities = new Dictionary<int, StartAbstractEntity>();
-            Dictionary<int, int[]> pipeNodeRelations = new Dictionary<int, int[]>();
-            Dictionary<int, int> fittingNodeRelations = new Dictionary<int, int>();
-
-            foreach (StartDataArrayItem startDataArrayItem in startDataArrayItems)
+            StartDataArrayItem[]? allDataArrayItems = JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
+            if (allDataArrayItems == null) throw new NullReferenceException("Cannot deserialize objects");
+            StartDataArrayItem[] dataArrayItems = allDataArrayItems.Select(item =>
             {
-                StartAbstractEntity? startAbstractEntity = StartEntityFactory.CreateEntity(startDataArrayItem);
-                if (startAbstractEntity == null) continue;
-
-                switch (startAbstractEntity.Type)
+                StartAbstractEntity? entity = StartEntityFactory.CreateEntity(item);
+                if (entity != null)
                 {
-                    case StartElementType.NODE:
-                        nodeEntities.Add(startDataArrayItem.NodeIds[0], startAbstractEntity);
-                        break;
-                    case StartElementType.PIPE_ELEMENT:
-                        pipeEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        pipeNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds);
-                        break;
-                    default:
-                        fittingEntities.Add(startDataArrayItem.DataArrayIndex, startAbstractEntity);
-                        fittingNodeRelations.Add(startDataArrayItem.DataArrayIndex, startDataArrayItem.NodeIds[0]);
-                        break;
+                    item.Entity = entity;
+                    item.Entity.ID = item.Type == StartElementType.NODE ? item.NodeIds[0] : item.DataArrayIndex;
+                    item.Entity.Type = item.Type;
                 }
-            }
+                return item;
+            }).Where(item => item.Entity != null).ToArray();
 
-            return new GroupedEntities()
-            {
-                NodeEntities = nodeEntities,
-                PipeEntities = pipeEntities,
-                FittingEntities = fittingEntities,
-                PipeNodeRelations = pipeNodeRelations,
-                FittingNodeRelations = fittingNodeRelations
-            };
+            return dataArrayItems;
         }
 
         public void Dispose()

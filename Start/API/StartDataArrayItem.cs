@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Start.Entities;
 
 namespace Start.API
 {
@@ -18,5 +19,7 @@ namespace Start.API
 
         [JsonProperty("data")]
         public object Data { get; set; }
+
+        public StartAbstractEntity Entity;
     }
 }
