@@ -7,6 +7,5 @@ namespace IFC.Entities.Interfaces
     {
         public IfcNodeEntity[] NodeEntities { get; }
         public XbimVector3D Direction { get; }
-        public IfcDistributionPort[] Ports { get; }
     }
 }

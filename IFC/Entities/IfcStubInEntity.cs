@@ -8,7 +8,7 @@ namespace IFC.Entities
 {
     public class IfcStubInEntity : IfcAbstractTeeEntity
     {
-        protected override IfcIdentifier Tag { get; set; } = "Stub-in";
+        public override IfcIdentifier Tag { get; protected set; } = "Stub-in";
     
         public readonly double Length;
         public readonly double Height;

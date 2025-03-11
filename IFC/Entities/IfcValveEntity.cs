@@ -23,7 +23,7 @@ namespace IFC.Entities
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
     
-        protected override IfcIdentifier Tag { get; set; } = "Valve";
+        public override IfcIdentifier Tag { get; protected set; } = "Valve";
         protected override IfcPipeFitting? _pipeFitting { get; set; }
 
         private readonly StartArmatureEntity _armatureEntity;
@@ -65,9 +65,6 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-        
             _pipeEntities[0].Clip(_nodeEntity, Length / 2);
             _pipeEntities[1].Clip(_nodeEntity, Length / 2);
         

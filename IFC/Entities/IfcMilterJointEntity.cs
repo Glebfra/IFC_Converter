@@ -22,7 +22,7 @@ namespace IFC.Entities
 {
     public class IfcMilterJointEntity : IfcAbstractEntity
     {
-        protected override IfcIdentifier Tag { get; set; } = "Milter Joint";
+        public override IfcIdentifier Tag { get; protected set; } = "Milter Joint";
     
         private readonly StartBendEntity _bendEntity;
         private readonly IfcNodeEntity _ifcNodeEntity;
@@ -79,9 +79,6 @@ namespace IFC.Entities
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
                 fitting.Representation = shape;
             });
-
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcAbstractSegments);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
             
             AddProperties(model, _pipeFitting);
 

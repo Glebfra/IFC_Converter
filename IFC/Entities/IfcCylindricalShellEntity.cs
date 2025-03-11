@@ -6,29 +6,28 @@ using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.Entities
 {
-    public sealed class IfcPipeEntity : IfcAbstractSegmentEntity
+    public sealed class IfcCylindricalShellEntity : IfcAbstractSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override XbimVector3D Direction { get; }
         public override double Diameter { get; }
 
-        public override IfcIdentifier Tag { get; protected set; } = "Pipe Element";
-
+        public override IfcIdentifier Tag { get; protected set; } = "Cylindrical Shell";
+        
         private StartPipeEntity _startPipeEntity;
         private IfcPipeSegment _pipeSegment;
-
-        public IfcPipeEntity(StartPipeEntity startPipeEntity, IfcNodeEntity[] ifcNodeEntities) 
+        
+        public IfcCylindricalShellEntity(StartPipeEntity startPipeEntity, IfcNodeEntity[] ifcNodeEntities) 
             : base(ifcNodeEntities)
         {
             _startPipeEntity = startPipeEntity;
             Coordinates = ifcNodeEntities[0].ObjectMatrix3D.Translation;
             Direction = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             Length = Direction.Length;
-            
+
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = Direction.Normalized();
             if (forward == WorldUp || forward == -1 * WorldUp) 
@@ -42,34 +41,7 @@ namespace IFC.Entities
         public override IfcProduct CreateAndAdd(IModel model)
         {
             _pipeSegment = CreatePipeSegment(model, _startPipeEntity.Name, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);
-            AddProperties(model, _pipeSegment);
             return _pipeSegment;
-        }
-
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-        
-            #region Pset_PipeSegmentTypeStart
-
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_PipeSegmentTypeStart";
-                    foreach (var kvp in _startPipeEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
         }
     }
 }

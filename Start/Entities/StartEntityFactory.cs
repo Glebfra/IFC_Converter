@@ -13,6 +13,7 @@ namespace Start.Entities
             switch (arrayItem.Type)
             {
                 case StartElementType.PIPE_ELEMENT:
+                case StartElementType.CYLINDRICAL_SHELL:
                     abstractEntity = JsonConvert.DeserializeObject<StartPipeEntity>(dataString)!;
                     break;
             

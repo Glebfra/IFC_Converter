@@ -32,7 +32,7 @@ namespace IFC.Entities
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public double Length { get; }
     
-        protected override IfcIdentifier Tag { get; set; } = "Reducer Conentric";
+        public override IfcIdentifier Tag { get; protected set; } = "Reducer Conentric";
 
         public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
         {
@@ -77,9 +77,6 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcAbstractSegmentEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-            
             _ifcAbstractSegmentEntities[0].Clip(_nodeEntity, Math.Abs(displacement1));
             _ifcAbstractSegmentEntities[1].Clip(_nodeEntity, Math.Abs(displacement2));
 

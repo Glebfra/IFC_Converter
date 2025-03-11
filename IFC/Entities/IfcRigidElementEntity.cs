@@ -1,5 +1,4 @@
-﻿using System;
-using IFC.Entities.Abstract;
+﻿using IFC.Entities.Abstract;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -16,7 +15,7 @@ namespace IFC.Entities
         public override XbimVector3D Direction { get; }
         public override double Diameter { get; }
 
-        protected override IfcIdentifier Tag { get; set; } = "Rigid Element";
+        public override IfcIdentifier Tag { get; protected set; } = "Rigid Element";
 
         private StartRigidElementEntity _startRigidElementEntity;
         private IfcPipeSegment _pipeSegment;
@@ -37,7 +36,7 @@ namespace IFC.Entities
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
 
-            Diameter = 0.05;
+            Diameter = 0.01;
         }
         
         public override IfcProduct CreateAndAdd(IModel model)

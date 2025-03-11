@@ -20,7 +20,7 @@ namespace IFC.Entities
 {
     public class IfcReducerEccentricEntity : IfcAbstractEntity
     {
-        protected override IfcIdentifier Tag { get; set; } = "Reducer Eccentric";
+        public override IfcIdentifier Tag { get; protected set; } = "Reducer Eccentric";
     
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
@@ -70,9 +70,6 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _ifcAbstractSegmentEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-            
             _ifcAbstractSegmentEntities[1].Clip(_nodeEntity, Length);
             
             MovePipe(_ifcAbstractSegmentEntities[1]);

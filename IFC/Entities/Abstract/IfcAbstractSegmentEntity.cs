@@ -8,9 +8,12 @@ using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
+using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 
 namespace IFC.Entities.Abstract
 {
@@ -20,7 +23,6 @@ namespace IFC.Entities.Abstract
         public abstract double Diameter { get; }
 
         public IfcNodeEntity[] NodeEntities { get; }
-        public IfcDistributionPort[] Ports { get; }
 
         public XbimVector3D Coordinates
         {
@@ -53,7 +55,6 @@ namespace IFC.Entities.Abstract
         public IfcAbstractSegmentEntity(IfcNodeEntity[] ifcNodeEntities)
         {
             NodeEntities = ifcNodeEntities;
-            Ports = new IfcDistributionPort[2];
         }
         
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
@@ -81,9 +82,7 @@ namespace IFC.Entities.Abstract
             IfcProductDefinitionShape productDefShape = CreatePipeShape(model, extrudedDirection);
             _pipeSegment = CreatePipe(model, productDefShape, startLocalPlacement, name, type);
             
-            Ports[0] = IfcPortConnection.CreatePort(model, startLocalPlacement);
-            Ports[1] = IfcPortConnection.CreatePort(model, endLocalPlacement);
-            IfcPortConnection.ConnectPorts(model, Ports, _pipeSegment);
+            AddProperties(model, _pipeSegment);
 
             return _pipeSegment;
         }
@@ -164,6 +163,39 @@ namespace IFC.Entities.Abstract
             XbimVector3D endPipeCoordinates = ObjectMatrix3D.Translation + ObjectMatrix3D.Forward * Length;
 
             return (nodeCoordinates - startPipeCoordinates).Length < (nodeCoordinates - endPipeCoordinates).Length;
+        }
+
+        protected override void AddProperties(IModel model, IfcProduct product)
+        {
+            base.AddProperties(model, product);
+
+            #region Qto_PipeSegmentBaseQuantities
+
+            model.Instances.New<IfcRelDefinesByProperties>(properties =>
+            {
+                properties.RelatedObjects.Add(product);
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
+                {
+                    quantity.Name = "Qto_PipeSegmentBaseQuantities";
+                    quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
+                    {
+                        length.Name = "Length";
+                        length.LengthValue = new IfcLengthMeasure(Length);
+
+                        _LengthChanged += () => length.LengthValue = new IfcLengthMeasure(Length);
+                    }));
+                    quantity.Quantities.Add(model.Instances.New<IfcQuantityArea>(area =>
+                    {
+                        double circumference = Math.PI * Diameter;
+                        area.Name = "OuterSurfaceArea";
+                        area.AreaValue = new IfcAreaMeasure(circumference * Length);
+
+                        _LengthChanged += () => area.AreaValue = new IfcAreaMeasure(circumference * Length);
+                    }));
+                });
+            });
+
+            #endregion
         }
     }
 }

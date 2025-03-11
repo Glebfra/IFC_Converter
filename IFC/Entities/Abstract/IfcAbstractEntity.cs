@@ -8,7 +8,7 @@ namespace IFC.Entities.Abstract
 {
     public abstract class IfcAbstractEntity
     {
-        protected abstract IfcIdentifier Tag { get; set; }
+        public abstract IfcIdentifier Tag { get; protected set; }
         public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
         public abstract IfcProduct CreateAndAdd(IModel model);
