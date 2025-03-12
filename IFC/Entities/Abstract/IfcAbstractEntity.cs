@@ -1,4 +1,5 @@
-﻿using Start.API;
+﻿using IFC.Entities.Interfaces;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -8,11 +9,10 @@ using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.Entities.Abstract
 {
-    public abstract class IfcAbstractEntity
+    public abstract class IfcAbstractEntity : IIfcEntity
     {
         public IfcIdentifier Tag { get; }
         public StartElementType Type { get; }
-        
         public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
         public IfcAbstractEntity(StartAbstractEntity abstractEntity)
@@ -20,7 +20,7 @@ namespace IFC.Entities.Abstract
             Tag = abstractEntity.Type.ToString();
             Type = abstractEntity.Type;
         }
-
+        
         public abstract IfcProduct CreateAndAdd(IModel model);
 
         protected virtual void AddProperties(IModel model, IfcProduct product)

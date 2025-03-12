@@ -14,6 +14,7 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
+using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 
@@ -51,12 +52,13 @@ namespace IFC.Entities.Abstract
 
         private double _length;
         private XbimVector3D _coordinates;
-        
+        private StartAbstractEntity _startAbstractEntity;
         private IfcPipeSegment _pipeSegment;
 
-        public IfcAbstractSegmentEntity(StartAbstractEntity entity, IfcNodeEntity[] ifcNodeEntities)
-            : base(entity)
+        public IfcAbstractSegmentEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity[] ifcNodeEntities)
+            : base(startAbstractEntity)
         {
+            _startAbstractEntity = startAbstractEntity;
             NodeEntities = ifcNodeEntities;
         }
         
@@ -132,6 +134,27 @@ namespace IFC.Entities.Abstract
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);
+            
+            #region Pset_PipeSegmentTypeStart
+
+            model.Instances.New<IfcRelDefinesByProperties>(properties =>
+            {
+                properties.RelatedObjects.Add(product);
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+                {
+                    set.Name = "Pset_PipeSegmentTypeStart";
+                    foreach (var kvp in _startAbstractEntity.GetData())
+                    {
+                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                        {
+                            value.Name = kvp.Key;
+                            value.NominalValue = new IfcText(kvp.Value);
+                        }));
+                    }
+                });
+            });
+
+            #endregion
 
             #region Qto_PipeSegmentBaseQuantities
 

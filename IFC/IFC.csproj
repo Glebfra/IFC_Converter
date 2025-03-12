@@ -139,7 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
-    <Compile Include="Entities\Abstract\IfcAbstractPipeFittingEntity.cs" />
+    <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\Fittings\IfcBendEntity.cs" />
@@ -155,6 +155,7 @@
     <Compile Include="Entities\Fittings\IfcWeldedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\IfcWeldoletEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
+    <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
     <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />

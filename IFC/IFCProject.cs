@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using IFC.Entities.Abstract;
+using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -19,10 +19,8 @@ namespace IFC
     public class IFCProject : IDisposable
     {
         private ITransaction _transaction;
-
         private readonly IfcStore _model;
         private readonly IfcBuilding _building;
-    
         private readonly List<IfcProduct> _ifcObjects;
 
         public static IFCProject CreateProject(string name)
@@ -77,16 +75,16 @@ namespace IFC
             _ifcObjects = new List<IfcProduct>();
         }
 
-        public void AddEntity(IfcAbstractEntity entity)
+        public void AddEntity(IIfcEntity entity)
         {
             IfcProduct ifcProduct = entity.CreateAndAdd(_model);
             _ifcObjects.Add(ifcProduct);
             _building.AddElement(ifcProduct);
         }
 
-        public void AddEntities(IEnumerable<IfcAbstractEntity> entities)
+        public void AddEntities(IEnumerable<IIfcEntity> entities)
         {
-            foreach (IfcAbstractEntity entity in entities)
+            foreach (IIfcEntity entity in entities)
             {
                 AddEntity(entity);
             }

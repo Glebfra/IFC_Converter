@@ -4,13 +4,12 @@ using System.Linq;
 using IFC;
 using IFC.Entities.Abstract;
 using IFC.Entities.Fittings;
+using IFC.Entities.Interfaces;
 using IFC.Entities.Segments;
-using QUT.Gppg;
 using Start;
 using Start.API;
 using Start.Entities;
 using Start.Extensions;
-using Xbim.Ifc2x3.PresentationResource;
 
 namespace STARTtoIFC
 {
@@ -18,6 +17,8 @@ namespace STARTtoIFC
     {
         public static void Convert(StartDocument startDocument, string outputFilePath)
         {
+            Logger logger = Logger.GetInstance();
+            
             Dictionary<int, IfcNodeEntity> nodeEntities = new Dictionary<int, IfcNodeEntity>();
             Dictionary<int, IfcAbstractSegmentEntity> twoNodeEntities = new Dictionary<int, IfcAbstractSegmentEntity>();
             
@@ -26,7 +27,7 @@ namespace STARTtoIFC
             {
                 startDataArrayItems = startProject.GetDataArrayItems()!;
             }
-            Logger.Log($"Found {startDataArrayItems.Length} objects");
+            logger.Log($"Found {startDataArrayItems.Length} objects");
 
             StartDataArrayItem[] nodeItems = startDataArrayItems.GetElementsByType(StartElementType.NODE).ToArray();
             foreach (StartDataArrayItem nodeItem in nodeItems)
@@ -34,7 +35,7 @@ namespace STARTtoIFC
                 StartNodeEntity startNodeEntity = (StartNodeEntity)nodeItem.Entity;
                 IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
                 nodeEntities.Add(startNodeEntity.ID, ifcNodeEntity);
-                Logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
+                logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
             }
 
             using (IFCProject ifcProject = IFCProject.CreateProject("IFC"))
@@ -43,7 +44,7 @@ namespace STARTtoIFC
                 ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, ref twoNodeEntities);
                 ConvertTwoNodeObjects<StartRigidElementEntity, IfcRigidElementEntity>(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, ref twoNodeEntities, true);
                 ConvertTwoNodeObjects<StartFlexibleElementEntity, IfcFlexibleSegmentEntity>(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, nodeEntities, ref twoNodeEntities, true);
-                
+
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.ELBOW, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_BEND, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.MILTER_BEND, nodeEntities, twoNodeEntities);
@@ -52,16 +53,16 @@ namespace STARTtoIFC
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.PRE_STRESSED_PIPE_BEND, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.SADDLE_BEND, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartBendEntity, IfcMilterJointEntity>(ifcProject, startDataArrayItems, StartElementType.MILTER_JOINT, nodeEntities, twoNodeEntities);
-                
+
                 ConvertOneNodeObjects<StartTeeEntity, IfcWeldedTeeEntity>(ifcProject, startDataArrayItems, StartElementType.WELDED_TEE, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartTeeEntity, IfcWeldoletEntity>(ifcProject, startDataArrayItems, StartElementType.WELDOLET, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartTeeEntity, IfcSweepoletEntity>(ifcProject, startDataArrayItems, StartElementType.SWEEPOLET, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartTeeEntity, IfcFabricatedTeeEntity>(ifcProject, startDataArrayItems, StartElementType.FABRICATED_TEE, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartTeeEntity, IfcStubInEntity>(ifcProject, startDataArrayItems, StartElementType.STUB_IN, nodeEntities, twoNodeEntities);
-                
+
                 ConvertOneNodeObjects<StartReducerEntity, IfcReducerConcentricEntity>(ifcProject, startDataArrayItems, StartElementType.REDUCER_CONCENTRIC, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartReducerEntity, IfcReducerEccentricEntity>(ifcProject, startDataArrayItems, StartElementType.REDUCER_ECCENTRIC, nodeEntities, twoNodeEntities);
-                
+
                 ConvertOneNodeObjects<StartArmatureEntity, IfcValveEntity>(ifcProject, startDataArrayItems, StartElementType.VALVE, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartArmatureEntity, IfcFlangeEntity>(ifcProject, startDataArrayItems, StartElementType.FLANGE, nodeEntities, twoNodeEntities);
 
@@ -81,6 +82,7 @@ namespace STARTtoIFC
             where T : StartAbstractEntity
             where U : IfcAbstractSegmentEntity
         {
+            Logger logger = Logger.GetInstance();
             StartDataArrayItem[] objectItems = dataArrayItems.GetElementsByType(type).ToArray();
             if (useNearEntities)
             {
@@ -88,7 +90,7 @@ namespace STARTtoIFC
                 int index = 0;
                 while (unconvertedObjects.Count != 0)
                 {
-                    if (index >= unconvertedObjects.Count) throw new Exception($"Cannot convert TWO_NODE_ENTITY to IFC");
+                    if (index >= unconvertedObjects.Count) return;
                     
                     Dictionary<int, IfcAbstractSegmentEntity> entities = twoNodeEntities;
                     StartDataArrayItem objectItem = unconvertedObjects[index];
@@ -123,7 +125,7 @@ namespace STARTtoIFC
                     U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities, ifcAbstractSegmentEntities);
                     ifcProject.AddEntity(ifcObjectEntity);
                     twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
-                    Logger.Log($"Added {ifcObjectEntity.Tag} with id {startObjectEntity.ID} to IFC.");
+                    logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
                     
                     unconvertedObjects.Remove(objectItem);
                     index = 0;
@@ -148,7 +150,7 @@ namespace STARTtoIFC
                 
                     ifcProject.AddEntity(ifcObjectEntity);
                     twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
-                    Logger.Log($"Added {ifcObjectEntity.Tag} with id {startObjectEntity.ID} to IFC.");
+                    logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
                 }
             }
         }
@@ -161,8 +163,9 @@ namespace STARTtoIFC
             IReadOnlyDictionary<int, IfcAbstractSegmentEntity> twoNodeEntities
         )
             where T : StartAbstractEntity
-            where U : IfcAbstractEntity
+            where U : IIfcOneNodeEntity
         {
+            Logger logger = Logger.GetInstance();
             StartDataArrayItem[] objectItems = dataArrayItems.GetElementsByType(type).ToArray();
             foreach (StartDataArrayItem objectItem in objectItems)
             {
@@ -181,7 +184,7 @@ namespace STARTtoIFC
 
                 U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcNodeEntity, ifcAbstractSegmentEntities);
                 ifcProject.AddEntity(ifcObjectEntity);
-                Logger.Log($"Added {ifcObjectEntity.Tag} with id {startObjectEntity.ID} to IFC.");
+                logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
             }
         }
     }
