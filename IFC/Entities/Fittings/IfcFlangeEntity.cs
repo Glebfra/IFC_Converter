@@ -10,31 +10,27 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings
 {
-    public class IfcFlangeEntity : IfcAbstractArmatureEntity
+    public sealed class IfcFlangeEntity : IfcAbstractFittingEntity
     {
-        private const int _numSegments = 32;
-        private const double _angleStep = 2 * Math.PI / _numSegments;
-    
-        private readonly StartArmatureEntity _armatureEntity;
-
         public readonly double Length;
         public readonly double[] Radiuses;
-
-        protected override IfcPipeFitting? _pipeFitting { get; set; }
-
-        public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcPipeEntities)
-            : base(armatureEntity, ifcNodeEntity, ifcPipeEntities)
+        
+        private const int _numSegments = 32;
+        private const double _angleStep = 2 * Math.PI / _numSegments;
+        private readonly StartArmatureEntity _armatureEntity;
+        private IfcPipeFitting _pipeFitting;
+        
+        public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(armatureEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;
-            Radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
+            Radiuses = ifcAbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
     
         public override IfcProduct CreateAndAdd(IModel model)
@@ -71,8 +67,8 @@ namespace IFC.Entities.Fittings
             });
 
             AddProperties(model, _pipeFitting);
-            _pipeEntities[0].Clip(_nodeEntity, 0.5 * Length);
-            _pipeEntities[1].Clip(_nodeEntity, 0.5 * Length);
+            _IfcAbstractSegmentEntities[0].Clip(IfcNodeEntity, 0.5 * Length);
+            _IfcAbstractSegmentEntities[1].Clip(IfcNodeEntity, 0.5 * Length);
         
             return _pipeFitting;
         }
@@ -112,32 +108,6 @@ namespace IFC.Entities.Fittings
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
-        }
-
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-        
-            #region Pset_PipeFittingTypeStart
-        
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_PipeFittingTypeStart";
-                    foreach (var kvp in _armatureEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
         }
     }
 }

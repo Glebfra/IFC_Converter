@@ -10,30 +10,26 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings
 {
-    public class IfcValveEntity : IfcAbstractArmatureEntity
+    public sealed class IfcValveEntity : IfcAbstractFittingEntity
     {
-        protected override IfcPipeFitting? _pipeFitting { get; set; }
-
         public readonly double Length;
-        public readonly double Diameter;
-        
+
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
         private readonly StartArmatureEntity _armatureEntity;
+        private IfcPipeFitting _pipeFitting;
 
-        public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] pipeEntities)
-            : base(armatureEntity, nodeEntity, pipeEntities)
+        public IfcValveEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(armatureEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;
-            Diameter = Math.Max(_pipeEntities[0].Diameter, _pipeEntities[1].Diameter) * 1.5;
+            Diameter = Math.Max(ifcAbstractSegmentEntities[0].Diameter, ifcAbstractSegmentEntities[1].Diameter) * 1.5;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
@@ -62,8 +58,8 @@ namespace IFC.Entities.Fittings
                 fitting.Tag = Tag;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
-            _pipeEntities[0].Clip(_nodeEntity, Length / 2);
-            _pipeEntities[1].Clip(_nodeEntity, Length / 2);
+            _IfcAbstractSegmentEntities[0].Clip(IfcNodeEntity, Length / 2);
+            _IfcAbstractSegmentEntities[1].Clip(IfcNodeEntity, Length / 2);
         
             AddProperties(model, _pipeFitting);
 
@@ -106,52 +102,6 @@ namespace IFC.Entities.Fittings
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
-        }
-    
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-        
-            #region Pset_PipeFittingTypeStart
-        
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_PipeFittingTypeStart";
-                    foreach (var kvp in _armatureEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
-
-            #region VALVE DEBUG
-
-#if DEBUG
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "VALVE DEBUG";
-                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                    {
-                        value.Name = "Angle";
-                        value.NominalValue = new IfcText(Angle.ToString("F5"));
-                    }));
-                });
-            });
-#endif
-
-            #endregion
         }
     }
 }

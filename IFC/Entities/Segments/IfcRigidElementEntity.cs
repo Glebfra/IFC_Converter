@@ -7,8 +7,6 @@ using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.Entities.Segments
 {
@@ -51,32 +49,6 @@ namespace IFC.Entities.Segments
             _pipeSegment = CreatePipeSegment(model, _startRigidElementEntity.Name, IfcPipeSegmentTypeEnum.RIGIDSEGMENT);
             AddProperties(model, _pipeSegment);
             return _pipeSegment;
-        }
-
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-            
-            #region Pset_RigidElementTypeStart
-
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_RigidElementTypeStart";
-                    foreach (var kvp in _startRigidElementEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
         }
     }
 }
