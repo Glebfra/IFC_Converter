@@ -62,7 +62,7 @@ namespace IFC.Entities.Abstract
             NodeEntities = ifcNodeEntities;
         }
         
-        public void Clip(IfcNodeEntity nodeEntity, double clipLength)
+        public virtual void Clip(IfcNodeEntity nodeEntity, double clipLength)
         {
             if (IsStartNode(nodeEntity))
                 Coordinates += ObjectMatrix3D.Forward * clipLength;

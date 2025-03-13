@@ -148,6 +148,7 @@
     <Compile Include="Entities\StartAbstractEntity.cs" />
     <Compile Include="Entities\StartArmatureEntity.cs" />
     <Compile Include="Entities\StartBendEntity.cs" />
+    <Compile Include="Entities\StartConeElementEntity.cs" />
     <Compile Include="Entities\StartEntityFactory.cs" />
     <Compile Include="Entities\StartFlexibleElementEntity.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
