@@ -67,9 +67,11 @@ namespace IFC.Entities.Fittings
             });
 
             AddProperties(model, _pipeFitting);
-            _IfcAbstractSegmentEntities[0].Clip(IfcNodeEntity, 0.5 * Length);
-            _IfcAbstractSegmentEntities[1].Clip(IfcNodeEntity, 0.5 * Length);
-        
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            {
+                ifcAbstractSegmentEntity.Clip(IfcNodeEntity, 0.5 * Length);
+            }
+
             return _pipeFitting;
         }
     
