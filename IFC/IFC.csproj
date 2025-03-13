@@ -142,6 +142,7 @@
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
+    <Compile Include="Entities\Fittings\IfcAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\IfcBendEntity.cs" />
     <Compile Include="Entities\Fittings\IfcFabricatedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\IfcFlangeEntity.cs" />

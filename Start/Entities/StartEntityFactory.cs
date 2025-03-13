@@ -61,6 +61,10 @@ namespace Start.Entities
                 case StartElementType.FLANGE:
                     abstractEntity = JsonConvert.DeserializeObject<StartArmatureEntity>(dataString)!;
                     break;
+                
+                case StartElementType.AXIAL_EXPANSION_JOINT:
+                    abstractEntity = JsonConvert.DeserializeObject<StartAxialExpansionJointEntity>(dataString)!;
+                    break;
             
                 default:
                     return null;
