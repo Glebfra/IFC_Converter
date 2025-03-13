@@ -37,11 +37,13 @@ namespace IFC.Entities.Abstract
             IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_IfcAbstractSegmentEntities.Length];
 
             int i = 0;
-            foreach (var branchPipe in _branchPipes)
+            foreach (IfcAbstractSegmentEntity branchPipe in _branchPipes)
             {
                 teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, length / 2);
+                branchPipe.Clip(IfcNodeEntity, length / 2);
             }
             teeExtrudedArea[i++] = CreateTeeBranchShape(model, _headPipe, height);
+            _headPipe.Clip(IfcNodeEntity, height);
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
@@ -62,7 +64,6 @@ namespace IFC.Entities.Abstract
             XbimVector3D direction = IfcAxis.GetDirectionToPipe(pipeEntity, ObjectMatrix3D.Translation);
             IfcAxis2Placement3D axis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), direction);
             IfcExtrudedAreaSolid extrudedAreaSolid = CreateTeeItemShape(model, axis, pipeEntity.Diameter / 2, length);
-            pipeEntity.Clip(IfcNodeEntity, length);
             return extrudedAreaSolid;
         }
     

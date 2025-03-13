@@ -2,6 +2,7 @@
 using System.Linq;
 using IFC.Entities.Abstract;
 using IFC.Tools;
+using Microsoft.Extensions.Logging;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;

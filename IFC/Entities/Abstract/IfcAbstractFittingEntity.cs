@@ -34,7 +34,7 @@ namespace IFC.Entities.Abstract
             XbimVector3D forward = directionToPipes[0].Negated();
             XbimVector3D up;
 
-            if (_IfcAbstractSegmentEntities.Length != 1)
+            if (_IfcAbstractSegmentEntities.Length == 2)
             {
                 Angle = forward.Angle(directionToPipes[1]);
             }
