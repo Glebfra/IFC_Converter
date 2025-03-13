@@ -20,7 +20,11 @@ namespace Start.Entities
                 case StartElementType.FLEXIBLE_ELEMENT:
                     abstractEntity = JsonConvert.DeserializeObject<StartFlexibleElementEntity>(dataString)!;
                     break;
-            
+                
+                case StartElementType.CONE_ELEMENT:
+                    abstractEntity = JsonConvert.DeserializeObject<StartConeElementEntity>(dataString)!;
+                    break;
+
                 case StartElementType.NODE:
                     abstractEntity = JsonConvert.DeserializeObject<StartNodeEntity>(dataString)!; 
                     break;

@@ -42,6 +42,7 @@ namespace STARTtoIFC
             {
                 ConvertTwoNodeObjects<StartPipeEntity, IfcPipeEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, ref twoNodeEntities);
                 ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, ref twoNodeEntities);
+                ConvertTwoNodeObjects<StartConeElementEntity, IfcConeElementEntity>(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, nodeEntities, ref twoNodeEntities);
                 ConvertTwoNodeObjects<StartRigidElementEntity, IfcRigidElementEntity>(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, ref twoNodeEntities, true);
                 ConvertTwoNodeObjects<StartFlexibleElementEntity, IfcFlexibleSegmentEntity>(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, nodeEntities, ref twoNodeEntities, true);
 

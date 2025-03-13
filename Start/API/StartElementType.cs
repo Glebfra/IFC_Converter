@@ -8,6 +8,7 @@
         RIGID_ELEMENT = 2,
         CYLINDRICAL_SHELL = 3,
         FLEXIBLE_ELEMENT = 5,
+        CONE_ELEMENT = 6,
         PIPE_BEND = 10,
         MILTER_BEND = 11,
         FABRICATED_TEE = 13,

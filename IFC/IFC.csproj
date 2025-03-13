@@ -158,6 +158,7 @@
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
+    <Compile Include="Entities\Segments\IfcConeElementEntity.cs" />
     <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeEntity.cs" />
