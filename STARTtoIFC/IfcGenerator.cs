@@ -66,6 +66,8 @@ namespace STARTtoIFC
 
                 ConvertOneNodeObjects<StartArmatureEntity, IfcValveEntity>(ifcProject, startDataArrayItems, StartElementType.VALVE, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartArmatureEntity, IfcFlangeEntity>(ifcProject, startDataArrayItems, StartElementType.FLANGE, nodeEntities, twoNodeEntities);
+                
+                ConvertOneNodeObjects<StartAxialExpansionJointEntity, IfcAxialExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.AXIAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities);
 
                 ifcProject.GroupObjects("Pipe system");
                 ifcProject.SaveAs(outputFilePath);
