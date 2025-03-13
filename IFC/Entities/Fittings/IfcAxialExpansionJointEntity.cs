@@ -62,8 +62,11 @@ namespace IFC.Entities.Fittings
                 fitting.Name = _startAxialExpansionJointEntity.Name;
             });
             
-            _IfcAbstractSegmentEntities[0].Clip(IfcNodeEntity, Length / 2);
-            _IfcAbstractSegmentEntities[1].Clip(IfcNodeEntity, Length / 2);
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            {
+                ifcAbstractSegmentEntity.Clip(IfcNodeEntity, Length / 2);
+            }
+
             AddProperties(model, _pipeFitting);
 
             return _pipeFitting;
