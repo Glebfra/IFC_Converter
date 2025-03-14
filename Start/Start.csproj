@@ -145,15 +145,20 @@
     <Compile Include="API\StartDataArrayItem.cs" />
     <Compile Include="API\StartDocument.cs" />
     <Compile Include="API\StartElementType.cs" />
-    <Compile Include="Entities\GroupedEntities.cs" />
     <Compile Include="Entities\StartAbstractEntity.cs" />
     <Compile Include="Entities\StartArmatureEntity.cs" />
+    <Compile Include="Entities\StartAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\StartBendEntity.cs" />
+    <Compile Include="Entities\StartConeElementEntity.cs" />
     <Compile Include="Entities\StartEntityFactory.cs" />
+    <Compile Include="Entities\StartFlexibleElementEntity.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
     <Compile Include="Entities\StartPipeEntity.cs" />
     <Compile Include="Entities\StartReducerEntity.cs" />
+    <Compile Include="Entities\StartRigidElementEntity.cs" />
     <Compile Include="Entities\StartTeeEntity.cs" />
+    <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
+    <Compile Include="Extensions\StartElementTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartProject.cs" />
   </ItemGroup>

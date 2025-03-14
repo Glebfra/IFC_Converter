@@ -2,48 +2,36 @@
 using System.Linq;
 using IFC.Entities.Abstract;
 using IFC.Tools;
+using Microsoft.Extensions.Logging;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
-using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
-    public class IfcReducerConcentricEntity : IfcAbstractEntity
+    public sealed class IfcReducerConcentricEntity : IfcAbstractFittingEntity
     {
+        public double Length { get; }
+        
         private const int _numSegments = 32;
         private const double _angleStep = 2 * Math.PI / _numSegments;
-
         private IfcPipeFitting? _pipeFitting;
-    
         private readonly StartReducerEntity _reducerEntity;
-        private readonly IfcPipeEntity[] _pipeEntities;
-        private readonly IfcNodeEntity _nodeEntity;
-    
-        public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        public double Length { get; }
-    
-        protected override IfcIdentifier Tag { get; set; } = "Reducer Conentric";
 
-        public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcPipeEntity[] pipeEntities)
+        public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(reducerEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
             _reducerEntity = reducerEntity;
-            _nodeEntity = nodeEntity;
-            _pipeEntities = pipeEntities;
 
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(pipeEntities[1], coordinates);
+            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(ifcAbstractSegmentEntities[1], coordinates);
         
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = directionToPipe.Normalized();
@@ -61,7 +49,7 @@ namespace IFC.Entities
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            double[] radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
+            double[] radiuses = _IfcAbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
             double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;
@@ -79,11 +67,8 @@ namespace IFC.Entities
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-            
-            _pipeEntities[0].Clip(_nodeEntity, Math.Abs(displacement1));
-            _pipeEntities[1].Clip(_nodeEntity, Math.Abs(displacement2));
+            _IfcAbstractSegmentEntities[0].Clip(IfcNodeEntity, Math.Abs(displacement1));
+            _IfcAbstractSegmentEntities[1].Clip(IfcNodeEntity, Math.Abs(displacement2));
 
             AddProperties(model, _pipeFitting);
 
@@ -121,32 +106,6 @@ namespace IFC.Entities
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
-        }
-
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-        
-            #region Pset_PipeFittingTypeStart
-        
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_PipeFittingTypeStart";
-                    foreach (var kvp in _reducerEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
         }
     }
 }

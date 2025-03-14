@@ -1,34 +1,62 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace STARTtoIFC
 {
-    public static class Logger
+    public class Logger
     {
-        public static Action<string>? OnLogsChanged;
+        public string Logs { get; private set; }
         
-        public static string Logs { get; private set; }
-        
-        public static void Log(string message)
+        private static Logger? _instance;
+
+        private int _countErrors;
+
+        public static Logger GetInstance()
+        {
+            return _instance ??= new Logger();
+        }
+
+        public Logger()
+        {
+            Logs = "";
+        }
+
+        public void Flush()
+        {
+            Logs = "";
+            _instance = null;
+        }
+
+        public void Log(string message)
         {
             string formattedMessage = $"[LOG] {message} \n";
             Logs += formattedMessage;
-            OnLogsChanged?.Invoke(formattedMessage);
+        }
+        
+        public void Info(string message)
+        {
+            string formattedMessage = $"[INFO] {message} \n";
+            Logs += formattedMessage;
         }
 
-        public static void Error(string message)
+        public void Error(string message)
         {
             string formattedMessage = $"[ERROR] {message} \n";
             Logs += formattedMessage;
-            OnLogsChanged?.Invoke(formattedMessage);
+            _countErrors++;
         }
 
-        public static void SaveAs(string filePath)
+        public bool HasErrors()
+        {
+            return _countErrors != 0;
+        }
+
+        public void SaveAs(string filePath)
         {
             using (StreamWriter sw = new StreamWriter(filePath))
             {
-                sw.Write(Logs);
+                sw.WriteLine(Logs);
             }
+            Flush();
         }
     }
 }

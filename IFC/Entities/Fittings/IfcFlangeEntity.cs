@@ -5,41 +5,32 @@ using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.SharedBldgServiceElements;
 using Xbim.Ifc4.TopologyResource;
-using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
-    public class IfcFlangeEntity : IfcAbstractArmatureEntity
+    public sealed class IfcFlangeEntity : IfcAbstractFittingEntity
     {
-        protected override IfcIdentifier Tag { get; set; } = "Flange";
-    
-        private const int _numSegments = 32;
-        private const double _angleStep = 2 * Math.PI / _numSegments;
-    
-        private readonly StartArmatureEntity _armatureEntity;
-
         public readonly double Length;
         public readonly double[] Radiuses;
-
-        protected override IfcPipeFitting? _pipeFitting { get; set; }
-
-        public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcPipeEntity[] ifcPipeEntities)
-            : base(ifcNodeEntity, ifcPipeEntities)
+        
+        private const int _numSegments = 32;
+        private const double _angleStep = 2 * Math.PI / _numSegments;
+        private readonly StartArmatureEntity _armatureEntity;
+        private IfcPipeFitting _pipeFitting;
+        
+        public IfcFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+            : base(armatureEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;
-            Radiuses = _pipeEntities.Select(entity => entity.Diameter / 2).ToArray();
+            Radiuses = ifcAbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
     
         public override IfcProduct CreateAndAdd(IModel model)
@@ -75,13 +66,12 @@ namespace IFC.Entities
                 fitting.Representation = shape;
             });
 
-            IfcDistributionPort[] ports = IfcPortConnection.GetPipeClosestPorts(ObjectMatrix3D, _pipeEntities);
-            IfcPortConnection.ConnectPorts(model, ports, _pipeFitting);
-            
             AddProperties(model, _pipeFitting);
-            _pipeEntities[0].Clip(_nodeEntity, 0.5 * Length);
-            _pipeEntities[1].Clip(_nodeEntity, 0.5 * Length);
-        
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            {
+                ifcAbstractSegmentEntity.Clip(IfcNodeEntity, 0.5 * Length);
+            }
+
             return _pipeFitting;
         }
     
@@ -120,32 +110,6 @@ namespace IFC.Entities
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
-        }
-
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-        
-            #region Pset_PipeFittingTypeStart
-        
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_PipeFittingTypeStart";
-                    foreach (var kvp in _armatureEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
         }
     }
 }

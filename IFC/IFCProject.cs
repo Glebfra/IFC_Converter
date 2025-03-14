@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using IFC.Entities.Abstract;
+using System.Reflection;
+using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -19,20 +20,17 @@ namespace IFC
     public class IFCProject : IDisposable
     {
         private ITransaction _transaction;
-
         private readonly IfcStore _model;
         private readonly IfcBuilding _building;
-    
         private readonly List<IfcProduct> _ifcObjects;
 
         public static IFCProject CreateProject(string name)
         {
-            // TODO Change application version
+            // TODO update application version
             XbimEditorCredentials editor = new()
             {
-                ApplicationFullName = "PASS Start-Prof",
-                ApplicationIdentifier = "Start-Prof",
-                ApplicationVersion = "04.86 R4",
+                ApplicationFullName = "PASS/Start-Prof",
+                ApplicationVersion = $"04.87 R2 (STARTtoIFC: {Assembly.GetExecutingAssembly().GetName().Version.ToString()})",
             };
         
             IfcStore model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
@@ -77,16 +75,16 @@ namespace IFC
             _ifcObjects = new List<IfcProduct>();
         }
 
-        public void AddEntity(IfcAbstractEntity entity)
+        public void AddEntity(IIfcEntity entity)
         {
             IfcProduct ifcProduct = entity.CreateAndAdd(_model);
             _ifcObjects.Add(ifcProduct);
             _building.AddElement(ifcProduct);
         }
 
-        public void AddEntities(IEnumerable<IfcAbstractEntity> entities)
+        public void AddEntities(IEnumerable<IIfcEntity> entities)
         {
-            foreach (IfcAbstractEntity entity in entities)
+            foreach (IIfcEntity entity in entities)
             {
                 AddEntity(entity);
             }

@@ -1,4 +1,4 @@
-﻿using IFC.Entities;
+﻿using IFC.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -50,11 +50,11 @@ namespace IFC.Tools
             return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.X, direction.Y, direction.Z));
         }
     
-        public static XbimVector3D GetDirectionToPipe(IfcPipeEntity pipeEntity, XbimVector3D Coordinates)
+        public static XbimVector3D GetDirectionToPipe(IfcAbstractSegmentEntity pipeEntity, XbimVector3D Coordinates)
         {
             XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
             XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Forward;
-            double pipeLength = pipeEntity.Depth;
+            double pipeLength = pipeEntity.Length;
             XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection * pipeLength;
             return (pipeStartCoordinates - Coordinates).Length < (pipeEndCoordinates - Coordinates).Length
                 ? pipeDirection

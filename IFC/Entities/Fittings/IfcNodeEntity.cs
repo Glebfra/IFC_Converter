@@ -1,7 +1,7 @@
 ﻿using Start.Entities;
 using Xbim.Common.Geometry;
 
-namespace IFC.Entities
+namespace IFC.Entities.Fittings
 {
     public class IfcNodeEntity
     {
