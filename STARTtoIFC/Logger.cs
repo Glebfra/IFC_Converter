@@ -7,7 +7,9 @@ namespace STARTtoIFC
         public string Logs { get; private set; }
         
         private static Logger? _instance;
-        
+
+        private int _countErrors;
+
         public static Logger GetInstance()
         {
             return _instance ??= new Logger();
@@ -40,6 +42,12 @@ namespace STARTtoIFC
         {
             string formattedMessage = $"[ERROR] {message} \n";
             Logs += formattedMessage;
+            _countErrors++;
+        }
+
+        public bool HasErrors()
+        {
+            return _countErrors != 0;
         }
 
         public void SaveAs(string filePath)

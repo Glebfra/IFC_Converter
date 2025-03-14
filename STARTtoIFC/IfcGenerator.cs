@@ -93,66 +93,87 @@ namespace STARTtoIFC
                 int index = 0;
                 while (unconvertedObjects.Count != 0)
                 {
-                    if (index >= unconvertedObjects.Count) return;
-                    
-                    StartDataArrayItem objectItem = unconvertedObjects[index];
-                    T startObjectEntity = (T)objectItem.Entity;
-                    
-                    StartDataArrayItem[] connNodes = dataArrayItems
-                        .GetConnElements(startObjectEntity.ID)
-                        .GetElementsByType(StartElementType.NODE)
-                        .ToArray();
-                    StartDataArrayItem[] connTwoNodesElements = dataArrayItems
-                        .GetConnElements(startObjectEntity.ID)
-                        .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
-                        .ToArray();
-                    int[] nodeIds = connNodes
-                        .Select(node => node.NodeIds[0])
-                        .ToArray();
-                    
-                    IfcNodeEntity[] ifcConnNodeEntities = nodeEntities
-                        .Where(pair => nodeIds.Contains(pair.Key))
-                        .Select(pair => pair.Value)
-                        .ToArray();
-                    IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements
-                        .Select(item => twoNodeEntities.TryGetValue(item.DataArrayIndex, out IfcAbstractSegmentEntity? entity) ? entity : null)
-                        .Where(item => item != null)
-                        .ToArray()!;
-                    
-                    if (ifcAbstractSegmentEntities.Length == 0)
+                    try
                     {
-                        index++;
-                        continue;
+                        if (index >= unconvertedObjects.Count) return;
+
+                        StartDataArrayItem objectItem = unconvertedObjects[index];
+                        T startObjectEntity = (T)objectItem.Entity;
+
+                        StartDataArrayItem[] connNodes = dataArrayItems
+                            .GetConnElements(startObjectEntity.ID)
+                            .GetElementsByType(StartElementType.NODE)
+                            .ToArray();
+                        StartDataArrayItem[] connTwoNodesElements = dataArrayItems
+                            .GetConnElements(startObjectEntity.ID)
+                            .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
+                            .ToArray();
+                        int[] nodeIds = connNodes
+                            .Select(node => node.NodeIds[0])
+                            .ToArray();
+
+                        IfcNodeEntity[] ifcConnNodeEntities = nodeEntities
+                            .Where(pair => nodeIds.Contains(pair.Key))
+                            .Select(pair => pair.Value)
+                            .ToArray();
+                        IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements
+                            .Select(item =>
+                                twoNodeEntities.TryGetValue(item.DataArrayIndex, out IfcAbstractSegmentEntity? entity)
+                                    ? entity
+                                    : null)
+                            .Where(item => item != null)
+                            .ToArray()!;
+
+                        if (ifcAbstractSegmentEntities.Length == 0)
+                        {
+                            index++;
+                            continue;
+                        }
+
+                        U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity,
+                            ifcConnNodeEntities, ifcAbstractSegmentEntities);
+                        ifcProject.AddEntity(ifcObjectEntity);
+                        twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
+                        logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
+                        unconvertedObjects.Remove(objectItem);
+                        index = 0;
                     }
-                    U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities, ifcAbstractSegmentEntities);
-                    ifcProject.AddEntity(ifcObjectEntity);
-                    twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
-                    logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
-                    
-                    unconvertedObjects.Remove(objectItem);
-                    index = 0;
+                    catch (Exception e)
+                    {
+                        logger.Error(e.ToString());
+                        index++;
+                    }
                 }
             }
             else
             {
                 foreach (StartDataArrayItem objectItem in objectItems)
                 {
-                    T startObjectEntity = (T)objectItem.Entity;
-                    StartDataArrayItem[] connNodes = dataArrayItems
-                        .GetConnElements(startObjectEntity.ID)
-                        .GetElementsByType(StartElementType.NODE)
-                        .ToArray();
-                    
-                    int[] nodeIds = connNodes
-                        .Select(node => node.NodeIds[0])
-                        .ToArray();
-                
-                    IfcNodeEntity[] ifcConnNodeEntities = nodeEntities.Where(pair => nodeIds.Contains(pair.Key)).Select(pair => pair.Value).ToArray();
-                    U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities);
-                
-                    ifcProject.AddEntity(ifcObjectEntity);
-                    twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
-                    logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
+                    try
+                    {
+                        T startObjectEntity = (T)objectItem.Entity;
+                        StartDataArrayItem[] connNodes = dataArrayItems
+                            .GetConnElements(startObjectEntity.ID)
+                            .GetElementsByType(StartElementType.NODE)
+                            .ToArray();
+
+                        int[] nodeIds = connNodes
+                            .Select(node => node.NodeIds[0])
+                            .ToArray();
+
+                        IfcNodeEntity[] ifcConnNodeEntities = nodeEntities.Where(pair => nodeIds.Contains(pair.Key))
+                            .Select(pair => pair.Value).ToArray();
+                        U ifcObjectEntity =
+                            (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities);
+
+                        ifcProject.AddEntity(ifcObjectEntity);
+                        twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
+                        logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.ToString());
+                    }
                 }
             }
         }
@@ -171,22 +192,31 @@ namespace STARTtoIFC
             StartDataArrayItem[] objectItems = dataArrayItems.GetElementsByType(type).ToArray();
             foreach (StartDataArrayItem objectItem in objectItems)
             {
-                T startObjectEntity = (T)objectItem.Entity;
-                StartDataArrayItem connNode = dataArrayItems
-                    .GetConnElements(startObjectEntity.ID)
-                    .GetElementsByType(StartElementType.NODE)
-                    .First();
-                StartDataArrayItem[] connTwoNodesElements = dataArrayItems
-                    .GetConnElements(startObjectEntity.ID)
-                    .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
-                    .ToArray();
+                try
+                {
+                    T startObjectEntity = (T)objectItem.Entity;
+                    StartDataArrayItem connNode = dataArrayItems
+                        .GetConnElements(startObjectEntity.ID)
+                        .GetElementsByType(StartElementType.NODE)
+                        .First();
+                    StartDataArrayItem[] connTwoNodesElements = dataArrayItems
+                        .GetConnElements(startObjectEntity.ID)
+                        .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
+                        .ToArray();
 
-                IfcNodeEntity ifcNodeEntity = nodeEntities[connNode.Entity.ID];
-                IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements.Select(item => twoNodeEntities[item.DataArrayIndex]).ToArray();
+                    IfcNodeEntity ifcNodeEntity = nodeEntities[connNode.Entity.ID];
+                    IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements
+                        .Select(item => twoNodeEntities[item.DataArrayIndex]).ToArray();
 
-                U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcNodeEntity, ifcAbstractSegmentEntities);
-                ifcProject.AddEntity(ifcObjectEntity);
-                logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
+                    U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcNodeEntity,
+                        ifcAbstractSegmentEntities);
+                    ifcProject.AddEntity(ifcObjectEntity);
+                    logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.ToString());
+                }
             }
         }
     }
