@@ -20,6 +20,7 @@ namespace Start.API
         [JsonProperty("data")]
         public object Data { get; set; }
 
+        [JsonIgnore] 
         public StartAbstractEntity Entity;
     }
 }

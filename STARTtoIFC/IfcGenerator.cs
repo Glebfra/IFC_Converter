@@ -40,11 +40,11 @@ namespace STARTtoIFC
 
             using (IFCProject ifcProject = IFCProject.CreateProject("IFC"))
             {
-                ConvertTwoNodeObjects<StartPipeEntity, IfcPipeEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, ref twoNodeEntities);
-                ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, ref twoNodeEntities);
-                ConvertTwoNodeObjects<StartConeElementEntity, IfcConeElementEntity>(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, nodeEntities, ref twoNodeEntities);
-                ConvertTwoNodeObjects<StartRigidElementEntity, IfcRigidElementEntity>(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, ref twoNodeEntities, true);
-                ConvertTwoNodeObjects<StartFlexibleElementEntity, IfcFlexibleSegmentEntity>(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, nodeEntities, ref twoNodeEntities, true);
+                ConvertTwoNodeObjects<StartPipeEntity, IfcPipeEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, twoNodeEntities);
+                ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, twoNodeEntities);
+                ConvertTwoNodeObjects<StartConeElementEntity, IfcConeElementEntity>(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, nodeEntities, twoNodeEntities);
+                ConvertTwoNodeObjects<StartRigidElementEntity, IfcRigidElementEntity>(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, twoNodeEntities, true);
+                ConvertTwoNodeObjects<StartFlexibleElementEntity, IfcFlexibleSegmentEntity>(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, nodeEntities, twoNodeEntities, true);
 
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.ELBOW, nodeEntities, twoNodeEntities);
                 ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_BEND, nodeEntities, twoNodeEntities);
@@ -75,11 +75,11 @@ namespace STARTtoIFC
         }
 
         private static void ConvertTwoNodeObjects<T, U>(
-            IFCProject ifcProject, 
-            StartDataArrayItem[] dataArrayItems, 
-            StartElementType type, 
-            Dictionary<int, IfcNodeEntity> nodeEntities, 
-            ref Dictionary<int, IfcAbstractSegmentEntity> twoNodeEntities,
+            IFCProject ifcProject,
+            StartDataArrayItem[] dataArrayItems,
+            StartElementType type,
+            Dictionary<int, IfcNodeEntity> nodeEntities,
+            Dictionary<int, IfcAbstractSegmentEntity> twoNodeEntities,
             bool useNearEntities = false
         )
             where T : StartAbstractEntity
@@ -95,7 +95,6 @@ namespace STARTtoIFC
                 {
                     if (index >= unconvertedObjects.Count) return;
                     
-                    Dictionary<int, IfcAbstractSegmentEntity> entities = twoNodeEntities;
                     StartDataArrayItem objectItem = unconvertedObjects[index];
                     T startObjectEntity = (T)objectItem.Entity;
                     
@@ -116,7 +115,7 @@ namespace STARTtoIFC
                         .Select(pair => pair.Value)
                         .ToArray();
                     IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements
-                        .Select(item => entities.TryGetValue(item.DataArrayIndex, out IfcAbstractSegmentEntity? entity) ? entity : null)
+                        .Select(item => twoNodeEntities.TryGetValue(item.DataArrayIndex, out IfcAbstractSegmentEntity? entity) ? entity : null)
                         .Where(item => item != null)
                         .ToArray()!;
                     

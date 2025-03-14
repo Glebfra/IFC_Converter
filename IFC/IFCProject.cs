@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Xbim.Common;
@@ -25,12 +26,11 @@ namespace IFC
 
         public static IFCProject CreateProject(string name)
         {
-            // TODO Change application version
+            // TODO update application version
             XbimEditorCredentials editor = new()
             {
-                ApplicationFullName = "PASS Start-Prof",
-                ApplicationIdentifier = "Start-Prof",
-                ApplicationVersion = "04.86 R4",
+                ApplicationFullName = "PASS/Start-Prof",
+                ApplicationVersion = $"04.87 R2 (STARTtoIFC: {Assembly.GetExecutingAssembly().GetName().Version.ToString()})",
             };
         
             IfcStore model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
