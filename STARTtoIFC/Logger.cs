@@ -18,6 +18,12 @@ namespace STARTtoIFC
             Logs = "";
         }
 
+        public void Flush()
+        {
+            Logs = "";
+            _instance = null;
+        }
+
         public void Log(string message)
         {
             string formattedMessage = $"[LOG] {message} \n";
@@ -42,8 +48,7 @@ namespace STARTtoIFC
             {
                 sw.WriteLine(Logs);
             }
-
-            _instance = null;
+            Flush();
         }
     }
 }

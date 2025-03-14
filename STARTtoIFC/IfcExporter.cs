@@ -26,7 +26,6 @@ namespace STARTtoIFC
             Logger logger = Logger.GetInstance();
             
             Localize(languageId);
-            logger.Info($"Language used {languageId}");
 
             StartDocument startDocument = new StartDocument(startDocumentObject);
             DataContainer dataContainer = new DataContainer()
@@ -51,7 +50,7 @@ namespace STARTtoIFC
                 logger.Info($"Converting start at {DateTime.Now}");
                 IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath);
                 logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                logger.SaveAs(dataContainer.OutputFilePath + ".log");
+                logger.Flush();
                 return (int)ConversionResult.Success;
             }
             catch (Exception e)
