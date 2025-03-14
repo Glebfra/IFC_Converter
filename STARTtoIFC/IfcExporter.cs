@@ -50,7 +50,15 @@ namespace STARTtoIFC
                 logger.Info($"Converting start at {DateTime.Now}");
                 IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath);
                 logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                logger.Flush();
+                
+                if (logger.HasErrors())
+                {
+                    logger.SaveAs(dataContainer.OutputFilePath + ".log");
+                }
+                else
+                {
+                    logger.Flush();
+                }
                 return (int)ConversionResult.Success;
             }
             catch (Exception e)
