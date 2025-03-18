@@ -145,6 +145,8 @@
     <Compile Include="API\StartDataArrayItem.cs" />
     <Compile Include="API\StartDocument.cs" />
     <Compile Include="API\StartElementType.cs" />
+    <Compile Include="API\StartLeakageCheckEnum.cs" />
+    <Compile Include="API\StartManufacturingTechnologyEnum.cs" />
     <Compile Include="Entities\StartAbstractEntity.cs" />
     <Compile Include="Entities\StartArmatureEntity.cs" />
     <Compile Include="Entities\StartAxialExpansionJointEntity.cs" />
