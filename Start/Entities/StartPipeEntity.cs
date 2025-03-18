@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities
 {
@@ -42,7 +43,7 @@ namespace Start.Entities
         public double ProductUnitWeight { get; set; }
     
         [JsonProperty("37")] 
-        public int ManufacturingTechnology { get; set; }
+        public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
     
         [JsonProperty("38")] 
         public double LongitudinalWeldJointFactor { get; set; }
@@ -96,7 +97,7 @@ namespace Start.Entities
                 { "Pipe Unit Weight", PipeUnitWeight.ToString("F5") },
                 { "Insulation Unit Weight", InsulationUnitWeight.ToString("F5") },
                 { "Product Unit Weight", ProductUnitWeight.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnology.ToString() },
+                { "Manufacturing Technology", ManufacturingTechnologyEnum.ToString() },
                 { "Longitudinal Weld Joint Factor", LongitudinalWeldJointFactor.ToString("F5") },
                 { "Strength Factor of the Traverse Weld", StrengthFactorOfTheTraverseWeld.ToString("F5") },
                 { "Additional Weight Load", AdditionalWeightLoad.ToString("F5") },

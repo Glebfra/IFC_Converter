@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities
 {
@@ -15,7 +16,7 @@ namespace Start.Entities
         public double Weight { get; set; }
     
         [JsonProperty("37")]
-        public int ManufacturingTechnology { get; set; }
+        public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
     
         [JsonProperty("70")]
         public double Radius { get; set; }
@@ -39,7 +40,7 @@ namespace Start.Entities
                 { "Wall Thickness", WallThickness.ToString("F5") },
                 { "Mill Tolerance", MillTolerance.ToString("F5") },
                 { "Weight", Weight.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnology.ToString() },
+                { "Manufacturing Technology", ManufacturingTechnologyEnum.ToString() },
                 { "Radius", Radius.ToString("F5") },
                 { "Ovalization Coefficient", OvalizationCoefficient.ToString("F5") },
                 { "Number Of Milters", NumberOfMilters.ToString() },

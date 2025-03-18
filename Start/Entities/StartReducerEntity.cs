@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities
 {
@@ -24,7 +25,7 @@ namespace Start.Entities
         public double Weight { get; set; }
         
         [JsonProperty("37")]
-        public int ManufacturingTechnology { get; set; }
+        public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
         
         [JsonProperty("131")]
         public double AngleBetweenEccentricityVectorAndZmAxis { get; set; }
@@ -44,7 +45,7 @@ namespace Start.Entities
             {
                 { "Name", Name },
                 { "Weight", Weight.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnology.ToString() },
+                { "Manufacturing Technology", ManufacturingTechnologyEnum.ToString() },
                 { "Mill Tolerance At D Max", MillToleranceAtDMax.ToString("F5") },
                 { "Mill Tolerance At D Min", MillToleranceAtDMin.ToString("F5") },
                 { "Mill Tolerance", MillTolerance.ToString("F5") },
