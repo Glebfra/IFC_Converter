@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using IFC.Entities.Fittings;
 using IFC.Entities.Interfaces;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;
 using Xbim.Common;
