@@ -4,14 +4,14 @@ using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
 
-namespace IFC.Entities.Fittings
+namespace IFC.Entities.Fittings.CAD
 {
-    public sealed class IfcStubInEntity : IfcAbstractTeeEntity
+    public sealed class IfcSweepoletEntity : IfcAbstractTeeEntity
     {
-        public readonly double Length;
-        public readonly double Height;
+        private double Length;
+        private double Height;
     
-        public IfcStubInEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
+        public IfcSweepoletEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
             : base(startTeeEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
             Length = _headPipe.Diameter;

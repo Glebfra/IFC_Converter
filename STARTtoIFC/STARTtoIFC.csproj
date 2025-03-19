@@ -153,6 +153,8 @@
     <Compile Include="ExportWindow.Designer.cs">
       <DependentUpon>ExportWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="IfcExportType.cs" />
+    <Compile Include="IfcExportTypeEnum.cs" />
     <Compile Include="IfcGenerator.cs" />
     <Compile Include="ConversionResult.cs" />
     <Compile Include="IfcExporter.cs" />

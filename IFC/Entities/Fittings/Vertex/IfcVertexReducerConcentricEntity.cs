@@ -2,7 +2,6 @@
 using System.Linq;
 using IFC.Entities.Abstract;
 using IFC.Tools;
-using Microsoft.Extensions.Logging;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -14,9 +13,9 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Entities.Fittings
+namespace IFC.Entities.Fittings.Vertex
 {
-    public sealed class IfcReducerConcentricEntity : IfcAbstractFittingEntity
+    public sealed class IfcVertexReducerConcentricEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }
         
@@ -25,7 +24,7 @@ namespace IFC.Entities.Fittings
         private IfcPipeFitting? _pipeFitting;
         private readonly StartReducerEntity _reducerEntity;
 
-        public IfcReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+        public IfcVertexReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
             : base(reducerEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
             _reducerEntity = reducerEntity;
@@ -56,7 +55,7 @@ namespace IFC.Entities.Fittings
             IfcCartesianPoint[] lowerCircle = CreateCircle(model, radiuses[0], displacement1);
             IfcCartesianPoint[] upperCircle = CreateCircle(model, radiuses[1], displacement2);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep);
+            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
         
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
@@ -97,10 +96,10 @@ namespace IFC.Entities.Fittings
                 IfcCartesianPoint p2 = lowerPoints[(i + 1) % _numSegments];
                 IfcCartesianPoint p3 = upperPoints[(i + 1) % _numSegments];
                 IfcCartesianPoint p4 = upperPoints[i];
-                faces[facesIndex++] = IfcGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
+                faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
             }
-            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, lowerPoints);
-            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, upperPoints);
+            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, lowerPoints);
+            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, upperPoints);
 
             return model.Instances.New<IfcFacetedBrep>(brep =>
             {

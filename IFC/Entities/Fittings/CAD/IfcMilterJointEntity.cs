@@ -14,7 +14,7 @@ using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 
-namespace IFC.Entities.Fittings
+namespace IFC.Entities.Fittings.CAD
 {
     public sealed class IfcMilterJointEntity : IfcAbstractFittingEntity
     {

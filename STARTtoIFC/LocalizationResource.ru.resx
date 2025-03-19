@@ -14,7 +14,7 @@
     <data name="MessageBox_Title_Error" xml:space="preserve">
         <value>Ошибка</value>
     </data>
-    <data name="ExportWindowForm_selectOutputFilePathButton_Click_SelectFile" xml:space="preserve">
+    <data name="ExportWindowForm_SaveDialogFile_Title" xml:space="preserve">
         <value>Выберите файл для сохранения</value>
     </data>
     <data name="ExportWindowForm_ExportButton_Text" xml:space="preserve">
@@ -37,5 +37,17 @@
     </data>
     <data name="ExportWindowForm_OutputFilePath_Empty_Error" xml:space="preserve">
         <value>Путь к файлу .ifc не может быть пустым.</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Vertex" xml:space="preserve">
+        <value>Вершинный</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Topological" xml:space="preserve">
+        <value>САПР</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Label" xml:space="preserve">
+        <value>Тип экспорта</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Error" xml:space="preserve">
+        <value>Неизвестный тип экспорта</value>
     </data>
 </root>

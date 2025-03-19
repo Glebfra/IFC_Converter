@@ -4,7 +4,7 @@ using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
 
-namespace IFC.Entities.Fittings
+namespace IFC.Entities.Fittings.CAD
 {
     public sealed class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
     {

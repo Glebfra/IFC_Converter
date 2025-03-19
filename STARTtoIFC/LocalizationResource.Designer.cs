@@ -78,6 +78,42 @@ namespace STARTtoIFC.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown export type.
+        /// </summary>
+        internal static string ExportWindowForm_ExportType_Error {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_ExportType_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export type.
+        /// </summary>
+        internal static string ExportWindowForm_ExportType_Label {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_ExportType_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAD.
+        /// </summary>
+        internal static string ExportWindowForm_ExportType_Topological {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_ExportType_Topological", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vertex.
+        /// </summary>
+        internal static string ExportWindowForm_ExportType_Vertex {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_ExportType_Vertex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path to .ifc file cannot be empty.
         /// </summary>
         internal static string ExportWindowForm_OutputFilePath_Empty_Error {
@@ -98,9 +134,9 @@ namespace STARTtoIFC.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Select the file to be saved.
         /// </summary>
-        internal static string ExportWindowForm_selectOutputFilePathButton_Click_SelectFile {
+        internal static string ExportWindowForm_SaveDialogFile_Title {
             get {
-                return ResourceManager.GetString("ExportWindowForm_selectOutputFilePathButton_Click_SelectFile", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_SaveDialogFile_Title", resourceCulture);
             }
         }
         
