@@ -19,15 +19,18 @@ namespace IFC.Entities.Fittings.Vertex
     {
         public double Length { get; }
         
-        private const int _numSegments = 32;
-        private const double _angleStep = 2 * Math.PI / _numSegments;
+        private readonly int _numSegments;
+        private readonly double _angleStep;
         private readonly double _pipeDisplacement;
         private readonly StartReducerEntity _reducerEntity;
         private IfcPipeFitting _pipeFitting;
 
-        public IfcVertexReducerEccentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
+        public IfcVertexReducerEccentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args)
             : base(reducerEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
+            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _angleStep = 2 * Math.PI / _numSegments;
+            
             _reducerEntity = reducerEntity;
             _IfcAbstractSegmentEntities = _IfcAbstractSegmentEntities
                 .OrderBy(entity => entity.Diameter)
@@ -105,7 +108,7 @@ namespace IFC.Entities.Fittings.Vertex
             return points;
         }
         
-        private static IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] lowerPoints, IfcCartesianPoint[] upperPoints)
+        private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] lowerPoints, IfcCartesianPoint[] upperPoints)
         {
             IfcFace[] faces = new IfcFace[_numSegments + 2];
             int facesIndex = 0;

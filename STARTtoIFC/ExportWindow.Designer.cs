@@ -40,8 +40,12 @@ namespace STARTtoIFC
             this.exportTypePanel = new System.Windows.Forms.Panel();
             this.exportTypeCombobox = new System.Windows.Forms.ComboBox();
             this.exportTypeLabel = new System.Windows.Forms.Label();
+            this.vertexSegmentsPanel = new System.Windows.Forms.Panel();
+            this.vertexSegmentsTextbox = new System.Windows.Forms.TextBox();
+            this.vertexSegmentsLabel = new System.Windows.Forms.Label();
             this.outputFilePathPanel.SuspendLayout();
             this.exportTypePanel.SuspendLayout();
+            this.vertexSegmentsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // exportButton
@@ -122,6 +126,37 @@ namespace STARTtoIFC
             this.exportTypeLabel.Text = "Export type";
             this.exportTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // vertexSegmentsPanel
+            // 
+            this.vertexSegmentsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.vertexSegmentsPanel.Controls.Add(this.vertexSegmentsTextbox);
+            this.vertexSegmentsPanel.Location = new System.Drawing.Point(161, 90);
+            this.vertexSegmentsPanel.Name = "vertexSegmentsPanel";
+            this.vertexSegmentsPanel.Size = new System.Drawing.Size(118, 40);
+            this.vertexSegmentsPanel.TabIndex = 5;
+            // 
+            // vertexSegmentsTextbox
+            // 
+            this.vertexSegmentsTextbox.Location = new System.Drawing.Point(3, 10);
+            this.vertexSegmentsTextbox.MaxLength = 2;
+            this.vertexSegmentsTextbox.Name = "vertexSegmentsTextbox";
+            this.vertexSegmentsTextbox.Size = new System.Drawing.Size(110, 20);
+            this.vertexSegmentsTextbox.TabIndex = 0;
+            this.vertexSegmentsTextbox.Text = "16";
+            this.vertexSegmentsTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.vertexSegmentsTextbox_KeyPress);
+            // 
+            // vertexSegmentsLabel
+            // 
+            this.vertexSegmentsLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.vertexSegmentsLabel.AutoSize = true;
+            this.vertexSegmentsLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.vertexSegmentsLabel.Location = new System.Drawing.Point(165, 84);
+            this.vertexSegmentsLabel.Name = "vertexSegmentsLabel";
+            this.vertexSegmentsLabel.Size = new System.Drawing.Size(85, 13);
+            this.vertexSegmentsLabel.TabIndex = 6;
+            this.vertexSegmentsLabel.Text = "Vertex segments\r\n";
+            this.vertexSegmentsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // ExportWindowForm
             // 
             this.AcceptButton = this.exportButton;
@@ -129,6 +164,8 @@ namespace STARTtoIFC
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(494, 171);
+            this.Controls.Add(this.vertexSegmentsLabel);
+            this.Controls.Add(this.vertexSegmentsPanel);
             this.Controls.Add(this.exportTypeLabel);
             this.Controls.Add(this.exportTypePanel);
             this.Controls.Add(this.outputFilePathLabel);
@@ -144,9 +181,19 @@ namespace STARTtoIFC
             this.outputFilePathPanel.ResumeLayout(false);
             this.outputFilePathPanel.PerformLayout();
             this.exportTypePanel.ResumeLayout(false);
+            this.vertexSegmentsPanel.ResumeLayout(false);
+            this.vertexSegmentsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Label vertexSegmentsLabel;
+
+        private System.Windows.Forms.Panel vertexSegmentsPanel;
+
+        private System.Windows.Forms.TextBox vertexSegmentsTextbox;
+
+        private System.Windows.Forms.Panel panel1;
 
         private System.Windows.Forms.ComboBox exportTypeCombobox;
 

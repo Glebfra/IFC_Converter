@@ -18,17 +18,19 @@ namespace IFC.Entities.Fittings.Vertex
     {
         public double Length { get; }
         
-        private const int _numSegments = 32;
-        private const double _angleStep = 2 * Math.PI / _numSegments;
-
+        private readonly int _numSegments;
+        private readonly double _angleStep;
+        
         private double[] _radiuses;
         
         private StartAxialExpansionJointEntity _startAxialExpansionJointEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
+        public IfcVertexAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
             : base(startAxialExpansionJointEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
+            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _angleStep = 2 * Math.PI / _numSegments;
             _startAxialExpansionJointEntity = startAxialExpansionJointEntity;
 
             _radiuses = new double[] { Diameter / 2 * 1.1, Diameter / 2 * 0.9 };

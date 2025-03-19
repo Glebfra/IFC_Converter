@@ -58,6 +58,7 @@ namespace STARTtoIFC
                 return;
             }
             _dataContainer.ExportType = exportType.Type;
+            _dataContainer.NumSegments = Convert.ToInt32(vertexSegmentsTextbox.Text);
             DialogResult = DialogResult.OK;
         }
 
@@ -105,6 +106,11 @@ namespace STARTtoIFC
                     outputFilePathTextbox.Text = saveFileDialog.FileName;
                 }
             }
+        }
+
+        private void vertexSegmentsTextbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
     }
 }
