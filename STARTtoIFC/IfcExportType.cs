@@ -1,6 +1,6 @@
 ﻿namespace STARTtoIFC
 {
-    public class IfcExportType
+    internal class IfcExportType
     {
         public IfcExportTypeEnum Type { get; set; }
         public string TypeName { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace STARTtoIFC
 {
-    public static class LanguageConverter
+    internal static class LanguageConverter
     {
         public static int ConvertLanguage(int languageId)
         {
