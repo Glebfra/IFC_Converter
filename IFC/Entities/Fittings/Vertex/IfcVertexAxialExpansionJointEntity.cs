@@ -12,9 +12,9 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Entities.Fittings
+namespace IFC.Entities.Fittings.Vertex
 {
-    public sealed class IfcAxialExpansionJointEntity : IfcAbstractFittingEntity
+    public sealed class IfcVertexAxialExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }
         
@@ -26,7 +26,7 @@ namespace IFC.Entities.Fittings
         private StartAxialExpansionJointEntity _startAxialExpansionJointEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
+        public IfcVertexAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
             : base(startAxialExpansionJointEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
             _startAxialExpansionJointEntity = startAxialExpansionJointEntity;
@@ -50,7 +50,7 @@ namespace IFC.Entities.Fittings
                 CreateFacetedBrep(model, thirdCircle, fourthCircle)
             };
             
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBreps);
+            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
@@ -94,10 +94,10 @@ namespace IFC.Entities.Fittings
                 IfcCartesianPoint p2 = lowerPoints[(i + 1) % _numSegments];
                 IfcCartesianPoint p3 = upperPoints[(i + 1) % _numSegments];
                 IfcCartesianPoint p4 = upperPoints[i];
-                faces[facesIndex++] = IfcGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
+                faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
             }
-            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, lowerPoints);
-            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, upperPoints);
+            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, lowerPoints);
+            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, upperPoints);
 
             return model.Instances.New<IfcFacetedBrep>(brep =>
             {

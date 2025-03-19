@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 using STARTtoIFC.Localization;
 
@@ -28,36 +28,65 @@ namespace STARTtoIFC
             exportButton.Text = LocalizationResource.ExportWindowForm_ExportButton_Text;
             selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
             outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilePath_Label;
+            exportTypeLabel.Text = LocalizationResource.ExportWindowForm_ExportType_Label;
+            
+            ArrayList types = new ArrayList
+            {
+                new IfcExportType(IfcExportTypeEnum.VERTEX, LocalizationResource.ExportWindowForm_ExportType_Vertex),
+                new IfcExportType(IfcExportTypeEnum.CAD, LocalizationResource.ExportWindowForm_ExportType_Topological)
+            };
+            exportTypeCombobox.DataSource = types;
+            exportTypeCombobox.DisplayMember = "TypeName";
+            exportTypeCombobox.ValueMember = "Type";
+            exportTypeCombobox.SelectedItem = types[1];
         }
 
         private void ExportButton_Click(object sender, EventArgs e)
         {
             string outputFilePath = outputFilePathTextbox.Text;
-            if (string.IsNullOrEmpty(outputFilePath))
+            CheckEmptyPath(outputFilePath);
+
+            string outputDirectoryPath = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
+            CheckExistDirectory(outputDirectoryPath);
+            CheckAccessControl(outputDirectoryPath);
+            
+            _dataContainer.OutputFilePath = outputFilePath;
+            
+            if (exportTypeCombobox.SelectedItem is not IfcExportType exportType)
+            {
+                MessageBox.Show(LocalizationResource.ExportWindowForm_ExportType_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            _dataContainer.ExportType = exportType.Type;
+            DialogResult = DialogResult.OK;
+        }
+
+        private void CheckEmptyPath(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
             {
                 MessageBox.Show(LocalizationResource.ExportWindowForm_OutputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
-            
-            string outputDirectoryPath = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
-            if (!Directory.Exists(outputDirectoryPath))
+        }
+
+        private void CheckExistDirectory(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
             {
                 MessageBox.Show(LocalizationResource.DirectoryDoesNotExists_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
+        }
 
+        private void CheckAccessControl(string directoryPath)
+        {
             try
             {
-                DirectorySecurity ds = Directory.GetAccessControl(outputDirectoryPath);
+                Directory.GetAccessControl(directoryPath);
             }
             catch (UnauthorizedAccessException)
             {
                 MessageBox.Show(LocalizationResource.UnauthorizedAccess_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
-
-            _dataContainer.OutputFilePath = outputFilePath;
-            DialogResult = DialogResult.OK;
         }
 
         private void selectOutputFilePathButton_Click(object sender, EventArgs e)
@@ -66,7 +95,7 @@ namespace STARTtoIFC
             {
                 // TODO: Предлагаю вообще убрать Title(он автоматически задаётся с учётом локализации) и добавить это:
                 //saveFileDialog.FileName = Имя файла старт;
-                saveFileDialog.Title = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Click_SelectFile;
+                saveFileDialog.Title = LocalizationResource.ExportWindowForm_SaveDialogFile_Title;
                 saveFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
                 saveFileDialog.DefaultExt = ".ifc";
                 saveFileDialog.RestoreDirectory = true;

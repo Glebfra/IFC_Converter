@@ -1,62 +1,17 @@
 ﻿using System.Linq;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Tools
 {
     public static class IfcGeometry
     {
-        public static IfcFace CreateRectangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3, IfcCartesianPoint p4)
-        {
-            return model.Instances.New<IfcFace>(f =>
-            {
-                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
-                {
-                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
-                    {
-                        pl.Polygon.AddRange(new[] { p1, p2, p3, p4 });
-                    });
-                    b.Orientation = true;
-                }));
-            });
-        }
-    
-        public static IfcFace CreateTriangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3)
-        {
-            return model.Instances.New<IfcFace>(f =>
-            {
-                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
-                {
-                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
-                    {
-                        pl.Polygon.AddRange(new[] { p1, p2, p3 });
-                    });
-                    b.Orientation = true;
-                }));
-            });
-        }
-    
-        public static IfcFace CreatePolygonFace(IModel model, IfcCartesianPoint[] points)
-        {
-            return model.Instances.New<IfcFace>(f =>
-            {
-                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
-                {
-                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
-                    {
-                        pl.Polygon.AddRange(points);
-                    });
-                    b.Orientation = true;
-                }));
-            });
-        }
-    
         public static IfcPlane CreatePlane(IModel model, XbimVector3D coordinates, XbimVector3D direction)
         {
             return model.Instances.New<IfcPlane>(plane =>
@@ -77,6 +32,15 @@ namespace IFC.Tools
             });
         }
 
+        public static IfcSweptDiskSolid CreateSweptDiskSolid(IModel model, IfcCurve curve, IfcPositiveLengthMeasure radius)
+        {
+            return model.Instances.New<IfcSweptDiskSolid>(solid =>
+            {
+                solid.Directrix = curve;
+                solid.Radius = radius;
+            });
+        }
+
         public static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction, XbimVector3D refDirection)
         {
             return model.Instances.New<IfcCircle>(ifcCircle =>
@@ -86,8 +50,7 @@ namespace IFC.Tools
             });
         }
 
-        public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates,
-            XbimVector3D direction)
+        public static IfcCircleProfileDef CreateCircleProfileDef(IModel model, double radius, XbimVector3D coordinates, XbimVector3D direction)
         {
             return model.Instances.New<IfcCircleProfileDef>(def =>
             {
@@ -111,7 +74,7 @@ namespace IFC.Tools
         {
             return model.Instances.New<IfcShapeRepresentation>(sr =>
             {
-                sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+                sr.ContextOfItems = model.Instances.FirstOrDefault<IfcGeometricRepresentationContext>();
                 sr.RepresentationIdentifier = "Body";
                 sr.RepresentationType = "SweptSolid";
                 sr.Items.Add(representationItem);

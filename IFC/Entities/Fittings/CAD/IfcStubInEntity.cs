@@ -4,18 +4,18 @@ using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
 
-namespace IFC.Entities.Fittings
+namespace IFC.Entities.Fittings.CAD
 {
-    public sealed class IfcWeldoletEntity : IfcAbstractTeeEntity
+    public sealed class IfcStubInEntity : IfcAbstractTeeEntity
     {
-        private double Length;
-        private double Height;
+        public readonly double Length;
+        public readonly double Height;
     
-        public IfcWeldoletEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
+        public IfcStubInEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
             : base(startTeeEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
             Length = _headPipe.Diameter;
-            Height = _branchPipes[0].Diameter / 2 + startTeeEntity.BranchHeight;
+            Height = _branchPipes[0].Diameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

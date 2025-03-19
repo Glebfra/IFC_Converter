@@ -138,23 +138,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\IfcAbstractBendEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcAxialExpansionJointEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcBendEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcFabricatedTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcFlangeEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcMilterJointEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcMilterJointEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcStubInEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcSweepoletEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcWeldedTeeEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcWeldoletEntity.cs" />
     <Compile Include="Entities\Fittings\IfcNodeEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcReducerConcentricEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcReducerEccentricEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcStubInEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcSweepoletEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcValveEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcWeldedTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\IfcWeldoletEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexValveEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexReducerEccentricEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexReducerConcentricEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexFlangeEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexAxialExpansionJointEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexBendEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="Tools\IfcAxis.cs" />
     <Compile Include="Tools\IfcGeometry.cs" />
     <Compile Include="Tools\IfcObjectPlacement.cs" />
+    <Compile Include="Tools\IfcVertexGeometry.cs" />
     <Compile Include="ValueConverter\ValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>

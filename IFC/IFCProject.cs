@@ -7,12 +7,11 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
-using Xbim.Ifc4.GeometricConstraintResource;
-using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.RepresentationResource;
 using Xbim.IO;
 
 namespace IFC
@@ -41,16 +40,27 @@ namespace IFC
             IfcSIUnit lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
             lengthUnit.Name = IfcSIUnitName.METRE;
             lengthUnit.Prefix = null;
-        
-            IfcCartesianPoint point = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
-            IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point);
-            IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
+
+            XbimVector3D coordinates = XbimVector3D.Zero;
+            XbimVector3D forward = new XbimVector3D(0, 0, 1);
+            XbimVector3D up = new XbimVector3D(0, 1, 0);
+            XbimMatrix3D worldMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, worldMatrix3D);
+
+            IfcGeometricRepresentationContext context = model.Instances.New<IfcGeometricRepresentationContext>(representationContext =>
+            {
+                representationContext.ContextIdentifier = "Start context";
+                representationContext.Precision = 1e-5;
+                representationContext.ContextType = "Model";
+                representationContext.CoordinateSpaceDimension = 3;
+                representationContext.WorldCoordinateSystem = objectPlacement.Axis2Placement3D;
+            });
         
             IfcSite site = model.Instances.New<IfcSite>(ifcSite =>
             {
                 ifcSite.Name = "Site";
                 ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                ifcSite.ObjectPlacement = localPlacement;
+                ifcSite.ObjectPlacement = objectPlacement.LocalPlacement;
             });
             project.AddSite(site);
 
@@ -58,7 +68,7 @@ namespace IFC
             {
                 ifcBuilding.Name = "Building";
                 ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                ifcBuilding.ObjectPlacement = localPlacement;
+                ifcBuilding.ObjectPlacement = objectPlacement.LocalPlacement;
             });
             site.AddBuilding(building);
             transaction.Commit();
@@ -88,6 +98,17 @@ namespace IFC
             {
                 AddEntity(entity);
             }
+        }
+
+        public void AddEntityRaw(IfcProduct product)
+        {
+            _ifcObjects.Add(product);
+            _building.AddElement(product);
+        }
+
+        public IModel GetModel()
+        {
+            return _model;
         }
 
         public void GroupObjects(string groupName)

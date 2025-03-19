@@ -21,7 +21,7 @@
     <data name="MessageBox_Title_Error" xml:space="preserve">
         <value>Error</value>
     </data>
-    <data name="ExportWindowForm_selectOutputFilePathButton_Click_SelectFile" xml:space="preserve">
+    <data name="ExportWindowForm_SaveDialogFile_Title" xml:space="preserve">
         <value>Select the file to be saved</value>
     </data>
     <data name="ExportWindowForm_ExportButton_Text" xml:space="preserve">
@@ -44,5 +44,17 @@
     </data>
     <data name="ExportWindowForm_OutputFilePath_Empty_Error" xml:space="preserve">
         <value>The path to .ifc file cannot be empty</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Vertex" xml:space="preserve">
+        <value>Vertex</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Topological" xml:space="preserve">
+        <value>CAD</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Label" xml:space="preserve">
+        <value>Export type</value>
+    </data>
+    <data name="ExportWindowForm_ExportType_Error" xml:space="preserve">
+        <value>Unknown export type</value>
     </data>
 </root>

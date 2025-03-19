@@ -63,7 +63,7 @@ namespace IFC.Entities.Segments
             IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, 0);
             IfcCartesianPoint[] secondCircle = CreateCircle(model, SecondDiameter / 2, Length);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, firstCircle, secondCircle);
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep);
+            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
 
             _pipeSegment = model.Instances.New<IfcPipeSegment>(segment =>
@@ -101,10 +101,10 @@ namespace IFC.Entities.Segments
                 IfcCartesianPoint p2 = lowerPoints[(i + 1) % _numSegments];
                 IfcCartesianPoint p3 = upperPoints[(i + 1) % _numSegments];
                 IfcCartesianPoint p4 = upperPoints[i];
-                faces[facesIndex++] = IfcGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
+                faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
             }
-            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, lowerPoints);
-            faces[facesIndex++] = IfcGeometry.CreatePolygonFace(model, upperPoints);
+            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, lowerPoints);
+            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, upperPoints);
 
             return model.Instances.New<IfcFacetedBrep>(brep =>
             {
