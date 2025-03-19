@@ -1,6 +1,6 @@
 ﻿namespace STARTtoIFC
 {
-    public enum IfcExportTypeEnum
+    internal enum IfcExportTypeEnum
     {
         CAD,
         VERTEX
