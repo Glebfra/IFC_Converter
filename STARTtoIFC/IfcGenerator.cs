@@ -95,8 +95,7 @@ namespace STARTtoIFC
             StartElementType type,
             Dictionary<int, IfcNodeEntity> nodeEntities,
             Dictionary<int, IfcAbstractSegmentEntity> twoNodeEntities,
-            bool useNearEntities = false,
-            params object[] args
+            bool useNearEntities = false
         )
             where T : StartAbstractEntity
             where U : IfcAbstractSegmentEntity
@@ -143,7 +142,7 @@ namespace STARTtoIFC
                             continue;
                         }
 
-                        U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities, ifcAbstractSegmentEntities, args);
+                        U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities, ifcAbstractSegmentEntities);
                         ifcProject.AddEntity(ifcObjectEntity);
                         twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
                         logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
