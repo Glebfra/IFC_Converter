@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(StartElementType.NODE)]
     public class StartNodeEntity : StartAbstractEntity
     {
         [JsonProperty("61")] 

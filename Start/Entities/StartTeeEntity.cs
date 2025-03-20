@@ -1,8 +1,16 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(
+        StartElementType.WELDED_TEE, 
+        StartElementType.WELDOLET, 
+        StartElementType.SWEEPOLET, 
+        StartElementType.FABRICATED_TEE, 
+        StartElementType.STUB_IN
+    )]
     public class StartTeeEntity : StartAbstractEntity
     {
         [JsonProperty("9")] 
