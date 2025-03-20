@@ -63,6 +63,7 @@ namespace Start.Entities
                     break;
                 
                 case StartElementType.AXIAL_EXPANSION_JOINT:
+                case StartElementType.AXIAL_EXPANSION_SLIP_JOINT:
                     abstractEntity = JsonConvert.DeserializeObject<StartAxialExpansionJointEntity>(dataString)!;
                     break;
             

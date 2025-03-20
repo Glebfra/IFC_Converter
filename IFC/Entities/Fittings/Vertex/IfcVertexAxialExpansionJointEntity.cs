@@ -14,36 +14,31 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    public sealed class IfcVertexAxialExpansionJointEntity : IfcAbstractFittingEntity
+    public sealed class IfcVertexAxialExpansionJointEntity : IfcAbstractAxialExpansionJointEntity
     {
-        public double Length { get; }
-        
         private readonly int _numSegments;
         private readonly double _angleStep;
-        
-        private double[] _radiuses;
-        
+
         private StartAxialExpansionJointEntity _startAxialExpansionJointEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+        public IfcVertexAxialExpansionJointEntity(
+            StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, 
+            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
             : base(startAxialExpansionJointEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
             _numSegments = args[0] is int ? (int)args[0] : 0;
             _angleStep = 2 * Math.PI / _numSegments;
             _startAxialExpansionJointEntity = startAxialExpansionJointEntity;
-
-            _radiuses = new double[] { Diameter / 2 * 1.1, Diameter / 2 * 0.9 };
-            Length = _startAxialExpansionJointEntity.Length;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-            IfcCartesianPoint[] firstCircle = CreateCircle(model, _radiuses[0], -Length / 2);
-            IfcCartesianPoint[] secondCircle = CreateCircle(model, _radiuses[0], 0);
-            IfcCartesianPoint[] thirdCircle = CreateCircle(model, _radiuses[1], 0);
-            IfcCartesianPoint[] fourthCircle = CreateCircle(model, _radiuses[1], Length / 2);
+            IfcCartesianPoint[] firstCircle = CreateCircle(model, _Radiuses[0], -Length / 2);
+            IfcCartesianPoint[] secondCircle = CreateCircle(model, _Radiuses[0], 0);
+            IfcCartesianPoint[] thirdCircle = CreateCircle(model, _Radiuses[1], 0);
+            IfcCartesianPoint[] fourthCircle = CreateCircle(model, _Radiuses[1], Length / 2);
 
             IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[]
             {
@@ -63,12 +58,7 @@ namespace IFC.Entities.Fittings.Vertex
                 fitting.Tag = Tag;
                 fitting.Name = _startAxialExpansionJointEntity.Name;
             });
-            
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
-            {
-                ifcAbstractSegmentEntity.Clip(IfcNodeEntity, Length / 2);
-            }
-
+            ClipPipes();
             AddProperties(model, _pipeFitting);
 
             return _pipeFitting;

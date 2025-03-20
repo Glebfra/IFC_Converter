@@ -159,6 +159,24 @@ namespace STARTtoIFC.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vertex segments.
+        /// </summary>
+        internal static string ExportWindowForm_VertexSegments_Textbox {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_VertexSegments_Textbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vertex segments num shoud be above 4.
+        /// </summary>
+        internal static string ExportWindowForm_VertexSegmentsNum_Error {
+            get {
+                return ResourceManager.GetString("ExportWindowForm_VertexSegmentsNum_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string MessageBox_Title_Error {

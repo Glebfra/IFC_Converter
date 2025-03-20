@@ -29,7 +29,8 @@ namespace STARTtoIFC
             selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
             outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilePath_Label;
             exportTypeLabel.Text = LocalizationResource.ExportWindowForm_ExportType_Label;
-            
+            vertexSegmentsLabel.Text = LocalizationResource.ExportWindowForm_VertexSegments_Textbox;
+
             ArrayList types = new ArrayList
             {
                 new IfcExportType(IfcExportTypeEnum.VERTEX, LocalizationResource.ExportWindowForm_ExportType_Vertex),
@@ -44,49 +45,72 @@ namespace STARTtoIFC
         private void ExportButton_Click(object sender, EventArgs e)
         {
             string outputFilePath = outputFilePathTextbox.Text;
-            CheckEmptyPath(outputFilePath);
+            if (!IsValidEmptyPath(outputFilePath)) return;
 
             string outputDirectoryPath = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
-            CheckExistDirectory(outputDirectoryPath);
-            CheckAccessControl(outputDirectoryPath);
-            
-            _dataContainer.OutputFilePath = outputFilePath;
+            if (!IsValidExistDirectory(outputDirectoryPath)) return;
+            if (!IsValidAccessControl(outputDirectoryPath)) return;
+
+            int vertexNum = Convert.ToInt32(vertexSegmentsTextbox.Text);
+            if (!IsValidVertexNum(vertexNum)) return;
             
             if (exportTypeCombobox.SelectedItem is not IfcExportType exportType)
             {
                 MessageBox.Show(LocalizationResource.ExportWindowForm_ExportType_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            
+            _dataContainer.OutputFilePath = outputFilePath;
             _dataContainer.ExportType = exportType.Type;
-            _dataContainer.NumSegments = Convert.ToInt32(vertexSegmentsTextbox.Text);
+            _dataContainer.NumSegments = vertexNum;
+            
             DialogResult = DialogResult.OK;
         }
 
-        private void CheckEmptyPath(string filePath)
+        private bool IsValidVertexNum(int vertexNum)
         {
-            if (string.IsNullOrEmpty(filePath))
+            bool result = vertexNum > 4;
+            if (!result)
+            {
+                MessageBox.Show(LocalizationResource.ExportWindowForm_VertexSegmentsNum_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return result;
+        }
+
+        private bool IsValidEmptyPath(string filePath)
+        {
+            bool result = !string.IsNullOrEmpty(filePath);
+            if (!result)
             {
                 MessageBox.Show(LocalizationResource.ExportWindowForm_OutputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            return result;
         }
 
-        private void CheckExistDirectory(string directoryPath)
+        private bool IsValidExistDirectory(string directoryPath)
         {
-            if (!Directory.Exists(directoryPath))
+            bool result = Directory.Exists(directoryPath);
+            if (!result)
             {
                 MessageBox.Show(LocalizationResource.DirectoryDoesNotExists_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            return result;
         }
 
-        private void CheckAccessControl(string directoryPath)
+        private bool IsValidAccessControl(string directoryPath)
         {
             try
             {
                 Directory.GetAccessControl(directoryPath);
+                return true;
             }
             catch (UnauthorizedAccessException)
             {
                 MessageBox.Show(LocalizationResource.UnauthorizedAccess_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
