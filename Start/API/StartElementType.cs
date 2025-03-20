@@ -29,6 +29,7 @@
         FLANGE = 49,
         REDUCER_CONCENTRIC = 63,
         REDUCER_ECCENTRIC = 64,
+        AXIAL_EXPANSION_SLIP_JOINT = 70,
         WELDOLET = 72,
         SWEEPOLET = 73,
         EXTRUDED_TEE = 74,

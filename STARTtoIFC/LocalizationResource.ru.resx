@@ -50,4 +50,10 @@
     <data name="ExportWindowForm_ExportType_Error" xml:space="preserve">
         <value>Неизвестный тип экспорта</value>
     </data>
+    <data name="ExportWindowForm_VertexSegments_Textbox" xml:space="preserve">
+        <value>Вершинные сегменты</value>
+    </data>
+    <data name="ExportWindowForm_VertexSegmentsNum_Error" xml:space="preserve">
+        <value>Количество вершинных сегментов должно быть больше 4</value>
+    </data>
 </root>

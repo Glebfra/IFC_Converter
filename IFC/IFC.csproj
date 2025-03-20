@@ -138,11 +138,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\IfcAbstractAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractBendEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcAxiaExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcMilterJointEntity.cs" />
