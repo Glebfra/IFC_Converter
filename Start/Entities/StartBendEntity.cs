@@ -4,6 +4,16 @@ using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(
+        StartElementType.ELBOW,
+        StartElementType.PIPE_BEND,
+        StartElementType.MILTER_BEND,
+        StartElementType.WELDED_BEND,
+        StartElementType.LONG_RADIUS_PIPE_BEND,
+        StartElementType.PRE_STRESSED_PIPE_BEND,
+        StartElementType.SADDLE_BEND,
+        StartElementType.MILTER_JOINT
+    )]
     public class StartBendEntity : StartAbstractEntity
     {
         [JsonProperty("9")]

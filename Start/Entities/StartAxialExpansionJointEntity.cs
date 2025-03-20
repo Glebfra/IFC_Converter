@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(StartElementType.AXIAL_EXPANSION_JOINT, StartElementType.AXIAL_EXPANSION_SLIP_JOINT)]
     public class StartAxialExpansionJointEntity : StartAbstractEntity
     {
         [JsonProperty("2")]

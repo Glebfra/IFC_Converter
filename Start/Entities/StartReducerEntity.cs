@@ -4,6 +4,7 @@ using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(StartElementType.REDUCER_CONCENTRIC, StartElementType.REDUCER_ECCENTRIC)]
     public class StartReducerEntity : StartAbstractEntity
     {
         [JsonProperty("2")]

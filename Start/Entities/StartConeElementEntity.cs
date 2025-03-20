@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(StartElementType.CONE_ELEMENT)]
     public class StartConeElementEntity : StartPipeEntity
     {
         [JsonProperty("838")]

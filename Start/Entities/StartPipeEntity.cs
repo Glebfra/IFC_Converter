@@ -4,6 +4,7 @@ using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(StartElementType.PIPE_ELEMENT, StartElementType.CYLINDRICAL_SHELL)]
     public class StartPipeEntity : StartAbstractEntity
     {
         [JsonProperty("225")] 

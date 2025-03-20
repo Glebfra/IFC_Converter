@@ -4,6 +4,7 @@ using Start.API;
 
 namespace Start.Entities
 {
+    [StartEntityType(StartElementType.VALVE, StartElementType.FLANGE)]
     public class StartArmatureEntity : StartAbstractEntity
     {
         [JsonProperty("225")] 
