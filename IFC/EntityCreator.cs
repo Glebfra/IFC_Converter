@@ -52,40 +52,49 @@ namespace IFC
                 }
             }
         }
+        
+        public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities)
+        {
+            if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
+            Type type = _entityTypeMap[entity.Type];
+            
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities)!;
+            return abstractEntity;
+        }
 
-        public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity segmentEntity)
+        public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
         {
             if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _entityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntity)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities)!;
             return abstractEntity;
         }
         
-        public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity segmentEntity)
+        public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities)
         {
             if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _entityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntity)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities)!;
             return abstractEntity;
         }
         
-        public IfcAbstractEntity? CreateVertexEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity segmentEntity, int numSegments)
+        public IfcAbstractEntity? CreateVertexEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
             if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _vertexEntityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntity, numSegments)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities, numSegments)!;
             return abstractEntity;
         }
         
-        public IfcAbstractEntity? CreateVertexEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity segmentEntity, int numSegments)
+        public IfcAbstractEntity? CreateVertexEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
             if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _vertexEntityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntity, numSegments)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities, numSegments)!;
             return abstractEntity;
         }
     }

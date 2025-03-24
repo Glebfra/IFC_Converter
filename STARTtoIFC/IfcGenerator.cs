@@ -12,6 +12,8 @@ using Start;
 using Start.API;
 using Start.Entities;
 using Start.Extensions;
+using Xbim.IO.Xml.BsConf;
+using EntityCreator = IFC.EntityCreator;
 
 namespace STARTtoIFC
 {
@@ -42,14 +44,12 @@ namespace STARTtoIFC
             
             using (IFCProject ifcProject = IFCProject.CreateProject("IFC"))
             {
-                object[] args = { ifcProject, startDataArrayItems, nodeEntities, twoNodeEntities };
-
                 ConvertTwoNodeObjects<StartPipeEntity, IfcPipeEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, twoNodeEntities);
                 ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, twoNodeEntities);
                 ConvertTwoNodeObjects<StartConeElementEntity, IfcConeElementEntity>(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, nodeEntities, twoNodeEntities);
                 ConvertTwoNodeObjects<StartRigidElementEntity, IfcRigidElementEntity>(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, twoNodeEntities, true);
                 ConvertTwoNodeObjects<StartFlexibleElementEntity, IfcFlexibleSegmentEntity>(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, nodeEntities, twoNodeEntities, true);
-                
+
                 if (exportType == IfcExportTypeEnum.VERTEX)
                 {
                     ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.ELBOW, nodeEntities, twoNodeEntities, numSegments);
@@ -96,6 +96,44 @@ namespace STARTtoIFC
 
                 ifcProject.GroupObjects("Pipe system");
                 ifcProject.SaveAs(outputFilePath);
+            }
+        }
+
+        private static void ConvertOneNodeObjects(
+            IFCProject ifcProject, 
+            StartDataArrayItem[] dataArrayItems,
+            IReadOnlyDictionary<int, IfcNodeEntity> nodeEntities, 
+            IReadOnlyDictionary<int, IfcAbstractSegmentEntity> twoNodeEntities,
+            int numSegments
+        )
+        {
+            Logger logger = Logger.GetInstance();
+            EntityCreator entityCreator = new EntityCreator();
+            
+            foreach (StartDataArrayItem startDataArrayItem in dataArrayItems)
+            {
+                StartDataArrayItem connNode = dataArrayItems
+                    .GetConnElements(startDataArrayItem.DataArrayIndex)
+                    .GetElementsByType(StartElementType.NODE)
+                    .First();
+                StartDataArrayItem[] connTwoNodesElements = dataArrayItems
+                    .GetConnElements(startDataArrayItem.DataArrayIndex)
+                    .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
+                    .ToArray();
+
+                IfcNodeEntity ifcNodeEntity = nodeEntities[connNode.Entity.ID];
+                IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements
+                    .Select(item => twoNodeEntities[item.DataArrayIndex])
+                    .ToArray();
+                
+                IfcAbstractEntity? entity = entityCreator.CreateEntity(startDataArrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
+                if (entity == null)
+                {
+                    logger.Log($"Cannot add {startDataArrayItem.Type} with id {startDataArrayItem.DataArrayIndex} to IFC.");
+                    continue;
+                }
+                ifcProject.AddEntity(entity);
+                logger.Log($"Added {startDataArrayItem.Type} with id {startDataArrayItem.DataArrayIndex} to IFC.");
             }
         }
 
