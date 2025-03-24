@@ -13,6 +13,15 @@ namespace IFC.Tools
 {
     public static class IfcGeometry
     {
+        public static IfcArbitraryClosedProfileDef CreateProfile(IModel model, IfcCurve curve)
+        {
+            return model.Instances.New<IfcArbitraryClosedProfileDef>(def =>
+            {
+                def.ProfileType = IfcProfileTypeEnum.AREA;
+                def.OuterCurve = curve;
+            });
+        }
+        
         public static IfcPlane CreatePlane(IModel model, XbimVector3D coordinates, XbimVector3D direction)
         {
             return model.Instances.New<IfcPlane>(plane =>
@@ -48,6 +57,15 @@ namespace IFC.Tools
             {
                 ifcCircle.Radius = radius;
                 ifcCircle.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates, direction, refDirection);
+            });
+        }
+        
+        public static IfcCircle CreateCircle(IModel model, double radius, XbimVector3D coordinates)
+        {
+            return model.Instances.New<IfcCircle>(ifcCircle =>
+            {
+                ifcCircle.Radius = radius;
+                ifcCircle.Position = IfcAxis.CreateAxis2Placement3D(model, coordinates);
             });
         }
 
