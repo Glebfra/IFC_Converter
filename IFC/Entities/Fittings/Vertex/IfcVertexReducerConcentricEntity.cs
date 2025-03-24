@@ -2,6 +2,7 @@
 using System.Linq;
 using IFC.Entities.Abstract;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -15,6 +16,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    [IfcEntityType(true, StartElementType.REDUCER_CONCENTRIC)]
     public sealed class IfcVertexReducerConcentricEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }

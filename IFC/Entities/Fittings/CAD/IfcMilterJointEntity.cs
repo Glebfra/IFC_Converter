@@ -1,6 +1,7 @@
 ﻿using System;
 using IFC.Entities.Abstract;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -16,6 +17,7 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
+    [IfcEntityType(false, StartElementType.MILTER_JOINT)]
     public sealed class IfcMilterJointEntity : IfcAbstractFittingEntity
     {
         public double Length => 2 * Depth;

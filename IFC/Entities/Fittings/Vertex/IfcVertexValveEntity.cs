@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -15,6 +16,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    [IfcEntityType(true, StartElementType.VALVE)]
     public sealed class IfcVertexValveEntity : IfcAbstractFittingEntity
     {
         public readonly double Length;

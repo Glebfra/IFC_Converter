@@ -1,6 +1,7 @@
 ﻿using System;
 using IFC.Entities.Abstract;
 using IFC.Entities.Fittings;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -10,6 +11,7 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Segments
 {
+    [IfcEntityType(false, StartElementType.RIGID_ELEMENT)]
     public sealed class IfcRigidElementEntity : IfcAbstractSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
