@@ -68,6 +68,15 @@ namespace IFC.Tools
                 lp.RelativePlacement = axis2Placement3D;
             });
         }
+        
+        public static IfcAxis1Placement CreateAxis1Placement(IModel model, IfcCartesianPoint location, IfcDirection axis)
+        {
+            return model.Instances.New<IfcAxis1Placement>(placement =>
+            {
+                placement.Location = location;
+                placement.Axis = axis;
+            });
+        }
 
         public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, IfcCartesianPoint point, IfcDirection axis, IfcDirection refDirection)
         {
@@ -76,6 +85,14 @@ namespace IFC.Tools
                 placement3D.Location = point;
                 placement3D.Axis = axis;
                 placement3D.RefDirection = refDirection;
+            });
+        }
+        
+        public static IfcAxis2Placement3D CreateAxis2Placement3D(IModel model, XbimVector3D coordinates)
+        {
+            return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
+            {
+                placement3D.Location = CreatePoint(model, coordinates);
             });
         }
     

@@ -153,6 +153,7 @@
     <Compile Include="Entities\Fittings\CAD\IfcWeldedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcWeldoletEntity.cs" />
     <Compile Include="Entities\Fittings\IfcNodeEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexAngularExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexValveEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexReducerEccentricEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexReducerConcentricEntity.cs" />
