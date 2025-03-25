@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -15,6 +16,7 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
+    [IfcEntityType(false, StartElementType.NONSTANDARD_EXPANSION_JOINT)]
     public class IfcNonstandardExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }
