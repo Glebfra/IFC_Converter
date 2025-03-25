@@ -158,6 +158,7 @@
     <Compile Include="Entities\StartFlexibleElementEntity.cs" />
     <Compile Include="Entities\StartLateralExpansionJointEntity.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
+    <Compile Include="Entities\StartNonstandardExpansionJointEntity.cs" />
     <Compile Include="Entities\StartPipeEntity.cs" />
     <Compile Include="Entities\StartReducerEntity.cs" />
     <Compile Include="Entities\StartRigidElementEntity.cs" />
