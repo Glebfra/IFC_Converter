@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -16,6 +17,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    [IfcEntityType(true, StartElementType.GIMBAL_EXPANSION_JOINT)]
     public class IfcVertexAngularExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Radius { get; }
@@ -29,10 +31,10 @@ namespace IFC.Entities.Fittings.Vertex
         
         public IfcVertexAngularExpansionJointEntity(
             StartAngularExpansionJointEntity startAngularExpansion, IfcNodeEntity ifcNodeEntity, 
-            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
             : base(startAngularExpansion, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             
             _startAngularExpansion = startAngularExpansion;

@@ -1,6 +1,7 @@
 ﻿using System;
 using IFC.Entities.Abstract;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -14,6 +15,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    [IfcEntityType(true, StartElementType.AXIAL_EXPANSION_JOINT, StartElementType.AXIAL_EXPANSION_SLIP_JOINT)]
     public sealed class IfcVertexAxialExpansionJointEntity : IfcAbstractAxialExpansionJointEntity
     {
         private readonly int _numSegments;
@@ -24,10 +26,10 @@ namespace IFC.Entities.Fittings.Vertex
         
         public IfcVertexAxialExpansionJointEntity(
             StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, 
-            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
             : base(startAxialExpansionJointEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             _startAxialExpansionJointEntity = startAxialExpansionJointEntity;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using IFC.Entities.Abstract;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -14,6 +15,16 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    [IfcEntityType(
+        true, 
+        StartElementType.ELBOW,
+        StartElementType.PIPE_BEND,
+        StartElementType.MILTER_BEND,
+        StartElementType.WELDED_BEND,
+        StartElementType.LONG_RADIUS_PIPE_BEND,
+        StartElementType.PRE_STRESSED_PIPE_BEND,
+        StartElementType.SADDLE_BEND
+    )]
     public sealed class IfcVertexBendEntity : IfcAbstractBendEntity
     {
         private readonly int _numSegments;
@@ -25,10 +36,10 @@ namespace IFC.Entities.Fittings.Vertex
         private StartBendEntity _bendEntity;
         private IfcPipeFitting _pipeFitting;
 
-        public IfcVertexBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+        public IfcVertexBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
             : base(bendEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             
             _bendEntity = bendEntity;

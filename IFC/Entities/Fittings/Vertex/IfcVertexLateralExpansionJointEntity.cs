@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -15,6 +16,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    [IfcEntityType(true, StartElementType.LATERAL_EXPANSION_JOINT)]
     public class IfcVertexLateralExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }
@@ -26,10 +28,10 @@ namespace IFC.Entities.Fittings.Vertex
         private StartLateralExpansionJointEntity _lateralExpansionJoint;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexLateralExpansionJointEntity(StartLateralExpansionJointEntity lateralExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+        public IfcVertexLateralExpansionJointEntity(StartLateralExpansionJointEntity lateralExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
             : base(lateralExpansionJoint, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
 
             _lateralExpansionJoint = lateralExpansionJoint;
@@ -43,9 +45,9 @@ namespace IFC.Entities.Fittings.Vertex
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
             XbimVector3D firstDisplacement = VectorExtensions.Forward.Negated() * (Length / 2);
-            IfcCartesianPoint[,] firstSphere = CreateSphere(model, firstDisplacement);
+            IfcCartesianPoint[,] firstSphere = CreateSphere(model, firstDisplacement, 0);
             XbimVector3D secondDisplacement = XbimVector3D.Multiply(VectorExtensions.Forward * (Length / 2), MatrixExtensions.My(Angle));
-            IfcCartesianPoint[,] secondSphere = CreateSphere(model, secondDisplacement);
+            IfcCartesianPoint[,] secondSphere = CreateSphere(model, secondDisplacement, Angle);
 
             IfcFacetedBrep[] brep = new IfcFacetedBrep[2];
             brep[0] = CreateFacetedBrep(model, firstSphere);
@@ -90,7 +92,7 @@ namespace IFC.Entities.Fittings.Vertex
             });
         }
 
-        private IfcCartesianPoint[,] CreateSphere(IModel model, XbimVector3D point)
+        private IfcCartesianPoint[,] CreateSphere(IModel model, XbimVector3D point, double angle)
         {
             IfcCartesianPoint[,] points = new IfcCartesianPoint[_numSegments, _numSegments];
             for (int i = 0; i < _numSegments; i++)

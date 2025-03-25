@@ -1,5 +1,6 @@
 ﻿using IFC.Entities.Abstract;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -12,6 +13,16 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
+    [IfcEntityType(
+        false, 
+        StartElementType.ELBOW,
+        StartElementType.PIPE_BEND,
+        StartElementType.MILTER_BEND,
+        StartElementType.WELDED_BEND,
+        StartElementType.LONG_RADIUS_PIPE_BEND,
+        StartElementType.PRE_STRESSED_PIPE_BEND,
+        StartElementType.SADDLE_BEND
+    )]
     public sealed class IfcBendEntity : IfcAbstractBendEntity
     {
         private StartBendEntity _bendEntity;

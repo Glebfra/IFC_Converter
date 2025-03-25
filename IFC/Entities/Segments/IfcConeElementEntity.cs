@@ -1,8 +1,8 @@
 ﻿using System;
 using IFC.Entities.Abstract;
 using IFC.Entities.Fittings;
-using IFC.Entities.Interfaces;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -16,6 +16,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Segments
 {
+    [IfcEntityType(false, StartElementType.CONE_ELEMENT)]
     public sealed class IfcConeElementEntity : IfcAbstractSegmentEntity
     {
         public override XbimVector3D Direction { get; }
