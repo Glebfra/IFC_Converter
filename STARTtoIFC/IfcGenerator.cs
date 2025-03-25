@@ -42,8 +42,6 @@ namespace STARTtoIFC
             
             using (IFCProject ifcProject = IFCProject.CreateProject("IFC"))
             {
-                object[] args = { ifcProject, startDataArrayItems, nodeEntities, twoNodeEntities };
-
                 ConvertTwoNodeObjects<StartPipeEntity, IfcPipeEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, twoNodeEntities);
                 ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, twoNodeEntities);
                 ConvertTwoNodeObjects<StartConeElementEntity, IfcConeElementEntity>(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, nodeEntities, twoNodeEntities);
@@ -94,6 +92,7 @@ namespace STARTtoIFC
                 ConvertOneNodeObjects<StartAngularExpansionJointEntity, IfcVertexAngularExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.GIMBAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
                 ConvertOneNodeObjects<StartLateralExpansionJointEntity, IfcVertexLateralExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.LATERAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
                 ConvertOneNodeObjects<StartTorsionExpansionJointEntity, IfcVertexTorsionExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.TORSION_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
+                ConvertOneNodeObjects<StartBallExpansionJointEntity, IfcVertexBallExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.BALL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
 
                 ifcProject.GroupObjects("Pipe system");
                 ifcProject.SaveAs(outputFilePath);

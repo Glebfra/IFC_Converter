@@ -46,6 +46,7 @@
         PUMP_ISO_5199 = 87,
         INLINE_PUMP = 88,
         OTHER_PUMP = 89,
+        BALL_EXPANSION_JOINT = 94,
         ANCHOR = 20,
         SLIDING_SUPPORT = 21,
         GUIDE_SINGLE_DIRECTION_SUPPORT = 22,
