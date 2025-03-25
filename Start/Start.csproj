@@ -163,6 +163,7 @@
     <Compile Include="Entities\StartRigidElementEntity.cs" />
     <Compile Include="Entities\StartTeeEntity.cs" />
     <Compile Include="Entities\StartTorsionExpansionJointEntity.cs" />
+    <Compile Include="Entities\StartUniversalExpansionJointEntity.cs" />
     <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
