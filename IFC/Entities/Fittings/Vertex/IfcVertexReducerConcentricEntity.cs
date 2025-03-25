@@ -26,10 +26,10 @@ namespace IFC.Entities.Fittings.Vertex
         private IfcPipeFitting? _pipeFitting;
         private readonly StartReducerEntity _reducerEntity;
 
-        public IfcVertexReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args)
+        public IfcVertexReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments)
             : base(reducerEntity, nodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             
             _reducerEntity = reducerEntity;

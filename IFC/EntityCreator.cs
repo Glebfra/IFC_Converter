@@ -29,7 +29,7 @@ namespace IFC
 
             foreach (Type type in assembly.GetTypes())
             {
-                if (!_namespaces.Contains(type.Namespace) || !type.IsSubclassOf(typeof(StartAbstractEntity))) continue;
+                if (!_namespaces.Contains(type.Namespace) || !type.IsSubclassOf(typeof(IfcAbstractEntity))) continue;
                 
                 object[] attributes = type.GetCustomAttributes(false);
                 foreach (object attribute in attributes)
@@ -58,7 +58,7 @@ namespace IFC
             if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _entityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities);
             return abstractEntity;
         }
 
@@ -67,7 +67,7 @@ namespace IFC
             if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _entityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities);
             return abstractEntity;
         }
         
@@ -76,7 +76,7 @@ namespace IFC
             if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _entityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities);
             return abstractEntity;
         }
         
@@ -85,7 +85,7 @@ namespace IFC
             if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _vertexEntityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities, numSegments)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities, numSegments);
             return abstractEntity;
         }
         
@@ -94,7 +94,7 @@ namespace IFC
             if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) return null;
             Type type = _vertexEntityTypeMap[entity.Type];
             
-            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities, numSegments)!;
+            IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities, numSegments);
             return abstractEntity;
         }
     }

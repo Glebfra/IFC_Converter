@@ -44,55 +44,13 @@ namespace STARTtoIFC
             
             using (IFCProject ifcProject = IFCProject.CreateProject("IFC"))
             {
-                ConvertTwoNodeObjects<StartPipeEntity, IfcPipeEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, twoNodeEntities);
-                ConvertTwoNodeObjects<StartPipeEntity, IfcCylindricalShellEntity>(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, twoNodeEntities);
-                ConvertTwoNodeObjects<StartConeElementEntity, IfcConeElementEntity>(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, nodeEntities, twoNodeEntities);
-                ConvertTwoNodeObjects<StartRigidElementEntity, IfcRigidElementEntity>(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, twoNodeEntities, true);
-                ConvertTwoNodeObjects<StartFlexibleElementEntity, IfcFlexibleSegmentEntity>(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, nodeEntities, twoNodeEntities, true);
+                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, nodeEntities, twoNodeEntities);
+                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, nodeEntities, twoNodeEntities);
+                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, nodeEntities, twoNodeEntities);
+                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, nodeEntities, twoNodeEntities, true);
+                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, nodeEntities, twoNodeEntities, true);
 
-                if (exportType == IfcExportTypeEnum.VERTEX)
-                {
-                    ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.ELBOW, nodeEntities, twoNodeEntities, numSegments);
-                    ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_BEND, nodeEntities, twoNodeEntities, numSegments);
-                    ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.MILTER_BEND, nodeEntities, twoNodeEntities, numSegments);
-                    ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.WELDED_BEND, nodeEntities, twoNodeEntities, numSegments);
-                    ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.LONG_RADIUS_PIPE_BEND, nodeEntities, twoNodeEntities, numSegments);
-                    ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.PRE_STRESSED_PIPE_BEND, nodeEntities, twoNodeEntities, numSegments);
-                    ConvertOneNodeObjects<StartBendEntity, IfcVertexBendEntity>(ifcProject, startDataArrayItems, StartElementType.SADDLE_BEND, nodeEntities, twoNodeEntities, numSegments);
-
-                    ConvertOneNodeObjects<StartAxialExpansionJointEntity, IfcVertexAxialExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.AXIAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
-                    ConvertOneNodeObjects<StartAxialExpansionJointEntity, IfcVertexAxialExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.AXIAL_EXPANSION_SLIP_JOINT, nodeEntities, twoNodeEntities, numSegments);
-                }
-                else
-                {
-                    ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.ELBOW, nodeEntities, twoNodeEntities);
-                    ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.PIPE_BEND, nodeEntities, twoNodeEntities);
-                    ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.MILTER_BEND, nodeEntities, twoNodeEntities);
-                    ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.WELDED_BEND, nodeEntities, twoNodeEntities);
-                    ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.LONG_RADIUS_PIPE_BEND, nodeEntities, twoNodeEntities);
-                    ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.PRE_STRESSED_PIPE_BEND, nodeEntities, twoNodeEntities);
-                    ConvertOneNodeObjects<StartBendEntity, IfcBendEntity>(ifcProject, startDataArrayItems, StartElementType.SADDLE_BEND, nodeEntities, twoNodeEntities);
-                    
-                    ConvertOneNodeObjects<StartAxialExpansionJointEntity, IfcAxialExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.AXIAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities);
-                    ConvertOneNodeObjects<StartAxialExpansionJointEntity, IfcAxialExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.AXIAL_EXPANSION_SLIP_JOINT, nodeEntities, twoNodeEntities);
-                }
-                
-                ConvertOneNodeObjects<StartBendEntity, IfcMilterJointEntity>(ifcProject, startDataArrayItems, StartElementType.MILTER_JOINT, nodeEntities, twoNodeEntities);
-
-                ConvertOneNodeObjects<StartTeeEntity, IfcWeldedTeeEntity>(ifcProject, startDataArrayItems, StartElementType.WELDED_TEE, nodeEntities, twoNodeEntities);
-                ConvertOneNodeObjects<StartTeeEntity, IfcWeldoletEntity>(ifcProject, startDataArrayItems, StartElementType.WELDOLET, nodeEntities, twoNodeEntities);
-                ConvertOneNodeObjects<StartTeeEntity, IfcSweepoletEntity>(ifcProject, startDataArrayItems, StartElementType.SWEEPOLET, nodeEntities, twoNodeEntities);
-                ConvertOneNodeObjects<StartTeeEntity, IfcFabricatedTeeEntity>(ifcProject, startDataArrayItems, StartElementType.FABRICATED_TEE, nodeEntities, twoNodeEntities);
-                ConvertOneNodeObjects<StartTeeEntity, IfcStubInEntity>(ifcProject, startDataArrayItems, StartElementType.STUB_IN, nodeEntities, twoNodeEntities);
-
-                ConvertOneNodeObjects<StartReducerEntity, IfcVertexReducerConcentricEntity>(ifcProject, startDataArrayItems, StartElementType.REDUCER_CONCENTRIC, nodeEntities, twoNodeEntities, numSegments);
-                ConvertOneNodeObjects<StartReducerEntity, IfcVertexReducerEccentricEntity>(ifcProject, startDataArrayItems, StartElementType.REDUCER_ECCENTRIC, nodeEntities, twoNodeEntities, numSegments);
-
-                ConvertOneNodeObjects<StartArmatureEntity, IfcVertexValveEntity>(ifcProject, startDataArrayItems, StartElementType.VALVE, nodeEntities, twoNodeEntities, numSegments);
-                ConvertOneNodeObjects<StartArmatureEntity, IfcVertexFlangeEntity>(ifcProject, startDataArrayItems, StartElementType.FLANGE, nodeEntities, twoNodeEntities, numSegments);
-                
-                ConvertOneNodeObjects<StartAngularExpansionJointEntity, IfcVertexAngularExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.GIMBAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
-                ConvertOneNodeObjects<StartLateralExpansionJointEntity, IfcVertexLateralExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.LATERAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
+                ConvertOneNodeObjects(ifcProject, startDataArrayItems, nodeEntities, twoNodeEntities, exportType == IfcExportTypeEnum.VERTEX, numSegments);
 
                 ifcProject.GroupObjects("Pipe system");
                 ifcProject.SaveAs(outputFilePath);
@@ -104,20 +62,25 @@ namespace STARTtoIFC
             StartDataArrayItem[] dataArrayItems,
             IReadOnlyDictionary<int, IfcNodeEntity> nodeEntities, 
             IReadOnlyDictionary<int, IfcAbstractSegmentEntity> twoNodeEntities,
+            bool isVertex,
             int numSegments
         )
         {
             Logger logger = Logger.GetInstance();
             EntityCreator entityCreator = new EntityCreator();
             
-            foreach (StartDataArrayItem startDataArrayItem in dataArrayItems)
+            StartDataArrayItem[] arrayItems = dataArrayItems
+                .Where(item => !StartElementTypeExtensions.TwoNodeElementTypes.Contains(item.Type) && item.Type != StartElementType.NODE)
+                .ToArray();
+            
+            foreach (StartDataArrayItem arrayItem in arrayItems)
             {
                 StartDataArrayItem connNode = dataArrayItems
-                    .GetConnElements(startDataArrayItem.DataArrayIndex)
+                    .GetConnElements(arrayItem.DataArrayIndex)
                     .GetElementsByType(StartElementType.NODE)
                     .First();
                 StartDataArrayItem[] connTwoNodesElements = dataArrayItems
-                    .GetConnElements(startDataArrayItem.DataArrayIndex)
+                    .GetConnElements(arrayItem.DataArrayIndex)
                     .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
                     .ToArray();
 
@@ -126,18 +89,23 @@ namespace STARTtoIFC
                     .Select(item => twoNodeEntities[item.DataArrayIndex])
                     .ToArray();
                 
-                IfcAbstractEntity? entity = entityCreator.CreateEntity(startDataArrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
+                IfcAbstractEntity? entity = isVertex 
+                    ? entityCreator.CreateVertexEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments) 
+                    : entityCreator.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
+                entity ??= entityCreator.CreateVertexEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments);
+                entity ??= entityCreator.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
+                
                 if (entity == null)
                 {
-                    logger.Log($"Cannot add {startDataArrayItem.Type} with id {startDataArrayItem.DataArrayIndex} to IFC.");
+                    logger.Error($"Cannot add {arrayItem.Type} with id {arrayItem.DataArrayIndex} to IFC.");
                     continue;
                 }
                 ifcProject.AddEntity(entity);
-                logger.Log($"Added {startDataArrayItem.Type} with id {startDataArrayItem.DataArrayIndex} to IFC.");
+                logger.Log($"Added {arrayItem.Type} with id {arrayItem.DataArrayIndex} to IFC.");
             }
         }
 
-        private static void ConvertTwoNodeObjects<T, U>(
+        private static void ConvertTwoNodeObjects(
             IFCProject ifcProject,
             StartDataArrayItem[] dataArrayItems,
             StartElementType type,
@@ -145,10 +113,10 @@ namespace STARTtoIFC
             Dictionary<int, IfcAbstractSegmentEntity> twoNodeEntities,
             bool useNearEntities = false
         )
-            where T : StartAbstractEntity
-            where U : IfcAbstractSegmentEntity
         {
             Logger logger = Logger.GetInstance();
+            EntityCreator entityCreator = new EntityCreator();
+            
             StartDataArrayItem[] objectItems = dataArrayItems.GetElementsByType(type).ToArray();
             if (useNearEntities)
             {
@@ -161,14 +129,13 @@ namespace STARTtoIFC
                         if (index >= unconvertedObjects.Count) return;
 
                         StartDataArrayItem objectItem = unconvertedObjects[index];
-                        T startObjectEntity = (T)objectItem.Entity;
 
                         StartDataArrayItem[] connNodes = dataArrayItems
-                            .GetConnElements(startObjectEntity.ID)
+                            .GetConnElements(objectItem.DataArrayIndex)
                             .GetElementsByType(StartElementType.NODE)
                             .ToArray();
                         StartDataArrayItem[] connTwoNodesElements = dataArrayItems
-                            .GetConnElements(startObjectEntity.ID)
+                            .GetConnElements(objectItem.DataArrayIndex)
                             .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
                             .ToArray();
                         int[] nodeIds = connNodes
@@ -190,10 +157,12 @@ namespace STARTtoIFC
                             continue;
                         }
 
-                        U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities, ifcAbstractSegmentEntities);
+                        IfcAbstractEntity? ifcObjectEntity = entityCreator.CreateEntity(objectItem.Entity, ifcConnNodeEntities, ifcAbstractSegmentEntities);
+                        if (ifcObjectEntity == null) continue;
+                        
                         ifcProject.AddEntity(ifcObjectEntity);
-                        twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
-                        logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
+                        twoNodeEntities.Add(objectItem.DataArrayIndex, (IfcAbstractSegmentEntity)ifcObjectEntity);
+                        logger.Log($"Added {objectItem.Type} with id {objectItem.DataArrayIndex} to IFC.");
                         unconvertedObjects.Remove(objectItem);
                         index = 0;
                     }
@@ -210,9 +179,8 @@ namespace STARTtoIFC
                 {
                     try
                     {
-                        T startObjectEntity = (T)objectItem.Entity;
                         StartDataArrayItem[] connNodes = dataArrayItems
-                            .GetConnElements(startObjectEntity.ID)
+                            .GetConnElements(objectItem.DataArrayIndex)
                             .GetElementsByType(StartElementType.NODE)
                             .ToArray();
 
@@ -224,68 +192,17 @@ namespace STARTtoIFC
                             .Where(pair => nodeIds.Contains(pair.Key))
                             .Select(pair => pair.Value)
                             .ToArray();
-                        U ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcConnNodeEntities);
+                        IfcAbstractEntity? ifcObjectEntity = entityCreator.CreateEntity(objectItem.Entity, ifcConnNodeEntities);
+                        if (ifcObjectEntity == null) continue;
 
                         ifcProject.AddEntity(ifcObjectEntity);
-                        twoNodeEntities.Add(startObjectEntity.ID, ifcObjectEntity);
-                        logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
+                        twoNodeEntities.Add(objectItem.DataArrayIndex, (IfcAbstractSegmentEntity)ifcObjectEntity);
+                        logger.Log($"Added {objectItem.Type} with id {objectItem.DataArrayIndex} to IFC.");
                     }
                     catch (Exception e)
                     {
                         logger.Error(e.ToString());
                     }
-                }
-            }
-        }
-
-        private static void ConvertOneNodeObjects<T, U>(
-            IFCProject ifcProject, 
-            StartDataArrayItem[] dataArrayItems, 
-            StartElementType type, 
-            IReadOnlyDictionary<int, IfcNodeEntity> nodeEntities, 
-            IReadOnlyDictionary<int, IfcAbstractSegmentEntity> twoNodeEntities,
-            params object[] args
-        )
-            where T : StartAbstractEntity
-            where U : IIfcOneNodeEntity
-        {
-            Logger logger = Logger.GetInstance();
-            StartDataArrayItem[] objectItems = dataArrayItems.GetElementsByType(type).ToArray();
-            foreach (StartDataArrayItem objectItem in objectItems)
-            {
-                try
-                {
-                    T startObjectEntity = (T)objectItem.Entity;
-                    StartDataArrayItem connNode = dataArrayItems
-                        .GetConnElements(startObjectEntity.ID)
-                        .GetElementsByType(StartElementType.NODE)
-                        .First();
-                    StartDataArrayItem[] connTwoNodesElements = dataArrayItems
-                        .GetConnElements(startObjectEntity.ID)
-                        .GetElementsByType(StartElementTypeExtensions.TwoNodeElementTypes)
-                        .ToArray();
-
-                    IfcNodeEntity ifcNodeEntity = nodeEntities[connNode.Entity.ID];
-                    IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements
-                        .Select(item => twoNodeEntities[item.DataArrayIndex])
-                        .ToArray();
-
-                    U ifcObjectEntity;
-                    if (args.Length != 0)
-                    {
-                        ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcNodeEntity, ifcAbstractSegmentEntities, args);
-                    }
-                    else
-                    {
-                        ifcObjectEntity = (U)Activator.CreateInstance(typeof(U), startObjectEntity, ifcNodeEntity, ifcAbstractSegmentEntities);
-                    }
-                    
-                    ifcProject.AddEntity(ifcObjectEntity);
-                    logger.Log($"Added {startObjectEntity.Type} with id {startObjectEntity.ID} to IFC.");
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.ToString());
                 }
             }
         }

@@ -28,10 +28,10 @@ namespace IFC.Entities.Fittings.Vertex
         private StartLateralExpansionJointEntity _lateralExpansionJoint;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexLateralExpansionJointEntity(StartLateralExpansionJointEntity lateralExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+        public IfcVertexLateralExpansionJointEntity(StartLateralExpansionJointEntity lateralExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
             : base(lateralExpansionJoint, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] as int? ?? 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
 
             _lateralExpansionJoint = lateralExpansionJoint;

@@ -27,10 +27,10 @@ namespace IFC.Entities.Fittings.Vertex
         private readonly StartArmatureEntity _armatureEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args)
+        public IfcVertexFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments)
             : base(armatureEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             
             _armatureEntity = armatureEntity;
