@@ -1,6 +1,7 @@
 ﻿using System;
 using IFC.Entities.Abstract;
 using IFC.Tools;
+using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -14,6 +15,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    [IfcEntityType(true, StartElementType.BALL_EXPANSION_JOINT)]
     public class IfcVertexBallExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }
@@ -25,10 +27,10 @@ namespace IFC.Entities.Fittings.Vertex
         private StartBallExpansionJointEntity _startBallExpansion;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexBallExpansionJointEntity(StartBallExpansionJointEntity startBallExpansion, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+        public IfcVertexBallExpansionJointEntity(StartBallExpansionJointEntity startBallExpansion, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
             : base(startBallExpansion, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = args[0] is int ? (int)args[0] : 0;
+            _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             
             _startBallExpansion = startBallExpansion;
