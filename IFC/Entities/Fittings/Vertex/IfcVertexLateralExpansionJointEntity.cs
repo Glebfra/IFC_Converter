@@ -20,11 +20,11 @@ namespace IFC.Entities.Fittings.Vertex
     public class IfcVertexLateralExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }
+        private double Radius { get; }
         
         private readonly int _numSegments;
         private readonly double _angleStep;
-        private readonly double _radius;
-        
+
         private StartLateralExpansionJointEntity _lateralExpansionJoint;
         private IfcPipeFitting _pipeFitting;
         
@@ -37,7 +37,7 @@ namespace IFC.Entities.Fittings.Vertex
             _lateralExpansionJoint = lateralExpansionJoint;
 
             Length = _lateralExpansionJoint.Length;
-            _radius = Length;
+            Radius = Length;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
@@ -99,9 +99,9 @@ namespace IFC.Entities.Fittings.Vertex
             {
                 for (int j = 0; j < _numSegments; j++)
                 {
-                    double x = point.X + _radius * Math.Cos(_angleStep * i) * Math.Cos(_angleStep * j);
-                    double y = point.Y + _radius * Math.Cos(_angleStep * i) * Math.Sin(_angleStep * j);
-                    double z = point.Z + _radius * Math.Sin(_angleStep * i);
+                    double x = point.X + Radius * Math.Cos(_angleStep * i) * Math.Cos(_angleStep * j);
+                    double y = point.Y + Radius * Math.Cos(_angleStep * i) * Math.Sin(_angleStep * j);
+                    double z = point.Z + Radius * Math.Sin(_angleStep * i);
                     points[i, j] = IfcAxis.CreatePoint(model, new XbimVector3D(x, y, z));
                 }
             }
@@ -113,7 +113,7 @@ namespace IFC.Entities.Fittings.Vertex
         {
             foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
             {
-                ifcAbstractSegmentEntity.Clip(IfcNodeEntity, Length / 2);
+                ifcAbstractSegmentEntity.Clip(IfcNodeEntity, Length);
             }
         }
     }

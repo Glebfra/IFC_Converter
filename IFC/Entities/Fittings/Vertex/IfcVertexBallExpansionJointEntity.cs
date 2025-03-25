@@ -1,8 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
-using IFC.Extensions;
 using IFC.Tools;
-using Start.API;
 using Start.Entities;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -11,90 +9,56 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    [IfcEntityType(true, StartElementType.GIMBAL_EXPANSION_JOINT)]
-    public class IfcVertexAngularExpansionJointEntity : IfcAbstractFittingEntity
+    public class IfcVertexBallExpansionJointEntity : IfcAbstractFittingEntity
     {
-        public double Radius { get; }
         public double Length { get; }
+        public double Radius { get; }
         
         private readonly int _numSegments;
         private readonly double _angleStep;
-
-        private StartAngularExpansionJointEntity _startAngularExpansion;
+        
+        private StartBallExpansionJointEntity _startBallExpansion;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexAngularExpansionJointEntity(
-            StartAngularExpansionJointEntity startAngularExpansion, IfcNodeEntity ifcNodeEntity, 
-            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
-            : base(startAngularExpansion, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexBallExpansionJointEntity(StartBallExpansionJointEntity startBallExpansion, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, params object[] args) 
+            : base(startBallExpansion, ifcNodeEntity, ifcAbstractSegmentEntities)
         {
-            _numSegments = numSegments;
+            _numSegments = args[0] is int ? (int)args[0] : 0;
             _angleStep = 2 * Math.PI / _numSegments;
             
-            _startAngularExpansion = startAngularExpansion;
-
-            Length = _startAngularExpansion.Length;
-            Radius = Length / 2;
+            _startBallExpansion = startBallExpansion;
+            
+            Length = _startBallExpansion.Length;
+            Radius = Length;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            XbimMatrix3D My = MatrixExtensions.My(Angle);
-            
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-            
-            XbimVector3D firstExtrudeDirection = VectorExtensions.Forward.Negated();
-            XbimVector3D secondExtrudeDirection = XbimVector3D.Multiply(firstExtrudeDirection, My).Negated();
-            
-            XbimVector3D firstProfileRefDirection = VectorExtensions.Right;
-            XbimVector3D secondProfileRefDirection = XbimVector3D.Multiply(firstProfileRefDirection, My).Negated();
 
             IfcCartesianPoint[,] points = CreateSphere(model);
-            
-            IfcRepresentationItem[] extrudedAreaSolids = new IfcRepresentationItem[3];
-            extrudedAreaSolids[0] = CreateBranch(model, firstExtrudeDirection, firstProfileRefDirection);
-            extrudedAreaSolids[1] = CreateBranch(model, secondExtrudeDirection, secondProfileRefDirection);
-            extrudedAreaSolids[2] = CreateFacetedBrep(model, points);
-            
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, extrudedAreaSolids);
+            IfcFacetedBrep brep = CreateFacetedBrep(model, points);
+            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, brep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-
+            
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.Representation = shape;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
                 fitting.Tag = Tag;
-                fitting.Name = _startAngularExpansion.Name;
+                fitting.Name = _startBallExpansion.Name;
             });
             
             ClipPipes();
             AddProperties(model, _pipeFitting);
 
             return _pipeFitting;
-        }
-
-        private IfcExtrudedAreaSolid CreateBranch(IModel model, XbimVector3D extrudeDirection, XbimVector3D refDirection)
-        {
-            IfcDirection firstExtrudedDirection = IfcAxis.CreateDirection(model, extrudeDirection);
-            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, _IfcAbstractSegmentEntities[0].Diameter / 2, XbimVector3D.Zero, refDirection);
-            return CreateExtrudedArea(model, firstProfileDef, firstExtrudedDirection, Length / 2);
-        }
-        
-        private IfcExtrudedAreaSolid CreateExtrudedArea(IModel model, IfcProfileDef profileDef, IfcDirection direction, double length)
-        {
-            return model.Instances.New<IfcExtrudedAreaSolid>(solid =>
-            {
-                solid.Depth = length;
-                solid.ExtrudedDirection = direction;
-                solid.SweptArea = profileDef;
-            });
         }
         
         private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[,] points)
@@ -118,7 +82,7 @@ namespace IFC.Entities.Fittings.Vertex
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
         }
-
+        
         private IfcCartesianPoint[,] CreateSphere(IModel model)
         {
             IfcCartesianPoint[,] points = new IfcCartesianPoint[_numSegments, _numSegments];
