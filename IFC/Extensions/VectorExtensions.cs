@@ -1,5 +1,8 @@
 ﻿using System;
+using IFC.Tools;
+using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometryResource;
 
 namespace IFC.Extensions
 {
@@ -12,6 +15,11 @@ namespace IFC.Extensions
         public static double SignedAngle(this XbimVector3D first, XbimVector3D second)
         {
             return Math.Acos(XbimVector3D.DotProduct(first, second) / (first.Length * second.Length));
+        }
+        
+        public static IfcDirection ToIfcDirection(this XbimVector3D vector, IModel model)
+        {
+            return IfcAxis.CreateDirection(model, vector);
         }
     }
 }

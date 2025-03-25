@@ -93,6 +93,8 @@ namespace STARTtoIFC
                 ConvertOneNodeObjects<StartLateralExpansionJointEntity, IfcVertexLateralExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.LATERAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
                 ConvertOneNodeObjects<StartTorsionExpansionJointEntity, IfcVertexTorsionExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.TORSION_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
                 ConvertOneNodeObjects<StartBallExpansionJointEntity, IfcVertexBallExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.BALL_EXPANSION_JOINT, nodeEntities, twoNodeEntities, numSegments);
+                
+                ConvertOneNodeObjects<StartUniversalExpansionJointEntity, IfcUniversalExpansionJointEntity>(ifcProject, startDataArrayItems, StartElementType.UNIVERSAL_EXPANSION_JOINT, nodeEntities, twoNodeEntities);
 
                 ifcProject.GroupObjects("Pipe system");
                 ifcProject.SaveAs(outputFilePath);
