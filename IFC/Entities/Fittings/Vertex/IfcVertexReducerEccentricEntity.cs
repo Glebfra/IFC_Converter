@@ -4,6 +4,7 @@ using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.API;
 using Start.Entities;
+using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -38,7 +39,7 @@ namespace IFC.Entities.Fittings.Vertex
                 .OrderBy(entity => entity.Diameter)
                 .ToArray();
 
-            XbimVector3D coordinates = IfcNodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D forward = CalculateForwardVector();
             XbimVector3D up = CalculateUpVector();
             _pipeDisplacement = up.Length;
@@ -66,7 +67,7 @@ namespace IFC.Entities.Fittings.Vertex
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            _IfcAbstractSegmentEntities[1].Clip(IfcNodeEntity, Length);
+            _IfcAbstractSegmentEntities[1].Clip(NodeEntity, Length);
             
             MovePipe(_IfcAbstractSegmentEntities[1]);
             AddProperties(model, _pipeFitting);
@@ -76,7 +77,7 @@ namespace IFC.Entities.Fittings.Vertex
 
         private XbimVector3D CalculateUpVector()
         {
-            XbimVector3D coordinates = IfcNodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
             IfcNodeEntity[] pipeNodeEntities = _IfcAbstractSegmentEntities[1].NodeEntities
                 .OrderBy(entity => (entity.ObjectMatrix3D.Translation - coordinates).Length)
                 .ToArray();
@@ -89,7 +90,7 @@ namespace IFC.Entities.Fittings.Vertex
 
         private XbimVector3D CalculateForwardVector()
         {
-            XbimVector3D coordinates = IfcNodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(_IfcAbstractSegmentEntities[1], coordinates);
             return directionToPipe.Normalized();
         }
@@ -133,8 +134,8 @@ namespace IFC.Entities.Fittings.Vertex
         
         private void MovePipe(IfcAbstractSegmentEntity ifcAbstractSegmentEntity)
         {
-            if ((ifcAbstractSegmentEntity.NodeEntities[0].ObjectMatrix3D.Translation - IfcNodeEntity.ObjectMatrix3D.Translation).Length <
-                (ifcAbstractSegmentEntity.NodeEntities[1].ObjectMatrix3D.Translation - IfcNodeEntity.ObjectMatrix3D.Translation).Length)
+            if ((ifcAbstractSegmentEntity.NodeEntities[0].ObjectMatrix3D.Translation - NodeEntity.ObjectMatrix3D.Translation).Length <
+                (ifcAbstractSegmentEntity.NodeEntities[1].ObjectMatrix3D.Translation - NodeEntity.ObjectMatrix3D.Translation).Length)
             {
                 ifcAbstractSegmentEntity.Coordinates += ObjectMatrix3D.Up * _pipeDisplacement;
             }

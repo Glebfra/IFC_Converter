@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Start.API;
+using Start.Entities.Abstract;
 
-namespace Start.Entities
+namespace Start.Entities.Segments
 {
     [StartEntityType(StartElementType.PIPE_ELEMENT, StartElementType.CYLINDRICAL_SHELL)]
     public class StartPipeEntity : StartAbstractEntity

@@ -33,7 +33,7 @@ namespace STARTtoIFC
                 InputFilePath = startDocument.GetPathName(),
                 LanguageId = languageId
             };
-            
+
             DialogResult dialogResult;
             using (ExportWindowForm exportWindowForm = new ExportWindowForm(dataContainer))
             {
@@ -48,7 +48,8 @@ namespace STARTtoIFC
             try
             {
                 logger.Info($"Converting start at {DateTime.Now}");
-                IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath, dataContainer.ExportType, dataContainer.NumSegments);
+                IfcGenerator ifcGenerator = new IfcGenerator(dataContainer);
+                ifcGenerator.Convert(startDocument);
                 logger.Info($"Convert is successfully ended at {DateTime.Now}");
                 
                 if (logger.HasErrors())

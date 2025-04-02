@@ -3,6 +3,7 @@ using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.API;
 using Start.Entities;
+using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -115,7 +116,7 @@ namespace IFC.Entities.Fittings.Vertex
         {
             foreach (IfcAbstractSegmentEntity ifcPipeEntity in _IfcAbstractSegmentEntities)
             {
-                ifcPipeEntity.Clip(IfcNodeEntity, Length / 2);
+                ifcPipeEntity.Clip(NodeEntity, Length / 2);
             }
         }
     }

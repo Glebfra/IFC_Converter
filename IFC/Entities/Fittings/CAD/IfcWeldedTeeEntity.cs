@@ -1,6 +1,7 @@
 ﻿using IFC.Entities.Abstract;
 using Start.API;
 using Start.Entities;
+using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;

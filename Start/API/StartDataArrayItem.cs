@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Start.Entities;
+using Start.Entities.Abstract;
 
 namespace Start.API
 {

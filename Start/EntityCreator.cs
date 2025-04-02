@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
 using Start.API;
-using Start.Entities;
+using Start.Entities.Abstract;
 
 namespace Start
 {
     public class EntityCreator
     {
-        private const string _namespace = "Start.Entities";
         private readonly Dictionary<StartElementType, Type> _entityTypeMap;
 
         public EntityCreator()
@@ -19,7 +18,7 @@ namespace Start
             
             foreach (Type type in assembly.GetTypes())
             {
-                if (type.Namespace != _namespace || !type.IsSubclassOf(typeof(StartAbstractEntity))) continue;
+                if (!type.IsSubclassOf(typeof(StartAbstractEntity))) continue;
                 
                 object[] attributes = type.GetCustomAttributes(false);
                 foreach (object attribute in attributes)

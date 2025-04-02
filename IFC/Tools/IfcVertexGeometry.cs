@@ -10,32 +10,12 @@ namespace IFC.Tools
     {
         public static IfcFace CreateRectangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3, IfcCartesianPoint p4)
         {
-            return model.Instances.New<IfcFace>(f =>
-            {
-                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
-                {
-                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
-                    {
-                        pl.Polygon.AddRange(new[] { p1, p2, p3, p4 });
-                    });
-                    b.Orientation = true;
-                }));
-            });
+            return CreatePolygonFace(model, new[] { p1, p2, p3, p4 });
         }
         
         public static IfcFace CreateTriangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3)
         {
-            return model.Instances.New<IfcFace>(f =>
-            {
-                f.Bounds.Add(model.Instances.New<IfcFaceOuterBound>(b =>
-                {
-                    b.Bound = model.Instances.New<IfcPolyLoop>(pl =>
-                    {
-                        pl.Polygon.AddRange(new[] { p1, p2, p3 });
-                    });
-                    b.Orientation = true;
-                }));
-            });
+            return CreatePolygonFace(model, new[] { p1, p2, p3 });
         }
         
         public static IfcFace CreatePolygonFace(IModel model, IfcCartesianPoint[] points)
@@ -55,13 +35,7 @@ namespace IFC.Tools
         
         public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem)
         {
-            return model.Instances.New<IfcShapeRepresentation>(sr =>
-            {
-                sr.ContextOfItems = model.Instances.FirstOrDefault<IfcGeometricRepresentationContext>();
-                sr.RepresentationIdentifier = "Body";
-                sr.RepresentationType = "Brep";
-                sr.Items.Add(representationItem);
-            });
+            return CreateShapeRepresentation(model, new[] { representationItem });
         }
 
         public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem[] representationItems)

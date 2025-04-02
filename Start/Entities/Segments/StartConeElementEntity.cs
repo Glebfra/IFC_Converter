@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Start.API;
 
-namespace Start.Entities
+namespace Start.Entities.Segments
 {
     [StartEntityType(StartElementType.CONE_ELEMENT)]
     public class StartConeElementEntity : StartPipeEntity

@@ -140,8 +140,7 @@ namespace IFC.Tools
             {
                 placement3D.Location = CreatePoint(model, coordinates);
                 placement3D.Axis = CreateDirection(model, direction);
-                placement3D.RefDirection =
-                    CreateDirection(model, new XbimVector3D(direction.Y, direction.Z, direction.X));
+                placement3D.RefDirection = CreateDirection(model, new XbimVector3D(direction.Y, direction.Z, direction.X));
             });
         }
     }

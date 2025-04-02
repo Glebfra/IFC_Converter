@@ -3,6 +3,7 @@ using IFC.Entities.Fittings;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Start.Entities;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
