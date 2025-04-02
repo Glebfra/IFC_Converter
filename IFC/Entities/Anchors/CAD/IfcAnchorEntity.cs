@@ -1,25 +1,23 @@
 ﻿using IFC.Entities.Abstract;
-using IFC.Entities.Fittings;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.API;
-using Start.Entities;
+using Start.Entities.Anchors;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
-using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedComponentElements;
 
-namespace IFC.Entities.Anchors
+namespace IFC.Entities.Anchors.CAD
 {
     public class IfcAnchorEntity : IfcAbstractAnchorEntity
     {
         private double _xDim;
         private double _yDim;
         private StartAnchorEntity _anchorEntity;
-        private IfcPipeFitting _pipeFitting;
+        private IfcDiscreteAccessory _discreteAccessory;
         
         public IfcAnchorEntity(StartAnchorEntity anchorEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
             : base(anchorEntity, nodeEntity, abstractSegmentEntities)
@@ -38,16 +36,17 @@ namespace IFC.Entities.Anchors
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolid);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             
-            _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
+            _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {
-                fitting.Name = _anchorEntity.Name;
-                fitting.Tag = Tag;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.OBSTRUCTION;
-                fitting.Representation = shape;
-                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
+                accessory.Name = _anchorEntity.Name;
+                accessory.Tag = Tag;
+                accessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
+                accessory.Representation = shape;
+                accessory.ObjectPlacement = objectPlacement.LocalPlacement;
             });
+            AddProperties(model, _discreteAccessory);
 
-            return _pipeFitting;
+            return _discreteAccessory;
         }
 
         private IfcRectangleProfileDef CreateRectangleProfileDef(IModel model)

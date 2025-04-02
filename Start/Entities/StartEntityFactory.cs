@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.Entities.Anchors;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
 
@@ -77,6 +78,9 @@ namespace Start.Entities
                 
                 case StartElementType.UNIVERSAL_EXPANSION_JOINT:
                     return JsonConvert.DeserializeObject<StartUniversalExpansionJointEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.HINGED_ANCHOR:
+                    return JsonConvert.DeserializeObject<StartHingedAnchorEntity>(dataArrayItem.Data.ToString());
                 
                 default:
                     return null;

@@ -1,12 +1,12 @@
 ﻿using IFC.Entities.Abstract;
-using IFC.Entities.Anchors;
-using IFC.Entities.Fittings;
+using IFC.Entities.Anchors.CAD;
+using IFC.Entities.Anchors.Vertex;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using Start.API;
-using Start.Entities;
 using Start.Entities.Abstract;
+using Start.Entities.Anchors;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
 
@@ -89,7 +89,7 @@ namespace IFC.Entities
                 
                 case StartElementType.WELDOLET:
                     return new IfcWeldoletEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
-                
+
                 default:
                     return null;
             }
@@ -135,6 +135,9 @@ namespace IFC.Entities
                 
                 case StartElementType.VALVE:
                     return new IfcVertexValveEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.HINGED_ANCHOR:
+                    return new IfcHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 default:
                     return null;
