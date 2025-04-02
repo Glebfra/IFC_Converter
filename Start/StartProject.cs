@@ -2,6 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 using Start.API;
+using Start.Entities;
 using Start.Entities.Abstract;
 
 namespace Start
@@ -75,13 +76,11 @@ namespace Start
         
         public StartDataArrayItem[] GetDataArrayItems()
         {
-            EntityCreator entityCreator = new EntityCreator();
-            
             StartDataArrayItem[]? allDataArrayItems = JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
             if (allDataArrayItems == null) throw new NullReferenceException("Cannot deserialize objects");
             StartDataArrayItem[] dataArrayItems = allDataArrayItems.Select(item =>
             {
-                StartAbstractEntity? entity = entityCreator.CreateEntity(item);
+                StartAbstractEntity? entity = StartEntityFactory.CreateEntity(item);
                 if (entity != null)
                 {
                     item.Entity = entity;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using IFC.Entities.Abstract;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Xbim.Common;

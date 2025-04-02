@@ -1,6 +1,4 @@
 ﻿using IFC.Entities.Abstract;
-using Start.API;
-using Start.Entities;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -8,7 +6,6 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    [IfcEntityType(false, StartElementType.FABRICATED_TEE)]
     public sealed class IfcFabricatedTeeEntity : IfcAbstractTeeEntity
     {
         public readonly double Length;

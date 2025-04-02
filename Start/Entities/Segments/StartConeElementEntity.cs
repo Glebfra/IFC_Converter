@@ -4,7 +4,6 @@ using Start.API;
 
 namespace Start.Entities.Segments
 {
-    [StartEntityType(StartElementType.CONE_ELEMENT)]
     public class StartConeElementEntity : StartPipeEntity
     {
         [JsonProperty("838")]

@@ -145,7 +145,6 @@
     <Compile Include="API\StartDataArrayItem.cs" />
     <Compile Include="API\StartDocument.cs" />
     <Compile Include="API\StartElementType.cs" />
-    <Compile Include="API\StartEntityTypeAttribute.cs" />
     <Compile Include="API\StartLeakageCheckEnum.cs" />
     <Compile Include="API\StartManufacturingTechnologyEnum.cs" />
     <Compile Include="Entities\Abstract\StartAbstractEntity.cs" />
@@ -165,11 +164,11 @@
     <Compile Include="Entities\Segments\StartConeElementEntity.cs" />
     <Compile Include="Entities\Segments\StartPipeEntity.cs" />
     <Compile Include="Entities\StartAnchorEntity.cs" />
+    <Compile Include="Entities\StartEntityFactory.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
     <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EntityCreator.cs" />
     <Compile Include="StartProject.cs" />
   </ItemGroup>
   <ItemGroup>

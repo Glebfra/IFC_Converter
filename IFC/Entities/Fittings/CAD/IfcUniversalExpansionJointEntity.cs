@@ -16,7 +16,6 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    [IfcEntityType(false, StartElementType.UNIVERSAL_EXPANSION_JOINT)]
     public class IfcUniversalExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }

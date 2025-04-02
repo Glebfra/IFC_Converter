@@ -16,7 +16,6 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    [IfcEntityType(true, StartElementType.AXIAL_EXPANSION_JOINT, StartElementType.AXIAL_EXPANSION_SLIP_JOINT)]
     public sealed class IfcVertexAxialExpansionJointEntity : IfcAbstractAxialExpansionJointEntity
     {
         private readonly int _numSegments;

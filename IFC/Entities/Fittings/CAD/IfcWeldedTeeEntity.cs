@@ -8,7 +8,6 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    [IfcEntityType(false, StartElementType.WELDED_TEE)]
     public sealed class IfcWeldedTeeEntity : IfcAbstractTeeEntity
     {
         public readonly double Length;

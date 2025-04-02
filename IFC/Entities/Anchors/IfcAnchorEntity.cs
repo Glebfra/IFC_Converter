@@ -14,7 +14,6 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Anchors
 {
-    [IfcEntityType(false, StartElementType.ANCHOR)]
     public class IfcAnchorEntity : IfcAbstractAnchorEntity
     {
         private double _xDim;

@@ -17,7 +17,6 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Segments
 {
-    [IfcEntityType(false, StartElementType.CONE_ELEMENT)]
     public sealed class IfcConeElementEntity : IfcAbstractSegmentEntity
     {
         public override XbimVector3D Direction { get; }

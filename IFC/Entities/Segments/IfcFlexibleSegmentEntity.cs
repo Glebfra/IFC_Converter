@@ -12,7 +12,6 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Segments
 {
-    [IfcEntityType(false, StartElementType.FLEXIBLE_ELEMENT)]
     public sealed class IfcFlexibleSegmentEntity : IfcAbstractSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }

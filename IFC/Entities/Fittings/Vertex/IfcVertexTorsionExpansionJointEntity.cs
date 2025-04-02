@@ -16,7 +16,6 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    [IfcEntityType(true, StartElementType.TORSION_EXPANSION_JOINT)]
     public class IfcVertexTorsionExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }

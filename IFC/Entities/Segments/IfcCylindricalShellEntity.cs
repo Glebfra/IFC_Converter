@@ -11,7 +11,6 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Segments
 {
-    [IfcEntityType(false, StartElementType.CYLINDRICAL_SHELL)]
     public sealed class IfcCylindricalShellEntity : IfcAbstractSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }

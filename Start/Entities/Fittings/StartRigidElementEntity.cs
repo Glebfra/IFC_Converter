@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.RIGID_ELEMENT)]
     public class StartRigidElementEntity : StartAbstractEntity
     {
         [JsonProperty("225")]

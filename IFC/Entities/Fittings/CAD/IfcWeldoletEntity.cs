@@ -8,7 +8,6 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    [IfcEntityType(false, StartElementType.WELDOLET)]
     public sealed class IfcWeldoletEntity : IfcAbstractTeeEntity
     {
         private double Length;

@@ -5,13 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(
-        StartElementType.WELDED_TEE, 
-        StartElementType.WELDOLET, 
-        StartElementType.SWEEPOLET, 
-        StartElementType.FABRICATED_TEE, 
-        StartElementType.STUB_IN
-    )]
     public class StartTeeEntity : StartAbstractEntity
     {
         [JsonProperty("9")] 

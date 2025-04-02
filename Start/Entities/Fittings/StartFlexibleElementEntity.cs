@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.FLEXIBLE_ELEMENT)]
     public class StartFlexibleElementEntity : StartAbstractEntity
     {
         [JsonProperty("2")]

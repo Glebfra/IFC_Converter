@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using IFC;
+using IFC.Entities;
 using IFC.Entities.Abstract;
-using IFC.Entities.Fittings;
 using Start;
 using Start.API;
 using Start.Entities;
 using Start.Extensions;
-using EntityCreator = IFC.EntityCreator;
 
 namespace STARTtoIFC
 {
@@ -69,8 +68,7 @@ namespace STARTtoIFC
         )
         {
             Logger logger = Logger.GetInstance();
-            EntityCreator entityCreator = new EntityCreator();
-
+            
             StartDataArrayItem[] arrayItems = dataArrayItems
                 .Where(item => !StartElementTypeExtensions.TwoNodeElementTypes.Contains(item.Type) && item.Type != StartElementType.NODE)
                 .ToArray();
@@ -92,13 +90,13 @@ namespace STARTtoIFC
                     IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities = connTwoNodesElements
                         .Select(item => _twoNodeEntities[item.DataArrayIndex])
                         .ToArray();
-                
+
                     IfcAbstractEntity? entity = _dataContainer.ExportType == IfcExportTypeEnum.VERTEX
-                        ? entityCreator.CreateVertexEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments) 
-                        : entityCreator.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
-                    entity ??= entityCreator.CreateVertexEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments);
-                    entity ??= entityCreator.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
-                
+                        ? IfcEntityFactory.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments)
+                        : IfcEntityFactory.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
+                    entity ??= IfcEntityFactory.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments);
+                    entity ??= IfcEntityFactory.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
+
                     if (entity == null)
                     {
                         logger.Error($"Cannot add {arrayItem.Type} with id {arrayItem.DataArrayIndex} to IFC.");
@@ -122,8 +120,7 @@ namespace STARTtoIFC
         )
         {
             Logger logger = Logger.GetInstance();
-            EntityCreator entityCreator = new EntityCreator();
-            
+
             StartDataArrayItem[] objectItems = dataArrayItems.GetElementsByType(type).ToArray();
             if (useNearEntities)
             {
@@ -164,7 +161,7 @@ namespace STARTtoIFC
                             continue;
                         }
 
-                        IfcAbstractEntity? ifcObjectEntity = entityCreator.CreateEntity(objectItem.Entity, ifcConnNodeEntities, ifcAbstractSegmentEntities);
+                        IfcAbstractEntity? ifcObjectEntity = IfcEntityFactory.CreateEntity(objectItem.Entity, ifcConnNodeEntities, ifcAbstractSegmentEntities);
                         if (ifcObjectEntity == null) continue;
                         
                         ifcProject.AddEntity(ifcObjectEntity);
@@ -199,7 +196,7 @@ namespace STARTtoIFC
                             .Where(pair => nodeIds.Contains(pair.Key))
                             .Select(pair => pair.Value)
                             .ToArray();
-                        IfcAbstractEntity? ifcObjectEntity = entityCreator.CreateEntity(objectItem.Entity, ifcConnNodeEntities);
+                        IfcAbstractEntity? ifcObjectEntity = IfcEntityFactory.CreateEntity(objectItem.Entity, ifcConnNodeEntities);
                         if (ifcObjectEntity == null) continue;
 
                         ifcProject.AddEntity(ifcObjectEntity);
