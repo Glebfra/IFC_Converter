@@ -17,7 +17,6 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    [IfcEntityType(true, StartElementType.REDUCER_ECCENTRIC)]
     public sealed class IfcVertexReducerEccentricEntity : IfcAbstractFittingEntity
     {
         public double Length { get; }

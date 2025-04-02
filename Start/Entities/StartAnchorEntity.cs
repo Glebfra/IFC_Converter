@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities
 {
-    [StartEntityType(StartElementType.ANCHOR)]
     public class StartAnchorEntity : StartAbstractEntity
     {
         [JsonProperty("264")] 

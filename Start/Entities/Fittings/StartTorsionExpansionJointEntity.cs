@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.TORSION_EXPANSION_JOINT)]
     public class StartTorsionExpansionJointEntity : StartAbstractEntity
     {
         [JsonProperty("2")]

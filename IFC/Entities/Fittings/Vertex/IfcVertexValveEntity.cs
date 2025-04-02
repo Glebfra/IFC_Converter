@@ -17,7 +17,6 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    [IfcEntityType(true, StartElementType.VALVE)]
     public sealed class IfcVertexValveEntity : IfcAbstractFittingEntity
     {
         public readonly double Length;

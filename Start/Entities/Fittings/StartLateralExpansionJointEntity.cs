@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.LATERAL_EXPANSION_JOINT)]
     public class StartLateralExpansionJointEntity : StartAbstractEntity
     {
         [JsonProperty("2")]

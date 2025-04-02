@@ -14,7 +14,6 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    [IfcEntityType(false, StartElementType.AXIAL_EXPANSION_JOINT)]
     public class IfcAxialExpansionJointEntity : IfcAbstractAxialExpansionJointEntity
     {
         private StartAxialExpansionJointEntity _axialExpansionJoint;

@@ -8,7 +8,6 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    [IfcEntityType(false, StartElementType.STUB_IN)]
     public sealed class IfcStubInEntity : IfcAbstractTeeEntity
     {
         public readonly double Length;

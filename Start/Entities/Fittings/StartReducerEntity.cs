@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.REDUCER_CONCENTRIC, StartElementType.REDUCER_ECCENTRIC)]
     public class StartReducerEntity : StartAbstractEntity
     {
         [JsonProperty("2")]

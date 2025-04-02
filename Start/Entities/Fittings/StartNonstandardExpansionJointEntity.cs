@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.NONSTANDARD_EXPANSION_JOINT)]
     public class StartNonstandardExpansionJointEntity : StartAbstractEntity
     {
         [JsonProperty("76")]

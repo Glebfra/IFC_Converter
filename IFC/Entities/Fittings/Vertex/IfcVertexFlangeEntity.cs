@@ -17,7 +17,6 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    [IfcEntityType(true, StartElementType.FLANGE)]
     public sealed class IfcVertexFlangeEntity : IfcAbstractFittingEntity
     {
         public readonly double Length;

@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities
 {
-    [StartEntityType(StartElementType.NODE)]
     public class StartNodeEntity : StartAbstractEntity
     {
         [JsonProperty("61")] 

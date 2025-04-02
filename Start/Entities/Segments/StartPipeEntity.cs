@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Segments
 {
-    [StartEntityType(StartElementType.PIPE_ELEMENT, StartElementType.CYLINDRICAL_SHELL)]
     public class StartPipeEntity : StartAbstractEntity
     {
         [JsonProperty("225")] 

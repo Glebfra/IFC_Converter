@@ -8,7 +8,6 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    [IfcEntityType(false, StartElementType.SWEEPOLET)]
     public sealed class IfcSweepoletEntity : IfcAbstractTeeEntity
     {
         private double Length;

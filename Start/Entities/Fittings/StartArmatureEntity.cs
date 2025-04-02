@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.VALVE, StartElementType.FLANGE)]
     public class StartArmatureEntity : StartAbstractEntity
     {
         [JsonProperty("225")] 

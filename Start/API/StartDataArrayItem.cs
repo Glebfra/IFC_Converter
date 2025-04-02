@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Start.Entities;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using Start.Entities.Abstract;
 
 namespace Start.API
@@ -21,7 +21,7 @@ namespace Start.API
         [JsonProperty("data")]
         public object Data { get; set; }
 
-        [JsonIgnore] 
+        [JsonIgnore]
         public StartAbstractEntity Entity;
     }
 }

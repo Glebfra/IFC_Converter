@@ -5,7 +5,6 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.GIMBAL_EXPANSION_JOINT)]
     public class StartAngularExpansionJointEntity : StartAbstractEntity
     {
         [JsonProperty("2")]
