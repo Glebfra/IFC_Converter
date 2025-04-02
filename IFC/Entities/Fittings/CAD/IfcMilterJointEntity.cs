@@ -3,6 +3,7 @@ using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.API;
 using Start.Entities;
+using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -41,7 +42,7 @@ namespace IFC.Entities.Fittings.CAD
             for (int i = 0; i < _IfcAbstractSegmentEntities.Length; i++)
             {
                 ifcRepresentationItems[i] = CreateExtrudedAreaSolid(model, _IfcAbstractSegmentEntities[i], 0);
-                _IfcAbstractSegmentEntities[i].Clip(IfcNodeEntity, Depth);
+                _IfcAbstractSegmentEntities[i].Clip(NodeEntity, Depth);
             }
 
             ifcRepresentationItems[_IfcAbstractSegmentEntities.Length] = model.Instances.New<IfcBooleanResult>(result =>

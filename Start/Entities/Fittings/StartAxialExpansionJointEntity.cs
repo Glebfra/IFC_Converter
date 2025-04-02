@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Start.API;
+using Start.Entities.Abstract;
 
-namespace Start.Entities
+namespace Start.Entities.Fittings
 {
-    [StartEntityType(StartElementType.LATERAL_EXPANSION_JOINT)]
-    public class StartLateralExpansionJointEntity : StartAbstractEntity
+    [StartEntityType(StartElementType.AXIAL_EXPANSION_JOINT, StartElementType.AXIAL_EXPANSION_SLIP_JOINT)]
+    public class StartAxialExpansionJointEntity : StartAbstractEntity
     {
         [JsonProperty("2")]
         public double AllowableAxialExpansion { get; set; }
@@ -36,7 +37,7 @@ namespace Start.Entities
         
         [JsonProperty("1405")]
         public double AxialStiffness { get; set; }
-        
+
         public override Dictionary<string, string> GetData()
         {
             Dictionary<string, string> dictionary = new Dictionary<string, string>()

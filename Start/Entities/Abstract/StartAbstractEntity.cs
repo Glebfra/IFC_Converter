@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Start.API;
 
-namespace Start.Entities
+namespace Start.Entities.Abstract
 {
     public abstract class StartAbstractEntity
     {

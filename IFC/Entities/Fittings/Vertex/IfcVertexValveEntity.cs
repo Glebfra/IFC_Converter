@@ -4,6 +4,7 @@ using IFC.Extensions;
 using IFC.Tools;
 using Start.API;
 using Start.Entities;
+using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -63,8 +64,8 @@ namespace IFC.Entities.Fittings.Vertex
                 fitting.Tag = Tag;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
-            _IfcAbstractSegmentEntities[0].Clip(IfcNodeEntity, Length / 2);
-            _IfcAbstractSegmentEntities[1].Clip(IfcNodeEntity, Length / 2);
+            _IfcAbstractSegmentEntities[0].Clip(NodeEntity, Length / 2);
+            _IfcAbstractSegmentEntities[1].Clip(NodeEntity, Length / 2);
         
             AddProperties(model, _pipeFitting);
 

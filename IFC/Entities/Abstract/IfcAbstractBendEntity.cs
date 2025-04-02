@@ -4,6 +4,7 @@ using IFC.Entities.Fittings;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities;
+using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
@@ -37,7 +38,7 @@ namespace IFC.Entities.Abstract
         
         protected XbimVector3D[] CalculateDirectionToPipes()
         {
-            XbimVector3D coordinates = IfcNodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
             return _IfcAbstractSegmentEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
         }
 
@@ -53,7 +54,7 @@ namespace IFC.Entities.Abstract
             double clipLength = _bendEntity.Radius * Math.Tan(Angle / 2);
             foreach (IfcAbstractSegmentEntity ifcPipeEntity in _IfcAbstractSegmentEntities)
             {
-                ifcPipeEntity.Clip(IfcNodeEntity, clipLength);
+                ifcPipeEntity.Clip(NodeEntity, clipLength);
             }
         }
 

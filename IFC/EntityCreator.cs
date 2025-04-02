@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using IFC.Entities.Abstract;
 using IFC.Entities.Fittings;
 using Start.API;
-using Start.Entities;
+using Start.Entities.Abstract;
 
 namespace IFC
 {
     public class EntityCreator
     {
-        private static string[] _namespaces =
-        {
-            "IFC.Entities.Fittings.CAD",
-            "IFC.Entities.Fittings.Vertex",
-            "IFC.Entities.Fittings",
-            "IFC.Entities.Segments",
-        };
         private readonly Dictionary<StartElementType, Type> _entityTypeMap;
         private readonly Dictionary<StartElementType, Type> _vertexEntityTypeMap;
 
@@ -29,7 +21,7 @@ namespace IFC
 
             foreach (Type type in assembly.GetTypes())
             {
-                if (!_namespaces.Contains(type.Namespace) || !type.IsSubclassOf(typeof(IfcAbstractEntity))) continue;
+                if (!type.IsSubclassOf(typeof(IfcAbstractEntity))) continue;
                 
                 object[] attributes = type.GetCustomAttributes(false);
                 foreach (object attribute in attributes)
@@ -55,7 +47,8 @@ namespace IFC
         
         public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities)
         {
-            if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
+            if (!_entityTypeMap.ContainsKey(entity.Type)) 
+                return null;
             Type type = _entityTypeMap[entity.Type];
             
             IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities);
@@ -64,7 +57,8 @@ namespace IFC
 
         public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
         {
-            if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
+            if (!_entityTypeMap.ContainsKey(entity.Type)) 
+                return null;
             Type type = _entityTypeMap[entity.Type];
             
             IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities);
@@ -73,7 +67,8 @@ namespace IFC
         
         public IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities)
         {
-            if (!_entityTypeMap.ContainsKey(entity.Type)) return null;
+            if (!_entityTypeMap.ContainsKey(entity.Type)) 
+                return null;
             Type type = _entityTypeMap[entity.Type];
             
             IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities);
@@ -82,7 +77,8 @@ namespace IFC
         
         public IfcAbstractEntity? CreateVertexEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
-            if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) return null;
+            if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) 
+                return null;
             Type type = _vertexEntityTypeMap[entity.Type];
             
             IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntity, segmentEntities, numSegments);
@@ -91,7 +87,8 @@ namespace IFC
         
         public IfcAbstractEntity? CreateVertexEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
-            if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) return null;
+            if (!_vertexEntityTypeMap.ContainsKey(entity.Type)) 
+                return null;
             Type type = _vertexEntityTypeMap[entity.Type];
             
             IfcAbstractEntity abstractEntity = (IfcAbstractEntity)Activator.CreateInstance(type, entity, nodeEntities, segmentEntities, numSegments);

@@ -1,5 +1,6 @@
 ﻿using IFC.Entities.Fittings;
 using Start.Entities;
+using Start.Entities.Fittings;
 
 namespace IFC.Entities.Abstract
 {
@@ -20,7 +21,7 @@ namespace IFC.Entities.Abstract
         {
             foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
             {
-                ifcAbstractSegmentEntity.Clip(IfcNodeEntity, Length / 2);
+                ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
             }
         }
     }
