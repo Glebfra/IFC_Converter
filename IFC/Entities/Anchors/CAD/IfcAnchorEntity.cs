@@ -3,6 +3,7 @@ using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common;
+using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
@@ -16,15 +17,26 @@ namespace IFC.Entities.Anchors.CAD
     {
         private double _xDim;
         private double _yDim;
+        
         private StartAnchorEntity _anchorEntity;
         private IfcDiscreteAccessory _discreteAccessory;
-        
+
         public IfcAnchorEntity(StartAnchorEntity anchorEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
-            : base(anchorEntity, nodeEntity, abstractSegmentEntities)
+            : base(anchorEntity, nodeEntity)
         {
             _anchorEntity = anchorEntity;
-            _xDim = _IfcAbstractSegmentEntities[0].Diameter * 2;
+
+            _xDim = abstractSegmentEntities[0].Diameter * 2;
             _yDim = _xDim;
+            
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D forward = abstractSegmentEntities[0].ObjectMatrix3D.Forward;
+            XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
+            if (forward == WorldUp || forward == -1 * WorldUp)
+                WorldUp = new XbimVector3D(0, 1, 0);
+            XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
+            
+            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

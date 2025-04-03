@@ -137,7 +137,10 @@ namespace IFC.Entities
                     return new IfcVertexValveEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 case StartElementType.HINGED_ANCHOR:
-                    return new IfcHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities, numSegments);
+                    return new IfcVertexHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.SLIDING_SUPPORT:
+                    return new IfcVertexSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 default:
                     return null;

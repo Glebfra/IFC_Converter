@@ -5,8 +5,9 @@ namespace Start.Entities.Abstract
 {
     public abstract class StartAbstractEntity
     {
+        public int ID { get; set; }
+        public StartElementType Type { get; set; } = StartElementType.ALL;
+        
         public abstract Dictionary<string, string> GetData();
-        public int ID;
-        public StartElementType Type = StartElementType.ALL;
     }
 }

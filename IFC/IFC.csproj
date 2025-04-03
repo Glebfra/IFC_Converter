@@ -146,7 +146,8 @@
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\Vertex\IfcHingedAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\Vertex\IfcVertexHingedAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\Vertex\IfcVertexSlidingSupportEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxiaExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
