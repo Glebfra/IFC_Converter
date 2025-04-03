@@ -82,6 +82,9 @@ namespace Start.Entities
                 case StartElementType.HINGED_ANCHOR:
                     return JsonConvert.DeserializeObject<StartHingedAnchorEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.SLIDING_SUPPORT:
+                    return JsonConvert.DeserializeObject<StartSlidingSupportEntity>(dataArrayItem.Data.ToString());
+                
                 default:
                     return null;
             }

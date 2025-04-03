@@ -115,5 +115,15 @@ namespace IFC.Tools
         {
             return model.Instances.New<IfcProductDefinitionShape>(shape => shape.Representations.Add(shapeRepresentation));
         }
+
+        public static IfcProfileDef CreateRectangleProfileDef(IModel model, double xDim, double yDim)
+        {
+            return model.Instances.New<IfcRectangleProfileDef>(def =>
+            {
+                def.ProfileType = IfcProfileTypeEnum.AREA;
+                def.XDim = xDim;
+                def.YDim = yDim;
+            });
+        }
     }
 }

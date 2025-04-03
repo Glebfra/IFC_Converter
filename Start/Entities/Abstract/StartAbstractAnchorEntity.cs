@@ -1,0 +1,41 @@
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace Start.Entities.Abstract
+{
+    public class StartAbstractAnchorEntity : StartAbstractEntity
+    {
+        [JsonProperty("264")] 
+        public int CheckAllowableLoads { get; set; }
+        
+        [JsonProperty("265")] 
+        public int AllowableLoadsInLocalAxes { get; set; }
+        
+        [JsonProperty("266")] 
+        public double Fx { get; set; }
+        
+        [JsonProperty("267")] 
+        public double Fy { get; set; }
+        
+        [JsonProperty("268")] 
+        public double Fz { get; set; }
+        
+        [JsonProperty("449")] 
+        public string Name { get; set; }
+        
+        public override Dictionary<string, string> GetData()
+        {
+            Dictionary<string, string> dictionary = new Dictionary<string, string>()
+            {
+                { "Check Allowable Loads", CheckAllowableLoads.ToString() },
+                { "Allowable Loads In Local Axes", AllowableLoadsInLocalAxes.ToString() },
+                { "Fx", Fx.ToString("F5") },
+                { "Fy", Fy.ToString("F5") },
+                { "Fz", Fz.ToString("F5") },
+                { "Name", Name }
+            };
+
+            return dictionary;
+        }
+    }
+}

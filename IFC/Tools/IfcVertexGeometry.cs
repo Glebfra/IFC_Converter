@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Xbim.Common;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.RepresentationResource;
@@ -18,7 +19,7 @@ namespace IFC.Tools
             return CreatePolygonFace(model, new[] { p1, p2, p3 });
         }
         
-        public static IfcFace CreatePolygonFace(IModel model, IfcCartesianPoint[] points)
+        public static IfcFace CreatePolygonFace(IModel model, IEnumerable<IfcCartesianPoint> points)
         {
             return model.Instances.New<IfcFace>(f =>
             {
@@ -38,7 +39,7 @@ namespace IFC.Tools
             return CreateShapeRepresentation(model, new[] { representationItem });
         }
 
-        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem[] representationItems)
+        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IEnumerable<IfcRepresentationItem> representationItems)
         {
             return model.Instances.New<IfcShapeRepresentation>(sr =>
             {
