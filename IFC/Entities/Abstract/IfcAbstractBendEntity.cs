@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using IFC.Entities.Fittings;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;

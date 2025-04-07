@@ -1,6 +1,4 @@
-﻿using IFC.Entities.Fittings;
-using Start.Entities;
-using Start.Entities.Fittings;
+﻿using Start.Entities.Fittings;
 
 namespace IFC.Entities.Abstract
 {

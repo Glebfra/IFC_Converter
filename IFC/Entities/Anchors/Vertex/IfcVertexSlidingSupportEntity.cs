@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;

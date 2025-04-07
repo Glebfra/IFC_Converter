@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedComponentElements;
-using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Anchors.Vertex
 {
