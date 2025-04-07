@@ -90,6 +90,12 @@ namespace IFC.Entities
                 case StartElementType.WELDOLET:
                     return new IfcWeldoletEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
 
+                case StartElementType.SPRING_SUPPORT:
+                    return new IfcSpringSupportEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.SPRING_HANGER:
+                    return new IfcSpringHangerEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities);
+
                 default:
                     return null;
             }
@@ -141,13 +147,7 @@ namespace IFC.Entities
                 
                 case StartElementType.SLIDING_SUPPORT:
                     return new IfcVertexSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
-                
-                case StartElementType.SPRING_SUPPORT:
-                    return new IfcVertexSpringSupportEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
-                
-                case StartElementType.SPRING_HANGER:
-                    return new IfcVertexSpringHangerEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
-                
+
                 default:
                     return null;
             }

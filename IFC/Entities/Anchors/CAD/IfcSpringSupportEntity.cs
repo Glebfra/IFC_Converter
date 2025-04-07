@@ -13,7 +13,7 @@ using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Anchors.Vertex
 {
-    public class IfcVertexSpringSupportEntity : IfcAbstractAnchorEntity
+    public class IfcSpringSupportEntity : IfcAbstractAnchorEntity
     {
         private readonly double _height;
         private readonly int _numSegments;
@@ -21,12 +21,12 @@ namespace IFC.Entities.Anchors.Vertex
         private StartSpringSupportEntity _springSupportEntity;
         private IfcDiscreteAccessory _discreteAccessory;
 
-        public IfcVertexSpringSupportEntity(StartSpringSupportEntity springSupportEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments) 
+        public IfcSpringSupportEntity(StartSpringSupportEntity springSupportEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
             : base(springSupportEntity, nodeEntity, segmentEntities)
         {
             _springSupportEntity = springSupportEntity;
             
-            _numSegments = numSegments;
+            _numSegments = 8;
             _height = _PipeDiameter * 2;
         }
 
