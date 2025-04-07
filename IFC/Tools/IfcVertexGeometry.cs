@@ -80,7 +80,7 @@ namespace IFC.Tools
 
             return points;
         }
-        
+
         public static IfcPolyline CreatePolyline(IModel model, IEnumerable<IfcCartesianPoint> points)
         {
             return model.Instances.New<IfcPolyline>(polyline =>
