@@ -1,7 +1,10 @@
-﻿using IFC.Entities.Interfaces;
+﻿using System.Collections.Generic;
+using IFC.Entities.Interfaces;
+using IFC.Extensions;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
@@ -13,17 +16,48 @@ namespace IFC.Entities.Abstract
         public IfcNodeEntity NodeEntity { get; }
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
+        protected IfcAbstractSegmentEntity[] _IfcAbstractSegmentEntities;
+        protected double _PipeDiameter;
+        protected bool _IsVertical;
+
         private StartAbstractEntity _abstractEntity;
         
-        public IfcAbstractAnchorEntity(StartAbstractEntity abstractEntity, IfcNodeEntity nodeEntity) 
+        public IfcAbstractAnchorEntity(StartAbstractEntity abstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
             : base(abstractEntity)
         {
             _abstractEntity = abstractEntity;
             NodeEntity = nodeEntity;
+            
+            _IfcAbstractSegmentEntities = segmentEntities;
+            _PipeDiameter = segmentEntities[0].Diameter;
+            _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward == VectorExtensions.Z;
 
             XbimVector3D forward = new XbimVector3D(0, 0, 1);
             XbimVector3D up = new XbimVector3D(0, 1, 0);
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(NodeEntity.ObjectMatrix3D.Translation, forward, up);
+        }
+
+        protected abstract IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement);
+
+        protected IEnumerable<IfcRepresentationItem> CreateAnchor(IModel model)
+        {
+            return _IsVertical ? CreateVerticalAnchor(model) : CreateHorizontalAnchor(model);
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateHorizontalAnchor(IModel model)
+        {
+            return CreateAnchorModel(model, XbimVector3D.Zero);
+        }
+        
+        private IEnumerable<IfcRepresentationItem> CreateVerticalAnchor(IModel model)
+        {
+            double displacement = _PipeDiameter;
+            
+            List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
+            representationItems.AddRange(CreateAnchorModel(model, VectorExtensions.Right.Negated() * displacement));
+            representationItems.AddRange(CreateAnchorModel(model, VectorExtensions.Right * displacement));
+
+            return representationItems;
         }
 
         protected override void AddProperties(IModel model, IfcProduct product)

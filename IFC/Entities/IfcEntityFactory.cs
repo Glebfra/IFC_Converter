@@ -145,6 +145,9 @@ namespace IFC.Entities
                 case StartElementType.SPRING_SUPPORT:
                     return new IfcVertexSpringSupportEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
+                case StartElementType.SPRING_HANGER:
+                    return new IfcVertexSpringHangerEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
                 default:
                     return null;
             }

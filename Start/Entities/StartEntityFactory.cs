@@ -86,6 +86,7 @@ namespace Start.Entities
                     return JsonConvert.DeserializeObject<StartSlidingSupportEntity>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.SPRING_SUPPORT:
+                case StartElementType.SPRING_HANGER:
                     return JsonConvert.DeserializeObject<StartSpringSupportEntity>(dataArrayItem.Data.ToString());
                 
                 default:
