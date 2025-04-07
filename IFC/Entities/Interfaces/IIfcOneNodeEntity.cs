@@ -1,9 +1,7 @@
-﻿using IFC.Entities.Fittings;
-
-namespace IFC.Entities.Interfaces
+﻿namespace IFC.Entities.Interfaces
 {
     public interface IIfcOneNodeEntity : IIfcEntity
     {
-        public IfcNodeEntity IfcNodeEntity { get; }
+        public IfcNodeEntity NodeEntity { get; }
     }
 }

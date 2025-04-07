@@ -2,7 +2,7 @@
 
 namespace STARTtoIFC
 {
-    public class Logger
+    internal class Logger
     {
         public string Logs { get; private set; }
         

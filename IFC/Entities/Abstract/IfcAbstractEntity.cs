@@ -1,6 +1,6 @@
 ﻿using IFC.Entities.Interfaces;
 using Start.API;
-using Start.Entities;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
@@ -25,7 +25,7 @@ namespace IFC.Entities.Abstract
 
         protected virtual void AddProperties(IModel model, IfcProduct product)
         {
-            #region DEBUG 
+            #region DEBUG
             #if DEBUG
             model.Instances.New<IfcRelDefinesByProperties>(properties =>
             {

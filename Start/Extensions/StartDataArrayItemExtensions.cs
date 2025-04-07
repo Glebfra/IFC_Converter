@@ -8,7 +8,7 @@ namespace Start.Extensions
     {
         public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems, StartElementType type)
         {
-            return arrayItems.Where(item => item.Type == type);
+            return GetElementsByType(arrayItems, new[] { type });
         }
         
         public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems, IEnumerable<StartElementType> types)

@@ -22,49 +22,58 @@ namespace STARTtoIFC
         [STAThread]
         public int Export(object startDocumentObject, int languageId)
         {
-            Application.EnableVisualStyles();
-            Logger logger = Logger.GetInstance();
-            
-            Localize(languageId);
-
-            StartDocument startDocument = new StartDocument(startDocumentObject);
-            DataContainer dataContainer = new DataContainer()
-            {
-                InputFilePath = startDocument.GetPathName(),
-                LanguageId = languageId
-            };
-            
-            DialogResult dialogResult;
-            using (ExportWindowForm exportWindowForm = new ExportWindowForm(dataContainer))
-            {
-                dialogResult = exportWindowForm.ShowDialog();
-            }
-
-            if (dialogResult == DialogResult.Cancel)
-            {
-                return (int)ConversionResult.Canceled;
-            }
-            
             try
             {
-                logger.Info($"Converting start at {DateTime.Now}");
-                IfcGenerator.Convert(startDocument, dataContainer.OutputFilePath);
-                logger.Info($"Convert is successfully ended at {DateTime.Now}");
+                Application.EnableVisualStyles();
+                Logger logger = Logger.GetInstance();
+            
+                Localize(languageId);
+
+                StartDocument startDocument = new StartDocument(startDocumentObject);
+                DataContainer dataContainer = new DataContainer()
+                {
+                    InputFilePath = startDocument.GetPathName(),
+                    LanguageId = languageId
+                };
+
+                DialogResult dialogResult;
+                using (ExportWindowForm exportWindowForm = new ExportWindowForm(dataContainer))
+                {
+                    dialogResult = exportWindowForm.ShowDialog();
+                }
+
+                if (dialogResult == DialogResult.Cancel)
+                {
+                    return (int)ConversionResult.Canceled;
+                }
                 
-                if (logger.HasErrors())
+                try
                 {
+                    logger.Info($"Converting start at {DateTime.Now}");
+                    IfcGenerator ifcGenerator = new IfcGenerator(dataContainer);
+                    ifcGenerator.Convert(startDocument);
+                    logger.Info($"Convert is successfully ended at {DateTime.Now}");
+                
+                    if (logger.HasErrors())
+                    {
+                        logger.SaveAs(dataContainer.OutputFilePath + ".log");
+                    }
+                    else
+                    {
+                        logger.Flush();
+                    }
+                    return (int)ConversionResult.Success;
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.ToString());
                     logger.SaveAs(dataContainer.OutputFilePath + ".log");
+                    return (int)ConversionResult.Fail;
                 }
-                else
-                {
-                    logger.Flush();
-                }
-                return (int)ConversionResult.Success;
-            }
+            } 
             catch (Exception e)
             {
-                logger.Error(e.ToString());
-                logger.SaveAs(dataContainer.OutputFilePath + ".log");
+                MessageBox.Show(e.ToString());
                 return (int)ConversionResult.Fail;
             }
         }

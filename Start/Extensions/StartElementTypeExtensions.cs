@@ -9,7 +9,8 @@ namespace Start.Extensions
             StartElementType.PIPE_ELEMENT,
             StartElementType.RIGID_ELEMENT,
             StartElementType.CYLINDRICAL_SHELL,
-            StartElementType.FLEXIBLE_ELEMENT
+            StartElementType.FLEXIBLE_ELEMENT,
+            StartElementType.CONE_ELEMENT
         };
     }
 }

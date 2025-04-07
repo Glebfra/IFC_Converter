@@ -1,7 +1,6 @@
 ﻿using System;
-using IFC.Entities.Fittings;
 using IFC.Tools;
-using Start.Entities;
+using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -26,7 +25,7 @@ namespace IFC.Entities.Abstract
         {
             _startTeeEntity = startTeeEntity;
 
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(IfcNodeEntity.ObjectMatrix3D.Translation, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
+            ObjectMatrix3D = XbimMatrix3D.CreateWorld(NodeEntity.ObjectMatrix3D.Translation, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
             SortPipes(out _branchPipes, out _headPipe);
         }
 
@@ -40,10 +39,10 @@ namespace IFC.Entities.Abstract
             foreach (IfcAbstractSegmentEntity branchPipe in _branchPipes)
             {
                 teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, length / 2);
-                branchPipe.Clip(IfcNodeEntity, length / 2);
+                branchPipe.Clip(NodeEntity, length / 2);
             }
             teeExtrudedArea[i++] = CreateTeeBranchShape(model, _headPipe, height);
-            _headPipe.Clip(IfcNodeEntity, height);
+            _headPipe.Clip(NodeEntity, height);
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);

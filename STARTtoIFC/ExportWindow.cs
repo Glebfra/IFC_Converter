@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 using STARTtoIFC.Localization;
 
@@ -28,36 +28,90 @@ namespace STARTtoIFC
             exportButton.Text = LocalizationResource.ExportWindowForm_ExportButton_Text;
             selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
             outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilePath_Label;
+            exportTypeLabel.Text = LocalizationResource.ExportWindowForm_ExportType_Label;
+            vertexSegmentsLabel.Text = LocalizationResource.ExportWindowForm_VertexSegments_Textbox;
+
+            ArrayList types = new ArrayList
+            {
+                new IfcExportType(IfcExportTypeEnum.VERTEX, LocalizationResource.ExportWindowForm_ExportType_Vertex),
+                new IfcExportType(IfcExportTypeEnum.CAD, LocalizationResource.ExportWindowForm_ExportType_Topological)
+            };
+            exportTypeCombobox.DataSource = types;
+            exportTypeCombobox.DisplayMember = "TypeName";
+            exportTypeCombobox.ValueMember = "Type";
+            exportTypeCombobox.SelectedItem = types[1];
         }
 
         private void ExportButton_Click(object sender, EventArgs e)
         {
             string outputFilePath = outputFilePathTextbox.Text;
-            if (string.IsNullOrEmpty(outputFilePath))
+            if (!IsValidEmptyPath(outputFilePath)) return;
+
+            string outputDirectoryPath = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
+            if (!IsValidExistDirectory(outputDirectoryPath)) return;
+            if (!IsValidAccessControl(outputDirectoryPath)) return;
+
+            int vertexNum = Convert.ToInt32(vertexSegmentsTextbox.Text);
+            if (!IsValidVertexNum(vertexNum)) return;
+            
+            if (exportTypeCombobox.SelectedItem is not IfcExportType exportType)
             {
-                MessageBox.Show(LocalizationResource.ExportWindowForm_OutputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.ExportWindowForm_ExportType_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             
-            string outputDirectoryPath = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
-            if (!Directory.Exists(outputDirectoryPath))
+            _dataContainer.OutputFilePath = outputFilePath;
+            _dataContainer.ExportType = exportType.Type;
+            _dataContainer.NumSegments = vertexNum;
+            
+            DialogResult = DialogResult.OK;
+        }
+
+        private bool IsValidVertexNum(int vertexNum)
+        {
+            bool result = vertexNum > 4;
+            if (!result)
             {
-                MessageBox.Show(LocalizationResource.DirectoryDoesNotExists_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show(LocalizationResource.ExportWindowForm_VertexSegmentsNum_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            return result;
+        }
+
+        private bool IsValidEmptyPath(string filePath)
+        {
+            bool result = !string.IsNullOrEmpty(filePath);
+            if (!result)
+            {
+                MessageBox.Show(LocalizationResource.ExportWindowForm_OutputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return result;
+        }
+
+        private bool IsValidExistDirectory(string directoryPath)
+        {
+            bool result = Directory.Exists(directoryPath);
+            if (!result)
+            {
+                MessageBox.Show(LocalizationResource.DirectoryDoesNotExists_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return result;
+        }
+
+        private bool IsValidAccessControl(string directoryPath)
+        {
             try
             {
-                DirectorySecurity ds = Directory.GetAccessControl(outputDirectoryPath);
+                Directory.GetAccessControl(directoryPath);
+                return true;
             }
             catch (UnauthorizedAccessException)
             {
                 MessageBox.Show(LocalizationResource.UnauthorizedAccess_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
-
-            _dataContainer.OutputFilePath = outputFilePath;
-            DialogResult = DialogResult.OK;
         }
 
         private void selectOutputFilePathButton_Click(object sender, EventArgs e)
@@ -66,7 +120,7 @@ namespace STARTtoIFC
             {
                 // TODO: Предлагаю вообще убрать Title(он автоматически задаётся с учётом локализации) и добавить это:
                 //saveFileDialog.FileName = Имя файла старт;
-                saveFileDialog.Title = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Click_SelectFile;
+                saveFileDialog.Title = LocalizationResource.ExportWindowForm_SaveDialogFile_Title;
                 saveFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
                 saveFileDialog.DefaultExt = ".ifc";
                 saveFileDialog.RestoreDirectory = true;
@@ -76,6 +130,11 @@ namespace STARTtoIFC
                     outputFilePathTextbox.Text = saveFileDialog.FileName;
                 }
             }
+        }
+
+        private void vertexSegmentsTextbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
     }
 }

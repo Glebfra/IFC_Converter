@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using IFC.Entities.Fittings;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
-using Start.Entities;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
@@ -17,7 +16,7 @@ namespace IFC.Entities.Abstract
 
         public double Angle { get; protected set; }
         public double Diameter { get; protected set; }
-        public IfcNodeEntity IfcNodeEntity { get; }
+        public IfcNodeEntity NodeEntity { get; }
         
         private StartAbstractEntity _abstractEntity;
         protected IfcAbstractSegmentEntity[] _IfcAbstractSegmentEntities;
@@ -26,7 +25,7 @@ namespace IFC.Entities.Abstract
             : base(abstractEntity)
         {
             _abstractEntity = abstractEntity;
-            IfcNodeEntity = ifcNodeEntity;
+            NodeEntity = ifcNodeEntity;
             _IfcAbstractSegmentEntities = ifcAbstractSegmentEntities;
             
             XbimVector3D coordinates = ifcNodeEntity.ObjectMatrix3D.Translation;
