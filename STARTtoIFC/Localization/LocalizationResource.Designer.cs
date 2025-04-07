@@ -38,7 +38,7 @@ namespace STARTtoIFC.Localization {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("STARTtoIFC.LocalizationResource", typeof(LocalizationResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("STARTtoIFC.Localization.LocalizationResource", typeof(LocalizationResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
