@@ -60,6 +60,35 @@ namespace IFC.Tools
             return points;
         }
 
+        public static IfcCartesianPoint[] CreateSpiral(IModel model, double radius, double height, int numSegments, int numTurns, XbimVector3D displacement)
+        {
+            double pitch = height / numTurns;
+            
+            IfcCartesianPoint[] points = new IfcCartesianPoint[numTurns * numSegments];
+            for (int i = 0; i < numTurns * numSegments; i++)
+            {
+                double factor = i / (double)numSegments;
+                double angle = 2 * Math.PI * factor;
+                
+                double x = radius * Math.Cos(angle);
+                double y = radius * Math.Sin(angle);
+                double z = pitch * factor;
+                
+                XbimVector3D point = new XbimVector3D(x, y, z) + displacement;
+                points[i] = IfcAxis.CreatePoint(model, point);
+            }
+
+            return points;
+        }
+        
+        public static IfcPolyline CreatePolyline(IModel model, IEnumerable<IfcCartesianPoint> points)
+        {
+            return model.Instances.New<IfcPolyline>(polyline =>
+            {
+                polyline.Points.AddRange(points);
+            });
+        }
+
         public static IfcFace CreateRectangleFace(IModel model, IfcCartesianPoint p1, IfcCartesianPoint p2, IfcCartesianPoint p3, IfcCartesianPoint p4)
         {
             return CreatePolygonFace(model, new[] { p1, p2, p3, p4 });
