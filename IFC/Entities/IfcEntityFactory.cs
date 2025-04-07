@@ -142,6 +142,9 @@ namespace IFC.Entities
                 case StartElementType.SLIDING_SUPPORT:
                     return new IfcVertexSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
+                case StartElementType.SPRING_SUPPORT:
+                    return new IfcVertexSpringSupportEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
                 default:
                     return null;
             }
