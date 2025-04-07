@@ -1,9 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
-using IFC.Entities.Fittings;
 using IFC.Tools;
-using Start.API;
-using Start.Entities;
 using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;

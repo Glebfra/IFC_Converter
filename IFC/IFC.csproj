@@ -150,7 +150,7 @@
     <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexHingedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexSlidingSupportEntity.cs" />
-    <Compile Include="Entities\Fittings\CAD\IfcAxiaExpansionJointEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcMilterJointEntity.cs" />
