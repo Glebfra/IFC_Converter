@@ -39,9 +39,9 @@ namespace IFC.Entities.Abstract
 
         protected abstract IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement);
 
-        protected IEnumerable<IfcRepresentationItem> CreateAnchor(IModel model)
+        protected IEnumerable<IfcRepresentationItem> CreateAnchor(IModel model, XbimVector3D normalDisplacement)
         {
-            return _IsVertical ? CreateVerticalAnchor(model) : CreateHorizontalAnchor(model);
+            return _IsVertical ? CreateVerticalAnchor(model, normalDisplacement) : CreateHorizontalAnchor(model);
         }
 
         private IEnumerable<IfcRepresentationItem> CreateHorizontalAnchor(IModel model)
@@ -49,13 +49,13 @@ namespace IFC.Entities.Abstract
             return CreateAnchorModel(model, XbimVector3D.Zero);
         }
         
-        private IEnumerable<IfcRepresentationItem> CreateVerticalAnchor(IModel model)
+        private IEnumerable<IfcRepresentationItem> CreateVerticalAnchor(IModel model, XbimVector3D normalDisplacement)
         {
-            double displacement = _PipeDiameter;
-            
+            XbimVector3D tangentDisplacement = _PipeDiameter * VectorExtensions.Right;
+
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
-            representationItems.AddRange(CreateAnchorModel(model, VectorExtensions.Right.Negated() * displacement));
-            representationItems.AddRange(CreateAnchorModel(model, VectorExtensions.Right * displacement));
+            representationItems.AddRange(CreateAnchorModel(model, tangentDisplacement.Negated() + normalDisplacement));
+            representationItems.AddRange(CreateAnchorModel(model, tangentDisplacement + normalDisplacement));
 
             return representationItems;
         }
