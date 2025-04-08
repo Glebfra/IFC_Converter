@@ -11,7 +11,7 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedComponentElements;
 
-namespace IFC.Entities.Anchors.Vertex
+namespace IFC.Entities.Anchors.CAD
 {
     public class IfcSpringHangerEntity : IfcAbstractAnchorEntity
     {

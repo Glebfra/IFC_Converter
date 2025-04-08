@@ -146,6 +146,7 @@
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideDoubleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideSingleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcRigidHangerEntity.cs" />
