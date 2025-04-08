@@ -73,11 +73,40 @@ namespace IFC.Tools
             IfcCircleProfileDef circleProfileDef = CreateCircleProfileDef(model, radius);
             return CreateExtrudedAreaSolid(model, circleProfileDef, zDim, coordinates);
         }
+        
+        public static IfcExtrudedAreaSolid CreateRectangle(IModel model, double xDim, double yDim, double zDim, XbimVector3D coordinates, XbimVector3D axis, XbimVector3D refDirection)
+        {
+            IfcRectangleProfileDef rectangleProfileDef = CreateRectangleProfileDef(model, xDim, yDim);
+            return CreateExtrudedAreaSolid(model, rectangleProfileDef, zDim, coordinates, axis, refDirection);
+        }
+
+        public static IfcExtrudedAreaSolid CreateCylinder(IModel model, double radius, double zDim, XbimVector3D coordinates, XbimVector3D axis, XbimVector3D refDirection)
+        {
+            IfcCircleProfileDef circleProfileDef = CreateCircleProfileDef(model, radius);
+            return CreateExtrudedAreaSolid(model, circleProfileDef, zDim, coordinates, axis, refDirection);
+        }
 
         public static IfcExtrudedAreaSolid CreateExtrudedAreaSolid(IModel model, IfcProfileDef profileDef, double zDim, XbimVector3D coordinates)
         {
             IfcCartesianPoint point = IfcAxis.CreatePoint(model, coordinates);
             IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point);
+            IfcDirection extrudeDirection = IfcAxis.CreateDirection(model, VectorExtensions.Forward);
+
+            return model.Instances.New<IfcExtrudedAreaSolid>(solid =>
+            {
+                solid.Depth = zDim;
+                solid.SweptArea = profileDef;
+                solid.ExtrudedDirection = extrudeDirection;
+                solid.Position = axis2Placement3D;
+            });
+        }
+        
+        public static IfcExtrudedAreaSolid CreateExtrudedAreaSolid(IModel model, IfcProfileDef profileDef, double zDim, XbimVector3D coordinates, XbimVector3D axis, XbimVector3D refDirection)
+        {
+            IfcCartesianPoint point = IfcAxis.CreatePoint(model, coordinates);
+            IfcDirection ifcAxis = IfcAxis.CreateDirection(model, axis);
+            IfcDirection ifcRefDirection = IfcAxis.CreateDirection(model, refDirection);
+            IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, point, ifcAxis, ifcRefDirection);
             IfcDirection extrudeDirection = IfcAxis.CreateDirection(model, VectorExtensions.Forward);
 
             return model.Instances.New<IfcExtrudedAreaSolid>(solid =>
