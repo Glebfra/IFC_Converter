@@ -89,6 +89,12 @@ namespace Start.Entities
                 case StartElementType.SPRING_HANGER:
                     return JsonConvert.DeserializeObject<StartSpringSupportEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.GUIDE_SINGLE_DIRECTION_SUPPORT:
+                    return JsonConvert.DeserializeObject<StartGuideSingleDirectionSupportEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.GUIDE_DOUBLE_DIRECTION_SUPPORT:
+                    return JsonConvert.DeserializeObject<StartGuideDoubleDirectionSupportEntity>(dataArrayItem.Data.ToString());
+                
                 default:
                     return null;
             }

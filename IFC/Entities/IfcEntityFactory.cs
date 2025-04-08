@@ -95,6 +95,12 @@ namespace IFC.Entities
                 
                 case StartElementType.SPRING_HANGER:
                     return new IfcSpringHangerEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.GUIDE_SINGLE_DIRECTION_SUPPORT:
+                    return new IfcGuideSingleDirectionSupportEntity((StartGuideSingleDirectionSupportEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.GUIDE_DOUBLE_DIRECTION_SUPPORT:
+                    return new IfcGuideDoubleDirectionSupportEntity((StartGuideDoubleDirectionSupportEntity)entity, nodeEntity, segmentEntities);
 
                 default:
                     return null;

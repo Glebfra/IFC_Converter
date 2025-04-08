@@ -150,6 +150,8 @@
     <Compile Include="Entities\Abstract\StartAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\StartAbstractEntity.cs" />
     <Compile Include="Entities\Anchors\StartAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\StartGuideDoubleDirectionSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\StartGuideSingleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartHingedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\StartSlidingSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartSpringSupportEntity.cs" />

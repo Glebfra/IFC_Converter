@@ -59,6 +59,22 @@ namespace IFC.Tools
 
             return points;
         }
+        
+        public static IfcCartesianPoint[] CreateCircle(IModel model, double radius, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
+        {
+            double angleStep = 2 * Math.PI / numSegments;
+            
+            IfcCartesianPoint[] points = new IfcCartesianPoint[numSegments];
+            for (int i = 0; i < numSegments; i++)
+            {
+                XbimVector3D x = xAxis * radius * Math.Cos(angleStep * i);
+                XbimVector3D y = yAxis * radius * Math.Sin(angleStep * i);
+                XbimVector3D point = x + y;
+                points[i] = IfcAxis.CreatePoint(model, point + coordinates);
+            }
+
+            return points;
+        }
 
         public static IfcCartesianPoint[] CreateSpiral(IModel model, double radius, double height, int numSegments, int numTurns, XbimVector3D displacement)
         {
