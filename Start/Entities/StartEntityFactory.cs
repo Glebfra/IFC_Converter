@@ -95,6 +95,9 @@ namespace Start.Entities
                 case StartElementType.GUIDE_DOUBLE_DIRECTION_SUPPORT:
                     return JsonConvert.DeserializeObject<StartGuideDoubleDirectionSupportEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.RIGID_HANGER:
+                    return JsonConvert.DeserializeObject<StartRigidHangerEntity>(dataArrayItem.Data.ToString());
+                
                 default:
                     return null;
             }

@@ -101,6 +101,9 @@ namespace IFC.Entities
                 
                 case StartElementType.GUIDE_DOUBLE_DIRECTION_SUPPORT:
                     return new IfcGuideDoubleDirectionSupportEntity((StartGuideDoubleDirectionSupportEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.RIGID_HANGER:
+                    return new IfcRigidHangerEntity((StartRigidHangerEntity)entity, nodeEntity, segmentEntities);
 
                 default:
                     return null;
