@@ -148,6 +148,7 @@
     <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideDoubleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideSingleDirectionSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\CAD\IfcRigidHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcSpringHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexHingedAnchorEntity.cs" />

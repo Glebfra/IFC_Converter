@@ -4,7 +4,7 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Anchors
 {
-    public class StartGuideSingleDirectionSupportEntity : StartAbstractAnchorEntity
+    public class StartRigidHangerEntity : StartAbstractAnchorEntity
     {
         [JsonProperty("1282")]
         public double Weight { get; set; }
