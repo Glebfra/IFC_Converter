@@ -89,6 +89,18 @@ namespace Start.Entities
                 case StartElementType.SPRING_HANGER:
                     return JsonConvert.DeserializeObject<StartSpringSupportEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.GUIDE_SINGLE_DIRECTION_SUPPORT:
+                    return JsonConvert.DeserializeObject<StartGuideSingleDirectionSupportEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.GUIDE_DOUBLE_DIRECTION_SUPPORT:
+                    return JsonConvert.DeserializeObject<StartGuideDoubleDirectionSupportEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.RIGID_HANGER:
+                    return JsonConvert.DeserializeObject<StartRigidHangerEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.CONSTANT_FORCE_SUPPORT:
+                    return JsonConvert.DeserializeObject<StartConstantForceSupportEntity>(dataArrayItem.Data.ToString());
+                
                 default:
                     return null;
             }

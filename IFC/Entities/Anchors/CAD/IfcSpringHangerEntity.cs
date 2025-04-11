@@ -11,7 +11,7 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedComponentElements;
 
-namespace IFC.Entities.Anchors.Vertex
+namespace IFC.Entities.Anchors.CAD
 {
     public class IfcSpringHangerEntity : IfcAbstractAnchorEntity
     {
@@ -34,7 +34,7 @@ namespace IFC.Entities.Anchors.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, -_PipeDiameter / 2 * VectorExtensions.Forward);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             

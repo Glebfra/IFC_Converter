@@ -13,18 +13,18 @@ using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Anchors.CAD
 {
-    public class IfcSpringSupportEntity : IfcAbstractAnchorEntity
+    public class IfcRigidHangerEntity : IfcAbstractAnchorEntity
     {
         private readonly double _height;
         private readonly int _numSegments;
-
-        private StartSpringSupportEntity _springSupportEntity;
+        
         private IfcDiscreteAccessory _discreteAccessory;
-
-        public IfcSpringSupportEntity(StartSpringSupportEntity springSupportEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(springSupportEntity, nodeEntity, segmentEntities)
+        private StartRigidHangerEntity _rigidHangerEntity;
+        
+        public IfcRigidHangerEntity(StartRigidHangerEntity rigidHangerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(rigidHangerEntity, nodeEntity, segmentEntities)
         {
-            _springSupportEntity = springSupportEntity;
+            _rigidHangerEntity = rigidHangerEntity;
             
             _numSegments = 8;
             _height = _PipeDiameter * 2;
@@ -34,13 +34,13 @@ namespace IFC.Entities.Anchors.CAD
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, _PipeDiameter / 2 * VectorExtensions.Forward);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, -_PipeDiameter / 2 * VectorExtensions.Forward);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             
             _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {
-                accessory.Name = _springSupportEntity.Name;
+                accessory.Name = _rigidHangerEntity.Name;
                 accessory.Tag = Tag;
                 accessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
                 accessory.Representation = shape;
@@ -53,34 +53,25 @@ namespace IFC.Entities.Anchors.CAD
 
         protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
-            IfcRepresentationItem[] representationItems = new IfcRepresentationItem[4];
+            IfcRepresentationItem[] representationItems = new IfcRepresentationItem[3];
 
-            XbimVector3D rectangleCoordinates = displacement - _height * VectorExtensions.Forward;
             double rectangleXDim = _PipeDiameter;
             double rectangleYDim = _PipeDiameter;
             double rectangleHeight = _height / 20;
+            XbimVector3D rectangleCoordinates = displacement + (_height - rectangleHeight) * VectorExtensions.Forward;
             representationItems[0] = IfcGeometry.CreateRectangle(model, rectangleXDim, rectangleYDim, rectangleHeight, rectangleCoordinates);
 
-            XbimVector3D stickCoordinates = rectangleCoordinates + rectangleHeight * VectorExtensions.Forward;
             double stickRadius = _PipeDiameter / 10;
             double stickHeight = _height / 3;
+            XbimVector3D stickCoordinates = rectangleCoordinates - stickHeight * VectorExtensions.Forward;
             representationItems[1] = IfcGeometry.CreateCylinder(model, stickRadius, stickHeight, stickCoordinates);
 
-            XbimVector3D springCoordinates = stickCoordinates;
-            double springRadius = stickRadius * 2;
-            double springHeight = stickHeight;
-            double springWireRadius = stickRadius / 2;
-            const int springNumTurns = 5;
-            IfcCartesianPoint[] spiralPoints = IfcVertexGeometry.CreateSpiral(model, springRadius, springHeight, _numSegments, springNumTurns, springCoordinates);
-            IfcPolyline spiralPolyline = IfcVertexGeometry.CreatePolyline(model, spiralPoints);
-            representationItems[2] = IfcGeometry.CreateSweptDiskSolid(model, spiralPolyline, springWireRadius);
-
-            XbimVector3D coneCoordinates = stickCoordinates + stickHeight * VectorExtensions.Forward;
-            XbimVector3D coneTopCoordinates = displacement - _PipeDiameter / 2 * VectorExtensions.Forward;
+            XbimVector3D coneCoordinates = stickCoordinates;
+            XbimVector3D coneTopCoordinates = displacement + _PipeDiameter / 2 * VectorExtensions.Forward;
             double coneRadius = _PipeDiameter / 4;
             IfcCartesianPoint[] circle = IfcVertexGeometry.CreateCircle(model, coneRadius, coneCoordinates, _numSegments);
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, coneTopCoordinates);
-            representationItems[3] = IfcVertexGeometry.CreateCone(model, circle, topPoint);
+            representationItems[2] = IfcVertexGeometry.CreateCone(model, circle, topPoint);
 
             return representationItems;
         }
