@@ -101,6 +101,9 @@ namespace Start.Entities
                 case StartElementType.CONSTANT_FORCE_SUPPORT:
                     return JsonConvert.DeserializeObject<StartConstantForceSupportEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
+                    return JsonConvert.DeserializeObject<StartConstantForceSupportHangerEntity>(dataArrayItem.Data.ToString());
+                
                 default:
                     return null;
             }
