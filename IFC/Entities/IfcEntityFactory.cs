@@ -107,6 +107,9 @@ namespace IFC.Entities
                 
                 case StartElementType.CONSTANT_FORCE_SUPPORT:
                     return new IfcConstantForceSupportEntity((StartConstantForceSupportEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
+                    return new IfcConstantForceSupportHangerEntity((StartConstantForceSupportHangerEntity)entity, nodeEntity, segmentEntities);
 
                 default:
                     return null;
