@@ -34,7 +34,7 @@ namespace IFC.Entities.Anchors.CAD
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, _PipeDiameter / 2 * VectorExtensions.Forward);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, -_PipeDiameter / 2 * VectorExtensions.Forward);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             
@@ -55,27 +55,27 @@ namespace IFC.Entities.Anchors.CAD
         {
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[4];
 
-            XbimVector3D rectangleCoordinates = displacement - _height * VectorExtensions.Forward;
             double rectangleXDim = _PipeDiameter;
             double rectangleYDim = _PipeDiameter;
             double rectangleHeight = _height / 20;
+            XbimVector3D rectangleCoordinates = displacement + (_height - rectangleHeight) * VectorExtensions.Forward;
             representationItems[0] = IfcGeometry.CreateRectangle(model, rectangleXDim, rectangleYDim, rectangleHeight, rectangleCoordinates);
             
             double coneHeight = _height / 4;
-            XbimVector3D botConeTopCoordinates = rectangleCoordinates + rectangleHeight * VectorExtensions.Forward;
-            XbimVector3D botConeCoordinates = botConeTopCoordinates + coneHeight * VectorExtensions.Forward;
+            XbimVector3D botConeTopCoordinates = rectangleCoordinates;
+            XbimVector3D botConeCoordinates = botConeTopCoordinates - coneHeight * VectorExtensions.Forward;
             double coneRadius = _PipeDiameter / 4;
             IfcCartesianPoint[] botConeCircle = IfcVertexGeometry.CreateCircle(model, coneRadius, botConeCoordinates, _numSegments);
             IfcCartesianPoint botConeTopPoint = IfcAxis.CreatePoint(model, botConeTopCoordinates);
             representationItems[1] = IfcVertexGeometry.CreateCone(model, botConeCircle, botConeTopPoint);
 
-            XbimVector3D stickCoordinates = botConeCoordinates;
             double stickRadius = _PipeDiameter / 10;
             double stickHeight = _height - rectangleHeight - 2 * coneHeight - _PipeDiameter / 2;
+            XbimVector3D stickCoordinates = botConeCoordinates - stickHeight * VectorExtensions.Forward;
             representationItems[2] = IfcGeometry.CreateCylinder(model, stickRadius, stickHeight, stickCoordinates);
 
-            XbimVector3D topConeCoordinates = stickCoordinates + stickHeight * VectorExtensions.Forward;
-            XbimVector3D topConeTopCoordinates = topConeCoordinates + coneHeight * VectorExtensions.Forward;
+            XbimVector3D topConeCoordinates = stickCoordinates;
+            XbimVector3D topConeTopCoordinates = topConeCoordinates - coneHeight * VectorExtensions.Forward;
             double topConeRadius = _PipeDiameter / 4;
             IfcCartesianPoint[] topConeCircle = IfcVertexGeometry.CreateCircle(model, topConeRadius, topConeCoordinates, _numSegments);
             IfcCartesianPoint topConeTopPoint = IfcAxis.CreatePoint(model, topConeTopCoordinates);

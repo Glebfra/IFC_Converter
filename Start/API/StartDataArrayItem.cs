@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics;
+using Newtonsoft.Json;
 using Start.Entities.Abstract;
 
 namespace Start.API
 {
+    [DebuggerDisplay("Type = {Type.ToString()}, ID = {DataArrayIndex}")]
     public class StartDataArrayItem
     {
         [JsonProperty("nodeIds")]
