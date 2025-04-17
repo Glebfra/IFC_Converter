@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Start;
 using Start.API;
+using Start.Entities.Fittings;
 using Start.Entities.Segments;
 
 namespace Tests.Start
@@ -49,6 +50,43 @@ namespace Tests.Start
             Assert.AreEqual(0, startPipeEntity.YCoord, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.ZCoord, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.AdditionalWeightLoad, TOLERANCE);
+        }
+
+        [Test]
+        public void ElbowTest()
+        {
+            StartBendEntity startBendEntity = _startDataArrayItems.FirstOrDefault(item => item.Type == StartElementType.ELBOW)?.Entity as StartBendEntity;
+            
+            Assert.NotNull(startBendEntity);
+            Assert.True(startBendEntity.Type == StartElementType.ELBOW);
+            Assert.True(startBendEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.SEAMLESS);
+            Assert.AreEqual(0.152, startBendEntity.Radius, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillTolerance, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillToleranceOutside, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient, TOLERANCE);
+            Assert.AreEqual(0.01, startBendEntity.WallThickness, TOLERANCE);
+            
+            //TODO Вес не выгружается
+            //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE); 
+        }
+
+        [Test]
+        public void PipeBendTest()
+        {
+            StartBendEntity startBendEntity = _startDataArrayItems.FirstOrDefault(item => item.Type == StartElementType.PIPE_BEND)?.Entity as StartBendEntity;
+            
+            Assert.NotNull(startBendEntity);
+            Assert.True(startBendEntity.Type == StartElementType.PIPE_BEND);
+            Assert.True(startBendEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.SEAMLESS);
+            Assert.AreEqual(0, startBendEntity.MillTolerance, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillToleranceOutside, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.NumberOfMilters, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient, TOLERANCE);
+            Assert.AreEqual(0.152, startBendEntity.Radius, TOLERANCE);
+            Assert.AreEqual(0.01, startBendEntity.WallThickness, TOLERANCE);
+            
+            //TODO вес не выгружается
+            //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE);
         }
     }
 }

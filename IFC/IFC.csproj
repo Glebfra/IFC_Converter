@@ -155,6 +155,7 @@
     <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexHingedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexSlidingSupportEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexVesselEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
@@ -204,6 +205,9 @@
       <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
       <Name>Start</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\Equipments\CAD\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
