@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using IFC.Entities.Abstract;
-using IFC.Entities.Interfaces;
+﻿using IFC.Entities.Abstract;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Equipments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
@@ -22,7 +19,7 @@ namespace IFC.Entities.Equipments.Vertex
         private double _length;
         
         private StartVesselEntity _vesselEntity;
-        private IfcPipeFitting _pipeFitting;
+        private IfcTank _ifcTank;
         
         public IfcVertexVesselEntity(StartVesselEntity vesselEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments) 
             : base(vesselEntity, nodeEntity, segmentEntities)
@@ -55,18 +52,18 @@ namespace IFC.Entities.Equipments.Vertex
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             
-            _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
+            _ifcTank = model.Instances.New<IfcTank>(fitting =>
             {
                 fitting.Name = _vesselEntity.Name;
                 fitting.Tag = Tag;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
+                fitting.PredefinedType = IfcTankTypeEnum.VESSEL;
                 fitting.Representation = shape;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
 
-            AddProperties(model, _pipeFitting);
+            AddProperties(model, _ifcTank);
 
-            return _pipeFitting;
+            return _ifcTank;
         }
     }
 }

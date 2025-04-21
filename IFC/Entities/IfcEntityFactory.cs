@@ -167,6 +167,9 @@ namespace IFC.Entities
                 
                 case StartElementType.VESSEL:
                     return new IfcVertexVesselEntity((StartVesselEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.TANK:
+                    return new IfcVertexTankEntity((StartTankEntity)entity, nodeEntity, segmentEntities, numSegments);
 
                 default:
                     return null;
