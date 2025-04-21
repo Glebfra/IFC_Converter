@@ -2,6 +2,7 @@
 using Start.API;
 using Start.Entities.Abstract;
 using Start.Entities.Anchors;
+using Start.Entities.Equipments;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
 
@@ -103,6 +104,9 @@ namespace Start.Entities
                 
                 case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
                     return JsonConvert.DeserializeObject<StartConstantForceSupportHangerEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.VESSEL:
+                    return JsonConvert.DeserializeObject<StartVesselEntity>(dataArrayItem.Data.ToString());
                 
                 default:
                     return null;

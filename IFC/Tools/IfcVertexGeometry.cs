@@ -31,21 +31,29 @@ namespace IFC.Tools
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
         }
+        
+        public static IfcFacetedBrep CreateClippedCone(IModel model, IfcCartesianPoint[] points1, IfcCartesianPoint[] points2)
+        {
+            int numSegments = points1.Length;
+            IfcFace[] faces = new IfcFace[numSegments + 2];
+            int facesIndex = 0;
+            for (int i = 0; i < numSegments; i++)
+            {
+                IfcCartesianPoint p1 = points1[i];
+                IfcCartesianPoint p2 = points1[(i + 1) % numSegments];
+                IfcCartesianPoint p3 = points2[(i + 1) % numSegments];
+                IfcCartesianPoint p4 = points2[i];
+                faces[facesIndex++] = CreateRectangleFace(model, p1, p2, p3, p4);
+            }
+            faces[facesIndex++] = CreatePolygonFace(model, points1);
+            faces[facesIndex] = CreatePolygonFace(model, points2);
+            
+            return model.Instances.New<IfcFacetedBrep>(brep =>
+            {
+                brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
+            });
+        }
 
-        public static IfcFacetedBrep CreateCone(IModel model, double radius, double height, XbimVector3D coordinates, int numSegments)
-        {
-            IfcCartesianPoint[] points = CreateCircle(model, radius, coordinates, numSegments);
-            IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, coordinates + VectorExtensions.Forward * height);
-            return CreateCone(model, points, topPoint);
-        }
-        
-        public static IfcFacetedBrep CreateCone(IModel model, double radius, XbimVector3D topCoordinates, XbimVector3D coordinates, int numSegments)
-        {
-            IfcCartesianPoint[] points = CreateCircle(model, radius, coordinates, numSegments);
-            IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, topCoordinates);
-            return CreateCone(model, points, topPoint);
-        }
-        
         public static IfcCartesianPoint[] CreateCircle(IModel model, double radius, XbimVector3D coordinates, int numSegments)
         {
             double angleStep = 2 * Math.PI / numSegments;

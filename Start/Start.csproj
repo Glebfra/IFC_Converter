@@ -158,6 +158,7 @@
     <Compile Include="Entities\Anchors\StartRigidHangerEntity.cs" />
     <Compile Include="Entities\Anchors\StartSlidingSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartSpringSupportEntity.cs" />
+    <Compile Include="Entities\Equipments\StartVesselEntity.cs" />
     <Compile Include="Entities\Fittings\StartAngularExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartArmatureEntity.cs" />
     <Compile Include="Entities\Fittings\StartAxialExpansionJointEntity.cs" />
