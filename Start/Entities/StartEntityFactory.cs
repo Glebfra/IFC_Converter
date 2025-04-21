@@ -108,6 +108,9 @@ namespace Start.Entities
                 case StartElementType.VESSEL:
                     return JsonConvert.DeserializeObject<StartVesselEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.TANK:
+                    return JsonConvert.DeserializeObject<StartTankEntity>(dataArrayItem.Data.ToString());
+                
                 default:
                     return null;
             }
