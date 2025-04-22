@@ -7,28 +7,28 @@ namespace Start.Entities.Fittings
 {
     public class StartArmatureEntity : StartAbstractEntity
     {
-        [JsonProperty("225")] 
+        [JsonProperty("449")]
         public string Name { get; set; }
     
-        [JsonProperty("4")] 
+        [JsonProperty("4")]
         public double OutsideDiameter { get; set; }
     
-        [JsonProperty("34")] 
+        [JsonProperty("34")]
         public double Weight { get; set; }
     
-        [JsonProperty("145")] 
+        [JsonProperty("145")]
         public double Length { get; set; }
     
-        [JsonProperty("82")] 
+        [JsonProperty("82")]
         public StartLeakageCheckEnum LeakageCheckEnum { get; set; }
     
-        [JsonProperty("720")] 
+        [JsonProperty("720")]
         public double GasketEffectiveDiameter { get; set; }
     
-        [JsonProperty("722")] 
+        [JsonProperty("722")]
         public double NominalPressure { get; set; }
     
-        [JsonProperty("387")] 
+        [JsonProperty("387")]
         public double GasketCrossection { get; set; }
 
         public override Dictionary<string, string> GetData()

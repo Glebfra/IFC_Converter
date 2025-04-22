@@ -75,13 +75,13 @@ namespace Start.Entities.Segments
         public double ProjectionAlongOZAxis { get; set; }
 
         [JsonProperty("404")]
-        public double XCoord;
+        public double XCoord { get; set; }
         
         [JsonProperty("405")]
-        public double YCoord;
+        public double YCoord { get; set; }
         
         [JsonProperty("406")]
-        public double ZCoord;
+        public double ZCoord { get; set; }
 
         public override Dictionary<string, string> GetData()
         {

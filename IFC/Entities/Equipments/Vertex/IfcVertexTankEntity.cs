@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using IFC.Entities.Abstract;
 using IFC.Entities.Interfaces;
 using IFC.Extensions;
@@ -115,6 +114,8 @@ namespace IFC.Entities.Equipments.Vertex
 
         private IEnumerable<IfcFacetedBrep> CreateFlange(IModel model, XbimVector3D xAxis, XbimVector3D yAxis)
         {
+            //TODO Fix flange at horizontal tank placement
+            
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[2];
 
             XbimVector3D[] displacements = new XbimVector3D[]

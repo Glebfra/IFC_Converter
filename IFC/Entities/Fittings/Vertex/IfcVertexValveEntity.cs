@@ -15,7 +15,7 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    public sealed class IfcVertexValveEntity : IfcAbstractFittingEntity
+    public class IfcVertexValveEntity : IfcAbstractFittingEntity
     {
         public readonly double Length;
 
@@ -69,7 +69,7 @@ namespace IFC.Entities.Fittings.Vertex
             return _pipeFitting;
         }
     
-        private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height, double angle = 0)
+        protected IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height, double angle = 0)
         {
             IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
             XbimMatrix3D My = MatrixExtensions.My(angle);
@@ -88,7 +88,7 @@ namespace IFC.Entities.Fittings.Vertex
             return points;
         }
 
-        private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] points, IfcCartesianPoint topPoint)
+        protected IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] points, IfcCartesianPoint topPoint)
         {
             IfcFace[] faces = new IfcFace[_numSegments + 1];
             int facesIndex = 0;
