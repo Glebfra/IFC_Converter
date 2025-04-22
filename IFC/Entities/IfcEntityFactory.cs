@@ -170,6 +170,9 @@ namespace IFC.Entities
                 
                 case StartElementType.TANK:
                     return new IfcVertexTankEntity((StartTankEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.INLINE_PUMP:
+                    return new IfcVertexInlinePumpEntity((StartInlinePumpEntity)entity, nodeEntity, segmentEntities, numSegments);
 
                 default:
                     return null;
