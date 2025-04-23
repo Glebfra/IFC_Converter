@@ -20,16 +20,22 @@ namespace Start.Entities.Equipments
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
         
         [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
-        public double ProjectionAlongOXAxis { get; set; }
+        public double PumpCenterCoordX { get; set; }
     
         [JsonProperty(StartPropertyName.ProjectionAlongOYAxis)]
-        public double ProjectionAlongOYAxis { get; set; }
+        public double PumpCenterCoordY { get; set; }
     
         [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
-        public double ProjectionAlongOZAxis { get; set; }
+        public double PumpCenterCoordZ { get; set; }
         
         [JsonProperty(StartPropertyName.PermissibleExcessFactor)]
         public double PermissibleExcessFactor { get; set; }
+        
+        [JsonProperty(StartPropertyName.FShaftXAxisAngle)]
+        public double FShaftXAxisAngle { get; set; }
+        
+        [JsonProperty(StartPropertyName.FShaftYAxisAngle)]
+        public double FShaftYAxisAngle { get; set; }
         
         public override Dictionary<string, string> GetData()
         {
@@ -39,10 +45,12 @@ namespace Start.Entities.Equipments
                 { "Material Name", MaterialName },
                 { "Temperature", Temperature.ToString("F5") },
                 { "Manufacturing Technology", ManufacturingTechnologyEnum.ToString() },
-                { "Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5") },
-                { "Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5") },
-                { "Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5") },
+                { "Pump Center Coord X", PumpCenterCoordX.ToString("F5") },
+                { "Pump Center Coord Y", PumpCenterCoordY.ToString("F5") },
+                { "Pump Center Coord Z", PumpCenterCoordZ.ToString("F5") },
                 { "Permissible Excess Factor", PermissibleExcessFactor.ToString("F5") },
+                { "FShaft XAxis Angle", FShaftXAxisAngle.ToString("F5") },
+                { "FShaft YAxis Angle", FShaftYAxisAngle.ToString("F5") },
             };
 
             return dictionary;

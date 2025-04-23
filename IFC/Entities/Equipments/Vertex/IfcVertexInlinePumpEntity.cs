@@ -48,8 +48,8 @@ namespace IFC.Entities.Equipments.Vertex
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
 
-            _IfcAbstractSegmentEntities[0].Clip(NodeEntity, Length / 2);
-            _IfcAbstractSegmentEntities[1].Clip(NodeEntity, Length / 2);
+            AbstractSegmentEntities[0].Clip(NodeEntity, Length / 2);
+            AbstractSegmentEntities[1].Clip(NodeEntity, Length / 2);
 
             AddProperties(model, _ifcPump);
 

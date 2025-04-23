@@ -78,6 +78,8 @@
         public const string NominalPressure = "722";
         public const string PermissibleExcessFactor = "749";
         public const string ConeElementSecondDiameter = "749";
+        public const string FShaftXAxisAngle = "750";
+        public const string FShaftYAxisAngle = "751";
         public const string TankRadius = "889";
         public const string FrictionMoment1 = "1094";
         public const string Pressure1 = "1095";        

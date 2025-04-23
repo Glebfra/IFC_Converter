@@ -24,8 +24,8 @@ namespace IFC.Entities.Fittings.Vertex
         private IfcPipeFitting? _pipeFitting;
         private readonly StartReducerEntity _reducerEntity;
 
-        public IfcVertexReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments)
-            : base(reducerEntity, nodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexReducerConcentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments)
+            : base(reducerEntity, nodeEntity, abstractSegmentEntities)
         {
             _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
@@ -33,7 +33,7 @@ namespace IFC.Entities.Fittings.Vertex
             _reducerEntity = reducerEntity;
 
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(ifcAbstractSegmentEntities[1], coordinates);
+            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(abstractSegmentEntities[1], coordinates);
         
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = directionToPipe.Normalized();
@@ -51,7 +51,7 @@ namespace IFC.Entities.Fittings.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            double[] radiuses = _IfcAbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
+            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
             double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;
@@ -69,8 +69,8 @@ namespace IFC.Entities.Fittings.Vertex
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            _IfcAbstractSegmentEntities[0].Clip(NodeEntity, Math.Abs(displacement1));
-            _IfcAbstractSegmentEntities[1].Clip(NodeEntity, Math.Abs(displacement2));
+            AbstractSegmentEntities[0].Clip(NodeEntity, Math.Abs(displacement1));
+            AbstractSegmentEntities[1].Clip(NodeEntity, Math.Abs(displacement2));
 
             AddProperties(model, _pipeFitting);
 

@@ -26,8 +26,8 @@ namespace IFC.Entities.Fittings.Vertex
         private StartBendEntity _bendEntity;
         private IfcPipeFitting _pipeFitting;
 
-        public IfcVertexBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
-            : base(bendEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments) 
+            : base(bendEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
@@ -36,7 +36,7 @@ namespace IFC.Entities.Fittings.Vertex
 
             _torusAngleStep = Angle / (_numSegments - 1);
             _torusRadius = _bendEntity.Radius;
-            _circleRadius = Math.Min(_IfcAbstractSegmentEntities[0].Diameter / 2, _IfcAbstractSegmentEntities[1].Diameter / 2);
+            _circleRadius = Math.Min(AbstractSegmentEntities[0].Diameter / 2, AbstractSegmentEntities[1].Diameter / 2);
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

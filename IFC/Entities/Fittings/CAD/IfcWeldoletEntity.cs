@@ -11,8 +11,8 @@ namespace IFC.Entities.Fittings.CAD
         private double Length;
         private double Height;
     
-        public IfcWeldoletEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(startTeeEntity, nodeEntity, ifcAbstractSegmentEntities)
+        public IfcWeldoletEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
             Length = _headPipe.Diameter;
             Height = _branchPipes[0].Diameter / 2 + startTeeEntity.BranchHeight;

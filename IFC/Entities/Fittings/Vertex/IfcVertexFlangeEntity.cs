@@ -25,15 +25,15 @@ namespace IFC.Entities.Fittings.Vertex
         private readonly StartArmatureEntity _armatureEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments)
-            : base(armatureEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments)
+            : base(armatureEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;
-            Radiuses = ifcAbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
+            Radiuses = abstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
     
         public override IfcProduct CreateAndAdd(IModel model)
@@ -70,7 +70,7 @@ namespace IFC.Entities.Fittings.Vertex
             });
 
             AddProperties(model, _pipeFitting);
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
             {
                 ifcAbstractSegmentEntity.Clip(NodeEntity, 0.5 * Length);
             }

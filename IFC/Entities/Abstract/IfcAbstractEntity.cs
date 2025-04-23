@@ -15,10 +15,14 @@ namespace IFC.Entities.Abstract
         public StartElementType Type { get; }
         public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
+        private StartAbstractEntity _abstractEntity;
+
         public IfcAbstractEntity(StartAbstractEntity abstractEntity)
         {
             Tag = abstractEntity.Type.ToString();
             Type = abstractEntity.Type;
+            
+            _abstractEntity = abstractEntity;
         }
         
         public abstract IfcProduct CreateAndAdd(IModel model);
@@ -56,6 +60,27 @@ namespace IFC.Entities.Abstract
                 });
             });
             #endif
+            #endregion
+
+            #region Pset_Start
+
+            model.Instances.New<IfcRelDefinesByProperties>(properties =>
+            {
+                properties.RelatedObjects.Add(product);
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+                {
+                    set.Name = "Pset_Start";
+                    foreach (var kvp in _abstractEntity.GetData())
+                    {
+                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                        {
+                            value.Name = kvp.Key;
+                            value.NominalValue = new IfcText(kvp.Value);
+                        }));
+                    }
+                });
+            });
+
             #endregion
         }
     }

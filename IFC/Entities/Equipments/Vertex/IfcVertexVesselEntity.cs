@@ -25,7 +25,7 @@ namespace IFC.Entities.Equipments.Vertex
             : base(vesselEntity, nodeEntity, segmentEntities)
         {
             _numSegments = numSegments;
-            _pipeDiameter = _IfcAbstractSegmentEntities[0].Diameter;
+            _pipeDiameter = AbstractSegmentEntities[0].Diameter;
             _length = _pipeDiameter / 4;
             
             _vesselEntity = vesselEntity;

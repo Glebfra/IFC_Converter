@@ -21,14 +21,14 @@ namespace IFC.Entities.Abstract
         private readonly StartBendEntity _bendEntity;
         private readonly XbimVector3D[] _directionToPipes;
 
-        public IfcAbstractBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(bendEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcAbstractBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(bendEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _bendEntity = bendEntity;
             _directionToPipes = CalculateDirectionToPipes();
             
             _BendRadius = _bendEntity.Radius;
-            _PipeRadius = Math.Min(_IfcAbstractSegmentEntities[0].Diameter / 2, _IfcAbstractSegmentEntities[1].Diameter / 2);
+            _PipeRadius = Math.Min(AbstractSegmentEntities[0].Diameter / 2, AbstractSegmentEntities[1].Diameter / 2);
 
             ObjectMatrix3D = ObjectMatrix3D.Translate(CalculateCircleCenter());
             Length = Angle * _BendRadius;
@@ -37,7 +37,7 @@ namespace IFC.Entities.Abstract
         protected XbimVector3D[] CalculateDirectionToPipes()
         {
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            return _IfcAbstractSegmentEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
+            return AbstractSegmentEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
         }
 
         private XbimVector3D CalculateCircleCenter()
@@ -50,7 +50,7 @@ namespace IFC.Entities.Abstract
         protected void ClipConnectedPipes()
         {
             double clipLength = _bendEntity.Radius * Math.Tan(Angle / 2);
-            foreach (IfcAbstractSegmentEntity ifcPipeEntity in _IfcAbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity ifcPipeEntity in AbstractSegmentEntities)
             {
                 ifcPipeEntity.Clip(NodeEntity, clipLength);
             }

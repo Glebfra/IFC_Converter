@@ -20,8 +20,8 @@ namespace IFC.Entities.Abstract
         protected IfcAbstractSegmentEntity[] _branchPipes;
         protected IfcAbstractSegmentEntity _headPipe;
 
-        public IfcAbstractTeeEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
-            : base(startTeeEntity, nodeEntity, ifcAbstractSegmentEntities)
+        public IfcAbstractTeeEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+            : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
             _startTeeEntity = startTeeEntity;
 
@@ -33,7 +33,7 @@ namespace IFC.Entities.Abstract
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
 
-            IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[_IfcAbstractSegmentEntities.Length];
+            IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[AbstractSegmentEntities.Length];
 
             int i = 0;
             foreach (IfcAbstractSegmentEntity branchPipe in _branchPipes)
@@ -90,20 +90,20 @@ namespace IFC.Entities.Abstract
             branchPipes = new IfcAbstractSegmentEntity[2];
             headPipe = null;
 
-            for (int j = 0; j < _IfcAbstractSegmentEntities.Length; j++)
+            for (int j = 0; j < AbstractSegmentEntities.Length; j++)
             {
-                for (int k = j + 1; k < _IfcAbstractSegmentEntities.Length; k++)
+                for (int k = j + 1; k < AbstractSegmentEntities.Length; k++)
                 {
-                    XbimVector3D firstPipeDir = _IfcAbstractSegmentEntities[j].ObjectMatrix3D.Forward;
-                    XbimVector3D secondPipeDir = _IfcAbstractSegmentEntities[k].ObjectMatrix3D.Forward;
+                    XbimVector3D firstPipeDir = AbstractSegmentEntities[j].ObjectMatrix3D.Forward;
+                    XbimVector3D secondPipeDir = AbstractSegmentEntities[k].ObjectMatrix3D.Forward;
 
                     double angleCos = XbimVector3D.DotProduct(firstPipeDir, secondPipeDir) /
                                       (firstPipeDir.Length * secondPipeDir.Length);
 
                     if (Math.Abs(angleCos) < 0.95) continue;
-                    branchPipes[0] = _IfcAbstractSegmentEntities[j];
-                    branchPipes[1] = _IfcAbstractSegmentEntities[k];
-                    headPipe = _IfcAbstractSegmentEntities[_IfcAbstractSegmentEntities.Length - (j + k)];
+                    branchPipes[0] = AbstractSegmentEntities[j];
+                    branchPipes[1] = AbstractSegmentEntities[k];
+                    headPipe = AbstractSegmentEntities[AbstractSegmentEntities.Length - (j + k)];
                 }
             }
             
