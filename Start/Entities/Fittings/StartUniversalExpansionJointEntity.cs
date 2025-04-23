@@ -1,51 +1,52 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
     public class StartUniversalExpansionJointEntity : StartAbstractEntity
     {
-        [JsonProperty("2")]
+        [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
         public double AllowableAxialExpansion { get; set; }
         
-        [JsonProperty("34")]
+        [JsonProperty(StartPropertyName.Weight)]
         public double Weight { get; set; }
         
-        [JsonProperty("75")]
+        [JsonProperty(StartPropertyName.AxialFlexibility)]
         public double AxialFlexibility { get; set; }
         
-        [JsonProperty("76")]
+        [JsonProperty(StartPropertyName.EffectiveArea)]
         public double EffectiveArea { get; set; }
         
-        [JsonProperty("145")]
+        [JsonProperty(StartPropertyName.Length)]
         public double Length { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
-        [JsonProperty("693")]
+        [JsonProperty(StartPropertyName.ShearCompliance)]
         public double ShearCompliance { get; set; }
         
-        [JsonProperty("694")]
+        [JsonProperty(StartPropertyName.PermissibleLateralMovement)]
         public double PermissibleLateralMovement { get; set; }
 
-        [JsonProperty("1293")]
+        [JsonProperty(StartPropertyName.StiffnessTempFactor)]
         public double StiffnessTempFactor { get; set; }
         
-        [JsonProperty("1294")]
+        [JsonProperty(StartPropertyName.AllowableCorrFactor)]
         public double AllowableCorrFactor { get; set; }
         
-        [JsonProperty("1416")]
+        [JsonProperty(StartPropertyName.StiffnessAngleFactor)]
         public double StiffnessAngleFactor { get; set; }
         
-        [JsonProperty("1417")]
+        [JsonProperty(StartPropertyName.AngleAllowableCorrFactor)]
         public double AngleAllowableCorrFactor { get; set; }
         
-        [JsonProperty("1418")]
+        [JsonProperty(StartPropertyName.StiffnessShearFactor)]
         public double StiffnessShearFactor { get; set; }
         
-        [JsonProperty("1419")]
+        [JsonProperty(StartPropertyName.ShearAllowableCorrFactor)]
         public double ShearAllowableCorrFactor { get; set; }
 
         public override Dictionary<string, string> GetData()

@@ -1,39 +1,40 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
     public class StartBallExpansionJointEntity : StartAbstractEntity
     {
-        [JsonProperty("2")]
+        [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
         public double AllowableAxialExpansion { get; set; }
         
-        [JsonProperty("34")]
+        [JsonProperty(StartPropertyName.Weight)]
         public double Weight { get; set; }
         
-        [JsonProperty("145")]
+        [JsonProperty(StartPropertyName.Length)]
         public double Length { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
-        [JsonProperty("1094")]
+        [JsonProperty(StartPropertyName.FrictionMoment1)]
         public double FrictionMoment1 { get; set; }
         
-        [JsonProperty("1095")]
+        [JsonProperty(StartPropertyName.Pressure1)]
         public double Pressure1 { get; set; }
         
-        [JsonProperty("1096")]
+        [JsonProperty(StartPropertyName.FrictionMoment2)]
         public double FrictionMoment2 { get; set; }
         
-        [JsonProperty("1097")]
+        [JsonProperty(StartPropertyName.Pressure2)]
         public double Pressure2 { get; set; }
         
-        [JsonProperty("1098")]
+        [JsonProperty(StartPropertyName.FrictionMoment3)]
         public double FrictionMoment3 { get; set; }
         
-        [JsonProperty("1099")]
+        [JsonProperty(StartPropertyName.Pressure3)]
         public double Pressure3 { get; set; }
 
         public override Dictionary<string, string> GetData()

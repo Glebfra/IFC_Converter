@@ -1,27 +1,28 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities
 {
     public class StartNodeEntity : StartAbstractEntity
     {
-        [JsonProperty("61")] 
+        [JsonProperty(StartPropertyName.AdditionalWeightLoad)] 
         public double AdditionalLoadFromWeight { get; set; }
         
-        [JsonProperty("225")] 
+        [JsonProperty(StartPropertyName.PipeName)] 
         public string Name { get; set; }
         
-        [JsonProperty("227")] 
+        [JsonProperty(StartPropertyName.Description)] 
         public string Description { get; set; }
 
-        [JsonProperty("404")]
+        [JsonProperty(StartPropertyName.XCoord)]
         public double XCoord;
         
-        [JsonProperty("405")]
+        [JsonProperty(StartPropertyName.YCoord)]
         public double YCoord;
         
-        [JsonProperty("406")]
+        [JsonProperty(StartPropertyName.ZCoord)]
         public double ZCoord;
 
         public override Dictionary<string, string> GetData()

@@ -7,37 +7,37 @@ namespace Start.Entities.Fittings
 {
     public class StartReducerEntity : StartAbstractEntity
     {
-        [JsonProperty("2")]
+        [JsonProperty(StartPropertyName.ConicalPartLength)]
         public double LengthOfConicalPart { get; set; }
         
-        [JsonProperty("4")] 
+        [JsonProperty(StartPropertyName.Diameter)] 
         public double MaxDiameter { get; set; }
         
-        [JsonProperty("6")]
+        [JsonProperty(StartPropertyName.MinDiameter)]
         public double MinDiameter { get; set; }
         
-        [JsonProperty("9")] 
+        [JsonProperty(StartPropertyName.WallThickness)] 
         public double ThicknessAtMaxDiameterPoint { get; set; }
         
-        [JsonProperty("13")]
+        [JsonProperty(StartPropertyName.MillTolerance)]
         public double MillToleranceAtDMax { get; set; }
         
-        [JsonProperty("34")]
+        [JsonProperty(StartPropertyName.Weight)]
         public double Weight { get; set; }
         
-        [JsonProperty("37")]
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
         
-        [JsonProperty("131")]
+        [JsonProperty(StartPropertyName.AngleBetweenEccentricityVectorAndZmAxis)]
         public double AngleBetweenEccentricityVectorAndZmAxis { get; set; }
         
-        [JsonProperty("225")]
+        [JsonProperty(StartPropertyName.PipeName)]
         public string Name { get; set; }
         
-        [JsonProperty("434")]
+        [JsonProperty(StartPropertyName.MillToleranceAtDMin)]
         public double MillToleranceAtDMin { get; set; }
         
-        [JsonProperty("455")]
+        [JsonProperty(StartPropertyName.ReducerMillTolerance)]
         public double MillTolerance { get; set; }
 
         public override Dictionary<string, string> GetData()

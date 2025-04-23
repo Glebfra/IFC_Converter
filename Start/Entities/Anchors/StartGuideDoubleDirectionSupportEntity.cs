@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Anchors
 {
     public class StartGuideDoubleDirectionSupportEntity : StartAbstractAnchorEntity
     {
-        [JsonProperty("1282")]
+        [JsonProperty(StartPropertyName.AnchorSupportWeight)]
         public double Weight { get; set; }
         
         public override Dictionary<string, string> GetData()

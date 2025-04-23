@@ -1,39 +1,40 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
     public class StartLateralExpansionJointEntity : StartAbstractEntity
     {
-        [JsonProperty("2")]
+        [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
         public double AllowableAxialExpansion { get; set; }
         
-        [JsonProperty("34")]
+        [JsonProperty(StartPropertyName.Weight)]
         public double Weight { get; set; }
         
-        [JsonProperty("75")]
+        [JsonProperty(StartPropertyName.AxialFlexibility)]
         public double AxialFlexibility { get; set; }
         
-        [JsonProperty("76")]
+        [JsonProperty(StartPropertyName.EffectiveArea)]
         public double EffectiveArea { get; set; }
         
-        [JsonProperty("145")]
+        [JsonProperty(StartPropertyName.Length)]
         public double Length { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
-        [JsonProperty("1289")]
+        [JsonProperty(StartPropertyName.EffectiveDiameter)]
         public double EffectiveDiameter { get; set; }
         
-        [JsonProperty("1293")]
+        [JsonProperty(StartPropertyName.StiffnessTempFactor)]
         public double StiffnessTempFactor { get; set; }
         
-        [JsonProperty("1294")]
+        [JsonProperty(StartPropertyName.AllowableCorrFactor)]
         public double AllowableCorrFactor { get; set; }
         
-        [JsonProperty("1405")]
+        [JsonProperty(StartPropertyName.AxialStiffness)]
         public double AxialStiffness { get; set; }
         
         public override Dictionary<string, string> GetData()

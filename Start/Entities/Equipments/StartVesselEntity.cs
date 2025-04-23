@@ -7,31 +7,31 @@ namespace Start.Entities.Equipments
 {
     public class StartVesselEntity : StartAbstractEntity
     {
-        [JsonProperty("7")] 
+        [JsonProperty(StartPropertyName.MaterialName)] 
         public string MaterialName { get; set; }
         
-        [JsonProperty("13")] 
+        [JsonProperty(StartPropertyName.MillTolerance)] 
         public double MillTolerance { get; set; }
         
-        [JsonProperty("14")] 
+        [JsonProperty(StartPropertyName.CorrosionAllowance)] 
         public double CorrosionAllowance { get; set; }
         
-        [JsonProperty("30")]
+        [JsonProperty(StartPropertyName.Temperature)]
         public double Temperature { get; set; }
         
-        [JsonProperty("37")] 
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)] 
         public StartManufacturingTechnologyEnum ManufacturingTechnology { get; set; }
         
-        [JsonProperty("128")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
         public double ProjectionAlongOXAxis { get; set; }
     
-        [JsonProperty("129")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOYAxis)]
         public double ProjectionAlongOYAxis { get; set; }
     
-        [JsonProperty("130")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
         public double ProjectionAlongOZAxis { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
         public override Dictionary<string, string> GetData()
