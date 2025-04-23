@@ -139,31 +139,5 @@ namespace IFC.Entities.Equipments.Vertex
 
             return facetedBreps;
         }
-
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-            
-            #region DEBUG
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "TANK DEBUG";
-                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                    {
-                        value.Name = "Is Vertical";
-                        value.NominalValue = new IfcText(_isVertical.ToString());
-                    }));
-                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                    {
-                        value.Name = "Direction to Pipe";
-                        value.NominalValue = new IfcText(_directionToPipe.ToString());
-                    }));
-                });
-            });
-            #endregion
-        }
     }
 }

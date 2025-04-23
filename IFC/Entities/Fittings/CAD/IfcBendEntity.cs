@@ -17,8 +17,8 @@ namespace IFC.Entities.Fittings.CAD
         private StartBendEntity _bendEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities)
-            : base(bendEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+            : base(bendEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _bendEntity = bendEntity;
         }

@@ -5,9 +5,6 @@ using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
-using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.Entities.Abstract
 {
@@ -58,32 +55,6 @@ namespace IFC.Entities.Abstract
             representationItems.AddRange(CreateAnchorModel(model, tangentDisplacement + normalDisplacement));
 
             return representationItems;
-        }
-
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-            
-            #region Pset_PipeAnchorTypeStart
-
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_PipeAnchorTypeStart";
-                    foreach (var kvp in _abstractEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
         }
     }
 }

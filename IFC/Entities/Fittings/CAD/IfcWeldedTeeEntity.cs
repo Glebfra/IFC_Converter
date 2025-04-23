@@ -11,8 +11,8 @@ namespace IFC.Entities.Fittings.CAD
         public readonly double Length;
         public readonly double Height;
 
-        public IfcWeldedTeeEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(startTeeEntity, nodeEntity, ifcAbstractSegmentEntities)
+        public IfcWeldedTeeEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
             Length = startTeeEntity.HeaderLength;
             Height = startTeeEntity.CrotchHeight + _branchPipes[0].Diameter / 2;

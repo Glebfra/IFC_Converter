@@ -8,8 +8,8 @@ namespace IFC.Entities.Abstract
         
         protected double[] _Radiuses;
 
-        public IfcAbstractAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(startAxialExpansionJointEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcAbstractAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(startAxialExpansionJointEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _Radiuses = new double[] { Diameter / 2 * 1.1, Diameter / 2 * 0.9 };
             Length = startAxialExpansionJointEntity.Length;
@@ -17,7 +17,7 @@ namespace IFC.Entities.Abstract
 
         protected void ClipPipes()
         {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
             {
                 ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
             }

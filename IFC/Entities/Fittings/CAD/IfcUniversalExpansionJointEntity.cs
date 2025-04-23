@@ -22,8 +22,8 @@ namespace IFC.Entities.Fittings.CAD
         private StartUniversalExpansionJointEntity _universalExpansionJoint;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcUniversalExpansionJointEntity(StartUniversalExpansionJointEntity universalExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(universalExpansionJoint, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcUniversalExpansionJointEntity(StartUniversalExpansionJointEntity universalExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(universalExpansionJoint, ifcNodeEntity, abstractSegmentEntities)
         {
             _universalExpansionJoint = universalExpansionJoint;
 
@@ -74,7 +74,7 @@ namespace IFC.Entities.Fittings.CAD
         
         private void ClipPipes()
         {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
             {
                 ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
             }

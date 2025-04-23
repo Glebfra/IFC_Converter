@@ -133,27 +133,6 @@ namespace IFC.Entities.Abstract
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);
-            
-            #region Pset_PipeSegmentTypeStart
-
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
-                {
-                    set.Name = "Pset_PipeSegmentTypeStart";
-                    foreach (var kvp in _startAbstractEntity.GetData())
-                    {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
-                });
-            });
-
-            #endregion
 
             #region Qto_PipeSegmentBaseQuantities
 
