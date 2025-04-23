@@ -17,8 +17,8 @@ namespace IFC.Entities.Fittings.CAD
         private StartAxialExpansionJointEntity _axialExpansionJoint;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcAxialExpansionJointEntity(StartAxialExpansionJointEntity axialExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(axialExpansionJoint, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcAxialExpansionJointEntity(StartAxialExpansionJointEntity axialExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(axialExpansionJoint, ifcNodeEntity, abstractSegmentEntities)
         {
             _axialExpansionJoint = axialExpansionJoint;
         }

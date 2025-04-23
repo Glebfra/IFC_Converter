@@ -143,6 +143,7 @@
     <Compile Include="Entities\Abstract\IfcAbstractBendEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
+    <Compile Include="Entities\Abstract\IfcAbstractConnectorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Entities\Anchors\Vertex\IfcVertexHingedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexSlidingSupportEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexInlinePumpEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexPumpEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexTankEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexVesselEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
+    <Compile Include="Entities\Interfaces\IIfcSegmentDependedEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
     <Compile Include="Entities\Segments\IfcConeElementEntity.cs" />
     <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />

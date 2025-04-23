@@ -27,10 +27,8 @@ namespace IFC.Entities.Fittings.Vertex
         private StartAngularExpansionJointEntity _startAngularExpansion;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexAngularExpansionJointEntity(
-            StartAngularExpansionJointEntity startAngularExpansion, IfcNodeEntity ifcNodeEntity, 
-            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
-            : base(startAngularExpansion, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexAngularExpansionJointEntity(StartAngularExpansionJointEntity startAngularExpansion, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments) 
+            : base(startAngularExpansion, ifcNodeEntity, abstractSegmentEntities)
         {
             _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
@@ -81,7 +79,7 @@ namespace IFC.Entities.Fittings.Vertex
         private IfcExtrudedAreaSolid CreateBranch(IModel model, XbimVector3D extrudeDirection, XbimVector3D refDirection)
         {
             IfcDirection firstExtrudedDirection = IfcAxis.CreateDirection(model, extrudeDirection);
-            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, _IfcAbstractSegmentEntities[0].Diameter / 2, XbimVector3D.Zero, refDirection);
+            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, AbstractSegmentEntities[0].Diameter / 2, XbimVector3D.Zero, refDirection);
             return CreateExtrudedArea(model, firstProfileDef, firstExtrudedDirection, Length / 2);
         }
         
@@ -136,7 +134,7 @@ namespace IFC.Entities.Fittings.Vertex
         
         private void ClipPipes()
         {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
             {
                 ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
             }

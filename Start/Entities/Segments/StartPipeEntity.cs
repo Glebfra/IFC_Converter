@@ -8,79 +8,79 @@ namespace Start.Entities.Segments
 {
     public class StartPipeEntity : StartAbstractEntity
     {
-        [JsonProperty("225")] 
+        [JsonProperty(StartPropertyName.PipeName)] 
         public string Name { get; set; }
     
-        [JsonProperty("4")] 
+        [JsonProperty(StartPropertyName.Diameter)] 
         public double Diameter { get; set; }
     
-        [JsonProperty("7")] 
+        [JsonProperty(StartPropertyName.MaterialName)] 
         public string MaterialName { get; set; }
     
-        [JsonProperty("9")] 
+        [JsonProperty(StartPropertyName.WallThickness)] 
         public double WallThickness { get; set; }
     
-        [JsonProperty("13")] 
+        [JsonProperty(StartPropertyName.MillTolerance)]
         public double MillTolerance { get; set; }
     
-        [JsonProperty("14")] 
+        [JsonProperty(StartPropertyName.CorrosionAllowance)] 
         public double CorrosionAllowance { get; set; }
     
-        [JsonProperty("27")]
+        [JsonProperty(StartPropertyName.Pressure)]
         public double Pressure { get; set; }
     
-        [JsonProperty("29")]
+        [JsonProperty(StartPropertyName.TestPressure)]
         public double TestPressure { get; set; }
     
-        [JsonProperty("30")]
+        [JsonProperty(StartPropertyName.Temperature)]
         public double Temperature { get; set; }
     
-        [JsonProperty("34")] 
+        [JsonProperty(StartPropertyName.Weight)]
         public double PipeUnitWeight { get; set; }
     
-        [JsonProperty("35")]
+        [JsonProperty(StartPropertyName.InsulationWeight)]
         public double InsulationUnitWeight { get; set; }
     
-        [JsonProperty("36")] 
+        [JsonProperty(StartPropertyName.ProductWeight)]
         public double ProductUnitWeight { get; set; }
     
-        [JsonProperty("37")] 
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)] 
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
     
-        [JsonProperty("38")] 
+        [JsonProperty(StartPropertyName.LongitudinalWeldJointFactor)] 
         public double LongitudinalWeldJointFactor { get; set; }
     
-        [JsonProperty("39")]
+        [JsonProperty(StartPropertyName.StrengthFactorOfTheTraverseWeld)]
         public double StrengthFactorOfTheTraverseWeld { get; set; }
     
-        [JsonProperty("61")]
+        [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
         public double AdditionalWeightLoad { get; set; }
     
-        [JsonProperty("64")] 
+        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheXAxis)] 
         public double AdditionalWeightLoadAlongTheXAxis { get; set; }
     
-        [JsonProperty("65")] 
+        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheYAxis)] 
         public double AdditionalWeightLoadAlongTheYAxis { get; set; }
     
-        [JsonProperty("66")] 
+        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheZAxis)] 
         public double AdditionalWeightLoadAlongTheZAxis { get; set; }
     
-        [JsonProperty("128")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
         public double ProjectionAlongOXAxis { get; set; }
     
-        [JsonProperty("129")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOYAxis)]
         public double ProjectionAlongOYAxis { get; set; }
     
-        [JsonProperty("130")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
         public double ProjectionAlongOZAxis { get; set; }
 
-        [JsonProperty("404")]
+        [JsonProperty(StartPropertyName.XCoord)]
         public double XCoord { get; set; }
         
-        [JsonProperty("405")]
+        [JsonProperty(StartPropertyName.YCoord)]
         public double YCoord { get; set; }
         
-        [JsonProperty("406")]
+        [JsonProperty(StartPropertyName.ZCoord)]
         public double ZCoord { get; set; }
 
         public override Dictionary<string, string> GetData()

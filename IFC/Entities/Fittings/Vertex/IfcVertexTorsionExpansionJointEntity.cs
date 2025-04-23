@@ -25,8 +25,8 @@ namespace IFC.Entities.Fittings.Vertex
         private StartTorsionExpansionJointEntity _torsionExpansionJoint;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexTorsionExpansionJointEntity(StartTorsionExpansionJointEntity torsionExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
-            : base(torsionExpansionJoint, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexTorsionExpansionJointEntity(StartTorsionExpansionJointEntity torsionExpansionJoint, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments) 
+            : base(torsionExpansionJoint, ifcNodeEntity, abstractSegmentEntities)
         {
             _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
@@ -111,7 +111,7 @@ namespace IFC.Entities.Fittings.Vertex
         
         private void ClipPipes()
         {
-            foreach (IfcAbstractSegmentEntity ifcPipeEntity in _IfcAbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity ifcPipeEntity in AbstractSegmentEntities)
             {
                 ifcPipeEntity.Clip(NodeEntity, Length / 2);
             }

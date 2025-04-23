@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Entities.Interfaces;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -9,11 +10,12 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Segments
 {
-    public sealed class IfcRigidElementEntity : IfcAbstractSegmentEntity
+    public sealed class IfcRigidElementEntity : IfcAbstractSegmentEntity, IIfcSegmentDependedEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override XbimVector3D Direction { get; }
         public override double Diameter { get; }
+        public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
 
         private StartRigidElementEntity _startRigidElementEntity;
         private IfcPipeSegment _pipeSegment;
@@ -22,6 +24,8 @@ namespace IFC.Entities.Segments
             : base(startRigidElementEntity, ifcNodeEntities)
         {
             _startRigidElementEntity = startRigidElementEntity;
+            AbstractSegmentEntities = abstractSegmentEntities;
+            
             Coordinates = ifcNodeEntities[0].ObjectMatrix3D.Translation;
             Direction = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             Length = Direction.Length;

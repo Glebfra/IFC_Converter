@@ -1,51 +1,52 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
     public class StartTeeEntity : StartAbstractEntity
     {
-        [JsonProperty("9")] 
+        [JsonProperty(StartPropertyName.WallThickness)] 
         public double HeaderThickness { get; set; }
         
-        [JsonProperty("13")] 
+        [JsonProperty(StartPropertyName.MillTolerance)] 
         public double MillTolerance { get; set; }
         
-        [JsonProperty("16")] 
+        [JsonProperty(StartPropertyName.HeaderLength)] 
         public double HeaderLength { get; set; }
         
-        [JsonProperty("18")]
+        [JsonProperty(StartPropertyName.BranchWallThickness)]
         public double BranchWallThickness { get; set; }
         
-        [JsonProperty("20")] 
+        [JsonProperty(StartPropertyName.MillToleranceForBranch)] 
         public double MillToleranceForBranch { get; set; }
         
-        [JsonProperty("21")] 
+        [JsonProperty(StartPropertyName.BranchHeight)] 
         public double BranchHeight { get; set; }
         
-        [JsonProperty("22")] 
+        [JsonProperty(StartPropertyName.PadThickness)] 
         public double PadThickness { get; set; }
         
-        [JsonProperty("23")] 
+        [JsonProperty(StartPropertyName.PadWidth)] 
         public double PadWidth { get; set; }
         
-        [JsonProperty("24")]
+        [JsonProperty(StartPropertyName.CrotchHeight)]
         public double CrotchHeight { get; set; }
         
-        [JsonProperty("25")]
+        [JsonProperty(StartPropertyName.CrotchThickness)]
         public double CrotchThickness { get; set; }
         
-        [JsonProperty("34")] 
+        [JsonProperty(StartPropertyName.Weight)] 
         public double Weight { get; set; }
         
-        [JsonProperty("38")] 
+        [JsonProperty(StartPropertyName.LongitudinalWeldJointFactor)] 
         public double StrengthFactorOfLongitudinalWeldSeamOnPressure { get; set; }
         
-        [JsonProperty("174")]
+        [JsonProperty(StartPropertyName.CrotchRadius)]
         public double CrotchRadius { get; set; }
         
-        [JsonProperty("225")]
+        [JsonProperty(StartPropertyName.PipeName)]
         public string Name { get; set; }
 
         public override Dictionary<string, string> GetData()

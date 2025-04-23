@@ -7,31 +7,31 @@ namespace Start.Entities.Equipments
 {
     public class StartTankEntity : StartAbstractEntity
     {
-        [JsonProperty("2")]
+        [JsonProperty(StartPropertyName.TankDistanceToNozzleAxis)]
         public double DistanceToNozzleAxis { get; set; }
         
-        [JsonProperty("7")]
+        [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; }
         
-        [JsonProperty("9")]
+        [JsonProperty(StartPropertyName.WallThickness)]
         public double WallThickness { get; set; }
         
-        [JsonProperty("13")]
+        [JsonProperty(StartPropertyName.MillTolerance)]
         public double MillTolerance { get; set; }
         
-        [JsonProperty("14")]
+        [JsonProperty(StartPropertyName.CorrosionAllowance)]
         public double CorrosionAllowance { get; set; }
         
-        [JsonProperty("30")]
+        [JsonProperty(StartPropertyName.Temperature)]
         public double Temperature { get; set; }
         
-        [JsonProperty("37")]
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnology { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
-        [JsonProperty("899")]
+        [JsonProperty(StartPropertyName.TankRadius)]
         public double Radius { get; set; }
         
         public override Dictionary<string, string> GetData()

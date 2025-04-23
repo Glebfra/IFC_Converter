@@ -147,6 +147,7 @@
     <Compile Include="API\StartElementType.cs" />
     <Compile Include="API\StartLeakageCheckEnum.cs" />
     <Compile Include="API\StartManufacturingTechnologyEnum.cs" />
+    <Compile Include="API\StartPropertyName.cs" />
     <Compile Include="Entities\Abstract\StartAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\StartAbstractEntity.cs" />
     <Compile Include="Entities\Anchors\StartAnchorEntity.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Entities\Anchors\StartSlidingSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartSpringSupportEntity.cs" />
     <Compile Include="Entities\Equipments\StartInlinePumpEntity.cs" />
+    <Compile Include="Entities\Equipments\StartPumpEntity.cs" />
     <Compile Include="Entities\Equipments\StartTankEntity.cs" />
     <Compile Include="Entities\Equipments\StartVesselEntity.cs" />
     <Compile Include="Entities\Fittings\StartAngularExpansionJointEntity.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -10,7 +11,6 @@ using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
@@ -22,10 +22,8 @@ namespace IFC.Entities.Fittings.Vertex
         private StartAxialExpansionJointEntity _startAxialExpansionJointEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcVertexAxialExpansionJointEntity(
-            StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, 
-            IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments) 
-            : base(startAxialExpansionJointEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexAxialExpansionJointEntity(StartAxialExpansionJointEntity startAxialExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments) 
+            : base(startAxialExpansionJointEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
@@ -35,16 +33,26 @@ namespace IFC.Entities.Fittings.Vertex
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-            IfcCartesianPoint[] firstCircle = CreateCircle(model, _Radiuses[0], -Length / 2);
-            IfcCartesianPoint[] secondCircle = CreateCircle(model, _Radiuses[0], 0);
-            IfcCartesianPoint[] thirdCircle = CreateCircle(model, _Radiuses[1], 0);
-            IfcCartesianPoint[] fourthCircle = CreateCircle(model, _Radiuses[1], Length / 2);
+            
+            XbimVector3D[] displacements = new XbimVector3D[]
+            {
+                0.5 * Length * VectorExtensions.Z,
+                XbimVector3D.Zero,
+            };
+
+            IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
+            {
+                IfcVertexGeometry.CreateCircle(model, _Radiuses[0], displacements[0].Negated(), _numSegments),
+                IfcVertexGeometry.CreateCircle(model, _Radiuses[0], displacements[1], _numSegments),
+                IfcVertexGeometry.CreateCircle(model, _Radiuses[1], displacements[1], _numSegments),
+                IfcVertexGeometry.CreateCircle(model, _Radiuses[1], displacements[0], _numSegments),
+            };
 
             IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[]
             {
-                CreateFacetedBrep(model, firstCircle, secondCircle),
-                CreateFacetedBrep(model, secondCircle, thirdCircle),
-                CreateFacetedBrep(model, thirdCircle, fourthCircle)
+                IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[1], circles[2]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]),
             };
             
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
@@ -62,39 +70,6 @@ namespace IFC.Entities.Fittings.Vertex
             AddProperties(model, _pipeFitting);
 
             return _pipeFitting;
-        }
-        
-        private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height)
-        {
-            IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
-            for (int i = 0; i < _numSegments; i++)
-            {
-                XbimVector3D point = new XbimVector3D(radius * Math.Cos(_angleStep * i), radius * Math.Sin(_angleStep * i), height);
-                points[i] = IfcAxis.CreatePoint(model, point);
-            }
-
-            return points;
-        }
-    
-        private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] lowerPoints, IfcCartesianPoint[] upperPoints)
-        {
-            IfcFace[] faces = new IfcFace[_numSegments + 2];
-            int facesIndex = 0;
-            for (int i = 0; i < _numSegments; i++)
-            {
-                IfcCartesianPoint p1 = lowerPoints[i];
-                IfcCartesianPoint p2 = lowerPoints[(i + 1) % _numSegments];
-                IfcCartesianPoint p3 = upperPoints[(i + 1) % _numSegments];
-                IfcCartesianPoint p4 = upperPoints[i];
-                faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
-            }
-            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, lowerPoints);
-            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, upperPoints);
-
-            return model.Instances.New<IfcFacetedBrep>(brep =>
-            {
-                brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
-            });
         }
     }
 }

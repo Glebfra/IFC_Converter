@@ -1,36 +1,37 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
     public class StartRigidElementEntity : StartAbstractEntity
     {
-        [JsonProperty("225")]
+        [JsonProperty(StartPropertyName.PipeName)]
         public string Name { get; set; }
         
-        [JsonProperty("7")]
+        [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; }
         
-        [JsonProperty("27")]
+        [JsonProperty(StartPropertyName.Pressure)]
         public double Pressure { get; set; }
         
-        [JsonProperty("29")]
+        [JsonProperty(StartPropertyName.TestPressure)]
         public double TestPressure { get; set; }
     
-        [JsonProperty("30")]
+        [JsonProperty(StartPropertyName.Temperature)]
         public double Temperature { get; set; }
         
-        [JsonProperty("34")] 
+        [JsonProperty(StartPropertyName.Weight)] 
         public double PipeUnitWeight { get; set; }
         
-        [JsonProperty("128")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
         public double ProjectionAlongOXAxis { get; set; }
     
-        [JsonProperty("129")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOYAxis)]
         public double ProjectionAlongOYAxis { get; set; }
     
-        [JsonProperty("130")]
+        [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
         public double ProjectionAlongOZAxis { get; set; }
 
         public override Dictionary<string, string> GetData()

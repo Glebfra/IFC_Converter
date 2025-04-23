@@ -7,31 +7,31 @@ namespace Start.Entities.Fittings
 {
     public class StartBendEntity : StartAbstractEntity
     {
-        [JsonProperty("9")]
+        [JsonProperty(StartPropertyName.WallThickness)]
         public double WallThickness { get; set; }
     
-        [JsonProperty("13")]
+        [JsonProperty(StartPropertyName.MillTolerance)]
         public double MillTolerance { get; set; }
     
-        [JsonProperty("34")]
+        [JsonProperty(StartPropertyName.Weight)]
         public double Weight { get; set; }
     
-        [JsonProperty("37")]
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
     
-        [JsonProperty("70")]
+        [JsonProperty(StartPropertyName.Radius)]
         public double Radius { get; set; }
     
-        [JsonProperty("71")]
+        [JsonProperty(StartPropertyName.OvalizationCoefficient)]
         public double OvalizationCoefficient { get; set; }
     
-        [JsonProperty("177")]
+        [JsonProperty(StartPropertyName.NumberOfMilters)]
         public int NumberOfMilters { get; set; }
     
-        [JsonProperty("216")]
+        [JsonProperty(StartPropertyName.MillToleranceOutside)]
         public double MillToleranceOutside { get; set; }
     
-        [JsonProperty("225")]
+        [JsonProperty(StartPropertyName.PipeName)]
         public string Name { get; set; }
 
         public override Dictionary<string, string> GetData()
