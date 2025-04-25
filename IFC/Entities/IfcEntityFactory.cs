@@ -173,6 +173,11 @@ namespace IFC.Entities
                 
                 case StartElementType.INLINE_PUMP:
                     return new IfcVertexInlinePumpEntity((StartInlinePumpEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.PUMP_API_610:
+                case StartElementType.PUMP_ISO_5199:
+                case StartElementType.PUMP_ISO_9905:
+                    return new IfcVertexPumpEntity((StartPumpEntity)entity, nodeEntity, segmentEntities, numSegments); 
 
                 default:
                     return null;

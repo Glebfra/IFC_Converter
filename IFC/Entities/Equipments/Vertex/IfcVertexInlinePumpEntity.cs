@@ -1,5 +1,6 @@
 ﻿using IFC.Entities.Abstract;
 using IFC.Entities.Fittings.Vertex;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Equipments;
 using Xbim.Common;
@@ -14,13 +15,16 @@ namespace IFC.Entities.Equipments.Vertex
 {
     public class IfcVertexInlinePumpEntity : IfcVertexValveEntity
     {
+        private int _numSegments;
+        
         private StartInlinePumpEntity _inlinePumpEntity;
         private IfcPump _ifcPump;
-        
+
         public IfcVertexInlinePumpEntity(StartInlinePumpEntity inlinePumpEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments) 
             : base(inlinePumpEntity, nodeEntity, segmentEntities, numSegments)
         {
             _inlinePumpEntity = inlinePumpEntity;
+            _numSegments = numSegments;
         }
         
         public override IfcProduct CreateAndAdd(IModel model)
@@ -28,13 +32,18 @@ namespace IFC.Entities.Equipments.Vertex
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[2];
-
-            IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, -Length / 2);
-            IfcCartesianPoint[] secondCircle = CreateCircle(model, Diameter / 2, Length / 2, Angle);
+            
+            XbimVector3D displacement = Length / 2 * VectorExtensions.Forward;
+            
+            IfcCartesianPoint[] firstCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement.Negated(), _numSegments);
+            IfcCartesianPoint[] secondCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement, _numSegments);
+            foreach (IfcCartesianPoint secondCirclePoint in secondCircle)
+                secondCirclePoint.RotateAroundYAxis(Angle);
+            
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
             
-            representationItems[0] = CreateFacetedBrep(model, firstCircle, topPoint);
-            representationItems[1] = CreateFacetedBrep(model, secondCircle, topPoint);
+            representationItems[0] = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
+            representationItems[1] = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
             
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);

@@ -37,5 +37,23 @@ namespace IFC.Extensions
         {
             return IfcAxis.CreatePoint(model, vector);
         }
+
+        public static XbimVector3D RotateAroundXAxis(this XbimVector3D vector3D, double angle)
+        {
+            XbimMatrix3D Mx = MatrixExtensions.Mx(angle);
+            return XbimVector3D.Multiply(vector3D, Mx);
+        }
+        
+        public static XbimVector3D RotateAroundYAxis(this XbimVector3D vector3D, double angle)
+        {
+            XbimMatrix3D My = MatrixExtensions.My(angle);
+            return XbimVector3D.Multiply(vector3D, My);
+        }
+        
+        public static XbimVector3D RotateAroundZAxis(this XbimVector3D vector3D, double angle)
+        {
+            XbimMatrix3D Mz = MatrixExtensions.Mz(angle);
+            return XbimVector3D.Multiply(vector3D, Mz);
+        }
     }
 }
