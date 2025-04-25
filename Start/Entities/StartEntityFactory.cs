@@ -32,7 +32,6 @@ namespace Start.Entities
                 
                 case StartElementType.VALVE:
                 case StartElementType.FLANGE:
-                case StartElementType.INLINE_PUMP:
                     return JsonConvert.DeserializeObject<StartArmatureEntity>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.AXIAL_EXPANSION_JOINT:
@@ -111,6 +110,14 @@ namespace Start.Entities
                 
                 case StartElementType.TANK:
                     return JsonConvert.DeserializeObject<StartTankEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.INLINE_PUMP:
+                    return JsonConvert.DeserializeObject<StartInlinePumpEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.PUMP_API_610:
+                case StartElementType.PUMP_ISO_5199:
+                case StartElementType.PUMP_ISO_9905:
+                    return JsonConvert.DeserializeObject<StartPumpEntity>(dataArrayItem.Data.ToString());
 
                 default:
                     return null;

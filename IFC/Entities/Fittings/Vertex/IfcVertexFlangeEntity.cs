@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -11,7 +12,6 @@ using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
-using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
@@ -40,24 +40,36 @@ namespace IFC.Entities.Fittings.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IfcCartesianPoint[] firstCircleConnection = CreateCircle(model, Radiuses[0], -0.5 * Length);
-            IfcCartesianPoint[] firstCircleExtension = CreateCircle(model, Radiuses[0] * 1.1, -0.3 * Length);
-            IfcCartesianPoint[] firstCircleStartFlange = CreateCircle(model, Radiuses[0] * 1.5, -0.3 * Length);
-            IfcCartesianPoint[] firstCircleEndFlange = CreateCircle(model, Radiuses[0] * 1.5, -0.1 * Length);
-        
-            IfcCartesianPoint[] secondCircleConnection = CreateCircle(model, Radiuses[1], 0.5 * Length);
-            IfcCartesianPoint[] secondCircleExtension = CreateCircle(model, Radiuses[1] * 1.1, 0.3 * Length);
-            IfcCartesianPoint[] secondCircleStartFlange = CreateCircle(model, Radiuses[1] * 1.5, 0.3 * Length);
-            IfcCartesianPoint[] secondCircleEndFlange = CreateCircle(model, Radiuses[1] * 1.5, 0.1 * Length);
+            XbimVector3D[] displacements = new XbimVector3D[]
+            {
+                0.5 * Length * VectorExtensions.Z,
+                0.3 * Length * VectorExtensions.Z,
+                0.1 * Length * VectorExtensions.Z,
+            };
 
-            IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[6];
-            facetedBreps[0] = CreateFacetedBrep(model, firstCircleConnection, firstCircleExtension);
-            facetedBreps[1] = CreateFacetedBrep(model, firstCircleExtension, firstCircleStartFlange);
-            facetedBreps[2] = CreateFacetedBrep(model, firstCircleStartFlange, firstCircleEndFlange);
-            facetedBreps[3] = CreateFacetedBrep(model, secondCircleConnection, secondCircleExtension);
-            facetedBreps[4] = CreateFacetedBrep(model, secondCircleExtension, secondCircleStartFlange);
-            facetedBreps[5] = CreateFacetedBrep(model, secondCircleStartFlange, secondCircleEndFlange);
-        
+            IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
+            {
+                IfcVertexGeometry.CreateCircle(model, Radiuses[0], displacements[0].Negated(), _numSegments),
+                IfcVertexGeometry.CreateCircle(model, Radiuses[0] * 1.1, displacements[1].Negated(), _numSegments),
+                IfcVertexGeometry.CreateCircle(model, Radiuses[0] * 1.5, displacements[1].Negated(), _numSegments),
+                IfcVertexGeometry.CreateCircle(model, Radiuses[0] * 1.5, displacements[2].Negated(), _numSegments),
+                
+                IfcVertexGeometry.CreateCircle(model, Radiuses[1], displacements[0], _numSegments),
+                IfcVertexGeometry.CreateCircle(model, Radiuses[1] * 1.1, displacements[1], _numSegments),
+                IfcVertexGeometry.CreateCircle(model, Radiuses[1] * 1.5, displacements[1], _numSegments),
+                IfcVertexGeometry.CreateCircle(model, Radiuses[1] * 1.5, displacements[2], _numSegments),
+            };
+
+            IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[]
+            {
+                IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[1], circles[2]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[4], circles[5]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[5], circles[6]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[6], circles[7]),
+            };
+
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
@@ -76,43 +88,6 @@ namespace IFC.Entities.Fittings.Vertex
             }
 
             return _pipeFitting;
-        }
-    
-        private IfcCartesianPoint[] CreateCircle(IModel model, double radius, double height)
-        {
-            IfcCartesianPoint[] points = new IfcCartesianPoint[_numSegments];
-            for (int i = 0; i < _numSegments; i++)
-            {
-                XbimVector3D point = new XbimVector3D(
-                    radius * Math.Cos(_angleStep * i),
-                    radius * Math.Sin(_angleStep * i),
-                    height
-                );
-                points[i] = IfcAxis.CreatePoint(model, point);
-            }
-
-            return points;
-        }
-    
-        private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[] firstPoints, IfcCartesianPoint[] secondPoints)
-        {
-            IfcFace[] faces = new IfcFace[_numSegments + 2];
-            int facesIndex = 0;
-            for (int i = 0; i < _numSegments; i++)
-            {
-                IfcCartesianPoint p1 = firstPoints[i];
-                IfcCartesianPoint p2 = firstPoints[(i + 1) % _numSegments];
-                IfcCartesianPoint p3 = secondPoints[(i + 1) % _numSegments];
-                IfcCartesianPoint p4 = secondPoints[i];
-                faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
-            }
-            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, firstPoints);
-            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, secondPoints);
-
-            return model.Instances.New<IfcFacetedBrep>(brep =>
-            {
-                brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
-            });
         }
     }
 }

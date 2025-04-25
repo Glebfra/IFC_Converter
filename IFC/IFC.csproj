@@ -192,6 +192,7 @@
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
+    <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Tools\IfcGeometry.cs" />
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
+    <Compile Include="Tools\IfcVertexPrimitives.cs" />
     <Compile Include="ValueConverter\ValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
