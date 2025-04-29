@@ -5,7 +5,7 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartReducerEntity : StartAbstractEntity
+    public class StartReducerEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.ConicalPartLength)]
         public double LengthOfConicalPart { get; set; }
@@ -21,10 +21,7 @@ namespace Start.Entities.Fittings
         
         [JsonProperty(StartPropertyName.MillTolerance)]
         public double MillToleranceAtDMax { get; set; }
-        
-        [JsonProperty(StartPropertyName.Weight)]
-        public double Weight { get; set; }
-        
+
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
         
@@ -42,20 +39,17 @@ namespace Start.Entities.Fittings
 
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Name", Name },
-                { "Weight", Weight.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnologyEnum.ToString() },
-                { "Mill Tolerance At D Max", MillToleranceAtDMax.ToString("F5") },
-                { "Mill Tolerance At D Min", MillToleranceAtDMin.ToString("F5") },
-                { "Mill Tolerance", MillTolerance.ToString("F5") },
-                { "Length Of Conical Part", LengthOfConicalPart.ToString("F5") },
-                { "Max Diameter", MaxDiameter.ToString("F5") },
-                { "Min Diameter", MinDiameter.ToString("F5") },
-                { "Thickness At Max Diameter Point", ThicknessAtMaxDiameterPoint.ToString("F5") },
-                { "Angle Between Eccentricity Vector And Zm Axis", AngleBetweenEccentricityVectorAndZmAxis.ToString("F5") }
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Name", Name);
+            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
+            dictionary.Add("Mill Tolerance At D Max", MillToleranceAtDMax.ToString("F5"));
+            dictionary.Add("Mill Tolerance At D Min", MillToleranceAtDMin.ToString("F5"));
+            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
+            dictionary.Add("Length Of Conical Part", LengthOfConicalPart.ToString("F5"));
+            dictionary.Add("Max Diameter", MaxDiameter.ToString("F5"));
+            dictionary.Add("Min Diameter", MinDiameter.ToString("F5"));
+            dictionary.Add("Thickness At Max Diameter Point", ThicknessAtMaxDiameterPoint.ToString("F5"));
+            dictionary.Add("Angle Between Eccentricity Vector And Zm Axis", AngleBetweenEccentricityVectorAndZmAxis.ToString("F5"));
 
             return dictionary;
         }

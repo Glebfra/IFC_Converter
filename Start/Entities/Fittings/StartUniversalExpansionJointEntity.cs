@@ -5,14 +5,11 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartUniversalExpansionJointEntity : StartAbstractEntity
+    public class StartUniversalExpansionJointEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
         public double AllowableAxialExpansion { get; set; }
-        
-        [JsonProperty(StartPropertyName.Weight)]
-        public double Weight { get; set; }
-        
+
         [JsonProperty(StartPropertyName.AxialFlexibility)]
         public double AxialFlexibility { get; set; }
         
@@ -51,21 +48,18 @@ namespace Start.Entities.Fittings
 
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5") },
-                { "Weight", Weight.ToString("F5") },
-                { "Axial Flexibility", AxialFlexibility.ToString("F5") },
-                { "Effective Area", EffectiveArea.ToString("F5") },
-                { "Length", Length.ToString("F5") },
-                { "Name", Name },
-                { "Stiffness Temp Factor", StiffnessTempFactor.ToString("F5") },
-                { "Allowable Corr Factor", AllowableCorrFactor.ToString("F5") },
-                { "Stiffness Angle Factor", StiffnessAngleFactor.ToString("F5") },
-                { "Angle Allowable Corr Factor", AngleAllowableCorrFactor.ToString("F5") },
-                { "Stiffness Shear Factor", StiffnessShearFactor.ToString("F5") },
-                { "Shear Allowable Corr Factor", ShearAllowableCorrFactor.ToString("F5") },
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5"));
+            dictionary.Add("Axial Flexibility", AxialFlexibility.ToString("F5"));
+            dictionary.Add("Effective Area", EffectiveArea.ToString("F5"));
+            dictionary.Add("Length", Length.ToString("F5"));
+            dictionary.Add("Name", Name);
+            dictionary.Add("Stiffness Temp Factor", StiffnessTempFactor.ToString("F5"));
+            dictionary.Add("Allowable Corr Factor", AllowableCorrFactor.ToString("F5"));
+            dictionary.Add("Stiffness Angle Factor", StiffnessAngleFactor.ToString("F5"));
+            dictionary.Add("Angle Allowable Corr Factor", AngleAllowableCorrFactor.ToString("F5"));
+            dictionary.Add("Stiffness Shear Factor", StiffnessShearFactor.ToString("F5"));
+            dictionary.Add("Shear Allowable Corr Factor", ShearAllowableCorrFactor.ToString("F5"));
 
             return dictionary;
         }

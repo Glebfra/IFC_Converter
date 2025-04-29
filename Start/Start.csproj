@@ -150,6 +150,8 @@
     <Compile Include="API\StartPropertyName.cs" />
     <Compile Include="Entities\Abstract\StartAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\StartAbstractEntity.cs" />
+    <Compile Include="Entities\Abstract\StartAbstractFittingEntity.cs" />
+    <Compile Include="Entities\Abstract\StartAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Anchors\StartAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\StartConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartConstantForceSupportHangerEntity.cs" />
@@ -168,16 +170,16 @@
     <Compile Include="Entities\Fittings\StartAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartBallExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartBendEntity.cs" />
-    <Compile Include="Entities\Fittings\StartFlexibleElementEntity.cs" />
     <Compile Include="Entities\Fittings\StartLateralExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartNonstandardExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartReducerEntity.cs" />
-    <Compile Include="Entities\Fittings\StartRigidElementEntity.cs" />
     <Compile Include="Entities\Fittings\StartTeeEntity.cs" />
     <Compile Include="Entities\Fittings\StartTorsionExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartUniversalExpansionJointEntity.cs" />
     <Compile Include="Entities\Segments\StartConeElementEntity.cs" />
+    <Compile Include="Entities\Segments\StartFlexibleElementEntity.cs" />
     <Compile Include="Entities\Segments\StartPipeEntity.cs" />
+    <Compile Include="Entities\Segments\StartRigidElementEntity.cs" />
     <Compile Include="Entities\StartEntityFactory.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
     <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />

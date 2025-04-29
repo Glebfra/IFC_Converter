@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Segments;
 using Xbim.Common;
@@ -16,8 +17,8 @@ namespace IFC.Entities.Segments
 {
     public sealed class IfcConeElementEntity : IfcAbstractSegmentEntity
     {
-        public override XbimVector3D Direction { get; }
-        public override double Diameter { get; }
+        public override XbimVector3D Direction { get; protected set; }
+        public override double OuterDiameter { get; protected set; }
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         
         public double SecondDiameter { get; }
@@ -51,14 +52,17 @@ namespace IFC.Entities.Segments
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
             
-            Diameter = startConeElementEntity.Diameter;
+            OuterDiameter = startConeElementEntity.Diameter;
             SecondDiameter = startConeElementEntity.SecondDiameter;
+            OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);
+            
+            _OnLengthChanged += () => OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);
         }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-            IfcCartesianPoint[] firstCircle = CreateCircle(model, Diameter / 2, 0);
+            IfcCartesianPoint[] firstCircle = CreateCircle(model, OuterDiameter / 2, 0);
             IfcCartesianPoint[] secondCircle = CreateCircle(model, SecondDiameter / 2, Length);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, firstCircle, secondCircle);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
@@ -102,7 +106,7 @@ namespace IFC.Entities.Segments
                 faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
             }
             faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, lowerPoints);
-            faces[facesIndex++] = IfcVertexGeometry.CreatePolygonFace(model, upperPoints);
+            faces[facesIndex] = IfcVertexGeometry.CreatePolygonFace(model, upperPoints);
 
             return model.Instances.New<IfcFacetedBrep>(brep =>
             {

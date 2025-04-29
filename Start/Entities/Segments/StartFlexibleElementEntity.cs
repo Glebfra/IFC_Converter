@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
 
-namespace Start.Entities.Fittings
+namespace Start.Entities.Segments
 {
-    public class StartFlexibleElementEntity : StartAbstractEntity
+    public class StartFlexibleElementEntity : StartAbstractSegmentEntity
     {
         [JsonProperty(StartPropertyName.FlexibleElementLength)]
         public double Length { get; set; }
@@ -36,10 +36,7 @@ namespace Start.Entities.Fittings
     
         [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
         public double ProjectionAlongOZAxis { get; set; }
-        
-        [JsonProperty(StartPropertyName.PipeName)] 
-        public string Name { get; set; }
-        
+
         [JsonProperty(StartPropertyName.UniformWeight)]
         public double UniformWeight { get; set; }
         
@@ -50,7 +47,6 @@ namespace Start.Entities.Fittings
         {
             Dictionary<string, string> dictionary = new()
             {
-                { "Name", Name },
                 { "Material Name", MaterialName },
                 { "Pipe Unit Weight", PipeUnitWeight.ToString("F5") },
                 { "Additional Weight Load", AdditionalWeightLoad.ToString("F5") },

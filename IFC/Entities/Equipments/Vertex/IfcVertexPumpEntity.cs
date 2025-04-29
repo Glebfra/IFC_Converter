@@ -31,7 +31,7 @@ namespace IFC.Entities.Equipments.Vertex
             _segmentEntities = segmentEntities;
 
             _numSegments = numSegments;
-            _length = _segmentEntities[0].Diameter / 2;
+            _length = _segmentEntities[0].OuterDiameter / 2;
         }
         
         public override IfcProduct CreateAndAdd(IModel model)
@@ -66,7 +66,7 @@ namespace IFC.Entities.Equipments.Vertex
                 0.1 * _length * VectorExtensions.Z,
             };
             
-            double[] radiuses = _segmentEntities.Select(entity => entity.Diameter / 2).ToArray();
+            double[] radiuses = _segmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
 
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {

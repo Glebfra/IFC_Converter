@@ -14,10 +14,11 @@ namespace IFC.Entities.Equipments.Vertex
 {
     public class IfcVertexVesselEntity : IfcAbstractFittingEntity
     {
+        public override double Length { get; protected set; }
+        
         private int _numSegments;
         private double _pipeDiameter;
-        private double _length;
-        
+
         private StartVesselEntity _vesselEntity;
         private IfcTank _ifcTank;
         
@@ -25,8 +26,8 @@ namespace IFC.Entities.Equipments.Vertex
             : base(vesselEntity, nodeEntity, segmentEntities)
         {
             _numSegments = numSegments;
-            _pipeDiameter = AbstractSegmentEntities[0].Diameter;
-            _length = _pipeDiameter / 4;
+            _pipeDiameter = AbstractSegmentEntities[0].OuterDiameter;
+            Length = _pipeDiameter / 4;
             
             _vesselEntity = vesselEntity;
         }
@@ -36,7 +37,7 @@ namespace IFC.Entities.Equipments.Vertex
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[2];
-            XbimVector3D firstCircleDisplacement = _length / 2 * VectorExtensions.Forward.Negated();
+            XbimVector3D firstCircleDisplacement = Length / 2 * VectorExtensions.Forward.Negated();
             
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {

@@ -19,8 +19,8 @@ namespace IFC.Entities.Fittings.Vertex
     public class IfcVertexAngularExpansionJointEntity : IfcAbstractFittingEntity
     {
         public double Radius { get; }
-        public double Length { get; }
-        
+        public sealed override double Length { get; protected set; }
+
         private readonly int _numSegments;
         private readonly double _angleStep;
 
@@ -79,7 +79,7 @@ namespace IFC.Entities.Fittings.Vertex
         private IfcExtrudedAreaSolid CreateBranch(IModel model, XbimVector3D extrudeDirection, XbimVector3D refDirection)
         {
             IfcDirection firstExtrudedDirection = IfcAxis.CreateDirection(model, extrudeDirection);
-            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, AbstractSegmentEntities[0].Diameter / 2, XbimVector3D.Zero, refDirection);
+            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, AbstractSegmentEntities[0].OuterDiameter / 2, XbimVector3D.Zero, refDirection);
             return CreateExtrudedArea(model, firstProfileDef, firstExtrudedDirection, Length / 2);
         }
         

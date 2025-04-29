@@ -6,35 +6,17 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Segments
 {
-    public class StartPipeEntity : StartAbstractEntity
+    public class StartPipeEntity : StartAbstractSegmentEntity
     {
-        [JsonProperty(StartPropertyName.PipeName)] 
-        public string Name { get; set; }
-    
-        [JsonProperty(StartPropertyName.Diameter)] 
-        public double Diameter { get; set; }
-    
         [JsonProperty(StartPropertyName.MaterialName)] 
         public string MaterialName { get; set; }
-    
-        [JsonProperty(StartPropertyName.WallThickness)] 
-        public double WallThickness { get; set; }
-    
+
         [JsonProperty(StartPropertyName.MillTolerance)]
         public double MillTolerance { get; set; }
     
         [JsonProperty(StartPropertyName.CorrosionAllowance)] 
         public double CorrosionAllowance { get; set; }
-    
-        [JsonProperty(StartPropertyName.Pressure)]
-        public double Pressure { get; set; }
-    
-        [JsonProperty(StartPropertyName.TestPressure)]
-        public double TestPressure { get; set; }
-    
-        [JsonProperty(StartPropertyName.Temperature)]
-        public double Temperature { get; set; }
-    
+
         [JsonProperty(StartPropertyName.Weight)]
         public double PipeUnitWeight { get; set; }
     
@@ -85,31 +67,23 @@ namespace Start.Entities.Segments
 
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Name", Name },
-                { "Outside Diameter", Diameter.ToString("F5") },
-                { "Material Name", MaterialName },
-                { "Wall Thickness", WallThickness.ToString("F5") },
-                { "Mill Tolerance", MillTolerance.ToString("F5") },
-                { "Corrosion Allowance", CorrosionAllowance.ToString("F5") },
-                { "Pressure", Pressure.ToString("F5") },
-                { "Test Pressure", TestPressure.ToString("F5") },
-                { "Temperature", Temperature.ToString("F5") },
-                { "Pipe Unit Weight", PipeUnitWeight.ToString("F5") },
-                { "Insulation Unit Weight", InsulationUnitWeight.ToString("F5") },
-                { "Product Unit Weight", ProductUnitWeight.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnologyEnum.ToString() },
-                { "Longitudinal Weld Joint Factor", LongitudinalWeldJointFactor.ToString("F5") },
-                { "Strength Factor of the Traverse Weld", StrengthFactorOfTheTraverseWeld.ToString("F5") },
-                { "Additional Weight Load", AdditionalWeightLoad.ToString("F5") },
-                { "Additional Weight Load along the X Axis", AdditionalWeightLoadAlongTheXAxis.ToString("F5") },
-                { "Additional Weight Load along the Y Axis", AdditionalWeightLoadAlongTheYAxis.ToString("F5") },
-                { "Additional Weight Load along the Z Axis", AdditionalWeightLoadAlongTheZAxis.ToString("F5") },
-                { "Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5") },
-                { "Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5") },
-                { "Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5") }
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Material Name", MaterialName);
+            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
+            dictionary.Add("Corrosion Allowance", CorrosionAllowance.ToString("F5"));
+            dictionary.Add("Pipe Unit Weight", PipeUnitWeight.ToString("F5"));
+            dictionary.Add("Insulation Unit Weight", InsulationUnitWeight.ToString("F5"));
+            dictionary.Add("Product Unit Weight", ProductUnitWeight.ToString("F5"));
+            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
+            dictionary.Add("Longitudinal Weld Joint Factor", LongitudinalWeldJointFactor.ToString("F5"));
+            dictionary.Add("Strength Factor of the Traverse Weld", StrengthFactorOfTheTraverseWeld.ToString("F5"));
+            dictionary.Add("Additional Weight Load", AdditionalWeightLoad.ToString("F5"));
+            dictionary.Add("Additional Weight Load along the X Axis", AdditionalWeightLoadAlongTheXAxis.ToString("F5"));
+            dictionary.Add("Additional Weight Load along the Y Axis", AdditionalWeightLoadAlongTheYAxis.ToString("F5"));
+            dictionary.Add("Additional Weight Load along the Z Axis", AdditionalWeightLoadAlongTheZAxis.ToString("F5"));
+            dictionary.Add("Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5"));
+            dictionary.Add("Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5"));
+            dictionary.Add("Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5"));
 
             return dictionary;
         }

@@ -16,7 +16,7 @@ namespace IFC.Entities.Fittings.Vertex
 {
     public class IfcVertexValveEntity : IfcAbstractFittingEntity
     {
-        public readonly double Length;
+        public sealed override double Length { get; protected set; }
 
         private readonly int _numSegments;
         
@@ -30,7 +30,7 @@ namespace IFC.Entities.Fittings.Vertex
             _numSegments = numSegments;
             
             Length = _armatureEntity.Length;
-            Diameter = Math.Max(abstractSegmentEntities[0].Diameter, abstractSegmentEntities[1].Diameter) * 1.5;
+            Diameter = Math.Max(abstractSegmentEntities[0].OuterDiameter, abstractSegmentEntities[1].OuterDiameter) * 1.5;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

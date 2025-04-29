@@ -18,7 +18,7 @@ namespace IFC.Entities.Fittings.CAD
 {
     public sealed class IfcMilterJointEntity : IfcAbstractFittingEntity
     {
-        public double Length => 2 * Depth;
+        public override double Length { get; protected set; }
         public double Depth { get; }
         
         private readonly StartBendEntity _bendEntity;
@@ -29,6 +29,7 @@ namespace IFC.Entities.Fittings.CAD
         {
             _bendEntity = bendEntity;
             Depth = Math.Min(abstractSegments[0].Length, abstractSegments[1].Length) * 0.1;
+            Length = 2 * Depth;
         }
     
         public override IfcProduct CreateAndAdd(IModel model)

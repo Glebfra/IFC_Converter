@@ -17,7 +17,7 @@ namespace IFC.Entities.Fittings.Vertex
 {
     public class IfcVertexLateralExpansionJointEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
+        public sealed override double Length { get; protected set; }
         private double Radius { get; }
         
         private readonly int _numSegments;

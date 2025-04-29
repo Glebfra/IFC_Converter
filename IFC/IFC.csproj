@@ -193,6 +193,7 @@
     <Compile Include="Entities\Segments\IfcPipeEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />

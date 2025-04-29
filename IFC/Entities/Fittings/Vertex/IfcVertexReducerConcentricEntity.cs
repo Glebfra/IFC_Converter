@@ -17,8 +17,8 @@ namespace IFC.Entities.Fittings.Vertex
 {
     public sealed class IfcVertexReducerConcentricEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
-        
+        public override double Length { get; protected set; }
+
         private readonly int _numSegments;
         private readonly double _angleStep;
         private IfcPipeFitting? _pipeFitting;
@@ -51,7 +51,7 @@ namespace IFC.Entities.Fittings.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
+            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
 
             double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
             double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;

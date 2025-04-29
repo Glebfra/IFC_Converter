@@ -16,7 +16,7 @@ namespace IFC.Entities.Fittings.CAD
 {
     public class IfcNonstandardExpansionJointEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
+        public sealed override double Length { get; protected set; }
         public double Radius { get; }
         
         private StartNonstandardExpansionJointEntity _nonstandardExpansionJoint;

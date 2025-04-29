@@ -16,7 +16,7 @@ namespace IFC.Entities.Fittings.Vertex
 {
     public class IfcVertexBallExpansionJointEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
+        public sealed override double Length { get; protected set; }
         public double Radius { get; }
         
         private readonly int _numSegments;

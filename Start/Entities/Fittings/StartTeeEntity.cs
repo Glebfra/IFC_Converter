@@ -5,7 +5,7 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartTeeEntity : StartAbstractEntity
+    public class StartTeeEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.WallThickness)] 
         public double HeaderThickness { get; set; }
@@ -36,10 +36,7 @@ namespace Start.Entities.Fittings
         
         [JsonProperty(StartPropertyName.CrotchThickness)]
         public double CrotchThickness { get; set; }
-        
-        [JsonProperty(StartPropertyName.Weight)] 
-        public double Weight { get; set; }
-        
+
         [JsonProperty(StartPropertyName.LongitudinalWeldJointFactor)] 
         public double StrengthFactorOfLongitudinalWeldSeamOnPressure { get; set; }
         
@@ -51,25 +48,22 @@ namespace Start.Entities.Fittings
 
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> data = new Dictionary<string, string>
-            {
-                { "Name", Name },
-                { "Header Thickness", HeaderThickness.ToString("F5") },
-                { "Mill Tolerance", MillTolerance.ToString("F5") },
-                { "Header Length", HeaderLength.ToString("F5") },
-                { "Branch Height", BranchHeight.ToString("F5") },
-                { "Weight", Weight.ToString("F5") },
-                { "Strength Factor Of Longitudinal Weld Seam On Pressure", StrengthFactorOfLongitudinalWeldSeamOnPressure.ToString("F5") },
-                { "Branch Wall Thickness", BranchWallThickness.ToString("F5") },
-                { "Mill Tolerance For Branch", MillToleranceForBranch.ToString("F5") },
-                { "Pad Thickness", PadThickness.ToString("F5") },
-                { "Pad Width", PadWidth.ToString("F5") },
-                { "Crotch Radius", CrotchRadius.ToString("F5") },
-                { "Crotch Thickness", CrotchThickness.ToString("F5") },
-                { "Crotch Height", CrotchHeight.ToString("F5") },
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Name", Name);
+            dictionary.Add("Header Thickness", HeaderThickness.ToString("F5"));
+            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
+            dictionary.Add("Header Length", HeaderLength.ToString("F5"));
+            dictionary.Add("Branch Height", BranchHeight.ToString("F5"));
+            dictionary.Add("Strength Factor Of Longitudinal Weld Seam On Pressure", StrengthFactorOfLongitudinalWeldSeamOnPressure.ToString("F5"));
+            dictionary.Add("Branch Wall Thickness", BranchWallThickness.ToString("F5"));
+            dictionary.Add("Mill Tolerance For Branch", MillToleranceForBranch.ToString("F5"));
+            dictionary.Add("Pad Thickness", PadThickness.ToString("F5"));
+            dictionary.Add("Pad Width", PadWidth.ToString("F5"));
+            dictionary.Add("Crotch Radius", CrotchRadius.ToString("F5"));
+            dictionary.Add("Crotch Thickness", CrotchThickness.ToString("F5"));
+            dictionary.Add("Crotch Height", CrotchHeight.ToString("F5"));
 
-            return data;
+            return dictionary;
         }
     }
 }

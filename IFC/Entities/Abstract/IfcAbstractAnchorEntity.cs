@@ -26,7 +26,7 @@ namespace IFC.Entities.Abstract
             NodeEntity = nodeEntity;
             
             _IfcAbstractSegmentEntities = segmentEntities;
-            _PipeDiameter = segmentEntities[0].Diameter;
+            _PipeDiameter = segmentEntities[0].OuterDiameter;
             _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward.IsParallel(VectorExtensions.Z);
 
             XbimVector3D forward = new XbimVector3D(0, 0, 1);

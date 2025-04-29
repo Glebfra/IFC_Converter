@@ -5,7 +5,7 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Equipments
 {
-    public class StartVesselEntity : StartAbstractEntity
+    public class StartVesselEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.MaterialName)] 
         public string MaterialName { get; set; }
@@ -33,21 +33,27 @@ namespace Start.Entities.Equipments
         
         [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
+
+        [JsonProperty(StartPropertyName.DeviceInternalDiameter)] 
+        public double DeviceInternalDiameter { get; set; }
+        
+        [JsonProperty(StartPropertyName.DeviceWallThickness)] 
+        public double DeviceWallThickness { get; set; }
         
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Name", Name },
-                { "Material Name", MaterialName },
-                { "Mill Tolerance", MillTolerance.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnology.ToString() },
-                { "Corrosion Allowance", CorrosionAllowance.ToString("F5") },
-                { "Temperature", Temperature.ToString("F5") },
-                { "Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5") },
-                { "Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5") },
-                { "Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5") }
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Name", Name);
+            dictionary.Add("Material Name", MaterialName);
+            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
+            dictionary.Add("Manufacturing Technology", ManufacturingTechnology.ToString());
+            dictionary.Add("Corrosion Allowance", CorrosionAllowance.ToString("F5"));
+            dictionary.Add("Temperature", Temperature.ToString("F5"));
+            dictionary.Add("Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5"));
+            dictionary.Add("Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5"));
+            dictionary.Add("Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5"));
+            dictionary.Add("Device Internal Diameter", DeviceInternalDiameter.ToString("F5"));
+            dictionary.Add("Device Wall Thickness", DeviceWallThickness.ToString("F5"));
 
             return dictionary;
         }
