@@ -17,7 +17,7 @@ namespace IFC.Entities.Fittings.Vertex
 {
     public sealed class IfcVertexFlangeEntity : IfcAbstractFittingEntity
     {
-        public readonly double Length;
+        public override double Length { get; protected set; }
         public readonly double[] Radiuses;
         
         private readonly int _numSegments;
@@ -33,7 +33,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length;
-            Radiuses = abstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
+            Radiuses = abstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
         }
     
         public override IfcProduct CreateAndAdd(IModel model)

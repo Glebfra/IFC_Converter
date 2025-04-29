@@ -5,7 +5,7 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartNonstandardExpansionJointEntity : StartAbstractEntity
+    public class StartNonstandardExpansionJointEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.EffectiveArea)]
         public double EffectiveArea { get; set; }
@@ -18,12 +18,10 @@ namespace Start.Entities.Fittings
         
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Effective Area", EffectiveArea.ToString("F5") },
-                { "Length", Length.ToString("F5") },
-                { "Name", Name },
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Effective Area", EffectiveArea.ToString("F5"));
+            dictionary.Add("Length", Length.ToString("F5"));
+            dictionary.Add("Name", Name);
 
             return dictionary;
         }

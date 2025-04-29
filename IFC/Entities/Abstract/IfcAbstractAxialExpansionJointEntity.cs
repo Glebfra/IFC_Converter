@@ -4,7 +4,7 @@ namespace IFC.Entities.Abstract
 {
     public abstract class IfcAbstractAxialExpansionJointEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
+        public sealed override double Length { get; protected set; }
         
         protected double[] _Radiuses;
 

@@ -7,13 +7,19 @@ using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
+using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
+using IfcLabel = Xbim.Ifc4.MeasureResource.IfcLabel;
 
 namespace IFC.Entities.Abstract
 {
     public abstract class IfcAbstractTeeEntity : IfcAbstractFittingEntity
     {
+        public abstract double Height { get; protected set; }
+
         private StartTeeEntity _startTeeEntity;
         private IfcPipeFitting _pipeFitting;
 
@@ -29,7 +35,7 @@ namespace IFC.Entities.Abstract
             SortPipes(out _branchPipes, out _headPipe);
         }
 
-        protected IfcPipeFitting CreateTeeEntity(IModel model, double length, double height)
+        protected IfcPipeFitting CreateTeeEntity(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
 
@@ -38,11 +44,11 @@ namespace IFC.Entities.Abstract
             int i = 0;
             foreach (IfcAbstractSegmentEntity branchPipe in _branchPipes)
             {
-                teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, length / 2);
-                branchPipe.Clip(NodeEntity, length / 2);
+                teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, Length / 2);
+                branchPipe.Clip(NodeEntity, Length / 2);
             }
-            teeExtrudedArea[i++] = CreateTeeBranchShape(model, _headPipe, height);
-            _headPipe.Clip(NodeEntity, height);
+            teeExtrudedArea[i++] = CreateTeeBranchShape(model, _headPipe, Height);
+            _headPipe.Clip(NodeEntity, Height);
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
@@ -62,7 +68,7 @@ namespace IFC.Entities.Abstract
         {
             XbimVector3D direction = IfcAxis.GetDirectionToPipe(pipeEntity, ObjectMatrix3D.Translation);
             IfcAxis2Placement3D axis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), direction);
-            IfcExtrudedAreaSolid extrudedAreaSolid = CreateTeeItemShape(model, axis, pipeEntity.Diameter / 2, length);
+            IfcExtrudedAreaSolid extrudedAreaSolid = CreateTeeItemShape(model, axis, pipeEntity.OuterDiameter / 2, length);
             return extrudedAreaSolid;
         }
     
@@ -109,6 +115,49 @@ namespace IFC.Entities.Abstract
             
             if (headPipe == null)
                 throw new Exception("Cannot find head pipe");
+        }
+        
+        protected override void AddProperties(IModel model, IfcProduct product)
+        {
+            base.AddProperties(model, product);
+
+            #region Pset_PipeFittingTypeJunction
+
+            model.Instances.New<IfcRelDefinesByProperties>(properties =>
+            {
+                properties.RelatedObjects.Add(product);
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+                {
+                    set.Name = "Pset_PipeFittingTypeJunction";
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "JunctionType";
+                        value.NominalValue = new IfcLabel("TEE");
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "JunctionLeftRadius";
+                        value.NominalValue = new IfcPositiveLengthMeasure(0);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "JunctionLeftAngle";
+                        value.NominalValue = new IfcPositivePlaneAngleMeasure(Math.PI / 2);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "JunctionRightRadius";
+                        value.NominalValue = new IfcPositiveLengthMeasure(0);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "JunctionRightAngle";
+                        value.NominalValue = new IfcPositivePlaneAngleMeasure(Math.PI / 2);
+                    }));
+                });
+            });
+
+            #endregion
         }
     }
 }

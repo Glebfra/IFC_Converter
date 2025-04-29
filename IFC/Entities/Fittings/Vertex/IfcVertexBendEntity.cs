@@ -36,7 +36,7 @@ namespace IFC.Entities.Fittings.Vertex
 
             _torusAngleStep = Angle / (_numSegments - 1);
             _torusRadius = _bendEntity.Radius;
-            _circleRadius = Math.Min(AbstractSegmentEntities[0].Diameter / 2, AbstractSegmentEntities[1].Diameter / 2);
+            _circleRadius = Math.Min(AbstractSegmentEntities[0].OuterDiameter / 2, AbstractSegmentEntities[1].OuterDiameter / 2);
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

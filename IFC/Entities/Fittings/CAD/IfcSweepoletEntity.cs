@@ -8,19 +8,19 @@ namespace IFC.Entities.Fittings.CAD
 {
     public sealed class IfcSweepoletEntity : IfcAbstractTeeEntity
     {
-        private double Length;
-        private double Height;
+        public override double Length { get; protected set; }
+        public override double Height { get; protected set; }
     
         public IfcSweepoletEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
-            Length = _headPipe.Diameter;
-            Height = _branchPipes[0].Diameter / 2;
+            Length = _headPipe.OuterDiameter;
+            Height = _branchPipes[0].OuterDiameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcPipeFitting pipeFitting = CreateTeeEntity(model, Length, Height);
+            IfcPipeFitting pipeFitting = CreateTeeEntity(model);
             AddProperties(model, pipeFitting);
             return pipeFitting;
         }

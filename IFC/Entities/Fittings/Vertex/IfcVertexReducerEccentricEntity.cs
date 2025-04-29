@@ -17,8 +17,8 @@ namespace IFC.Entities.Fittings.Vertex
 {
     public sealed class IfcVertexReducerEccentricEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
-        
+        public override double Length { get; protected set; }
+
         private readonly int _numSegments;
         private readonly double _angleStep;
         private readonly double _pipeDisplacement;
@@ -33,7 +33,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             _reducerEntity = reducerEntity;
             AbstractSegmentEntities = abstractSegmentEntities
-                .OrderBy(entity => entity.Diameter)
+                .OrderBy(entity => entity.OuterDiameter)
                 .ToArray();
 
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
@@ -50,8 +50,8 @@ namespace IFC.Entities.Fittings.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IfcCartesianPoint[] lowerCircle = CreateCircle(model, AbstractSegmentEntities[0].Diameter / 2, 0, 0);
-            IfcCartesianPoint[] upperCircle = CreateCircle(model, AbstractSegmentEntities[1].Diameter / 2, Length, _pipeDisplacement);
+            IfcCartesianPoint[] lowerCircle = CreateCircle(model, AbstractSegmentEntities[0].OuterDiameter / 2, 0, 0);
+            IfcCartesianPoint[] upperCircle = CreateCircle(model, AbstractSegmentEntities[1].OuterDiameter / 2, Length, _pipeDisplacement);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);

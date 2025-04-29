@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Extensions;
 using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -11,8 +12,8 @@ namespace IFC.Entities.Segments
     public sealed class IfcCylindricalShellEntity : IfcAbstractSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        public override XbimVector3D Direction { get; }
-        public override double Diameter { get; }
+        public override XbimVector3D Direction { get; protected set; }
+        public override double OuterDiameter { get; protected set; }
 
         private StartPipeEntity _startPipeEntity;
         private IfcPipeSegment _pipeSegment;
@@ -32,7 +33,10 @@ namespace IFC.Entities.Segments
             XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
-            Diameter = _startPipeEntity.Diameter;
+            OuterDiameter = _startPipeEntity.Diameter;
+            OuterSurfaceArea = MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
+            
+            _OnLengthChanged += () => MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
         }
         
         public override IfcProduct CreateAndAdd(IModel model)

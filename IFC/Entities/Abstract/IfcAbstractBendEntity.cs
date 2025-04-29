@@ -6,14 +6,16 @@ using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 
 namespace IFC.Entities.Abstract
 {
     public abstract class IfcAbstractBendEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
+        public sealed override double Length { get; protected set; }
         
         protected double _BendRadius;
         protected double _PipeRadius;
@@ -28,12 +30,12 @@ namespace IFC.Entities.Abstract
             _directionToPipes = CalculateDirectionToPipes();
             
             _BendRadius = _bendEntity.Radius;
-            _PipeRadius = Math.Min(AbstractSegmentEntities[0].Diameter / 2, AbstractSegmentEntities[1].Diameter / 2);
+            _PipeRadius = Math.Min(AbstractSegmentEntities[0].OuterDiameter / 2, AbstractSegmentEntities[1].OuterDiameter / 2);
 
             ObjectMatrix3D = ObjectMatrix3D.Translate(CalculateCircleCenter());
             Length = Angle * _BendRadius;
         }
-        
+
         protected XbimVector3D[] CalculateDirectionToPipes()
         {
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
@@ -59,25 +61,24 @@ namespace IFC.Entities.Abstract
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);
-
-            #region Qto_PipeFittingBaseQuantities
+            
+            #region Pset_PipeFittingTypeBend
 
             model.Instances.New<IfcRelDefinesByProperties>(properties =>
             {
                 properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
                 {
-                    quantity.Name = "Qto_PipeFittingBaseQuantities";
-                    quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
+                    set.Name = "Pset_PipeFittingTypeBend";
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
-                        length.Name = "Length";
-                        length.LengthValue = Length;
-                        length.Formula = "radius*angle; [angle]=rad, [radius]=metre";
+                        value.Name = "BendAngle";
+                        value.NominalValue = new IfcPositivePlaneAngleMeasure(Angle);
                     }));
-                    quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
-                        weight.Name = "NetWeight";
-                        weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_bendEntity.Weight * Length);
+                        value.Name = "BendRadius";
+                        value.NominalValue = new IfcPositiveLengthMeasure(_BendRadius);
                     }));
                 });
             });
