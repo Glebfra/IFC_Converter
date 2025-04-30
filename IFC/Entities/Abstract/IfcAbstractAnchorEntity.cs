@@ -5,6 +5,9 @@ using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
+using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.Entities.Abstract
 {
@@ -55,6 +58,29 @@ namespace IFC.Entities.Abstract
             representationItems.AddRange(CreateAnchorModel(model, tangentDisplacement + normalDisplacement));
 
             return representationItems;
+        }
+
+        protected override void AddProperties(IModel model, IfcProduct product)
+        {
+            base.AddProperties(model, product);
+            
+            #region DEBUG_ANCHOR
+            #if DEBUG
+            model.Instances.New<IfcRelDefinesByProperties>(properties =>
+            {
+                properties.RelatedObjects.Add(product);
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+                {
+                    set.Name = "DEBUG_ANCHOR";
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "Is Vertical";
+                        value.NominalValue = new IfcText(_IsVertical.ToString());
+                    }));
+                });
+            });
+            #endif
+            #endregion
         }
     }
 }

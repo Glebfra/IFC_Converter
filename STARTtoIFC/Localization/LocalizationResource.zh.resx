@@ -21,9 +21,7 @@
         <value>浏览</value>
     </data>
     <data name="ExportWindowForm_ExportType_Label" xml:space="preserve">
-        <value>输出类型
-
-</value>
+        <value>输出类型</value>
     </data>
     <data name="ExportWindowForm_VertexSegments_Textbox" xml:space="preserve">
         <value>顶点段数量</value>
