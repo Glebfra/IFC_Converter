@@ -1,37 +1,32 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartTorsionExpansionJointEntity : StartAbstractEntity
+    public class StartTorsionExpansionJointEntity : StartAbstractFittingEntity
     {
-        [JsonProperty("2")]
+        [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
         public double AllowableAxialExpansion { get; set; }
-        
-        [JsonProperty("34")]
-        public double Weight { get; set; }
-        
-        [JsonProperty("72")]
+
+        [JsonProperty(StartPropertyName.FrictionMoment)]
         public double FrictionMoment { get; set; }
         
-        [JsonProperty("145")]
+        [JsonProperty(StartPropertyName.Length)]
         public double Length { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5") },
-                { "Weight", Weight.ToString("F5") },
-                { "Friction Moment", FrictionMoment.ToString("F5") },
-                { "Length", Length.ToString("F5") },
-                { "Name", Name },
-            };
-            
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5"));
+            dictionary.Add("Friction Moment", FrictionMoment.ToString("F5"));
+            dictionary.Add("Length", Length.ToString("F5"));
+            dictionary.Add("Name", Name);
+
             return dictionary;
         }
     }

@@ -1,6 +1,9 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Entities.Interfaces;
+using IFC.Extensions;
 using Start.Entities.Fittings;
+using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
@@ -9,11 +12,12 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Segments
 {
-    public sealed class IfcRigidElementEntity : IfcAbstractSegmentEntity
+    public sealed class IfcRigidElementEntity : IfcAbstractSegmentEntity, IIfcSegmentDependedEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        public override XbimVector3D Direction { get; }
-        public override double Diameter { get; }
+        public override XbimVector3D Direction { get; protected set; }
+        public override double OuterDiameter { get; protected set; }
+        public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
 
         private StartRigidElementEntity _startRigidElementEntity;
         private IfcPipeSegment _pipeSegment;
@@ -22,6 +26,8 @@ namespace IFC.Entities.Segments
             : base(startRigidElementEntity, ifcNodeEntities)
         {
             _startRigidElementEntity = startRigidElementEntity;
+            AbstractSegmentEntities = abstractSegmentEntities;
+            
             Coordinates = ifcNodeEntities[0].ObjectMatrix3D.Translation;
             Direction = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             Length = Direction.Length;
@@ -34,13 +40,16 @@ namespace IFC.Entities.Segments
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
 
-            Diameter = abstractSegmentEntities.Length switch
+            OuterDiameter = abstractSegmentEntities.Length switch
             {
-                1 => abstractSegmentEntities[0].Diameter,
-                2 => Math.Min(abstractSegmentEntities[0].Diameter, abstractSegmentEntities[1].Diameter),
+                1 => abstractSegmentEntities[0].OuterDiameter,
+                2 => Math.Min(abstractSegmentEntities[0].OuterDiameter, abstractSegmentEntities[1].OuterDiameter),
                 _ => 0.05
             };
-            if (Diameter > 0.05) Diameter = 0.05;
+            if (OuterDiameter > 0.05) OuterDiameter = 0.05;
+            OuterSurfaceArea = MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
+            
+            _OnLengthChanged += () => MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
         }
         
         public override IfcProduct CreateAndAdd(IModel model)

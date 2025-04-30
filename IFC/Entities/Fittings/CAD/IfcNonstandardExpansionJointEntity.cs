@@ -16,14 +16,14 @@ namespace IFC.Entities.Fittings.CAD
 {
     public class IfcNonstandardExpansionJointEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
+        public sealed override double Length { get; protected set; }
         public double Radius { get; }
         
         private StartNonstandardExpansionJointEntity _nonstandardExpansionJoint;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcNonstandardExpansionJointEntity(StartNonstandardExpansionJointEntity nonstandardExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(nonstandardExpansionJointEntity, ifcNodeEntity, ifcAbstractSegmentEntities)
+        public IfcNonstandardExpansionJointEntity(StartNonstandardExpansionJointEntity nonstandardExpansionJointEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(nonstandardExpansionJointEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _nonstandardExpansionJoint = nonstandardExpansionJointEntity;
 
@@ -74,7 +74,7 @@ namespace IFC.Entities.Fittings.CAD
         
         private void ClipPipes()
         {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in _IfcAbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
             {
                 ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
             }

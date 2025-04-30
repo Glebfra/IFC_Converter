@@ -17,23 +17,23 @@ namespace IFC.Entities.Fittings.Vertex
 {
     public sealed class IfcVertexReducerEccentricEntity : IfcAbstractFittingEntity
     {
-        public double Length { get; }
-        
+        public override double Length { get; protected set; }
+
         private readonly int _numSegments;
         private readonly double _angleStep;
         private readonly double _pipeDisplacement;
         private readonly StartReducerEntity _reducerEntity;
         private IfcPipeFitting _pipeFitting;
 
-        public IfcVertexReducerEccentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities, int numSegments)
-            : base(reducerEntity, nodeEntity, ifcAbstractSegmentEntities)
+        public IfcVertexReducerEccentricEntity(StartReducerEntity reducerEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments)
+            : base(reducerEntity, nodeEntity, abstractSegmentEntities)
         {
             _numSegments = numSegments;
             _angleStep = 2 * Math.PI / _numSegments;
             
             _reducerEntity = reducerEntity;
-            _IfcAbstractSegmentEntities = _IfcAbstractSegmentEntities
-                .OrderBy(entity => entity.Diameter)
+            AbstractSegmentEntities = abstractSegmentEntities
+                .OrderBy(entity => entity.OuterDiameter)
                 .ToArray();
 
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
@@ -50,8 +50,8 @@ namespace IFC.Entities.Fittings.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IfcCartesianPoint[] lowerCircle = CreateCircle(model, _IfcAbstractSegmentEntities[0].Diameter / 2, 0, 0);
-            IfcCartesianPoint[] upperCircle = CreateCircle(model, _IfcAbstractSegmentEntities[1].Diameter / 2, Length, _pipeDisplacement);
+            IfcCartesianPoint[] lowerCircle = CreateCircle(model, AbstractSegmentEntities[0].OuterDiameter / 2, 0, 0);
+            IfcCartesianPoint[] upperCircle = CreateCircle(model, AbstractSegmentEntities[1].OuterDiameter / 2, Length, _pipeDisplacement);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
@@ -64,9 +64,9 @@ namespace IFC.Entities.Fittings.Vertex
                 fitting.Tag = Tag;
                 fitting.Name = _reducerEntity.Name;
             });
-            _IfcAbstractSegmentEntities[1].Clip(NodeEntity, Length);
+            AbstractSegmentEntities[1].Clip(NodeEntity, Length);
             
-            MovePipe(_IfcAbstractSegmentEntities[1]);
+            MovePipe(AbstractSegmentEntities[1]);
             AddProperties(model, _pipeFitting);
 
             return _pipeFitting;
@@ -75,20 +75,20 @@ namespace IFC.Entities.Fittings.Vertex
         private XbimVector3D CalculateUpVector()
         {
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            IfcNodeEntity[] pipeNodeEntities = _IfcAbstractSegmentEntities[1].NodeEntities
+            IfcNodeEntity[] pipeNodeEntities = AbstractSegmentEntities[1].NodeEntities
                 .OrderBy(entity => (entity.ObjectMatrix3D.Translation - coordinates).Length)
                 .ToArray();
             return (
                 pipeNodeEntities[1].ObjectMatrix3D.Translation - 
                 pipeNodeEntities[0].ObjectMatrix3D.Translation - 
-                IfcAxis.GetDirectionToPipe(_IfcAbstractSegmentEntities[1], coordinates)
+                IfcAxis.GetDirectionToPipe(AbstractSegmentEntities[1], coordinates)
             );
         }
 
         private XbimVector3D CalculateForwardVector()
         {
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(_IfcAbstractSegmentEntities[1], coordinates);
+            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(AbstractSegmentEntities[1], coordinates);
             return directionToPipe.Normalized();
         }
 

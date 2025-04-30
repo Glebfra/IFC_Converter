@@ -143,10 +143,12 @@
     <Compile Include="Entities\Abstract\IfcAbstractBendEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
+    <Compile Include="Entities\Abstract\IfcAbstractConnectorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideDoubleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideSingleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcRigidHangerEntity.cs" />
@@ -154,6 +156,10 @@
     <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexHingedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexSlidingSupportEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexInlinePumpEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexPumpEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexTankEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexVesselEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
@@ -179,12 +185,15 @@
     <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
+    <Compile Include="Entities\Interfaces\IIfcSegmentDependedEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
     <Compile Include="Entities\Segments\IfcConeElementEntity.cs" />
     <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
+    <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />
@@ -193,6 +202,7 @@
     <Compile Include="Tools\IfcGeometry.cs" />
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
+    <Compile Include="Tools\IfcVertexPrimitives.cs" />
     <Compile Include="ValueConverter\ValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +213,9 @@
       <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
       <Name>Start</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\Equipments\CAD\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

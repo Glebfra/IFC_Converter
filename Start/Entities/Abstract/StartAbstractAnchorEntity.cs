@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities.Abstract
 {
     public class StartAbstractAnchorEntity : StartAbstractEntity
     {
-        [JsonProperty("264")] 
+        [JsonProperty(StartPropertyName.CheckAllowableLoads)]
         public int CheckAllowableLoads { get; set; }
         
-        [JsonProperty("265")] 
+        [JsonProperty(StartPropertyName.AllowableLoadsInLocalAxes)]
         public int AllowableLoadsInLocalAxes { get; set; }
         
-        [JsonProperty("266")] 
+        [JsonProperty(StartPropertyName.Fx)]
         public double Fx { get; set; }
         
-        [JsonProperty("267")] 
+        [JsonProperty(StartPropertyName.Fy)]
         public double Fy { get; set; }
         
-        [JsonProperty("268")] 
+        [JsonProperty(StartPropertyName.Fz)]
         public double Fz { get; set; }
         
-        [JsonProperty("449")] 
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
         public override Dictionary<string, string> GetData()

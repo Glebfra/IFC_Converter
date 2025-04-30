@@ -2,6 +2,7 @@
 using Start.API;
 using Start.Entities.Abstract;
 using Start.Entities.Anchors;
+using Start.Entities.Equipments;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
 
@@ -101,6 +102,24 @@ namespace Start.Entities
                 case StartElementType.CONSTANT_FORCE_SUPPORT:
                     return JsonConvert.DeserializeObject<StartConstantForceSupportEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
+                    return JsonConvert.DeserializeObject<StartConstantForceSupportHangerEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.VESSEL:
+                    return JsonConvert.DeserializeObject<StartVesselEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.TANK:
+                    return JsonConvert.DeserializeObject<StartTankEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.INLINE_PUMP:
+                    return JsonConvert.DeserializeObject<StartInlinePumpEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.PUMP_API_610:
+                case StartElementType.PUMP_ISO_5199:
+                case StartElementType.PUMP_ISO_9905:
+                case StartElementType.OTHER_PUMP:
+                    return JsonConvert.DeserializeObject<StartPumpEntity>(dataArrayItem.Data.ToString());
+
                 default:
                     return null;
             }

@@ -1,39 +1,40 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Anchors
 {
     public class StartSpringSupportEntity : StartAbstractEntity
     {
-        [JsonProperty("72")]
+        [JsonProperty(StartPropertyName.FrictionMoment)]
         public double FrictionMoment { get; set; }
         
-        [JsonProperty("73")]
+        [JsonProperty(StartPropertyName.SafetyFactorForLiftingCapacity)]
         public double SafetyFactorForLiftingCapacity { get; set; }
         
-        [JsonProperty("74")]
+        [JsonProperty(StartPropertyName.ChainCompliance)]
         public double ChainCompliance { get; set; }
         
-        [JsonProperty("112")]
+        [JsonProperty(StartPropertyName.ChainRigidity)]
         public double ChainRigidity { get; set; }
         
-        [JsonProperty("146")]
+        [JsonProperty(StartPropertyName.SupportsNumber)]
         public int SupportsNumber { get; set; }
         
-        [JsonProperty("147")]
+        [JsonProperty(StartPropertyName.LoadChange)]
         public double LoadChange { get; set; }
         
-        [JsonProperty("148")]
+        [JsonProperty(StartPropertyName.SupportingForce)]
         public double SupportingForce { get; set; }
         
-        [JsonProperty("154")]
+        [JsonProperty(StartPropertyName.LoadCapacityOfOneSupport)]
         public double LoadCapacityOfOneSupport { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
-        [JsonProperty("1282")]
+        [JsonProperty(StartPropertyName.AnchorSupportWeight)]
         public double Weight { get; set; }
         
         public override Dictionary<string, string> GetData()

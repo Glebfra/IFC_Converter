@@ -29,8 +29,8 @@ namespace IFC.Entities.Abstract
             NodeEntity = nodeEntity;
             
             _IfcAbstractSegmentEntities = segmentEntities;
-            _PipeDiameter = segmentEntities[0].Diameter;
-            _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward == VectorExtensions.Z;
+            _PipeDiameter = segmentEntities[0].OuterDiameter;
+            _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward.IsParallel(VectorExtensions.Z);
 
             XbimVector3D forward = new XbimVector3D(0, 0, 1);
             XbimVector3D up = new XbimVector3D(0, 1, 0);
@@ -64,25 +64,22 @@ namespace IFC.Entities.Abstract
         {
             base.AddProperties(model, product);
             
-            #region Pset_PipeAnchorTypeStart
-
+            #region DEBUG_ANCHOR
+            #if DEBUG
             model.Instances.New<IfcRelDefinesByProperties>(properties =>
             {
                 properties.RelatedObjects.Add(product);
                 properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
                 {
-                    set.Name = "Pset_PipeAnchorTypeStart";
-                    foreach (var kvp in _abstractEntity.GetData())
+                    set.Name = "DEBUG_ANCHOR";
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
+                        value.Name = "Is Vertical";
+                        value.NominalValue = new IfcText(_IsVertical.ToString());
+                    }));
                 });
             });
-
+            #endif
             #endregion
         }
     }

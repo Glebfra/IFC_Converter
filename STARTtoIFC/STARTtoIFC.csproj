@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\Program Files %28x86%29\CTAPTPR\Converters\STARTtoIFC\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>5</WarningLevel>
@@ -159,7 +159,6 @@
     <Compile Include="ConversionResult.cs" />
     <Compile Include="IfcExporter.cs" />
     <Compile Include="IIfcExporter.cs" />
-    <Compile Include="LanguageConverter.cs" />
     <Compile Include="Localization\LocalizationResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -182,6 +181,9 @@
     <EmbeddedResource Include="ExportWindow.resx">
       <DependentUpon>ExportWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExportWindow.zh.resx">
+      <DependentUpon>ExportWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Localization\LocalizationResource.en.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
@@ -190,6 +192,9 @@
       <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\LocalizationResource.ru.resx">
+      <DependentUpon>LocalizationResource.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\LocalizationResource.zh.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

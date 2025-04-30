@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 
 namespace Start.Entities.Segments
 {
     public class StartConeElementEntity : StartPipeEntity
     {
-        [JsonProperty("838")]
+        [JsonProperty(StartPropertyName.ConeElementSecondDiameter)]
         public double SecondDiameter { get; set; }
 
         public override Dictionary<string, string> GetData()

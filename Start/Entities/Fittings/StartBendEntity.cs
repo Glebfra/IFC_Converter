@@ -5,49 +5,43 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartBendEntity : StartAbstractEntity
+    public class StartBendEntity : StartAbstractFittingEntity
     {
-        [JsonProperty("9")]
+        [JsonProperty(StartPropertyName.WallThickness)]
         public double WallThickness { get; set; }
     
-        [JsonProperty("13")]
+        [JsonProperty(StartPropertyName.MillTolerance)]
         public double MillTolerance { get; set; }
-    
-        [JsonProperty("34")]
-        public double Weight { get; set; }
-    
-        [JsonProperty("37")]
+
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
     
-        [JsonProperty("70")]
+        [JsonProperty(StartPropertyName.Radius)]
         public double Radius { get; set; }
     
-        [JsonProperty("71")]
+        [JsonProperty(StartPropertyName.OvalizationCoefficient)]
         public double OvalizationCoefficient { get; set; }
     
-        [JsonProperty("177")]
+        [JsonProperty(StartPropertyName.NumberOfMilters)]
         public int NumberOfMilters { get; set; }
     
-        [JsonProperty("216")]
+        [JsonProperty(StartPropertyName.MillToleranceOutside)]
         public double MillToleranceOutside { get; set; }
     
-        [JsonProperty("225")]
+        [JsonProperty(StartPropertyName.PipeName)]
         public string Name { get; set; }
 
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Wall Thickness", WallThickness.ToString("F5") },
-                { "Mill Tolerance", MillTolerance.ToString("F5") },
-                { "Weight", Weight.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnologyEnum.ToString() },
-                { "Radius", Radius.ToString("F5") },
-                { "Ovalization Coefficient", OvalizationCoefficient.ToString("F5") },
-                { "Number Of Milters", NumberOfMilters.ToString() },
-                { "Mill Tolerance Outside", MillToleranceOutside.ToString("F5") },
-                { "Name", Name }
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Wall Thickness", WallThickness.ToString("F5"));
+            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
+            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
+            dictionary.Add("Radius", Radius.ToString("F5"));
+            dictionary.Add("Ovalization Coefficient", OvalizationCoefficient.ToString("F5"));
+            dictionary.Add("Number Of Milters", NumberOfMilters.ToString());
+            dictionary.Add("Mill Tolerance Outside", MillToleranceOutside.ToString("F5"));
+            dictionary.Add("Name", Name);
 
             return dictionary;
         }

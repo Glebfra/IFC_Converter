@@ -5,45 +5,39 @@ using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartArmatureEntity : StartAbstractEntity
+    public class StartArmatureEntity : StartAbstractFittingEntity
     {
-        [JsonProperty("225")] 
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
     
-        [JsonProperty("4")] 
+        [JsonProperty(StartPropertyName.Diameter)]
         public double OutsideDiameter { get; set; }
-    
-        [JsonProperty("34")] 
-        public double Weight { get; set; }
-    
-        [JsonProperty("145")] 
+
+        [JsonProperty(StartPropertyName.Length)]
         public double Length { get; set; }
     
-        [JsonProperty("82")] 
+        [JsonProperty(StartPropertyName.LeakageCheck)]
         public StartLeakageCheckEnum LeakageCheckEnum { get; set; }
     
-        [JsonProperty("720")] 
+        [JsonProperty(StartPropertyName.GasketEffectiveDiameter)]
         public double GasketEffectiveDiameter { get; set; }
     
-        [JsonProperty("722")] 
+        [JsonProperty(StartPropertyName.NominalPressure)]
         public double NominalPressure { get; set; }
     
-        [JsonProperty("387")] 
+        [JsonProperty(StartPropertyName.GasketCrossection)]
         public double GasketCrossection { get; set; }
 
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Name", Name },
-                { "Outside Diameter", OutsideDiameter.ToString("F5") },
-                { "Weight", Weight.ToString("F5") },
-                { "Length", Length.ToString("F5") },
-                { "Leakage Check", LeakageCheckEnum.ToString() },
-                { "Gasket Effective Diameter", GasketEffectiveDiameter.ToString("F5") },
-                { "Nominal Pressure", NominalPressure.ToString("F5") },
-                { "Gasket Crossection", GasketCrossection.ToString("F5") }
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Name", Name);
+            dictionary.Add("Outside Diameter", OutsideDiameter.ToString("F5"));
+            dictionary.Add("Length", Length.ToString("F5"));
+            dictionary.Add("Leakage Check", LeakageCheckEnum.ToString());
+            dictionary.Add("Gasket Effective Diameter", GasketEffectiveDiameter.ToString("F5"));
+            dictionary.Add("Nominal Pressure", NominalPressure.ToString("F5"));
+            dictionary.Add("Gasket Crossection", GasketCrossection.ToString("F5"));
 
             return dictionary;
         }

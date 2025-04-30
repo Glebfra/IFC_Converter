@@ -1,12 +1,14 @@
 ﻿using IFC.Entities.Abstract;
 using IFC.Entities.Anchors.CAD;
 using IFC.Entities.Anchors.Vertex;
+using IFC.Entities.Equipments.Vertex;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using Start.API;
 using Start.Entities.Abstract;
 using Start.Entities.Anchors;
+using Start.Entities.Equipments;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
 
@@ -107,6 +109,9 @@ namespace IFC.Entities
                 
                 case StartElementType.CONSTANT_FORCE_SUPPORT:
                     return new IfcConstantForceSupportEntity((StartConstantForceSupportEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
+                    return new IfcConstantForceSupportHangerEntity((StartConstantForceSupportHangerEntity)entity, nodeEntity, segmentEntities);
 
                 default:
                     return null;
@@ -159,6 +164,21 @@ namespace IFC.Entities
                 
                 case StartElementType.SLIDING_SUPPORT:
                     return new IfcVertexSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.VESSEL:
+                    return new IfcVertexVesselEntity((StartVesselEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.TANK:
+                    return new IfcVertexTankEntity((StartTankEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.INLINE_PUMP:
+                    return new IfcVertexInlinePumpEntity((StartInlinePumpEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.PUMP_API_610:
+                case StartElementType.PUMP_ISO_5199:
+                case StartElementType.PUMP_ISO_9905:
+                case StartElementType.OTHER_PUMP:
+                    return new IfcVertexPumpEntity((StartPumpEntity)entity, nodeEntity, segmentEntities, numSegments); 
 
                 default:
                     return null;

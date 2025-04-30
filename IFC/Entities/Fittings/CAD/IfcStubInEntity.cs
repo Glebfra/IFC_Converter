@@ -8,19 +8,19 @@ namespace IFC.Entities.Fittings.CAD
 {
     public sealed class IfcStubInEntity : IfcAbstractTeeEntity
     {
-        public readonly double Length;
-        public readonly double Height;
-    
-        public IfcStubInEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(startTeeEntity, nodeEntity, ifcAbstractSegmentEntities)
+        public override double Length { get; protected set; }
+        public override double Height { get; protected set; }
+
+        public IfcStubInEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
-            Length = _headPipe.Diameter;
-            Height = _branchPipes[0].Diameter / 2;
+            Length = _headPipe.OuterDiameter;
+            Height = _branchPipes[0].OuterDiameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcPipeFitting pipeFitting = CreateTeeEntity(model, Length, Height);
+            IfcPipeFitting pipeFitting = CreateTeeEntity(model);
             AddProperties(model, pipeFitting);
             return pipeFitting;
         }

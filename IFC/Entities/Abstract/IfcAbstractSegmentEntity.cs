@@ -21,8 +21,18 @@ namespace IFC.Entities.Abstract
 {
     public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcClippable, IIfcTwoNodeEntity
     {
-        public abstract XbimVector3D Direction { get; }
-        public abstract double Diameter { get; }
+        public abstract XbimVector3D Direction { get; protected set; }
+        public abstract double OuterDiameter { get; protected set; }
+
+        public double OuterSurfaceArea
+        {
+            get => _outerSurfaceArea;
+            protected set
+            {
+                _outerSurfaceArea = value;
+                _OnOuterSurfaceAreaChanged?.Invoke();
+            }
+        }
 
         public IfcNodeEntity[] NodeEntities { get; }
 
@@ -32,7 +42,7 @@ namespace IFC.Entities.Abstract
             set
             {
                 _coordinates = value;
-                _CoordinatesChanged?.Invoke();
+                _OnCoordinatesChanged?.Invoke();
             }
         }
 
@@ -42,22 +52,25 @@ namespace IFC.Entities.Abstract
             set
             {
                 _length = value;
-                _LengthChanged?.Invoke();
+                _OnLengthChanged?.Invoke();
             }
         }
         
-        protected event Action? _CoordinatesChanged;
-        protected event Action? _LengthChanged;
+        protected event Action? _OnCoordinatesChanged;
+        protected event Action? _OnLengthChanged;
+        protected event Action? _OnOuterSurfaceAreaChanged;
 
         private double _length;
+        private double _outerSurfaceArea;
         private XbimVector3D _coordinates;
-        private StartAbstractEntity _startAbstractEntity;
+        
+        private StartAbstractSegmentEntity _abstractSegmentEntity;
         private IfcPipeSegment _pipeSegment;
 
-        public IfcAbstractSegmentEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity[] ifcNodeEntities)
-            : base(startAbstractEntity)
+        public IfcAbstractSegmentEntity(StartAbstractSegmentEntity abstractSegmentEntity, IfcNodeEntity[] ifcNodeEntities)
+            : base(abstractSegmentEntity)
         {
-            _startAbstractEntity = startAbstractEntity;
+            _abstractSegmentEntity = abstractSegmentEntity;
             NodeEntities = ifcNodeEntities;
         }
         
@@ -98,14 +111,14 @@ namespace IFC.Entities.Abstract
         
         protected IfcProductDefinitionShape CreatePipeShape(IModel model, IfcDirection extrudedDirection)
         {
-            IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, Diameter / 2, XbimVector3D.Zero);
+            IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, OuterDiameter / 2, XbimVector3D.Zero);
             IfcExtrudedAreaSolid extrudedArea = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
             {
                 solid.SweptArea = profileDef;
                 solid.ExtrudedDirection = extrudedDirection;
                 solid.Depth = Length;
 
-                _LengthChanged += () => solid.Depth = Length;
+                _OnLengthChanged += () => solid.Depth = Length;
             });
             IfcShapeRepresentation shapeRep = IfcGeometry.CreateShapeRepresentation(model, extrudedArea);
         
@@ -117,7 +130,7 @@ namespace IFC.Entities.Abstract
             return model.Instances.New<IfcCartesianPoint>(point =>
             {
                 point.SetXYZ(Coordinates.X, Coordinates.Y, Coordinates.Z);
-                _CoordinatesChanged += () => point.SetXYZ(Coordinates.X, Coordinates.Y, Coordinates.Z);
+                _OnCoordinatesChanged += () => point.SetXYZ(Coordinates.X, Coordinates.Y, Coordinates.Z);
             });
         }
 
@@ -133,23 +146,51 @@ namespace IFC.Entities.Abstract
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);
-            
-            #region Pset_PipeSegmentTypeStart
+
+            #region Pset_PipeSegmentTypeCommon
 
             model.Instances.New<IfcRelDefinesByProperties>(properties =>
             {
                 properties.RelatedObjects.Add(product);
                 properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
                 {
-                    set.Name = "Pset_PipeSegmentTypeStart";
-                    foreach (var kvp in _startAbstractEntity.GetData())
+                    set.Name = "Pset_PipeSegmentTypeCommon";
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
+                        value.Name = "OuterDiameter";
+                        value.NominalValue = new IfcPositiveLengthMeasure(OuterDiameter);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "InnerDiameter";
+                        value.NominalValue = new IfcPositiveLengthMeasure(_abstractSegmentEntity.InnerDiameter);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "NominalDiameter";
+                        value.NominalValue = new IfcPositiveLengthMeasure(_abstractSegmentEntity.Diameter);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
+                    {
+                        value.Name = "WorkingPressure";
+                        value.NominalValue = new IfcPressureMeasure(_abstractSegmentEntity.Pressure);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertyBoundedValue>(value =>
+                    {
+                        double[] pressureRange = _abstractSegmentEntity.PressureRange;
+                        
+                        value.Name = "PressureRange";
+                        value.LowerBoundValue = new IfcPressureMeasure(pressureRange[0]);
+                        value.UpperBoundValue = new IfcPressureMeasure(pressureRange[1]);
+                    }));
+                    set.HasProperties.Add(model.Instances.New<IfcPropertyBoundedValue>(value =>
+                    {
+                        double[] temperatureRange = _abstractSegmentEntity.TemperatureRange;
+                        
+                        value.Name = "TemperatureRange";
+                        value.LowerBoundValue = new IfcThermodynamicTemperatureMeasure(temperatureRange[0]);
+                        value.UpperBoundValue = new IfcThermodynamicTemperatureMeasure(temperatureRange[1]);
+                    }));
                 });
             });
 
@@ -168,15 +209,14 @@ namespace IFC.Entities.Abstract
                         length.Name = "Length";
                         length.LengthValue = new IfcLengthMeasure(Length);
 
-                        _LengthChanged += () => length.LengthValue = new IfcLengthMeasure(Length);
+                        _OnLengthChanged += () => length.LengthValue = new IfcLengthMeasure(Length);
                     }));
                     quantity.Quantities.Add(model.Instances.New<IfcQuantityArea>(area =>
                     {
-                        double circumference = Math.PI * Diameter;
                         area.Name = "OuterSurfaceArea";
-                        area.AreaValue = new IfcAreaMeasure(circumference * Length);
+                        area.AreaValue = new IfcAreaMeasure(OuterSurfaceArea);
 
-                        _LengthChanged += () => area.AreaValue = new IfcAreaMeasure(circumference * Length);
+                        _OnOuterSurfaceAreaChanged += () => area.AreaValue = new IfcAreaMeasure(OuterSurfaceArea);
                     }));
                 });
             });

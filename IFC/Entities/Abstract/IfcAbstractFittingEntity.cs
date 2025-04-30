@@ -1,88 +1,47 @@
-﻿using System.Linq;
-using IFC.Entities.Interfaces;
-using IFC.Tools;
-using Start.Entities.Abstract;
+﻿using Start.Entities.Abstract;
 using Xbim.Common;
-using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
+using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.QuantityResource;
 
 namespace IFC.Entities.Abstract
 {
-    public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity
+    public abstract class IfcAbstractFittingEntity : IfcAbstractConnectorEntity
     {
-        public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-
-        public double Angle { get; protected set; }
         public double Diameter { get; protected set; }
-        public IfcNodeEntity NodeEntity { get; }
-        
-        private StartAbstractEntity _abstractEntity;
-        protected IfcAbstractSegmentEntity[] _IfcAbstractSegmentEntities;
-        
-        protected IfcAbstractFittingEntity(StartAbstractEntity abstractEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegmentEntities) 
-            : base(abstractEntity)
+        public abstract double Length { get; protected set; }
+
+        private StartAbstractFittingEntity _abstractFitting;
+
+        public IfcAbstractFittingEntity(StartAbstractFittingEntity abstractFitting, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(abstractFitting, ifcNodeEntity, abstractSegmentEntities)
         {
-            _abstractEntity = abstractEntity;
-            NodeEntity = ifcNodeEntity;
-            _IfcAbstractSegmentEntities = ifcAbstractSegmentEntities;
-            
-            XbimVector3D coordinates = ifcNodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D[] directionToPipes = _IfcAbstractSegmentEntities.Select(entity => IfcAxis.GetDirectionToPipe(entity, coordinates)).ToArray();
-            XbimVector3D forward = directionToPipes[0].Negated();
-            XbimVector3D up;
-
-            if (_IfcAbstractSegmentEntities.Length == 2)
-            {
-                Angle = forward.Angle(directionToPipes[1]);
-            }
-            if (Angle == 0 && directionToPipes.Length == 3)
-            {
-                Angle = forward.Angle(directionToPipes[2]);
-            }
-            if (Angle != 0)
-            {
-                up = XbimVector3D.CrossProduct(forward, directionToPipes[1]).Normalized();
-            }
-            else
-            {
-                XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
-                if (forward != WorldUp && forward != WorldUp.Negated())
-                {
-                    up = WorldUp;
-                }
-                else
-                {
-                    up = new XbimVector3D(0, 1, 0);
-                }
-            }
-
-            Diameter = _IfcAbstractSegmentEntities[0].Diameter;
-
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+            _abstractFitting = abstractFitting;
+            Diameter = AbstractSegmentEntities[0].OuterDiameter;
         }
-
+        
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);
             
-            #region Pset_PipeFittingTypeStart
+            #region Qto_PipeFittingBaseQuantities
 
             model.Instances.New<IfcRelDefinesByProperties>(properties =>
             {
                 properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
+                properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
                 {
-                    set.Name = "Pset_PipeFittingTypeStart";
-                    foreach (var kvp in _abstractEntity.GetData())
+                    quantity.Name = "Qto_PipeFittingBaseQuantities";
+                    quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
                     {
-                        set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
-                        {
-                            value.Name = kvp.Key;
-                            value.NominalValue = new IfcText(kvp.Value);
-                        }));
-                    }
+                        length.Name = "Length";
+                        length.LengthValue = Length;
+                    }));
+                    quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
+                    {
+                        weight.Name = "NetWeight";
+                        weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_abstractFitting.Weight);
+                    }));
                 });
             });
 

@@ -18,35 +18,36 @@ namespace IFC.Entities.Fittings.CAD
 {
     public sealed class IfcMilterJointEntity : IfcAbstractFittingEntity
     {
-        public double Length => 2 * Depth;
+        public override double Length { get; protected set; }
         public double Depth { get; }
         
         private readonly StartBendEntity _bendEntity;
         private IfcPipeFitting _pipeFitting;
 
-        public IfcMilterJointEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] ifcAbstractSegments)
-            : base(bendEntity, ifcNodeEntity, ifcAbstractSegments)
+        public IfcMilterJointEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegments)
+            : base(bendEntity, ifcNodeEntity, abstractSegments)
         {
             _bendEntity = bendEntity;
-            Depth = Math.Min(ifcAbstractSegments[0].Length, ifcAbstractSegments[1].Length) * 0.1;
+            Depth = Math.Min(abstractSegments[0].Length, abstractSegments[1].Length) * 0.1;
+            Length = 2 * Depth;
         }
     
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
 
-            IfcRepresentationItem[] ifcRepresentationItems = new IfcRepresentationItem[_IfcAbstractSegmentEntities.Length + 1];
-            for (int i = 0; i < _IfcAbstractSegmentEntities.Length; i++)
+            IfcRepresentationItem[] ifcRepresentationItems = new IfcRepresentationItem[AbstractSegmentEntities.Length + 1];
+            for (int i = 0; i < AbstractSegmentEntities.Length; i++)
             {
-                ifcRepresentationItems[i] = CreateExtrudedAreaSolid(model, _IfcAbstractSegmentEntities[i], 0);
-                _IfcAbstractSegmentEntities[i].Clip(NodeEntity, Depth);
+                ifcRepresentationItems[i] = CreateExtrudedAreaSolid(model, AbstractSegmentEntities[i], 0);
+                AbstractSegmentEntities[i].Clip(NodeEntity, Depth);
             }
 
-            ifcRepresentationItems[_IfcAbstractSegmentEntities.Length] = model.Instances.New<IfcBooleanResult>(result =>
+            ifcRepresentationItems[AbstractSegmentEntities.Length] = model.Instances.New<IfcBooleanResult>(result =>
             {
                 result.Operator = IfcBooleanOperator.INTERSECTION;
-                result.FirstOperand = CreateExtrudedAreaSolid(model, _IfcAbstractSegmentEntities[0], Depth);
-                result.SecondOperand = CreateExtrudedAreaSolid(model, _IfcAbstractSegmentEntities[1], Depth);
+                result.FirstOperand = CreateExtrudedAreaSolid(model, AbstractSegmentEntities[0], Depth);
+                result.SecondOperand = CreateExtrudedAreaSolid(model, AbstractSegmentEntities[1], Depth);
             });
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems);

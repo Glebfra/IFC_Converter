@@ -1,28 +1,27 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Start.API;
 using Start.Entities.Abstract;
 
 namespace Start.Entities.Fittings
 {
-    public class StartNonstandardExpansionJointEntity : StartAbstractEntity
+    public class StartNonstandardExpansionJointEntity : StartAbstractFittingEntity
     {
-        [JsonProperty("76")]
+        [JsonProperty(StartPropertyName.EffectiveArea)]
         public double EffectiveArea { get; set; }
         
-        [JsonProperty("145")]
+        [JsonProperty(StartPropertyName.Length)]
         public double Length { get; set; }
         
-        [JsonProperty("449")]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
         
         public override Dictionary<string, string> GetData()
         {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Effective Area", EffectiveArea.ToString("F5") },
-                { "Length", Length.ToString("F5") },
-                { "Name", Name },
-            };
+            Dictionary<string, string> dictionary = base.GetData();
+            dictionary.Add("Effective Area", EffectiveArea.ToString("F5"));
+            dictionary.Add("Length", Length.ToString("F5"));
+            dictionary.Add("Name", Name);
 
             return dictionary;
         }
