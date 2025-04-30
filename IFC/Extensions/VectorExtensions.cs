@@ -25,7 +25,7 @@ namespace IFC.Extensions
 
         public static bool IsParallel(this XbimVector3D v1, XbimVector3D v2)
         {
-            return Math.Abs(1 / (v1.Length * v2.Length) * XbimVector3D.DotProduct(v1, v2) - 1) < TOLERANCE;
+            return Math.Abs(1 / (v1.Length * v2.Length) * Math.Abs(XbimVector3D.DotProduct(v1, v2)) - 1) < TOLERANCE;
         }
         
         public static IfcDirection ToIfcDirection(this XbimVector3D vector, IModel model)

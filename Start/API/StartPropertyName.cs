@@ -70,8 +70,8 @@
         public const string YCoord = "405";
         public const string ZCoord = "406";
         public const string MillToleranceAtDMin = "434";
-        public const string ReducerMillTolerance = "455";
         public const string Name = "449";
+        public const string ReducerMillTolerance = "455";
         public const string ShearCompliance = "693";
         public const string PermissibleLateralMovement = "694";
         public const string GasketEffectiveDiameter = "720";

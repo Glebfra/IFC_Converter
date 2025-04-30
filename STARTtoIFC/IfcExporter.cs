@@ -80,9 +80,7 @@ namespace STARTtoIFC
 
         private void Localize(int languageId)
         {
-            int convertedLanguageId = LanguageConverter.ConvertLanguage(languageId);
-            
-            var ci = new CultureInfo(convertedLanguageId);
+            CultureInfo ci = new CultureInfo(languageId);
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
         }
