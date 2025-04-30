@@ -182,6 +182,9 @@
     <EmbeddedResource Include="ExportWindow.resx">
       <DependentUpon>ExportWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExportWindow.zh.resx">
+      <DependentUpon>ExportWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Localization\LocalizationResource.en.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
@@ -190,6 +193,9 @@
       <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\LocalizationResource.ru.resx">
+      <DependentUpon>LocalizationResource.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\LocalizationResource.zh.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
