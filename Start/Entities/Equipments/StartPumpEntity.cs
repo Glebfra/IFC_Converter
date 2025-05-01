@@ -13,10 +13,7 @@ namespace Start.Entities.Equipments
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; }
         
-        [JsonProperty(StartPropertyName.Temperature)]
-        public double Temperature { get; set; }
-        
-        [JsonProperty(StartPropertyName.ManufacturingTechnology)] 
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
         
         [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
@@ -36,6 +33,9 @@ namespace Start.Entities.Equipments
         
         [JsonProperty(StartPropertyName.FShaftYAxisAngle)]
         public double FShaftYAxisAngle { get; set; }
+        
+        [JsonProperty(StartPropertyName.Temperature)]
+        public double Temperature { get; set; }
         
         public override Dictionary<string, string> GetData()
         {
