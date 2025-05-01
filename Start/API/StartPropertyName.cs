@@ -4,6 +4,7 @@
     {
         public const string AllowableAxialExpansion = "2";
         public const string FlexibleElementLength = "2";
+        public const string AirCoolerLength = "2";
         public const string ConicalPartLength = "2";
         public const string TankDistanceToNozzleAxis = "2";
         public const string Diameter = "4";
@@ -57,6 +58,7 @@
         public const string PipeName = "225";
         public const string Description = "227";
         public const string CheckAllowableLoads = "264";
+        public const string PermissibleLoads = "264";
         public const string AllowableLoadsInLocalAxes = "265";
         public const string Fx = "266";
         public const string Fy = "267";
@@ -80,6 +82,18 @@
         public const string ConeElementSecondDiameter = "749";
         public const string FShaftXAxisAngle = "750";
         public const string FShaftYAxisAngle = "751";
+        public const string VesselFrad = "853";
+        public const string VesselFvert = "854";
+        public const string VesselFshaft = "855";
+        public const string VesselMrad = "856";
+        public const string VesselMvert = "857";
+        public const string VesselMshaft = "858";
+        public const string ManifoldFrad = "866";
+        public const string ManifoldFvert = "867";
+        public const string ManifoldFshaft = "868";
+        public const string ManifoldMrad = "869";
+        public const string ManifoldMvert = "870";
+        public const string ManifoldMshaft = "871";
         public const string DeviceWallThickness = "862";
         public const string DeviceInternalDiameter = "864";
         public const string TankRadius = "889";
