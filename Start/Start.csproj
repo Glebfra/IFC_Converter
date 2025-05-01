@@ -161,6 +161,7 @@
     <Compile Include="Entities\Anchors\StartRigidHangerEntity.cs" />
     <Compile Include="Entities\Anchors\StartSlidingSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartSpringSupportEntity.cs" />
+    <Compile Include="Entities\Equipments\StartCompressorEntity.cs" />
     <Compile Include="Entities\Equipments\StartInlinePumpEntity.cs" />
     <Compile Include="Entities\Equipments\StartPumpEntity.cs" />
     <Compile Include="Entities\Equipments\StartTankEntity.cs" />

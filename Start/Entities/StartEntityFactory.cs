@@ -122,6 +122,9 @@ namespace Start.Entities
                 
                 case StartElementType.TURBINE:
                     return JsonConvert.DeserializeObject<StartTurbineEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.COMPRESSOR:
+                    return JsonConvert.DeserializeObject<StartCompressorEntity>(dataArrayItem.Data.ToString());
 
                 default:
                     return null;
