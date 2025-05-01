@@ -14,8 +14,8 @@ namespace IFC.Entities.Fittings.CAD
         public IfcSweepoletEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
-            Length = _headPipe.OuterDiameter;
-            Height = _branchPipes[0].OuterDiameter / 2;
+            Length = _HeadPipe.OuterDiameter;
+            Height = _BranchPipes[0].OuterDiameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
