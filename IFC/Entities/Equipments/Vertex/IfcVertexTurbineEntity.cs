@@ -15,46 +15,46 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Equipments.Vertex
 {
-    public class IfcVertexPumpEntity : IfcAbstractConnectorEntity
+    public class IfcVertexTurbineEntity : IfcAbstractConnectorEntity
     {
         private int _numSegments;
         private double _length;
-
-        private StartPumpEntity _pumpEntity;
-        private IfcPump _ifcPump;
         
-        public IfcVertexPumpEntity(StartPumpEntity pumpEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
-            : base(pumpEntity, nodeEntity, segmentEntities)
+        private StartTurbineEntity _turbineEntity;
+        private IfcFan _ifcFan;
+        
+        public IfcVertexTurbineEntity(StartTurbineEntity turbineEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments) 
+            : base(turbineEntity, ifcNodeEntity, abstractSegmentEntities)
         {
-            _pumpEntity = pumpEntity;
-
+            _turbineEntity = turbineEntity;
+            
             _numSegments = numSegments;
             _length = AbstractSegmentEntities[0].OuterDiameter / 2;
         }
-        
+
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-
+            
             IEnumerable<IfcFacetedBrep> facetedBreps = CreateFlange(model);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             
-            _ifcPump = model.Instances.New<IfcPump>(fitting =>
+            _ifcFan = model.Instances.New<IfcFan>(fitting =>
             {
-                fitting.PredefinedType = IfcPumpTypeEnum.SUMPPUMP;
-                fitting.Name = _pumpEntity.Name;
+                fitting.PredefinedType = IfcFanTypeEnum.TUBEAXIAL;
+                fitting.Name = _turbineEntity.Name;
                 fitting.Tag = Tag;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
                 fitting.Representation = shape;
             });
 
-            AddProperties(model, _ifcPump);
+            AddProperties(model, _ifcFan);
             ClipPipes();
 
-            return _ifcPump;
+            return _ifcFan;
         }
-
+        
         private IEnumerable<IfcFacetedBrep> CreateFlange(IModel model)
         {
             XbimVector3D[] displacements = new XbimVector3D[]
@@ -88,10 +88,10 @@ namespace IFC.Entities.Equipments.Vertex
                 IfcVertexGeometry.CreateClippedCone(model, circles[5], circles[6]),
                 IfcVertexGeometry.CreateClippedCone(model, circles[6], circles[7]),
             };
-            
+
             return facetedBreps;
         }
-
+        
         private void ClipPipes()
         {
             foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)

@@ -119,6 +119,9 @@ namespace Start.Entities
                 case StartElementType.PUMP_ISO_9905:
                 case StartElementType.OTHER_PUMP:
                     return JsonConvert.DeserializeObject<StartPumpEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.TURBINE:
+                    return JsonConvert.DeserializeObject<StartTurbineEntity>(dataArrayItem.Data.ToString());
 
                 default:
                     return null;

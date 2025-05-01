@@ -164,6 +164,7 @@
     <Compile Include="Entities\Equipments\StartInlinePumpEntity.cs" />
     <Compile Include="Entities\Equipments\StartPumpEntity.cs" />
     <Compile Include="Entities\Equipments\StartTankEntity.cs" />
+    <Compile Include="Entities\Equipments\StartTurbineEntity.cs" />
     <Compile Include="Entities\Equipments\StartVesselEntity.cs" />
     <Compile Include="Entities\Fittings\StartAngularExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartArmatureEntity.cs" />
