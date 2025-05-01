@@ -182,6 +182,9 @@ namespace IFC.Entities
                 
                 case StartElementType.TURBINE:
                     return new IfcVertexTurbineEntity((StartTurbineEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.COMPRESSOR:
+                    return new IfcVertexCompressorEntity((StartCompressorEntity)entity, nodeEntity, segmentEntities, numSegments);
 
                 default:
                     return null;
