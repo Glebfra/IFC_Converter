@@ -185,6 +185,9 @@ namespace IFC.Entities
                 
                 case StartElementType.COMPRESSOR:
                     return new IfcVertexCompressorEntity((StartCompressorEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.AIR_COOLER:
+                    return new IfcVertexAirCoolerEntity((StartAirCoolerEntity)entity, nodeEntity, segmentEntities, numSegments);
 
                 default:
                     return null;
