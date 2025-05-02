@@ -14,8 +14,8 @@ namespace IFC.Entities.Fittings.CAD
         public IfcWeldoletEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
-            Length = _headPipe.OuterDiameter;
-            Height = _branchPipes[0].OuterDiameter / 2 + startTeeEntity.BranchHeight;
+            Length = _HeadPipe.OuterDiameter;
+            Height = _BranchPipes[0].OuterDiameter / 2 + startTeeEntity.BranchHeight;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
