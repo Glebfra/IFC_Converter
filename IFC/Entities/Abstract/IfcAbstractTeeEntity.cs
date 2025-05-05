@@ -30,19 +30,18 @@ namespace IFC.Entities.Abstract
             _startTeeEntity = startTeeEntity;
 
             _BranchPipes = new IfcAbstractSegmentEntity[2];
-            for (int j = 0; j < AbstractSegmentEntities.Length; j++)
+            for (int i = 0; i < AbstractSegmentEntities.Length; i++)
             {
-                for (int k = j + 1; k < AbstractSegmentEntities.Length; k++)
+                for (int j = i + 1; j < AbstractSegmentEntities.Length; j++)
                 {
-                    XbimVector3D firstPipeDir = AbstractSegmentEntities[j].ObjectMatrix3D.Forward;
-                    XbimVector3D secondPipeDir = AbstractSegmentEntities[k].ObjectMatrix3D.Forward;
-
-                    double angleCos = XbimVector3D.DotProduct(firstPipeDir, secondPipeDir) / (firstPipeDir.Length * secondPipeDir.Length);
-
-                    if (Math.Abs(angleCos) < 0.95) continue;
-                    _BranchPipes[0] = AbstractSegmentEntities[j];
-                    _BranchPipes[1] = AbstractSegmentEntities[k];
-                    _HeadPipe = AbstractSegmentEntities[AbstractSegmentEntities.Length - (j + k)];
+                    XbimVector3D firstPipeDir = AbstractSegmentEntities[i].ObjectMatrix3D.Forward;
+                    XbimVector3D secondPipeDir = AbstractSegmentEntities[j].ObjectMatrix3D.Forward;
+                    
+                    if (!firstPipeDir.IsParallel(secondPipeDir))
+                        continue;
+                    _BranchPipes[0] = AbstractSegmentEntities[i];
+                    _BranchPipes[1] = AbstractSegmentEntities[j];
+                    _HeadPipe = AbstractSegmentEntities[AbstractSegmentEntities.Length - (i + j)];
                 }
             }
             if (_HeadPipe == null)
