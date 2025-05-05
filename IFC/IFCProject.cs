@@ -41,6 +41,10 @@ namespace IFC
             lengthUnit.Name = IfcSIUnitName.METRE;
             lengthUnit.Prefix = null;
 
+            IfcSIUnit massUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.MASSUNIT);
+            massUnit.Name = IfcSIUnitName.GRAM;
+            massUnit.Prefix = IfcSIPrefix.KILO;
+
             XbimVector3D coordinates = XbimVector3D.Zero;
             XbimVector3D forward = new XbimVector3D(0, 0, 1);
             XbimVector3D up = new XbimVector3D(0, 1, 0);
