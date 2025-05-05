@@ -190,10 +190,6 @@
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartProject.cs" />
-    <Compile Include="StartProperties\IStartProperty.cs" />
-    <Compile Include="StartProperties\LengthProperty.cs" />
-    <Compile Include="StartProperties\MassProperty.cs" />
-    <Compile Include="StartProperties\StartPropertyJsonConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
