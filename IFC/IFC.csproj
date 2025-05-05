@@ -156,9 +156,12 @@
     <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexHingedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\Vertex\IfcVertexSlidingSupportEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexAirCoolerEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexCompressorEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexInlinePumpEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexPumpEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexTankEntity.cs" />
+    <Compile Include="Entities\Equipments\Vertex\IfcVertexTurbineEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexVesselEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />

@@ -1,56 +1,85 @@
 ﻿using System;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
-using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
-using IfcLabel = Xbim.Ifc4.MeasureResource.IfcLabel;
 
 namespace IFC.Entities.Abstract
 {
     public abstract class IfcAbstractTeeEntity : IfcAbstractFittingEntity
     {
         public abstract double Height { get; protected set; }
+        
+        protected IfcAbstractSegmentEntity[] _BranchPipes;
+        protected IfcAbstractSegmentEntity _HeadPipe;
 
         private StartTeeEntity _startTeeEntity;
         private IfcPipeFitting _pipeFitting;
-
-        protected IfcAbstractSegmentEntity[] _branchPipes;
-        protected IfcAbstractSegmentEntity _headPipe;
 
         public IfcAbstractTeeEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
             _startTeeEntity = startTeeEntity;
 
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(NodeEntity.ObjectMatrix3D.Translation, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
-            SortPipes(out _branchPipes, out _headPipe);
+            _BranchPipes = new IfcAbstractSegmentEntity[2];
+            for (int i = 0; i < AbstractSegmentEntities.Length; i++)
+            {
+                for (int j = i + 1; j < AbstractSegmentEntities.Length; j++)
+                {
+                    XbimVector3D firstPipeDir = AbstractSegmentEntities[i].ObjectMatrix3D.Forward;
+                    XbimVector3D secondPipeDir = AbstractSegmentEntities[j].ObjectMatrix3D.Forward;
+                    
+                    if (!firstPipeDir.IsParallel(secondPipeDir))
+                        continue;
+                    _BranchPipes[0] = AbstractSegmentEntities[i];
+                    _BranchPipes[1] = AbstractSegmentEntities[j];
+                    _HeadPipe = AbstractSegmentEntities[AbstractSegmentEntities.Length - (i + j)];
+                }
+            }
+            if (_HeadPipe == null)
+                throw new NullReferenceException("Cannot find head pipe");
+            if (_BranchPipes == null)
+                throw new NullReferenceException("Cannot find branch pipes");
+
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D forward = IfcAxis.GetDirectionToPipe(_BranchPipes[1], coordinates).Normalized();
+            XbimVector3D right = IfcAxis.GetDirectionToPipe(_HeadPipe, coordinates).Normalized();
+            XbimVector3D up = XbimVector3D.CrossProduct(forward, right);
+            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+            
+            Angle = ObjectMatrix3D.Forward.Angle(right);
         }
 
         protected IfcPipeFitting CreateTeeEntity(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
+            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[AbstractSegmentEntities.Length];
-
-            int i = 0;
-            foreach (IfcAbstractSegmentEntity branchPipe in _branchPipes)
+            IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[2];
+            teeExtrudedArea[0] = CreateBranch(model);
+            teeExtrudedArea[1] = CreateHead(model);
+            
+            foreach (IfcAbstractSegmentEntity branchPipe in _BranchPipes)
             {
-                teeExtrudedArea[i++] = CreateTeeBranchShape(model, branchPipe, Length / 2);
                 branchPipe.Clip(NodeEntity, Length / 2);
             }
-            teeExtrudedArea[i++] = CreateTeeBranchShape(model, _headPipe, Height);
-            _headPipe.Clip(NodeEntity, Height);
+            _HeadPipe.Clip(NodeEntity, Height);
 
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
+            IfcBooleanResult result = model.Instances.New<IfcBooleanResult>(booleanResult =>
+            {
+                booleanResult.Operator = IfcBooleanOperator.UNION;
+                booleanResult.FirstOperand = teeExtrudedArea[0];
+                booleanResult.SecondOperand = teeExtrudedArea[1];
+            });
+
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, result);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
@@ -63,60 +92,25 @@ namespace IFC.Entities.Abstract
 
             return _pipeFitting;
         }
-    
-        protected IfcExtrudedAreaSolid CreateTeeBranchShape(IModel model, IfcAbstractSegmentEntity pipeEntity, double length)
+
+        private IfcExtrudedAreaSolid CreateBranch(IModel model)
         {
-            XbimVector3D direction = IfcAxis.GetDirectionToPipe(pipeEntity, ObjectMatrix3D.Translation);
-            IfcAxis2Placement3D axis = IfcAxis.CreateAxis2Placement3D(model, new XbimVector3D(), direction);
-            IfcExtrudedAreaSolid extrudedAreaSolid = CreateTeeItemShape(model, axis, pipeEntity.OuterDiameter / 2, length);
-            return extrudedAreaSolid;
-        }
-    
-        protected IfcExtrudedAreaSolid CreateTeeItemShape(IModel model, IfcAxis2Placement3D axis, double radius, double length)
-        {
-            IfcCircleProfileDef profileDef = model.Instances.New<IfcCircleProfileDef>(c =>
-            {
-                c.ProfileType = IfcProfileTypeEnum.AREA;
-                c.Radius = radius;
-            });
-
-            IfcExtrudedAreaSolid extrudedAreaSolid = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
-            {
-                solid.SweptArea = profileDef;
-                solid.ExtrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
-                solid.Depth = length;
-                solid.Position = axis;
-            });
-
-            return extrudedAreaSolid;
-        }
-    
-        protected void SortPipes(out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe)
-        {
-            branchPipes = new IfcAbstractSegmentEntity[2];
-            headPipe = null;
-
-            for (int j = 0; j < AbstractSegmentEntities.Length; j++)
-            {
-                for (int k = j + 1; k < AbstractSegmentEntities.Length; k++)
-                {
-                    XbimVector3D firstPipeDir = AbstractSegmentEntities[j].ObjectMatrix3D.Forward;
-                    XbimVector3D secondPipeDir = AbstractSegmentEntities[k].ObjectMatrix3D.Forward;
-
-                    double angleCos = XbimVector3D.DotProduct(firstPipeDir, secondPipeDir) /
-                                      (firstPipeDir.Length * secondPipeDir.Length);
-
-                    if (Math.Abs(angleCos) < 0.95) continue;
-                    branchPipes[0] = AbstractSegmentEntities[j];
-                    branchPipes[1] = AbstractSegmentEntities[k];
-                    headPipe = AbstractSegmentEntities[AbstractSegmentEntities.Length - (j + k)];
-                }
-            }
-            
-            if (headPipe == null)
-                throw new Exception("Cannot find head pipe");
+            double circleRadius = _BranchPipes[0].OuterDiameter / 2;
+            XbimVector3D coordinates = Length / 2 * VectorExtensions.Forward.Negated();
+            return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
         }
         
+        private IfcExtrudedAreaSolid CreateHead(IModel model)
+        {
+            XbimVector3D directionToHeadPipe = IfcAxis.GetDirectionToPipe(_HeadPipe, ObjectMatrix3D.Translation);
+
+            double circleRadius = _HeadPipe.OuterDiameter / 2;
+            XbimVector3D coordinates = XbimVector3D.Zero;
+            XbimVector3D forward = VectorExtensions.Forward.RotateAroundYAxis(Angle);
+            XbimVector3D right = VectorExtensions.Right.RotateAroundYAxis(Angle);
+            return IfcGeometry.CreateCylinder(model, circleRadius, Height, coordinates, forward, right);
+        }
+
         protected override void AddProperties(IModel model, IfcProduct product)
         {
             base.AddProperties(model, product);
@@ -142,7 +136,7 @@ namespace IFC.Entities.Abstract
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "JunctionLeftAngle";
-                        value.NominalValue = new IfcPositivePlaneAngleMeasure(Math.PI / 2);
+                        value.NominalValue = new IfcPositivePlaneAngleMeasure(Angle);
                     }));
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
@@ -152,7 +146,7 @@ namespace IFC.Entities.Abstract
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "JunctionRightAngle";
-                        value.NominalValue = new IfcPositivePlaneAngleMeasure(Math.PI / 2);
+                        value.NominalValue = new IfcPositivePlaneAngleMeasure(Math.PI - Angle);
                     }));
                 });
             });

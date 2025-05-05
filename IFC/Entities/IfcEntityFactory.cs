@@ -178,7 +178,16 @@ namespace IFC.Entities
                 case StartElementType.PUMP_ISO_5199:
                 case StartElementType.PUMP_ISO_9905:
                 case StartElementType.OTHER_PUMP:
-                    return new IfcVertexPumpEntity((StartPumpEntity)entity, nodeEntity, segmentEntities, numSegments); 
+                    return new IfcVertexPumpEntity((StartPumpEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.TURBINE:
+                    return new IfcVertexTurbineEntity((StartTurbineEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.COMPRESSOR:
+                    return new IfcVertexCompressorEntity((StartCompressorEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.AIR_COOLER:
+                    return new IfcVertexAirCoolerEntity((StartAirCoolerEntity)entity, nodeEntity, segmentEntities, numSegments);
 
                 default:
                     return null;
