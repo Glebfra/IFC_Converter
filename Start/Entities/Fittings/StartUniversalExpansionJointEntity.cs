@@ -45,23 +45,5 @@ namespace Start.Entities.Fittings
         
         [JsonProperty(StartPropertyName.ShearAllowableCorrFactor)]
         public double ShearAllowableCorrFactor { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5"));
-            dictionary.Add("Axial Flexibility", AxialFlexibility.ToString("F5"));
-            dictionary.Add("Effective Area", EffectiveArea.ToString("F5"));
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Name", Name);
-            dictionary.Add("Stiffness Temp Factor", StiffnessTempFactor.ToString("F5"));
-            dictionary.Add("Allowable Corr Factor", AllowableCorrFactor.ToString("F5"));
-            dictionary.Add("Stiffness Angle Factor", StiffnessAngleFactor.ToString("F5"));
-            dictionary.Add("Angle Allowable Corr Factor", AngleAllowableCorrFactor.ToString("F5"));
-            dictionary.Add("Stiffness Shear Factor", StiffnessShearFactor.ToString("F5"));
-            dictionary.Add("Shear Allowable Corr Factor", ShearAllowableCorrFactor.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

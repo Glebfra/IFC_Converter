@@ -27,19 +27,5 @@ namespace Start.Entities.Fittings
     
         [JsonProperty(StartPropertyName.GasketCrossection)]
         public double GasketCrossection { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Name", Name);
-            dictionary.Add("Outside Diameter", OutsideDiameter.ToString("F5"));
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Leakage Check", LeakageCheckEnum.ToString());
-            dictionary.Add("Gasket Effective Diameter", GasketEffectiveDiameter.ToString("F5"));
-            dictionary.Add("Nominal Pressure", NominalPressure.ToString("F5"));
-            dictionary.Add("Gasket Crossection", GasketCrossection.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

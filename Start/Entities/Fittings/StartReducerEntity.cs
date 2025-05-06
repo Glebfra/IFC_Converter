@@ -36,22 +36,5 @@ namespace Start.Entities.Fittings
         
         [JsonProperty(StartPropertyName.ReducerMillTolerance)]
         public double MillTolerance { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Name", Name);
-            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
-            dictionary.Add("Mill Tolerance At D Max", MillToleranceAtDMax.ToString("F5"));
-            dictionary.Add("Mill Tolerance At D Min", MillToleranceAtDMin.ToString("F5"));
-            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
-            dictionary.Add("Length Of Conical Part", LengthOfConicalPart.ToString("F5"));
-            dictionary.Add("Max Diameter", MaxDiameter.ToString("F5"));
-            dictionary.Add("Min Diameter", MinDiameter.ToString("F5"));
-            dictionary.Add("Thickness At Max Diameter Point", ThicknessAtMaxDiameterPoint.ToString("F5"));
-            dictionary.Add("Angle Between Eccentricity Vector And Zm Axis", AngleBetweenEccentricityVectorAndZmAxis.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

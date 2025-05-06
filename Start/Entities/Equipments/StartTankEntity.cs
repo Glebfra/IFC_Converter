@@ -33,21 +33,5 @@ namespace Start.Entities.Equipments
         
         [JsonProperty(StartPropertyName.TankRadius)]
         public double Radius { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Name", Name },
-                { "Material Name", MaterialName },
-                { "Wall Thickness", WallThickness.ToString("F5") },
-                { "Mill Tolerance", MillTolerance.ToString("F5") },
-                { "Manufacturing Technology", ManufacturingTechnology.ToString() },
-                { "Corrosion Allowance", CorrosionAllowance.ToString("F5") },
-                { "Temperature", Temperature.ToString("F5") },
-            };
-
-            return dictionary;
-        }
     }
 }

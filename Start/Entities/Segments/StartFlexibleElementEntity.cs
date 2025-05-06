@@ -42,25 +42,5 @@ namespace Start.Entities.Segments
         
         [JsonProperty(StartPropertyName.ShearStiffness)]
         public double ShearStiffness { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Material Name", MaterialName },
-                { "Pipe Unit Weight", PipeUnitWeight.ToString("F5") },
-                { "Additional Weight Load", AdditionalWeightLoad.ToString("F5") },
-                { "Additional Weight Load along the X Axis", AdditionalWeightLoadAlongTheXAxis.ToString("F5") },
-                { "Additional Weight Load along the Y Axis", AdditionalWeightLoadAlongTheYAxis.ToString("F5") },
-                { "Additional Weight Load along the Z Axis", AdditionalWeightLoadAlongTheZAxis.ToString("F5") },
-                { "Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5") },
-                { "Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5") },
-                { "Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5") },
-                { "Uniform Weight", UniformWeight.ToString("F5") },
-                { "Shear Stiffness", ShearStiffness.ToString("F5") },
-            };
-
-            return dictionary;
-        }
     }
 }

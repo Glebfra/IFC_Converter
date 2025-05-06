@@ -35,11 +35,11 @@ namespace Start.Entities.Segments
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
 
         [JsonProperty(StartPropertyName.LongitudinalWeldJointFactor)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        [JsonConverter(typeof(StartPropertyJsonConverter<FactorProperty, double>))]
         public FactorProperty LongitudinalWeldJointFactor { get; set; } = FactorProperty.Zero;
     
         [JsonProperty(StartPropertyName.StrengthFactorOfTheTraverseWeld)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        [JsonConverter(typeof(StartPropertyJsonConverter<FactorProperty, double>))]
         public FactorProperty StrengthFactorOfTheTraverseWeld { get; set; } = FactorProperty.Zero;
     
         [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
@@ -81,28 +81,5 @@ namespace Start.Entities.Segments
         [JsonProperty(StartPropertyName.ZCoord)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty ZCoord { get; set; } = LengthProperty.Zero;
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Material Name", MaterialName);
-            dictionary.Add("Mill Tolerance", MillTolerance.ToString());
-            dictionary.Add("Corrosion Allowance", CorrosionAllowance.ToString());
-            dictionary.Add("Pipe Unit Weight", PipeUnitWeight.ToString());
-            dictionary.Add("Insulation Unit Weight", InsulationUnitWeight.ToString());
-            dictionary.Add("Product Unit Weight", ProductUnitWeight.ToString());
-            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
-            dictionary.Add("Longitudinal Weld Joint Factor", LongitudinalWeldJointFactor.ToString());
-            dictionary.Add("Strength Factor of the Traverse Weld", StrengthFactorOfTheTraverseWeld.ToString());
-            dictionary.Add("Additional Weight Load", AdditionalWeightLoad.ToString());
-            dictionary.Add("Additional Weight Load along the X Axis", AdditionalWeightLoadAlongTheXAxis.ToString());
-            dictionary.Add("Additional Weight Load along the Y Axis", AdditionalWeightLoadAlongTheYAxis.ToString());
-            dictionary.Add("Additional Weight Load along the Z Axis", AdditionalWeightLoadAlongTheZAxis.ToString());
-            dictionary.Add("Projection Along OX Axis", ProjectionAlongOXAxis.ToString());
-            dictionary.Add("Projection Along OY Axis", ProjectionAlongOYAxis.ToString());
-            dictionary.Add("Projection Along OZ Axis", ProjectionAlongOZAxis.ToString());
-
-            return dictionary;
-        }
     }
 }

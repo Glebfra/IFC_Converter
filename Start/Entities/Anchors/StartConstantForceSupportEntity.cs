@@ -15,17 +15,5 @@ namespace Start.Entities.Anchors
         
         [JsonProperty(StartPropertyName.AnchorSupportWeight)]
         public double Weight { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Friction Moment", FrictionMoment.ToString("F5") },
-                { "Supports Number", SupportsNumber.ToString() },
-                { "Weight", Weight.ToString("F5") }
-            };
-
-            return dictionary;
-        }
     }
 }

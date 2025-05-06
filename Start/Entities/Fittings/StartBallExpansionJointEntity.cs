@@ -33,21 +33,5 @@ namespace Start.Entities.Fittings
         
         [JsonProperty(StartPropertyName.Pressure3)]
         public double Pressure3 { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5"));
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Name", Name);
-            dictionary.Add("Friction Moment 1", FrictionMoment1.ToString("F5"));
-            dictionary.Add("Friction Moment 2", FrictionMoment2.ToString("F5"));
-            dictionary.Add("Friction Moment 3", FrictionMoment3.ToString("F5"));
-            dictionary.Add("Pressure 1", Pressure1.ToString("F5"));
-            dictionary.Add("Pressure 2", Pressure2.ToString("F5"));
-            dictionary.Add("Pressure 3", Pressure3.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

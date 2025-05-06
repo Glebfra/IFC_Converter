@@ -18,16 +18,5 @@ namespace Start.Entities.Fittings
         
         [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5"));
-            dictionary.Add("Friction Moment", FrictionMoment.ToString("F5"));
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Name", Name);
-
-            return dictionary;
-        }
     }
 }

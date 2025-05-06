@@ -38,20 +38,5 @@ namespace Start.Entities.Abstract
         
         [JsonIgnore]
         public TemperatureProperty[] TemperatureRange => new TemperatureProperty[] {Temperature, Temperature};
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Name", Name },
-                { "Outside Diameter", Diameter.ToString() },
-                { "Wall Thickness", WallThickness.ToString() },
-                { "Pressure", Pressure.ToString() },
-                { "Test Pressure", TestPressure.ToString() },
-                { "Temperature", Temperature.ToString() },
-            };
-
-            return dictionary;
-        }
     }
 }

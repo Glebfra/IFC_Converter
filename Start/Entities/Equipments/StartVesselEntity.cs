@@ -39,23 +39,5 @@ namespace Start.Entities.Equipments
         
         [JsonProperty(StartPropertyName.DeviceWallThickness)] 
         public double DeviceWallThickness { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Name", Name);
-            dictionary.Add("Material Name", MaterialName);
-            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
-            dictionary.Add("Manufacturing Technology", ManufacturingTechnology.ToString());
-            dictionary.Add("Corrosion Allowance", CorrosionAllowance.ToString("F5"));
-            dictionary.Add("Temperature", Temperature.ToString("F5"));
-            dictionary.Add("Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5"));
-            dictionary.Add("Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5"));
-            dictionary.Add("Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5"));
-            dictionary.Add("Device Internal Diameter", DeviceInternalDiameter.ToString("F5"));
-            dictionary.Add("Device Wall Thickness", DeviceWallThickness.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

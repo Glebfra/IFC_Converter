@@ -45,25 +45,5 @@ namespace Start.Entities.Fittings
         
         [JsonProperty(StartPropertyName.PipeName)]
         public string Name { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Name", Name);
-            dictionary.Add("Header Thickness", HeaderThickness.ToString("F5"));
-            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
-            dictionary.Add("Header Length", HeaderLength.ToString("F5"));
-            dictionary.Add("Branch Height", BranchHeight.ToString("F5"));
-            dictionary.Add("Strength Factor Of Longitudinal Weld Seam On Pressure", StrengthFactorOfLongitudinalWeldSeamOnPressure.ToString("F5"));
-            dictionary.Add("Branch Wall Thickness", BranchWallThickness.ToString("F5"));
-            dictionary.Add("Mill Tolerance For Branch", MillToleranceForBranch.ToString("F5"));
-            dictionary.Add("Pad Thickness", PadThickness.ToString("F5"));
-            dictionary.Add("Pad Width", PadWidth.ToString("F5"));
-            dictionary.Add("Crotch Radius", CrotchRadius.ToString("F5"));
-            dictionary.Add("Crotch Thickness", CrotchThickness.ToString("F5"));
-            dictionary.Add("Crotch Height", CrotchHeight.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

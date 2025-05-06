@@ -24,20 +24,5 @@ namespace Start.Entities
         
         [JsonProperty(StartPropertyName.ZCoord)]
         public double ZCoord;
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>
-            {
-                { "Name", Name },
-                { "Description", Description },
-                { "Additional Load from Weight", AdditionalLoadFromWeight.ToString("F5") },
-                { "X Coordinate", XCoord.ToString("F5") },
-                { "Y Coordinate", YCoord.ToString("F5") },
-                { "Z Coordinate", ZCoord.ToString("F5") }
-            };
-
-            return dictionary;
-        }
     }
 }

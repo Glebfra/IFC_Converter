@@ -8,15 +8,5 @@ namespace Start.Entities.Abstract
     {
         [JsonProperty(StartPropertyName.Weight)]
         public double Weight { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Weight", Weight.ToString("F5") },
-            };
-            
-            return dictionary;
-        }
     }
 }

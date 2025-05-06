@@ -21,17 +21,5 @@ namespace Start.Entities.Equipments
     
         [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
         public double PumpCenterCoordZ { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Material Name", MaterialName);
-            dictionary.Add("Temperature", Temperature.ToString("F5"));
-            dictionary.Add("Pump Center CoordX", PumpCenterCoordX.ToString("F5"));
-            dictionary.Add("Pump Center CoordY", PumpCenterCoordY.ToString("F5"));
-            dictionary.Add("Pump Center CoordZ", PumpCenterCoordZ.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

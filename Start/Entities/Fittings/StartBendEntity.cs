@@ -30,20 +30,5 @@ namespace Start.Entities.Fittings
     
         [JsonProperty(StartPropertyName.PipeName)]
         public string Name { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Wall Thickness", WallThickness.ToString("F5"));
-            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
-            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
-            dictionary.Add("Radius", Radius.ToString("F5"));
-            dictionary.Add("Ovalization Coefficient", OvalizationCoefficient.ToString("F5"));
-            dictionary.Add("Number Of Milters", NumberOfMilters.ToString());
-            dictionary.Add("Mill Tolerance Outside", MillToleranceOutside.ToString("F5"));
-            dictionary.Add("Name", Name);
-
-            return dictionary;
-        }
     }
 }

@@ -47,26 +47,5 @@ namespace Start.Entities.Equipments
         
         [JsonProperty(StartPropertyName.ManifoldMshaft)]
         public double ManifoldMshaft { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Permissible Loads", PermissibleLoads.ToString());
-            dictionary.Add("Vessel Frad", VesselFrad.ToString("F5"));
-            dictionary.Add("Vessel Fvert", VesselFvert.ToString("F5"));
-            dictionary.Add("Vessel Fshaft", VesselFshaft.ToString("F5"));
-            dictionary.Add("Vessel Mrad", VesselMrad.ToString("F5"));
-            dictionary.Add("Vessel Mvert", VesselMvert.ToString("F5"));
-            dictionary.Add("Vessel Mshaft", VesselMshaft.ToString("F5"));
-            dictionary.Add("Manifold Frad", ManifoldFrad.ToString("F5"));
-            dictionary.Add("Manifold Fvert", ManifoldFvert.ToString("F5"));
-            dictionary.Add("Manifold Fshaft", ManifoldFshaft.ToString("F5"));
-            dictionary.Add("Manifold Mrad", ManifoldMrad.ToString("F5"));
-            dictionary.Add("Manifold Mvert", ManifoldMvert.ToString("F5"));
-            dictionary.Add("Manifold Mshaft", ManifoldMshaft.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }

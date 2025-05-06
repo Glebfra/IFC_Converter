@@ -23,20 +23,5 @@ namespace Start.Entities.Abstract
         
         [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Check Allowable Loads", CheckAllowableLoads.ToString() },
-                { "Allowable Loads In Local Axes", AllowableLoadsInLocalAxes.ToString() },
-                { "Fx", Fx.ToString("F5") },
-                { "Fy", Fy.ToString("F5") },
-                { "Fz", Fz.ToString("F5") },
-                { "Name", Name }
-            };
-
-            return dictionary;
-        }
     }
 }

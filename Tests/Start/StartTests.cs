@@ -44,7 +44,7 @@ namespace Tests.Start
             Assert.AreEqual(1, startPipeEntity.ProjectionAlongOXAxis.StartProperty, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.ProjectionAlongOYAxis.StartProperty, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.ProjectionAlongOZAxis.StartProperty, TOLERANCE);
-            Assert.AreEqual(1, startPipeEntity.StrengthFactorOfTheTraverseWeld, TOLERANCE);
+            Assert.AreEqual(1, startPipeEntity.StrengthFactorOfTheTraverseWeld.StartProperty, TOLERANCE);
             Assert.AreEqual(0.01, startPipeEntity.WallThickness.StartProperty, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.XCoord.StartProperty, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.YCoord.StartProperty, TOLERANCE);

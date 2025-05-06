@@ -15,15 +15,5 @@ namespace Start.Entities.Anchors
         
         [JsonProperty(StartPropertyName.Mz)] 
         public double Mz { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Mx", Mx.ToString("F5"));
-            dictionary.Add("My", My.ToString("F5"));
-            dictionary.Add("Mz", Mz.ToString("F5"));
-
-            return dictionary;
-        }
     }
 }
