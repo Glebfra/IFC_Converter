@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Anchors
 {
     public class StartSlidingSupportEntity : StartAbstractAnchorEntity
     {
         [JsonProperty(StartPropertyName.FrictionMoment)]
-        public double FrictionMoment { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty FrictionMoment { get; set; } = MomentProperty.Zero;
     }
 }

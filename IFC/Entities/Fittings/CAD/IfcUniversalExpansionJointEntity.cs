@@ -27,7 +27,7 @@ namespace IFC.Entities.Fittings.CAD
         {
             _universalExpansionJoint = universalExpansionJoint;
 
-            Length = _universalExpansionJoint.Length;
+            Length = _universalExpansionJoint.Length.SIProperty;
             Radius = Diameter / 2;
         }
 

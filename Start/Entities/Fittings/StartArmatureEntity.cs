@@ -2,29 +2,35 @@
 using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Fittings
 {
     public class StartArmatureEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
-    
+        public string Name { get; set; } = string.Empty;
+
         [JsonProperty(StartPropertyName.Diameter)]
-        public double OutsideDiameter { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty OutsideDiameter { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.Length)]
-        public double Length { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Length { get; set; } = LengthProperty.Zero;
     
         [JsonProperty(StartPropertyName.LeakageCheck)]
         public StartLeakageCheckEnum LeakageCheckEnum { get; set; }
-    
+
         [JsonProperty(StartPropertyName.GasketEffectiveDiameter)]
-        public double GasketEffectiveDiameter { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty GasketEffectiveDiameter { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.NominalPressure)]
-        public double NominalPressure { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<PressureProperty, double>))]
+        public PressureProperty NominalPressure { get; set; } = PressureProperty.Zero;
     
+        //TODO get measurements
         [JsonProperty(StartPropertyName.GasketCrossection)]
         public double GasketCrossection { get; set; }
     }

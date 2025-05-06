@@ -29,7 +29,7 @@ namespace IFC.Entities.Fittings.Vertex
             _armatureEntity = armatureEntity;
             _numSegments = numSegments;
             
-            Length = _armatureEntity.Length;
+            Length = _armatureEntity.Length.SIProperty;
             Diameter = Math.Max(abstractSegmentEntities[0].OuterDiameter, abstractSegmentEntities[1].OuterDiameter) * 1.5;
         }
 

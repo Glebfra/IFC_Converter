@@ -38,7 +38,7 @@
         public const string OvalizationCoefficient = "71";
         public const string FrictionMoment = "72";
         public const string SafetyFactorForLiftingCapacity = "73";
-        public const string ChainCompliance = "74";
+        public const string Flexibility = "74";
         public const string AxialFlexibility = "75";
         public const string EffectiveArea = "76";
         public const string LeakageCheck = "82";

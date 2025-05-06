@@ -30,6 +30,9 @@ namespace Start.Entities.Abstract
                     case double startProperty:
                         dictionary.Add(field.Name, $"{startProperty}");
                         break;
+                    case string startProperty:
+                        dictionary.Add(field.Name, startProperty);
+                        break;
                 }
             }
 

@@ -2,36 +2,43 @@
 using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Equipments
 {
     public class StartTankEntity : StartAbstractEntity
     {
         [JsonProperty(StartPropertyName.TankDistanceToNozzleAxis)]
-        public double DistanceToNozzleAxis { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty DistanceToNozzleAxis { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.MaterialName)]
-        public string MaterialName { get; set; }
+        public string MaterialName { get; set; } = string.Empty;
         
         [JsonProperty(StartPropertyName.WallThickness)]
-        public double WallThickness { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty WallThickness { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.MillTolerance)]
-        public double MillTolerance { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MillTolerance { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.CorrosionAllowance)]
-        public double CorrosionAllowance { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty CorrosionAllowance { get; set; } = LengthProperty.Zero;
         
         [JsonProperty(StartPropertyName.Temperature)]
-        public double Temperature { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<TemperatureProperty, double>))]
+        public TemperatureProperty Temperature { get; set; } = TemperatureProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnology { get; set; }
-        
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
-        
+
+        [JsonProperty(StartPropertyName.Name)] 
+        public string Name { get; set; } = string.Empty;
+
         [JsonProperty(StartPropertyName.TankRadius)]
-        public double Radius { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Radius { get; set; } = LengthProperty.Zero;
     }
 }

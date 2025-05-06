@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using IFC.Entities.Abstract;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -14,8 +15,8 @@ namespace IFC.Entities.Fittings.CAD
         public IfcWeldedTeeEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
-            Length = startTeeEntity.HeaderLength;
-            Height = startTeeEntity.CrotchHeight + _BranchPipes[0].OuterDiameter / 2;
+            Length = startTeeEntity.HeaderLength.SIProperty;
+            Height = startTeeEntity.CrotchHeight.SIProperty + _BranchPipes[0].OuterDiameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

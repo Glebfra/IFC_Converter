@@ -2,35 +2,45 @@
 using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Fittings
 {
+    //TODO implement with StartLateralExpansionJointEntity
     public class StartAxialExpansionJointEntity : StartAbstractFittingEntity
     {
+        //TODO get measurements
         [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
         public double AllowableAxialExpansion { get; set; }
 
         [JsonProperty(StartPropertyName.AxialFlexibility)]
-        public double AxialFlexibility { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<FlexibilityProperty, double>))]
+        public FlexibilityProperty AxialFlexibility { get; set; } = FlexibilityProperty.Zero;
+
         [JsonProperty(StartPropertyName.EffectiveArea)]
-        public double EffectiveArea { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<AreaProperty, double>))]
+        public AreaProperty EffectiveArea { get; set; } = AreaProperty.Zero;
+
         [JsonProperty(StartPropertyName.Length)]
-        public double Length { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Length { get; set; } = LengthProperty.Zero;
         
         [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
-        
+        public string Name { get; set; } = string.Empty;
+
         [JsonProperty(StartPropertyName.EffectiveDiameter)]
-        public double EffectiveDiameter { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty EffectiveDiameter { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.StiffnessTempFactor)]
-        public double StiffnessTempFactor { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<FactorProperty, double>))]
+        public FactorProperty StiffnessTempFactor { get; set; } = FactorProperty.Zero;
+
         [JsonProperty(StartPropertyName.AllowableCorrFactor)]
-        public double AllowableCorrFactor { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<FactorProperty, double>))]
+        public FactorProperty AllowableCorrFactor { get; set; } = FactorProperty.Zero;
         
+        //TODO get measurements
         [JsonProperty(StartPropertyName.AxialStiffness)]
         public double AxialStiffness { get; set; }
     }

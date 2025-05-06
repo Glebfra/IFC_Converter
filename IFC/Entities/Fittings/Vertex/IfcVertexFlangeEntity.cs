@@ -32,7 +32,7 @@ namespace IFC.Entities.Fittings.Vertex
             _angleStep = 2 * Math.PI / _numSegments;
             
             _armatureEntity = armatureEntity;
-            Length = _armatureEntity.Length;
+            Length = _armatureEntity.Length.SIProperty;
             Radiuses = abstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
         }
     

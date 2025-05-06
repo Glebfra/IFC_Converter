@@ -190,11 +190,17 @@
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartProject.cs" />
+    <Compile Include="StartProperties\AngleProperty.cs" />
+    <Compile Include="StartProperties\AreaProperty.cs" />
     <Compile Include="StartProperties\FactorProperty.cs" />
+    <Compile Include="StartProperties\FlexibilityProperty.cs" />
+    <Compile Include="StartProperties\ForceProperty.cs" />
     <Compile Include="StartProperties\IStartProperty.cs" />
     <Compile Include="StartProperties\LengthProperty.cs" />
     <Compile Include="StartProperties\MassProperty.cs" />
     <Compile Include="StartProperties\MassUnitProperty.cs" />
+    <Compile Include="StartProperties\MomentProperty.cs" />
+    <Compile Include="StartProperties\NumberProperty.cs" />
     <Compile Include="StartProperties\PressureProperty.cs" />
     <Compile Include="StartProperties\StartAbstractProperty.cs" />
     <Compile Include="StartProperties\StartPropertyJsonConverter.cs" />

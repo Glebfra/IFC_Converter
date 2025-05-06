@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Anchors
 {
     public class StartConstantForceSupportHangerEntity : StartAbstractAnchorEntity
     {
         [JsonProperty(StartPropertyName.AnchorSupportWeight)]
-        public double Weight { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassProperty, double>))]
+        public MassProperty Weight { get; set; } = MassProperty.Zero;
     }
 }

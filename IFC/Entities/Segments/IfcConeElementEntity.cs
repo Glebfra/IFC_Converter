@@ -53,7 +53,7 @@ namespace IFC.Entities.Segments
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
             
             OuterDiameter = startConeElementEntity.Diameter.SIProperty;
-            SecondDiameter = startConeElementEntity.SecondDiameter;
+            SecondDiameter = startConeElementEntity.SecondDiameter.SIProperty;
             OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);
             
             _OnLengthChanged += () => OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);

@@ -29,7 +29,7 @@ namespace IFC.Entities.Abstract
             _bendEntity = bendEntity;
             _directionToPipes = CalculateDirectionToPipes();
             
-            _BendRadius = _bendEntity.Radius;
+            _BendRadius = _bendEntity.Radius.SIProperty;
             _PipeRadius = Math.Min(AbstractSegmentEntities[0].OuterDiameter / 2, AbstractSegmentEntities[1].OuterDiameter / 2);
 
             ObjectMatrix3D = ObjectMatrix3D.Translate(CalculateCircleCenter());
@@ -45,13 +45,13 @@ namespace IFC.Entities.Abstract
         private XbimVector3D CalculateCircleCenter()
         {
             XbimVector3D dirToCenter = (_directionToPipes[0].Normalized() + _directionToPipes[1].Normalized()).Normalized();
-            double lengthToCenter = _bendEntity.Radius / Math.Cos(Angle / 2);
+            double lengthToCenter = _bendEntity.Radius.SIProperty / Math.Cos(Angle / 2);
             return dirToCenter * lengthToCenter;
         }
         
         protected void ClipConnectedPipes()
         {
-            double clipLength = _bendEntity.Radius * Math.Tan(Angle / 2);
+            double clipLength = _bendEntity.Radius.SIProperty * Math.Tan(Angle / 2);
             foreach (IfcAbstractSegmentEntity ifcPipeEntity in AbstractSegmentEntities)
             {
                 ifcPipeEntity.Clip(NodeEntity, clipLength);

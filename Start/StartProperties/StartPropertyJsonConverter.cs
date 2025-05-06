@@ -15,7 +15,9 @@ namespace Start.StartProperties
         {
             if (reader.Value == null)
                 throw new NullReferenceException(nameof(reader.Value));
-            return (T)Activator.CreateInstance(typeof(T), reader.Value);
+            if (reader.Value is long)
+                return (T)Activator.CreateInstance(typeof(T), Convert.ToInt32(reader.Value));
+            return (T)Activator.CreateInstance(typeof(T), (U)reader.Value);
         }
     }
 }

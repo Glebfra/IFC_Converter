@@ -12,7 +12,7 @@ namespace IFC.Entities.Abstract
             : base(startAxialExpansionJointEntity, ifcNodeEntity, abstractSegmentEntities)
         {
             _Radiuses = new double[] { Diameter / 2 * 1.1, Diameter / 2 * 0.9 };
-            Length = startAxialExpansionJointEntity.Length;
+            Length = startAxialExpansionJointEntity.Length.SIProperty;
         }
 
         protected void ClipPipes()

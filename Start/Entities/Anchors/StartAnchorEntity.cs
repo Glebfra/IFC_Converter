@@ -2,18 +2,22 @@
 using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Anchors
 {
     public class StartAnchorEntity : StartAbstractAnchorEntity
     {
-        [JsonProperty(StartPropertyName.Mx)] 
-        public double Mx { get; set; }
+        [JsonProperty(StartPropertyName.Mx)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty Mx { get; set; } = MomentProperty.Zero;
         
-        [JsonProperty(StartPropertyName.My)] 
-        public double My { get; set; }
+        [JsonProperty(StartPropertyName.My)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty My { get; set; } = MomentProperty.Zero;
         
-        [JsonProperty(StartPropertyName.Mz)] 
-        public double Mz { get; set; }
+        [JsonProperty(StartPropertyName.Mz)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty Mz { get; set; } = MomentProperty.Zero;
     }
 }

@@ -60,11 +60,11 @@ namespace Tests.Start
             Assert.NotNull(startBendEntity);
             Assert.True(startBendEntity.Type == StartElementType.ELBOW);
             Assert.True(startBendEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.SEAMLESS);
-            Assert.AreEqual(0.152, startBendEntity.Radius, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.MillTolerance, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.MillToleranceOutside, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient, TOLERANCE);
-            Assert.AreEqual(0.01, startBendEntity.WallThickness, TOLERANCE);
+            Assert.AreEqual(0.152, startBendEntity.Radius.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillTolerance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillToleranceOutside.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.01, startBendEntity.WallThickness.StartProperty, TOLERANCE);
             
             //TODO Вес не выгружается
             //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE); 
@@ -78,12 +78,12 @@ namespace Tests.Start
             Assert.NotNull(startBendEntity);
             Assert.True(startBendEntity.Type == StartElementType.PIPE_BEND);
             Assert.True(startBendEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.SEAMLESS);
-            Assert.AreEqual(0, startBendEntity.MillTolerance, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.MillToleranceOutside, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.NumberOfMilters, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient, TOLERANCE);
-            Assert.AreEqual(0.152, startBendEntity.Radius, TOLERANCE);
-            Assert.AreEqual(0.01, startBendEntity.WallThickness, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillTolerance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillToleranceOutside.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.NumberOfMilters.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.152, startBendEntity.Radius.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.01, startBendEntity.WallThickness.StartProperty, TOLERANCE);
             
             //TODO вес не выгружается
             //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE);

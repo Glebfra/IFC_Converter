@@ -44,7 +44,7 @@ namespace IFC.Entities.Fittings.Vertex
             XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp).Normalized();
         
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-            Length = _reducerEntity.LengthOfConicalPart;
+            Length = _reducerEntity.LengthOfConicalPart.SIProperty;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
