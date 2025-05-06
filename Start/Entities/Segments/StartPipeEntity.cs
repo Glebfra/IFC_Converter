@@ -33,12 +33,14 @@ namespace Start.Entities.Segments
     
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
-    
+
         [JsonProperty(StartPropertyName.LongitudinalWeldJointFactor)]
-        public double LongitudinalWeldJointFactor { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public FactorProperty LongitudinalWeldJointFactor { get; set; } = FactorProperty.Zero;
     
         [JsonProperty(StartPropertyName.StrengthFactorOfTheTraverseWeld)]
-        public double StrengthFactorOfTheTraverseWeld { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public FactorProperty StrengthFactorOfTheTraverseWeld { get; set; } = FactorProperty.Zero;
     
         [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
         [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
@@ -90,8 +92,8 @@ namespace Start.Entities.Segments
             dictionary.Add("Insulation Unit Weight", InsulationUnitWeight.ToString());
             dictionary.Add("Product Unit Weight", ProductUnitWeight.ToString());
             dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
-            dictionary.Add("Longitudinal Weld Joint Factor", LongitudinalWeldJointFactor.ToString("F5"));
-            dictionary.Add("Strength Factor of the Traverse Weld", StrengthFactorOfTheTraverseWeld.ToString("F5"));
+            dictionary.Add("Longitudinal Weld Joint Factor", LongitudinalWeldJointFactor.ToString());
+            dictionary.Add("Strength Factor of the Traverse Weld", StrengthFactorOfTheTraverseWeld.ToString());
             dictionary.Add("Additional Weight Load", AdditionalWeightLoad.ToString());
             dictionary.Add("Additional Weight Load along the X Axis", AdditionalWeightLoadAlongTheXAxis.ToString());
             dictionary.Add("Additional Weight Load along the Y Axis", AdditionalWeightLoadAlongTheYAxis.ToString());

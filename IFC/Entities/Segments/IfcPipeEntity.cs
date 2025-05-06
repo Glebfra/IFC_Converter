@@ -21,13 +21,13 @@ namespace IFC.Entities.Segments
         public IfcPipeEntity(StartPipeEntity startPipeEntity, IfcNodeEntity[] ifcNodeEntities) 
             : base(startPipeEntity, ifcNodeEntities)
         {
-            /*_startPipeEntity = startPipeEntity;
+            _startPipeEntity = startPipeEntity;
             Coordinates = ifcNodeEntities[0].ObjectMatrix3D.Translation;
             XbimVector3D nodesDirection = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             XbimVector3D pipeProjection = new XbimVector3D(
-                startPipeEntity.ProjectionAlongOXAxis,
-                startPipeEntity.ProjectionAlongOYAxis,
-                startPipeEntity.ProjectionAlongOZAxis
+                startPipeEntity.ProjectionAlongOXAxis.SIProperty,
+                startPipeEntity.ProjectionAlongOYAxis.SIProperty,
+                startPipeEntity.ProjectionAlongOZAxis.SIProperty
             );
             Direction = (pipeProjection * XbimVector3D.DotProduct(nodesDirection, pipeProjection)).Normalized() * pipeProjection.Length;
             Length = Direction.Length;
@@ -40,10 +40,10 @@ namespace IFC.Entities.Segments
             XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
-            OuterDiameter = _startPipeEntity.Diameter;
+            OuterDiameter = _startPipeEntity.Diameter.SIProperty;
             OuterSurfaceArea = MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
             
-            _OnLengthChanged += () => MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);*/
+            _OnLengthChanged += () => MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
         }
         
         public override IfcProduct CreateAndAdd(IModel model)

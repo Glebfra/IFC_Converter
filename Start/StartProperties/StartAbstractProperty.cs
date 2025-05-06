@@ -29,7 +29,7 @@ namespace Start.StartProperties
 
         public override string ToString()
         {
-            return SIProperty.ToString();
+            return $"{SIProperty.ToString()} {SIUnit}";
         }
     }
 }
