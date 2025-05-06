@@ -32,7 +32,7 @@ namespace IFC.Entities.Segments
         public IfcConeElementEntity(StartConeElementEntity startConeElementEntity, IfcNodeEntity[] ifcNodeEntities) 
             : base(startConeElementEntity, ifcNodeEntities)
         {
-            _startConeElementEntity = startConeElementEntity;
+            /*_startConeElementEntity = startConeElementEntity;
             Coordinates = NodeEntities[0].ObjectMatrix3D.Translation;
             XbimVector3D nodesDirection = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             XbimVector3D pipeProjection = new XbimVector3D(
@@ -56,7 +56,7 @@ namespace IFC.Entities.Segments
             SecondDiameter = startConeElementEntity.SecondDiameter;
             OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);
             
-            _OnLengthChanged += () => OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);
+            _OnLengthChanged += () => OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);*/
         }
         
         public override IfcProduct CreateAndAdd(IModel model)

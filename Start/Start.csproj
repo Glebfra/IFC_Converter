@@ -26,7 +26,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -193,7 +193,11 @@
     <Compile Include="StartProperties\IStartProperty.cs" />
     <Compile Include="StartProperties\LengthProperty.cs" />
     <Compile Include="StartProperties\MassProperty.cs" />
+    <Compile Include="StartProperties\MassUnitProperty.cs" />
+    <Compile Include="StartProperties\PressureProperty.cs" />
+    <Compile Include="StartProperties\StartAbstractProperty.cs" />
     <Compile Include="StartProperties\StartPropertyJsonConverter.cs" />
+    <Compile Include="StartProperties\TemperatureProperty.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

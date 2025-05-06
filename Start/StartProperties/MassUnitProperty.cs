@@ -1,17 +1,17 @@
 ﻿namespace Start.StartProperties
 {
-    public sealed class MassProperty : StartAbstractProperty<double>
+    public class MassUnitProperty : StartAbstractProperty<double>
     {
-        public override string StartUnit { get; } = "tf";
-        public override string SIUnit { get; } = "kg";
+        public override string StartUnit { get; } = "t/m";
+        public override string SIUnit { get; } = "kg/m";
 
         private const double FACTOR = 1000;
 
-        public MassProperty(double startProperty) : base(startProperty)
+        public MassUnitProperty(double startProperty) : base(startProperty)
         {
         }
 
-        public static MassProperty Zero => new MassProperty(0);
+        public static MassUnitProperty Zero => new MassUnitProperty(0);
 
         protected override double ConvertFromStart(double startProperty)
         {

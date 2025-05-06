@@ -4,7 +4,7 @@
     {
         public T StartProperty { get; }
         public T SIProperty { get; }
-        
+
         public string StartUnit { get; }
         public string SIUnit { get; }
     }

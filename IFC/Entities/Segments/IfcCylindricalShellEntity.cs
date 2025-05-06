@@ -33,7 +33,7 @@ namespace IFC.Entities.Segments
             XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
-            OuterDiameter = _startPipeEntity.Diameter;
+            OuterDiameter = _startPipeEntity.Diameter.SIProperty;
             OuterSurfaceArea = MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
             
             _OnLengthChanged += () => MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
