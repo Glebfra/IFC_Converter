@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Linq;
-using IFC.Entities;
-using IFC.Entities.Abstract;
-using IFC.Tools;
 using Xbim.Common.Geometry;
 
 namespace IFC.Extensions

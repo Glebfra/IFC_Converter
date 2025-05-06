@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Start.StartProperties
 {
@@ -25,6 +26,11 @@ namespace Start.StartProperties
         protected virtual T ConvertFromSI(T siProperty)
         {
             return siProperty;
+        }
+
+        public Type GetPropertyType()
+        {
+            return typeof(T);
         }
 
         public override string ToString()

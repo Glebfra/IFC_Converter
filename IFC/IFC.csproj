@@ -206,7 +206,6 @@
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
     <Compile Include="Tools\IfcVertexPrimitives.cs" />
-    <Compile Include="ValueConverter\ValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

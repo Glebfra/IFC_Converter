@@ -116,7 +116,7 @@ namespace IFC.Entities.Fittings.CAD
                     quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                     {
                         weight.Name = "NetWeight";
-                        weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_bendEntity.Weight.SIProperty) * Length;
+                        weight.WeightValue = _bendEntity.Weight.SIProperty;
                     }));
                 });
             });

@@ -77,18 +77,28 @@ namespace Start
         public StartDataArrayItem[] GetDataArrayItems()
         {
             StartDataArrayItem[]? allDataArrayItems = JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
-            if (allDataArrayItems == null) throw new NullReferenceException("Cannot deserialize objects");
-            StartDataArrayItem[] dataArrayItems = allDataArrayItems.Select(item =>
+            if (allDataArrayItems == null) 
+                throw new NullReferenceException("Cannot deserialize objects");
+            
+            StartDataArrayItem[] dataArrayItems = allDataArrayItems.Select(item => 
             {
-                StartAbstractEntity? entity = StartEntityFactory.CreateEntity(item);
-                if (entity != null)
+                try
                 {
-                    item.Entity = entity;
-                    item.Entity.ID = item.Type == StartElementType.NODE ? item.NodeIds[0] : item.DataArrayIndex;
-                    item.Entity.Type = item.Type;
+                    StartAbstractEntity? entity = StartEntityFactory.CreateEntity(item);
+                    if (entity != null)
+                    {
+                        item.Entity = entity;
+                        item.Entity.ID = item.Type == StartElementType.NODE ? item.NodeIds[0] : item.DataArrayIndex;
+                        item.Entity.Type = item.Type;
+                    }
+                    return item;
                 }
-                return item;
-            }).Where(item => item.Entity != null).ToArray();
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return null;
+                }
+            }).Where(item => item != null && item.Entity != null).ToArray();
 
             return dataArrayItems;
         }

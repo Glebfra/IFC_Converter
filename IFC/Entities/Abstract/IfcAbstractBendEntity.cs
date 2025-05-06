@@ -7,9 +7,7 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
-using Xbim.Ifc4.QuantityResource;
 
 namespace IFC.Entities.Abstract
 {

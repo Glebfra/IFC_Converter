@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Start.Entities.Abstract;
+﻿using Start.Entities.Abstract;
 
 namespace Start.Entities.Anchors
 {

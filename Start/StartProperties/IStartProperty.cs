@@ -1,4 +1,6 @@
-﻿namespace Start.StartProperties
+﻿using System;
+
+namespace Start.StartProperties
 {
     public interface IStartProperty<out T>
     {
@@ -7,5 +9,7 @@
 
         public string StartUnit { get; }
         public string SIUnit { get; }
+
+        public Type GetPropertyType();
     }
 }

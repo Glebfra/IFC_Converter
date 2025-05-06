@@ -3,11 +3,18 @@ using Newtonsoft.Json;
 
 namespace Start.StartProperties
 {
+    /// <summary>
+    /// This class declares a right way to convert object properties from start json
+    /// </summary>
+    /// <typeparam name="T">Inherited property class from IStartProperty</typeparam>
+    /// <typeparam name="U">Inherited property type (double, int, etc...)</typeparam>
     internal class StartPropertyJsonConverter<T, U> : JsonConverter<T>
+        where T : IStartProperty<U>
     { 
         public override void WriteJson(JsonWriter writer, T? value, JsonSerializer serializer)
         {
-            StartAbstractProperty<U> abstractProperty = value as StartAbstractProperty<U>;
+            if (value is not IStartProperty<U> abstractProperty) 
+                throw new NullReferenceException(nameof(abstractProperty));
             writer.WriteValue(abstractProperty.StartProperty);
         }
 
@@ -15,9 +22,7 @@ namespace Start.StartProperties
         {
             if (reader.Value == null)
                 throw new NullReferenceException(nameof(reader.Value));
-            if (reader.Value is long)
-                return (T)Activator.CreateInstance(typeof(T), Convert.ToInt32(reader.Value));
-            return (T)Activator.CreateInstance(typeof(T), (U)reader.Value);
+            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(reader.Value, typeof(U)));
         }
     }
 }

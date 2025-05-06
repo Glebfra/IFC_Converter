@@ -193,8 +193,6 @@ namespace STARTtoIFC
 
         private System.Windows.Forms.TextBox vertexSegmentsTextbox;
 
-        private System.Windows.Forms.Panel panel1;
-
         private System.Windows.Forms.ComboBox exportTypeCombobox;
 
         private System.Windows.Forms.Label exportTypeLabel;

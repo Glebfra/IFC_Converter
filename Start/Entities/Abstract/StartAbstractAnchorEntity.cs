@@ -27,6 +27,6 @@ namespace Start.Entities.Abstract
         public ForceProperty Fz { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }
