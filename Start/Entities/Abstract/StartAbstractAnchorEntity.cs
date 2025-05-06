@@ -1,42 +1,32 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
+using Start.StartProperties;
 
 namespace Start.Entities.Abstract
 {
     public class StartAbstractAnchorEntity : StartAbstractEntity
     {
         [JsonProperty(StartPropertyName.CheckAllowableLoads)]
-        public int CheckAllowableLoads { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<NumberProperty, int>))]
+        public NumberProperty CheckAllowableLoads { get; set; } = NumberProperty.Zero;
+
         [JsonProperty(StartPropertyName.AllowableLoadsInLocalAxes)]
-        public int AllowableLoadsInLocalAxes { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<NumberProperty, int>))]
+        public NumberProperty AllowableLoadsInLocalAxes { get; set; } = NumberProperty.Zero;
+
         [JsonProperty(StartPropertyName.Fx)]
-        public double Fx { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty Fx { get; set; } = ForceProperty.Zero;
+
         [JsonProperty(StartPropertyName.Fy)]
-        public double Fy { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty Fy { get; set; } = ForceProperty.Zero;
+
         [JsonProperty(StartPropertyName.Fz)]
-        public double Fz { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty Fz { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Check Allowable Loads", CheckAllowableLoads.ToString() },
-                { "Allowable Loads In Local Axes", AllowableLoadsInLocalAxes.ToString() },
-                { "Fx", Fx.ToString("F5") },
-                { "Fy", Fy.ToString("F5") },
-                { "Fz", Fz.ToString("F5") },
-                { "Name", Name }
-            };
-
-            return dictionary;
-        }
+        public string Name { get; set; } = string.Empty;
     }
 }

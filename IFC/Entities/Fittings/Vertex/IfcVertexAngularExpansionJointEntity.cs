@@ -35,7 +35,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             _startAngularExpansion = startAngularExpansion;
 
-            Length = _startAngularExpansion.Length;
+            Length = _startAngularExpansion.Length.SIProperty;
             Radius = Length / 2;
         }
 

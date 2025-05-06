@@ -26,7 +26,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -206,7 +206,6 @@
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
     <Compile Include="Tools\IfcVertexPrimitives.cs" />
-    <Compile Include="ValueConverter\ValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

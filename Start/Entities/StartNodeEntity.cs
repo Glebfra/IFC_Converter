@@ -1,43 +1,32 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities
 {
     public class StartNodeEntity : StartAbstractEntity
     {
-        [JsonProperty(StartPropertyName.AdditionalWeightLoad)] 
-        public double AdditionalLoadFromWeight { get; set; }
-        
-        [JsonProperty(StartPropertyName.PipeName)] 
-        public string Name { get; set; }
-        
-        [JsonProperty(StartPropertyName.Description)] 
-        public string Description { get; set; }
+        [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassProperty, double>))]
+        public MassProperty AdditionalLoadFromWeight { get; set; } = MassProperty.Zero;
+
+        [JsonProperty(StartPropertyName.PipeName)]
+        public string Name { get; set; } = string.Empty;
+
+        [JsonProperty(StartPropertyName.Description)]
+        public string Description { get; set; } = string.Empty;
 
         [JsonProperty(StartPropertyName.XCoord)]
-        public double XCoord;
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty XCoord { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.YCoord)]
-        public double YCoord;
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty YCoord { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.ZCoord)]
-        public double ZCoord;
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>
-            {
-                { "Name", Name },
-                { "Description", Description },
-                { "Additional Load from Weight", AdditionalLoadFromWeight.ToString("F5") },
-                { "X Coordinate", XCoord.ToString("F5") },
-                { "Y Coordinate", YCoord.ToString("F5") },
-                { "Z Coordinate", ZCoord.ToString("F5") }
-            };
-
-            return dictionary;
-        }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ZCoord { get; set; } = LengthProperty.Zero;
     }
 }

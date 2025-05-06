@@ -14,8 +14,8 @@ namespace IFC.Entities.Fittings.CAD
         public IfcFabricatedTeeEntity(StartTeeEntity startTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
-            Length = startTeeEntity.HeaderLength;
-            Height = startTeeEntity.BranchHeight + _BranchPipes[0].OuterDiameter / 2;
+            Length = startTeeEntity.HeaderLength.SIProperty;
+            Height = startTeeEntity.BranchHeight.SIProperty + _BranchPipes[0].OuterDiameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

@@ -1,29 +1,21 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Fittings
 {
     public class StartNonstandardExpansionJointEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.EffectiveArea)]
-        public double EffectiveArea { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<AreaProperty, double>))]
+        public AreaProperty EffectiveArea { get; set; } = AreaProperty.Zero;
         
         [JsonProperty(StartPropertyName.Length)]
-        public double Length { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Length { get; set; } = LengthProperty.Zero;
         
         [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Effective Area", EffectiveArea.ToString("F5"));
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Name", Name);
-
-            return dictionary;
-        }
+        public string Name { get; set; } = string.Empty;
     }
 }

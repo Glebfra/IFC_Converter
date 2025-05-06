@@ -1,53 +1,45 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Fittings
 {
     public class StartBallExpansionJointEntity : StartAbstractFittingEntity
     {
+        //TODO get measurements
         [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
         public double AllowableAxialExpansion { get; set; }
 
         [JsonProperty(StartPropertyName.Length)]
-        public double Length { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Length { get; set; } = LengthProperty.Zero;
         
         [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
-        
+        public string Name { get; set; } = string.Empty;
+
         [JsonProperty(StartPropertyName.FrictionMoment1)]
-        public double FrictionMoment1 { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty FrictionMoment1 { get; set; } = MomentProperty.Zero;
+
         [JsonProperty(StartPropertyName.Pressure1)]
-        public double Pressure1 { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<PressureProperty, double>))]
+        public PressureProperty Pressure1 { get; set; } = PressureProperty.Zero;
+
         [JsonProperty(StartPropertyName.FrictionMoment2)]
-        public double FrictionMoment2 { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty FrictionMoment2 { get; set; } = MomentProperty.Zero;
+
         [JsonProperty(StartPropertyName.Pressure2)]
-        public double Pressure2 { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<PressureProperty, double>))]
+        public PressureProperty Pressure2 { get; set; } = PressureProperty.Zero;
+
         [JsonProperty(StartPropertyName.FrictionMoment3)]
-        public double FrictionMoment3 { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty FrictionMoment3 { get; set; } = MomentProperty.Zero;
+
         [JsonProperty(StartPropertyName.Pressure3)]
-        public double Pressure3 { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Allowable Axial Expansion", AllowableAxialExpansion.ToString("F5"));
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Name", Name);
-            dictionary.Add("Friction Moment 1", FrictionMoment1.ToString("F5"));
-            dictionary.Add("Friction Moment 2", FrictionMoment2.ToString("F5"));
-            dictionary.Add("Friction Moment 3", FrictionMoment3.ToString("F5"));
-            dictionary.Add("Pressure 1", Pressure1.ToString("F5"));
-            dictionary.Add("Pressure 2", Pressure2.ToString("F5"));
-            dictionary.Add("Pressure 3", Pressure3.ToString("F5"));
-
-            return dictionary;
-        }
+        [JsonConverter(typeof(StartPropertyJsonConverter<PressureProperty, double>))]
+        public PressureProperty Pressure3 { get; set; } = PressureProperty.Zero;
     }
 }

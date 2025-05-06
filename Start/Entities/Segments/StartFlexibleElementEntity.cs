@@ -1,66 +1,57 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Segments
 {
     public class StartFlexibleElementEntity : StartAbstractSegmentEntity
     {
         [JsonProperty(StartPropertyName.FlexibleElementLength)]
-        public double Length { get; set; }
-        
-        [JsonProperty(StartPropertyName.MaterialName)] 
-        public string MaterialName { get; set; }
-        
-        [JsonProperty(StartPropertyName.Weight)] 
-        public double PipeUnitWeight { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Length { get; set; } = LengthProperty.Zero;
+
+        [JsonProperty(StartPropertyName.MaterialName)]
+        public string MaterialName { get; set; } = string.Empty;
+
+        [JsonProperty(StartPropertyName.Weight)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public MassUnitProperty PipeUnitWeight { get; set; } = MassUnitProperty.Zero;
+
         [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
-        public double AdditionalWeightLoad { get; set; }
-        
-        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheXAxis)] 
-        public double AdditionalWeightLoadAlongTheXAxis { get; set; }
-    
-        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheYAxis)] 
-        public double AdditionalWeightLoadAlongTheYAxis { get; set; }
-    
-        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheZAxis)] 
-        public double AdditionalWeightLoadAlongTheZAxis { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public MassUnitProperty AdditionalWeightLoad { get; set; } = MassUnitProperty.Zero;
+
+        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheXAxis)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public MassUnitProperty AdditionalWeightLoadAlongTheXAxis { get; set; } = MassUnitProperty.Zero;
+
+        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheYAxis)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public MassUnitProperty AdditionalWeightLoadAlongTheYAxis { get; set; } = MassUnitProperty.Zero;
+
+        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheZAxis)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public MassUnitProperty AdditionalWeightLoadAlongTheZAxis { get; set; } = MassUnitProperty.Zero;
+
         [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
-        public double ProjectionAlongOXAxis { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ProjectionAlongOXAxis { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.ProjectionAlongOYAxis)]
-        public double ProjectionAlongOYAxis { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ProjectionAlongOYAxis { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
-        public double ProjectionAlongOZAxis { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ProjectionAlongOZAxis { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.UniformWeight)]
-        public double UniformWeight { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassProperty, double>))]
+        public MassProperty UniformWeight { get; set; } = MassProperty.Zero;
         
+        //TODO get measurements
         [JsonProperty(StartPropertyName.ShearStiffness)]
         public double ShearStiffness { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Material Name", MaterialName },
-                { "Pipe Unit Weight", PipeUnitWeight.ToString("F5") },
-                { "Additional Weight Load", AdditionalWeightLoad.ToString("F5") },
-                { "Additional Weight Load along the X Axis", AdditionalWeightLoadAlongTheXAxis.ToString("F5") },
-                { "Additional Weight Load along the Y Axis", AdditionalWeightLoadAlongTheYAxis.ToString("F5") },
-                { "Additional Weight Load along the Z Axis", AdditionalWeightLoadAlongTheZAxis.ToString("F5") },
-                { "Projection Along OX Axis", ProjectionAlongOXAxis.ToString("F5") },
-                { "Projection Along OY Axis", ProjectionAlongOYAxis.ToString("F5") },
-                { "Projection Along OZ Axis", ProjectionAlongOZAxis.ToString("F5") },
-                { "Uniform Weight", UniformWeight.ToString("F5") },
-                { "Shear Stiffness", ShearStiffness.ToString("F5") },
-            };
-
-            return dictionary;
-        }
     }
 }

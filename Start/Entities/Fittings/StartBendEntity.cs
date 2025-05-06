@@ -1,49 +1,40 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Fittings
 {
     public class StartBendEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.WallThickness)]
-        public double WallThickness { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty WallThickness { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.MillTolerance)]
-        public double MillTolerance { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MillTolerance { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
-    
+
         [JsonProperty(StartPropertyName.Radius)]
-        public double Radius { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Radius { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.OvalizationCoefficient)]
-        public double OvalizationCoefficient { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<FactorProperty, double>))]
+        public FactorProperty OvalizationCoefficient { get; set; } = FactorProperty.Zero;
+
         [JsonProperty(StartPropertyName.NumberOfMilters)]
-        public int NumberOfMilters { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<NumberProperty, int>))]
+        public NumberProperty NumberOfMilters { get; set; } = NumberProperty.Zero;
+
         [JsonProperty(StartPropertyName.MillToleranceOutside)]
-        public double MillToleranceOutside { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MillToleranceOutside { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.PipeName)]
-        public string Name { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Wall Thickness", WallThickness.ToString("F5"));
-            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
-            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
-            dictionary.Add("Radius", Radius.ToString("F5"));
-            dictionary.Add("Ovalization Coefficient", OvalizationCoefficient.ToString("F5"));
-            dictionary.Add("Number Of Milters", NumberOfMilters.ToString());
-            dictionary.Add("Mill Tolerance Outside", MillToleranceOutside.ToString("F5"));
-            dictionary.Add("Name", Name);
-
-            return dictionary;
-        }
+        public string Name { get; set; } = string.Empty;
     }
 }

@@ -1,51 +1,41 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
+using Start.StartProperties;
 
 namespace Start.Entities.Abstract
 {
     public class StartAbstractSegmentEntity : StartAbstractEntity
     {
         [JsonProperty(StartPropertyName.PipeName)]
-        public string Name { get; set; }
-        
+        public string Name { get; set; } = string.Empty;
+
         [JsonProperty(StartPropertyName.Diameter)]
-        public double Diameter { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Diameter { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.WallThickness)]
-        public double WallThickness { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty WallThickness { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.Pressure)]
-        public double Pressure { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<PressureProperty, double>))]
+        public PressureProperty Pressure { get; set; } = PressureProperty.Zero;
+
         [JsonProperty(StartPropertyName.TestPressure)]
-        public double TestPressure { get; set; }
-    
+        [JsonConverter(typeof(StartPropertyJsonConverter<PressureProperty, double>))]
+        public PressureProperty TestPressure { get; set; } = PressureProperty.Zero;
+
         [JsonProperty(StartPropertyName.Temperature)]
-        public double Temperature { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<TemperatureProperty, double>))]
+        public TemperatureProperty Temperature { get; set; } = TemperatureProperty.Zero;
 
         [JsonIgnore]
-        public double InnerDiameter => Diameter - WallThickness;
+        public LengthProperty InnerDiameter => new LengthProperty(Diameter.StartProperty - WallThickness.StartProperty);
         
         [JsonIgnore]
-        public double[] PressureRange => new double[] {Pressure, TestPressure};
+        public PressureProperty[] PressureRange => new PressureProperty[] {Pressure, TestPressure};
         
         [JsonIgnore]
-        public double[] TemperatureRange => new double[] {Temperature, Temperature};
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new()
-            {
-                { "Name", Name },
-                { "Outside Diameter", Diameter.ToString("F5") },
-                { "Wall Thickness", WallThickness.ToString("F5") },
-                { "Pressure", Pressure.ToString("F5") },
-                { "Test Pressure", TestPressure.ToString("F5") },
-                { "Temperature", Temperature.ToString("F5") },
-            };
-
-            return dictionary;
-        }
+        public TemperatureProperty[] TemperatureRange => new TemperatureProperty[] {Temperature, Temperature};
     }
 }

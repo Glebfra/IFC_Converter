@@ -1,57 +1,48 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Fittings
 {
     public class StartReducerEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.ConicalPartLength)]
-        public double LengthOfConicalPart { get; set; }
-        
-        [JsonProperty(StartPropertyName.Diameter)] 
-        public double MaxDiameter { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty LengthOfConicalPart { get; set; } = LengthProperty.Zero;
+
+        [JsonProperty(StartPropertyName.Diameter)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MaxDiameter { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.MinDiameter)]
-        public double MinDiameter { get; set; }
-        
-        [JsonProperty(StartPropertyName.WallThickness)] 
-        public double ThicknessAtMaxDiameterPoint { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MinDiameter { get; set; } = LengthProperty.Zero;
+
+        [JsonProperty(StartPropertyName.WallThickness)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ThicknessAtMaxDiameterPoint { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.MillTolerance)]
-        public double MillToleranceAtDMax { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MillToleranceAtDMax { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
-        
+
         [JsonProperty(StartPropertyName.AngleBetweenEccentricityVectorAndZmAxis)]
-        public double AngleBetweenEccentricityVectorAndZmAxis { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<AngleProperty, double>))]
+        public AngleProperty AngleBetweenEccentricityVectorAndZmAxis { get; set; } = AngleProperty.Zero;
+
         [JsonProperty(StartPropertyName.PipeName)]
-        public string Name { get; set; }
-        
+        public string Name { get; set; } = string.Empty;
+
         [JsonProperty(StartPropertyName.MillToleranceAtDMin)]
-        public double MillToleranceAtDMin { get; set; }
-        
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MillToleranceAtDMin { get; set; } = LengthProperty.Zero;
+
         [JsonProperty(StartPropertyName.ReducerMillTolerance)]
-        public double MillTolerance { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Name", Name);
-            dictionary.Add("Manufacturing Technology", ManufacturingTechnologyEnum.ToString());
-            dictionary.Add("Mill Tolerance At D Max", MillToleranceAtDMax.ToString("F5"));
-            dictionary.Add("Mill Tolerance At D Min", MillToleranceAtDMin.ToString("F5"));
-            dictionary.Add("Mill Tolerance", MillTolerance.ToString("F5"));
-            dictionary.Add("Length Of Conical Part", LengthOfConicalPart.ToString("F5"));
-            dictionary.Add("Max Diameter", MaxDiameter.ToString("F5"));
-            dictionary.Add("Min Diameter", MinDiameter.ToString("F5"));
-            dictionary.Add("Thickness At Max Diameter Point", ThicknessAtMaxDiameterPoint.ToString("F5"));
-            dictionary.Add("Angle Between Eccentricity Vector And Zm Axis", AngleBetweenEccentricityVectorAndZmAxis.ToString("F5"));
-
-            return dictionary;
-        }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty MillTolerance { get; set; } = LengthProperty.Zero;
     }
 }

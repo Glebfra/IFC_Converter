@@ -33,23 +33,23 @@ namespace Tests.Start
             Assert.True(startPipeEntity.Name == "TestPipe");
             Assert.True(startPipeEntity.MaterialName == "A105");
             Assert.True(startPipeEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.SEAMLESS);
-            Assert.AreEqual(0.1, startPipeEntity.Diameter, TOLERANCE);
-            Assert.AreEqual(10, startPipeEntity.Pressure, TOLERANCE);
-            Assert.AreEqual(100, startPipeEntity.Temperature, TOLERANCE);
-            Assert.AreEqual(20, startPipeEntity.TestPressure, TOLERANCE);
-            Assert.AreEqual(0.005, startPipeEntity.CorrosionAllowance, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.MillTolerance, TOLERANCE);
-            Assert.AreEqual(0.02193, startPipeEntity.PipeUnitWeight, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.ProductUnitWeight, TOLERANCE);
-            Assert.AreEqual(1, startPipeEntity.ProjectionAlongOXAxis, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.ProjectionAlongOYAxis, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.ProjectionAlongOZAxis, TOLERANCE);
-            Assert.AreEqual(1, startPipeEntity.StrengthFactorOfTheTraverseWeld, TOLERANCE);
-            Assert.AreEqual(0.01, startPipeEntity.WallThickness, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.XCoord, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.YCoord, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.ZCoord, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.AdditionalWeightLoad, TOLERANCE);
+            Assert.AreEqual(0.1, startPipeEntity.Diameter.StartProperty, TOLERANCE);
+            Assert.AreEqual(10, startPipeEntity.Pressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(100, startPipeEntity.Temperature.StartProperty, TOLERANCE);
+            Assert.AreEqual(20, startPipeEntity.TestPressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.005, startPipeEntity.CorrosionAllowance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.MillTolerance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.02193, startPipeEntity.PipeUnitWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.ProductUnitWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(1, startPipeEntity.ProjectionAlongOXAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.ProjectionAlongOYAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.ProjectionAlongOZAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(1, startPipeEntity.StrengthFactorOfTheTraverseWeld.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.01, startPipeEntity.WallThickness.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.XCoord.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.YCoord.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.ZCoord.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startPipeEntity.AdditionalWeightLoad.StartProperty, TOLERANCE);
         }
 
         [Test]
@@ -60,11 +60,11 @@ namespace Tests.Start
             Assert.NotNull(startBendEntity);
             Assert.True(startBendEntity.Type == StartElementType.ELBOW);
             Assert.True(startBendEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.SEAMLESS);
-            Assert.AreEqual(0.152, startBendEntity.Radius, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.MillTolerance, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.MillToleranceOutside, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient, TOLERANCE);
-            Assert.AreEqual(0.01, startBendEntity.WallThickness, TOLERANCE);
+            Assert.AreEqual(0.152, startBendEntity.Radius.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillTolerance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillToleranceOutside.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.01, startBendEntity.WallThickness.StartProperty, TOLERANCE);
             
             //TODO Вес не выгружается
             //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE); 
@@ -78,12 +78,12 @@ namespace Tests.Start
             Assert.NotNull(startBendEntity);
             Assert.True(startBendEntity.Type == StartElementType.PIPE_BEND);
             Assert.True(startBendEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.SEAMLESS);
-            Assert.AreEqual(0, startBendEntity.MillTolerance, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.MillToleranceOutside, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.NumberOfMilters, TOLERANCE);
-            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient, TOLERANCE);
-            Assert.AreEqual(0.152, startBendEntity.Radius, TOLERANCE);
-            Assert.AreEqual(0.01, startBendEntity.WallThickness, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillTolerance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.MillToleranceOutside.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.NumberOfMilters.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, startBendEntity.OvalizationCoefficient.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.152, startBendEntity.Radius.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.01, startBendEntity.WallThickness.StartProperty, TOLERANCE);
             
             //TODO вес не выгружается
             //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE);

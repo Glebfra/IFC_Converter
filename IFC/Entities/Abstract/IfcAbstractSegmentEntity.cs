@@ -2,6 +2,7 @@
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -163,33 +164,33 @@ namespace IFC.Entities.Abstract
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "InnerDiameter";
-                        value.NominalValue = new IfcPositiveLengthMeasure(_abstractSegmentEntity.InnerDiameter);
+                        value.NominalValue = new IfcPositiveLengthMeasure(_abstractSegmentEntity.InnerDiameter.SIProperty);
                     }));
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "NominalDiameter";
-                        value.NominalValue = new IfcPositiveLengthMeasure(_abstractSegmentEntity.Diameter);
+                        value.NominalValue = new IfcPositiveLengthMeasure(_abstractSegmentEntity.Diameter.SIProperty);
                     }));
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                     {
                         value.Name = "WorkingPressure";
-                        value.NominalValue = new IfcPressureMeasure(_abstractSegmentEntity.Pressure);
+                        value.NominalValue = new IfcPressureMeasure(_abstractSegmentEntity.Pressure.SIProperty);
                     }));
                     set.HasProperties.Add(model.Instances.New<IfcPropertyBoundedValue>(value =>
                     {
-                        double[] pressureRange = _abstractSegmentEntity.PressureRange;
+                        PressureProperty[] pressureRange = _abstractSegmentEntity.PressureRange;
                         
                         value.Name = "PressureRange";
-                        value.LowerBoundValue = new IfcPressureMeasure(pressureRange[0]);
-                        value.UpperBoundValue = new IfcPressureMeasure(pressureRange[1]);
+                        value.LowerBoundValue = new IfcPressureMeasure(pressureRange[0].SIProperty);
+                        value.UpperBoundValue = new IfcPressureMeasure(pressureRange[1].SIProperty);
                     }));
                     set.HasProperties.Add(model.Instances.New<IfcPropertyBoundedValue>(value =>
                     {
-                        double[] temperatureRange = _abstractSegmentEntity.TemperatureRange;
+                        TemperatureProperty[] temperatureRange = _abstractSegmentEntity.TemperatureRange;
                         
                         value.Name = "TemperatureRange";
-                        value.LowerBoundValue = new IfcThermodynamicTemperatureMeasure(temperatureRange[0]);
-                        value.UpperBoundValue = new IfcThermodynamicTemperatureMeasure(temperatureRange[1]);
+                        value.LowerBoundValue = new IfcThermodynamicTemperatureMeasure(temperatureRange[0].SIProperty);
+                        value.UpperBoundValue = new IfcThermodynamicTemperatureMeasure(temperatureRange[1].SIProperty);
                     }));
                 });
             });
