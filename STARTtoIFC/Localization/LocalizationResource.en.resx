@@ -30,7 +30,7 @@
         <value>Selected directory does not exist</value>
     </data>
     <data name="UnauthorizedAccess_Error" xml:space="preserve">
-        <value>You do not have sufficient permissions to write to this directory.</value>
+        <value>You do not have sufficient permissions to write to this directory</value>
     </data>
     <data name="ExportWindowForm_selectOutputFilePathButton_Text" xml:space="preserve">
         <value>Browse...</value>
