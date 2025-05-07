@@ -65,9 +65,7 @@ namespace Tests.Start
             Assert.AreEqual(0, startBendEntity.MillToleranceOutside.StartProperty, TOLERANCE);
             Assert.AreEqual(0, startBendEntity.OvalizationCoefficient.StartProperty, TOLERANCE);
             Assert.AreEqual(0.01, startBendEntity.WallThickness.StartProperty, TOLERANCE);
-            
-            //TODO Вес не выгружается
-            //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE); 
+            Assert.AreEqual(0.005236, startBendEntity.Weight.StartProperty, TOLERANCE); 
         }
 
         [Test]
@@ -84,9 +82,7 @@ namespace Tests.Start
             Assert.AreEqual(0, startBendEntity.OvalizationCoefficient.StartProperty, TOLERANCE);
             Assert.AreEqual(0.152, startBendEntity.Radius.StartProperty, TOLERANCE);
             Assert.AreEqual(0.01, startBendEntity.WallThickness.StartProperty, TOLERANCE);
-            
-            //TODO вес не выгружается
-            //Assert.AreEqual(0.052, startBendEntity.Weight, TOLERANCE);
+            Assert.AreEqual(0.005236, startBendEntity.Weight.StartProperty, TOLERANCE);
         }
     }
 }
