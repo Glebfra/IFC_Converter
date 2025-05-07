@@ -5,7 +5,7 @@
         public override string StartUnit { get; } = "tf";
         public override string SIUnit { get; } = "kg";
 
-        private const double FACTOR = 1000;
+        private const double FACTOR = 102.04;
 
         public MassProperty(double startProperty) : base(startProperty)
         {
