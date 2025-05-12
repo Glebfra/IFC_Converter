@@ -142,6 +142,7 @@
     <Compile Include="API\StartAutoServer.cs" />
     <Compile Include="API\StartBaseRoot.cs" />
     <Compile Include="API\StartBaseRootDataArray.cs" />
+    <Compile Include="API\StartConnectionTypeEnum.cs" />
     <Compile Include="API\StartDataArrayItem.cs" />
     <Compile Include="API\StartDocument.cs" />
     <Compile Include="API\StartElementType.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Entities\Fittings\StartBallExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartBendEntity.cs" />
     <Compile Include="Entities\Fittings\StartCapEntity.cs" />
+    <Compile Include="Entities\Fittings\StartConnectorEntity.cs" />
     <Compile Include="Entities\Fittings\StartLateralExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartNonstandardExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartReducerEntity.cs" />

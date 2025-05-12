@@ -57,6 +57,7 @@
         public const string MillToleranceOutside = "216";
         public const string PipeName = "225";
         public const string Description = "227";
+        public const string StrengthFactorOfTheTransverseTension = "253";
         public const string CheckAllowableLoads = "264";
         public const string PermissibleLoads = "264";
         public const string AllowableLoadsInLocalAxes = "265";
@@ -67,6 +68,7 @@
         public const string My = "270";
         public const string Mz = "271";
         public const string UniformWeight = "311";
+        public const string ConnectionType = "370";
         public const string GasketCrossection = "387";
         public const string XCoord = "404";
         public const string YCoord = "405";
@@ -74,6 +76,11 @@
         public const string MillToleranceAtDMin = "434";
         public const string Name = "449";
         public const string ReducerMillTolerance = "455";
+        public const string StressIntensificationFactor_ii = "462";
+        public const string StressIntensificationFactor_io = "463";
+        public const string StressIntensificationFactor_it = "464";
+        public const string StressIntensificationFactor_ia = "465";
+        public const string SeamDeltaParameter = "521"; 
         public const string ShearCompliance = "693";
         public const string PermissibleLateralMovement = "694";
         public const string GasketEffectiveDiameter = "720";

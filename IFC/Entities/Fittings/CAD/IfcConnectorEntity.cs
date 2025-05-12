@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -11,39 +12,49 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    public sealed class IfcCapEntity : IfcAbstractFittingEntity
+    public sealed class IfcConnectorEntity : IfcAbstractFittingEntity
     {
         public override double Length { get; protected set; }
-
-        private StartCapEntity _capEntity;
+        
+        private StartConnectorEntity _connectorEntity;
         private IfcPipeFitting _pipeFitting;
         
-        public IfcCapEntity(StartCapEntity capEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
-            : base(capEntity, ifcNodeEntity, abstractSegmentEntities)
+        public IfcConnectorEntity(StartConnectorEntity connectorEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
+            : base(connectorEntity, ifcNodeEntity, abstractSegmentEntities)
         {
-            _capEntity = capEntity;
-            Length = Diameter / 2;
+            _connectorEntity = connectorEntity;
+            Length = Diameter / 4;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-            
-            IfcExtrudedAreaSolid extrudedAreaSolid = IfcGeometry.CreateCylinder(model, Diameter / 2, Length, XbimVector3D.Zero);
+
+            XbimVector3D displacement = Length / 2 * VectorExtensions.Forward.Negated();
+            IfcExtrudedAreaSolid extrudedAreaSolid = IfcGeometry.CreateCylinder(model, Diameter / 2 * 1.1, Length, displacement);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolid);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-
+            
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
-                fitting.Name = _capEntity.Name;
+                fitting.Name = _connectorEntity.Name;
                 fitting.Tag = Tag;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.OBSTRUCTION;
+                fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
                 fitting.Representation = shape;
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;
             });
             AddProperties(model, _pipeFitting);
+            ClipPipes();
 
             return _pipeFitting;
+        }
+
+        private void ClipPipes()
+        {
+            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
+            {
+                ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
+            }
         }
     }
 }
