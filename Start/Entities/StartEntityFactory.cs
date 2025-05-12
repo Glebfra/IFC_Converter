@@ -131,6 +131,9 @@ namespace Start.Entities
                 
                 case StartElementType.CAP:
                     return JsonConvert.DeserializeObject<StartCapEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.CONNECTOR:
+                    return JsonConvert.DeserializeObject<StartConnectorEntity>(dataArrayItem.Data.ToString());
 
                 default:
                     return null;

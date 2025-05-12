@@ -115,6 +115,9 @@ namespace IFC.Entities
                 
                 case StartElementType.CAP:
                     return new IfcCapEntity((StartCapEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.CONNECTOR:
+                    return new IfcConnectorEntity((StartConnectorEntity)entity, nodeEntity, segmentEntities);
 
                 default:
                     return null;
