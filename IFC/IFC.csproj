@@ -165,6 +165,7 @@
     <Compile Include="Entities\Equipments\Vertex\IfcVertexVesselEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcCapEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcMilterJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcNonstandardExpansionJointEntity.cs" />
