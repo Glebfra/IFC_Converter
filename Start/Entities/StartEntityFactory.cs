@@ -128,6 +128,9 @@ namespace Start.Entities
                 
                 case StartElementType.AIR_COOLER:
                     return JsonConvert.DeserializeObject<StartAirCoolerEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.CAP:
+                    return JsonConvert.DeserializeObject<StartCapEntity>(dataArrayItem.Data.ToString());
 
                 default:
                     return null;
