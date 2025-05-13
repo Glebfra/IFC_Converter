@@ -47,13 +47,8 @@ namespace IFC.Entities.Fittings.Vertex
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
             IfcFacetedBrep lowerBrep = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
             IfcFacetedBrep upperBrep = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
-        
-            IfcBooleanResult result = model.Instances.New<IfcBooleanResult>(booleanResult =>
-            {
-                booleanResult.Operator = IfcBooleanOperator.UNION;
-                booleanResult.FirstOperand = lowerBrep;
-                booleanResult.SecondOperand = upperBrep;
-            });
+            IfcBooleanResult result = IfcGeometry.CreateBooleanResult(model, lowerBrep, upperBrep, IfcBooleanOperator.UNION);
+            
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, result);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
