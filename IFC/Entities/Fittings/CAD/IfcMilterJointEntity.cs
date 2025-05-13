@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -35,20 +37,16 @@ namespace IFC.Entities.Fittings.CAD
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
-
-            IfcRepresentationItem[] ifcRepresentationItems = new IfcRepresentationItem[AbstractSegmentEntities.Length + 1];
+            
+            List<IfcRepresentationItem> ifcRepresentationItems = new List<IfcRepresentationItem>();
             for (int i = 0; i < AbstractSegmentEntities.Length; i++)
             {
-                ifcRepresentationItems[i] = CreateExtrudedAreaSolid(model, AbstractSegmentEntities[i], 0);
+                ifcRepresentationItems.Add(CreateExtrudedAreaSolid(model, AbstractSegmentEntities[i], 0));
                 AbstractSegmentEntities[i].Clip(NodeEntity, Depth);
             }
 
-            ifcRepresentationItems[AbstractSegmentEntities.Length] = model.Instances.New<IfcBooleanResult>(result =>
-            {
-                result.Operator = IfcBooleanOperator.INTERSECTION;
-                result.FirstOperand = CreateExtrudedAreaSolid(model, AbstractSegmentEntities[0], Depth);
-                result.SecondOperand = CreateExtrudedAreaSolid(model, AbstractSegmentEntities[1], Depth);
-            });
+            IfcExtrudedAreaSolid[] segments = AbstractSegmentEntities.Select(item => CreateExtrudedAreaSolid(model, item, Depth)).ToArray();
+            ifcRepresentationItems.Add(IfcGeometry.CreateBooleanResult(model, segments[0], segments[1], IfcBooleanOperator.INTERSECTION));
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
