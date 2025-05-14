@@ -16,6 +16,17 @@ namespace IFC.Tools
             });
         }
 
+        public static IfcSweptDiskSolid CreateCircularBend(IModel model, double circleRadius, double bendRadius, double angle, XbimVector3D coordinates, XbimVector3D axis, XbimVector3D refDirection)
+        {
+            axis = axis.Normalized();
+            refDirection = refDirection.Normalized();
+            XbimVector3D up = XbimVector3D.CrossProduct(axis, refDirection).Normalized();
+            
+            IfcCircle circle = CreateCircle(model, bendRadius, coordinates, up, refDirection);
+            IfcTrimmedCurve curve = CreateTrimmedCurve(model, circle, -angle, 0);
+            return CreateSweptDiskSolid(model, curve, circleRadius);
+        }
+
         public static IfcExtrudedAreaSolid CreateRectangle(IModel model, double xDim, double yDim, double zDim, XbimVector3D coordinates)
         {
             IfcRectangleProfileDef rectangleProfileDef = CreateRectangleProfileDef(model, xDim, yDim);
