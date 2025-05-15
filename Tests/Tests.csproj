@@ -59,6 +59,12 @@
     <ItemGroup>
         <Compile Include="Start\StartTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Start\StartTests.Fittings.cs">
+          <DependentUpon>StartTests.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Start\StartTests.Segments.cs">
+          <DependentUpon>StartTests.cs</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\IFC\IFC.csproj">
