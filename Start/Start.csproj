@@ -179,6 +179,7 @@
     <Compile Include="Entities\Fittings\StartConnectorEntity.cs" />
     <Compile Include="Entities\Fittings\StartLateralExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartNonstandardExpansionJointEntity.cs" />
+    <Compile Include="Entities\Fittings\StartNonstandardTeeEntity.cs" />
     <Compile Include="Entities\Fittings\StartReducerEntity.cs" />
     <Compile Include="Entities\Fittings\StartTeeEntity.cs" />
     <Compile Include="Entities\Fittings\StartTorsionExpansionJointEntity.cs" />

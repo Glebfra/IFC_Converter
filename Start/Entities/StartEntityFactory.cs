@@ -74,6 +74,9 @@ namespace Start.Entities
                 case StartElementType.STUB_IN:
                     return JsonConvert.DeserializeObject<StartTeeEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.NONSTANDARD_TEE:
+                    return JsonConvert.DeserializeObject<StartNonstandardTeeEntity>(dataArrayItem.Data.ToString());
+                
                 case StartElementType.TORSION_EXPANSION_JOINT:
                     return JsonConvert.DeserializeObject<StartTorsionExpansionJointEntity>(dataArrayItem.Data.ToString());
                 

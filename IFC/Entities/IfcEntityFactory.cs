@@ -89,6 +89,9 @@ namespace IFC.Entities
                 case StartElementType.WELDED_TEE:
                     return new IfcWeldedTeeEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
                 
+                case StartElementType.NONSTANDARD_TEE:
+                    return new IfcNonStandardTeeEntity((StartNonstandardTeeEntity)entity, nodeEntity, segmentEntities);
+                
                 case StartElementType.WELDOLET:
                     return new IfcWeldoletEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
 
