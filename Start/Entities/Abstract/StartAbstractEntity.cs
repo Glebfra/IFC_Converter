@@ -23,7 +23,7 @@ namespace Start.Entities.Abstract
             return dictionary;
         }
 
-        private static void AddToDictionary(Dictionary<string, string> dictionary, Type type, object @object, string? propertyName = null)
+        private static void AddToDictionary(IDictionary<string, string> dictionary, Type type, object @object, string? propertyName = null)
         {
             foreach (PropertyInfo propertyInfo in type.GetProperties())
             {
