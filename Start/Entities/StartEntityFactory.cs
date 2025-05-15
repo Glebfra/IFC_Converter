@@ -51,6 +51,9 @@ namespace Start.Entities
                 case StartElementType.MILTER_JOINT:
                     return JsonConvert.DeserializeObject<StartBendEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.NONSTANDARD_BEND:
+                    return JsonConvert.DeserializeObject<StartNonStandardBendEntity>(dataArrayItem.Data.ToString());
+                
                 case StartElementType.FLEXIBLE_ELEMENT:
                     return JsonConvert.DeserializeObject<StartFlexibleElementEntity>(dataArrayItem.Data.ToString());
                 

@@ -76,6 +76,7 @@
         public const string MillToleranceAtDMin = "434";
         public const string Name = "449";
         public const string ReducerMillTolerance = "455";
+        public const string FlexibilityFactor_k = "459";
         public const string StressIntensificationFactor_ii = "462";
         public const string StressIntensificationFactor_io = "463";
         public const string StressIntensificationFactor_it = "464";

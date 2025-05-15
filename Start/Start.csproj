@@ -178,6 +178,7 @@
     <Compile Include="Entities\Fittings\StartCapEntity.cs" />
     <Compile Include="Entities\Fittings\StartConnectorEntity.cs" />
     <Compile Include="Entities\Fittings\StartLateralExpansionJointEntity.cs" />
+    <Compile Include="Entities\Fittings\StartNonStandardBendEntity.cs" />
     <Compile Include="Entities\Fittings\StartNonstandardExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartNonstandardTeeEntity.cs" />
     <Compile Include="Entities\Fittings\StartReducerEntity.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="StartProperties\NumberProperty.cs" />
     <Compile Include="StartProperties\PressureProperty.cs" />
     <Compile Include="StartProperties\StartAbstractProperty.cs" />
+    <Compile Include="StartProperties\StartIgnoreAttribute.cs" />
     <Compile Include="StartProperties\StartPropertyJsonConverter.cs" />
     <Compile Include="StartProperties\TemperatureProperty.cs" />
   </ItemGroup>
