@@ -186,7 +186,7 @@ namespace STARTtoIFC.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have sufficient permissions to write to this directory..
+        ///   Looks up a localized string similar to You do not have sufficient permissions to write to this directory.
         /// </summary>
         internal static string UnauthorizedAccess_Error {
             get {

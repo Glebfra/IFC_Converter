@@ -1,6 +1,5 @@
 ﻿using System;
 using IFC.Entities.Abstract;
-using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -35,7 +34,7 @@ namespace IFC.Entities.Fittings.Vertex
             _bendEntity = bendEntity;
 
             _torusAngleStep = Angle / (_numSegments - 1);
-            _torusRadius = _bendEntity.Radius;
+            _torusRadius = _bendEntity.Radius.SIProperty;
             _circleRadius = Math.Min(AbstractSegmentEntities[0].OuterDiameter / 2, AbstractSegmentEntities[1].OuterDiameter / 2);
         }
 

@@ -10,9 +10,9 @@ namespace IFC.Entities
         public IfcNodeEntity(StartNodeEntity nodeEntity)
         {
             XbimVector3D coordinates = new XbimVector3D(
-                nodeEntity.XCoord,
-                nodeEntity.YCoord,
-                nodeEntity.ZCoord
+                nodeEntity.XCoord.SIProperty,
+                nodeEntity.YCoord.SIProperty,
+                nodeEntity.ZCoord.SIProperty
             );
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
         }

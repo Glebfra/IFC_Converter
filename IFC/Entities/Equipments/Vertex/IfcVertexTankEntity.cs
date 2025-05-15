@@ -11,8 +11,6 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Equipments.Vertex
@@ -55,8 +53,8 @@ namespace IFC.Entities.Equipments.Vertex
             _directionToPipe = IfcAxis.GetDirectionToPipe(_abstractSegmentEntities[0], coordinates).Normalized();
             _isVertical = _directionToPipe.IsParallel(VectorExtensions.Z);
             
-            _tankHeight = _startTankEntity.DistanceToNozzleAxis * 2;
-            _tankRadius = _startTankEntity.Radius;
+            _tankHeight = _startTankEntity.DistanceToNozzleAxis.SIProperty * 2;
+            _tankRadius = _startTankEntity.Radius.SIProperty;
 
             _flangeHeight = _pipeDiameter * 0.2;
             _flangeRadius = _pipeDiameter * 0.75;

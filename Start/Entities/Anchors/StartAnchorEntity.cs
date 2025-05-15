@@ -1,29 +1,22 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Anchors
 {
     public class StartAnchorEntity : StartAbstractAnchorEntity
     {
-        [JsonProperty(StartPropertyName.Mx)] 
-        public double Mx { get; set; }
+        [JsonProperty(StartPropertyName.Mx)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty Mx { get; set; } = MomentProperty.Zero;
         
-        [JsonProperty(StartPropertyName.My)] 
-        public double My { get; set; }
+        [JsonProperty(StartPropertyName.My)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty My { get; set; } = MomentProperty.Zero;
         
-        [JsonProperty(StartPropertyName.Mz)] 
-        public double Mz { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Mx", Mx.ToString("F5"));
-            dictionary.Add("My", My.ToString("F5"));
-            dictionary.Add("Mz", Mz.ToString("F5"));
-
-            return dictionary;
-        }
+        [JsonProperty(StartPropertyName.Mz)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty Mz { get; set; } = MomentProperty.Zero;
     }
 }

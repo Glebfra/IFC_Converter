@@ -33,7 +33,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             _startBallExpansion = startBallExpansion;
             
-            Length = _startBallExpansion.Length;
+            Length = _startBallExpansion.Length.SIProperty;
             Radius = Length;
         }
 

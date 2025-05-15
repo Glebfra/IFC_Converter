@@ -15,7 +15,7 @@ namespace IFC.Entities.Fittings.CAD
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
             Length = _HeadPipe.OuterDiameter;
-            Height = _BranchPipes[0].OuterDiameter / 2 + startTeeEntity.BranchHeight;
+            Height = _BranchPipes[0].OuterDiameter / 2 + startTeeEntity.BranchHeight.SIProperty;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

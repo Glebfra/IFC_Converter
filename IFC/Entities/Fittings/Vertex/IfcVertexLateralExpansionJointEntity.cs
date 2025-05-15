@@ -34,7 +34,7 @@ namespace IFC.Entities.Fittings.Vertex
 
             _lateralExpansionJoint = lateralExpansionJoint;
 
-            Length = _lateralExpansionJoint.Length;
+            Length = _lateralExpansionJoint.Length.SIProperty;
             Radius = Length;
         }
 

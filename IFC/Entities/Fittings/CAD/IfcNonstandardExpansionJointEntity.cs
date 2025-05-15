@@ -27,7 +27,7 @@ namespace IFC.Entities.Fittings.CAD
         {
             _nonstandardExpansionJoint = nonstandardExpansionJointEntity;
 
-            Length = _nonstandardExpansionJoint.Length;
+            Length = _nonstandardExpansionJoint.Length.SIProperty;
             Radius = Diameter / 2;
         }
 

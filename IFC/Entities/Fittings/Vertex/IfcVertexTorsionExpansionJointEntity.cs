@@ -34,7 +34,7 @@ namespace IFC.Entities.Fittings.Vertex
             _torsionExpansionJoint = torsionExpansionJoint;
             
             Radius = Diameter / 2;
-            Length = _torsionExpansionJoint.Length;
+            Length = _torsionExpansionJoint.Length.SIProperty;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

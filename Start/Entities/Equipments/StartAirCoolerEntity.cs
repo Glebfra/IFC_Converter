@@ -1,72 +1,64 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
+using Start.StartProperties;
 
 namespace Start.Entities.Equipments
 {
     public class StartAirCoolerEntity : StartPumpEntity
     {
         [JsonProperty(StartPropertyName.AirCoolerLength)]
-        public double Length { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty Length { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.PermissibleLoads)]
         public StartPermissibleLoadsEnum PermissibleLoads { get; set; }
         
         [JsonProperty(StartPropertyName.VesselFrad)]
-        public double VesselFrad { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty VesselFrad { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.VesselFvert)]
-        public double VesselFvert { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty VesselFvert { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.VesselFshaft)]
-        public double VesselFshaft { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty VesselFshaft { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.VesselMrad)]
-        public double VesselMrad { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty VesselMrad { get; set; } = MomentProperty.Zero;
         
         [JsonProperty(StartPropertyName.VesselMvert)]
-        public double VesselMvert { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty VesselMvert { get; set; } = MomentProperty.Zero;
         
         [JsonProperty(StartPropertyName.VesselMshaft)]
-        public double VesselMshaft { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty VesselMshaft { get; set; } = MomentProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManifoldFrad)]
-        public double ManifoldFrad { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty ManifoldFrad { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManifoldFvert)]
-        public double ManifoldFvert { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty ManifoldFvert { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManifoldFshaft)]
-        public double ManifoldFshaft { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty ManifoldFshaft { get; set; } = ForceProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManifoldMrad)]
-        public double ManifoldMrad { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty ManifoldMrad { get; set; } = MomentProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManifoldMvert)]
-        public double ManifoldMvert { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty ManifoldMvert { get; set; } = MomentProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManifoldMshaft)]
-        public double ManifoldMshaft { get; set; }
-
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = base.GetData();
-            dictionary.Add("Length", Length.ToString("F5"));
-            dictionary.Add("Permissible Loads", PermissibleLoads.ToString());
-            dictionary.Add("Vessel Frad", VesselFrad.ToString("F5"));
-            dictionary.Add("Vessel Fvert", VesselFvert.ToString("F5"));
-            dictionary.Add("Vessel Fshaft", VesselFshaft.ToString("F5"));
-            dictionary.Add("Vessel Mrad", VesselMrad.ToString("F5"));
-            dictionary.Add("Vessel Mvert", VesselMvert.ToString("F5"));
-            dictionary.Add("Vessel Mshaft", VesselMshaft.ToString("F5"));
-            dictionary.Add("Manifold Frad", ManifoldFrad.ToString("F5"));
-            dictionary.Add("Manifold Fvert", ManifoldFvert.ToString("F5"));
-            dictionary.Add("Manifold Fshaft", ManifoldFshaft.ToString("F5"));
-            dictionary.Add("Manifold Mrad", ManifoldMrad.ToString("F5"));
-            dictionary.Add("Manifold Mvert", ManifoldMvert.ToString("F5"));
-            dictionary.Add("Manifold Mshaft", ManifoldMshaft.ToString("F5"));
-
-            return dictionary;
-        }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty ManifoldMshaft { get; set; } = MomentProperty.Zero;
     }
 }

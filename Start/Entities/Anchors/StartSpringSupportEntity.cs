@@ -1,59 +1,49 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
+using Start.StartProperties;
 
 namespace Start.Entities.Anchors
 {
     public class StartSpringSupportEntity : StartAbstractEntity
     {
         [JsonProperty(StartPropertyName.FrictionMoment)]
-        public double FrictionMoment { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
+        public MomentProperty FrictionMoment { get; set; } = MomentProperty.Zero;
         
         [JsonProperty(StartPropertyName.SafetyFactorForLiftingCapacity)]
-        public double SafetyFactorForLiftingCapacity { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<FactorProperty, double>))]
+        public FactorProperty SafetyFactorForLiftingCapacity { get; set; } = FactorProperty.Zero;
         
-        [JsonProperty(StartPropertyName.ChainCompliance)]
-        public double ChainCompliance { get; set; }
+        [JsonProperty(StartPropertyName.Flexibility)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<FlexibilityProperty, double>))]
+        public FlexibilityProperty Flexibility { get; set; } = FlexibilityProperty.Zero;
         
+        //TODO get measurements
         [JsonProperty(StartPropertyName.ChainRigidity)]
         public double ChainRigidity { get; set; }
         
         [JsonProperty(StartPropertyName.SupportsNumber)]
-        public int SupportsNumber { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<NumberProperty, int>))]
+        public NumberProperty SupportsNumber { get; set; } = NumberProperty.Zero;
         
+        //TODO get measurements
         [JsonProperty(StartPropertyName.LoadChange)]
         public double LoadChange { get; set; }
         
         [JsonProperty(StartPropertyName.SupportingForce)]
-        public double SupportingForce { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<ForceProperty, double>))]
+        public ForceProperty SupportingForce { get; set; } = ForceProperty.Zero;
         
+        //TODO get measurements
         [JsonProperty(StartPropertyName.LoadCapacityOfOneSupport)]
         public double LoadCapacityOfOneSupport { get; set; }
-        
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; }
+
+        [JsonProperty(StartPropertyName.Name)] 
+        public string Name { get; set; } = string.Empty;
         
         [JsonProperty(StartPropertyName.AnchorSupportWeight)]
-        public double Weight { get; set; }
-        
-        public override Dictionary<string, string> GetData()
-        {
-            Dictionary<string, string> dictionary = new Dictionary<string, string>()
-            {
-                { "Friction Moment", FrictionMoment.ToString("F5") },
-                { "Safety Factor For Lifting Capacity", SafetyFactorForLiftingCapacity.ToString("F5") },
-                { "Chain Compliance", ChainCompliance.ToString("F5") },
-                { "Chain Rigidity", ChainRigidity.ToString("F5") },
-                { "Supports Number", SupportsNumber.ToString() },
-                { "Load Change", LoadChange.ToString("F5") },
-                { "Supporting Force", SupportingForce.ToString("F5") },
-                { "Load Capacity Of One Support", LoadCapacityOfOneSupport.ToString("F5") },
-                { "Name", Name },
-                { "Weight", Weight.ToString("F5") }
-            };
-
-            return dictionary;
-        }
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassProperty, double>))]
+        public MassProperty Weight { get; set; } = MassProperty.Zero;
     }
 }

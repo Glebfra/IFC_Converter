@@ -72,14 +72,7 @@ namespace IFC.Entities.Abstract
             }
             _HeadPipe.Clip(NodeEntity, Height);
 
-            IfcBooleanResult result = model.Instances.New<IfcBooleanResult>(booleanResult =>
-            {
-                booleanResult.Operator = IfcBooleanOperator.UNION;
-                booleanResult.FirstOperand = teeExtrudedArea[0];
-                booleanResult.SecondOperand = teeExtrudedArea[1];
-            });
-
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, result);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {

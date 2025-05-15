@@ -74,6 +74,9 @@ namespace Start.Entities
                 case StartElementType.STUB_IN:
                     return JsonConvert.DeserializeObject<StartTeeEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.NONSTANDARD_TEE:
+                    return JsonConvert.DeserializeObject<StartNonstandardTeeEntity>(dataArrayItem.Data.ToString());
+                
                 case StartElementType.TORSION_EXPANSION_JOINT:
                     return JsonConvert.DeserializeObject<StartTorsionExpansionJointEntity>(dataArrayItem.Data.ToString());
                 
@@ -128,6 +131,12 @@ namespace Start.Entities
                 
                 case StartElementType.AIR_COOLER:
                     return JsonConvert.DeserializeObject<StartAirCoolerEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.CAP:
+                    return JsonConvert.DeserializeObject<StartCapEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.CONNECTOR:
+                    return JsonConvert.DeserializeObject<StartConnectorEntity>(dataArrayItem.Data.ToString());
 
                 default:
                     return null;

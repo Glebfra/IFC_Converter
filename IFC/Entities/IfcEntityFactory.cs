@@ -89,6 +89,9 @@ namespace IFC.Entities
                 case StartElementType.WELDED_TEE:
                     return new IfcWeldedTeeEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
                 
+                case StartElementType.NONSTANDARD_TEE:
+                    return new IfcNonStandardTeeEntity((StartNonstandardTeeEntity)entity, nodeEntity, segmentEntities);
+                
                 case StartElementType.WELDOLET:
                     return new IfcWeldoletEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
 
@@ -112,6 +115,12 @@ namespace IFC.Entities
                 
                 case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
                     return new IfcConstantForceSupportHangerEntity((StartConstantForceSupportHangerEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.CAP:
+                    return new IfcCapEntity((StartCapEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.CONNECTOR:
+                    return new IfcConnectorEntity((StartConnectorEntity)entity, nodeEntity, segmentEntities);
 
                 default:
                     return null;

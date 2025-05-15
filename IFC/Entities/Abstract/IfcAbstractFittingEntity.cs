@@ -40,7 +40,7 @@ namespace IFC.Entities.Abstract
                     quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
                     {
                         weight.Name = "NetWeight";
-                        weight.WeightValue = ValueConverter.ValueConverter.TfToKg(_abstractFitting.Weight);
+                        weight.WeightValue = _abstractFitting.Weight.SIProperty;
                     }));
                 });
             });

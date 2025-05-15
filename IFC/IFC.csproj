@@ -26,7 +26,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -165,9 +165,12 @@
     <Compile Include="Entities\Equipments\Vertex\IfcVertexVesselEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcCapEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcConnectorEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcMilterJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcNonstandardExpansionJointEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcNonStandardTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcStubInEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcSweepoletEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcUniversalExpansionJointEntity.cs" />
@@ -203,10 +206,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\IfcAxis.cs" />
     <Compile Include="Tools\IfcGeometry.cs" />
+    <Compile Include="Tools\IfcGeometry.Extensions.cs">
+      <DependentUpon>IfcGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\IfcGeometry.Primitives.cs">
+      <DependentUpon>IfcGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\IfcGeometry.Profiles.cs">
+      <DependentUpon>IfcGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\IfcGeometry.ShapeTools.cs">
+      <DependentUpon>IfcGeometry.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
-    <Compile Include="Tools\IfcVertexPrimitives.cs" />
-    <Compile Include="ValueConverter\ValueConverter.cs" />
+    <Compile Include="Tools\IfcVertexGeometry.Primitives.cs">
+      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\IfcVertexGeometry.ShapeTools.cs">
+      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -36,9 +36,9 @@ namespace IFC.Entities.Segments
             Coordinates = NodeEntities[0].ObjectMatrix3D.Translation;
             XbimVector3D nodesDirection = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             XbimVector3D pipeProjection = new XbimVector3D(
-                startConeElementEntity.ProjectionAlongOXAxis,
-                startConeElementEntity.ProjectionAlongOYAxis,
-                startConeElementEntity.ProjectionAlongOZAxis
+                startConeElementEntity.ProjectionAlongOXAxis.SIProperty,
+                startConeElementEntity.ProjectionAlongOYAxis.SIProperty,
+                startConeElementEntity.ProjectionAlongOZAxis.SIProperty
             );
             Direction = (pipeProjection * XbimVector3D.DotProduct(nodesDirection, pipeProjection)).Normalized() * pipeProjection.Length;
             Length = Direction.Length;
@@ -52,8 +52,8 @@ namespace IFC.Entities.Segments
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
             
-            OuterDiameter = startConeElementEntity.Diameter;
-            SecondDiameter = startConeElementEntity.SecondDiameter;
+            OuterDiameter = startConeElementEntity.Diameter.SIProperty;
+            SecondDiameter = startConeElementEntity.SecondDiameter.SIProperty;
             OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);
             
             _OnLengthChanged += () => OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);
