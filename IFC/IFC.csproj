@@ -221,6 +221,9 @@
     </Compile>
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
+    <Compile Include="Tools\IfcVertexGeometry.Points.cs">
+      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\IfcVertexGeometry.Primitives.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
     </Compile>

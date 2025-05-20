@@ -56,8 +56,10 @@ namespace IFC.Extensions
 
         public static XbimMatrix3D CreateWorld(XbimVector3D translation, XbimVector3D forward)
         {
+            forward = forward.Normalized();
             XbimVector3D worldUp = forward.IsParallel(VectorExtensions.Z) ? VectorExtensions.Y : VectorExtensions.Z;
-            XbimVector3D up = XbimVector3D.CrossProduct(forward, worldUp);
+            XbimVector3D right = XbimVector3D.CrossProduct(forward, worldUp).Normalized();
+            XbimVector3D up = XbimVector3D.CrossProduct(forward, right).Normalized();
             return XbimMatrix3D.CreateWorld(translation, forward, up);
         }
 

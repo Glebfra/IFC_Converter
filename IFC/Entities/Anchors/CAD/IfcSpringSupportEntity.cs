@@ -66,12 +66,10 @@ namespace IFC.Entities.Anchors.CAD
             double stickHeight = _height / 3;
             representationItems[1] = IfcGeometry.CreateCylinder(model, stickRadius, stickHeight, stickCoordinates);
 
-            XbimVector3D springCoordinates = stickCoordinates;
             double springRadius = stickRadius * 2;
-            double springHeight = stickHeight;
             double springWireRadius = stickRadius / 2;
             const int springNumTurns = 5;
-            IfcCartesianPoint[] spiralPoints = IfcVertexGeometry.CreateSpiral(model, springRadius, springHeight, _numSegments, springNumTurns, springCoordinates);
+            IfcCartesianPoint[] spiralPoints = IfcVertexGeometry.CreateSpiral(model, springRadius, stickHeight, _numSegments, springNumTurns, stickCoordinates);
             IfcPolyline spiralPolyline = IfcVertexGeometry.CreatePolyline(model, spiralPoints);
             representationItems[2] = IfcGeometry.CreateSweptDiskSolid(model, spiralPolyline, springWireRadius);
 

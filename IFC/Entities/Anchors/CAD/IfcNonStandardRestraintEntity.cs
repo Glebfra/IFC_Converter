@@ -78,21 +78,22 @@ namespace IFC.Entities.Anchors.CAD
 
         private XbimVector3D CreateAnchorDirection(StartNonStandardRestraintModule restraintModule)
         {
+            const double PI_2 = Math.PI / 2;
             bool useLocalAxes = restraintModule.Local == StartRestraintAxesTypeEnum.LOCAL;
-            bool isAxisX = Math.Abs(restraintModule.AngleX.SIProperty - Math.PI) < 1e-3;
-            bool isAxisY = Math.Abs(restraintModule.AngleY.SIProperty - Math.PI) < 1e-3;
-            bool isAxisZ = Math.Abs(restraintModule.AngleZ.SIProperty - Math.PI) < 1e-3;
+
+            int xAxisFactor = (int)((restraintModule.AngleX.SIProperty - PI_2) / PI_2);
+            int yAxisFactor = (int)((restraintModule.AngleY.SIProperty - PI_2) / PI_2);
+            int zAxisFactor = (int)((restraintModule.AngleZ.SIProperty - PI_2) / PI_2);
 
             if (!useLocalAxes)
             {
-                return Convert.ToInt32(isAxisX) * VectorExtensions.X +
-                       Convert.ToInt32(isAxisY) * VectorExtensions.Y +
-                       Convert.ToInt32(isAxisZ) * VectorExtensions.Z.Negated();
+                return xAxisFactor * VectorExtensions.X +
+                       yAxisFactor * VectorExtensions.Y +
+                       zAxisFactor * VectorExtensions.Z.Negated();
             }
             
             foreach (IfcAbstractSegmentEntity segmentEntity in AbstractSegmentEntities)
             {
-                
                 if (segmentEntity.NodeEntities.All(item => item.ID != _nonStandardRestraint.SectionStartNode) ||
                     segmentEntity.NodeEntities.All(item => item.ID != _nonStandardRestraint.SectionEndNode))
                 {
@@ -105,9 +106,9 @@ namespace IFC.Entities.Anchors.CAD
                 XbimVector3D forward = endNode.ObjectMatrix3D.Translation - startNode.ObjectMatrix3D.Translation;
                 XbimMatrix3D fictiveObjectMatrix = MatrixExtensions.CreateWorld(XbimVector3D.Zero, forward);
                 
-                return Convert.ToInt32(isAxisX) * fictiveObjectMatrix.Forward + 
-                       Convert.ToInt32(isAxisY) * fictiveObjectMatrix.Right + 
-                       Convert.ToInt32(isAxisZ) * fictiveObjectMatrix.Up.Negated();
+                return xAxisFactor * fictiveObjectMatrix.Forward + 
+                       yAxisFactor * fictiveObjectMatrix.Right + 
+                       zAxisFactor * fictiveObjectMatrix.Up;
             }
             
             throw new NullReferenceException(nameof(IfcNonStandardRestraintEntity) + "Cannot find local axes");
@@ -115,8 +116,9 @@ namespace IFC.Entities.Anchors.CAD
 
         private IEnumerable<IfcRepresentationItem> CreateSingleAnchorShape(IModel model, XbimVector3D direction, XbimVector3D displacement, bool hasSpring)
         {
-            XbimVector3D refDirection = new XbimVector3D(direction.Y, direction.Z, direction.X);
-            XbimVector3D upDirection = XbimVector3D.CrossProduct(direction, refDirection);
+            XbimMatrix3D shapePlacementMatrix = MatrixExtensions.CreateWorld(displacement, direction.Negated());
+            XbimVector3D refDirection = shapePlacementMatrix.Right;
+            XbimVector3D upDirection = shapePlacementMatrix.Up;
             
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
 
