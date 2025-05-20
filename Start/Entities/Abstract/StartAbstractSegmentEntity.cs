@@ -30,12 +30,15 @@ namespace Start.Entities.Abstract
         public TemperatureProperty Temperature { get; set; } = TemperatureProperty.Zero;
 
         [JsonIgnore]
+        [StartIgnore]
         public LengthProperty InnerDiameter => new LengthProperty(Diameter.StartProperty - WallThickness.StartProperty);
         
         [JsonIgnore]
+        [StartIgnore]
         public PressureProperty[] PressureRange => new PressureProperty[] {Pressure, TestPressure};
         
         [JsonIgnore]
+        [StartIgnore]
         public TemperatureProperty[] TemperatureRange => new TemperatureProperty[] {Temperature, Temperature};
     }
 }

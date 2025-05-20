@@ -68,6 +68,9 @@ namespace IFC.Entities
                 case StartElementType.SADDLE_BEND:
                     return new IfcBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities);
                 
+                case StartElementType.NONSTANDARD_BEND:
+                    return new IfcBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities);
+                
                 case StartElementType.FABRICATED_TEE:
                     return new IfcFabricatedTeeEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
                 
@@ -116,6 +119,9 @@ namespace IFC.Entities
                 case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
                     return new IfcConstantForceSupportHangerEntity((StartConstantForceSupportHangerEntity)entity, nodeEntity, segmentEntities);
                 
+                case StartElementType.NONSTANDARD_RESTRAINT:
+                    return new IfcNonStandardRestraintEntity((StartNonStandardRestraint)entity, nodeEntity, segmentEntities);
+                
                 case StartElementType.CAP:
                     return new IfcCapEntity((StartCapEntity)entity, nodeEntity, segmentEntities);
                 
@@ -149,6 +155,9 @@ namespace IFC.Entities
                 case StartElementType.PRE_STRESSED_PIPE_BEND:
                 case StartElementType.SADDLE_BEND:
                     return new IfcVertexBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.NONSTANDARD_BEND:
+                    return new IfcVertexBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 case StartElementType.FLANGE:
                     return new IfcVertexFlangeEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
