@@ -44,6 +44,7 @@ namespace IFC.Entities.Segments
             Length = Direction.Length;
             Direction = Direction.Normalized();
             
+            //TODO change to MatrixExtensions
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = Direction.Normalized();
             if (forward == WorldUp || forward == -1 * WorldUp) 

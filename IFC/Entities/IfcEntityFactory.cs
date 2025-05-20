@@ -119,6 +119,9 @@ namespace IFC.Entities
                 case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
                     return new IfcConstantForceSupportHangerEntity((StartConstantForceSupportHangerEntity)entity, nodeEntity, segmentEntities);
                 
+                case StartElementType.NONSTANDARD_RESTRAINT:
+                    return new IfcNonStandardRestraintEntity((StartNonStandardRestraint)entity, nodeEntity, segmentEntities);
+                
                 case StartElementType.CAP:
                     return new IfcCapEntity((StartCapEntity)entity, nodeEntity, segmentEntities);
                 

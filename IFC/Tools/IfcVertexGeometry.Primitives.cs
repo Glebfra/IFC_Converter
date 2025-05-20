@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using IFC.Extensions;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -19,7 +20,7 @@ namespace IFC.Tools
             IfcCartesianPoint[] botCircle = CreateCircle(model, radius, coordinates, numSegments, xAxis, yAxis);
             IfcCartesianPoint topPoint = (coordinates + zAxis * height).ToCartesianPoint(model);
             
-            return IfcVertexGeometry.CreateCone(model, botCircle, topPoint);
+            return CreateCone(model, botCircle, topPoint);
         }
 
         public static IfcFacetedBrep CreateClippedCone(IModel model, double botRadius, double topRadius, double height, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
@@ -29,16 +30,16 @@ namespace IFC.Tools
             XbimVector3D zAxis = XbimVector3D.CrossProduct(xAxis, yAxis).Normalized();
             XbimVector3D topCoordinates = coordinates + height * zAxis;
             
-            IfcCartesianPoint[] botCircle = IfcVertexGeometry.CreateCircle(model, botRadius, coordinates, numSegments, xAxis, yAxis);
-            IfcCartesianPoint[] topCircle = IfcVertexGeometry.CreateCircle(model, topRadius, topCoordinates, numSegments, xAxis, yAxis);
+            IfcCartesianPoint[] botCircle = CreateCircle(model, botRadius, coordinates, numSegments, xAxis, yAxis);
+            IfcCartesianPoint[] topCircle = CreateCircle(model, topRadius, topCoordinates, numSegments, xAxis, yAxis);
 
-            return IfcVertexGeometry.CreateClippedCone(model, botCircle, topCircle);
+            return CreateClippedCone(model, botCircle, topCircle);
         }
 
         public static IfcFacetedBrep CreateSphere(IModel model, double radius, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
         {
-            IfcCartesianPoint[,] spherePoints = IfcVertexGeometry.CreateSpherePoints(model, radius, coordinates, numSegments, xAxis, yAxis);
-            return IfcVertexGeometry.CreateSphere(model, spherePoints);
+            IfcCartesianPoint[,] spherePoints = CreateSpherePoints(model, radius, coordinates, numSegments, xAxis, yAxis);
+            return CreateSphere(model, spherePoints);
         }
 
         public static IfcFacetedBrep CreateCone(IModel model, IfcCartesianPoint[] points, IfcCartesianPoint topPoint)
@@ -160,8 +161,12 @@ namespace IFC.Tools
             return points;
         }
 
-        public static IfcCartesianPoint[] CreateSpiral(IModel model, double radius, double height, int numSegments, int numTurns, XbimVector3D displacement)
+        public static IfcCartesianPoint[] CreateSpiral(IModel model, double radius, double height, int numSegments, int numTurns, XbimVector3D displacement, XbimVector3D xAxis, XbimVector3D yAxis)
         {
+            xAxis = xAxis.Normalized();
+            yAxis = yAxis.Normalized();
+            XbimVector3D zAxis = XbimVector3D.CrossProduct(xAxis, yAxis).Normalized();
+            
             double pitch = height / numTurns;
             
             IfcCartesianPoint[] points = new IfcCartesianPoint[numTurns * numSegments];
@@ -170,15 +175,20 @@ namespace IFC.Tools
                 double factor = i / (double)numSegments;
                 double angle = 2 * Math.PI * factor;
                 
-                double x = radius * Math.Cos(angle);
-                double y = radius * Math.Sin(angle);
-                double z = pitch * factor;
+                XbimVector3D x = xAxis * radius * Math.Cos(angle);
+                XbimVector3D y = yAxis * radius * Math.Sin(angle);
+                XbimVector3D z = zAxis * pitch * factor;
                 
-                XbimVector3D point = new XbimVector3D(x, y, z) + displacement;
+                XbimVector3D point = x + y + z + displacement;
                 points[i] = IfcAxis.CreatePoint(model, point);
             }
 
             return points;
+        }
+        
+        public static IfcCartesianPoint[] CreateSpiral(IModel model, double radius, double height, int numSegments, int numTurns, XbimVector3D displacement)
+        {
+            return CreateSpiral(model, radius, height, numSegments, numTurns, displacement, VectorExtensions.X, VectorExtensions.Y);
         }
     }
 }

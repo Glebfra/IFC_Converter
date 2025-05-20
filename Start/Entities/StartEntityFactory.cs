@@ -111,6 +111,9 @@ namespace Start.Entities
                 case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
                     return JsonConvert.DeserializeObject<StartConstantForceSupportHangerEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.NONSTANDARD_RESTRAINT:
+                    return JsonConvert.DeserializeObject<StartNonStandardRestraint>(dataArrayItem.Data.ToString());
+                
                 case StartElementType.VESSEL:
                     return JsonConvert.DeserializeObject<StartVesselEntity>(dataArrayItem.Data.ToString());
                 

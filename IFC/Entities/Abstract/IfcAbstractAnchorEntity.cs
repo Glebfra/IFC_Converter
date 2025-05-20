@@ -11,12 +11,13 @@ using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.Entities.Abstract
 {
-    public abstract class IfcAbstractAnchorEntity : IfcAbstractEntity, IIfcOneNodeEntity
+    public abstract class IfcAbstractAnchorEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
     {
         public IfcNodeEntity NodeEntity { get; }
+        public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
+        
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-
-        protected IfcAbstractSegmentEntity[] _IfcAbstractSegmentEntities;
+        
         protected double _PipeDiameter;
         protected bool _IsVertical;
 
@@ -28,7 +29,7 @@ namespace IFC.Entities.Abstract
             _abstractEntity = abstractEntity;
             NodeEntity = nodeEntity;
             
-            _IfcAbstractSegmentEntities = segmentEntities;
+            AbstractSegmentEntities = segmentEntities;
             _PipeDiameter = segmentEntities[0].OuterDiameter;
             _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward.IsParallel(VectorExtensions.Z);
 
