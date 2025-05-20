@@ -5,10 +5,12 @@ namespace IFC.Entities
 {
     public class IfcNodeEntity
     {
+        public readonly int ID;
         public readonly XbimMatrix3D ObjectMatrix3D;
 
         public IfcNodeEntity(StartNodeEntity nodeEntity)
         {
+            ID = nodeEntity.ID;
             XbimVector3D coordinates = new XbimVector3D(
                 nodeEntity.XCoord.SIProperty,
                 nodeEntity.YCoord.SIProperty,

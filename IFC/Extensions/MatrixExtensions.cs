@@ -54,11 +54,25 @@ namespace IFC.Extensions
             );
         }
 
+        public static XbimMatrix3D CreateWorld(XbimVector3D translation, XbimVector3D forward)
+        {
+            forward = forward.Normalized();
+            XbimVector3D worldUp = forward.IsParallel(VectorExtensions.Z) ? VectorExtensions.Y : VectorExtensions.Z;
+            XbimVector3D right = XbimVector3D.CrossProduct(forward, worldUp).Normalized();
+            XbimVector3D up = XbimVector3D.CrossProduct(forward, right).Normalized();
+            return XbimMatrix3D.CreateWorld(translation, forward, up);
+        }
+
         public static XbimMatrix3D Translate(this XbimMatrix3D matrix3D, XbimVector3D translationVector)
         {
             matrix3D.OffsetX += translationVector.X;
             matrix3D.OffsetY += translationVector.Y;
             matrix3D.OffsetZ += translationVector.Z;
+            return matrix3D;
+        }
+
+        public static XbimMatrix3D Copy(this XbimMatrix3D matrix3D)
+        {
             return matrix3D;
         }
     }

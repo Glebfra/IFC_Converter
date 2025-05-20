@@ -148,6 +148,8 @@
     <Compile Include="API\StartElementType.cs" />
     <Compile Include="API\StartLeakageCheckEnum.cs" />
     <Compile Include="API\StartManufacturingTechnologyEnum.cs" />
+    <Compile Include="API\StartRestraintAxesTypeEnum.cs" />
+    <Compile Include="API\StartRestraintTypeEnum.cs" />
     <Compile Include="API\StartPermissibleLoadsEnum.cs" />
     <Compile Include="API\StartPropertyName.cs" />
     <Compile Include="Entities\Abstract\StartAbstractAnchorEntity.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Entities\Anchors\StartGuideDoubleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartGuideSingleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartHingedAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\StartNonStandardRestraint.cs" />
     <Compile Include="Entities\Anchors\StartRigidHangerEntity.cs" />
     <Compile Include="Entities\Anchors\StartSlidingSupportEntity.cs" />
     <Compile Include="Entities\Anchors\StartSpringSupportEntity.cs" />
@@ -191,6 +194,7 @@
     <Compile Include="Entities\Segments\StartRigidElementEntity.cs" />
     <Compile Include="Entities\StartEntityFactory.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
+    <Compile Include="Entities\StartNonStandardRestraintModule.cs" />
     <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

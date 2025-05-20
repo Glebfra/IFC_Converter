@@ -2,6 +2,23 @@
 {
     public static class StartPropertyName
     {
+        public const string Restraint1 = "restraint1";
+        public const string Restraint2 = "restraint2";
+        public const string Restraint3 = "restraint3";
+        public const string Restraint4 = "restraint4";
+        public const string Restraint5 = "restraint5";
+        public const string Restraint6 = "restraint6";
+        public const string RestraintType = "type";
+        public const string RestraintAxesType = "local";
+        public const string RestraintAngleX = "x";
+        public const string RestraintAngleY = "y";
+        public const string RestraintAngleZ = "z";
+        public const string RestraintFrictionCoefficient = "kfric";
+        public const string RestraintLength = "len";
+        public const string RestraintGapPlus = "gapp";
+        public const string RestraintGapMinus = "gapm";
+        public const string RestraintFlexibility = "flex";
+        
         public const string AllowableAxialExpansion = "2";
         public const string FlexibleElementLength = "2";
         public const string AirCoolerLength = "2";
@@ -67,6 +84,8 @@
         public const string Mx = "269";
         public const string My = "270";
         public const string Mz = "271";
+        public const string SectionStartNode = "291";
+        public const string SectionEndNode = "292";
         public const string UniformWeight = "311";
         public const string ConnectionType = "370";
         public const string GasketCrossection = "387";

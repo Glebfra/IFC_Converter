@@ -8,8 +8,6 @@ namespace IFC.Extensions
 {
     public static class VectorExtensions
     {
-        private const double TOLERANCE = 1e-3;
-
         public static XbimVector3D X => new XbimVector3D(1, 0, 0);
         public static XbimVector3D Y => new XbimVector3D(0, 1, 0);
         public static XbimVector3D Z => new XbimVector3D(0, 0, 1);
@@ -23,9 +21,9 @@ namespace IFC.Extensions
             return Math.Acos(XbimVector3D.DotProduct(first, second) / (first.Length * second.Length));
         }
 
-        public static bool IsParallel(this XbimVector3D v1, XbimVector3D v2)
+        public static bool IsParallel(this XbimVector3D v1, XbimVector3D v2, double tolerance = 1e-3)
         {
-            return Math.Abs(1 / (v1.Length * v2.Length) * Math.Abs(XbimVector3D.DotProduct(v1, v2)) - 1) < TOLERANCE;
+            return Math.Abs(1 / (v1.Length * v2.Length) * Math.Abs(XbimVector3D.DotProduct(v1, v2)) - 1) < tolerance;
         }
         
         public static IfcDirection ToIfcDirection(this XbimVector3D vector, IModel model)
