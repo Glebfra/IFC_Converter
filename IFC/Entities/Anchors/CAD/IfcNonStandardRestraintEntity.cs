@@ -65,11 +65,30 @@ namespace IFC.Entities.Anchors.CAD
                 bool isDoubleSided = restraintModule.Type != StartRestraintTypeEnum.RIGID_ONE_SIDED;
 
                 XbimVector3D direction = CreateAnchorDirection(restraintModule);
+                IEnumerable<XbimVector3D> segmentDirections = AbstractSegmentEntities.Select(entity => entity.Direction);
+                bool isParallel = segmentDirections.Any(segmentDirection => segmentDirection.IsParallel(direction));
 
-                representationItems.AddRange(CreateSingleAnchorShape(model, direction, displacement - _height * direction, hasSpring));
+                XbimVector3D[] displacements;
+                if (isParallel)
+                {
+                    displacements = new XbimVector3D[]
+                    {
+                        displacement - _height * direction + _PipeDiameter * VectorExtensions.Z,
+                        displacement + _height * direction + _PipeDiameter * VectorExtensions.Z
+                    };
+                }
+                else
+                {
+                    displacements = new XbimVector3D[]
+                    {
+                        displacement - _height * direction,
+                        displacement + _height * direction
+                    };
+                }
+                representationItems.AddRange(CreateSingleAnchorShape(model, direction, displacements[0], hasSpring));
                 if (isDoubleSided)
                 {
-                    representationItems.AddRange(CreateSingleAnchorShape(model, direction.Negated(), displacement + _height * direction, hasSpring));
+                    representationItems.AddRange(CreateSingleAnchorShape(model, direction.Negated(), displacements[1], hasSpring));
                 }
             }
 
