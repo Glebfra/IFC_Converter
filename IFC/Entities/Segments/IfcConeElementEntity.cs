@@ -44,15 +44,9 @@ namespace IFC.Entities.Segments
             Length = Direction.Length;
             Direction = Direction.Normalized();
             
-            //TODO change to MatrixExtensions
-            XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = Direction.Normalized();
-            if (forward == WorldUp || forward == -1 * WorldUp) 
-                WorldUp = new XbimVector3D(0, 1, 0);
-            XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
-            
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
-            
+            ObjectMatrix3D = MatrixExtensions.CreateWorld(Coordinates, forward);
+
             OuterDiameter = startConeElementEntity.Diameter.SIProperty;
             SecondDiameter = startConeElementEntity.SecondDiameter.SIProperty;
             OuterSurfaceArea = MathExtensions.CalculateClippedConeArea(OuterDiameter / 2, SecondDiameter / 2, Length);

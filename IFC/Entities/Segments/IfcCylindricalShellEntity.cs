@@ -26,14 +26,9 @@ namespace IFC.Entities.Segments
             Direction = ifcNodeEntities[1].ObjectMatrix3D.Translation - Coordinates;
             Length = Direction.Length;
 
-            //TODO change to MatrixExtensions
-            XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = Direction.Normalized();
-            if (forward == WorldUp || forward == -1 * WorldUp) 
-                WorldUp = new XbimVector3D(0, 1, 0);
-            XbimVector3D up = XbimVector3D.CrossProduct(forward, WorldUp);
-            
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(Coordinates, forward, up);
+            ObjectMatrix3D = MatrixExtensions.CreateWorld(Coordinates, forward);
+
             OuterDiameter = _startPipeEntity.Diameter.SIProperty;
             OuterSurfaceArea = MathExtensions.CalculateCylinderArea(OuterDiameter / 2, Length);
             
