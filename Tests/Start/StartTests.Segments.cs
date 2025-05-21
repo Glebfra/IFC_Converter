@@ -36,5 +36,29 @@ namespace Tests.Start
             Assert.AreEqual(0, startPipeEntity.ZCoord.StartProperty, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.AdditionalWeightLoad.StartProperty, TOLERANCE);
         }
+
+        [Test]
+        public void FlexibleElementTest()
+        {
+            StartFlexibleElementEntity flexibleElementEntity = _startDataArrayItems.FirstOrDefault(item => item.Type == StartElementType.FLEXIBLE_ELEMENT)?.Entity as StartFlexibleElementEntity;
+            
+            Assert.NotNull(flexibleElementEntity);
+            Assert.True(flexibleElementEntity.Type == StartElementType.FLEXIBLE_ELEMENT);
+            Assert.True(flexibleElementEntity.Name == "I'm flexible");
+            Assert.AreEqual(1, flexibleElementEntity.Length.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.ProjectionAlongOXAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(1, flexibleElementEntity.ProjectionAlongOYAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.ProjectionAlongOZAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.02193, flexibleElementEntity.PipeUnitWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.Pressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.Temperature.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.TestPressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(153.06, flexibleElementEntity.UniformWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoad.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoadAlongTheXAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoadAlongTheYAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoadAlongTheZAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, flexibleElementEntity.Diameter.StartProperty, TOLERANCE);
+        }
     }
 }
