@@ -11,10 +11,12 @@ namespace Start.Entities.Abstract
     public abstract class StartAbstractEntity
     {
         [JsonIgnore] 
-        public int ID;
+        [StartIgnore]
+        public int ID { get; set; }
         
         [JsonIgnore]
-        public StartElementType Type = StartElementType.ALL;
+        [StartIgnore]
+        public StartElementType Type { get; set; } = StartElementType.ALL;
 
         public Dictionary<string, string> GetData()
         {
@@ -27,6 +29,9 @@ namespace Start.Entities.Abstract
         {
             foreach (PropertyInfo propertyInfo in type.GetProperties())
             {
+                if (propertyInfo.GetCustomAttribute<StartIgnoreAttribute>() != null)
+                    continue;
+                
                 object? value = propertyInfo.GetValue(@object);
                 string newPropertyName = propertyName != null ? $"{propertyName}_{propertyInfo.Name}" : propertyInfo.Name;
                 switch (value)

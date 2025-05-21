@@ -151,6 +151,7 @@
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideDoubleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideSingleDirectionSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\CAD\IfcNonStandardRestraintEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcRigidHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcSpringHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
@@ -220,6 +221,9 @@
     </Compile>
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
+    <Compile Include="Tools\IfcVertexGeometry.Points.cs">
+      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\IfcVertexGeometry.Primitives.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
     </Compile>

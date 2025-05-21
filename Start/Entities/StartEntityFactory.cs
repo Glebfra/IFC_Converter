@@ -51,6 +51,9 @@ namespace Start.Entities
                 case StartElementType.MILTER_JOINT:
                     return JsonConvert.DeserializeObject<StartBendEntity>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.NONSTANDARD_BEND:
+                    return JsonConvert.DeserializeObject<StartNonStandardBendEntity>(dataArrayItem.Data.ToString());
+                
                 case StartElementType.FLEXIBLE_ELEMENT:
                     return JsonConvert.DeserializeObject<StartFlexibleElementEntity>(dataArrayItem.Data.ToString());
                 
@@ -107,6 +110,9 @@ namespace Start.Entities
                 
                 case StartElementType.CONSTANT_FORCE_SUPPORT_HANGER:
                     return JsonConvert.DeserializeObject<StartConstantForceSupportHangerEntity>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.NONSTANDARD_RESTRAINT:
+                    return JsonConvert.DeserializeObject<StartNonStandardRestraint>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.VESSEL:
                     return JsonConvert.DeserializeObject<StartVesselEntity>(dataArrayItem.Data.ToString());
