@@ -24,6 +24,7 @@ namespace IFC.Entities.Fittings.CAD
         {
             _pipeFitting = CreateTeeEntity(model);
             AddProperties(model, _pipeFitting);
+            ClipPipes();
             return _pipeFitting;
         }
     }
