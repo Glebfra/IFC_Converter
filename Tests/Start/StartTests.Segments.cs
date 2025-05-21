@@ -53,12 +53,69 @@ namespace Tests.Start
             Assert.AreEqual(0, flexibleElementEntity.Pressure.StartProperty, TOLERANCE);
             Assert.AreEqual(0, flexibleElementEntity.Temperature.StartProperty, TOLERANCE);
             Assert.AreEqual(0, flexibleElementEntity.TestPressure.StartProperty, TOLERANCE);
-            Assert.AreEqual(153.06, flexibleElementEntity.UniformWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(1.5, flexibleElementEntity.UniformWeight.StartProperty, TOLERANCE);
             Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoad.StartProperty, TOLERANCE);
             Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoadAlongTheXAxis.StartProperty, TOLERANCE);
             Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoadAlongTheYAxis.StartProperty, TOLERANCE);
             Assert.AreEqual(0, flexibleElementEntity.AdditionalWeightLoadAlongTheZAxis.StartProperty, TOLERANCE);
             Assert.AreEqual(0, flexibleElementEntity.Diameter.StartProperty, TOLERANCE);
+        }
+
+        [Test]
+        public void RigidElementTest()
+        {
+            StartRigidElementEntity rigidElementEntity = _startDataArrayItems.FirstOrDefault(item => item.Type == StartElementType.RIGID_ELEMENT)?.Entity as StartRigidElementEntity;
+            
+            Assert.NotNull(rigidElementEntity);
+            Assert.True(rigidElementEntity.Type == StartElementType.RIGID_ELEMENT);
+            Assert.True(rigidElementEntity.Name == "I'm rigid");
+            Assert.True(rigidElementEntity.MaterialName == "A105");
+            Assert.AreEqual(0, rigidElementEntity.Diameter.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, rigidElementEntity.InnerDiameter.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, rigidElementEntity.InnerDiameter.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.02193, rigidElementEntity.PipeUnitWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, rigidElementEntity.Pressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, rigidElementEntity.ProjectionAlongOXAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.1, rigidElementEntity.ProjectionAlongOYAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, rigidElementEntity.ProjectionAlongOZAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(50, rigidElementEntity.Temperature.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, rigidElementEntity.TestPressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, rigidElementEntity.WallThickness.StartProperty, TOLERANCE);
+        }
+
+        [Test]
+        public void ConeElementTest()
+        {
+            StartConeElementEntity coneElementEntity = _startDataArrayItems.FirstOrDefault(item => item.Type == StartElementType.CONE_ELEMENT)?.Entity as StartConeElementEntity;
+            
+            Assert.NotNull(coneElementEntity);
+            Assert.True(coneElementEntity.Type == StartElementType.CONE_ELEMENT);
+            Assert.True(coneElementEntity.Name == "I'm cone");
+            Assert.True(coneElementEntity.MaterialName == "A105");
+            Assert.True(coneElementEntity.ManufacturingTechnologyEnum == StartManufacturingTechnologyEnum.ELECTRIC_WELDED);
+            Assert.AreEqual(0, coneElementEntity.AdditionalWeightLoad.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.AdditionalWeightLoadAlongTheXAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.AdditionalWeightLoadAlongTheYAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.AdditionalWeightLoadAlongTheZAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.CorrosionAllowance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.1, coneElementEntity.Diameter.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.09, coneElementEntity.InnerDiameter.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.InsulationUnitWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(1, coneElementEntity.LongitudinalWeldJointFactor.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.MillTolerance.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.00707, coneElementEntity.PipeUnitWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.Pressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.ProductUnitWeight.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.ProjectionAlongOXAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.1, coneElementEntity.ProjectionAlongOYAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.ProjectionAlongOZAxis.StartProperty, TOLERANCE);
+            Assert.AreEqual(0.05, coneElementEntity.SecondDiameter.StartProperty, TOLERANCE);
+            Assert.AreEqual(1, coneElementEntity.StrengthFactorOfTheTraverseWeld.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.Temperature.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.TestPressure.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.XCoord.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.YCoord.StartProperty, TOLERANCE);
+            Assert.AreEqual(0, coneElementEntity.ZCoord.StartProperty, TOLERANCE);
         }
     }
 }

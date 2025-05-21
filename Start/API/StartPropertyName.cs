@@ -118,9 +118,9 @@
         public const string GasketEffectiveDiameter = "720";
         public const string NominalPressure = "722";
         public const string PermissibleExcessFactor = "749";
-        public const string ConeElementSecondDiameter = "749";
         public const string FShaftXAxisAngle = "750";
         public const string FShaftYAxisAngle = "751";
+        public const string ConeElementSecondDiameter = "838";
         public const string VesselFrad = "853";
         public const string VesselFvert = "854";
         public const string VesselFshaft = "855";
