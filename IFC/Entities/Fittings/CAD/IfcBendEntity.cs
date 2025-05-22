@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -31,8 +32,9 @@ namespace IFC.Entities.Fittings.CAD
                 XbimVector3D.Zero, VectorExtensions.Forward, VectorExtensions.Right
             );
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, pipeBend);
-
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, pipeBend);
+            
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.Name = _bendEntity.Name;

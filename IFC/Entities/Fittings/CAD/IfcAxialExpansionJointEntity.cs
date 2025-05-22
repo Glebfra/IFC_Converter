@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -37,6 +38,8 @@ namespace IFC.Entities.Fittings.CAD
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolids);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, extrudedAreaSolids);
+            
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.ObjectPlacement = objectPlacement.LocalPlacement;

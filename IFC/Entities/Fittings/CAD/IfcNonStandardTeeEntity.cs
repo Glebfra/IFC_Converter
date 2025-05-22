@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -24,6 +25,7 @@ namespace IFC.Entities.Fittings.CAD
         {
             _pipeFitting = CreateTeeEntity(model);
             AddProperties(model, _pipeFitting);
+            ClipPipes();
             return _pipeFitting;
         }
     }

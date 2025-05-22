@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using IFC.Extensions;
+﻿using IFC.Extensions;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;

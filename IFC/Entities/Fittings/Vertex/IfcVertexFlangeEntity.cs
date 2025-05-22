@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -33,7 +34,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length.SIProperty;
-            Radiuses = abstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
+            Radiuses = abstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
     
         public override IfcProduct CreateAndAdd(IModel model)
@@ -69,6 +70,7 @@ namespace IFC.Entities.Fittings.Vertex
                 IfcVertexGeometry.CreateClippedCone(model, circles[5], circles[6]),
                 IfcVertexGeometry.CreateClippedCone(model, circles[6], circles[7]),
             };
+            ColourEntity(model, facetedBreps);
 
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);

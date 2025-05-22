@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -33,7 +34,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             _reducerEntity = reducerEntity;
             AbstractSegmentEntities = abstractSegmentEntities
-                .OrderBy(entity => entity.OuterDiameter)
+                .OrderBy(entity => entity.Diameter)
                 .ToArray();
 
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
@@ -50,11 +51,12 @@ namespace IFC.Entities.Fittings.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IfcCartesianPoint[] lowerCircle = CreateCircle(model, AbstractSegmentEntities[0].OuterDiameter / 2, 0, 0);
-            IfcCartesianPoint[] upperCircle = CreateCircle(model, AbstractSegmentEntities[1].OuterDiameter / 2, Length, _pipeDisplacement);
+            IfcCartesianPoint[] lowerCircle = CreateCircle(model, AbstractSegmentEntities[0].Diameter / 2, 0, 0);
+            IfcCartesianPoint[] upperCircle = CreateCircle(model, AbstractSegmentEntities[1].Diameter / 2, Length, _pipeDisplacement);
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, lowerCircle, upperCircle);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, facetedBrep);
         
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
@@ -134,7 +136,7 @@ namespace IFC.Entities.Fittings.Vertex
             if ((ifcAbstractSegmentEntity.NodeEntities[0].ObjectMatrix3D.Translation - NodeEntity.ObjectMatrix3D.Translation).Length <
                 (ifcAbstractSegmentEntity.NodeEntities[1].ObjectMatrix3D.Translation - NodeEntity.ObjectMatrix3D.Translation).Length)
             {
-                ifcAbstractSegmentEntity.Coordinates += ObjectMatrix3D.Up * _pipeDisplacement;
+                ifcAbstractSegmentEntity.Coordinates.Value += ObjectMatrix3D.Up * _pipeDisplacement;
             }
         }
     }

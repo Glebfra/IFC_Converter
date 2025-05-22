@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -45,6 +46,7 @@ namespace IFC.Entities.Fittings.Vertex
             IfcFacetedBrep brep = CreateFacetedBrep(model, points);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, brep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, brep);
             
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {

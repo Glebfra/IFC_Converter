@@ -1,4 +1,5 @@
 ﻿using System;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -65,15 +66,11 @@ namespace IFC.Entities.Abstract
             IfcExtrudedAreaSolid[] teeExtrudedArea = new IfcExtrudedAreaSolid[2];
             teeExtrudedArea[0] = CreateBranch(model);
             teeExtrudedArea[1] = CreateHead(model);
-            
-            foreach (IfcAbstractSegmentEntity branchPipe in _BranchPipes)
-            {
-                branchPipe.Clip(NodeEntity, Length / 2);
-            }
-            _HeadPipe.Clip(NodeEntity, Height);
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, teeExtrudedArea);
+            
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.Name = _startTeeEntity.Name;
@@ -88,7 +85,7 @@ namespace IFC.Entities.Abstract
 
         private IfcExtrudedAreaSolid CreateBranch(IModel model)
         {
-            double circleRadius = _BranchPipes[0].OuterDiameter / 2;
+            double circleRadius = _BranchPipes[0].Diameter / 2;
             XbimVector3D coordinates = Length / 2 * VectorExtensions.Forward.Negated();
             return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
         }
@@ -97,11 +94,20 @@ namespace IFC.Entities.Abstract
         {
             XbimVector3D directionToHeadPipe = IfcAxis.GetDirectionToPipe(_HeadPipe, ObjectMatrix3D.Translation);
 
-            double circleRadius = _HeadPipe.OuterDiameter / 2;
+            double circleRadius = _HeadPipe.Diameter / 2;
             XbimVector3D coordinates = XbimVector3D.Zero;
             XbimVector3D forward = VectorExtensions.Forward.RotateAroundYAxis(Angle);
             XbimVector3D right = VectorExtensions.Right.RotateAroundYAxis(Angle);
             return IfcGeometry.CreateCylinder(model, circleRadius, Height, coordinates, forward, right);
+        }
+        
+        protected void ClipPipes()
+        {
+            foreach (IfcAbstractSegmentEntity branchPipe in _BranchPipes)
+            {
+                branchPipe.Clip(NodeEntity, Length / 2);
+            }
+            _HeadPipe.Clip(NodeEntity, Height);
         }
 
         protected override void AddProperties(IModel model, IfcProduct product)

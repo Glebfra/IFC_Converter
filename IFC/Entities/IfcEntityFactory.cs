@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors.CAD;
 using IFC.Entities.Anchors.Vertex;
 using IFC.Entities.Equipments.Vertex;
@@ -21,7 +22,7 @@ namespace IFC.Entities
             switch (entity.Type)
             {
                 case StartElementType.PIPE_ELEMENT:
-                    return new IfcPipeEntity((StartPipeEntity)entity, nodeEntities);
+                    return new IfcPipeSegmentEntity((StartPipeEntity)entity, nodeEntities);
                 
                 case StartElementType.CONE_ELEMENT:
                     return new IfcConeElementEntity((StartConeElementEntity)entity, nodeEntities);

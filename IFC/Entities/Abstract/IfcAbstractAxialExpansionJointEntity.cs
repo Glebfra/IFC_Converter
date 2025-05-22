@@ -1,4 +1,5 @@
-﻿using Start.Entities.Fittings;
+﻿using IFC.Entities.Abstract.Segments;
+using Start.Entities.Fittings;
 
 namespace IFC.Entities.Abstract
 {

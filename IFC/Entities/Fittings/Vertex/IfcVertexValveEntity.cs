@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -30,7 +31,7 @@ namespace IFC.Entities.Fittings.Vertex
             _numSegments = numSegments;
             
             Length = _armatureEntity.Length.SIProperty;
-            Diameter = Math.Max(abstractSegmentEntities[0].OuterDiameter, abstractSegmentEntities[1].OuterDiameter) * 1.5;
+            Diameter = Math.Max(abstractSegmentEntities[0].Diameter, abstractSegmentEntities[1].Diameter) * 1.5;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
@@ -48,6 +49,7 @@ namespace IFC.Entities.Fittings.Vertex
             IfcFacetedBrep lowerBrep = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
             IfcFacetedBrep upperBrep = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
             IfcBooleanResult result = IfcGeometry.CreateBooleanResult(model, lowerBrep, upperBrep, IfcBooleanOperator.UNION);
+            ColourEntity(model, result);
             
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, result);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);

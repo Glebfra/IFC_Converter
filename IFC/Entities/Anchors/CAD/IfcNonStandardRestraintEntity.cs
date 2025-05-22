@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.API;
@@ -41,6 +42,7 @@ namespace IFC.Entities.Anchors.CAD
             IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, representationItems);
 
             _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {

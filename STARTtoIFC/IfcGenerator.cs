@@ -4,6 +4,7 @@ using System.Linq;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using Start;
 using Start.API;
 using Start.Entities;

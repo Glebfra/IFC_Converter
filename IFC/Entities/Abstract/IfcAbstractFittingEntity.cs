@@ -1,4 +1,6 @@
-﻿using Start.Entities.Abstract;
+﻿using IFC.Entities.Abstract.Segments;
+using IFC.Tools;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProductExtension;
@@ -10,6 +12,7 @@ namespace IFC.Entities.Abstract
     {
         public double Diameter { get; protected set; }
         public abstract double Length { get; protected set; }
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("5f4e7c");
 
         private StartAbstractFittingEntity _abstractFitting;
 
@@ -17,7 +20,7 @@ namespace IFC.Entities.Abstract
             : base(abstractFitting, ifcNodeEntity, abstractSegmentEntities)
         {
             _abstractFitting = abstractFitting;
-            Diameter = AbstractSegmentEntities[0].OuterDiameter;
+            Diameter = AbstractSegmentEntities[0].Diameter;
         }
         
         protected override void AddProperties(IModel model, IfcProduct product)

@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -35,7 +36,7 @@ namespace IFC.Entities.Fittings.Vertex
 
             _torusAngleStep = Angle / (_numSegments - 1);
             _torusRadius = _bendEntity.Radius.SIProperty;
-            _circleRadius = Math.Min(AbstractSegmentEntities[0].OuterDiameter / 2, AbstractSegmentEntities[1].OuterDiameter / 2);
+            _circleRadius = Math.Min(AbstractSegmentEntities[0].Diameter / 2, AbstractSegmentEntities[1].Diameter / 2);
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
@@ -46,6 +47,7 @@ namespace IFC.Entities.Fittings.Vertex
             IfcFacetedBrep brep = CreateFacetedBrep(model, ifcCartesianPoints);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, brep);
             
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {

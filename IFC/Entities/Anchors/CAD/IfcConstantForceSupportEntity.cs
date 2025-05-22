@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Anchors;
@@ -37,6 +38,7 @@ namespace IFC.Entities.Anchors.CAD
             IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, _PipeDiameter / 2 * VectorExtensions.Forward);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, representationItems);
             
             _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {

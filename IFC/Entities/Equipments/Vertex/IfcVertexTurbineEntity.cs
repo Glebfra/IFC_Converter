@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Equipments;
@@ -17,6 +18,8 @@ namespace IFC.Entities.Equipments.Vertex
 {
     public class IfcVertexTurbineEntity : IfcAbstractConnectorEntity
     {
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("695689");
+        
         private int _numSegments;
         private double _length;
         
@@ -29,7 +32,7 @@ namespace IFC.Entities.Equipments.Vertex
             _turbineEntity = turbineEntity;
             
             _numSegments = numSegments;
-            _length = AbstractSegmentEntities[0].OuterDiameter / 2;
+            _length = AbstractSegmentEntities[0].Diameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
@@ -39,6 +42,7 @@ namespace IFC.Entities.Equipments.Vertex
             IEnumerable<IfcFacetedBrep> facetedBreps = CreateFlange(model);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, facetedBreps);
             
             _ifcFan = model.Instances.New<IfcFan>(fitting =>
             {
@@ -64,7 +68,7 @@ namespace IFC.Entities.Equipments.Vertex
                 0.1 * _length * VectorExtensions.Z,
             };
             
-            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
+            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {

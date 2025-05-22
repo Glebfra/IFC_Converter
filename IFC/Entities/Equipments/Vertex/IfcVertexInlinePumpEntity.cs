@@ -1,4 +1,4 @@
-﻿using IFC.Entities.Abstract;
+﻿using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Extensions;
 using IFC.Tools;
@@ -47,6 +47,7 @@ namespace IFC.Entities.Equipments.Vertex
             
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, representationItems);
             
             _ifcPump = model.Instances.New<IfcPump>(fitting =>
             {
