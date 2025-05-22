@@ -32,8 +32,9 @@ namespace IFC.Entities.Fittings.CAD
                 XbimVector3D.Zero, VectorExtensions.Forward, VectorExtensions.Right
             );
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, pipeBend);
-
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, pipeBend);
+            
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.Name = _bendEntity.Name;

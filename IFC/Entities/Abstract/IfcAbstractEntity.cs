@@ -1,8 +1,11 @@
-﻿using IFC.Entities.Interfaces;
+﻿using System.Collections.Generic;
+using IFC.Entities.Interfaces;
+using IFC.Tools;
 using Start.API;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
@@ -14,6 +17,7 @@ namespace IFC.Entities.Abstract
         public IfcIdentifier Tag { get; }
         public StartElementType Type { get; }
         public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
+        public abstract Colour Colour { get; protected set; }
 
         private StartAbstractEntity _abstractEntity;
 
@@ -82,6 +86,16 @@ namespace IFC.Entities.Abstract
             });
 
             #endregion
+        }
+        
+        protected void ColourEntity(IModel model, IEnumerable<IfcRepresentationItem> representationItems)
+        {
+            IfcColours.StyleItems(model, Colour, representationItems);
+        }
+
+        protected void ColourEntity(IModel model, IfcRepresentationItem representationItems)
+        {
+            ColourEntity(model, new[] { representationItems });
         }
     }
 }

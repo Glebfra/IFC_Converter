@@ -18,6 +18,8 @@ namespace IFC.Entities.Equipments.Vertex
 {
     public class IfcVertexTankEntity : IfcAbstractEntity, IIfcOneNodeEntity
     {
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("695689");
+        
         public IfcNodeEntity NodeEntity { get; }
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
@@ -71,6 +73,7 @@ namespace IFC.Entities.Equipments.Vertex
 
             IfcShapeRepresentation representation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, representation);
+            ColourEntity(model, representationItems);
 
             _ifcTank = model.Instances.New<IfcTank>(tank =>
             {

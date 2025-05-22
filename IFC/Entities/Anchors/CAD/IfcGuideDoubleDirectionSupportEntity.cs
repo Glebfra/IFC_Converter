@@ -38,6 +38,7 @@ namespace IFC.Entities.Anchors.CAD
             IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, representationItems);
 
             _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {

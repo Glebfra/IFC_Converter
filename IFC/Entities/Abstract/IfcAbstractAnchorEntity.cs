@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Extensions;
+using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -18,7 +19,8 @@ namespace IFC.Entities.Abstract
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
         
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        
+        public sealed override Colour Colour { get; protected set; } = Colour.FromHEX("4ab636");
+
         protected double _PipeDiameter;
         protected bool _IsVertical;
 
@@ -33,7 +35,7 @@ namespace IFC.Entities.Abstract
             AbstractSegmentEntities = segmentEntities;
             _PipeDiameter = segmentEntities[0].Diameter;
             _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward.IsParallel(VectorExtensions.Z);
-
+            
             XbimVector3D forward = new XbimVector3D(0, 0, 1);
             XbimVector3D up = new XbimVector3D(0, 1, 0);
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(NodeEntity.ObjectMatrix3D.Translation, forward, up);

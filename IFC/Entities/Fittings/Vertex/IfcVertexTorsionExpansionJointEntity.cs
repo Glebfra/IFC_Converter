@@ -58,6 +58,7 @@ namespace IFC.Entities.Fittings.Vertex
             brep[1] = CreateFacetedBrep(model, cartesianPoints[2], cartesianPoints[3]);
             brep[2] = CreateFacetedBrep(model, cartesianPoints[4], cartesianPoints[5]);
             brep[3] = CreateFacetedBrep(model, cartesianPoints[6], cartesianPoints[7]);
+            ColourEntity(model, brep);
             
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, brep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);

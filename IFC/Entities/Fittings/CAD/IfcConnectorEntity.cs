@@ -35,6 +35,7 @@ namespace IFC.Entities.Fittings.CAD
             IfcExtrudedAreaSolid extrudedAreaSolid = IfcGeometry.CreateCylinder(model, Diameter / 2 * 1.1, Length, displacement);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolid);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, extrudedAreaSolid);
             
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
