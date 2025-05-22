@@ -74,6 +74,8 @@ namespace IFC.Entities.Abstract
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, teeExtrudedArea);
+            
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
                 fitting.Name = _startTeeEntity.Name;

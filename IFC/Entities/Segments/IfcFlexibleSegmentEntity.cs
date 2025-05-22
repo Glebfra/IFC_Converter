@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract;
 using IFC.Entities.Interfaces;
 using IFC.Extensions;
+using IFC.Tools;
 using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -16,6 +17,8 @@ namespace IFC.Entities.Segments
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override XbimVector3D Direction { get; protected set; }
         public override double OuterDiameter { get; protected set; }
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("3e3ec0");
+        
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
 
         private StartFlexibleElementEntity _startFlexibleElementEntity;

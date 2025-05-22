@@ -52,6 +52,7 @@ namespace IFC.Entities.Equipments.Vertex
             
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, representationItems);
             
             _ifcTank = model.Instances.New<IfcTank>(fitting =>
             {

@@ -17,6 +17,8 @@ namespace IFC.Entities.Equipments.Vertex
 {
     public class IfcVertexTurbineEntity : IfcAbstractConnectorEntity
     {
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("695689");
+        
         private int _numSegments;
         private double _length;
         
@@ -39,6 +41,7 @@ namespace IFC.Entities.Equipments.Vertex
             IEnumerable<IfcFacetedBrep> facetedBreps = CreateFlange(model);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, facetedBreps);
             
             _ifcFan = model.Instances.New<IfcFan>(fitting =>
             {

@@ -46,6 +46,7 @@ namespace IFC.Entities.Fittings.Vertex
             IfcFacetedBrep brep = CreateFacetedBrep(model, ifcCartesianPoints);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, brep);
             
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {

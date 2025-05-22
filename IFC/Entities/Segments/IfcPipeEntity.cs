@@ -1,5 +1,6 @@
 ﻿using IFC.Entities.Abstract;
 using IFC.Extensions;
+using IFC.Tools;
 using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -14,6 +15,7 @@ namespace IFC.Entities.Segments
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override XbimVector3D Direction { get; protected set; }
         public override double OuterDiameter { get; protected set; }
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("ffffff");
 
         private StartPipeEntity _startPipeEntity;
         private IfcPipeSegment _pipeSegment;

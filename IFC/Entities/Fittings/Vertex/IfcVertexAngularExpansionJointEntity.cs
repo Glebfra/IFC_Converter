@@ -60,6 +60,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, extrudedAreaSolids);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, extrudedAreaSolids);
 
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {

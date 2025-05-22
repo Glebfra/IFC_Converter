@@ -20,6 +20,7 @@ namespace IFC.Entities.Segments
         public override XbimVector3D Direction { get; protected set; }
         public override double OuterDiameter { get; protected set; }
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("4c0099");
         
         public double SecondDiameter { get; }
 
@@ -62,6 +63,7 @@ namespace IFC.Entities.Segments
             IfcFacetedBrep facetedBrep = CreateFacetedBrep(model, firstCircle, secondCircle);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, facetedBrep);
 
             _pipeSegment = model.Instances.New<IfcPipeSegment>(segment =>
             {

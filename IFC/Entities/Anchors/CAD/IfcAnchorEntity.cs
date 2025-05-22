@@ -17,7 +17,7 @@ namespace IFC.Entities.Anchors.CAD
     {
         private double _xDim;
         private double _yDim;
-        
+
         private StartAnchorEntity _anchorEntity;
         private IfcDiscreteAccessory _discreteAccessory;
 
@@ -46,6 +46,7 @@ namespace IFC.Entities.Anchors.CAD
             IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, representationItems);
             
             _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {
@@ -63,7 +64,7 @@ namespace IFC.Entities.Anchors.CAD
         protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
             IfcExtrudedAreaSolid rectangle = IfcGeometry.CreateRectangle(model, _xDim, _yDim, _xDim / 10, XbimVector3D.Zero);
-            return new[] {rectangle};
+            return new[] { rectangle };
         }
     }
 }

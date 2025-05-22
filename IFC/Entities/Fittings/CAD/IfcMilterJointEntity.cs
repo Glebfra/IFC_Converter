@@ -50,6 +50,7 @@ namespace IFC.Entities.Fittings.CAD
 
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, ifcRepresentationItems);
             
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {
