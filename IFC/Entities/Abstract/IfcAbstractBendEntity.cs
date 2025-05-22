@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -28,7 +29,7 @@ namespace IFC.Entities.Abstract
             _directionToPipes = CalculateDirectionToPipes();
             
             _BendRadius = _bendEntity.Radius.SIProperty;
-            _PipeRadius = Math.Min(AbstractSegmentEntities[0].OuterDiameter / 2, AbstractSegmentEntities[1].OuterDiameter / 2);
+            _PipeRadius = Math.Min(AbstractSegmentEntities[0].Diameter / 2, AbstractSegmentEntities[1].Diameter / 2);
 
             ObjectMatrix3D = ObjectMatrix3D.Translate(CalculateCircleCenter());
             Length = Angle * _BendRadius;

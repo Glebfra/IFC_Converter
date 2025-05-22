@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Extensions;
 using Start.Entities.Abstract;
@@ -30,7 +31,7 @@ namespace IFC.Entities.Abstract
             NodeEntity = nodeEntity;
             
             AbstractSegmentEntities = segmentEntities;
-            _PipeDiameter = segmentEntities[0].OuterDiameter;
+            _PipeDiameter = segmentEntities[0].Diameter;
             _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward.IsParallel(VectorExtensions.Z);
 
             XbimVector3D forward = new XbimVector3D(0, 0, 1);

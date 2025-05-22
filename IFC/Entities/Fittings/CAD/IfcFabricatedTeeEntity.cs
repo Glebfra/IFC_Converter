@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -15,7 +16,7 @@ namespace IFC.Entities.Fittings.CAD
             : base(startTeeEntity, nodeEntity, abstractSegmentEntities)
         {
             Length = startTeeEntity.HeaderLength.SIProperty;
-            Height = startTeeEntity.BranchHeight.SIProperty + _BranchPipes[0].OuterDiameter / 2;
+            Height = startTeeEntity.BranchHeight.SIProperty + _BranchPipes[0].Diameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)

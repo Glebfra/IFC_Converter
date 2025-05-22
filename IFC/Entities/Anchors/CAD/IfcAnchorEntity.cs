@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common;
@@ -26,7 +27,7 @@ namespace IFC.Entities.Anchors.CAD
         {
             _anchorEntity = anchorEntity;
 
-            _xDim = abstractSegmentEntities[0].OuterDiameter * 2;
+            _xDim = abstractSegmentEntities[0].Diameter * 2;
             _yDim = _xDim;
             
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;

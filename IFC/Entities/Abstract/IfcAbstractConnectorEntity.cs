@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Start.Entities.Abstract;

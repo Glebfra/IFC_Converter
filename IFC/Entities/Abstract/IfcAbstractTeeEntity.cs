@@ -1,4 +1,5 @@
 ﻿using System;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -82,7 +83,7 @@ namespace IFC.Entities.Abstract
 
         private IfcExtrudedAreaSolid CreateBranch(IModel model)
         {
-            double circleRadius = _BranchPipes[0].OuterDiameter / 2;
+            double circleRadius = _BranchPipes[0].Diameter / 2;
             XbimVector3D coordinates = Length / 2 * VectorExtensions.Forward.Negated();
             return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
         }
@@ -91,7 +92,7 @@ namespace IFC.Entities.Abstract
         {
             XbimVector3D directionToHeadPipe = IfcAxis.GetDirectionToPipe(_HeadPipe, ObjectMatrix3D.Translation);
 
-            double circleRadius = _HeadPipe.OuterDiameter / 2;
+            double circleRadius = _HeadPipe.Diameter / 2;
             XbimVector3D coordinates = XbimVector3D.Zero;
             XbimVector3D forward = VectorExtensions.Forward.RotateAroundYAxis(Angle);
             XbimVector3D right = VectorExtensions.Right.RotateAroundYAxis(Angle);

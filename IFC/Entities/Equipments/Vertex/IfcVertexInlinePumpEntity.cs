@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Extensions;
 using IFC.Tools;

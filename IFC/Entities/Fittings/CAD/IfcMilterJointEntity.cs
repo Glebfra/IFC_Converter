@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -30,7 +31,7 @@ namespace IFC.Entities.Fittings.CAD
             : base(bendEntity, ifcNodeEntity, abstractSegments)
         {
             _bendEntity = bendEntity;
-            Depth = Math.Min(abstractSegments[0].Length, abstractSegments[1].Length) * 0.1;
+            Depth = Math.Min(abstractSegments[0].Length.Value, abstractSegments[1].Length.Value) * 0.1;
             Length = 2 * Depth;
         }
     

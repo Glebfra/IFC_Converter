@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -54,7 +55,7 @@ namespace IFC.Tools
         {
             XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
             XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Forward;
-            double pipeLength = pipeEntity.Length;
+            double pipeLength = pipeEntity.Length.Value;
             XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection * pipeLength;
             return (pipeStartCoordinates - Coordinates).Length < (pipeEndCoordinates - Coordinates).Length
                 ? pipeDirection

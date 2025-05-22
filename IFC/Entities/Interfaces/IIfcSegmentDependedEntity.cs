@@ -1,4 +1,4 @@
-﻿using IFC.Entities.Abstract;
+﻿using IFC.Entities.Abstract.Segments;
 
 namespace IFC.Entities.Interfaces
 {

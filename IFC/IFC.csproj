@@ -144,8 +144,12 @@
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractConnectorEntity.cs" />
-    <Compile Include="Entities\Abstract\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractTeeEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\IfcAbstractConeElementEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\IfcAbstractFlexibleSegmentEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\IfcAbstractPipeSegmentEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\IfcAbstractRigidElementEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportHangerEntity.cs" />
@@ -197,7 +201,7 @@
     <Compile Include="Entities\Segments\IfcConeElementEntity.cs" />
     <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
-    <Compile Include="Entities\Segments\IfcPipeEntity.cs" />
+    <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
@@ -205,6 +209,7 @@
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\ActionProperty.cs" />
     <Compile Include="Tools\IfcAxis.cs" />
     <Compile Include="Tools\IfcGeometry.cs" />
     <Compile Include="Tools\IfcGeometry.Extensions.cs">

@@ -1,5 +1,6 @@
 ﻿using System;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -79,7 +80,7 @@ namespace IFC.Entities.Fittings.Vertex
         private IfcExtrudedAreaSolid CreateBranch(IModel model, XbimVector3D extrudeDirection, XbimVector3D refDirection)
         {
             IfcDirection firstExtrudedDirection = IfcAxis.CreateDirection(model, extrudeDirection);
-            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, AbstractSegmentEntities[0].OuterDiameter / 2, XbimVector3D.Zero, refDirection);
+            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, AbstractSegmentEntities[0].Diameter / 2, XbimVector3D.Zero, refDirection);
             return CreateExtrudedArea(model, firstProfileDef, firstExtrudedDirection, Length / 2);
         }
         

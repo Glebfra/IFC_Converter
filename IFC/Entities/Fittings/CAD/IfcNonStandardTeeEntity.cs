@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -51,7 +52,7 @@ namespace IFC.Entities.Fittings.Vertex
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
+            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             double displacement1 = radiuses[0] > radiuses[1] ? -Length : 0;
             double displacement2 = radiuses[1] > radiuses[0] ? Length : 0;

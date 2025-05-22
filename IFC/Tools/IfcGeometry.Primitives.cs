@@ -38,7 +38,7 @@ namespace IFC.Tools
             IfcCircleProfileDef circleProfileDef = CreateCircleProfileDef(model, radius);
             return CreateExtrudedAreaSolid(model, circleProfileDef, zDim, coordinates);
         }
-        
+
         public static IfcExtrudedAreaSolid CreateRectangle(IModel model, double xDim, double yDim, double zDim, XbimVector3D coordinates, XbimVector3D axis, XbimVector3D refDirection)
         {
             IfcRectangleProfileDef rectangleProfileDef = CreateRectangleProfileDef(model, xDim, yDim);

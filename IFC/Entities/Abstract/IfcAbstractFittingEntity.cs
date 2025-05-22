@@ -1,4 +1,5 @@
-﻿using Start.Entities.Abstract;
+﻿using IFC.Entities.Abstract.Segments;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProductExtension;
@@ -17,7 +18,7 @@ namespace IFC.Entities.Abstract
             : base(abstractFitting, ifcNodeEntity, abstractSegmentEntities)
         {
             _abstractFitting = abstractFitting;
-            Diameter = AbstractSegmentEntities[0].OuterDiameter;
+            Diameter = AbstractSegmentEntities[0].Diameter;
         }
         
         protected override void AddProperties(IModel model, IfcProduct product)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -33,7 +34,7 @@ namespace IFC.Entities.Fittings.Vertex
             
             _armatureEntity = armatureEntity;
             Length = _armatureEntity.Length.SIProperty;
-            Radiuses = abstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
+            Radiuses = abstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
     
         public override IfcProduct CreateAndAdd(IModel model)

@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Equipments;
@@ -14,7 +15,7 @@ namespace IFC.Entities.Equipments.Vertex
 {
     public class IfcVertexVesselEntity : IfcAbstractFittingEntity
     {
-        public override double Length { get; protected set; }
+        public sealed override double Length { get; protected set; }
         
         private int _numSegments;
         private double _pipeDiameter;
@@ -26,7 +27,7 @@ namespace IFC.Entities.Equipments.Vertex
             : base(vesselEntity, nodeEntity, segmentEntities)
         {
             _numSegments = numSegments;
-            _pipeDiameter = AbstractSegmentEntities[0].OuterDiameter;
+            _pipeDiameter = AbstractSegmentEntities[0].Diameter;
             Length = _pipeDiameter / 4;
             
             _vesselEntity = vesselEntity;

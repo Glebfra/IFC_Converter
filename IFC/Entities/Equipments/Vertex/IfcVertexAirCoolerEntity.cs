@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Equipments;
@@ -29,7 +30,7 @@ namespace IFC.Entities.Equipments.Vertex
             _airCoolerEntity = airCoolerEntity;
             
             _numSegments = numSegments;
-            _length = AbstractSegmentEntities[0].OuterDiameter / 2;
+            _length = AbstractSegmentEntities[0].Diameter / 2;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
@@ -64,7 +65,7 @@ namespace IFC.Entities.Equipments.Vertex
                 0.1 * _length * VectorExtensions.Z,
             };
             
-            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.OuterDiameter / 2).ToArray();
+            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {

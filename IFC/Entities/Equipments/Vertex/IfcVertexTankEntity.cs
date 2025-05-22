@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Extensions;
 using IFC.Tools;
@@ -49,7 +50,7 @@ namespace IFC.Entities.Equipments.Vertex
             XbimVector3D up = VectorExtensions.Y;
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
 
-            _pipeDiameter = abstractSegmentEntities[0].OuterDiameter;
+            _pipeDiameter = abstractSegmentEntities[0].Diameter;
             _directionToPipe = IfcAxis.GetDirectionToPipe(_abstractSegmentEntities[0], coordinates).Normalized();
             _isVertical = _directionToPipe.IsParallel(VectorExtensions.Z);
             
