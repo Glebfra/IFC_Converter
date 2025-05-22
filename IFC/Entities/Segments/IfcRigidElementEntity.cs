@@ -13,6 +13,7 @@ namespace IFC.Entities.Segments
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
         
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("009249");
         public override double Diameter { get; protected set; }
         public override ActionProperty<double> Length { get; protected set; }
         public override ActionProperty<double> OuterSurfaceArea { get; protected set; }

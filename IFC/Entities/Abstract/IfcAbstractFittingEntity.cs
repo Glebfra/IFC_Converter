@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract.Segments;
+using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
@@ -11,6 +12,7 @@ namespace IFC.Entities.Abstract
     {
         public double Diameter { get; protected set; }
         public abstract double Length { get; protected set; }
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("5f4e7c");
 
         private StartAbstractFittingEntity _abstractFitting;
 

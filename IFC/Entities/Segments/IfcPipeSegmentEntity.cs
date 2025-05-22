@@ -9,6 +9,7 @@ namespace IFC.Entities.Segments
     public sealed class IfcPipeSegmentEntity : IfcAbstractPipeSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
+        public override Colour Colour { get; protected set; } = Colour.FromHEX("bebebe");
         public override double Diameter { get; protected set; }
         public override ActionProperty<double> Length { get; protected set; }
         public override ActionProperty<double> OuterSurfaceArea { get; protected set; }

@@ -32,7 +32,7 @@ namespace IFC.Entities.Equipments.Vertex
             
             _vesselEntity = vesselEntity;
         }
-        
+
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
