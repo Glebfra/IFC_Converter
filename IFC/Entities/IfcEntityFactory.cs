@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors.CAD;
 using IFC.Entities.Anchors.Vertex;
 using IFC.Entities.Equipments.Vertex;
@@ -11,7 +12,6 @@ using Start.Entities.Anchors;
 using Start.Entities.Equipments;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
-using IfcAbstractSegmentEntity = IFC.Entities.Abstract.Segments.IfcAbstractSegmentEntity;
 
 namespace IFC.Entities
 {
