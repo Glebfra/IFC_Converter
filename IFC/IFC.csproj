@@ -138,6 +138,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractBendEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractCadBendEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractBendEntity.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="Entities\Abstract\Segments\IfcAbstractPipeSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractSegmentEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\IfcAbstractStraightSegment.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportHangerEntity.cs" />
@@ -169,7 +173,7 @@
     <Compile Include="Entities\Equipments\Vertex\IfcVertexTurbineEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexVesselEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcAxialExpansionJointEntity.cs" />
-    <Compile Include="Entities\Fittings\CAD\IfcBendEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcCadBendEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcCapEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcConnectorEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcFabricatedTeeEntity.cs" />

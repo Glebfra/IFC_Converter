@@ -67,10 +67,10 @@ namespace IFC.Entities
                 case StartElementType.LONG_RADIUS_PIPE_BEND:
                 case StartElementType.PRE_STRESSED_PIPE_BEND:
                 case StartElementType.SADDLE_BEND:
-                    return new IfcBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities);
+                    return new IfcCadBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.NONSTANDARD_BEND:
-                    return new IfcBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities);
+                    return new IfcCadBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.FABRICATED_TEE:
                     return new IfcFabricatedTeeEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);

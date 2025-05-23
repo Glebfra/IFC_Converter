@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract;
+﻿using System;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
@@ -11,24 +12,26 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
 
-namespace IFC.Entities.Fittings.CAD
+namespace IFC.Entities.Abstract.Fittings
 {
-    public sealed class IfcBendEntity : IfcAbstractBendEntity
+    public abstract class IfcAbstractCadBendEntity : IfcAbstractBendEntity
     {
-        private StartBendEntity _bendEntity;
-        private IfcPipeFitting _pipeFitting;
+        private readonly StartBendEntity _bendEntity;
+        private IfcPipeFitting? _pipeFitting;
         
-        public IfcBendEntity(StartBendEntity bendEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
-            : base(bendEntity, ifcNodeEntity, abstractSegmentEntities)
+        protected IfcAbstractCadBendEntity(StartBendEntity bendEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(bendEntity, nodeEntity, segmentEntities)
         {
             _bendEntity = bendEntity;
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
+            ObjectMatrix3D = ObjectMatrix3D.Translate(CalculateCircleCenter());
+            
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
             IfcSweptDiskSolid pipeBend = IfcGeometry.CreateCircularBend(
-                model, _PipeRadius, _BendRadius, Angle,
+                model, PipeRadius, BendRadius, Angle,
                 XbimVector3D.Zero, VectorExtensions.Forward, VectorExtensions.Right
             );
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, pipeBend);
@@ -48,6 +51,16 @@ namespace IFC.Entities.Fittings.CAD
             ClipConnectedPipes();
 
             return _pipeFitting;
+        }
+        
+        private XbimVector3D CalculateCircleCenter()
+        {
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
+            XbimVector3D dirToCenter = (directionToPipes[0].Normalized() + directionToPipes[1].Normalized()).Normalized();
+            double lengthToCenter = BendRadius / Math.Cos(Angle / 2);
+            
+            return dirToCenter * lengthToCenter;
         }
     }
 }
