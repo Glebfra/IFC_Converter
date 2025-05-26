@@ -147,6 +147,7 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractMilterJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractTeeEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractUniversalExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexBallExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexBendEntity.cs" />
