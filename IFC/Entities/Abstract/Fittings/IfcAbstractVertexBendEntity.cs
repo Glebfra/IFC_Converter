@@ -22,8 +22,8 @@ namespace IFC.Entities.Abstract.Fittings
         public abstract double AngleStep { get; protected set; }
         public abstract double BendAngleStep { get; protected set; }
 
-        private StartBendEntity _bendEntity;
-        private IfcPipeFitting _pipeFitting;
+        private readonly StartBendEntity _bendEntity;
+        private IfcPipeFitting? _pipeFitting;
         
         public IfcAbstractVertexBendEntity(StartBendEntity bendEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
             : base(bendEntity, nodeEntity, segmentEntities)
