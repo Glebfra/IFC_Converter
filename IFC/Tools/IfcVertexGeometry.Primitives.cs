@@ -20,31 +20,7 @@ namespace IFC.Tools
             
             return CreateCone(model, botCircle, topPoint);
         }
-
-        public static IfcFacetedBrep CreateClippedCone(IModel model, double botRadius, double topRadius, double height, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
-        {
-            xAxis = xAxis.Normalized();
-            yAxis = yAxis.Normalized();
-            XbimVector3D zAxis = XbimVector3D.CrossProduct(xAxis, yAxis).Normalized();
-            XbimVector3D topCoordinates = coordinates + height * zAxis;
-            
-            IfcCartesianPoint[] botCircle = CreateCircle(model, botRadius, coordinates, numSegments, xAxis, yAxis);
-            IfcCartesianPoint[] topCircle = CreateCircle(model, topRadius, topCoordinates, numSegments, xAxis, yAxis);
-
-            return CreateClippedCone(model, botCircle, topCircle);
-        }
-
-        public static IfcFacetedBrep CreateCylinder(IModel model, double radius, double height, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
-        {
-            return CreateClippedCone(model, radius, radius, height, coordinates, numSegments, xAxis, yAxis);
-        }
-
-        public static IfcFacetedBrep CreateSphere(IModel model, double radius, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
-        {
-            IfcCartesianPoint[,] spherePoints = CreateSpherePoints(model, radius, coordinates, numSegments, xAxis, yAxis);
-            return CreateSphere(model, spherePoints);
-        }
-
+        
         public static IfcFacetedBrep CreateCone(IModel model, IfcCartesianPoint[] points, IfcCartesianPoint topPoint)
         {
             int numSegments = points.Length;
@@ -62,6 +38,24 @@ namespace IFC.Tools
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
+        }
+
+        public static IfcFacetedBrep CreateClippedCone(IModel model, double botRadius, double topRadius, double height, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
+        {
+            xAxis = xAxis.Normalized();
+            yAxis = yAxis.Normalized();
+            XbimVector3D zAxis = XbimVector3D.CrossProduct(xAxis, yAxis).Normalized();
+            XbimVector3D topCoordinates = coordinates + height * zAxis;
+            
+            IfcCartesianPoint[] botCircle = CreateCircle(model, botRadius, coordinates, numSegments, xAxis, yAxis);
+            IfcCartesianPoint[] topCircle = CreateCircle(model, topRadius, topCoordinates, numSegments, xAxis, yAxis);
+
+            return CreateClippedCone(model, botCircle, topCircle);
+        }
+
+        public static IfcFacetedBrep CreateCylinder(IModel model, double radius, double height, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
+        {
+            return CreateClippedCone(model, radius, radius, height, coordinates, numSegments, xAxis, yAxis);
         }
 
         public static IfcFacetedBrep CreateClippedCone(IModel model, IfcCartesianPoint[] points1, IfcCartesianPoint[] points2)
@@ -84,6 +78,12 @@ namespace IFC.Tools
             {
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
+        }
+
+        public static IfcFacetedBrep CreateSphere(IModel model, double radius, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
+        {
+            IfcCartesianPoint[,] spherePoints = CreateSpherePoints(model, radius, coordinates, numSegments, xAxis, yAxis);
+            return CreateSphere(model, spherePoints);
         }
 
         public static IfcFacetedBrep CreateSphere(IModel model, IfcCartesianPoint[,] points)

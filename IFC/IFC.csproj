@@ -147,6 +147,7 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexAxialExpansionJointEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexBallExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexBendEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
@@ -220,6 +221,12 @@
     <Compile Include="Tools\ActionProperty.cs" />
     <Compile Include="Tools\Colour.cs" />
     <Compile Include="Tools\IfcAxis.cs" />
+    <Compile Include="Tools\IfcAxis.Direction.cs">
+      <DependentUpon>IfcAxis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\IfcAxis.Placement.cs">
+      <DependentUpon>IfcAxis.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\IfcColours.cs" />
     <Compile Include="Tools\IfcGeometry.cs" />
     <Compile Include="Tools\IfcGeometry.Extensions.cs">
