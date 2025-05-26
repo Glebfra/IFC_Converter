@@ -1,9 +1,8 @@
-﻿using IFC.Entities.Abstract;
+﻿using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Abstract.Segments;
+using IFC.Tools;
 using Start.Entities.Fittings;
-using Xbim.Common;
-using Xbim.Ifc4.HvacDomain;
-using Xbim.Ifc4.Kernel;
+using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Fittings.CAD
 {
@@ -11,22 +10,15 @@ namespace IFC.Entities.Fittings.CAD
     {
         public override double Length { get; protected set; }
         public override double Height { get; protected set; }
-
-        private IfcPipeFitting _pipeFitting;
+        public override double Angle { get; protected set; }
         
-        public IfcNonStandardTeeEntity(StartNonstandardTeeEntity nonstandardTeeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities) 
-            : base(nonstandardTeeEntity, nodeEntity, abstractSegmentEntities)
+        public IfcNonStandardTeeEntity(StartNonstandardTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(teeEntity, nodeEntity, segmentEntities)
         {
-            Length = nonstandardTeeEntity.HeaderLength.SIProperty;
-            Height = Diameter / 2 + nonstandardTeeEntity.BranchHeight.SIProperty;
-        }
-
-        public override IfcProduct CreateAndAdd(IModel model)
-        {
-            _pipeFitting = CreateTeeEntity(model);
-            AddProperties(model, _pipeFitting);
-            ClipPipes();
-            return _pipeFitting;
+            XbimVector3D right = IfcAxis.GetDirectionToPipe(_HeadPipe, ObjectMatrix3D.Translation).Normalized();
+            Angle = ObjectMatrix3D.Forward.Angle(right);
+            Length = teeEntity.HeaderLength.SIProperty;
+            Height = _BranchPipes[0].Diameter / 2 + teeEntity.BranchHeight.SIProperty;
         }
     }
 }

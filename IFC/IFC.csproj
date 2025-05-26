@@ -140,7 +140,9 @@
   <ItemGroup>
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractBendEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractCadBendEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractCapEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractFittingEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractTeeEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractBendEntity.cs" />

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Linq;
 using IFC.Entities.Abstract.Segments;
-using IFC.Extensions;
-using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
-using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
