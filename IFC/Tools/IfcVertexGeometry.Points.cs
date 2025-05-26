@@ -24,7 +24,7 @@ namespace IFC.Tools
                     double x = radius * Math.Cos(angleStep * i) * Math.Cos(angleStep * j);
                     double y = radius * Math.Cos(angleStep * i) * Math.Sin(angleStep * j);
                     double z = radius * Math.Sin(angleStep * i);
-                    points[i, j] = (x * xAxis + y * yAxis + z * zAxis).ToCartesianPoint(model);
+                    points[i, j] = (x * xAxis + y * yAxis + z * zAxis + coordinates).ToCartesianPoint(model);
                 }
             }
 
