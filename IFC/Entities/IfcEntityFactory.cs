@@ -58,6 +58,7 @@ namespace IFC.Entities
                     return new IfcAnchorEntity((StartAnchorEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.AXIAL_EXPANSION_JOINT:
+                case StartElementType.AXIAL_EXPANSION_SLIP_JOINT:
                     return new IfcAxialExpansionJointEntity((StartAxialExpansionJointEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.ELBOW:
