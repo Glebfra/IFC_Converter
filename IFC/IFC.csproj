@@ -138,6 +138,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractAngularExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractBendEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractCadBendEntity.cs" />
@@ -148,7 +149,6 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexBendEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAnchorEntity.cs" />
-    <Compile Include="Entities\Abstract\IfcAbstractAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractConnectorEntity.cs" />
