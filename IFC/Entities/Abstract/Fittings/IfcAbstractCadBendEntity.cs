@@ -52,15 +52,5 @@ namespace IFC.Entities.Abstract.Fittings
 
             return _pipeFitting;
         }
-        
-        private XbimVector3D CalculateCircleCenter()
-        {
-            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(pipe => IfcAxis.GetDirectionToPipe(pipe, coordinates)).ToArray();
-            XbimVector3D dirToCenter = (directionToPipes[0].Normalized() + directionToPipes[1].Normalized()).Normalized();
-            double lengthToCenter = BendRadius / Math.Cos(Angle / 2);
-            
-            return dirToCenter * lengthToCenter;
-        }
     }
 }
