@@ -1,6 +1,7 @@
 ﻿using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
+using Start.Entities.Abstract;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -14,17 +15,17 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
-    public abstract class IfcAbstractUniversalExpansionJointEntity : IfcAbstractExpansionJoint
+    public abstract class IfcAbstractNonStandardExpansionJointEntity : IfcAbstractExpansionJoint
     {
         public abstract double Radius { get; protected set; }
         
-        private StartUniversalExpansionJointEntity _universalExpansion;
+        private readonly StartNonstandardExpansionJointEntity _nonstandardExpansion;
         private IfcPipeFitting? _pipeFitting;
         
-        protected IfcAbstractUniversalExpansionJointEntity(StartUniversalExpansionJointEntity universalExpansion, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(universalExpansion, nodeEntity, segmentEntities)
+        protected IfcAbstractNonStandardExpansionJointEntity(StartNonstandardExpansionJointEntity nonstandardExpansion, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(nonstandardExpansion, nodeEntity, segmentEntities)
         {
-            _universalExpansion = universalExpansion;
+            _nonstandardExpansion = nonstandardExpansion;
         }
         
         public override IfcProduct CreateAndAdd(IModel model)
@@ -32,8 +33,10 @@ namespace IFC.Entities.Abstract.Fittings
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
             
             IfcCartesianPoint shapeLocation = IfcAxis.CreatePoint(model, VectorExtensions.Forward.Negated() * (Length / 2));
+            IfcDirection shapeForward = VectorExtensions.Forward.ToIfcDirection(model);
+            IfcDirection shapeRight = VectorExtensions.Right.ToIfcDirection(model);
             IfcAxis2Placement3D placement3D = IfcAxis.CreateAxis2Placement3D(model, shapeLocation);
-
+            
             IfcCircleProfileDef profileDef = IfcGeometry.CreateCircleProfileDef(model, Radius, XbimVector3D.Zero);
             IfcExtrudedAreaSolid extrudedAreaSolid = CreateExtrudedArea(model, placement3D, VectorExtensions.Forward, profileDef, Length);
             
@@ -47,7 +50,7 @@ namespace IFC.Entities.Abstract.Fittings
                 fitting.Representation = shape;
                 fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
                 fitting.Tag = Tag;
-                fitting.Name = _universalExpansion.Name;
+                fitting.Name = _nonstandardExpansion.Name;
             });
             
             ClipPipes();
