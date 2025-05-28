@@ -53,7 +53,7 @@ namespace IFC.Entities.Equipments.Vertex
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
 
             _pipeDiameter = abstractSegmentEntities[0].Diameter;
-            _directionToPipe = IfcAxis.GetDirectionToPipe(_abstractSegmentEntities[0], coordinates).Normalized();
+            _directionToPipe = IfcAxis.GetPipeDirectionFromNode(_abstractSegmentEntities[0], coordinates).Normalized();
             _isVertical = _directionToPipe.IsParallel(VectorExtensions.Z);
             
             _tankHeight = _startTankEntity.DistanceToNozzleAxis.SIProperty * 2;

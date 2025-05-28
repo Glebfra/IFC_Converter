@@ -14,7 +14,7 @@ namespace IFC.Entities.Fittings.CAD
             : base(bendEntity, nodeEntity, segmentEntities)
         {
             Diameter = segmentEntities[0].Diameter;
-            Length = 2 * Math.Min(segmentEntities[0].Length.Value, segmentEntities[1].Length.Value) * 0.1;
+            Length = 2 * Math.Min(segmentEntities[0].RealLength.Value, segmentEntities[1].RealLength.Value) * 0.1;
         }
     }
 }

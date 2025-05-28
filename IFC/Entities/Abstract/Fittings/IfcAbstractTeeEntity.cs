@@ -52,8 +52,8 @@ namespace IFC.Entities.Abstract.Fittings
                 throw new NullReferenceException("Cannot find branch pipes");
             
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D forward = IfcAxis.GetDirectionToPipe(_BranchPipes[1], coordinates).Normalized();
-            XbimVector3D right = IfcAxis.GetDirectionToPipe(_HeadPipe, coordinates).Normalized();
+            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(_BranchPipes[1], coordinates).Normalized();
+            XbimVector3D right = IfcAxis.GetPipeDirectionFromNode(_HeadPipe, coordinates).Normalized();
             XbimVector3D up = XbimVector3D.CrossProduct(forward, right);
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
@@ -138,7 +138,7 @@ namespace IFC.Entities.Abstract.Fittings
         
         private IfcExtrudedAreaSolid CreateHead(IModel model)
         {
-            XbimVector3D directionToHeadPipe = IfcAxis.GetDirectionToPipe(_HeadPipe, ObjectMatrix3D.Translation);
+            XbimVector3D directionToHeadPipe = IfcAxis.GetPipeDirectionFromNode(_HeadPipe, ObjectMatrix3D.Translation);
 
             double circleRadius = _HeadPipe.Diameter / 2;
             XbimVector3D coordinates = XbimVector3D.Zero;

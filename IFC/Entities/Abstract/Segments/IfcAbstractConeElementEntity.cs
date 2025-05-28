@@ -30,7 +30,7 @@ namespace IFC.Entities.Abstract.Segments
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
             IfcFacetedBrep facetedBrep = IfcVertexGeometry.CreateClippedCone(
-                model, Diameter / 2, SecondDiameter / 2, Length.Value, 
+                model, Diameter / 2, SecondDiameter / 2, RealLength.Value, 
                 XbimVector3D.Zero, _NumSegments, VectorExtensions.Right, VectorExtensions.Up
             );
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);

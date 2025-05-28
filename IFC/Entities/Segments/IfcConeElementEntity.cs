@@ -10,8 +10,9 @@ namespace IFC.Entities.Segments
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override Colour Colour { get; protected set; } = Colour.FromHEX("46008b");
+        public override double Length { get; protected set; }
         public override double Diameter { get; protected set; }
-        public override ActionProperty<double> Length { get; protected set; }
+        public override ActionProperty<double> RealLength { get; protected set; }
         public override ActionProperty<double> OuterSurfaceArea { get; protected set; }
         public override ActionProperty<XbimVector3D> Coordinates { get; protected set; }
         public override XbimVector3D Direction { get; }
@@ -28,8 +29,9 @@ namespace IFC.Entities.Segments
                 coneElement.ProjectionAlongOYAxis.SIProperty,
                 coneElement.ProjectionAlongOZAxis.SIProperty
             );
+            Length = pipeProjection.Length;
             Direction = (pipeProjection * XbimVector3D.DotProduct(nodesDirection, pipeProjection)).Normalized() * pipeProjection.Length;
-            Length = new ActionProperty<double>(Direction.Length);
+            RealLength = new ActionProperty<double>(Direction.Length);
             Direction = Direction.Normalized();
             
             XbimVector3D forward = Direction.Normalized();
@@ -37,9 +39,9 @@ namespace IFC.Entities.Segments
 
             Diameter = coneElement.Diameter.SIProperty;
             SecondDiameter = coneElement.SecondDiameter.SIProperty;
-            OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateClippedConeArea(Diameter / 2, SecondDiameter / 2, Length.Value));
+            OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateClippedConeArea(Diameter / 2, SecondDiameter / 2, RealLength.Value));
             
-            Length.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateClippedConeArea(Diameter / 2, SecondDiameter / 2, Length.Value);
+            RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateClippedConeArea(Diameter / 2, SecondDiameter / 2, RealLength.Value);
         }
     }
 }

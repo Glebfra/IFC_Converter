@@ -15,7 +15,7 @@ namespace IFC.Entities.Fittings.CAD
         public IfcSweepoletEntity(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
             : base(teeEntity, nodeEntity, segmentEntities)
         {
-            XbimVector3D right = IfcAxis.GetDirectionToPipe(_HeadPipe, ObjectMatrix3D.Translation).Normalized();
+            XbimVector3D right = IfcAxis.GetPipeDirectionFromNode(_HeadPipe, ObjectMatrix3D.Translation).Normalized();
             Angle = ObjectMatrix3D.Forward.Angle(right);
             Length = _HeadPipe.Diameter;
             Height = _BranchPipes[0].Diameter / 2;

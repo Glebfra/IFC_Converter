@@ -92,7 +92,7 @@ namespace IFC.Entities.Abstract.Fittings
         
         private IfcExtrudedAreaSolid CreateExtrudedAreaSolid(IModel model, IfcAbstractSegmentEntity ifcAbstractSegment, double displacement)
         {
-            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(ifcAbstractSegment, ObjectMatrix3D.Translation).Normalized();
+            XbimVector3D directionToPipe = IfcAxis.GetPipeDirectionFromNode(ifcAbstractSegment, ObjectMatrix3D.Translation).Normalized();
             XbimVector3D localUp = ObjectMatrix3D.Up;
         
             IfcCartesianPoint point = IfcAxis.CreatePoint(model, XbimVector3D.Zero - directionToPipe * displacement);

@@ -14,8 +14,9 @@ namespace IFC.Entities.Segments
         
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override Colour Colour { get; protected set; } = Colour.FromHEX("009249");
+        public override double Length { get; protected set; }
         public override double Diameter { get; protected set; }
-        public override ActionProperty<double> Length { get; protected set; }
+        public override ActionProperty<double> RealLength { get; protected set; }
         public override ActionProperty<double> OuterSurfaceArea { get; protected set; }
         public override ActionProperty<XbimVector3D> Coordinates { get; protected set; }
         public override XbimVector3D Direction { get; }
@@ -27,7 +28,8 @@ namespace IFC.Entities.Segments
             
             Coordinates = new ActionProperty<XbimVector3D>(nodeEntities[0].ObjectMatrix3D.Translation);
             Direction = nodeEntities[1].ObjectMatrix3D.Translation - Coordinates.Value;
-            Length = new ActionProperty<double>(Direction.Length);
+            RealLength = new ActionProperty<double>(Direction.Length);
+            Length = Direction.Length;
 
             XbimVector3D forward = Direction.Normalized();
             ObjectMatrix3D = MatrixExtensions.CreateWorld(Coordinates.Value, forward);
@@ -39,9 +41,9 @@ namespace IFC.Entities.Segments
                 _ => 0.05
             };
             if (Diameter > 0.05) Diameter = 0.05;
-            OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateCylinderArea(Diameter / 2, Length.Value));
+            OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value));
             
-            Length.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, Length.Value);
+            RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value);
         }
     }
 }

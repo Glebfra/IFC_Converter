@@ -145,6 +145,7 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractCapEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractExpansionJoint.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractFittingEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractReducerEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexLateralExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractMilterJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractNonStandardExpansionJointEntity.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexBallExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexBendEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexFlangeEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexReducerEccentricEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="Tools\IfcAxis.Placement.cs">
       <DependentUpon>IfcAxis.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\IfcAxisSettings.cs" />
     <Compile Include="Tools\IfcColours.cs" />
     <Compile Include="Tools\IfcGeometry.cs" />
     <Compile Include="Tools\IfcGeometry.Extensions.cs">

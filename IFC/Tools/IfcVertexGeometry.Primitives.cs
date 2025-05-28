@@ -40,7 +40,11 @@ namespace IFC.Tools
             });
         }
 
-        public static IfcFacetedBrep CreateClippedCone(IModel model, double botRadius, double topRadius, double height, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
+        public static IfcFacetedBrep CreateClippedCone(
+            IModel model, double botRadius, double topRadius, double height, 
+            XbimVector3D coordinates, int numSegments, 
+            XbimVector3D xAxis, XbimVector3D yAxis
+        )
         {
             xAxis = xAxis.Normalized();
             yAxis = yAxis.Normalized();
@@ -48,6 +52,23 @@ namespace IFC.Tools
             XbimVector3D topCoordinates = coordinates + height * zAxis;
             
             IfcCartesianPoint[] botCircle = CreateCircle(model, botRadius, coordinates, numSegments, xAxis, yAxis);
+            IfcCartesianPoint[] topCircle = CreateCircle(model, topRadius, topCoordinates, numSegments, xAxis, yAxis);
+
+            return CreateClippedCone(model, botCircle, topCircle);
+        }
+
+        public static IfcFacetedBrep CreateClippedCone(
+            IModel model, double botRadius, double topRadius, double height, int numSegments, 
+            IfcAxisSettings axisSettings, XbimVector3D topDisplacement
+        )
+        {
+            XbimVector3D xAxis = axisSettings.XAxis.Normalized();
+            XbimVector3D yAxis = axisSettings.YAxis.Normalized();
+            XbimVector3D zAxis = axisSettings.ZAxis.Normalized();
+            XbimVector3D botCoordinates = axisSettings.Origin;
+            XbimVector3D topCoordinates = botCoordinates + topDisplacement + height * zAxis;
+
+            IfcCartesianPoint[] botCircle = CreateCircle(model, botRadius, botCoordinates, numSegments, xAxis, yAxis);
             IfcCartesianPoint[] topCircle = CreateCircle(model, topRadius, topCoordinates, numSegments, xAxis, yAxis);
 
             return CreateClippedCone(model, botCircle, topCircle);

@@ -34,7 +34,7 @@ namespace IFC.Entities.Fittings.Vertex
             _reducerEntity = reducerEntity;
 
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D directionToPipe = IfcAxis.GetDirectionToPipe(abstractSegmentEntities[1], coordinates);
+            XbimVector3D directionToPipe = IfcAxis.GetPipeDirectionFromNode(abstractSegmentEntities[1], coordinates);
         
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             XbimVector3D forward = directionToPipe.Normalized();

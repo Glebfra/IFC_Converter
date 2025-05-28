@@ -53,9 +53,9 @@ namespace IFC.Entities.Abstract.Segments
             {
                 solid.SweptArea = profileDef;
                 solid.ExtrudedDirection = extrudedDirection;
-                solid.Depth = Length.Value;
+                solid.Depth = RealLength.Value;
 
-                Length.OnValueChange += () => solid.Depth = Length.Value;
+                RealLength.OnValueChange += () => solid.Depth = RealLength.Value;
             });
             IfcShapeRepresentation shapeRep = IfcGeometry.CreateShapeRepresentation(model, extrudedArea);
         

@@ -22,7 +22,7 @@ namespace IFC.Entities.Abstract
             AbstractSegmentEntities = abstractSegmentEntities;
             
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(entity => IfcAxis.GetDirectionToPipe(entity, coordinates)).ToArray();
+            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(entity => IfcAxis.GetPipeDirectionFromNode(entity, coordinates)).ToArray();
             XbimVector3D forward = directionToPipes[0].Negated();
             XbimVector3D up;
 

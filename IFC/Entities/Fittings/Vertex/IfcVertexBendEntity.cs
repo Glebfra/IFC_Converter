@@ -25,7 +25,7 @@ namespace IFC.Entities.Fittings.Vertex
             AngleStep = 2 * Math.PI / NumSegments;
 
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D[] directionToPipes = segmentEntities.Select(entity => IfcAxis.GetDirectionToPipe(entity, coordinates)).ToArray();
+            XbimVector3D[] directionToPipes = segmentEntities.Select(entity => IfcAxis.GetPipeDirectionFromNode(entity, coordinates)).ToArray();
             XbimVector3D forward = directionToPipes[0].Negated();
             
             Angle = forward.Angle(directionToPipes[1]);

@@ -18,7 +18,7 @@ namespace IFC.Entities.Fittings.Vertex
             : base(lateralExpansion, nodeEntity, segmentEntities)
         {
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(entity => IfcAxis.GetDirectionToPipe(entity, coordinates)).ToArray();
+            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(entity => IfcAxis.GetPipeDirectionFromNode(entity, coordinates)).ToArray();
             XbimVector3D forward = directionToPipes[0].Negated();
 
             Angle = forward.Angle(directionToPipes[1]);
