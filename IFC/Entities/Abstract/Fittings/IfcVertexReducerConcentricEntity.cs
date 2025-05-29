@@ -1,8 +1,7 @@
-﻿using IFC.Entities.Abstract.Fittings;
-using IFC.Entities.Abstract.Segments;
+﻿using IFC.Entities.Abstract.Segments;
 using Start.Entities.Fittings;
 
-namespace IFC.Entities.Fittings.Vertex
+namespace IFC.Entities.Abstract.Fittings
 {
     public sealed class IfcVertexReducerConcentricEntity : IfcAbstractVertexReducerConcentricEntity
     {
