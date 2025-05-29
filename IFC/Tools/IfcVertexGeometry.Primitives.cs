@@ -56,6 +56,23 @@ namespace IFC.Tools
 
             return CreateClippedCone(model, botCircle, topCircle);
         }
+        
+        public static IfcFacetedBrep CreateClippedCone(
+            IModel model, double botRadius, double topRadius, double height, int numSegments, 
+            IfcAxisSettings axisSettings
+        )
+        {
+            XbimVector3D coordinates = axisSettings.Origin;
+            XbimVector3D xAxis = axisSettings.XAxis.Normalized();
+            XbimVector3D yAxis = axisSettings.YAxis.Normalized();
+            XbimVector3D zAxis = XbimVector3D.CrossProduct(xAxis, yAxis).Normalized();
+            XbimVector3D topCoordinates = coordinates + height * zAxis;
+            
+            IfcCartesianPoint[] botCircle = CreateCircle(model, botRadius, coordinates, numSegments, xAxis, yAxis);
+            IfcCartesianPoint[] topCircle = CreateCircle(model, topRadius, topCoordinates, numSegments, xAxis, yAxis);
+
+            return CreateClippedCone(model, botCircle, topCircle);
+        }
 
         public static IfcFacetedBrep CreateClippedCone(
             IModel model, double botRadius, double topRadius, double height, int numSegments, 
