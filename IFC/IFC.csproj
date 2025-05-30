@@ -140,7 +140,9 @@
   <ItemGroup>
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractEquipmentEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexAirCoolerEntity.cs" />
+    <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexCompressorEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexInlinePumpEntity.cs" />
+    <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexPumpEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractAngularExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractBendEntity.cs" />
