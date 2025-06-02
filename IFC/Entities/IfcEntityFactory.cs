@@ -55,7 +55,7 @@ namespace IFC.Entities
             switch (entity.Type)
             {
                 case StartElementType.ANCHOR:
-                    return new IfcAnchorEntity((StartAnchorEntity)entity, nodeEntity, segmentEntities);
+                    return new IfcFixedAnchorEntity((StartAnchorEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.AXIAL_EXPANSION_JOINT:
                 case StartElementType.AXIAL_EXPANSION_SLIP_JOINT:

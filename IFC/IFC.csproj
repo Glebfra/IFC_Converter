@@ -138,6 +138,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\Anchors\IfcAbstractAnchorEntity.cs" />
+    <Compile Include="Entities\Abstract\Anchors\IfcAbstractFixedSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractEquipmentEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexAirCoolerEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexCompressorEntity.cs" />
@@ -177,7 +179,7 @@
     <Compile Include="Entities\Abstract\Segments\IfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractStraightSegment.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\CAD\IfcFixedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcGuideDoubleDirectionSupportEntity.cs" />
