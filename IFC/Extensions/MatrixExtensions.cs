@@ -63,6 +63,14 @@ namespace IFC.Extensions
             return XbimMatrix3D.CreateWorld(translation, forward, up);
         }
 
+        public static XbimMatrix3D Inverted(this XbimMatrix3D matrix3D)
+        {
+            if (matrix3D.M44 == 0)
+                matrix3D.M44 = 1;
+            matrix3D.Invert();
+            return matrix3D;
+        }
+
         public static XbimMatrix3D Translate(this XbimMatrix3D matrix3D, XbimVector3D translationVector)
         {
             matrix3D.OffsetX += translationVector.X;
