@@ -1,12 +1,10 @@
 ﻿using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Abstract;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
-using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using IFC.Entities.Abstract.Segments;
+﻿using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;

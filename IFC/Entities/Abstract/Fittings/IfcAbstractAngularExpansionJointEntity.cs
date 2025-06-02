@@ -1,6 +1,4 @@
-﻿using System;
-using IFC.Entities.Abstract.Segments;
-using IFC.Entities.Interfaces;
+﻿using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;

@@ -2,7 +2,6 @@
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Abstract;
 using Start.Entities.Anchors;
 using Xbim.Common;
 using Xbim.Common.Geometry;
