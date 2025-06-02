@@ -140,6 +140,7 @@
   <ItemGroup>
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportEntity.cs" />
+    <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportHangerEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractFixedSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractNonFixedSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractEquipmentEntity.cs" />
