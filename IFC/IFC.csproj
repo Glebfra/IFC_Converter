@@ -148,6 +148,7 @@
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractNonFixedSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractNonStandardRestraintEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractRigidHangerEntity.cs" />
+    <Compile Include="Entities\Abstract\Anchors\IfcAbstractSlidingSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractSpringHangerEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractSpringSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractEquipmentEntity.cs" />
@@ -181,7 +182,6 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexTorsionExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexValveEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcVertexReducerConcentricEntity.cs" />
-    <Compile Include="Entities\Abstract\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractConeElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractFlexibleSegmentEntity.cs" />
@@ -199,7 +199,7 @@
     <Compile Include="Entities\Anchors\CAD\IfcRigidHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcSpringHangerEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
-    <Compile Include="Entities\Anchors\Vertex\IfcVertexSlidingSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\Vertex\IfcSlidingSupportEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexAirCoolerEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexCompressorEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexInlinePumpEntity.cs" />

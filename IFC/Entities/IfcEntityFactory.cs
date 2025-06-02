@@ -127,6 +127,9 @@ namespace IFC.Entities
                 case StartElementType.HINGED_ANCHOR:
                     return new IfcHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities);
                 
+                case StartElementType.SLIDING_SUPPORT:
+                    return new IfcSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities);
+                
                 case StartElementType.CAP:
                     return new IfcCapEntity((StartCapEntity)entity, nodeEntity, segmentEntities);
                 
@@ -182,9 +185,6 @@ namespace IFC.Entities
                 case StartElementType.VALVE:
                     return new IfcVertexValveEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
 
-                case StartElementType.SLIDING_SUPPORT:
-                    return new IfcVertexSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
-                
                 case StartElementType.VESSEL:
                     return new IfcVertexVesselEntity((StartVesselEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
