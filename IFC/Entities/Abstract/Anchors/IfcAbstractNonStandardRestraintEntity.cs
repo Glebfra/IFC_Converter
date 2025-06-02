@@ -95,18 +95,15 @@ namespace IFC.Entities.Abstract.Anchors
 
         private XbimVector3D CreateAnchorDirection(StartNonStandardRestraintModule restraintModule)
         {
-            const double PI_2 = Math.PI / 2;
+            double restraintX = Math.Cos(restraintModule.AngleX.SIProperty);
+            double restraintY = Math.Cos(restraintModule.AngleY.SIProperty);
+            double restraintZ = Math.Cos(restraintModule.AngleZ.SIProperty);
+            
             bool useLocalAxes = restraintModule.Local == StartRestraintAxesTypeEnum.LOCAL;
-
-            int xAxisFactor = (int)((restraintModule.AngleX.SIProperty - PI_2) / PI_2);
-            int yAxisFactor = (int)((restraintModule.AngleY.SIProperty - PI_2) / PI_2);
-            int zAxisFactor = (int)((restraintModule.AngleZ.SIProperty - PI_2) / PI_2);
-
             if (!useLocalAxes)
             {
-                return xAxisFactor * VectorExtensions.X +
-                       yAxisFactor * VectorExtensions.Y +
-                       zAxisFactor * VectorExtensions.Z.Negated();
+                XbimVector3D restraintVector = new XbimVector3D(restraintX, restraintY, restraintZ);
+                return restraintVector;
             }
             
             foreach (IfcAbstractSegmentEntity segmentEntity in AbstractSegmentEntities)
@@ -122,10 +119,10 @@ namespace IFC.Entities.Abstract.Anchors
                 
                 XbimVector3D forward = endNode.ObjectMatrix3D.Translation - startNode.ObjectMatrix3D.Translation;
                 XbimMatrix3D fictiveObjectMatrix = MatrixExtensions.CreateWorld(XbimVector3D.Zero, forward);
-                
-                return xAxisFactor * fictiveObjectMatrix.Forward + 
-                       yAxisFactor * fictiveObjectMatrix.Right + 
-                       zAxisFactor * fictiveObjectMatrix.Up;
+                XbimVector3D restraintVector = fictiveObjectMatrix.Forward * restraintX +
+                                               fictiveObjectMatrix.Right * restraintY +
+                                               fictiveObjectMatrix.Up * restraintZ;
+                return restraintVector.Negated();
             }
             
             throw new NullReferenceException(nameof(IfcAbstractNonStandardRestraintEntity) + "Cannot find local axes");
