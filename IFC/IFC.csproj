@@ -151,6 +151,7 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractBendEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractCadBendEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractCapEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractConnectorEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractExpansionJoint.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractReducerEntity.cs" />
@@ -170,8 +171,6 @@
     <Compile Include="Entities\Abstract\Fittings\IfcVertexReducerConcentricEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
-    <Compile Include="Entities\Abstract\IfcAbstractFittingEntity.cs" />
-    <Compile Include="Entities\Abstract\IfcAbstractConnectorEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractConeElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractPipeSegmentEntity.cs" />
