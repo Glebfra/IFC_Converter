@@ -125,7 +125,7 @@ namespace IFC.Entities
                     return new IfcNonStandardRestraintEntity((StartNonStandardRestraint)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.HINGED_ANCHOR:
-                    return new IfcVertexHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities);
+                    return new IfcHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.CAP:
                     return new IfcCapEntity((StartCapEntity)entity, nodeEntity, segmentEntities);
