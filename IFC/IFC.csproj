@@ -145,6 +145,7 @@
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractGuideDoubleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractGuideSingleDirectionSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractNonFixedSupportEntity.cs" />
+    <Compile Include="Entities\Abstract\Anchors\IfcAbstractNonStandardRestraintEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractEquipmentEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexAirCoolerEntity.cs" />
     <Compile Include="Entities\Abstract\Equipments\IfcAbstractVertexCompressorEntity.cs" />
