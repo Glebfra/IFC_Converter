@@ -124,6 +124,9 @@ namespace IFC.Entities
                 case StartElementType.NONSTANDARD_RESTRAINT:
                     return new IfcNonStandardRestraintEntity((StartNonStandardRestraint)entity, nodeEntity, segmentEntities);
                 
+                case StartElementType.DAMPER:
+                    return new IfcDamperEntity((StartDamperEntity)entity, nodeEntity, segmentEntities);
+                
                 case StartElementType.HINGED_ANCHOR:
                     return new IfcHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities);
                 

@@ -71,6 +71,7 @@
         PUMP_ISO_5199 = 87,
         INLINE_PUMP = 88,
         OTHER_PUMP = 89,
+        DAMPER = 92,
         BALL_EXPANSION_JOINT = 94,
         SADDLE_BEND = 96,
         SUPPORT_LOAD = 101,

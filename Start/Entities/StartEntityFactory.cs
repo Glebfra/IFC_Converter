@@ -114,6 +114,9 @@ namespace Start.Entities
                 case StartElementType.NONSTANDARD_RESTRAINT:
                     return JsonConvert.DeserializeObject<StartNonStandardRestraint>(dataArrayItem.Data.ToString());
                 
+                case StartElementType.DAMPER:
+                    return JsonConvert.DeserializeObject<StartDamperEntity>(dataArrayItem.Data.ToString());
+                
                 case StartElementType.VESSEL:
                     return JsonConvert.DeserializeObject<StartVesselEntity>(dataArrayItem.Data.ToString());
                 
