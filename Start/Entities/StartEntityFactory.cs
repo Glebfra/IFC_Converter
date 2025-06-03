@@ -75,6 +75,7 @@ namespace Start.Entities
                 case StartElementType.SWEEPOLET:
                 case StartElementType.FABRICATED_TEE:
                 case StartElementType.STUB_IN:
+                case StartElementType.STAND_TEE:
                     return JsonConvert.DeserializeObject<StartTeeEntity>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.NONSTANDARD_TEE:

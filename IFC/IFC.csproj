@@ -218,6 +218,7 @@
     <Compile Include="Entities\Fittings\CAD\IfcMilterJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcNonstandardExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcNonStandardTeeEntity.cs" />
+    <Compile Include="Entities\Fittings\CAD\IfcStandTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcStubInEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcSweepoletEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcUniversalExpansionJointEntity.cs" />

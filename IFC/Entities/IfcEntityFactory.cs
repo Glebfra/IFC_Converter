@@ -98,6 +98,9 @@ namespace IFC.Entities
                 
                 case StartElementType.WELDOLET:
                     return new IfcWeldoletEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.STAND_TEE:
+                    return new IfcStandTeeEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
 
                 case StartElementType.SPRING_SUPPORT:
                     return new IfcSpringSupportEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities);
