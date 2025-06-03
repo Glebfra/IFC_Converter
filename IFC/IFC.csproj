@@ -169,6 +169,7 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractExpansionJoint.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractReducerEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexSaddleBendEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexLateralExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractMilterJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractNonStandardExpansionJointEntity.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Entities\Fittings\CAD\IfcUniversalExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcWeldedTeeEntity.cs" />
     <Compile Include="Entities\Fittings\CAD\IfcWeldoletEntity.cs" />
+    <Compile Include="Entities\Fittings\Vertex\IfcVertexSaddleBendEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexAngularExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexAxialExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexBallExpansionJointEntity.cs" />

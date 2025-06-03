@@ -67,9 +67,8 @@ namespace IFC.Entities
                 case StartElementType.WELDED_BEND:
                 case StartElementType.LONG_RADIUS_PIPE_BEND:
                 case StartElementType.PRE_STRESSED_PIPE_BEND:
-                case StartElementType.SADDLE_BEND:
                     return new IfcCadBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities);
-                
+
                 case StartElementType.NONSTANDARD_BEND:
                     return new IfcCadBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities);
                 
@@ -164,8 +163,10 @@ namespace IFC.Entities
                 case StartElementType.WELDED_BEND:
                 case StartElementType.LONG_RADIUS_PIPE_BEND:
                 case StartElementType.PRE_STRESSED_PIPE_BEND:
-                case StartElementType.SADDLE_BEND:
                     return new IfcVertexBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.SADDLE_BEND:
+                    return new IfcVertexSaddleBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 case StartElementType.NONSTANDARD_BEND:
                     return new IfcVertexBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities, numSegments);

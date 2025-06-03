@@ -148,5 +148,36 @@ namespace IFC.Tools
                 brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
             });
         }
+
+        public static IfcFacetedBrep CreateTorus(IModel model, double torusRadius, double circleRadius, double angle, int numSegments, IfcAxisSettings axisSettings)
+        {
+            IfcCartesianPoint[,] points = CreateTorusPoints(model, torusRadius, circleRadius, angle, numSegments, axisSettings);
+            return CreateTorus(model, points);
+        }
+
+        public static IfcFacetedBrep CreateTorus(IModel model, IfcCartesianPoint[,] points)
+        {
+            int length1 = points.GetLength(0);
+            int length2 = points.GetLength(1);
+            
+            IfcFace[] faces = new IfcFace[(length1 - 1) * length2];
+            int facesIndex = 0;
+            for (int i = 0; i < length1 - 1; i++)
+            {
+                for (int j = 0; j < length2; j++)
+                {
+                    IfcCartesianPoint p1 = points[i, j];
+                    IfcCartesianPoint p2 = points[i, (j + 1) % length2];
+                    IfcCartesianPoint p3 = points[i + 1, (j + 1) % length2];
+                    IfcCartesianPoint p4 = points[i + 1, j];
+                    faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
+                }
+            }
+
+            return model.Instances.New<IfcFacetedBrep>(brep =>
+            {
+                brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
+            });
+        }
     }
 }

@@ -90,5 +90,25 @@ namespace IFC.Tools
         {
             return CreateSpiral(model, radius, height, numSegments, numTurns, displacement, VectorExtensions.X, VectorExtensions.Y);
         }
+
+        public static IfcCartesianPoint[,] CreateTorusPoints(IModel model, double torusRadius, double circleRadius, double angle, int numSegments, IfcAxisSettings axisSettings)
+        {
+            double angleStep = 2 * Math.PI / numSegments;
+            double BendAngleStep = angle / (numSegments - 1);
+
+            IfcCartesianPoint[,] ifcCartesianPoints = new IfcCartesianPoint[numSegments, numSegments];
+            for (int i = 0; i < numSegments; i++)
+            {
+                for (int j = 0; j < numSegments; j++)
+                {
+                    double x = (torusRadius + circleRadius * Math.Cos(j * angleStep)) * Math.Cos(i * BendAngleStep);
+                    double y = circleRadius * Math.Sin(j * angleStep);
+                    double z = (torusRadius + circleRadius * Math.Cos(j * angleStep)) * Math.Sin(i * BendAngleStep);
+                    ifcCartesianPoints[i, j] = IfcAxis.CreatePoint(model, new XbimVector3D(x, y, z));
+                }
+            }
+
+            return ifcCartesianPoints;
+        }
     }
 }
