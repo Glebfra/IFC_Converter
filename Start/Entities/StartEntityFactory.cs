@@ -32,6 +32,7 @@ namespace Start.Entities
                 
                 case StartElementType.VALVE:
                 case StartElementType.FLANGE:
+                case StartElementType.SINGLE_FLANGE:
                     return JsonConvert.DeserializeObject<StartArmatureEntity>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.AXIAL_EXPANSION_JOINT:
