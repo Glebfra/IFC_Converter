@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
@@ -50,6 +51,8 @@ namespace IFC.Entities.Abstract.Fittings
                 throw new NullReferenceException("Cannot find head pipe");
             if (_BranchPipes == null)
                 throw new NullReferenceException("Cannot find branch pipes");
+
+            _BranchPipes = _BranchPipes.OrderByDescending(entity => entity.Diameter).ToArray();
             
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(_BranchPipes[1], coordinates).Normalized();
