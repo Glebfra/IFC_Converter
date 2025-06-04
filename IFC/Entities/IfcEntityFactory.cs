@@ -177,6 +177,9 @@ namespace IFC.Entities
                 case StartElementType.FLANGE:
                     return new IfcVertexFlangeEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
+                case StartElementType.SINGLE_FLANGE:
+                    return new IfcVertexSingleFlangeEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
                 case StartElementType.LATERAL_EXPANSION_JOINT:
                     return new IfcVertexLateralExpansionJointEntity((StartLateralExpansionJointEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
