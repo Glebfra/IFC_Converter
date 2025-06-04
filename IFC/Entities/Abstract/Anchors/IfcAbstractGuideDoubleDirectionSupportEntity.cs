@@ -25,6 +25,10 @@ namespace IFC.Entities.Abstract.Anchors
             : base(doubleDirectionSupport, nodeEntity, segmentEntities)
         {
             _doubleDirectionSupport = doubleDirectionSupport;
+
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(AbstractSegmentEntities[1], coordinates);
+            ObjectMatrix3D = MatrixExtensions.CreateWorld(coordinates, forward);
         }
         
         public override IfcProduct CreateAndAdd(IModel model)
@@ -51,21 +55,13 @@ namespace IFC.Entities.Abstract.Anchors
 
         protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
-            XbimVector3D[] xDirections;
-            XbimVector3D[] yDirections;
-            XbimVector3D[] zDirections;
-            
-            if (_IsVertical)
+            XbimVector3D[] zDirections = new[] { VectorExtensions.Up, VectorExtensions.Up.Negated(), VectorExtensions.Right, VectorExtensions.Right.Negated() };
+            XbimVector3D[] xDirections = new[] { VectorExtensions.Right, VectorExtensions.Right, VectorExtensions.Up, VectorExtensions.Up };
+            XbimVector3D[] yDirections = new XbimVector3D[4];
+
+            for (int i = 0; i < 4; i++)
             {
-                xDirections = new[] { VectorExtensions.Up, VectorExtensions.Up.Negated(), VectorExtensions.Forward, VectorExtensions.Forward.Negated() };
-                yDirections = new[] { VectorExtensions.Forward, VectorExtensions.Forward, VectorExtensions.Right.Negated(), VectorExtensions.Right.Negated() };
-                zDirections = new[] { VectorExtensions.Right, VectorExtensions.Right.Negated(), VectorExtensions.Up, VectorExtensions.Up.Negated() };
-            }
-            else
-            {
-                xDirections = new[] { VectorExtensions.Up, VectorExtensions.Up.Negated(), VectorExtensions.Forward, VectorExtensions.Forward.Negated() };
-                yDirections = new[] { VectorExtensions.Right, VectorExtensions.Right, VectorExtensions.Right.Negated(), VectorExtensions.Right.Negated() };
-                zDirections = new[] { VectorExtensions.Forward, VectorExtensions.Forward.Negated(), VectorExtensions.Up, VectorExtensions.Up.Negated() };
+                yDirections[i] = XbimVector3D.CrossProduct(zDirections[i], xDirections[i]);
             }
             
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[zDirections.Length * 3];

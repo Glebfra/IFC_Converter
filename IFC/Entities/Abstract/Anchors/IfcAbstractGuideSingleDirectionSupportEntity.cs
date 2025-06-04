@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
@@ -25,6 +26,10 @@ namespace IFC.Entities.Abstract.Anchors
             : base(singleDirectionSupport, nodeEntity, segmentEntities)
         {
             _singleDirectionSupport = singleDirectionSupport;
+
+            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(AbstractSegmentEntities[1], coordinates);
+            ObjectMatrix3D = MatrixExtensions.CreateWorld(coordinates, forward);
         }
         
         public override IfcProduct CreateAndAdd(IModel model)
@@ -51,9 +56,13 @@ namespace IFC.Entities.Abstract.Anchors
 
         protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
-            XbimVector3D[] xDirections = new[] { VectorExtensions.Up, VectorExtensions.Forward, VectorExtensions.Forward.Negated() };
-            XbimVector3D[] yDirections = new[] { VectorExtensions.Right, VectorExtensions.Right.Negated(), VectorExtensions.Right.Negated() };
-            XbimVector3D[] zDirections = new[] { VectorExtensions.Forward, VectorExtensions.Up, VectorExtensions.Up.Negated() };
+            XbimVector3D[] zDirections = new[] { VectorExtensions.Up, VectorExtensions.Right, VectorExtensions.Right.Negated() };
+            XbimVector3D[] xDirections = new[] { VectorExtensions.Right, VectorExtensions.Up, VectorExtensions.Up };
+            XbimVector3D[] yDirections = new XbimVector3D[3];
+            for (int i = 0; i < 3; i++)
+            {
+                yDirections[i] = XbimVector3D.CrossProduct(zDirections[i], xDirections[i]);
+            }
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[zDirections.Length * 3];
 
             for (int i = 0; i < zDirections.Length; i++)
