@@ -5,37 +5,38 @@ using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common.Geometry;
 
-namespace IFC.Entities.Abstract
+namespace IFC.Entities.Abstract.Equipments
 {
-    public abstract class IfcAbstractConnectorEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
+    public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
     {
+        public abstract double Length { get; protected set; }
+        
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         
         public IfcNodeEntity NodeEntity { get; }
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
-        public double Angle { get; protected set; }
-
-        public IfcAbstractConnectorEntity(StartAbstractEntity abstractEntity, IfcNodeEntity ifcNodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        
+        protected IfcAbstractEquipmentEntity(StartAbstractEntity abstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
             : base(abstractEntity)
         {
-            NodeEntity = ifcNodeEntity;
-            AbstractSegmentEntities = abstractSegmentEntities;
+            NodeEntity = nodeEntity;
+            AbstractSegmentEntities = segmentEntities;
             
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(entity => IfcAxis.GetDirectionToPipe(entity, coordinates)).ToArray();
+            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(entity => IfcAxis.GetPipeDirectionFromNode(entity, coordinates)).ToArray();
             XbimVector3D forward = directionToPipes[0].Negated();
             XbimVector3D up;
 
-            Angle = 0;
+            double angle = 0;
             if (AbstractSegmentEntities.Length == 2)
             {
-                Angle = forward.Angle(directionToPipes[1]);
+                angle = forward.Angle(directionToPipes[1]);
             }
-            if (Angle == 0 && directionToPipes.Length == 3)
+            if (angle == 0 && directionToPipes.Length == 3)
             {
-                Angle = forward.Angle(directionToPipes[2]);
+                angle = forward.Angle(directionToPipes[2]);
             }
-            if (Angle != 0)
+            if (angle != 0)
             {
                 up = XbimVector3D.CrossProduct(forward, directionToPipes[1]).Normalized();
             }

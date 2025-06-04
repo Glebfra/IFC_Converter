@@ -14,8 +14,9 @@ namespace IFC.Entities.Abstract.Segments
 {
     public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcTwoNodeEntity, IIfcClippable
     {
+        public abstract double Length { get; protected set; }
         public abstract double Diameter { get; protected set; }
-        public abstract ActionProperty<double> Length { get; protected set; }
+        public abstract ActionProperty<double> RealLength { get; protected set; }
         public abstract ActionProperty<double> OuterSurfaceArea { get; protected set; }
         public abstract ActionProperty<XbimVector3D> Coordinates { get; protected set; }
         
@@ -35,7 +36,7 @@ namespace IFC.Entities.Abstract.Segments
         {
             if (IsStartNode(nodeEntity))
                 Coordinates.Value += ObjectMatrix3D.Forward * clipLength;
-            Length.Value -= clipLength;
+            RealLength.Value -= clipLength;
         }
 
         protected override void AddProperties(IModel model, IfcProduct product)
@@ -102,9 +103,9 @@ namespace IFC.Entities.Abstract.Segments
                     quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
                     {
                         length.Name = "Length";
-                        length.LengthValue = new IfcLengthMeasure(Length.Value);
+                        length.LengthValue = new IfcLengthMeasure(RealLength.Value);
 
-                        Length.OnValueChange += () => length.LengthValue = new IfcLengthMeasure(Length.Value);
+                        RealLength.OnValueChange += () => length.LengthValue = new IfcLengthMeasure(RealLength.Value);
                     }));
                     quantity.Quantities.Add(model.Instances.New<IfcQuantityArea>(area =>
                     {
@@ -123,7 +124,7 @@ namespace IFC.Entities.Abstract.Segments
         {
             XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D startPipeCoordinates = ObjectMatrix3D.Translation;
-            XbimVector3D endPipeCoordinates = ObjectMatrix3D.Translation + ObjectMatrix3D.Forward * Length.Value;
+            XbimVector3D endPipeCoordinates = ObjectMatrix3D.Translation + ObjectMatrix3D.Forward * RealLength.Value;
 
             return (nodeCoordinates - startPipeCoordinates).Length < (nodeCoordinates - endPipeCoordinates).Length;
         }

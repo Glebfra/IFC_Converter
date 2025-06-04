@@ -57,5 +57,10 @@ namespace IFC.Tools
             
             return StyleItems(model, surfaceStyle, representationItems);
         }
+        
+        public static IEnumerable<IfcStyledItem> StyleItems(IModel model, Colour colour, IfcRepresentationItem representationItem)
+        {
+            return StyleItems(model, colour, new[] { representationItem });
+        }
     }
 }

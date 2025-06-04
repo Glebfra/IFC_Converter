@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using IFC.Entities.Abstract;
 using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Anchors;
@@ -12,26 +11,25 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedComponentElements;
 
-namespace IFC.Entities.Anchors.CAD
+namespace IFC.Entities.Abstract.Anchors
 {
-    public class IfcAnchorEntity : IfcAbstractAnchorEntity
+    public abstract class IfcAbstractFixedSupportEntity : IfcAbstractAnchorEntity
     {
-        private double _xDim;
-        private double _yDim;
+        public abstract double XDim { get; protected set; }
+        public abstract double YDim { get; protected set; }
+        
+        public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
 
-        private StartAnchorEntity _anchorEntity;
-        private IfcDiscreteAccessory _discreteAccessory;
-
-        public IfcAnchorEntity(StartAnchorEntity anchorEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
-            : base(anchorEntity, nodeEntity, abstractSegmentEntities)
+        private readonly StartAnchorEntity _anchor;
+        private IfcDiscreteAccessory? _discreteAccessory;
+        
+        protected IfcAbstractFixedSupportEntity(StartAnchorEntity anchor, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(anchor, nodeEntity, segmentEntities)
         {
-            _anchorEntity = anchorEntity;
-
-            _xDim = abstractSegmentEntities[0].Diameter * 2;
-            _yDim = _xDim;
+            _anchor = anchor;
             
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D forward = abstractSegmentEntities[0].ObjectMatrix3D.Forward;
+            XbimVector3D forward = AbstractSegmentEntities[0].ObjectMatrix3D.Forward;
             XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
             if (forward == WorldUp || forward == -1 * WorldUp)
                 WorldUp = new XbimVector3D(0, 1, 0);
@@ -39,7 +37,7 @@ namespace IFC.Entities.Anchors.CAD
             
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
-
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
@@ -51,7 +49,7 @@ namespace IFC.Entities.Anchors.CAD
             
             _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {
-                accessory.Name = _anchorEntity.Name;
+                accessory.Name = _anchor.Name;
                 accessory.Tag = Tag;
                 accessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
                 accessory.Representation = shape;
@@ -62,9 +60,9 @@ namespace IFC.Entities.Anchors.CAD
             return _discreteAccessory;
         }
 
-        protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
+        private IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
-            IfcExtrudedAreaSolid rectangle = IfcGeometry.CreateRectangle(model, _xDim, _yDim, _xDim / 10, XbimVector3D.Zero);
+            IfcExtrudedAreaSolid rectangle = IfcGeometry.CreateRectangle(model, XDim, YDim, XDim / 10, XbimVector3D.Zero);
             return new[] { rectangle };
         }
     }
