@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors.CAD;
 using IFC.Entities.Anchors.Vertex;
 using IFC.Entities.Equipments.Vertex;
@@ -21,7 +22,7 @@ namespace IFC.Entities
             switch (entity.Type)
             {
                 case StartElementType.PIPE_ELEMENT:
-                    return new IfcPipeEntity((StartPipeEntity)entity, nodeEntities);
+                    return new IfcPipeSegmentEntity((StartPipeEntity)entity, nodeEntities);
                 
                 case StartElementType.CONE_ELEMENT:
                     return new IfcConeElementEntity((StartConeElementEntity)entity, nodeEntities);
@@ -54,9 +55,10 @@ namespace IFC.Entities
             switch (entity.Type)
             {
                 case StartElementType.ANCHOR:
-                    return new IfcAnchorEntity((StartAnchorEntity)entity, nodeEntity, segmentEntities);
+                    return new IfcFixedAnchorEntity((StartAnchorEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.AXIAL_EXPANSION_JOINT:
+                case StartElementType.AXIAL_EXPANSION_SLIP_JOINT:
                     return new IfcAxialExpansionJointEntity((StartAxialExpansionJointEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.ELBOW:
@@ -65,11 +67,10 @@ namespace IFC.Entities
                 case StartElementType.WELDED_BEND:
                 case StartElementType.LONG_RADIUS_PIPE_BEND:
                 case StartElementType.PRE_STRESSED_PIPE_BEND:
-                case StartElementType.SADDLE_BEND:
-                    return new IfcBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities);
-                
+                    return new IfcCadBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities);
+
                 case StartElementType.NONSTANDARD_BEND:
-                    return new IfcBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities);
+                    return new IfcCadBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.FABRICATED_TEE:
                     return new IfcFabricatedTeeEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
@@ -97,6 +98,9 @@ namespace IFC.Entities
                 
                 case StartElementType.WELDOLET:
                     return new IfcWeldoletEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.STAND_TEE:
+                    return new IfcStandTeeEntity((StartTeeEntity)entity, nodeEntity, segmentEntities);
 
                 case StartElementType.SPRING_SUPPORT:
                     return new IfcSpringSupportEntity((StartSpringSupportEntity)entity, nodeEntity, segmentEntities);
@@ -121,6 +125,15 @@ namespace IFC.Entities
                 
                 case StartElementType.NONSTANDARD_RESTRAINT:
                     return new IfcNonStandardRestraintEntity((StartNonStandardRestraint)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.DAMPER:
+                    return new IfcDamperEntity((StartDamperEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.HINGED_ANCHOR:
+                    return new IfcHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities);
+                
+                case StartElementType.SLIDING_SUPPORT:
+                    return new IfcSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities);
                 
                 case StartElementType.CAP:
                     return new IfcCapEntity((StartCapEntity)entity, nodeEntity, segmentEntities);
@@ -153,14 +166,19 @@ namespace IFC.Entities
                 case StartElementType.WELDED_BEND:
                 case StartElementType.LONG_RADIUS_PIPE_BEND:
                 case StartElementType.PRE_STRESSED_PIPE_BEND:
-                case StartElementType.SADDLE_BEND:
                     return new IfcVertexBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.SADDLE_BEND:
+                    return new IfcVertexSaddleBendEntity((StartBendEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 case StartElementType.NONSTANDARD_BEND:
                     return new IfcVertexBendEntity((StartNonStandardBendEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 case StartElementType.FLANGE:
                     return new IfcVertexFlangeEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.SINGLE_FLANGE:
+                    return new IfcVertexSingleFlangeEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
                 
                 case StartElementType.LATERAL_EXPANSION_JOINT:
                     return new IfcVertexLateralExpansionJointEntity((StartLateralExpansionJointEntity)entity, nodeEntity, segmentEntities, numSegments);
@@ -176,13 +194,7 @@ namespace IFC.Entities
                 
                 case StartElementType.VALVE:
                     return new IfcVertexValveEntity((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
-                
-                case StartElementType.HINGED_ANCHOR:
-                    return new IfcVertexHingedAnchorEntity((StartHingedAnchorEntity)entity, nodeEntity, segmentEntities, numSegments);
-                
-                case StartElementType.SLIDING_SUPPORT:
-                    return new IfcVertexSlidingSupportEntity((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
-                
+
                 case StartElementType.VESSEL:
                     return new IfcVertexVesselEntity((StartVesselEntity)entity, nodeEntity, segmentEntities, numSegments);
                 

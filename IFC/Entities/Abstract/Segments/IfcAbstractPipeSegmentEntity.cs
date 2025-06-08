@@ -1,0 +1,27 @@
+﻿using Start.Entities.Segments;
+using Xbim.Common;
+using Xbim.Ifc4.HvacDomain;
+using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.Kernel;
+
+namespace IFC.Entities.Abstract.Segments
+{
+    public abstract class IfcAbstractPipeSegmentEntity : IfcAbstractStraightSegment
+    {
+        private StartPipeEntity _pipeEntity;
+        private IfcPipeSegment? _pipeSegment;
+        
+        protected IfcAbstractPipeSegmentEntity(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities) 
+            : base(pipeEntity, nodeEntities)
+        {
+            _pipeEntity = pipeEntity;
+        }
+
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            _pipeSegment = CreatePipeSegment(model, _pipeEntity.Name, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);
+            AddProperties(model, _pipeSegment);
+            return _pipeSegment;
+        }
+    }
+}

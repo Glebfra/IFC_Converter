@@ -32,6 +32,7 @@ namespace Start.Entities
                 
                 case StartElementType.VALVE:
                 case StartElementType.FLANGE:
+                case StartElementType.SINGLE_FLANGE:
                     return JsonConvert.DeserializeObject<StartArmatureEntity>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.AXIAL_EXPANSION_JOINT:
@@ -75,6 +76,7 @@ namespace Start.Entities
                 case StartElementType.SWEEPOLET:
                 case StartElementType.FABRICATED_TEE:
                 case StartElementType.STUB_IN:
+                case StartElementType.STAND_TEE:
                     return JsonConvert.DeserializeObject<StartTeeEntity>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.NONSTANDARD_TEE:
@@ -113,6 +115,9 @@ namespace Start.Entities
                 
                 case StartElementType.NONSTANDARD_RESTRAINT:
                     return JsonConvert.DeserializeObject<StartNonStandardRestraint>(dataArrayItem.Data.ToString());
+                
+                case StartElementType.DAMPER:
+                    return JsonConvert.DeserializeObject<StartDamperEntity>(dataArrayItem.Data.ToString());
                 
                 case StartElementType.VESSEL:
                     return JsonConvert.DeserializeObject<StartVesselEntity>(dataArrayItem.Data.ToString());

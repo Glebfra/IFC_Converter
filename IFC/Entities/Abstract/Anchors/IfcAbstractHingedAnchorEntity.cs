@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using IFC.Entities.Abstract;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Anchors;
@@ -11,40 +11,34 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedComponentElements;
 
-namespace IFC.Entities.Anchors.Vertex
+namespace IFC.Entities.Abstract.Anchors
 {
-    public class IfcVertexHingedAnchorEntity : IfcAbstractAnchorEntity
+    public abstract class IfcAbstractHingedAnchorEntity : IfcAbstractNonFixedSupportEntity
     {
-        private readonly double _height;
-        private readonly int _numSegments;
-
-        private StartHingedAnchorEntity _hingedAnchorEntity;
-        private IfcDiscreteAccessory _discreteAccessory;
-
-        public IfcVertexHingedAnchorEntity(StartHingedAnchorEntity hingedAnchorEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities, int numSegments) 
-            : base(hingedAnchorEntity, nodeEntity, abstractSegmentEntities)
+        public abstract int NumSegments { get; protected set; }
+        public abstract double Height { get; protected set; }
+        
+        private readonly StartHingedAnchorEntity _hingedAnchor;
+        private IfcDiscreteAccessory? _discreteAccessory;
+        
+        protected IfcAbstractHingedAnchorEntity(StartHingedAnchorEntity hingedAnchor, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(hingedAnchor, nodeEntity, segmentEntities)
         {
-            _hingedAnchorEntity = hingedAnchorEntity;
-            
-            _numSegments = numSegments;
-            _height = _PipeDiameter * 2;
-
-            XbimVector3D forward = new XbimVector3D(0, 0, 1);
-            XbimVector3D up = new XbimVector3D(0, 1, 0);
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(NodeEntity.ObjectMatrix3D.Translation, forward, up);
+            _hingedAnchor = hingedAnchor;
         }
-
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, _PipeDiameter / 2 * VectorExtensions.Forward);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, Diameter / 2 * VectorExtensions.Forward);
             IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+            ColourEntity(model, representationItems);
 
             _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
             {
-                accessory.Name = _hingedAnchorEntity.Name;
+                accessory.Name = _hingedAnchor.Name;
                 accessory.Tag = Tag;
                 accessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
                 accessory.Representation = shape;
@@ -59,16 +53,16 @@ namespace IFC.Entities.Anchors.Vertex
         {
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[2];
 
-            XbimVector3D rectangleCoordinates = displacement - _height * VectorExtensions.Forward;
-            double rectangleXDim = _PipeDiameter;
-            double rectangleYDim = _PipeDiameter;
-            double rectangleHeight = _height / 20;
+            XbimVector3D rectangleCoordinates = displacement - Height * VectorExtensions.Forward;
+            double rectangleXDim = Diameter;
+            double rectangleYDim = Diameter;
+            double rectangleHeight = Height / 20;
             representationItems[0] = IfcGeometry.CreateRectangle(model, rectangleXDim, rectangleYDim, rectangleHeight, rectangleCoordinates);
 
             XbimVector3D coneCoordinates = rectangleCoordinates + rectangleHeight * VectorExtensions.Forward;
-            XbimVector3D coneTopCoordinates = displacement - _PipeDiameter / 2 * VectorExtensions.Forward;
-            double coneRadius = _PipeDiameter / 2;
-            IfcCartesianPoint[] circle = IfcVertexGeometry.CreateCircle(model, coneRadius, coneCoordinates, _numSegments);
+            XbimVector3D coneTopCoordinates = displacement - Diameter / 2 * VectorExtensions.Forward;
+            double coneRadius = Diameter / 2;
+            IfcCartesianPoint[] circle = IfcVertexGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments);
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, coneTopCoordinates);
             representationItems[1] = IfcVertexGeometry.CreateCone(model, circle, topPoint);
             
