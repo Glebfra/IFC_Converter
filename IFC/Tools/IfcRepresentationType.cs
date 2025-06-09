@@ -1,0 +1,35 @@
+﻿namespace IFC.Tools
+{
+    public enum IfcRepresentationType
+    {
+        Point,
+        PointCloud,
+        Curve,
+        Curve2D,
+        Curve3D,
+        Surface,
+        Surface2D,
+        Surface3D,
+        SectionedSurface,
+        FillArea,
+        Text,
+        AdvancedSurface,
+        GeometricSet,
+        GeometricCurveSet,
+        Annotation2D,
+        SurfaceModel,
+        Tessellation,
+        Segment,
+        SolidModel,
+        SweptSolid,
+        AdvancedSweptSolid,
+        Brep,
+        AdvancedBrep,
+        CSG,
+        Clipping,
+        BoundingBox,
+        SectionedSpine,
+        LightSource,
+        MappedRepresentation
+    }
+}
