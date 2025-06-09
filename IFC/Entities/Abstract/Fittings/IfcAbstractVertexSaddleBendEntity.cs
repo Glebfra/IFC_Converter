@@ -75,7 +75,7 @@ namespace IFC.Entities.Abstract.Fittings
             representationItems.Add(IfcGeometry.CreateCylinder(
                 model, BranchPipeRadius, BranchHeight, branchDisplacement, VectorExtensions.Forward.Negated(), VectorExtensions.Right
             ));
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems, IfcRepresentationType.SweptSolid, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, representationItems);
             

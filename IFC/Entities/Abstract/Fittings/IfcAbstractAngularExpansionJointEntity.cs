@@ -49,7 +49,7 @@ namespace IFC.Entities.Abstract.Fittings
             extrudedAreaSolids[1] = CreateBranch(model, secondExtrudeDirection, secondProfileRefDirection);
             extrudedAreaSolids[2] = CreateFacetedBrep(model, points);
             
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, extrudedAreaSolids);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolids, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, extrudedAreaSolids);
 

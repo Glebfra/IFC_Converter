@@ -38,7 +38,7 @@ namespace IFC.Entities.Abstract.Fittings
                 model, _PipeRadiuses[0], _PipeRadiuses[1], Length, 
                 NumSegments, axisSettings, XbimVector3D.Zero
             );
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, facetedBrep);
         

@@ -66,7 +66,7 @@ namespace IFC.Entities.Abstract.Fittings
             teeExtrudedArea[0] = CreateBranch(model);
             teeExtrudedArea[1] = CreateHead(model);
 
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, teeExtrudedArea, IfcRepresentationType.SweptSolid, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape productDefinitionShape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, teeExtrudedArea);
             

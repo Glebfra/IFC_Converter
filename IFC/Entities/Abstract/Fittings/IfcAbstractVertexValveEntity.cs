@@ -45,7 +45,7 @@ namespace IFC.Entities.Abstract.Fittings
             IfcBooleanResult result = IfcGeometry.CreateBooleanResult(model, lowerBrep, upperBrep, IfcBooleanOperator.UNION);
             ColourEntity(model, result);
             
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, result);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, result, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
             {

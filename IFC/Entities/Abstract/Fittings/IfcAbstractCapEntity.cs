@@ -29,7 +29,7 @@ namespace IFC.Entities.Abstract.Fittings
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
             
             IfcExtrudedAreaSolid extrudedAreaSolid = IfcGeometry.CreateCylinder(model, Diameter / 2, Length, XbimVector3D.Zero);
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolid);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolid, IfcRepresentationType.SweptSolid, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, extrudedAreaSolid);
 

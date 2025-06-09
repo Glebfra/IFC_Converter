@@ -57,7 +57,7 @@ namespace IFC.Entities.Abstract.Segments
 
                 RealLength.OnValueChange += () => solid.Depth = RealLength.Value;
             });
-            IfcShapeRepresentation shapeRep = IfcGeometry.CreateShapeRepresentation(model, extrudedArea);
+            IfcShapeRepresentation shapeRep = IfcGeometry.CreateShapeRepresentation(model, extrudedArea, IfcRepresentationType.SweptSolid, IfcRepresentationIdentifier.Body);
         
             return IfcGeometry.CreateProductDefinitionShape(model, shapeRep);
         }

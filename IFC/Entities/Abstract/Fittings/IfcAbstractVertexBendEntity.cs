@@ -38,7 +38,7 @@ namespace IFC.Entities.Abstract.Fittings
             
             IfcCartesianPoint[,] ifcCartesianPoints = CreatePoints(model);
             IfcFacetedBrep brep = CreateFacetedBrep(model, ifcCartesianPoints);
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, brep);
             

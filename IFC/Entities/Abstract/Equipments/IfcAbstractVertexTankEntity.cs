@@ -53,7 +53,7 @@ namespace IFC.Entities.Abstract.Equipments
                 ? CreateVerticalTank(model)
                 : CreateHorizontalTank(model);
 
-            IfcShapeRepresentation representation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
+            IfcShapeRepresentation representation = IfcGeometry.CreateShapeRepresentation(model, representationItems, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, representation);
             ColourEntity(model, representationItems);
 

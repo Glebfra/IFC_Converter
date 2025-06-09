@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
@@ -50,16 +51,15 @@ namespace IFC
             XbimVector3D up = new XbimVector3D(0, 1, 0);
             XbimMatrix3D worldMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, worldMatrix3D);
-
-            IfcGeometricRepresentationContext context = model.Instances.New<IfcGeometricRepresentationContext>(representationContext =>
+            
+            model.Instances.New<IfcGeometricRepresentationSubContext>(context =>
             {
-                representationContext.ContextIdentifier = "Start context";
-                representationContext.Precision = 1e-5;
-                representationContext.ContextType = "Model";
-                representationContext.CoordinateSpaceDimension = 3;
-                representationContext.WorldCoordinateSystem = objectPlacement.Axis2Placement3D;
+                context.ParentContext = model.Instances.OfType<IfcGeometricRepresentationContext>().First();
+                context.ContextIdentifier = "Body";
+                context.ContextType = "Model";
+                context.TargetView = IfcGeometricProjectionEnum.MODEL_VIEW;
             });
-        
+
             IfcSite site = model.Instances.New<IfcSite>(ifcSite =>
             {
                 ifcSite.Name = "Site";
@@ -75,6 +75,7 @@ namespace IFC
                 ifcBuilding.ObjectPlacement = objectPlacement.LocalPlacement;
             });
             site.AddBuilding(building);
+
             transaction.Commit();
 
             return new IFCProject(model);

@@ -37,7 +37,7 @@ namespace IFC.Entities.Abstract.Fittings
             IfcFacetedBrep[] brep = new IfcFacetedBrep[2];
             brep[0] = IfcVertexGeometry.CreateSphere(model, Radius, firstDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y);
             brep[1] = IfcVertexGeometry.CreateSphere(model, Radius, secondDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y);
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, brep);
             

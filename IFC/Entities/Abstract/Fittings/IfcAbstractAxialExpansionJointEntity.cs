@@ -39,7 +39,7 @@ namespace IFC.Entities.Abstract.Fittings
             extrudedAreaSolids[0] = IfcGeometry.CreateExtrudedAreaSolid(model, profileDefs[0], Length / 2, XbimVector3D.Zero, VectorExtensions.Forward.Negated(), VectorExtensions.Right.Negated());
             extrudedAreaSolids[1] = IfcGeometry.CreateExtrudedAreaSolid(model, profileDefs[1], Length / 2, XbimVector3D.Zero, VectorExtensions.Forward, VectorExtensions.Right);
 
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolids);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolids, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, extrudedAreaSolids);
             

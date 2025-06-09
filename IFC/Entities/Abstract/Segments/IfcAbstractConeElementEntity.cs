@@ -33,7 +33,7 @@ namespace IFC.Entities.Abstract.Segments
                 model, Diameter / 2, SecondDiameter / 2, RealLength.Value, 
                 XbimVector3D.Zero, _NumSegments, VectorExtensions.Right, VectorExtensions.Up
             );
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBrep);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBrep, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             
             IfcColours.StyleItems(model, Colour, facetedBrep);

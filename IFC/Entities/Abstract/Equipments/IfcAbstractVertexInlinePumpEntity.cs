@@ -47,7 +47,7 @@ namespace IFC.Entities.Abstract.Equipments
             representationItems[0] = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
             representationItems[1] = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
             
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, representationItems);
             

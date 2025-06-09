@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -34,6 +35,11 @@ namespace IFC.Extensions
         public static IfcCartesianPoint ToCartesianPoint(this XbimVector3D vector, IModel model)
         {
             return IfcAxis.CreatePoint(model, vector);
+        }
+
+        public static double[] ToDoubleArray(this XbimVector3D vector3D)
+        {
+            return new double[] { vector3D.X, vector3D.Y, vector3D.Z };
         }
 
         public static XbimVector3D RotateAroundXAxis(this XbimVector3D vector3D, double angle)

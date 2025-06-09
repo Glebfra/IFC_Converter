@@ -250,6 +250,8 @@
     <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
+    <Compile Include="Extensions\IfcCartesianPointListExtensions.cs" />
+    <Compile Include="Extensions\IfcTriangulatedFaceSetExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
@@ -280,6 +282,8 @@
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\IfcObjectPlacement.cs" />
+    <Compile Include="Tools\IfcRepresentationIdentifier.cs" />
+    <Compile Include="Tools\IfcRepresentationType.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
     <Compile Include="Tools\IfcVertexGeometry.Points.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>

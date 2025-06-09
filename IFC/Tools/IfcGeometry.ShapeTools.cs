@@ -13,19 +13,21 @@ namespace IFC.Tools
 {
     public static partial class IfcGeometry
     {
-        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem)
+        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem, IfcRepresentationType type, IfcRepresentationIdentifier identifier)
         {
-            return CreateShapeRepresentation(model, new[] { representationItem });
+            return CreateShapeRepresentation(model, new[] { representationItem }, type, identifier);
         }
-
-        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IEnumerable<IfcRepresentationItem> representationItems)
+        
+        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IEnumerable<IfcRepresentationItem> representationItems, IfcRepresentationType type, IfcRepresentationIdentifier identifier)
         {
-            return model.Instances.New<IfcShapeRepresentation>(representation =>
+            string representationIdentifier = identifier.ToString().Replace("_", "-");
+            string representationType = type.ToString().Replace("_", "-");
+            return model.Instances.New<IfcShapeRepresentation>(sr =>
             {
-                representation.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-                representation.RepresentationIdentifier = "Body";
-                representation.RepresentationType = "SweptSolid";
-                representation.Items.AddRange(representationItems);
+                sr.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationSubContext>().FirstOrDefault();
+                sr.RepresentationIdentifier = representationIdentifier;
+                sr.RepresentationType = representationType;
+                sr.Items.AddRange(representationItems);
             });
         }
 

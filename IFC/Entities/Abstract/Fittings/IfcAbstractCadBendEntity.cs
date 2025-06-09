@@ -32,7 +32,7 @@ namespace IFC.Entities.Abstract.Fittings
                 model, PipeRadius, BendRadius, Angle,
                 XbimVector3D.Zero, VectorExtensions.Forward, VectorExtensions.Right
             );
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, pipeBend);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, pipeBend, IfcRepresentationType.AdvancedSweptSolid, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, pipeBend);
             

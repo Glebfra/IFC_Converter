@@ -42,7 +42,7 @@ namespace IFC.Entities.Abstract.Fittings
             IfcExtrudedAreaSolid[] segments = AbstractSegmentEntities.Select(item => CreateExtrudedAreaSolid(model, item, Length / 2)).ToArray();
             ifcRepresentationItems.Add(IfcGeometry.CreateBooleanResult(model, segments[0], segments[1], IfcBooleanOperator.INTERSECTION));
 
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems, IfcRepresentationType.CSG, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, ifcRepresentationItems);
             

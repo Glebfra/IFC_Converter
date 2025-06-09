@@ -53,7 +53,7 @@ namespace IFC.Entities.Abstract.Fittings
                 IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]),
             };
             
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, facetedBreps, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, facetedBreps);
             

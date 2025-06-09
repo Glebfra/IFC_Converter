@@ -31,7 +31,7 @@ namespace IFC.Entities.Abstract.Fittings
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
             
             IfcFacetedBrep brep = IfcVertexGeometry.CreateSphere(model, Radius, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y);
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, brep);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep, IfcRepresentationType.Brep, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, brep);
             

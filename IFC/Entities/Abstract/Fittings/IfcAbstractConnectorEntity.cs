@@ -31,7 +31,7 @@ namespace IFC.Entities.Abstract.Fittings
 
             XbimVector3D displacement = Length / 2 * VectorExtensions.Forward.Negated();
             IfcExtrudedAreaSolid extrudedAreaSolid = IfcGeometry.CreateCylinder(model, Diameter / 2 * 1.1, Length, displacement);
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolid);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, extrudedAreaSolid, IfcRepresentationType.SweptSolid, IfcRepresentationIdentifier.Body);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
             ColourEntity(model, extrudedAreaSolid);
             
