@@ -1,5 +1,6 @@
 ﻿using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
+using IFC.Tools.Shape;
 using Start.Entities.Anchors;
 
 namespace IFC.Entities.Abstract.Anchors

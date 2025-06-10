@@ -4,7 +4,7 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
 
-namespace IFC.Tools
+namespace IFC.Tools.Geometry
 {
     public static partial class IfcAxis
     {

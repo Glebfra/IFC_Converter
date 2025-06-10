@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
+using IFC.Tools.Shape;
 using Start.API;
 using Start.Entities.Abstract;
 using Xbim.Common;

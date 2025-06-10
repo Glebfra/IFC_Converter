@@ -261,42 +261,45 @@
     <Compile Include="IFCProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ActionProperty.cs" />
-    <Compile Include="Tools\Colour.cs" />
-    <Compile Include="Tools\IfcAxis.cs" />
-    <Compile Include="Tools\IfcAxis.Direction.cs">
+    <Compile Include="Tools\Geometry\IfcAxis.cs" />
+    <Compile Include="Tools\Geometry\IfcAxis.Direction.cs">
       <DependentUpon>IfcAxis.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcAxis.Placement.cs">
+    <Compile Include="Tools\Geometry\IfcAxis.Placement.cs">
       <DependentUpon>IfcAxis.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcAxisSettings.cs" />
-    <Compile Include="Tools\IfcColours.cs" />
-    <Compile Include="Tools\IfcGeometry.cs" />
-    <Compile Include="Tools\IfcGeometry.Extensions.cs">
+    <Compile Include="Tools\Geometry\IfcAxisSettings.cs" />
+    <Compile Include="Tools\Geometry\IfcGeometry.cs" />
+    <Compile Include="Tools\Geometry\IfcGeometry.Extensions.cs">
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcGeometry.Primitives.cs">
+    <Compile Include="Tools\Geometry\IfcGeometry.Primitives.cs">
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcGeometry.Profiles.cs">
+    <Compile Include="Tools\Geometry\IfcGeometry.Profiles.cs">
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcGeometry.ShapeTools.cs">
+    <Compile Include="Tools\Geometry\IfcGeometry.ShapeTools.cs">
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcObjectPlacement.cs" />
-    <Compile Include="Tools\IfcRepresentationIdentifier.cs" />
-    <Compile Include="Tools\IfcRepresentationType.cs" />
-    <Compile Include="Tools\IfcVertexGeometry.cs" />
-    <Compile Include="Tools\IfcVertexGeometry.Points.cs">
+    <Compile Include="Tools\Geometry\IfcObjectPlacement.cs" />
+    <Compile Include="Tools\Geometry\IfcVertexGeometry.cs" />
+    <Compile Include="Tools\Geometry\IfcVertexGeometry.Points.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcVertexGeometry.Primitives.cs">
+    <Compile Include="Tools\Geometry\IfcVertexGeometry.PointSets.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcVertexGeometry.ShapeTools.cs">
+    <Compile Include="Tools\Geometry\IfcVertexGeometry.Primitives.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Geometry\IfcVertexGeometry.ShapeTools.cs">
+      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Shape\Colour.cs" />
+    <Compile Include="Tools\Shape\IfcColours.cs" />
+    <Compile Include="Tools\Shape\IfcRepresentationIdentifier.cs" />
+    <Compile Include="Tools\Shape\IfcRepresentationType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

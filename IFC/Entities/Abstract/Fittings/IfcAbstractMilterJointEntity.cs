@@ -2,6 +2,8 @@
 using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
+using IFC.Tools.Geometry;
+using IFC.Tools.Shape;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;

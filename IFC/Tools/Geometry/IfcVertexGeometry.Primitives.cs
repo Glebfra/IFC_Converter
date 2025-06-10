@@ -1,14 +1,20 @@
-﻿using IFC.Extensions;
+﻿using System;
+using IFC.Extensions;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Tools
+namespace IFC.Tools.Geometry
 {
     public static partial class IfcVertexGeometry
     {
+        public static IfcTriangulatedFaceSet CreateCylinder(IModel model, double radius, double height, IfcAxisSettings axisSettings, int numSegments)
+        {
+            throw new NotImplementedException(nameof(CreateCylinder));
+        }
+        
         public static IfcFacetedBrep CreateCone(IModel model, double radius, double height, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
         {
             xAxis = xAxis.Normalized();

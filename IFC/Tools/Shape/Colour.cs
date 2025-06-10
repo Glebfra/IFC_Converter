@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IFC.Tools
+namespace IFC.Tools.Shape
 {
     public class Colour
     {

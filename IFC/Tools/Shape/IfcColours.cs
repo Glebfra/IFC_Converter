@@ -3,7 +3,7 @@ using Xbim.Common;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.PresentationAppearanceResource;
 
-namespace IFC.Tools
+namespace IFC.Tools.Shape
 {
     public static class IfcColours
     {

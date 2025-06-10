@@ -8,7 +8,7 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.TopologyResource;
 
-namespace IFC.Tools
+namespace IFC.Tools.Geometry
 {
     public static partial class IfcVertexGeometry
     {

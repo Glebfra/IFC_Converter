@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
+using IFC.Tools.Geometry;
 using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
 

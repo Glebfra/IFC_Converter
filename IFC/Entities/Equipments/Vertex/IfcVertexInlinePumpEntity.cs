@@ -3,6 +3,7 @@ using System.Linq;
 using IFC.Entities.Abstract.Equipments;
 using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
+using IFC.Tools.Geometry;
 using Start.Entities.Equipments;
 using Xbim.Common.Geometry;
 

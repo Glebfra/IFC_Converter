@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IFC.Extensions;
+using IFC.Tools.Shape;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -9,7 +10,7 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.RepresentationResource;
 
-namespace IFC.Tools
+namespace IFC.Tools.Geometry
 {
     public static partial class IfcGeometry
     {

@@ -1,7 +1,7 @@
 ﻿using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;
 
-namespace IFC.Tools
+namespace IFC.Tools.Geometry
 {
     public struct IfcObjectPlacement
     {

@@ -1,6 +1,6 @@
 ﻿using Xbim.Common.Geometry;
 
-namespace IFC.Tools
+namespace IFC.Tools.Geometry
 {
     public struct IfcAxisSettings
     {
