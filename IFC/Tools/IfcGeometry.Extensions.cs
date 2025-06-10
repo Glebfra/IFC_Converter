@@ -2,9 +2,10 @@
 using System.Linq;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 
-namespace IFC.Tools.Geometry
+namespace IFC.Tools
 {
     public static partial class IfcGeometry
     {

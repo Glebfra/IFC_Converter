@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using IFC.Tools;
-using IFC.Tools.Geometry;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;

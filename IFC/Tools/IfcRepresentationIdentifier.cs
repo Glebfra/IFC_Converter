@@ -1,4 +1,4 @@
-﻿namespace IFC.Tools.Shape
+﻿namespace IFC.Tools
 {
     public enum IfcRepresentationIdentifier
     {

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
-using IFC.Tools.Geometry;
-using IFC.Tools.Shape;
 using Start.Entities.Anchors;
 using Xbim.Common;
 using Xbim.Common.Geometry;

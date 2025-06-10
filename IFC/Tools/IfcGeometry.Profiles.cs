@@ -5,7 +5,7 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
 
-namespace IFC.Tools.Geometry
+namespace IFC.Tools
 {
     public static partial class IfcGeometry
     {

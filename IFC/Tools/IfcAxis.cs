@@ -1,4 +1,4 @@
-﻿namespace IFC.Tools.Geometry
+﻿namespace IFC.Tools
 {
     public static partial class IfcAxis
     {

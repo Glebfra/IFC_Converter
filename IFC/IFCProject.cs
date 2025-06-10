@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
-using IFC.Tools.Geometry;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
