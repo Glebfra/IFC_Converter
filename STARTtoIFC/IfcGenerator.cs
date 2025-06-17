@@ -46,7 +46,7 @@ namespace STARTtoIFC
                 logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
             }
             
-            using (IFCProject ifcProject = IFCProject.CreateProject("IFC"))
+            using (IFCProject ifcProject = IFCProject.CreateProject(startDocument.GetTitle()))
             {
                 ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, false);
                 ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, false);

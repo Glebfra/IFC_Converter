@@ -33,17 +33,15 @@ namespace IFC
             };
         
             IfcStore model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
+            model.Header.FileDescription.Description.Add("ViewDefinition [DesignTransferView]");
+            model.Header.FileDescription.Description.Add("Version 2.0");
+            model.Header.FileName.Name = name;
+            
+            AddUnits(model);
+            
             ITransaction transaction = model.BeginTransaction("Model creation");
             IfcProject project = model.Instances.New<IfcProject>(p => p.Name = name);
             project.Initialize(ProjectUnits.SIUnitsUK);
-        
-            IfcSIUnit lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
-            lengthUnit.Name = IfcSIUnitName.METRE;
-            lengthUnit.Prefix = null;
-
-            IfcSIUnit massUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.MASSUNIT);
-            massUnit.Name = IfcSIUnitName.GRAM;
-            massUnit.Prefix = IfcSIPrefix.KILO;
 
             XbimVector3D coordinates = XbimVector3D.Zero;
             XbimVector3D forward = new XbimVector3D(0, 0, 1);
@@ -136,6 +134,17 @@ namespace IFC
         {
             _transaction.Dispose();
             _model.Dispose();
+        }
+
+        private static void AddUnits(IModel model)
+        {
+            IfcSIUnit lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+            lengthUnit.Name = IfcSIUnitName.METRE;
+            lengthUnit.Prefix = null;
+
+            IfcSIUnit massUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.MASSUNIT);
+            massUnit.Name = IfcSIUnitName.GRAM;
+            massUnit.Prefix = IfcSIPrefix.KILO;
         }
     }
 }
