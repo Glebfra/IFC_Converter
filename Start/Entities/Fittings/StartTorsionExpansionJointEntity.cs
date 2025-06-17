@@ -7,9 +7,9 @@ namespace Start.Entities.Fittings
 {
     public class StartTorsionExpansionJointEntity : StartAbstractFittingEntity
     {
-        //TODO get measurements
         [JsonProperty(StartPropertyName.AllowableAxialExpansion)]
-        public double AllowableAxialExpansion { get; set; }
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty AllowableAxialExpansion { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.FrictionMoment)]
         [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]
