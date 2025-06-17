@@ -78,7 +78,7 @@ namespace Start
         {
             StartDataArrayItem[]? allDataArrayItems = JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
             if (allDataArrayItems == null) 
-                throw new NullReferenceException("Cannot deserialize objects");
+                throw new NullReferenceException($"{nameof(GetDataArrayItems)} Cannot deserialize objects");
             
             StartDataArrayItem[] dataArrayItems = allDataArrayItems.Select(item => 
             {

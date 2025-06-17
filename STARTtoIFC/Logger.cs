@@ -50,8 +50,14 @@ namespace STARTtoIFC
             return _countErrors != 0;
         }
 
+        private void End()
+        {
+            Log(HasErrors() ? "Convert ended with errors!" : "Convert ended successfully");
+        }
+
         public void SaveAs(string filePath)
         {
+            End();
             using (StreamWriter sw = new StreamWriter(filePath))
             {
                 sw.WriteLine(Logs);
