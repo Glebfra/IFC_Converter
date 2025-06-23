@@ -33,6 +33,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OLD|AnyCPU' ">
+    <OutputPath>bin\OLD\</OutputPath>
+    <DefineConstants>OLD;DEBUG</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
@@ -138,6 +142,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntitiesExtensions\DebugPropertySet.cs" />
+    <Compile Include="EntitiesExtensions\IPropertySet.cs" />
+    <Compile Include="EntitiesExtensions\Pset_PipeSegmentTypeCommon.cs" />
+    <Compile Include="EntitiesExtensions\Pset_Start.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportHangerEntity.cs" />
@@ -186,12 +194,14 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexValveEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcVertexReducerConcentricEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
+    <Compile Include="Entities\Abstract\NewIfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractConeElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractPipeSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractStraightSegment.cs" />
+    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcDamperEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcFixedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
@@ -248,6 +258,9 @@
     <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
+    <Compile Include="Entities\Segments\IfcPipeSegmentEntity.Ifc.cs">
+      <DependentUpon>IfcPipeSegmentEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />

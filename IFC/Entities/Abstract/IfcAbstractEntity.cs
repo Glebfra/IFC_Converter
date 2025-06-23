@@ -16,17 +16,17 @@ namespace IFC.Entities.Abstract
     {
         public IfcIdentifier Tag { get; }
         public StartElementType Type { get; }
+        public StartAbstractEntity StartAbstractEntity { get; }
+        
         public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public abstract Colour Colour { get; protected set; }
 
-        private StartAbstractEntity _abstractEntity;
-
-        public IfcAbstractEntity(StartAbstractEntity abstractEntity)
+        public IfcAbstractEntity(StartAbstractEntity startAbstractEntity)
         {
-            Tag = abstractEntity.Type.ToString();
-            Type = abstractEntity.Type;
+            Tag = startAbstractEntity.Type.ToString();
+            Type = startAbstractEntity.Type;
             
-            _abstractEntity = abstractEntity;
+            StartAbstractEntity = startAbstractEntity;
         }
         
         public abstract IfcProduct CreateAndAdd(IModel model);
@@ -74,7 +74,7 @@ namespace IFC.Entities.Abstract
                 properties.RelatingPropertyDefinition = model.Instances.New<IfcPropertySet>(set =>
                 {
                     set.Name = "Pset_Start";
-                    foreach (var kvp in _abstractEntity.GetData())
+                    foreach (var kvp in StartAbstractEntity.GetData())
                     {
                         set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                         {

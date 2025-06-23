@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
@@ -23,6 +25,15 @@ namespace IFC
         private readonly IfcBuilding _building;
         private readonly List<IfcProduct> _ifcObjects;
 
+        public IFCProject(IfcStore model)
+        {
+            _model = model;
+            _building = _model.Instances.FirstOrDefault<IfcBuilding>();
+            _transaction = _model.BeginTransaction("Objects adding");
+
+            _ifcObjects = new List<IfcProduct>();
+        }
+        
         public static IFCProject CreateProject(string name)
         {
             // TODO update application version
@@ -78,13 +89,14 @@ namespace IFC
             return new IFCProject(model);
         }
 
-        public IFCProject(IfcStore model)
+        public static IFCProject OpenProject(string filePath)
         {
-            _model = model;
-            _building = _model.Instances.FirstOrDefault<IfcBuilding>();
-            _transaction = _model.BeginTransaction("Objects adding");
-
-            _ifcObjects = new List<IfcProduct>();
+            IfcStore model;
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
+            {
+                model = IfcStore.Open(stream, StorageType.Ifc, XbimSchemaVersion.Ifc4, XbimModelType.MemoryModel);
+            }
+            return new IFCProject(model);
         }
 
         public void AddEntity(IIfcEntity entity)

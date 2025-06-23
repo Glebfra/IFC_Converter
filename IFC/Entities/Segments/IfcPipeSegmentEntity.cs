@@ -6,7 +6,7 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Segments
 {
-    public sealed class IfcPipeSegmentEntity : IfcAbstractPipeSegmentEntity
+    public sealed partial class IfcPipeSegmentEntity : IfcAbstractPipeSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override Colour Colour { get; protected set; } = Colour.FromHEX("bebebe");

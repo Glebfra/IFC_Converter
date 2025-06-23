@@ -1,4 +1,5 @@
 ﻿using Start.Entities;
+using Xbim.Common;
 using Xbim.Common.Geometry;
 
 namespace IFC.Entities

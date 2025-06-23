@@ -16,8 +16,8 @@ namespace IFC.Entities.Abstract.Anchors
 
         protected bool _IsVertical;
         
-        protected IfcAbstractNonFixedSupportEntity(StartAbstractEntity abstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(abstractEntity, nodeEntity, segmentEntities)
+        protected IfcAbstractNonFixedSupportEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(startAbstractEntity, nodeEntity, segmentEntities)
         {
             _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward.IsParallel(VectorExtensions.Z);
             

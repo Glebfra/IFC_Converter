@@ -12,8 +12,8 @@ namespace IFC.Entities.Abstract.Anchors
 
         public override Colour Colour { get; protected set; } = Colour.FromHEX("4ab636");
 
-        protected IfcAbstractAnchorEntity(StartAbstractEntity abstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(abstractEntity)
+        protected IfcAbstractAnchorEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(startAbstractEntity)
         {
             NodeEntity = nodeEntity;
             AbstractSegmentEntities = segmentEntities;

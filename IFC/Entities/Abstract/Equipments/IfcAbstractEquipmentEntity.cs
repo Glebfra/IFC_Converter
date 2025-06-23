@@ -16,8 +16,8 @@ namespace IFC.Entities.Abstract.Equipments
         public IfcNodeEntity NodeEntity { get; }
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
         
-        protected IfcAbstractEquipmentEntity(StartAbstractEntity abstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(abstractEntity)
+        protected IfcAbstractEquipmentEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
+            : base(startAbstractEntity)
         {
             NodeEntity = nodeEntity;
             AbstractSegmentEntities = segmentEntities;
