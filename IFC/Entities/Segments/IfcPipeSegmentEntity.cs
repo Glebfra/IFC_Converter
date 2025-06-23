@@ -3,6 +3,7 @@ using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Segments;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Segments
 {
@@ -38,6 +39,12 @@ namespace IFC.Entities.Segments
             OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value));
             
             RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value);
+        }
+
+        public IfcPipeSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings)
+            : base(tag, length, diameter, axisSettings)
+        {
+            
         }
     }
 }

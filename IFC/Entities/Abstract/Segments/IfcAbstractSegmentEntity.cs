@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Interfaces;
+using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Abstract;
 using Start.StartProperties;
@@ -14,13 +15,13 @@ namespace IFC.Entities.Abstract.Segments
 {
     public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcTwoNodeEntity, IIfcClippable
     {
-        public abstract double Length { get; protected set; }
-        public abstract double Diameter { get; protected set; }
-        public abstract ActionProperty<double> RealLength { get; protected set; }
-        public abstract ActionProperty<double> OuterSurfaceArea { get; protected set; }
-        public abstract ActionProperty<XbimVector3D> Coordinates { get; protected set; }
+        public virtual double Length { get; protected set; }
+        public virtual double Diameter { get; protected set; }
+        public virtual ActionProperty<double> RealLength { get; protected set; }
+        public virtual ActionProperty<double> OuterSurfaceArea { get; protected set; }
+        public virtual ActionProperty<XbimVector3D> Coordinates { get; protected set; }
         
-        public abstract XbimVector3D Direction { get; }
+        public virtual XbimVector3D Direction { get; }
         public IfcNodeEntity[] NodeEntities { get; }
 
         private StartAbstractSegmentEntity _segmentEntity;
@@ -30,6 +31,19 @@ namespace IFC.Entities.Abstract.Segments
         {
             _segmentEntity = segmentEntity;
             NodeEntities = nodeEntities;
+        }
+
+        protected IfcAbstractSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings)
+            : base(tag)
+        {
+            Length = length;
+            RealLength = new ActionProperty<double>(length);
+            Diameter = diameter;
+            Coordinates = new ActionProperty<XbimVector3D>(axisSettings.Origin);
+            OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value));
+            Direction = axisSettings.XAxis + axisSettings.YAxis + axisSettings.ZAxis;
+            
+            RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value);
         }
 
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)

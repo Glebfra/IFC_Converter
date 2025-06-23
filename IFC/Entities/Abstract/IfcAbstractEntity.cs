@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Interfaces;
+using IFC.EntitiesExtensions;
 using IFC.Tools;
 using Start.API;
 using Start.Entities.Abstract;
@@ -17,18 +18,24 @@ namespace IFC.Entities.Abstract
         public IfcIdentifier Tag { get; }
         public StartElementType Type { get; }
         public StartAbstractEntity StartAbstractEntity { get; }
-        
+        public List<IPropertySet> PropertySets { get; } = new List<IPropertySet>();
+
         public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public abstract Colour Colour { get; protected set; }
 
-        public IfcAbstractEntity(StartAbstractEntity startAbstractEntity)
+        protected IfcAbstractEntity(StartAbstractEntity startAbstractEntity)
         {
             Tag = startAbstractEntity.Type.ToString();
             Type = startAbstractEntity.Type;
             
             StartAbstractEntity = startAbstractEntity;
         }
-        
+
+        protected IfcAbstractEntity(IfcIdentifier tag)
+        {
+            Tag = tag;
+        }
+
         public abstract IfcProduct CreateAndAdd(IModel model);
 
         protected virtual void AddProperties(IModel model, IfcProduct product)

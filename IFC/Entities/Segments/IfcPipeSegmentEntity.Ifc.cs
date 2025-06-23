@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using IFC.Entities.Abstract.Segments;
 using IFC.EntitiesExtensions;
 using Start.API;
 using Start.Entities.Segments;
@@ -12,7 +11,7 @@ using Xbim.Ifc4.Interfaces;
 
 namespace IFC.Entities.Segments
 {
-    public sealed partial class IfcPipeSegmentEntity : IfcAbstractPipeSegmentEntity
+    public sealed partial class IfcPipeSegmentEntity
     {
         public static IfcPipeSegmentEntity? CreateFromIfc(IfcPipeSegment pipeSegment, IfcNodeEntity[] nodeEntities)
         {

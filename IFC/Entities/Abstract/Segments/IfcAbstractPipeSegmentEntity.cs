@@ -1,8 +1,11 @@
-﻿using Start.Entities.Segments;
+﻿using IFC.Tools;
+using Start.Entities.Segments;
 using Xbim.Common;
+using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
@@ -15,6 +18,12 @@ namespace IFC.Entities.Abstract.Segments
             : base(pipeEntity, nodeEntities)
         {
             _pipeEntity = pipeEntity;
+        }
+
+        protected IfcAbstractPipeSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings)
+            : base(tag, length, diameter, axisSettings)
+        {
+            
         }
 
         public override IfcProduct CreateAndAdd(IModel model)
