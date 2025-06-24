@@ -146,6 +146,7 @@
     <Compile Include="EntitiesExtensions\IPropertySet.cs" />
     <Compile Include="EntitiesExtensions\Pset_PipeSegmentTypeCommon.cs" />
     <Compile Include="EntitiesExtensions\Pset_Start.cs" />
+    <Compile Include="EntitiesExtensions\Qto_PipeSegmentBaseQuantities.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportHangerEntity.cs" />
@@ -258,9 +259,6 @@
     <Compile Include="Entities\Segments\IfcCylindricalShellEntity.cs" />
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
-    <Compile Include="Entities\Segments\IfcPipeSegmentEntity.Ifc.cs">
-      <DependentUpon>IfcPipeSegmentEntity.cs</DependentUpon>
-    </Compile>
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />

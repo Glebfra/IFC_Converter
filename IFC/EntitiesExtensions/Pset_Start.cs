@@ -16,11 +16,11 @@ namespace IFC.EntitiesExtensions
             Data = data;
         }
 
-        public IfcPropertySet CreatePropertySet(IModel model)
+        public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {
             return model.Instances.New<IfcPropertySet>(set =>
             {
-                set.Name = "Pset_Start";
+                set.Name = nameof(Pset_Start);
                 foreach (KeyValuePair<string, string> kvp in Data)
                 {
                     set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>

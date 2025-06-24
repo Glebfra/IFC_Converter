@@ -60,11 +60,11 @@ namespace IFC.EntitiesExtensions
             return pset;
         }
 
-        public IfcPropertySet CreatePropertySet(IModel model)
+        public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {
             return model.Instances.New<IfcPropertySet>(set =>
             {
-                set.Name = "Pset_PipeSegmentTypeCommon";
+                set.Name = nameof(Pset_PipeSegmentTypeCommon);
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = nameof(OuterDiameter);

@@ -21,8 +21,8 @@ namespace IFC.Entities.Abstract.Segments
             
         }
 
-        protected IfcAbstractStraightSegment(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings)
-            : base(tag, length, diameter, axisSettings)
+        protected IfcAbstractStraightSegment(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings, IfcNodeEntity[] nodeEntities)
+            : base(tag, length, diameter, axisSettings, nodeEntities)
         {
             
         }

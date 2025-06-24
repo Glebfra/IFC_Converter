@@ -18,6 +18,7 @@ namespace IFC.Entities.Abstract
         public IfcIdentifier Tag { get; }
         public StartElementType Type { get; }
         public StartAbstractEntity StartAbstractEntity { get; }
+        
         public List<IPropertySet> PropertySets { get; } = new List<IPropertySet>();
 
         public abstract XbimMatrix3D ObjectMatrix3D { get; protected set; }
@@ -93,6 +94,15 @@ namespace IFC.Entities.Abstract
             });
 
             #endregion
+            
+            foreach (IPropertySet propertySet in PropertySets)
+            {
+                model.Instances.New<IfcRelDefinesByProperties>(properties =>
+                {
+                    properties.RelatedObjects.Add(product);
+                    properties.RelatingPropertyDefinition = propertySet.CreatePropertySet(model);
+                });
+            }
         }
         
         protected void ColourEntity(IModel model, IEnumerable<IfcRepresentationItem> representationItems)

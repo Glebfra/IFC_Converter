@@ -1,5 +1,6 @@
-﻿using Start.Entities;
-using Xbim.Common;
+﻿using Start.API;
+using Start.Entities;
+using Start.StartProperties;
 using Xbim.Common.Geometry;
 
 namespace IFC.Entities
@@ -18,6 +19,20 @@ namespace IFC.Entities
                 nodeEntity.ZCoord.SIProperty
             );
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
+        }
+
+        public static IfcNodeEntity CreateFromIfc(XbimVector3D coordinates, int id)
+        {
+            StartNodeEntity nodeEntity = new StartNodeEntity()
+            {
+                ID = id,
+                XCoord = new LengthProperty(coordinates.X),
+                YCoord = new LengthProperty(coordinates.Y),
+                ZCoord = new LengthProperty(coordinates.Z),
+                Type = StartElementType.NODE,
+            };
+
+            return new IfcNodeEntity(nodeEntity);
         }
     }
 }

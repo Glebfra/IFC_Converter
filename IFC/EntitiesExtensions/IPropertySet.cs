@@ -5,6 +5,6 @@ namespace IFC.EntitiesExtensions
 {
     public interface IPropertySet
     {
-        public IfcPropertySet CreatePropertySet(IModel model);
+        public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model);
     }
 }

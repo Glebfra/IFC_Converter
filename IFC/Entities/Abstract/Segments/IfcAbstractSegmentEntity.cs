@@ -33,7 +33,7 @@ namespace IFC.Entities.Abstract.Segments
             NodeEntities = nodeEntities;
         }
 
-        protected IfcAbstractSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings)
+        protected IfcAbstractSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings, IfcNodeEntity[] nodeEntities)
             : base(tag)
         {
             Length = length;
@@ -42,6 +42,7 @@ namespace IFC.Entities.Abstract.Segments
             Coordinates = new ActionProperty<XbimVector3D>(axisSettings.Origin);
             OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value));
             Direction = axisSettings.XAxis + axisSettings.YAxis + axisSettings.ZAxis;
+            NodeEntities = nodeEntities;
             
             RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value);
         }

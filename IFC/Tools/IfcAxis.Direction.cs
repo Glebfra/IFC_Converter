@@ -2,12 +2,18 @@
 using IFC.Entities.Abstract.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 
 namespace IFC.Tools
 {
     public static partial class IfcAxis
     {
+        public static XbimVector3D GetExtrudedDirection(IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            return extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
+        }
+        
         public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, XbimVector3D coordinates)
         {
             XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;

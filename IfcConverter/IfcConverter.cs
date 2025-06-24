@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using IFC;
+using IFC.Entities;
 using IFC.Entities.Segments;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -12,11 +14,13 @@ namespace IfcConverter
         {
             IFCProject ifcProject = IFCProject.OpenProject(filePath);
             IModel model = ifcProject.GetModel();
+
+            List<IfcNodeEntity> nodeEntities = new List<IfcNodeEntity>();
             IfcPipeSegment[] pipeSegments = model.Instances.OfType<IfcPipeSegment>().ToArray();
             IfcPipeSegmentEntity[] pipeSegmentEntities = new IfcPipeSegmentEntity[pipeSegments.Length];
-            foreach (IfcPipeSegment ifcPipeSegment in pipeSegments)
+            for (int i = 0; i < pipeSegments.Length; i++)
             {
-                IfcPipeSegmentEntity.CreateFromIfc(ifcPipeSegment, null);
+                pipeSegmentEntities[i] = IfcPipeSegmentEntity.CreateFromIfc(pipeSegments[i]);
             }
         }
     }

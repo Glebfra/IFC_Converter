@@ -15,11 +15,11 @@ namespace IFC.EntitiesExtensions
             ObjectMatrix3D = objectMatrix3D;
         }
 
-        public IfcPropertySet CreatePropertySet(IModel model)
+        public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {
             return model.Instances.New<IfcPropertySet>(set =>
             {
-                set.Name = "DEBUG";
+                set.Name = nameof(DebugPropertySet);
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "Coordinates";

@@ -1,12 +1,21 @@
-﻿using Xbim.Common;
+﻿using IFC.Extensions;
+using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
+using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
+using Xbim.Ifc4.Kernel;
 
 namespace IFC.Tools
 {
     public static partial class IfcAxis
     {
+        public static XbimVector3D GetCoordinates(IfcProduct product)
+        {
+            return product.ObjectPlacement.ToMatrix3D().Offset();
+        }
+        
         public static IfcObjectPlacement CreatePointObjectPlacement(IModel model, XbimMatrix3D ObjectMatrix3D)
         {
             IfcCartesianPoint point = CreatePoint(model, ObjectMatrix3D.Translation);
