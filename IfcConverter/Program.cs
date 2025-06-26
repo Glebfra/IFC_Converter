@@ -7,26 +7,26 @@ namespace IfcConverter
     {
         public static void Main(string[] args)
         {
-            string filePath;
+            string ifcFilePath, ctpFilePath;
             while (true)
             {
                 Console.WriteLine("Write the path to .ifc file");
-                filePath = Console.ReadLine();
-                filePath = filePath.Replace("\"", "");
+                ifcFilePath = Console.ReadLine();
+                ifcFilePath = ifcFilePath.Replace("\"", "");
                 
-                if (string.IsNullOrEmpty(filePath))
+                if (string.IsNullOrEmpty(ifcFilePath))
                 {
                     Console.WriteLine("FilePath cannot be empty");
                     continue;
                 }
 
-                if (!filePath.EndsWith(".ifc"))
+                if (!ifcFilePath.EndsWith(".ifc"))
                 {
                     Console.WriteLine("Input file should be .ifc formatted");
                     continue;
                 }
                 
-                if (!File.Exists(filePath))
+                if (!File.Exists(ifcFilePath))
                 {
                     Console.WriteLine("File does not exist");
                     continue;
@@ -35,8 +35,35 @@ namespace IfcConverter
                 break;
             }
 
+            while (true)
+            {
+                Console.WriteLine("Write the path to .ctp file");
+                ctpFilePath = Console.ReadLine();
+                ctpFilePath = ctpFilePath.Replace("\"", "");
+                
+                if (string.IsNullOrEmpty(ctpFilePath))
+                {
+                    Console.WriteLine("FilePath cannot be empty");
+                    continue;
+                }
+
+                if (!ctpFilePath.EndsWith(".ctp"))
+                {
+                    Console.WriteLine("Input file should be .ctp formatted");
+                    continue;
+                }
+                
+                if (!File.Exists(ctpFilePath))
+                {
+                    Console.WriteLine("File does not exist");
+                    continue;
+                }
+                
+                break;
+            }
+
             IfcConverter ifcConverter = new IfcConverter();
-            ifcConverter.Import(filePath);
+            ifcConverter.Import(ifcFilePath, ctpFilePath);
         }
     }
 }

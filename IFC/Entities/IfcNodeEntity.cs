@@ -7,6 +7,7 @@ namespace IFC.Entities
 {
     public class IfcNodeEntity
     {
+        public readonly StartNodeEntity NodeEntity;
         public readonly int ID;
         public readonly XbimMatrix3D ObjectMatrix3D;
 
@@ -19,6 +20,7 @@ namespace IFC.Entities
                 nodeEntity.ZCoord.SIProperty
             );
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
+            NodeEntity = nodeEntity;
         }
 
         public static IfcNodeEntity CreateFromIfc(XbimVector3D coordinates, int id)

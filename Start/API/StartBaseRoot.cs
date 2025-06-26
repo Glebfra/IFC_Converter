@@ -66,7 +66,7 @@ namespace Start.API
             return new StartBaseRoot(args[1]);
         }
 
-        public StartBaseRoot GetStartNode()
+        public StartBaseRoot GetSNode()
         {
             object element = _startBaseRoot.GetType().InvokeMember(
                 "GetSNode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
@@ -74,12 +74,71 @@ namespace Start.API
             return new StartBaseRoot(element);
         }
 
-        public StartBaseRoot GetEndNode()
+        public StartBaseRoot GetENode()
         {
             object element = _startBaseRoot.GetType().InvokeMember(
                 "GetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, null
             )!;
             return new StartBaseRoot(element);
+        }
+        
+        public void SetSNode(int index)
+        {
+            object[] args = new object[] { index };
+            _startBaseRoot.GetType().InvokeMember(
+                "SetSNode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+        }
+        
+        public void SetENode(int index)
+        {
+            object[] args = new object[] { index };
+            _startBaseRoot.GetType().InvokeMember(
+                "SetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+        }
+
+        public void SetSNode(StartBaseRoot node)
+        {
+            object[] args = new object[] { node._startBaseRoot };
+            _startBaseRoot.GetType().InvokeMember(
+                "SetSNode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+        }
+        
+        public void SetENode(StartBaseRoot node)
+        {
+            object[] args = new object[] { node._startBaseRoot };
+            _startBaseRoot.GetType().InvokeMember(
+                "SetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+        }
+
+        public string GetDataChar(int key)
+        {
+            object[] args = new object[] { key };
+            object data = _startBaseRoot.GetType().InvokeMember(
+                "GetDataChar", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+            return (string)data;
+        }
+        
+        public int GetDataInt(int key)
+        {
+            object[] args = new object[] { key };
+            object data = _startBaseRoot.GetType().InvokeMember(
+                "GetDataInt", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+            return (int)data;
+        }
+        
+        public double GetDataReal(int key)
+        {
+            object[] args = new object[] { key };
+            object data = _startBaseRoot.GetType().InvokeMember(
+                "GetDataReal", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+            return (double)data;
         }
 
         public int GetNumber()
@@ -124,6 +183,14 @@ namespace Start.API
                 "GetDataJson", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             )!;
             return (string)value;
+        }
+
+        public void SetDataJson(int key, string data)
+        {
+            object[] args = { key, data };
+            _startBaseRoot.GetType().InvokeMember(
+                "SetDataJson", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
         }
 
         public void Dispose()

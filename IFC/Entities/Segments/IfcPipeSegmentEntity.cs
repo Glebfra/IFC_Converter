@@ -14,7 +14,6 @@ using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.RepresentationResource;
 
@@ -108,7 +107,7 @@ namespace IFC.Entities.Segments
             Pset_Start pset = Pset_Start.CreateFromPropertySet(psetStart);
             Dictionary<string, string> data = pset.Data;
             bool isValidTechnology = Enum.TryParse(data["ManufacturingTechnologyEnum"], out StartManufacturingTechnologyEnum manufacturingTechnologyEnum);
-            
+
             pipeEntity.MaterialName = data["MaterialName"];
             pipeEntity.MillTolerance = new LengthProperty(GetPropertyValue(data["MillTolerance"]));
             pipeEntity.CorrosionAllowance = new LengthProperty(GetPropertyValue(data["CorrosionAllowance"]));

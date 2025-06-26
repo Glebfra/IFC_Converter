@@ -30,45 +30,45 @@ namespace STARTtoIFC
         {
             Logger logger = Logger.GetInstance();
 
-            StartDataArrayItem[] startDataArrayItems;
             using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
-                startDataArrayItems = startProject.GetDataArrayItems()!;
-            }
-            logger.Log($"Found {startDataArrayItems.Length} objects");
+                StartDataArrayItem[] startDataArrayItems = startProject.GetDataArrayItems()!;
+                
+                logger.Log($"Found {startDataArrayItems.Length} objects");
 
-            StartDataArrayItem[] nodeItems = startDataArrayItems.GetElementsByType(StartElementType.NODE).ToArray();
-            foreach (StartDataArrayItem nodeItem in nodeItems)
-            {
-                StartNodeEntity startNodeEntity = (StartNodeEntity)nodeItem.Entity;
-                IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
-                _nodeEntities.Add(startNodeEntity.ID, ifcNodeEntity);
-                logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
-            }
+                StartDataArrayItem[] nodeItems = startDataArrayItems.GetElementsByType(StartElementType.NODE).ToArray();
+                foreach (StartDataArrayItem nodeItem in nodeItems)
+                {
+                    StartNodeEntity startNodeEntity = (StartNodeEntity)nodeItem.Entity;
+                    IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
+                    _nodeEntities.Add(startNodeEntity.ID, ifcNodeEntity);
+                    logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
+                }
             
-            using (IFCProject ifcProject = IFCProject.CreateProject(startDocument.GetTitle()))
-            {
-                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, false);
-                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, false);
-                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, false);
-                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, true);
-                ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, true);
+                using (IFCProject ifcProject = IFCProject.CreateProject(startDocument.GetTitle()))
+                {
+                    ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT, false);
+                    ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.CYLINDRICAL_SHELL, false);
+                    ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.CONE_ELEMENT, false);
+                    ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, true);
+                    ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, true);
 
-                ConvertOneNodeObjects(ifcProject, startDataArrayItems, _dataContainer.ExportType == IfcExportTypeEnum.VERTEX, _dataContainer.NumSegments);
+                    ConvertOneNodeObjects(ifcProject, startDataArrayItems, _dataContainer.NumSegments);
 
-                ifcProject.GroupObjects("Pipe system");
-                ifcProject.SaveAs(_dataContainer.OutputFilePath);
+                    ifcProject.GroupObjects("Pipe system");
+                    ifcProject.SaveAs(_dataContainer.OutputFilePath);
+                }
             }
         }
 
         private void ConvertOneNodeObjects(
             IFCProject ifcProject, 
             StartDataArrayItem[] dataArrayItems,
-            bool isVertex,
             int numSegments
         )
         {
             Logger logger = Logger.GetInstance();
+            bool isVertex = _dataContainer.ExportType == IfcExportTypeEnum.VERTEX;
             
             StartDataArrayItem[] arrayItems = dataArrayItems
                 .Where(item => !StartElementTypeExtensions.TwoNodeElementTypes.Contains(item.Type) && item.Type != StartElementType.NODE)
@@ -92,7 +92,7 @@ namespace STARTtoIFC
                         .Select(item => _twoNodeEntities[item.DataArrayIndex])
                         .ToArray();
 
-                    IfcAbstractEntity? entity = _dataContainer.ExportType == IfcExportTypeEnum.VERTEX
+                    IfcAbstractEntity? entity = isVertex
                         ? IfcEntityFactory.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments)
                         : IfcEntityFactory.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities);
                     entity ??= IfcEntityFactory.CreateEntity(arrayItem.Entity, ifcNodeEntity, ifcAbstractSegmentEntities, numSegments);

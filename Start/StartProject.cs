@@ -69,6 +69,11 @@ namespace Start
             return _dataArray.GetNumberElements(minType, maxType);
         }
 
+        public StartBaseRoot AddElement(StartElementType type, out int index)
+        {
+            return new StartBaseRoot(_dataArray.AddElement(type, out index));
+        }
+
         public string GetDataJson()
         {
             return _dataArray.GetDataJson(StartElementType.ALL, StartElementType.ALL);
