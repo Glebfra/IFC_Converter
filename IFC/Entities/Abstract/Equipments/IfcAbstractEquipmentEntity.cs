@@ -13,7 +13,7 @@ namespace IFC.Entities.Abstract.Equipments
         
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         
-        public IfcNodeEntity NodeEntity { get; }
+        public IfcNodeEntity NodeEntity { get; set; }
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
         
         protected IfcAbstractEquipmentEntity(StartAbstractEntity startAbstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 

@@ -6,11 +6,11 @@ using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.EntitiesExtensions
 {
-    public class DebugPropertySet : IPropertySet
+    public class Pset_Debug : IPropertySet
     {
         public XbimMatrix3D ObjectMatrix3D;
 
-        public DebugPropertySet(XbimMatrix3D objectMatrix3D)
+        public Pset_Debug(XbimMatrix3D objectMatrix3D)
         {
             ObjectMatrix3D = objectMatrix3D;
         }
@@ -19,7 +19,7 @@ namespace IFC.EntitiesExtensions
         {
             return model.Instances.New<IfcPropertySet>(set =>
             {
-                set.Name = nameof(DebugPropertySet);
+                set.Name = nameof(Pset_Debug);
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "Coordinates";

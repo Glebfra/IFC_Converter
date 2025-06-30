@@ -2,6 +2,6 @@
 {
     public interface IIfcOneNodeEntity : IIfcEntity
     {
-        public IfcNodeEntity NodeEntity { get; }
+        public IfcNodeEntity NodeEntity { get; set; }
     }
 }

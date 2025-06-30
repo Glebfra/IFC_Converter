@@ -74,6 +74,16 @@ namespace Start
             return new StartBaseRoot(_dataArray.AddElement(type, out index));
         }
 
+        public StartBaseRoot AddElementAndNode(StartElementType type, int nSNode, int nENode, out int index)
+        {
+            return new StartBaseRoot(_dataArray.AddElementAndNode(type, nSNode, nENode, out index));
+        }
+        
+        public StartBaseRoot AddElementAndNode(StartElementType type, int nSNode, out int index)
+        {
+            return new StartBaseRoot(_dataArray.AddElementAndNode(type, nSNode, out index));
+        }
+
         public string GetDataJson()
         {
             return _dataArray.GetDataJson(StartElementType.ALL, StartElementType.ALL);

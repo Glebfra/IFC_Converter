@@ -7,7 +7,7 @@ namespace IFC.Entities.Abstract.Anchors
 {
     public abstract class IfcAbstractAnchorEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
     {
-        public IfcNodeEntity NodeEntity { get; }
+        public IfcNodeEntity NodeEntity { get; set; }
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
 
         public override Colour Colour { get; protected set; } = Colour.FromHEX("4ab636");

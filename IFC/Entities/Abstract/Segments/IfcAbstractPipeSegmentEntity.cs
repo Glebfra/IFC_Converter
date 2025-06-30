@@ -19,12 +19,6 @@ namespace IFC.Entities.Abstract.Segments
             _pipeEntity = pipeEntity;
         }
 
-        protected IfcAbstractPipeSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings, IfcNodeEntity[] nodeEntities)
-            : base(tag, length, diameter, axisSettings, nodeEntities)
-        {
-            
-        }
-
         public override IfcProduct CreateAndAdd(IModel model)
         {
             _pipeSegment = CreatePipeSegment(model, _pipeEntity.Name, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);

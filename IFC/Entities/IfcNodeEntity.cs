@@ -36,5 +36,10 @@ namespace IFC.Entities
 
             return new IfcNodeEntity(nodeEntity);
         }
+
+        public bool Equals(IfcNodeEntity other)
+        {
+            return ObjectMatrix3D.Translation == other.ObjectMatrix3D.Translation;
+        }
     }
 }

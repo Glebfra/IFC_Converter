@@ -32,11 +32,6 @@ namespace IFC.Entities.Abstract
             StartAbstractEntity = startAbstractEntity;
         }
 
-        protected IfcAbstractEntity(IfcIdentifier tag)
-        {
-            Tag = tag;
-        }
-
         public abstract IfcProduct CreateAndAdd(IModel model);
 
         protected virtual void AddProperties(IModel model, IfcProduct product)

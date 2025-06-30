@@ -17,7 +17,7 @@ namespace IFC.Entities.Abstract.Fittings
         public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
         public override Colour Colour { get; protected set; } = Colour.FromHEX("5f4e7c");
         
-        public IfcNodeEntity NodeEntity { get; }
+        public IfcNodeEntity NodeEntity { get; set; }
         public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
 
         private readonly StartAbstractFittingEntity _fittingEntity;

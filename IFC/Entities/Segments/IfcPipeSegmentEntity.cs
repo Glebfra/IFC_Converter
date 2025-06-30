@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using IFC.Entities.Abstract.Segments;
 using IFC.EntitiesExtensions;
+using IFC.Exceptions;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.API;
 using Start.Entities.Segments;
 using Start.StartProperties;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Segments
@@ -53,27 +54,17 @@ namespace IFC.Entities.Segments
             RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value);
         }
 
-        public IfcPipeSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings, IfcNodeEntity[] nodeEntities)
-            : base(tag, length, diameter, axisSettings, nodeEntities)
-        {
-            
-        }
-        
         public static IfcPipeSegmentEntity? CreateFromIfc(IfcPipeSegment pipeSegment)
         {
+            XbimMatrix3D matrix3D = pipeSegment.ObjectPlacement.ToMatrix3D();
             StartPipeEntity pipeEntity = new StartPipeEntity();
-            
-            XbimVector3D coordinates = IfcAxis.GetCoordinates(pipeSegment);
-            XbimVector3D direction = XbimVector3D.Zero;
-            
-            IfcRepresentationItem[] representationItems = GetRepresentationItems(pipeSegment).ToArray();
-            foreach (IfcRepresentationItem representationItem in representationItems)
-            {
-                XbimVector3D? tempDirection = GetPipeDirection(representationItem);
-                if (tempDirection != null)
-                    direction = (XbimVector3D)tempDirection;
-            }
-            
+            pipeEntity.Name = pipeSegment.Name ?? string.Empty;
+
+            XbimVector3D coordinates = matrix3D.Translation;
+            XbimVector3D direction = GetPipeDirection(pipeSegment);
+            if (direction == XbimVector3D.Zero)
+                throw new IfcConvertException("Cannot find direction of pipe segment");
+
             IIfcPropertySet? psetStart = pipeSegment.PropertySets.FirstOrDefault(set => set.Name == nameof(Pset_Start));
             if (psetStart != null)
                 UpdatePipeFromPsetStart(psetStart, ref pipeEntity);
@@ -139,9 +130,9 @@ namespace IFC.Entities.Segments
         private static void UpdatePipeFromQtoSegmentBase(IIfcElementQuantity elementQuantity, XbimVector3D direction, ref StartPipeEntity pipeEntity)
         {
             Qto_PipeSegmentBaseQuantities qto = Qto_PipeSegmentBaseQuantities.CreateFromQuantitySet(elementQuantity);
-            pipeEntity.ProjectionAlongOXAxis = new LengthProperty(direction.X);
-            pipeEntity.ProjectionAlongOYAxis = new LengthProperty(direction.Y);
-            pipeEntity.ProjectionAlongOZAxis = new LengthProperty(direction.Z);
+            pipeEntity.ProjectionAlongOXAxis = new LengthProperty(direction.X * qto.Length);
+            pipeEntity.ProjectionAlongOYAxis = new LengthProperty(direction.Y * qto.Length);
+            pipeEntity.ProjectionAlongOZAxis = new LengthProperty(direction.Z * qto.Length);
         }
 
         private static IEnumerable<IfcRepresentationItem> GetRepresentationItems(IfcPipeSegment pipeSegment)
@@ -155,14 +146,22 @@ namespace IFC.Entities.Segments
             return representationItems;
         }
 
-        private static XbimVector3D? GetPipeDirection(IfcRepresentationItem representationItem)
+        private static XbimVector3D GetPipeDirection(IfcPipeSegment pipeSegment)
         {
-            if (representationItem is IfcExtrudedAreaSolid areaSolid)
+            XbimMatrix3D matrix3D = pipeSegment.ObjectPlacement.ToMatrix3D();
+            XbimVector3D direction = XbimVector3D.Zero;
+            
+            IfcRepresentationItem[] representationItems = GetRepresentationItems(pipeSegment).ToArray();
+            foreach (IfcRepresentationItem representationItem in representationItems)
             {
-                return areaSolid.ExtrudedDirection.XbimVector3D();
+                if (representationItem is IfcExtrudedAreaSolid areaSolid)
+                {
+                    direction = matrix3D.Transform(areaSolid.ExtrudedDirection.XbimVector3D());
+                    break;
+                }
             }
-
-            return null;
+            
+            return direction;
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using IFC.Entities.Interfaces;
-using IFC.Extensions;
+﻿using System.Linq;
+using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Start.Entities.Abstract;
 using Start.StartProperties;
@@ -13,6 +13,12 @@ using Xbim.Ifc4.QuantityResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
+    internal struct Node
+    {
+        public IfcNodeEntity NodeEntity;
+        public int Index;
+    }
+    
     public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcTwoNodeEntity, IIfcClippable
     {
         public virtual double Length { get; protected set; }
@@ -33,18 +39,12 @@ namespace IFC.Entities.Abstract.Segments
             NodeEntities = nodeEntities;
         }
 
-        protected IfcAbstractSegmentEntity(IfcIdentifier tag, double length, double diameter, IfcAxisSettings axisSettings, IfcNodeEntity[] nodeEntities)
-            : base(tag)
+        internal Node GetNearestNode(IfcNodeEntity nodeEntity)
         {
-            Length = length;
-            RealLength = new ActionProperty<double>(length);
-            Diameter = diameter;
-            Coordinates = new ActionProperty<XbimVector3D>(axisSettings.Origin);
-            OuterSurfaceArea = new ActionProperty<double>(MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value));
-            Direction = axisSettings.XAxis + axisSettings.YAxis + axisSettings.ZAxis;
-            NodeEntities = nodeEntities;
-            
-            RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value);
+            return NodeEntities
+                .Select((item, index) => new Node() { NodeEntity = item, Index = index })
+                .OrderBy(node => (node.NodeEntity.ObjectMatrix3D.Translation - nodeEntity.ObjectMatrix3D.Translation).Modulus)
+                .Single();
         }
 
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
