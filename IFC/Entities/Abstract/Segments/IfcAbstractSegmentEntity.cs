@@ -13,12 +13,6 @@ using Xbim.Ifc4.QuantityResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
-    internal struct Node
-    {
-        public IfcNodeEntity NodeEntity;
-        public int Index;
-    }
-    
     public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcTwoNodeEntity, IIfcClippable
     {
         public virtual double Length { get; protected set; }
@@ -37,14 +31,6 @@ namespace IFC.Entities.Abstract.Segments
         {
             _segmentEntity = segmentEntity;
             NodeEntities = nodeEntities;
-        }
-
-        internal Node GetNearestNode(IfcNodeEntity nodeEntity)
-        {
-            return NodeEntities
-                .Select((item, index) => new Node() { NodeEntity = item, Index = index })
-                .OrderBy(node => (node.NodeEntity.ObjectMatrix3D.Translation - nodeEntity.ObjectMatrix3D.Translation).Modulus)
-                .Single();
         }
 
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
@@ -134,7 +120,7 @@ namespace IFC.Entities.Abstract.Segments
 
             #endregion
         }
-        
+
         private bool IsStartNode(IfcNodeEntity nodeEntity)
         {
             XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;

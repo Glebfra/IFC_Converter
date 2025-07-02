@@ -263,7 +263,10 @@
     <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
     <Compile Include="Exceptions\IfcConvertException.cs" />
+    <Compile Include="Extensions\IfcAbstractSegmentEntityExtensions.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
+    <Compile Include="Extensions\IfcNodeEntityExtensions.cs" />
+    <Compile Include="Extensions\IndexedResult.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />

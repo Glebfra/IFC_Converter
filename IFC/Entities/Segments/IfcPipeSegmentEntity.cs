@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using IFC.Entities.Abstract.Segments;
 using IFC.EntitiesExtensions;
-using IFC.Exceptions;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.API;
@@ -56,18 +55,25 @@ namespace IFC.Entities.Segments
 
         public static IfcPipeSegmentEntity? CreateFromIfc(IfcPipeSegment pipeSegment)
         {
-            XbimMatrix3D matrix3D = pipeSegment.ObjectPlacement.ToMatrix3D();
             StartPipeEntity pipeEntity = new StartPipeEntity();
             pipeEntity.Name = pipeSegment.Name ?? string.Empty;
 
+            XbimMatrix3D matrix3D = pipeSegment.ObjectPlacement.ToMatrix3D();
             XbimVector3D coordinates = matrix3D.Translation;
-            XbimVector3D direction = GetPipeDirection(pipeSegment);
-            if (direction == XbimVector3D.Zero)
-                throw new IfcConvertException("Cannot find direction of pipe segment");
+            XbimVector3D pipeProjection = GetPipeProjection(pipeSegment);
+            
+            IfcNodeEntity[] nodeEntities = new IfcNodeEntity[]
+            {
+                IfcNodeEntity.CreateFromIfc(coordinates, 0),
+                IfcNodeEntity.CreateFromIfc(coordinates + pipeProjection, 0)
+            };
 
             IIfcPropertySet? psetStart = pipeSegment.PropertySets.FirstOrDefault(set => set.Name == nameof(Pset_Start));
             if (psetStart != null)
+            {
                 UpdatePipeFromPsetStart(psetStart, ref pipeEntity);
+                return new IfcPipeSegmentEntity(pipeEntity, nodeEntities);
+            }
 
             IIfcPropertySet? psetTypeCommon = pipeSegment.PropertySets.FirstOrDefault(set => set.Name == nameof(Pset_PipeSegmentTypeCommon));
             if (psetTypeCommon != null)
@@ -75,13 +81,7 @@ namespace IFC.Entities.Segments
 
             IIfcElementQuantity? elementQuantity = pipeSegment.ElementQuantities.FirstOrDefault(quantity => quantity.Name == nameof(Qto_PipeSegmentBaseQuantities));
             if (elementQuantity != null)
-                UpdatePipeFromQtoSegmentBase(elementQuantity, direction, ref pipeEntity);
-
-            IfcNodeEntity[] nodeEntities = new IfcNodeEntity[]
-            {
-                IfcNodeEntity.CreateFromIfc(coordinates, 1),
-                IfcNodeEntity.CreateFromIfc(coordinates + direction, 2)
-            };
+                UpdatePipeFromQtoSegmentBase(elementQuantity, pipeProjection, ref pipeEntity);
 
             return new IfcPipeSegmentEntity(pipeEntity, nodeEntities);
         }
@@ -97,42 +97,67 @@ namespace IFC.Entities.Segments
 
             Pset_Start pset = Pset_Start.CreateFromPropertySet(psetStart);
             Dictionary<string, string> data = pset.Data;
-            bool isValidTechnology = Enum.TryParse(data["ManufacturingTechnologyEnum"], out StartManufacturingTechnologyEnum manufacturingTechnologyEnum);
+            
+            if (data.TryGetValue(nameof(pipeEntity.ManufacturingTechnologyEnum), out string manufacturingTechnology))
+            {
+                bool isValidTechnology = Enum.TryParse(data["ManufacturingTechnologyEnum"], out StartManufacturingTechnologyEnum manufacturingTechnologyEnum);
+                pipeEntity.ManufacturingTechnologyEnum = isValidTechnology ? manufacturingTechnologyEnum : StartManufacturingTechnologyEnum.SEAMLESS;
+            }
 
-            pipeEntity.MaterialName = data["MaterialName"];
-            pipeEntity.MillTolerance = new LengthProperty(GetPropertyValue(data["MillTolerance"]));
-            pipeEntity.CorrosionAllowance = new LengthProperty(GetPropertyValue(data["CorrosionAllowance"]));
-            pipeEntity.PipeUnitWeight = new MassUnitProperty(GetPropertyValue(data["PipeUnitWeight"]));
-            pipeEntity.InsulationUnitWeight = new MassUnitProperty(GetPropertyValue(data["InsulationUnitWeight"]));
-            pipeEntity.ProductUnitWeight = new MassUnitProperty(GetPropertyValue(data["ProductUnitWeight"]));
-            pipeEntity.ManufacturingTechnologyEnum = isValidTechnology ? manufacturingTechnologyEnum : StartManufacturingTechnologyEnum.SEAMLESS;
-            pipeEntity.LongitudinalWeldJointFactor = new FactorProperty(GetPropertyValue(data["LongitudinalWeldJointFactor"]));
-            pipeEntity.StrengthFactorOfTheTraverseWeld = new FactorProperty(GetPropertyValue(data["StrengthFactorOfTheTraverseWeld"]));
-            pipeEntity.AdditionalWeightLoad = new MassUnitProperty(GetPropertyValue(data["AdditionalWeightLoad"]));
-            pipeEntity.AdditionalWeightLoadAlongTheXAxis = new MassUnitProperty(GetPropertyValue(data["AdditionalWeightLoadAlongTheXAxis"]));
-            pipeEntity.AdditionalWeightLoadAlongTheYAxis = new MassUnitProperty(GetPropertyValue(data["AdditionalWeightLoadAlongTheYAxis"]));
-            pipeEntity.AdditionalWeightLoadAlongTheZAxis = new MassUnitProperty(GetPropertyValue(data["AdditionalWeightLoadAlongTheZAxis"]));
-            pipeEntity.ProjectionAlongOXAxis = new LengthProperty(GetPropertyValue(data["ProjectionAlongOXAxis"]));
-            pipeEntity.ProjectionAlongOYAxis = new LengthProperty(GetPropertyValue(data["ProjectionAlongOYAxis"]));
-            pipeEntity.ProjectionAlongOZAxis = new LengthProperty(GetPropertyValue(data["ProjectionAlongOZAxis"]));
-            pipeEntity.XCoord = new LengthProperty(GetPropertyValue(data["XCoord"]));
-            pipeEntity.YCoord = new LengthProperty(GetPropertyValue(data["YCoord"]));
-            pipeEntity.ZCoord = new LengthProperty(GetPropertyValue(data["ZCoord"]));
+            if (data.TryGetValue(nameof(pipeEntity.Diameter), out string diameter))
+                pipeEntity.Diameter = LengthProperty.CreateFromSi(GetPropertyValue(diameter));
+            if (data.TryGetValue(nameof(pipeEntity.MaterialName), out string materialName))
+                pipeEntity.MaterialName = materialName;
+            if (data.TryGetValue(nameof(pipeEntity.MillTolerance), out string millTolerance))
+                pipeEntity.MillTolerance = LengthProperty.CreateFromSi(GetPropertyValue(millTolerance));
+            if (data.TryGetValue(nameof(pipeEntity.CorrosionAllowance), out string corrosionAllowance))
+                pipeEntity.CorrosionAllowance = LengthProperty.CreateFromSi(GetPropertyValue(corrosionAllowance));
+            if (data.TryGetValue(nameof(pipeEntity.PipeUnitWeight), out string pipeUnitWeight))
+                pipeEntity.PipeUnitWeight = MassUnitProperty.CreateFromSi(GetPropertyValue(pipeUnitWeight));
+            if (data.TryGetValue(nameof(pipeEntity.InsulationUnitWeight), out string insulationWeight))
+                pipeEntity.InsulationUnitWeight = MassUnitProperty.CreateFromSi(GetPropertyValue(insulationWeight));
+            if (data.TryGetValue(nameof(pipeEntity.ProductUnitWeight), out string productUnitWeight))
+                pipeEntity.ProductUnitWeight = MassUnitProperty.CreateFromSi(GetPropertyValue(productUnitWeight));
+            if (data.TryGetValue(nameof(pipeEntity.LongitudinalWeldJointFactor), out string longitudinalWeldJointFactor))
+                pipeEntity.LongitudinalWeldJointFactor = FactorProperty.CreateFromSi(GetPropertyValue(longitudinalWeldJointFactor));
+            if (data.TryGetValue(nameof(pipeEntity.StrengthFactorOfTheTraverseWeld), out string strengthFactorOfTraverseWeld))
+                pipeEntity.StrengthFactorOfTheTraverseWeld = FactorProperty.CreateFromSi(GetPropertyValue(strengthFactorOfTraverseWeld));
+            if (data.TryGetValue(nameof(pipeEntity.AdditionalWeightLoad), out string additionalWeightLoad))
+                pipeEntity.AdditionalWeightLoad = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoad));
+            if (data.TryGetValue(nameof(pipeEntity.AdditionalWeightLoadAlongTheXAxis), out string additionalWeightLoadAlongTheXAxis))
+                pipeEntity.AdditionalWeightLoadAlongTheXAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheXAxis));
+            if (data.TryGetValue(nameof(pipeEntity.AdditionalWeightLoadAlongTheYAxis), out string additionalWeightLoadAlongTheYAxis))
+                pipeEntity.AdditionalWeightLoadAlongTheYAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheYAxis));
+            if (data.TryGetValue(nameof(pipeEntity.AdditionalWeightLoadAlongTheZAxis), out string additionalWeightLoadAlongTheZAxis))
+                pipeEntity.AdditionalWeightLoadAlongTheZAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheZAxis));
+            if (data.TryGetValue(nameof(pipeEntity.ProjectionAlongOXAxis), out string projectionAlongOXAxis))
+                pipeEntity.ProjectionAlongOXAxis = LengthProperty.CreateFromSi(GetPropertyValue(projectionAlongOXAxis));
+            if (data.TryGetValue(nameof(pipeEntity.ProjectionAlongOYAxis), out string projectionAlongOYAxis))
+                pipeEntity.ProjectionAlongOYAxis = LengthProperty.CreateFromSi(GetPropertyValue(projectionAlongOYAxis));
+            if (data.TryGetValue(nameof(pipeEntity.ProjectionAlongOZAxis), out string projectionAlongOZAxis))
+                pipeEntity.ProjectionAlongOZAxis = LengthProperty.CreateFromSi(GetPropertyValue(projectionAlongOZAxis));
+            if (data.TryGetValue(nameof(pipeEntity.XCoord), out string xCoord))
+                pipeEntity.XCoord = LengthProperty.CreateFromSi(GetPropertyValue(xCoord));
+            if (data.TryGetValue(nameof(pipeEntity.YCoord), out string yCoord))
+                pipeEntity.YCoord = LengthProperty.CreateFromSi(GetPropertyValue(yCoord));
+            if (data.TryGetValue(nameof(pipeEntity.ZCoord), out string zCoord))
+                pipeEntity.ZCoord = LengthProperty.CreateFromSi(GetPropertyValue(zCoord));
         }
 
         private static void UpdatePipeFromPsetTypeCommon(IIfcPropertySet psetTypeCommon, ref StartPipeEntity pipeEntity)
         {
             Pset_PipeSegmentTypeCommon pset = Pset_PipeSegmentTypeCommon.CreateFromPropertySet(psetTypeCommon);
-            pipeEntity.Diameter = new LengthProperty(pset.NominalDiameter);
-            pipeEntity.WallThickness = new LengthProperty(pset.NominalDiameter - pset.InnerDiameter);
+            pipeEntity.Diameter = LengthProperty.CreateFromSi(pset.NominalDiameter);
+            pipeEntity.WallThickness = LengthProperty.CreateFromSi(pset.NominalDiameter - pset.InnerDiameter);
         }
 
         private static void UpdatePipeFromQtoSegmentBase(IIfcElementQuantity elementQuantity, XbimVector3D direction, ref StartPipeEntity pipeEntity)
         {
             Qto_PipeSegmentBaseQuantities qto = Qto_PipeSegmentBaseQuantities.CreateFromQuantitySet(elementQuantity);
-            pipeEntity.ProjectionAlongOXAxis = new LengthProperty(direction.X * qto.Length);
-            pipeEntity.ProjectionAlongOYAxis = new LengthProperty(direction.Y * qto.Length);
-            pipeEntity.ProjectionAlongOZAxis = new LengthProperty(direction.Z * qto.Length);
+            XbimVector3D newProjection = direction * qto.Length;
+            pipeEntity.ProjectionAlongOXAxis = LengthProperty.CreateFromSi(newProjection.X);
+            pipeEntity.ProjectionAlongOYAxis = LengthProperty.CreateFromSi(newProjection.Y);
+            pipeEntity.ProjectionAlongOZAxis = LengthProperty.CreateFromSi(newProjection.Z);
         }
 
         private static IEnumerable<IfcRepresentationItem> GetRepresentationItems(IfcPipeSegment pipeSegment)
@@ -146,7 +171,7 @@ namespace IFC.Entities.Segments
             return representationItems;
         }
 
-        private static XbimVector3D GetPipeDirection(IfcPipeSegment pipeSegment)
+        private static XbimVector3D GetPipeProjection(IfcPipeSegment pipeSegment)
         {
             XbimMatrix3D matrix3D = pipeSegment.ObjectPlacement.ToMatrix3D();
             XbimVector3D direction = XbimVector3D.Zero;
@@ -156,7 +181,7 @@ namespace IFC.Entities.Segments
             {
                 if (representationItem is IfcExtrudedAreaSolid areaSolid)
                 {
-                    direction = matrix3D.Transform(areaSolid.ExtrudedDirection.XbimVector3D());
+                    direction = matrix3D.Transform(areaSolid.ExtrudedDirection.XbimVector3D() * areaSolid.Depth);
                     break;
                 }
             }

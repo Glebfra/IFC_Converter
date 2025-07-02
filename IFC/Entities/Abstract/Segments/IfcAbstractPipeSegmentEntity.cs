@@ -1,10 +1,8 @@
-﻿using IFC.Tools;
-using Start.Entities.Segments;
+﻿using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Abstract.Segments
 {

@@ -10,8 +10,26 @@
         public MassProperty(double startProperty) : base(startProperty)
         {
         }
+        
+        public MassProperty() {}
 
         public static MassProperty Zero => new MassProperty(0);
+        
+        public static MassProperty CreateFromStart(double startProperty)
+        {
+            MassProperty forceProperty = new MassProperty();
+            forceProperty.StartProperty = startProperty;
+            forceProperty.SIProperty = forceProperty.ConvertFromStart(startProperty);
+            return forceProperty;
+        }
+        
+        public static MassProperty CreateFromSi(double siProperty)
+        {
+            MassProperty forceProperty = new MassProperty();
+            forceProperty.StartProperty = forceProperty.ConvertFromSI(siProperty);
+            forceProperty.SIProperty = siProperty;
+            return forceProperty;
+        }
 
         protected override double ConvertFromStart(double startProperty)
         {

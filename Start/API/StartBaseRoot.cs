@@ -27,6 +27,14 @@ namespace Start.API
             )!;
             return (int)name;
         }
+        
+        public void SetName(string name)
+        {
+            object[] args = new object[] { name };
+            _startBaseRoot.GetType().InvokeMember(
+                "SetName", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+        }
 
         public int GetNumberConn()
         {
