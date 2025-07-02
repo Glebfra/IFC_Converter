@@ -142,13 +142,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntitiesExtensions\Pset_Debug.cs" />
-    <Compile Include="EntitiesExtensions\IPropertySet.cs" />
-    <Compile Include="EntitiesExtensions\Pset_PipeFittingTypeJunction.cs" />
-    <Compile Include="EntitiesExtensions\Pset_PipeSegmentTypeCommon.cs" />
-    <Compile Include="EntitiesExtensions\Pset_Start.cs" />
-    <Compile Include="EntitiesExtensions\Qto_PipeFittingBaseQuantities.cs" />
-    <Compile Include="EntitiesExtensions\Qto_PipeSegmentBaseQuantities.cs" />
+    <Compile Include="PropertySets\Pset_Debug.cs" />
+    <Compile Include="PropertySets\IPropertySet.cs" />
+    <Compile Include="PropertySets\Pset_PipeFittingTypeJunction.cs" />
+    <Compile Include="PropertySets\Pset_PipeSegmentTypeCommon.cs" />
+    <Compile Include="PropertySets\Pset_Start.cs" />
+    <Compile Include="PropertySets\Qto_PipeFittingBaseQuantities.cs" />
+    <Compile Include="PropertySets\Qto_PipeSegmentBaseQuantities.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractAnchorEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Abstract\Anchors\IfcAbstractConstantForceSupportHangerEntity.cs" />
