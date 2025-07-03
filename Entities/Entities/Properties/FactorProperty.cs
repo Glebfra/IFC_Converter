@@ -1,11 +1,11 @@
-﻿namespace Start.StartProperties
+﻿namespace Entities.Entities.Properties
 {
-    public class FactorProperty : StartAbstractProperty<double>
+    public class FactorProperty : AbstractProperty<double>
     {
         public override string SIUnit { get; } = string.Empty;
         public override string StartUnit { get; } = string.Empty;
 
-        public FactorProperty(double startProperty) : base(startProperty)
+        protected FactorProperty(double startProperty) : base(startProperty)
         {
         }
         

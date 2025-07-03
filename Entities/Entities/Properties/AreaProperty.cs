@@ -1,11 +1,11 @@
-﻿namespace Start.StartProperties
+﻿namespace Entities.Entities.Properties
 {
-    public class AreaProperty : StartAbstractProperty<double>
+    public class AreaProperty : AbstractProperty<double>
     {
         public override string SIUnit { get; } = "m2";
         public override string StartUnit { get; } = "m2";
 
-        public AreaProperty(double startProperty) : base(startProperty)
+        protected AreaProperty(double startProperty) : base(startProperty)
         {
         }
         

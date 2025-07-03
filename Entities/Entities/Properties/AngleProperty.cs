@@ -1,11 +1,11 @@
-﻿namespace Start.StartProperties
+﻿namespace Entities.Entities.Properties
 {
-    public class AngleProperty : StartAbstractProperty<double>
+    public class AngleProperty : AbstractProperty<double>
     {
         public override string StartUnit { get; } = "rad";
         public override string SIUnit { get; } = "rad";
 
-        public AngleProperty(double startProperty) : base(startProperty)
+        protected AngleProperty(double startProperty) : base(startProperty)
         {
         }
         

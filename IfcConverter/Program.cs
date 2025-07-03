@@ -62,8 +62,10 @@ namespace IfcConverter
                 break;
             }
 
-            IfcConverter ifcConverter = new IfcConverter();
-            ifcConverter.Import(ifcFilePath, ctpFilePath);
+            using (IfcConverter ifcConverter = new IfcConverter())
+            {
+                ifcConverter.Import(ifcFilePath, ctpFilePath);
+            }
         }
     }
 }

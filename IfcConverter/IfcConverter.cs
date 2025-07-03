@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IFC;
 using IFC.Entities;
@@ -11,28 +12,30 @@ using Start;
 using Start.API;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
-using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.Kernel;
 
 namespace IfcConverter
 {
-    internal class IfcConverter
+    internal class IfcConverter : IDisposable
     {
         private int _nodeIndex = 1;
+        
         private Dictionary<IfcNodeEntity, StartObject> _nodeEntities = new Dictionary<IfcNodeEntity, StartObject>();
+        private Dictionary<IfcWeldedTeeEntity, StartObject> _weldedTees = new Dictionary<IfcWeldedTeeEntity, StartObject>();
+        private Dictionary<IfcPipeSegmentEntity, StartObject> _pipeEntities = new Dictionary<IfcPipeSegmentEntity, StartObject>();
 
         public void Import(string filePath, string ctpFilePath)
         {
             using (IFCProject ifcProject = IFCProject.OpenProject(filePath))
             {
-                IModel model = ifcProject.GetModel();
-
-                IfcPipeSegment[] pipeSegments = GetPipeSegments(model);
+                IfcProduct[] products = ifcProject.GetProducts().ToArray();
+                IfcPipeSegment[] pipeSegments = products.OfType<IfcPipeSegment>().ToArray();
                 IfcPipeSegmentEntity[] pipeSegmentEntities = CreatePipeSegmentEntities(pipeSegments);
 
-                IfcPipeFitting[] pipeFittings = GetPipeFittings(model);
+                IfcPipeFitting[] pipeFittings = products.OfType<IfcPipeFitting>().ToArray();
                 IfcPipeFitting[] junctions = FilterJunctions(pipeFittings);
                 IfcWeldedTeeEntity[] weldedTeeEntities = CreateWeldedTeeEntities(junctions, pipeSegmentEntities);
                 
@@ -42,12 +45,25 @@ namespace IfcConverter
                     GeneratePipeSegments(startProject, pipeSegmentEntities);
                 }
             }
+        }
 
+        public void Dispose()
+        {
             foreach (KeyValuePair<IfcNodeEntity, StartObject> kvp in _nodeEntities)
             {
                 kvp.Value.Object.Dispose();
             }
+            foreach (KeyValuePair<IfcPipeSegmentEntity, StartObject> kvp in _pipeEntities)
+            {
+                kvp.Value.Object.Dispose();
+            }
+            foreach (KeyValuePair<IfcWeldedTeeEntity,StartObject> kvp in _weldedTees)
+            {
+                kvp.Value.Object.Dispose();
+            }
             _nodeEntities = null;
+            _pipeEntities = null;
+            _weldedTees = null;
         }
 
         private void GenerateWeldedTees(StartProject startProject, IfcWeldedTeeEntity[] weldedTeeEntities)
@@ -57,30 +73,21 @@ namespace IfcConverter
                 StartTeeEntity startTeeEntity = (StartTeeEntity)ifcWeldedTeeEntity.StartAbstractEntity;
                 string startTeeJson = JsonConvert.SerializeObject(startTeeEntity);
 
-                using (StartBaseRoot startTeeObject = startProject.AddElement(StartElementType.WELDED_TEE, out int teeIndex))
-                {
-                    startTeeObject.SetDataJson(0, startTeeJson);
+                StartBaseRoot startTeeObject = startProject.AddElement(StartElementType.WELDED_TEE, out int teeIndex);
+                
+                startTeeObject.SetDataJson(0, startTeeJson);
+                _weldedTees.Add(ifcWeldedTeeEntity, new StartObject() {Object = startTeeObject, Index = teeIndex});
 
-                    IfcNodeEntity ifcNodeEntity = ifcWeldedTeeEntity.NodeEntity;
-                    if (!_nodeEntities.ContainsKey(ifcNodeEntity))
-                    {
-                        string startNodeJson = JsonConvert.SerializeObject(ifcNodeEntity.NodeEntity);
-                        StartBaseRoot newNodeEntityObject = startProject.AddElement(StartElementType.NODE, out int nodeIndex);
-                        newNodeEntityObject.SetDataJson(0, startNodeJson);
-                        newNodeEntityObject.SetName((_nodeIndex++).ToString());
-                        _nodeEntities.Add(ifcNodeEntity, new StartObject() {Object = newNodeEntityObject, Index = nodeIndex});
-                    }
-                    
-                    startTeeObject.SetSNode(_nodeEntities[ifcNodeEntity].Index);
-                    
-                    foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in ifcWeldedTeeEntity.AbstractSegmentEntities)
-                    {
-                        XbimVector3D displacement = ifcAbstractSegmentEntity.ReplaceNearestNode(ifcNodeEntity);
-                        // StartPipeEntity pipeEntity = (StartPipeEntity)ifcAbstractSegmentEntity.StartAbstractEntity;
-                        // pipeEntity.ProjectionAlongOXAxis = new LengthProperty(pipeEntity.ProjectionAlongOXAxis.SIProperty + displacement.X);
-                        // pipeEntity.ProjectionAlongOYAxis = new LengthProperty(pipeEntity.ProjectionAlongOYAxis.SIProperty + displacement.Y);
-                        // pipeEntity.ProjectionAlongOZAxis = new LengthProperty(pipeEntity.ProjectionAlongOZAxis.SIProperty + displacement.Z);
-                    }
+                IfcNodeEntity ifcNodeEntity = ifcWeldedTeeEntity.NodeEntity;
+                StartObject nodeObject = GetOrCreateNode(startProject, ifcNodeEntity);
+                
+                int connNodeIndex = nodeObject.Index;
+                startTeeObject.SetSNode(connNodeIndex);
+                startTeeObject.SetConnElem(connNodeIndex);
+
+                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in ifcWeldedTeeEntity.AbstractSegmentEntities)
+                {
+                    XbimVector3D displacement = ifcAbstractSegmentEntity.ReplaceNearestNode(ifcNodeEntity);
                 }
             }
         }
@@ -92,46 +99,40 @@ namespace IfcConverter
                 StartPipeEntity startPipeEntity = (StartPipeEntity)ifcPipeSegmentEntity.StartAbstractEntity;
                 string startPipeJson = JsonConvert.SerializeObject(startPipeEntity);
 
-                using (StartBaseRoot startPipeObject = startProject.AddElement(StartElementType.PIPE_ELEMENT, out int pipeIndex))
+                StartBaseRoot startPipeObject = startProject.AddElement(StartElementType.PIPE_ELEMENT, out int pipeIndex);
+                startPipeObject.SetDataJson(0, startPipeJson);
+                _pipeEntities.Add(ifcPipeSegmentEntity, new StartObject() {Object = startPipeObject, Index = pipeIndex});
+
+                StartObject[] nodeEntityObjects = new StartObject[2];
+                for (int i = 0; i < 2; i++)
                 {
-                    startPipeObject.SetDataJson(0, startPipeJson);
-
-                    StartObject[] nodeEntityObjects = new StartObject[2];
-                    for (int i = 0; i < 2; i++)
-                    {
-                        IfcNodeEntity ifcNodeEntity = ifcPipeSegmentEntity.NodeEntities[i];
-                        if (!_nodeEntities.ContainsKey(ifcNodeEntity))
-                        {
-                            string startNodeJson = JsonConvert.SerializeObject(ifcNodeEntity.NodeEntity);
-                            StartBaseRoot newNodeEntityObject = startProject.AddElement(StartElementType.NODE, out int nodeIndex);
-                            newNodeEntityObject.SetDataJson(0, startNodeJson);
-                            newNodeEntityObject.SetName((_nodeIndex++).ToString());
-                            _nodeEntities.Add(ifcNodeEntity, new StartObject {Object = newNodeEntityObject, Index = nodeIndex});
-                        }
-
-                        nodeEntityObjects[i] = _nodeEntities[ifcNodeEntity];
-                    }
-                    startPipeObject.SetSNode(nodeEntityObjects[0].Index);
-                    startPipeObject.SetENode(nodeEntityObjects[1].Index);
+                    IfcNodeEntity ifcNodeEntity = ifcPipeSegmentEntity.NodeEntities[i];
+                    nodeEntityObjects[i] = GetOrCreateNode(startProject, ifcNodeEntity);
                 }
+
+                int[] connNodeIndexes = nodeEntityObjects.Select(item => item.Index).ToArray();
+                startPipeObject.SetSNode(connNodeIndexes[0]);
+                startPipeObject.SetENode(connNodeIndexes[1]);
+                startPipeObject.SetConnElem(connNodeIndexes[0]);
+                startPipeObject.SetConnElem(connNodeIndexes[1]);
             }
         }
 
-        private static IfcPipeSegment[] GetPipeSegments(IModel model)
+        private StartObject GetOrCreateNode(StartProject startProject, IfcNodeEntity ifcNodeEntity)
         {
-            return model.Instances
-                .OfType<IfcPipeSegment>()
-                .ToArray();
+            if (_nodeEntities.TryGetValue(ifcNodeEntity, out StartObject node)) 
+                return node;
+            
+            string startNodeJson = JsonConvert.SerializeObject(ifcNodeEntity.NodeEntity);
+            StartBaseRoot nodeEntityObject = startProject.AddElement(StartElementType.NODE, out int nodeIndex);
+            nodeEntityObject.SetDataJson(0, startNodeJson);
+            nodeEntityObject.SetName((_nodeIndex++).ToString());
+            _nodeEntities.Add(ifcNodeEntity, new StartObject() {Object = nodeEntityObject, Index = nodeIndex});
+
+            return _nodeEntities[ifcNodeEntity];
         }
 
-        private static IfcPipeFitting[] GetPipeFittings(IModel model)
-        {
-            return model.Instances
-                .OfType<IfcPipeFitting>()
-                .ToArray();
-        }
-
-        private static IfcPipeFitting[] FilterJunctions(IfcPipeFitting[] pipeFittings)
+        private static IfcPipeFitting[] FilterJunctions(IEnumerable<IfcPipeFitting> pipeFittings)
         {
             return pipeFittings
                 .Where(item => item.PredefinedType == IfcPipeFittingTypeEnum.JUNCTION)
@@ -141,14 +142,14 @@ namespace IfcConverter
         private static IfcWeldedTeeEntity[] CreateWeldedTeeEntities(IEnumerable<IfcPipeFitting> pipeFittings, IfcAbstractSegmentEntity[] segmentEntities)
         {
             return pipeFittings
-                .Select(item => IfcWeldedTeeEntity.CreateFromIfc(item, segmentEntities))
+                .Select(item => IfcWeldedTeeEntityExtensions.CreateFromIfc(item, segmentEntities))
                 .ToArray();
         }
 
         private static IfcPipeSegmentEntity[] CreatePipeSegmentEntities(IEnumerable<IfcPipeSegment> pipeSegments)
         {
             return pipeSegments
-                .Select(IfcPipeSegmentEntity.CreateFromIfc)
+                .Select(IfcPipeSegmentExtensions.CreateFromIfc)
                 .ToArray();
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
@@ -95,6 +94,11 @@ namespace IFC
                 model = IfcStore.Open(stream, StorageType.Ifc, XbimSchemaVersion.Ifc4, XbimModelType.MemoryModel);
             }
             return new IFCProject(model);
+        }
+
+        public IEnumerable<IfcProduct> GetProducts()
+        {
+            return _model.Instances.OfType<IfcProduct>();
         }
 
         public void AddEntity(IIfcEntity entity)

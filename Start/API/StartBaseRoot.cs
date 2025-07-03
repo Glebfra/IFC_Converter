@@ -74,6 +74,14 @@ namespace Start.API
             return new StartBaseRoot(args[1]);
         }
 
+        public void SetConnElem(int index)
+        {
+            object[] args = new object[] { index };
+            _startBaseRoot.GetType().InvokeMember(
+                "SetConnElem", BindingFlags.InvokeMethod, null, _startBaseRoot, args
+            );
+        }
+
         public StartBaseRoot GetSNode()
         {
             object element = _startBaseRoot.GetType().InvokeMember(

@@ -142,6 +142,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IfcBendEntityExtensions.cs" />
+    <Compile Include="Extensions\IfcPipeSegmentExtensions.cs" />
+    <Compile Include="Extensions\IfcProductExtensions.cs" />
+    <Compile Include="Extensions\IfcWeldedTeeEntityExtensions.cs" />
     <Compile Include="PropertySets\Pset_Debug.cs" />
     <Compile Include="PropertySets\IPropertySet.cs" />
     <Compile Include="PropertySets\Pset_PipeFittingTypeJunction.cs" />

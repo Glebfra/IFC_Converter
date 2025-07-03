@@ -7,6 +7,8 @@ namespace IFC.Entities
 {
     public class IfcNodeEntity
     {
+        private static int _id;
+        
         public readonly StartNodeEntity NodeEntity;
         public readonly int ID;
         public readonly XbimMatrix3D ObjectMatrix3D;
@@ -35,6 +37,11 @@ namespace IFC.Entities
             };
 
             return new IfcNodeEntity(nodeEntity);
+        }
+
+        public static IfcNodeEntity CreateFromIfc(XbimVector3D coordinates)
+        {
+            return CreateFromIfc(coordinates, _id++);
         }
 
         public bool Equals(IfcNodeEntity other)
