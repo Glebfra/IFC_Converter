@@ -7,6 +7,10 @@ namespace Start.Entities.Segments
 {
     public class StartPipeEntity : StartAbstractSegmentEntity
     {
+        [JsonIgnore]
+        [StartIgnore]
+        public override StartElementType Type { get; set; } = StartElementType.PIPE_ELEMENT;
+        
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; } = string.Empty;
 

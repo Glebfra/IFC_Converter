@@ -1,7 +1,7 @@
 ﻿using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 
-namespace IFC.EntitiesExtensions
+namespace IFC.PropertySets
 {
     public interface IPropertySet
     {

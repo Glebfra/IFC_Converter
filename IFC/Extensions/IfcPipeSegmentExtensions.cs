@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using IFC.Entities;
 using IFC.Entities.Segments;
-using IFC.EntitiesExtensions;
+using IFC.PropertySets;
 using Start.API;
 using Start.Entities.Segments;
 using Start.StartProperties;

@@ -5,7 +5,7 @@ using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.QuantityResource;
 
-namespace IFC.EntitiesExtensions
+namespace IFC.PropertySets
 {
     public class Qto_PipeSegmentBaseQuantities : IPropertySet
     {

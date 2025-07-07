@@ -22,7 +22,7 @@ namespace IFC.Entities.Abstract.Fittings
         {
             
         }
-        
+
         protected virtual XbimVector3D CalculateCircleCenter()
         {
             XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;

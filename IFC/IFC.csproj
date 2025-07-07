@@ -148,6 +148,7 @@
     <Compile Include="Extensions\IfcWeldedTeeEntityExtensions.cs" />
     <Compile Include="PropertySets\Pset_Debug.cs" />
     <Compile Include="PropertySets\IPropertySet.cs" />
+    <Compile Include="PropertySets\Pset_PipeFittingTypeBend.cs" />
     <Compile Include="PropertySets\Pset_PipeFittingTypeJunction.cs" />
     <Compile Include="PropertySets\Pset_PipeSegmentTypeCommon.cs" />
     <Compile Include="PropertySets\Pset_Start.cs" />

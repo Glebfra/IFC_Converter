@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Interfaces;
-using IFC.EntitiesExtensions;
+using IFC.PropertySets;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.MeasureResource;
 

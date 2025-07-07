@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
-using IFC.EntitiesExtensions;
+using IFC.PropertySets;
 using Start.Entities.Fittings;
 using Start.StartProperties;
 using Xbim.Common.Geometry;
@@ -22,14 +22,14 @@ namespace IFC.Extensions
             StartTeeEntity teeEntity = new StartTeeEntity();
             teeEntity.Name = pipeFitting.Name ?? string.Empty;
             
+            XbimMatrix3D matrix3D = pipeFitting.ObjectPlacement.ToMatrix3D();
+            IfcNodeEntity nodeEntity = IfcNodeEntity.CreateFromIfc(matrix3D.Translation);
+            IfcAbstractSegmentEntity[] nearestSegments = segmentEntities.GetNearestSegments(nodeEntity, 3);
+            
             IIfcPropertySet? psetStart = pipeFitting.PropertySets.FirstOrDefault(set => set.Name == nameof(Pset_Start));
             if (psetStart != null)
                 UpdateFromPsetStart(psetStart, ref teeEntity);
 
-            XbimMatrix3D matrix3D = pipeFitting.ObjectPlacement.ToMatrix3D();
-            IfcNodeEntity nodeEntity = IfcNodeEntity.CreateFromIfc(matrix3D.Translation, 1);
-            
-            IfcAbstractSegmentEntity[] nearestSegments = segmentEntities.GetNearestSegments(nodeEntity, 3);
             return new IfcWeldedTeeEntity(teeEntity, nodeEntity, nearestSegments);
         }
 

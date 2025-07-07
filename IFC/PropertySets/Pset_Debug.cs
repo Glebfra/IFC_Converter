@@ -4,7 +4,7 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
 
-namespace IFC.EntitiesExtensions
+namespace IFC.PropertySets
 {
     public class Pset_Debug : IPropertySet
     {

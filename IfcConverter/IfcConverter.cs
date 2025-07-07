@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IFC;
 using IFC.Entities;
+using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Segments;
@@ -10,9 +11,9 @@ using IFC.Extensions;
 using Newtonsoft.Json;
 using Start;
 using Start.API;
+using Start.Entities.Abstract;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
-using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
@@ -36,12 +37,17 @@ namespace IfcConverter
                 IfcPipeSegmentEntity[] pipeSegmentEntities = CreatePipeSegmentEntities(pipeSegments);
 
                 IfcPipeFitting[] pipeFittings = products.OfType<IfcPipeFitting>().ToArray();
-                IfcPipeFitting[] junctions = FilterJunctions(pipeFittings);
-                IfcWeldedTeeEntity[] weldedTeeEntities = CreateWeldedTeeEntities(junctions, pipeSegmentEntities);
                 
+                IfcPipeFitting[] junctions = FilterByType(pipeFittings, IfcPipeFittingTypeEnum.JUNCTION);
+                IfcWeldedTeeEntity[] weldedTeeEntities = CreateWeldedTeeEntities(junctions, pipeSegmentEntities);
+
+                IfcPipeFitting[] bends = FilterByType(pipeFittings, IfcPipeFittingTypeEnum.BEND);
+                IfcCadBendEntity[] bendEntities = CreateBendEntities(bends, pipeSegmentEntities);
+
                 using (StartProject startProject = StartProject.OpenProject(ctpFilePath))
                 {
-                    GenerateWeldedTees(startProject, weldedTeeEntities);
+                    GenerateFitting<IfcWeldedTeeEntity, StartTeeEntity>(startProject, weldedTeeEntities);
+                    GenerateFitting<IfcCadBendEntity, StartBendEntity>(startProject, bendEntities);
                     GeneratePipeSegments(startProject, pipeSegmentEntities);
                 }
             }
@@ -66,28 +72,28 @@ namespace IfcConverter
             _weldedTees = null;
         }
 
-        private void GenerateWeldedTees(StartProject startProject, IfcWeldedTeeEntity[] weldedTeeEntities)
+        private void GenerateFitting<T, U>(StartProject startProject, T[] fittings)
+            where T : IfcAbstractFittingEntity
+            where U : StartAbstractEntity
         {
-            foreach (IfcWeldedTeeEntity ifcWeldedTeeEntity in weldedTeeEntities)
+            foreach (T fitting in fittings)
             {
-                StartTeeEntity startTeeEntity = (StartTeeEntity)ifcWeldedTeeEntity.StartAbstractEntity;
-                string startTeeJson = JsonConvert.SerializeObject(startTeeEntity);
+                U startEntity = (U)fitting.StartAbstractEntity;
+                string startEntityJson = JsonConvert.SerializeObject(startEntity);
 
-                StartBaseRoot startTeeObject = startProject.AddElement(StartElementType.WELDED_TEE, out int teeIndex);
-                
-                startTeeObject.SetDataJson(0, startTeeJson);
-                _weldedTees.Add(ifcWeldedTeeEntity, new StartObject() {Object = startTeeObject, Index = teeIndex});
+                StartBaseRoot startEntityObject = startProject.AddElement(fitting.Type, out int entityIndex);
+                startEntityObject.SetDataJson(0, startEntityJson);
 
-                IfcNodeEntity ifcNodeEntity = ifcWeldedTeeEntity.NodeEntity;
+                IfcNodeEntity ifcNodeEntity = fitting.NodeEntity;
                 StartObject nodeObject = GetOrCreateNode(startProject, ifcNodeEntity);
-                
-                int connNodeIndex = nodeObject.Index;
-                startTeeObject.SetSNode(connNodeIndex);
-                startTeeObject.SetConnElem(connNodeIndex);
 
-                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in ifcWeldedTeeEntity.AbstractSegmentEntities)
+                int connNodeIndex = nodeObject.Index;
+                startEntityObject.SetSNode(connNodeIndex);
+                startEntityObject.SetConnElem(connNodeIndex);
+                
+                foreach (IfcAbstractSegmentEntity abstractSegmentEntity in fitting.AbstractSegmentEntities)
                 {
-                    XbimVector3D displacement = ifcAbstractSegmentEntity.ReplaceNearestNode(ifcNodeEntity);
+                    abstractSegmentEntity.ReplaceNearestNode(ifcNodeEntity);
                 }
             }
         }
@@ -132,10 +138,17 @@ namespace IfcConverter
             return _nodeEntities[ifcNodeEntity];
         }
 
-        private static IfcPipeFitting[] FilterJunctions(IEnumerable<IfcPipeFitting> pipeFittings)
+        private static IfcPipeFitting[] FilterByType(IEnumerable<IfcPipeFitting> pipeFittings, IfcPipeFittingTypeEnum type)
         {
             return pipeFittings
-                .Where(item => item.PredefinedType == IfcPipeFittingTypeEnum.JUNCTION)
+                .Where(item => item.PredefinedType == type)
+                .ToArray();
+        }
+
+        private static IfcCadBendEntity[] CreateBendEntities(IEnumerable<IfcPipeFitting> pipeFittings, IfcAbstractSegmentEntity[] segmentEntities)
+        {
+            return pipeFittings
+                .Select(item => IfcBendEntityExtensions.CreateFromIfc(item, segmentEntities))
                 .ToArray();
         }
 

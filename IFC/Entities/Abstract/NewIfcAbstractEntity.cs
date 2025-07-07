@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Interfaces;
-using IFC.EntitiesExtensions;
 using IFC.Extensions;
+using IFC.PropertySets;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;

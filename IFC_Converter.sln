@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IfcConverter", "IfcConverter\IfcConverter.csproj", "{B4CA4E05-2866-4F0C-A244-082E9F655F38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{568A1F13-B8B2-4F3F-BF3D-488DB3E5F0EE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,12 +66,6 @@ Global
 		{B4CA4E05-2866-4F0C-A244-082E9F655F38}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4CA4E05-2866-4F0C-A244-082E9F655F38}.OLD|Any CPU.ActiveCfg = Debug|Any CPU
 		{B4CA4E05-2866-4F0C-A244-082E9F655F38}.OLD|Any CPU.Build.0 = Debug|Any CPU
-		{568A1F13-B8B2-4F3F-BF3D-488DB3E5F0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{568A1F13-B8B2-4F3F-BF3D-488DB3E5F0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{568A1F13-B8B2-4F3F-BF3D-488DB3E5F0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{568A1F13-B8B2-4F3F-BF3D-488DB3E5F0EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{568A1F13-B8B2-4F3F-BF3D-488DB3E5F0EE}.OLD|Any CPU.ActiveCfg = Debug|Any CPU
-		{568A1F13-B8B2-4F3F-BF3D-488DB3E5F0EE}.OLD|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

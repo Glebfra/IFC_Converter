@@ -6,7 +6,7 @@ using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 
-namespace IFC.EntitiesExtensions
+namespace IFC.PropertySets
 {
     public class Qto_PipeFittingBaseQuantities : IPropertySet
     {
