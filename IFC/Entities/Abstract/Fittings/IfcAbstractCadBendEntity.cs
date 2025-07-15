@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -25,12 +26,11 @@ namespace IFC.Entities.Abstract.Fittings
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            ObjectMatrix3D = ObjectMatrix3D.Translate(CalculateCircleCenter());
-            
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
+            XbimVector3D bendDisplacement = BendRadius / Math.Cos(Angle / 2) * (VectorExtensions.Forward + VectorExtensions.Right).Normalized().Negated();
             IfcSweptDiskSolid pipeBend = IfcGeometry.CreateCircularBend(
                 model, PipeRadius, BendRadius, Angle,
-                XbimVector3D.Zero, VectorExtensions.Forward, VectorExtensions.Right
+                bendDisplacement, VectorExtensions.Forward, VectorExtensions.Right
             );
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, pipeBend);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);

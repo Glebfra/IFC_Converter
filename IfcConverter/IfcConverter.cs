@@ -8,12 +8,10 @@ using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Segments;
 using IFC.Extensions;
+using IFC.PropertySets;
 using Newtonsoft.Json;
 using Start;
 using Start.API;
-using Start.Entities.Abstract;
-using Start.Entities.Fittings;
-using Start.Entities.Segments;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
@@ -25,7 +23,6 @@ namespace IfcConverter
         private int _nodeIndex = 1;
         
         private Dictionary<IfcNodeEntity, StartObject> _nodeEntities = new Dictionary<IfcNodeEntity, StartObject>();
-        private Dictionary<IfcWeldedTeeEntity, StartObject> _weldedTees = new Dictionary<IfcWeldedTeeEntity, StartObject>();
         private Dictionary<IfcPipeSegmentEntity, StartObject> _pipeEntities = new Dictionary<IfcPipeSegmentEntity, StartObject>();
 
         public void Import(string filePath, string ctpFilePath)
@@ -37,17 +34,17 @@ namespace IfcConverter
                 IfcPipeSegmentEntity[] pipeSegmentEntities = CreatePipeSegmentEntities(pipeSegments);
 
                 IfcPipeFitting[] pipeFittings = products.OfType<IfcPipeFitting>().ToArray();
-                
-                IfcPipeFitting[] junctions = FilterByType(pipeFittings, IfcPipeFittingTypeEnum.JUNCTION);
-                IfcWeldedTeeEntity[] weldedTeeEntities = CreateWeldedTeeEntities(junctions, pipeSegmentEntities);
 
-                IfcPipeFitting[] bends = FilterByType(pipeFittings, IfcPipeFittingTypeEnum.BEND);
+                IfcPipeFitting[] tees = FilterTees(pipeFittings);
+                IfcWeldedTeeEntity[] weldedTeeEntities = CreateWeldedTeeEntities(tees, pipeSegmentEntities);
+
+                IfcPipeFitting[] bends = FilterBends(pipeFittings);
                 IfcCadBendEntity[] bendEntities = CreateBendEntities(bends, pipeSegmentEntities);
 
                 using (StartProject startProject = StartProject.OpenProject(ctpFilePath))
                 {
-                    GenerateFitting<IfcWeldedTeeEntity, StartTeeEntity>(startProject, weldedTeeEntities);
-                    GenerateFitting<IfcCadBendEntity, StartBendEntity>(startProject, bendEntities);
+                    GenerateFitting(startProject, weldedTeeEntities);
+                    GenerateFitting(startProject, bendEntities);
                     GeneratePipeSegments(startProject, pipeSegmentEntities);
                 }
             }
@@ -63,23 +60,15 @@ namespace IfcConverter
             {
                 kvp.Value.Object.Dispose();
             }
-            foreach (KeyValuePair<IfcWeldedTeeEntity,StartObject> kvp in _weldedTees)
-            {
-                kvp.Value.Object.Dispose();
-            }
             _nodeEntities = null;
             _pipeEntities = null;
-            _weldedTees = null;
         }
 
-        private void GenerateFitting<T, U>(StartProject startProject, T[] fittings)
-            where T : IfcAbstractFittingEntity
-            where U : StartAbstractEntity
+        private void GenerateFitting(StartProject startProject, IEnumerable<IfcAbstractFittingEntity> fittings)
         {
-            foreach (T fitting in fittings)
+            foreach (IfcAbstractFittingEntity fitting in fittings)
             {
-                U startEntity = (U)fitting.StartAbstractEntity;
-                string startEntityJson = JsonConvert.SerializeObject(startEntity);
+                string startEntityJson = JsonConvert.SerializeObject(fitting.StartAbstractEntity);
 
                 StartBaseRoot startEntityObject = startProject.AddElement(fitting.Type, out int entityIndex);
                 startEntityObject.SetDataJson(0, startEntityJson);
@@ -93,7 +82,10 @@ namespace IfcConverter
                 
                 foreach (IfcAbstractSegmentEntity abstractSegmentEntity in fitting.AbstractSegmentEntities)
                 {
-                    abstractSegmentEntity.ReplaceNearestNode(ifcNodeEntity);
+                    if (abstractSegmentEntity is IfcPipeSegmentEntity pipeSegmentEntity)
+                    {
+                        pipeSegmentEntity.ReplaceNearestNodeAndRescale(ifcNodeEntity);
+                    }
                 }
             }
         }
@@ -102,8 +94,7 @@ namespace IfcConverter
         {
             foreach (IfcPipeSegmentEntity ifcPipeSegmentEntity in pipeSegmentEntities)
             {
-                StartPipeEntity startPipeEntity = (StartPipeEntity)ifcPipeSegmentEntity.StartAbstractEntity;
-                string startPipeJson = JsonConvert.SerializeObject(startPipeEntity);
+                string startPipeJson = JsonConvert.SerializeObject(ifcPipeSegmentEntity.StartAbstractEntity);
 
                 StartBaseRoot startPipeObject = startProject.AddElement(StartElementType.PIPE_ELEMENT, out int pipeIndex);
                 startPipeObject.SetDataJson(0, startPipeJson);
@@ -138,11 +129,56 @@ namespace IfcConverter
             return _nodeEntities[ifcNodeEntity];
         }
 
-        private static IfcPipeFitting[] FilterByType(IEnumerable<IfcPipeFitting> pipeFittings, IfcPipeFittingTypeEnum type)
+        private static IfcPipeFitting[] FilterTees(IfcPipeFitting[] pipeFittings)
         {
-            return pipeFittings
-                .Where(item => item.PredefinedType == type)
-                .ToArray();
+            List<IfcPipeFitting> tees = new List<IfcPipeFitting>();
+            foreach (IfcPipeFitting pipeFitting in pipeFittings)
+            {
+                if (pipeFitting.PredefinedType == IfcPipeFittingTypeEnum.JUNCTION)
+                {
+                    tees.Add(pipeFitting);
+                    continue;
+                }
+
+                IIfcPropertySet? avevaEntityParametersRaw = pipeFitting.PropertySets.FirstOrDefault(set => set.Name == nameof(AVEVA_EntityParameters));
+                if (avevaEntityParametersRaw != null)
+                {
+                    AVEVA_EntityParameters avevaEntityParameters = AVEVA_EntityParameters.CreateFromPropertySet(avevaEntityParametersRaw);
+                    if (avevaEntityParameters.E3DType == "TEE")
+                    {
+                        tees.Add(pipeFitting);
+                        continue;
+                    }
+                }
+            }
+
+            return tees.ToArray();
+        }
+
+        private static IfcPipeFitting[] FilterBends(IfcPipeFitting[] pipeFittings)
+        {
+            List<IfcPipeFitting> bends = new List<IfcPipeFitting>();
+            foreach (IfcPipeFitting pipeFitting in pipeFittings)
+            {
+                if (pipeFitting.PredefinedType == IfcPipeFittingTypeEnum.BEND)
+                {
+                    bends.Add(pipeFitting);
+                    continue;
+                }
+                
+                IIfcPropertySet? avevaEntityParametersRaw = pipeFitting.PropertySets.FirstOrDefault(set => set.Name == nameof(AVEVA_EntityParameters));
+                if (avevaEntityParametersRaw != null)
+                {
+                    AVEVA_EntityParameters avevaEntityParameters = AVEVA_EntityParameters.CreateFromPropertySet(avevaEntityParametersRaw);
+                    if (avevaEntityParameters.E3DType == "ELBOW")
+                    {
+                        bends.Add(pipeFitting);
+                        continue;
+                    }
+                }
+            }
+
+            return bends.ToArray();
         }
 
         private static IfcCadBendEntity[] CreateBendEntities(IEnumerable<IfcPipeFitting> pipeFittings, IfcAbstractSegmentEntity[] segmentEntities)

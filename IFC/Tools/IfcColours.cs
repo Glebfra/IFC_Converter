@@ -10,12 +10,22 @@ namespace IFC.Tools
         public static IfcColourRgb CreateColour(IModel model, Colour colour)
         {
             double[] normalizedColour = colour.ToNormal();
-            return model.Instances.New<IfcColourRgb>(colourRgb =>
+            IfcColourRgb colourRgb = model.Instances.New<IfcColourRgb>(colourRgb =>
             {
                 colourRgb.Red = normalizedColour[0];
                 colourRgb.Green = normalizedColour[1];
                 colourRgb.Blue = normalizedColour[2];
             });
+            
+            colour.ColorChanged += () =>
+            {
+                normalizedColour = colour.ToNormal();
+                colourRgb.Red = normalizedColour[0];
+                colourRgb.Green = normalizedColour[1];
+                colourRgb.Blue = normalizedColour[2];
+            };
+            
+            return colourRgb;
         }
 
         public static IfcSurfaceStyleShading CreateSurfaceStyleShading(IModel model, IfcColourRgb colourRgb)

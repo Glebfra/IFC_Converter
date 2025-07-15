@@ -24,6 +24,13 @@ namespace IFC.Extensions
                 .ToArray();
         }
 
+        public static IfcAbstractSegmentEntity[] GetConnSegments(this IEnumerable<IfcAbstractSegmentEntity> segmentEntities, IfcNodeEntity nodeEntity)
+        {
+            return segmentEntities
+                .Where(item => item.NodeEntities.Contains(nodeEntity))
+                .ToArray();
+        }
+
         public static XbimVector3D ReplaceNearestNode(this IfcAbstractSegmentEntity segmentEntity, IfcNodeEntity nodeEntity)
         {
             IndexedResult<IfcNodeEntity> nearestNode = GetNearestNode(segmentEntity, nodeEntity);

@@ -201,6 +201,7 @@
     <Compile Include="Entities\StartNonStandardRestraintModule.cs" />
     <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
+    <Compile Include="Extensions\StartPipeEntityExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartProject.cs" />
     <Compile Include="StartProperties\AngleProperty.cs" />
