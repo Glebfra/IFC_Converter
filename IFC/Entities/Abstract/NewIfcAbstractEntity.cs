@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Interfaces;
-using IFC.Extensions;
 using IFC.PropertySets;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.RepresentationResource;
+using IfcObjectPlacement = IFC.Tools.IfcObjectPlacement;
 
 namespace IFC.Entities.Abstract
 {
@@ -27,22 +27,13 @@ namespace IFC.Entities.Abstract
         protected T CreateIfcEntity<T>(IModel model)
             where T : IfcElement, IInstantiableEntity
         {
-            IfcCartesianPoint cartesianPoint = IfcAxis.CreatePoint(model, ObjectMatrix3D.Value.Translation);
-            IfcDirection forward = IfcAxis.CreateDirection(model, ObjectMatrix3D.Value.Forward);
-            IfcDirection right = IfcAxis.CreateDirection(model, ObjectMatrix3D.Value.Right);
-            
-            ObjectMatrix3D.OnValueChange += () => cartesianPoint.SetVector(ObjectMatrix3D.Value.Translation);
-            ObjectMatrix3D.OnValueChange += () => forward.SetVector(ObjectMatrix3D.Value.Forward);
-            ObjectMatrix3D.OnValueChange += () => right.SetVector(ObjectMatrix3D.Value.Right);
-            
-            IfcAxis2Placement3D axis2Placement3D = IfcAxis.CreateAxis2Placement3D(model, cartesianPoint, forward, right);
-            IfcLocalPlacement localPlacement = IfcAxis.CreateLocalPlacement(model, axis2Placement3D);
+            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
             T ifcElement = model.Instances.New<T>(product =>
             {
                 product.Name = Name;
                 product.Tag = Tag;
-                product.ObjectPlacement = localPlacement;
+                product.ObjectPlacement = objectPlacement.LocalPlacement;
 
                 Name.OnValueChange += () => product.Name = Name;
                 Tag.OnValueChange += () => product.Tag = Tag;
@@ -52,6 +43,18 @@ namespace IFC.Entities.Abstract
             return ifcElement;
         }
 
+        protected void AddShapeRepresentation(IModel model, IfcProduct product, IfcRepresentationItem representationItem)
+        {
+            AddShapeRepresentation(model, product, new[] { representationItem });
+        }
+        
+        protected void AddShapeRepresentation(IModel model, IfcProduct product, IEnumerable<IfcRepresentationItem> representationItems)
+        {
+            ColourEntity(model, representationItems);
+            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
+            product.Representation = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
+        }
+
         private void AddProperties(IModel model, IfcProduct product)
         {
             foreach (IPropertySet propertySet in PropertySets)
@@ -59,6 +62,7 @@ namespace IFC.Entities.Abstract
                 model.Instances.New<IfcRelDefinesByProperties>(properties =>
                 {
                     properties.Name = propertySet.GetType().Name;
+                    properties.RelatedObjects.Add(product);
                     properties.RelatingPropertyDefinition = propertySet.CreatePropertySet(model);
                 });
             }

@@ -156,6 +156,7 @@
     <Compile Include="ExportWindow.Designer.cs">
       <DependentUpon>ExportWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\IfcPipeSegmentEntityExtensions.cs" />
     <Compile Include="IfcExportType.cs" />
     <Compile Include="IfcExportTypeEnum.cs" />
     <Compile Include="IfcGenerator.cs" />

@@ -142,9 +142,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractConeElementEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\NewIfcAbstractPipeSegmentEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcNewEntity.cs" />
+    <Compile Include="Entities\Segments\NewIfcConeElementEntity.cs" />
+    <Compile Include="Entities\Segments\NewIfcCylindricalShellEntity.cs" />
+    <Compile Include="Entities\Segments\NewIfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\NewIfcPipeSegmentEntity.cs" />
+    <Compile Include="Entities\Segments\NewIfcRigidElementEntity.cs" />
     <Compile Include="Extensions\IfcBendEntityExtensions.cs" />
     <Compile Include="Extensions\IfcDirectionExtensions.cs" />
     <Compile Include="Extensions\IfcPipeSegmentExtensions.cs" />

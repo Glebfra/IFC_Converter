@@ -5,7 +5,7 @@ using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Segments
 {
-    public sealed class NewIfcPipeSegmentEntity : NewIfcAbstractPipeSegmentEntity
+    public class NewIfcFlexibleSegmentEntity : NewIfcAbstractFlexibleSegmentEntity
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
@@ -13,7 +13,7 @@ namespace IFC.Entities.Segments
         public override ActionProperty<double> Length { get; }
         public override ActionProperty<double> Diameter { get; }
 
-        public NewIfcPipeSegmentEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter)
+        public NewIfcFlexibleSegmentEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter)
         {
             Name = new ActionProperty<IfcLabel>(name);
             Tag = new ActionProperty<IfcIdentifier>(tag);

@@ -28,6 +28,22 @@ namespace Start.Entities.Abstract
         [JsonProperty(StartPropertyName.Temperature)]
         [JsonConverter(typeof(StartPropertyJsonConverter<TemperatureProperty, double>))]
         public TemperatureProperty Temperature { get; set; } = TemperatureProperty.Zero;
+        
+        [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ProjectionAlongOXAxis { get; set; } = LengthProperty.Zero;
+    
+        [JsonProperty(StartPropertyName.ProjectionAlongOYAxis)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ProjectionAlongOYAxis { get; set; } = LengthProperty.Zero;
+
+        [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
+        public LengthProperty ProjectionAlongOZAxis { get; set; } = LengthProperty.Zero;
+        
+        [JsonProperty(StartPropertyName.Weight)]
+        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
+        public MassUnitProperty PipeUnitWeight { get; set; } = MassUnitProperty.Zero;
 
         [JsonIgnore]
         [StartIgnore]

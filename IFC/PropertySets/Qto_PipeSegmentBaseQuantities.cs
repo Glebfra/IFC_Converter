@@ -1,4 +1,6 @@
-﻿using Xbim.Common;
+﻿using Start.Entities.Abstract;
+using Xbim.Common;
+using Xbim.Common.Geometry;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
@@ -16,7 +18,19 @@ namespace IFC.PropertySets
         public IfcMassMeasure GrossWeight;
         public IfcMassMeasure NetWeight;
 
-        public Qto_PipeSegmentBaseQuantities() {}
+        public static Qto_PipeSegmentBaseQuantities CreateFromStart(StartAbstractSegmentEntity abstractSegmentEntity)
+        {
+            Qto_PipeSegmentBaseQuantities qto = new Qto_PipeSegmentBaseQuantities();
+            qto.NetWeight = abstractSegmentEntity.PipeUnitWeight.SIProperty;
+            
+            XbimVector3D projection = new XbimVector3D(
+                abstractSegmentEntity.ProjectionAlongOXAxis.SIProperty,
+                abstractSegmentEntity.ProjectionAlongOYAxis.SIProperty,
+                abstractSegmentEntity.ProjectionAlongOZAxis.SIProperty
+            );
+            qto.Length = projection.Length;
+            return qto;
+        }
 
         public static Qto_PipeSegmentBaseQuantities CreateFromQuantitySet(IIfcElementQuantity elementQuantity)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
@@ -11,9 +12,11 @@ namespace IFC.PropertySets
     {
         public Dictionary<string, string> Data;
 
-        public Pset_Start(Dictionary<string, string> data)
+        public static Pset_Start CreateFromStart(StartAbstractEntity abstractEntity)
         {
-            Data = data;
+            Pset_Start pset = new Pset_Start();
+            pset.Data = abstractEntity.GetData();
+            return pset;
         }
 
         public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
@@ -46,7 +49,10 @@ namespace IFC.PropertySets
                 data.Add(name, value);
             }
 
-            return new Pset_Start(data);
+            Pset_Start pset = new Pset_Start();
+            pset.Data = data;
+
+            return pset;
         }
     }
 }

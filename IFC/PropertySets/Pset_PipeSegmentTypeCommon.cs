@@ -1,4 +1,7 @@
-﻿using Xbim.Common;
+﻿using System.Linq;
+using Start.Entities.Abstract;
+using Start.Entities.Segments;
+using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
@@ -14,8 +17,19 @@ namespace IFC.PropertySets
         public IfcPressureMeasure WorkingPressure;
         public IfcPressureMeasure[] PressureRange = new IfcPressureMeasure[2];
         public IfcThermodynamicTemperatureMeasure[] TemperatureRange = new IfcThermodynamicTemperatureMeasure[2];
-        
-        public Pset_PipeSegmentTypeCommon() {}
+
+        public static Pset_PipeSegmentTypeCommon CreateFromStart(StartAbstractSegmentEntity abstractSegmentEntity)
+        {
+            Pset_PipeSegmentTypeCommon pset = new Pset_PipeSegmentTypeCommon();
+            pset.InnerDiameter = abstractSegmentEntity.InnerDiameter.SIProperty;
+            pset.NominalDiameter = abstractSegmentEntity.Diameter.SIProperty;
+            pset.OuterDiameter = abstractSegmentEntity.Diameter.SIProperty;
+            pset.WorkingPressure = abstractSegmentEntity.Pressure.SIProperty;
+            pset.PressureRange = abstractSegmentEntity.PressureRange.Select(item => new IfcPressureMeasure(item.SIProperty)).ToArray();
+            pset.TemperatureRange = abstractSegmentEntity.TemperatureRange.Select(item => new IfcThermodynamicTemperatureMeasure(item.SIProperty)).ToArray();
+
+            return pset;
+        }
 
         public static Pset_PipeSegmentTypeCommon CreateFromPropertySet(IIfcPropertySet propertySet)
         {
