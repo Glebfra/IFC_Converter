@@ -142,16 +142,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractConeElementEntity.cs" />
-    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractFlexibleSegmentEntity.cs" />
-    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractPipeSegmentEntity.cs" />
-    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractRigidElementEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractConeElementEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractFlexibleSegmentEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractPipeSegmentEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractRigidElementEntity.cs" />
+    <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcNewEntity.cs" />
-    <Compile Include="Entities\Segments\NewIfcConeElementEntity.cs" />
-    <Compile Include="Entities\Segments\NewIfcCylindricalShellEntity.cs" />
-    <Compile Include="Entities\Segments\NewIfcFlexibleSegmentEntity.cs" />
-    <Compile Include="Entities\Segments\NewIfcPipeSegmentEntity.cs" />
-    <Compile Include="Entities\Segments\NewIfcRigidElementEntity.cs" />
+    <Compile Include="Entities\Segments\New\NewIfcConeElementEntity.cs" />
+    <Compile Include="Entities\Segments\New\NewIfcCylindricalShellEntity.cs" />
+    <Compile Include="Entities\Segments\New\NewIfcFlexibleSegmentEntity.cs" />
+    <Compile Include="Entities\Segments\New\NewIfcPipeSegmentEntity.cs" />
+    <Compile Include="Entities\Segments\New\NewIfcRigidElementEntity.cs" />
     <Compile Include="Extensions\IfcBendEntityExtensions.cs" />
     <Compile Include="Extensions\IfcDirectionExtensions.cs" />
     <Compile Include="Extensions\IfcPipeSegmentExtensions.cs" />
@@ -221,7 +222,6 @@
     <Compile Include="Entities\Abstract\Segments\IfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractStraightSegment.cs" />
-    <Compile Include="Entities\Abstract\Segments\NewIfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcDamperEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcFixedAnchorEntity.cs" />
     <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
@@ -335,6 +335,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Entities\Abstract\Fittings\New\" />
     <Folder Include="Entities\Equipments\CAD\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
