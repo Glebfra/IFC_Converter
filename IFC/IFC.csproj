@@ -142,11 +142,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\Fittings\New\NewIfcAbstractAxialExpansionJointEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\New\NewIfcAbstractBendEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\New\NewIfcAbstractCadBendEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\New\NewIfcAbstractVertexAngularExpansionJointEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\New\NewIfcAbstractExpansionJointEntity.cs" />
+    <Compile Include="Entities\Abstract\Fittings\New\NewIfcAbstractFittingEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractConeElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractPipeSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\New\NewIfcAbstractSegmentEntity.cs" />
+    <Compile Include="Entities\Fittings\New\NewIfcAxialExpansionJointEntity.cs" />
+    <Compile Include="Entities\Fittings\New\NewIfcCadBendEntity.cs" />
+    <Compile Include="Entities\Fittings\New\NewIfcVertexAngularExpansionJointEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcNewEntity.cs" />
     <Compile Include="Entities\Segments\New\NewIfcConeElementEntity.cs" />
     <Compile Include="Entities\Segments\New\NewIfcCylindricalShellEntity.cs" />
@@ -335,7 +344,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\Abstract\Fittings\New\" />
     <Folder Include="Entities\Equipments\CAD\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

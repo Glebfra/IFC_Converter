@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Interfaces;
+﻿using System;
+using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -22,7 +23,7 @@ namespace IFC.Entities.Abstract.Segments
 
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException("Clipping functionality is not implemented for this segment entity.");
         }
     }
 }

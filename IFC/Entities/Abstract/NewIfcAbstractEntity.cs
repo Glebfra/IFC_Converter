@@ -18,9 +18,10 @@ namespace IFC.Entities.Abstract
         public abstract ActionProperty<IfcLabel> Name { get; }
         public abstract ActionProperty<IfcIdentifier> Tag { get; } 
         public abstract ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
-        public ActionProperty<Colour> Colour { get; } = new ActionProperty<Colour>(IFC.Tools.Colour.FromHEX("bebebe"));
+        public virtual ActionProperty<Colour> Colour { get; } = new ActionProperty<Colour>(IFC.Tools.Colour.FromHEX("bebebe"));
         
         public List<IPropertySet> PropertySets { get; } = new List<IPropertySet>();
+        public List<NewIfcAbstractEntity> ConnectedEntities { get; } = new List<NewIfcAbstractEntity>();
 
         public abstract IfcProduct CreateAndAdd(IModel model);
 
