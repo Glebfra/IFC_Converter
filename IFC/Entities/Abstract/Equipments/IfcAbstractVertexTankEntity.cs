@@ -14,6 +14,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Equipments
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractVertexTankEntity : IfcAbstractEquipmentEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -124,4 +130,6 @@ namespace IFC.Entities.Abstract.Equipments
             return facetedBreps;
         }
     }
+
+    #endif
 }

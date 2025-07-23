@@ -4,6 +4,12 @@ using Start.Entities.Fittings;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexAxialExpansionJointEntity : IfcAbstractVertexAxialExpansionJointEntity
     {
         public override double Length { get; protected set; }
@@ -18,4 +24,6 @@ namespace IFC.Entities.Fittings.Vertex
             PipeDiameter = segmentEntities[0].Diameter;
         }
     }
+
+    #endif
 }

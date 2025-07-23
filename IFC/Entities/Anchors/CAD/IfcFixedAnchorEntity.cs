@@ -4,6 +4,12 @@ using Start.Entities.Anchors;
 
 namespace IFC.Entities.Anchors.CAD
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcFixedAnchorEntity : IfcAbstractFixedSupportEntity
     {
         public override double XDim { get; protected set; }
@@ -16,4 +22,6 @@ namespace IFC.Entities.Anchors.CAD
             YDim = XDim;
         }
     }
+
+    #endif
 }

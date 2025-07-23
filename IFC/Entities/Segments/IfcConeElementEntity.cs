@@ -6,6 +6,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Segments
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcConeElementEntity : IfcAbstractConeElementEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
@@ -44,4 +50,6 @@ namespace IFC.Entities.Segments
             RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateClippedConeArea(Diameter / 2, SecondDiameter / 2, RealLength.Value);
         }
     }
+
+    #endif
 }

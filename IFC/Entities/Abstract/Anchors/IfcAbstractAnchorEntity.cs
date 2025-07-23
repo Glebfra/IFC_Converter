@@ -5,6 +5,12 @@ using Start.Entities.Abstract;
 
 namespace IFC.Entities.Abstract.Anchors
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractAnchorEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
     {
         public IfcNodeEntity NodeEntity { get; set; }
@@ -19,4 +25,6 @@ namespace IFC.Entities.Abstract.Anchors
             AbstractSegmentEntities = segmentEntities;
         }
     }
+
+    #endif
 }

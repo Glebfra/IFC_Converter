@@ -4,6 +4,12 @@ using Start.Entities.Fittings;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexReducerEccentricEntity : IfcAbstractVertexReducerEccentricEntity
     {
         public override int NumSegments { get; protected set; }
@@ -16,4 +22,6 @@ namespace IFC.Entities.Fittings.Vertex
             Length = reducerEntity.LengthOfConicalPart.SIProperty;
         }
     }
+
+    #endif
 }

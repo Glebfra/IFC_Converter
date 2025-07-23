@@ -4,6 +4,12 @@ using Start.Entities.Anchors;
 
 namespace IFC.Entities.Abstract.Anchors
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractDamperEntity : IfcAbstractNonStandardRestraintEntity
     {
         public override Colour Colour { get; protected set; } = Colour.FromHEX("0000ef");
@@ -14,4 +20,6 @@ namespace IFC.Entities.Abstract.Anchors
             
         }
     }
+
+    #endif
 }

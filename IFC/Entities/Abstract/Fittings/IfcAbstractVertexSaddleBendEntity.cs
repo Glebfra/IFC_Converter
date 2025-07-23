@@ -15,6 +15,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractVertexSaddleBendEntity : IfcAbstractBendEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -112,4 +118,6 @@ namespace IFC.Entities.Abstract.Fittings
             return dirToCenter * lengthToCenter;
         }
     }
+
+    #endif
 }

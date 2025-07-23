@@ -4,6 +4,12 @@ using Start.Entities.Fittings;
 
 namespace IFC.Entities.Fittings.CAD
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcConnectorEntity : IfcAbstractConnectorEntity
     {
         public override double Length { get; protected set; }
@@ -16,4 +22,6 @@ namespace IFC.Entities.Fittings.CAD
             Length = Diameter / 4;
         }
     }
+
+    #endif
 }

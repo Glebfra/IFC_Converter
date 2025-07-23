@@ -4,6 +4,12 @@ using Start.Entities.Equipments;
 
 namespace IFC.Entities.Equipments.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexVesselEntity : IfcAbstractVertexVesselEntity
     {
         public override int NumSegments { get; protected set; }
@@ -18,4 +24,6 @@ namespace IFC.Entities.Equipments.Vertex
             Length = Diameter / 4;
         }
     }
+
+    #endif
 }

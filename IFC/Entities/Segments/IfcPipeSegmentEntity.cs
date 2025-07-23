@@ -3,9 +3,32 @@ using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Segments;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Segments
 {
+    #if NEW
+    
+    public sealed class IfcPipeSegmentEntity : IfcAbstractPipeSegmentEntity
+    {
+        public override ActionProperty<IfcLabel> Name { get; }
+        public override ActionProperty<IfcIdentifier> Tag { get; }
+        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
+        public override ActionProperty<double> Length { get; }
+        public override ActionProperty<double> Diameter { get; }
+
+        public IfcPipeSegmentEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter)
+        {
+            Name = new ActionProperty<IfcLabel>(name);
+            Tag = new ActionProperty<IfcIdentifier>(tag);
+            ObjectMatrix3D = new ActionProperty<XbimMatrix3D>(objectMatrix3D);
+            Length = new ActionProperty<double>(length);
+            Diameter = new ActionProperty<double>(diameter);
+        }
+    }
+    
+    #else
+    
     public sealed class IfcPipeSegmentEntity : IfcAbstractPipeSegmentEntity
     {
         public override XbimMatrix3D ObjectMatrix3D { get; protected set; }
@@ -40,4 +63,6 @@ namespace IFC.Entities.Segments
             RealLength.OnValueChange += () => OuterSurfaceArea.Value = MathExtensions.CalculateCylinderArea(Diameter / 2, RealLength.Value);
         }
     }
+
+    #endif
 }

@@ -15,6 +15,12 @@ using Start.Entities.Segments;
 
 namespace IFC.Entities
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public static class IfcEntityFactory
     {
         public static IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities)
@@ -224,4 +230,6 @@ namespace IFC.Entities
             }
         }
     }
+
+    #endif
 }

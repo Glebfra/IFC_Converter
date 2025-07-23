@@ -4,6 +4,12 @@ using Start.Entities.Equipments;
 
 namespace IFC.Entities.Equipments.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexTurbineEntity : IfcAbstractVertexTurbineEntity
     {
         public override double Length { get; protected set; }
@@ -16,4 +22,6 @@ namespace IFC.Entities.Equipments.Vertex
             Length = AbstractSegmentEntities[0].Diameter / 2;
         }
     }
+
+    #endif
 }

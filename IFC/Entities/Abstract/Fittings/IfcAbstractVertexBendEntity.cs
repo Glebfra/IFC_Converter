@@ -15,6 +15,12 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+
     public abstract class IfcAbstractVertexBendEntity : IfcAbstractBendEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -96,4 +102,6 @@ namespace IFC.Entities.Abstract.Fittings
             });
         }
     }
+
+    #endif
 }

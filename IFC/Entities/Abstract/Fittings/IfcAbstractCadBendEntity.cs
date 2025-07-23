@@ -13,6 +13,35 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW 
+    
+    public abstract class IfcAbstractCadBendEntity : IfcAbstractBendEntity
+    {
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            return pipeFitting;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
+            
+            XbimVector3D bendDisplacement = BendRadius / Math.Cos(Angle / 2) * (VectorExtensions.Forward + VectorExtensions.Right).Normalized().Negated();
+            IfcSweptDiskSolid pipeBend = IfcGeometry.CreateCircularBend(
+                model, PipeRadius, BendRadius, Angle,
+                bendDisplacement, VectorExtensions.Forward, VectorExtensions.Right
+            );
+            AddShapeRepresentation(model, pipeFitting, pipeBend);
+
+            return pipeFitting;
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractCadBendEntity : IfcAbstractBendEntity
     {
         private readonly StartBendEntity _bendEntity;
@@ -51,4 +80,6 @@ namespace IFC.Entities.Abstract.Fittings
             return _pipeFitting;
         }
     }
+
+    #endif
 }

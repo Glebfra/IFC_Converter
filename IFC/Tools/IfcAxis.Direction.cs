@@ -9,11 +9,9 @@ namespace IFC.Tools
 {
     public static partial class IfcAxis
     {
-        public static XbimVector3D GetExtrudedDirection(IfcExtrudedAreaSolid extrudedAreaSolid)
-        {
-            return extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
-        }
         
+        #if !NEW
+            
         public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, XbimVector3D coordinates)
         {
             XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
@@ -30,7 +28,14 @@ namespace IFC.Tools
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             return GetPipeDirectionFromNode(pipeEntity, coordinates);
         }
+
+        #endif
         
+        public static XbimVector3D GetExtrudedDirection(IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            return extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
+        }
+
         public static IfcCartesianPoint CreatePoint(IModel model, XbimVector3D coordinates)
         {
             return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.X, coordinates.Y, coordinates.Z));

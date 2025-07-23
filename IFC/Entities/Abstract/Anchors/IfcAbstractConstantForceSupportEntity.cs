@@ -13,6 +13,12 @@ using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Abstract.Anchors
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractConstantForceSupportEntity : IfcAbstractNonFixedSupportEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -82,4 +88,6 @@ namespace IFC.Entities.Abstract.Anchors
             return representationItems;
         }
     }
+
+    #endif
 }

@@ -4,6 +4,12 @@ using Start.Entities.Fittings;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+
     public abstract class IfcAbstractReducerEntity : IfcAbstractFittingEntity
     {
         protected double[] _PipeRadiuses;
@@ -22,4 +28,6 @@ namespace IFC.Entities.Abstract.Fittings
             AbstractSegmentEntities[1].Clip(NodeEntity, Length);
         }
     }
+
+    #endif
 }

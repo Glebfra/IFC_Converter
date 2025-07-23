@@ -4,6 +4,12 @@ using Start.Entities.Anchors;
 
 namespace IFC.Entities.Anchors.CAD
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcSpringSupportEntity : IfcAbstractSpringSupportEntity
     {
         public override double Diameter { get; protected set; }
@@ -18,4 +24,6 @@ namespace IFC.Entities.Anchors.CAD
             Height = Diameter * 2;
         }
     }
+
+    #endif
 }

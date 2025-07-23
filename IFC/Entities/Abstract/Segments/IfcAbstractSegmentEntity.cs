@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Start.Entities.Abstract;
 using Start.StartProperties;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.HvacDomain;
+using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
@@ -13,6 +16,30 @@ using Xbim.Ifc4.QuantityResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
+    #if NEW
+    
+    public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcClippable
+    {
+        public abstract ActionProperty<double> Length { get; }
+        public abstract ActionProperty<double> Diameter { get; }
+
+        protected T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)
+            where T : IfcPipeSegment, IInstantiableEntity
+        {
+            T pipeSegment = base.CreateIfcEntity<T>(model);
+            pipeSegment.PredefinedType = pipeSegmentType;
+            
+            return pipeSegment;
+        }
+
+        public void Clip(IfcNodeEntity nodeEntity, double clipLength)
+        {
+            throw new NotImplementedException("Clipping functionality is not implemented for this segment entity.");
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcTwoNodeEntity, IIfcClippable
     {
         public virtual double Length { get; protected set; }
@@ -130,4 +157,6 @@ namespace IFC.Entities.Abstract.Segments
             return (nodeCoordinates - startPipeCoordinates).Length < (nodeCoordinates - endPipeCoordinates).Length;
         }
     }
+
+    #endif
 }

@@ -7,6 +7,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexLateralExpansionJointEntity : IfcAbstractVertexLateralExpansionJointEntity
     {
         public override double Length { get; protected set; }
@@ -27,4 +33,6 @@ namespace IFC.Entities.Fittings.Vertex
             Radius = Length;
         }
     }
+
+    #endif
 }

@@ -13,6 +13,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+
     public abstract class IfcAbstractVertexAxialExpansionJointEntity : IfcAbstractExpansionJoint
     {
         public abstract double PipeDiameter { get; protected set; }
@@ -71,4 +77,6 @@ namespace IFC.Entities.Abstract.Fittings
             return _pipeFitting;
         }
     }
+
+    #endif
 }

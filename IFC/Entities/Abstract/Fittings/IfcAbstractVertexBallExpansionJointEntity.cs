@@ -12,6 +12,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractVertexBallExpansionJointEntity : IfcAbstractExpansionJoint
     {
         public abstract int NumSegments { get; protected set; }
@@ -50,4 +56,6 @@ namespace IFC.Entities.Abstract.Fittings
             return _pipeFitting;
         }
     }
+
+    #endif
 }

@@ -3,6 +3,12 @@ using Start.Entities.Fittings;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+
     public sealed class IfcVertexReducerConcentricEntity : IfcAbstractVertexReducerConcentricEntity
     {
         public override double Length { get; protected set; }
@@ -15,4 +21,6 @@ namespace IFC.Entities.Abstract.Fittings
             Length = reducerEntity.LengthOfConicalPart.SIProperty;
         }
     }
+
+    #endif
 }

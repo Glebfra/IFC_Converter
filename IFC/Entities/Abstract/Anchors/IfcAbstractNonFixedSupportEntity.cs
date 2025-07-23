@@ -8,6 +8,12 @@ using Xbim.Ifc4.GeometryResource;
 
 namespace IFC.Entities.Abstract.Anchors
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractNonFixedSupportEntity : IfcAbstractAnchorEntity
     {
         public abstract double Diameter { get; protected set; }
@@ -49,4 +55,6 @@ namespace IFC.Entities.Abstract.Anchors
             return representationItems;
         }
     }
+
+    #endif
 }

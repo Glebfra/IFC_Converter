@@ -4,6 +4,12 @@ using Start.Entities.Anchors;
 
 namespace IFC.Entities.Anchors.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcSlidingSupportEntity : IfcAbstractSlidingSupportEntity
     {
         public override double Diameter { get; protected set; }
@@ -18,4 +24,6 @@ namespace IFC.Entities.Anchors.Vertex
             Height = Diameter * 2;
         }
     }
+
+    #endif
 }

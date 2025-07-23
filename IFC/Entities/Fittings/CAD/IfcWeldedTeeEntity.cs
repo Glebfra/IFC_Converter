@@ -6,6 +6,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Fittings.CAD
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcWeldedTeeEntity : IfcAbstractTeeEntity
     {
         public override double Length { get; protected set; }
@@ -23,4 +29,6 @@ namespace IFC.Entities.Fittings.CAD
             Height = teeEntity.CrotchHeight.SIProperty + _BranchPipes[0].Diameter / 2;
         }
     }
+
+    #endif
 }

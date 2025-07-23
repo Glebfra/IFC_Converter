@@ -26,6 +26,16 @@ namespace STARTtoIFC
             _twoNodeEntities = new Dictionary<int, IfcAbstractSegmentEntity>();
         }
         
+        
+        #if NEW
+
+        public void Convert(StartDocument startDocument)
+        {
+            
+        }
+        
+        #else
+        
         public void Convert(StartDocument startDocument)
         {
             Logger logger = Logger.GetInstance();
@@ -211,5 +221,7 @@ namespace STARTtoIFC
                 }
             }
         }
+
+        #endif
     }
 }

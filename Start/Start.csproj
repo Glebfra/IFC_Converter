@@ -33,8 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OLD|AnyCPU' ">
-    <OutputPath>bin\OLD\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NEW|AnyCPU' ">
+    <OutputPath>bin\NEW\</OutputPath>
+    <DefineConstants>NEW</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

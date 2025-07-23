@@ -9,7 +9,9 @@ namespace STARTtoIFC.Extensions
 {
     internal static class IfcPipeSegmentEntityExtensions
     {
-        public static NewIfcPipeSegmentEntity CreateFromStart(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
+        #if NEW
+        
+        public static IfcPipeSegmentEntity CreateFromStart(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
         {
             XbimVector3D coordinates = nodeEntities[0].ObjectMatrix3D.Translation;
             XbimVector3D nodesDirection = nodeEntities[1].ObjectMatrix3D.Translation - coordinates;
@@ -22,7 +24,7 @@ namespace STARTtoIFC.Extensions
             XbimVector3D forward = direction.Normalized();
             XbimMatrix3D objectMatrix3D = MatrixExtensions.CreateWorld(coordinates, forward);
             
-            NewIfcPipeSegmentEntity pipeSegment = new NewIfcPipeSegmentEntity(
+            IfcPipeSegmentEntity pipeSegment = new IfcPipeSegmentEntity(
                 pipeEntity.Name,
                 pipeEntity.Type.ToString(),
                 objectMatrix3D,
@@ -36,5 +38,7 @@ namespace STARTtoIFC.Extensions
 
             return pipeSegment;
         }
+
+        #endif
     }
 }

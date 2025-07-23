@@ -15,6 +15,12 @@ using Xbim.Ifc4.Interfaces;
 
 namespace IFC.Extensions
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public static class IfcWeldedTeeEntityExtensions
     {
         public static IfcWeldedTeeEntity CreateFromIfc(IfcPipeFitting pipeFitting, IfcAbstractSegmentEntity[] segmentEntities)
@@ -59,4 +65,6 @@ namespace IFC.Extensions
             pipeFitting.CrotchRadius = LengthProperty.CreateFromSi(GetPropertyValue(data[nameof(pipeFitting.CrotchRadius)]));
         }
     }
+
+    #endif
 }

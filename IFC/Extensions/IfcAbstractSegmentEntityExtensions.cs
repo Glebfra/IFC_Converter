@@ -6,6 +6,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Extensions
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public static class IfcAbstractSegmentEntityExtensions
     {
         public static IndexedResult<IfcNodeEntity> GetNearestNode(this IfcAbstractSegmentEntity segmentEntity, IfcNodeEntity nodeEntity)
@@ -39,4 +45,6 @@ namespace IFC.Extensions
             return displacement;
         }
     }
+
+    #endif
 }

@@ -5,6 +5,12 @@ using Start.Entities.Fittings;
 
 namespace IFC.Entities.Fittings.CAD
 {
+    #if NEW
+    
+    
+    
+    #else
+
     public sealed class IfcMilterJointEntity : IfcAbstractMilterJointEntity
     {
         public override double Length { get; protected set; }
@@ -17,4 +23,6 @@ namespace IFC.Entities.Fittings.CAD
             Length = 2 * Math.Min(segmentEntities[0].RealLength.Value, segmentEntities[1].RealLength.Value) * 0.1;
         }
     }
+
+    #endif
 }

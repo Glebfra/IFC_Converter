@@ -8,6 +8,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexValveEntity : IfcAbstractVertexValveEntity
     {
         public override int NumSegments { get; protected set; }
@@ -28,4 +34,6 @@ namespace IFC.Entities.Fittings.Vertex
             Angle = directions[0].Negated().Angle(directions[1]);
         }
     }
+
+    #endif
 }

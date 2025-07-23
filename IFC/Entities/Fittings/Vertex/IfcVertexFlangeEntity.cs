@@ -5,6 +5,12 @@ using Start.Entities.Fittings;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexFlangeEntity : IfcAbstractVertexFlangeEntity
     {
         public override double Length { get; protected set; }
@@ -19,4 +25,6 @@ namespace IFC.Entities.Fittings.Vertex
             Radiuses = segmentEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
     }
+
+    #endif
 }

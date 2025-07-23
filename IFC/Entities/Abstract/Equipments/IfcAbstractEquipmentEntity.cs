@@ -7,6 +7,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Abstract.Equipments
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
     {
         public abstract double Length { get; protected set; }
@@ -56,4 +62,6 @@ namespace IFC.Entities.Abstract.Equipments
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
     }
+
+    #endif
 }

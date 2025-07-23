@@ -13,6 +13,12 @@ using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Abstract.Anchors
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractConstantForceSupportHangerEntity : IfcAbstractConstantForceSupportEntity
     {
         private readonly StartConstantForceSupportHangerEntity _constantForceSupport;
@@ -79,4 +85,6 @@ namespace IFC.Entities.Abstract.Anchors
             return representationItems;
         }
     }
+
+    #endif
 }

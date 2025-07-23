@@ -14,6 +14,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractNonStandardExpansionJointEntity : IfcAbstractExpansionJoint
     {
         public abstract double Radius { get; protected set; }
@@ -69,4 +75,6 @@ namespace IFC.Entities.Abstract.Fittings
             });
         }
     }
+
+    #endif
 }

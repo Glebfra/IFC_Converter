@@ -6,6 +6,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Equipments.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexTankEntity : IfcAbstractVertexTankEntity
     {
         public override int NumSegments { get; protected set; }
@@ -32,4 +38,6 @@ namespace IFC.Entities.Equipments.Vertex
             FlangeRadius = PipeDiameter * 0.75;
         }
     }
+
+    #endif
 }

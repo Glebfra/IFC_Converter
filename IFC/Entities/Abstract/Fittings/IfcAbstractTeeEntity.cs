@@ -15,6 +15,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractTeeEntity : IfcAbstractFittingEntity
     {
         public abstract double Height { get; protected set; }
@@ -154,4 +160,6 @@ namespace IFC.Entities.Abstract.Fittings
             return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
         }
     }
+
+    #endif
 }

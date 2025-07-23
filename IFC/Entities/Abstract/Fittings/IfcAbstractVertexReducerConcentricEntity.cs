@@ -12,6 +12,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractVertexReducerConcentricEntity : IfcAbstractReducerEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -67,4 +73,6 @@ namespace IFC.Entities.Abstract.Fittings
             return AbstractSegmentEntities[1].ObjectMatrix3D.Up;
         }
     }
+
+    #endif
 }

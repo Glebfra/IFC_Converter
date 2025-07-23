@@ -13,6 +13,12 @@ using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Abstract.Anchors
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractFixedSupportEntity : IfcAbstractAnchorEntity
     {
         public abstract double XDim { get; protected set; }
@@ -66,4 +72,6 @@ namespace IFC.Entities.Abstract.Anchors
             return new[] { rectangle };
         }
     }
+
+    #endif
 }

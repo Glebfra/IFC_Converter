@@ -18,6 +18,12 @@ using Xbim.Ifc4.Interfaces;
 
 namespace IFC.Extensions
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public static class IfcPipeSegmentExtensions
     {
         public static IfcPipeSegmentEntity CreateFromIfc(IfcPipeSegment pipeSegment)
@@ -182,4 +188,6 @@ namespace IFC.Extensions
             };
         }
     }
+
+    #endif
 }

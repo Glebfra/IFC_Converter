@@ -15,6 +15,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Equipments
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractVertexAirCoolerEntity : IfcAbstractEquipmentEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -99,4 +105,6 @@ namespace IFC.Entities.Abstract.Equipments
             }
         }
     }
+
+    #endif
 }

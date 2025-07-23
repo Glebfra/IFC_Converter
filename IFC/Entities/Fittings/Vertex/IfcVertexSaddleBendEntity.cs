@@ -8,6 +8,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexSaddleBendEntity : IfcAbstractVertexSaddleBendEntity
     {
         public override int NumSegments { get; protected set; }
@@ -36,4 +42,6 @@ namespace IFC.Entities.Fittings.Vertex
             BranchHeight = Length / 2;
         }
     }
+
+    #endif
 }

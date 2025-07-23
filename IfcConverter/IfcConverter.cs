@@ -20,6 +20,20 @@ namespace IfcConverter
 {
     internal class IfcConverter : IDisposable
     {
+        #if NEW
+
+        public void Import(string filePath, string ctpFilePath)
+        {
+            
+        }
+        
+        public void Dispose()
+        {
+            
+        }
+        
+        #else
+        
         private int _nodeIndex = 1;
         
         private Dictionary<IfcNodeEntity, StartObject> _nodeEntities = new Dictionary<IfcNodeEntity, StartObject>();
@@ -201,5 +215,7 @@ namespace IfcConverter
                 .Select(IfcPipeSegmentExtensions.CreateFromIfc)
                 .ToArray();
         }
+        
+        #endif
     }
 }

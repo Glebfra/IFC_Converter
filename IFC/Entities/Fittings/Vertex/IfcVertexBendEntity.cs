@@ -8,6 +8,12 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Fittings.Vertex
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public sealed class IfcVertexBendEntity : IfcAbstractVertexBendEntity
     {
         public override double Length { get; protected set; }
@@ -34,4 +40,6 @@ namespace IFC.Entities.Fittings.Vertex
             PipeRadius = Math.Min(AbstractSegmentEntities[0].Diameter / 2, AbstractSegmentEntities[1].Diameter / 2);
         }
     }
+
+    #endif
 }

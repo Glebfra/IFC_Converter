@@ -12,6 +12,12 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public abstract class IfcAbstractStraightSegment : IfcAbstractSegmentEntity
     {
         protected IfcAbstractStraightSegment(StartAbstractSegmentEntity segmentEntity, IfcNodeEntity[] nodeEntities) 
@@ -71,4 +77,6 @@ namespace IFC.Entities.Abstract.Segments
             });
         }
     }
+
+    #endif
 }
