@@ -3,12 +3,33 @@ using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Segments;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Segments
 {
     #if NEW
-    
-    
+
+    public class IfcConeElementEntity : IfcAbstractConeElementEntity
+    {
+        public override ActionProperty<IfcLabel> Name { get; }
+        public override ActionProperty<IfcIdentifier> Tag { get; }
+        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
+        public override ActionProperty<double> Length { get; }
+        public override ActionProperty<double> Diameter { get; }
+        public override int NumSegments { get; }
+        public override ActionProperty<double> SecondDiameter { get; }
+
+        public IfcConeElementEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter, double secondDiameter, int numSegments)
+        {
+            Name = name;
+            Tag = tag;
+            ObjectMatrix3D = objectMatrix3D;
+            Length = length;
+            Diameter = diameter;
+            SecondDiameter = secondDiameter;
+            NumSegments = numSegments;
+        }
+    }
     
     #else
     

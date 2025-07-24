@@ -3,14 +3,15 @@ using IFC.Entities.Segments;
 using IFC.Extensions;
 using IFC.PropertySets;
 using Start.Entities.Segments;
+using STARTtoIFC.Extensions.PropertySets;
 using Xbim.Common.Geometry;
 
-namespace STARTtoIFC.Extensions
+namespace STARTtoIFC.Extensions.Entities
 {
+    #if NEW
+    
     internal static class IfcPipeSegmentEntityExtensions
     {
-        #if NEW
-        
         public static IfcPipeSegmentEntity CreateFromStart(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
         {
             XbimVector3D coordinates = nodeEntities[0].ObjectMatrix3D.Translation;
@@ -32,13 +33,13 @@ namespace STARTtoIFC.Extensions
                 pipeEntity.Diameter.SIProperty
             );
             
-            pipeSegment.PropertySets.Add(Pset_Start.CreateFromStart(pipeEntity));
-            pipeSegment.PropertySets.Add(Pset_PipeSegmentTypeCommon.CreateFromStart(pipeEntity));
-            pipeSegment.PropertySets.Add(Qto_PipeSegmentBaseQuantities.CreateFromStart(pipeEntity));
+            pipeSegment.PropertySets.Add(Pset_StartExtensions.CreateFromStart(pipeEntity));
+            pipeSegment.PropertySets.Add(Pset_PipeSegmentTypeCommonExtensions.CreateFromStart(pipeEntity));
+            pipeSegment.PropertySets.Add(Qto_PipeSegmentBaseQuantitiesExtensions.CreateFromStart(pipeEntity));
 
             return pipeSegment;
         }
-
-        #endif
     }
+    
+    #endif
 }

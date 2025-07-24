@@ -18,19 +18,6 @@ namespace IFC.PropertySets
         public IfcPressureMeasure[] PressureRange = new IfcPressureMeasure[2];
         public IfcThermodynamicTemperatureMeasure[] TemperatureRange = new IfcThermodynamicTemperatureMeasure[2];
 
-        public static Pset_PipeSegmentTypeCommon CreateFromStart(StartAbstractSegmentEntity abstractSegmentEntity)
-        {
-            Pset_PipeSegmentTypeCommon pset = new Pset_PipeSegmentTypeCommon();
-            pset.InnerDiameter = abstractSegmentEntity.InnerDiameter.SIProperty;
-            pset.NominalDiameter = abstractSegmentEntity.Diameter.SIProperty;
-            pset.OuterDiameter = abstractSegmentEntity.Diameter.SIProperty;
-            pset.WorkingPressure = abstractSegmentEntity.Pressure.SIProperty;
-            pset.PressureRange = abstractSegmentEntity.PressureRange.Select(item => new IfcPressureMeasure(item.SIProperty)).ToArray();
-            pset.TemperatureRange = abstractSegmentEntity.TemperatureRange.Select(item => new IfcThermodynamicTemperatureMeasure(item.SIProperty)).ToArray();
-
-            return pset;
-        }
-
         public static Pset_PipeSegmentTypeCommon CreateFromPropertySet(IIfcPropertySet propertySet)
         {
             Pset_PipeSegmentTypeCommon pset = new Pset_PipeSegmentTypeCommon();

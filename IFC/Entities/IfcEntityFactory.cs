@@ -15,11 +15,7 @@ using Start.Entities.Segments;
 
 namespace IFC.Entities
 {
-    #if NEW
-    
-    
-    
-    #else
+    #if !NEW
     
     public static class IfcEntityFactory
     {

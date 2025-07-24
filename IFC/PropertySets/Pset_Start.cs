@@ -12,13 +12,6 @@ namespace IFC.PropertySets
     {
         public Dictionary<string, string> Data;
 
-        public static Pset_Start CreateFromStart(StartAbstractEntity abstractEntity)
-        {
-            Pset_Start pset = new Pset_Start();
-            pset.Data = abstractEntity.GetData();
-            return pset;
-        }
-
         public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {
             return model.Instances.New<IfcPropertySet>(set =>

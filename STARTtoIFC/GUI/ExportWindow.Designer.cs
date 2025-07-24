@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace STARTtoIFC
+namespace STARTtoIFC.GUI
 {
     internal partial class ExportWindowForm
     {

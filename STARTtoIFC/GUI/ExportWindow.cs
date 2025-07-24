@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using STARTtoIFC.Localization;
 
-namespace STARTtoIFC
+namespace STARTtoIFC.GUI
 {
     internal partial class ExportWindowForm : Form
     {

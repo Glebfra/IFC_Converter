@@ -9,6 +9,7 @@ using Start;
 using Start.API;
 using Start.Entities;
 using Start.Extensions;
+using STARTtoIFC.Extensions;
 
 namespace STARTtoIFC
 {
@@ -31,7 +32,71 @@ namespace STARTtoIFC
 
         public void Convert(StartDocument startDocument)
         {
+            Logger logger = Logger.GetInstance();
+
+            using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
+            {
+                StartDataArrayItem[] startDataArrayItems = startProject.GetDataArrayItems()!;
+                logger.Log($"Found {startDataArrayItems.Length} objects");
+
+                StartDataArrayItem[] nodeItems = startDataArrayItems.GetElementsByType(StartElementType.NODE).ToArray();
+                foreach (StartDataArrayItem nodeItem in nodeItems)
+                {
+                    StartNodeEntity startNodeEntity = (StartNodeEntity)nodeItem.Entity;
+                    IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
+                    _nodeEntities.Add(startNodeEntity.ID, ifcNodeEntity);
+                    logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
+                }
+
+                using (IFCProject ifcProject = IFCProject.CreateProject(startDocument.GetTitle()))
+                {
+                    ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.PIPE_ELEMENT);
+                    
+                    ifcProject.GroupObjects("Pipe system");
+                    ifcProject.SaveAs(_dataContainer.OutputFilePath);
+                }
+            }
+        }
+        
+        private void ConvertTwoNodeObjects(
+            IFCProject ifcProject,
+            StartDataArrayItem[] dataArrayItems,
+            StartElementType type
+        )
+        {
+            Logger logger = Logger.GetInstance();
+
+            StartDataArrayItem[] objectItems = dataArrayItems.GetElementsByType(type).ToArray();
             
+            foreach (StartDataArrayItem objectItem in objectItems)
+            {
+                try
+                {
+                    StartDataArrayItem[] connNodes = dataArrayItems
+                        .GetConnElements(objectItem.DataArrayIndex)
+                        .GetElementsByType(StartElementType.NODE)
+                        .ToArray();
+
+                    int[] nodeIds = connNodes
+                        .Select(node => node.NodeIds[0])
+                        .ToArray();
+
+                    IfcNodeEntity[] ifcConnNodeEntities = _nodeEntities
+                        .Where(pair => nodeIds.Contains(pair.Key))
+                        .Select(pair => pair.Value)
+                        .ToArray();
+                    IfcAbstractEntity? ifcObjectEntity = IfcEntityFactory.CreateEntity(objectItem.Entity, ifcConnNodeEntities);
+                    if (ifcObjectEntity == null) continue;
+
+                    ifcProject.AddEntity(ifcObjectEntity);
+                    _twoNodeEntities.Add(objectItem.DataArrayIndex, (IfcAbstractSegmentEntity)ifcObjectEntity);
+                    logger.Log($"Added {objectItem.Type} with id {objectItem.DataArrayIndex} to IFC.");
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.ToString());
+                }
+            }
         }
         
         #else

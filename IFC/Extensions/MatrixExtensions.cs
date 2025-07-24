@@ -83,10 +83,5 @@ namespace IFC.Extensions
             matrix3D.OffsetZ += translationVector.Z;
             return matrix3D;
         }
-
-        public static XbimMatrix3D Copy(this XbimMatrix3D matrix3D)
-        {
-            return matrix3D;
-        }
     }
 }
