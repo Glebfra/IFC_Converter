@@ -9,9 +9,8 @@ namespace IFC.Tools
 {
     public static partial class IfcAxis
     {
-        
         #if !NEW
-            
+        
         public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, XbimVector3D coordinates)
         {
             XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;

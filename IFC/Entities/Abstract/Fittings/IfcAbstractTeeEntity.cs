@@ -1,11 +1,13 @@
 ﻿using System;
 using IFC.Entities.Abstract.Segments;
+using IFC.Entities.Interfaces;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
@@ -16,8 +18,52 @@ using Xbim.Ifc4.RepresentationResource;
 namespace IFC.Entities.Abstract.Fittings
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractTeeEntity : IfcAbstractFittingEntity
+    {
+        public abstract ActionProperty<double> BranchDiameter { get; }
+        public abstract ActionProperty<double> HeadDiameter { get; }
+        public abstract ActionProperty<double> Height { get; }
+        public abstract ActionProperty<double> Angle { get; }
+
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            return pipeFitting;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.JUNCTION;
+
+            IfcRepresentationItem[] representationItems = new IfcRepresentationItem[]
+            {
+                CreateBranch(model),
+                CreateHead(model)
+            };
+            AddShapeRepresentation(model, pipeFitting, representationItems);
+
+            return pipeFitting;
+        }
+        
+        private IfcExtrudedAreaSolid CreateHead(IModel model)
+        {
+            double circleRadius = HeadDiameter / 2;
+            XbimVector3D coordinates = XbimVector3D.Zero;
+            XbimVector3D forward = VectorExtensions.Forward.RotateAroundYAxis(Angle);
+            XbimVector3D right = VectorExtensions.Right.RotateAroundYAxis(Angle);
+            return IfcGeometry.CreateCylinder(model, circleRadius, Height, coordinates, forward, right);
+        }
+        
+        private IfcExtrudedAreaSolid CreateBranch(IModel model)
+        {
+            double circleRadius = BranchDiameter / 2;
+            XbimVector3D coordinates = Length / 2 * VectorExtensions.Forward.Negated();
+            return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
+        }
+    }
     
     #else
     

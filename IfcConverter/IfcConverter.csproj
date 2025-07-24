@@ -63,6 +63,10 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Extensions\IfcPipeElementExtensions.cs" />
+        <Compile Include="Extensions\IfcPipeSegmentExtensions.Start.cs">
+          <DependentUpon>IfcPipeElementExtensions.cs</DependentUpon>
+        </Compile>
         <Compile Include="IfcConverter.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
