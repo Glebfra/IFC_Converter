@@ -18,8 +18,147 @@ using Xbim.Ifc4.SharedComponentElements;
 namespace IFC.Entities.Abstract.Anchors
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractNonStandardRestraintEntity : IfcAbstractNonFixedSupportEntity
+    {
+        public abstract IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; }
+        public abstract StartNonStandardRestraint NonStandardRestraint { get; }
+        public abstract int NumSegments { get; }
+        public abstract double Height { get; }
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcDiscreteAccessory discreteAccessory = CreateIfcEntity<IfcDiscreteAccessory>(model);
+            return discreteAccessory;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcDiscreteAccessory, IInstantiableEntity
+        {
+            throw new NotImplementedException();
+            
+            T discreteAccessory = base.CreateIfcEntity<T>(model);
+            discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, Diameter / 2 * VectorExtensions.Forward);
+            AddShapeRepresentation(model, discreteAccessory, representationItems);
+            
+            return discreteAccessory;
+        }
+        
+        /*protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
+        {
+            List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
+
+            foreach (StartNonStandardRestraintModule restraintModule in NonStandardRestraint.Restraints)
+            {
+                bool hasSpring = restraintModule.Type == StartRestraintTypeEnum.ELASTIC;
+                bool isDoubleSided = restraintModule.Type != StartRestraintTypeEnum.RIGID_ONE_SIDED;
+
+                XbimVector3D direction = CreateAnchorDirection(restraintModule);
+                IEnumerable<XbimVector3D> segmentDirections = AbstractSegmentEntities.Select(entity => entity.Direction);
+                bool isParallel = segmentDirections.Any(segmentDirection => segmentDirection.IsParallel(direction));
+
+                XbimVector3D[] displacements;
+                if (isParallel)
+                {
+                    displacements = new XbimVector3D[]
+                    {
+                        displacement - Height * direction + Diameter * VectorExtensions.Z,
+                        displacement + Height * direction + Diameter * VectorExtensions.Z
+                    };
+                }
+                else
+                {
+                    displacements = new XbimVector3D[]
+                    {
+                        displacement - Height * direction,
+                        displacement + Height * direction
+                    };
+                }
+                representationItems.AddRange(CreateSingleAnchorShape(model, direction, displacements[0], hasSpring));
+                if (isDoubleSided)
+                {
+                    representationItems.AddRange(CreateSingleAnchorShape(model, direction.Negated(), displacements[1], hasSpring));
+                }
+            }
+
+            return representationItems;
+        }
+
+        private XbimVector3D CreateAnchorDirection(StartNonStandardRestraintModule restraintModule)
+        {
+            double restraintX = Math.Cos(restraintModule.AngleX.SIProperty);
+            double restraintY = Math.Cos(restraintModule.AngleY.SIProperty);
+            double restraintZ = Math.Cos(restraintModule.AngleZ.SIProperty);
+            
+            bool useLocalAxes = restraintModule.Local == StartRestraintAxesTypeEnum.LOCAL;
+            if (!useLocalAxes)
+            {
+                XbimVector3D restraintVector = new XbimVector3D(restraintX, restraintY, restraintZ);
+                return restraintVector;
+            }
+            
+            foreach (IfcAbstractSegmentEntity segmentEntity in AbstractSegmentEntities)
+            {
+                if (segmentEntity.NodeEntities.All(item => item.ID != NonStandardRestraint.SectionStartNode) ||
+                    segmentEntity.NodeEntities.All(item => item.ID != NonStandardRestraint.SectionEndNode))
+                {
+                    continue;
+                }
+                
+                IfcNodeEntity startNode = segmentEntity.NodeEntities.First(item => item.ID == NonStandardRestraint.SectionStartNode);
+                IfcNodeEntity endNode = segmentEntity.NodeEntities.First(item => item.ID == NonStandardRestraint.SectionEndNode);
+                
+                XbimVector3D forward = endNode.ObjectMatrix3D.Translation - startNode.ObjectMatrix3D.Translation;
+                XbimMatrix3D fictiveObjectMatrix = MatrixExtensions.CreateWorld(XbimVector3D.Zero, forward);
+                XbimVector3D restraintVector = fictiveObjectMatrix.Forward * restraintX +
+                                               fictiveObjectMatrix.Right * restraintY +
+                                               fictiveObjectMatrix.Up * restraintZ;
+                return restraintVector.Negated();
+            }
+            
+            throw new NullReferenceException(nameof(IfcAbstractNonStandardRestraintEntity) + "Cannot find local axes");
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateSingleAnchorShape(IModel model, XbimVector3D direction, XbimVector3D displacement, bool hasSpring)
+        {
+            XbimMatrix3D shapePlacementMatrix = MatrixExtensions.CreateWorld(displacement, direction.Negated());
+            XbimVector3D refDirection = shapePlacementMatrix.Right;
+            XbimVector3D upDirection = shapePlacementMatrix.Up;
+            
+            List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
+
+            XbimVector3D rectangleCoordinates = displacement;
+            double rectangleXDim = Diameter;
+            double rectangleYDim = Diameter;
+            double rectangleHeight = Height / 20;
+            representationItems.Add(IfcGeometry.CreateRectangle(model, rectangleXDim, rectangleYDim, rectangleHeight, rectangleCoordinates, direction, refDirection));
+            
+            XbimVector3D stickCoordinates = rectangleCoordinates + rectangleHeight * direction;
+            double stickRadius = Diameter / 10;
+            double stickHeight = Height / 3;
+            representationItems.Add(IfcGeometry.CreateCylinder(model, stickRadius, stickHeight, stickCoordinates, direction, refDirection));
+
+            if (hasSpring)
+            {
+                double springRadius = stickRadius * 2;
+                double springWireRadius = stickRadius / 2;
+                const int springNumTurns = 5;
+                IfcCartesianPoint[] spiralPoints = IfcVertexGeometry.CreateSpiral(model, springRadius, stickHeight, NumSegments, springNumTurns, stickCoordinates, refDirection, upDirection);
+                IfcPolyline spiralPolyline = IfcVertexGeometry.CreatePolyline(model, spiralPoints);
+                representationItems.Add(IfcGeometry.CreateSweptDiskSolid(model, spiralPolyline, springWireRadius));
+            }
+            
+            XbimVector3D coneCoordinates = stickCoordinates + stickHeight * direction;
+            XbimVector3D coneTopCoordinates = -Diameter / 2 * direction;
+            double coneRadius = Diameter / 4;
+            double coneHeight = Math.Sqrt((coneTopCoordinates - coneCoordinates).Modulus);
+            representationItems.Add(IfcVertexGeometry.CreateCone(model, coneRadius, coneHeight, coneCoordinates, NumSegments, refDirection, upDirection));
+
+            return representationItems;
+        }*/
+    }
     
     #else
     

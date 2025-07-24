@@ -5,8 +5,11 @@ using Start.Entities.Anchors;
 namespace IFC.Entities.Abstract.Anchors
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractDamperEntity : IfcAbstractAnchorEntity
+    {
+        public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("0000ef");
+    }
     
     #else
     

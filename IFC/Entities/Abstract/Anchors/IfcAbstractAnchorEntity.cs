@@ -6,8 +6,11 @@ using Start.Entities.Abstract;
 namespace IFC.Entities.Abstract.Anchors
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractAnchorEntity : IfcAbstractEntity
+    {
+        public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("4ab636");
+    }
     
     #else
     
