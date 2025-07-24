@@ -8,8 +8,11 @@ using Xbim.Common.Geometry;
 namespace IFC.Entities.Abstract.Equipments
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity
+    {
+        public abstract ActionProperty<double> Length { get; }
+    }
     
     #else
     

@@ -13,8 +13,45 @@ using Xbim.Ifc4.RepresentationResource;
 namespace IFC.Entities.Abstract.Equipments
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractVertexInlinePumpEntity : IfcAbstractEquipmentEntity
+    {
+        public abstract ActionProperty<int> NumSegments { get; }
+        public abstract ActionProperty<double> Angle { get; }
+        public abstract ActionProperty<double> Diameter { get; }
+
+        public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("5b1c6a");
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPump discreteAccessory = CreateIfcEntity<IfcPump>(model);
+            return discreteAccessory;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPump, IInstantiableEntity
+        {
+            T pump = base.CreateIfcEntity<T>(model);
+            pump.PredefinedType = IfcPumpTypeEnum.SUMPPUMP;
+            
+            XbimVector3D displacement = Length / 2 * VectorExtensions.Forward;
+            IfcCartesianPoint[] firstCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement.Negated(), NumSegments);
+            IfcCartesianPoint[] secondCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement, NumSegments);
+            foreach (IfcCartesianPoint secondCirclePoint in secondCircle)
+                secondCirclePoint.RotateAroundYAxis(Angle);
+            
+            IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
+
+            IfcRepresentationItem[] representationItems = new IfcRepresentationItem[]
+            {
+                IfcVertexGeometry.CreateCone(model, firstCircle, topPoint),
+                IfcVertexGeometry.CreateCone(model, secondCircle, topPoint)
+            };
+            AddShapeRepresentation(model, pump, representationItems);
+            
+            return pump;
+        }
+    }
     
     #else
     

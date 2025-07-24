@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Equipments;
@@ -13,8 +14,51 @@ using Xbim.Ifc4.RepresentationResource;
 namespace IFC.Entities.Abstract.Equipments
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractVertexVesselEntity : IfcAbstractEquipmentEntity
+    {
+        public abstract ActionProperty<int> NumSegments { get; }
+        public abstract ActionProperty<double> Diameter { get; }
+
+        public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("695689");
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcTank discreteAccessory = CreateIfcEntity<IfcTank>(model);
+            return discreteAccessory;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcTank, IInstantiableEntity
+        {
+            T chiller = base.CreateIfcEntity<T>(model);
+            chiller.PredefinedType = IfcTankTypeEnum.VESSEL;
+            
+            IEnumerable<IfcRepresentationItem> representationItems = CreateFlange(model);
+            AddShapeRepresentation(model, chiller, representationItems);
+            
+            return chiller;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateFlange(IModel model)
+        {
+            XbimVector3D firstCircleDisplacement = Length / 2 * VectorExtensions.Forward.Negated();
+            
+            IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
+            {
+                IfcVertexGeometry.CreateCircle(model, Diameter * 0.66, firstCircleDisplacement, NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameter * 0.66, XbimVector3D.Zero, NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameter * 0.55, XbimVector3D.Zero, NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameter * 0.5, firstCircleDisplacement.Negated(), NumSegments)
+            };
+
+            return new IfcRepresentationItem[]
+            {
+                IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3])
+            };
+        }
+    }
     
     #else
     
