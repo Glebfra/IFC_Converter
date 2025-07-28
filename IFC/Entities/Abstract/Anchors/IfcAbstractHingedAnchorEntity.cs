@@ -19,6 +19,8 @@ namespace IFC.Entities.Abstract.Anchors
     {
         public abstract ActionProperty<int> NumSegments { get; }
         public abstract ActionProperty<double> Height { get; }
+        
+        protected IfcAbstractHingedAnchorEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {

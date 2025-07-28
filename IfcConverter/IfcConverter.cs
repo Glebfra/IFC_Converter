@@ -153,17 +153,6 @@ namespace IfcConverter
                     tees.Add(pipeFitting);
                     continue;
                 }
-
-                IIfcPropertySet? avevaEntityParametersRaw = pipeFitting.PropertySets.FirstOrDefault(set => set.Name == nameof(AVEVA_EntityParameters));
-                if (avevaEntityParametersRaw != null)
-                {
-                    AVEVA_EntityParameters avevaEntityParameters = AVEVA_EntityParameters.CreateFromPropertySet(avevaEntityParametersRaw);
-                    if (avevaEntityParameters.E3DType == "TEE")
-                    {
-                        tees.Add(pipeFitting);
-                        continue;
-                    }
-                }
             }
 
             return tees.ToArray();
@@ -178,17 +167,6 @@ namespace IfcConverter
                 {
                     bends.Add(pipeFitting);
                     continue;
-                }
-                
-                IIfcPropertySet? avevaEntityParametersRaw = pipeFitting.PropertySets.FirstOrDefault(set => set.Name == nameof(AVEVA_EntityParameters));
-                if (avevaEntityParametersRaw != null)
-                {
-                    AVEVA_EntityParameters avevaEntityParameters = AVEVA_EntityParameters.CreateFromPropertySet(avevaEntityParametersRaw);
-                    if (avevaEntityParameters.E3DType == "ELBOW")
-                    {
-                        bends.Add(pipeFitting);
-                        continue;
-                    }
                 }
             }
 

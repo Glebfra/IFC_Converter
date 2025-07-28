@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
@@ -9,9 +10,20 @@ namespace IFC.Entities.Abstract.Equipments
 {
     #if NEW
 
-    public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity
+    public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity, IIfcSegmentDependedEntity, IIfcOneNodeEntity
     {
         public abstract ActionProperty<double> Length { get; }
+        public abstract IEnumerable<IfcAbstractSegmentEntity> AbstractSegmentEntities { get; }
+        
+        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
+        
+        public IfcNodeEntity NodeEntity { get; }
+
+        protected IfcAbstractEquipmentEntity(XbimMatrix3D objectMatrix)
+        {
+            ObjectMatrix3D = objectMatrix;
+            NodeEntity = new IfcNodeEntity(objectMatrix);
+        }
     }
     
     #else

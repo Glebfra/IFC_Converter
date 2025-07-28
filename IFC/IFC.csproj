@@ -202,7 +202,6 @@
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexReducerEccentricEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexTorsionExpansionJointEntity.cs" />
     <Compile Include="Entities\Abstract\Fittings\IfcAbstractVertexValveEntity.cs" />
-    <Compile Include="Entities\Abstract\Fittings\IfcVertexReducerConcentricEntity.cs" />
     <Compile Include="Entities\Abstract\IfcAbstractEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractConeElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractFlexibleSegmentEntity.cs" />

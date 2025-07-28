@@ -13,8 +13,32 @@ using Xbim.Ifc4.RepresentationResource;
 namespace IFC.Entities.Abstract.Fittings
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractVertexBallExpansionJointEntity : IfcAbstractExpansionJointEntity
+    {
+        public abstract int NumSegments { get; }
+        public abstract double Radius { get; }
+        
+        protected IfcAbstractVertexBallExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            return pipeFitting;
+        }
+        
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
+
+            IfcFacetedBrep brep = IfcVertexGeometry.CreateSphere(model, Radius, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y);
+            AddShapeRepresentation(model, pipeFitting, brep);
+
+            return pipeFitting;
+        }
+    }
     
     #else
     

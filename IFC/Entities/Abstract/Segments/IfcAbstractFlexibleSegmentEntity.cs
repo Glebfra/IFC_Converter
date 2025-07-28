@@ -17,6 +17,8 @@ namespace IFC.Entities.Abstract.Segments
     
     public abstract class IfcAbstractFlexibleSegmentEntity : IfcAbstractSegmentEntity
     {
+        protected IfcAbstractFlexibleSegmentEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeSegment pipeSegment = CreateIfcEntity<IfcPipeSegment>(model, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);

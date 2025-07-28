@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace STARTtoIFC
+namespace STARTtoIFC.Tools
 {
     internal class Logger
     {

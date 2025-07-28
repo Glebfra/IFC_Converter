@@ -4,9 +4,10 @@ using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Segments;
 using IFC.Extensions;
 using Start.Entities.Segments;
+using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
-namespace STARTtoIFC.Extensions.Entities
+namespace STARTtoIFC.Extensions.Entities.Segments
 {
     #if NEW
     
@@ -14,12 +15,7 @@ namespace STARTtoIFC.Extensions.Entities
     {
         public static IfcFlexibleSegmentEntity CreateFromStart(StartFlexibleElementEntity flexibleElement, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities)
         {
-            XbimVector3D coordinates = nodeEntities[0].ObjectMatrix3D.Translation;
-            XbimVector3D direction = nodeEntities[1].ObjectMatrix3D.Translation - coordinates;
-            double length = direction.Length;
-
-            XbimVector3D forward = direction.Normalized();
-            XbimMatrix3D objectMatrix3D = MatrixExtensions.CreateWorld(coordinates, forward);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(flexibleElement, nodeEntities, out double length);
 
             double diameter = segmentEntities.Length switch
             {

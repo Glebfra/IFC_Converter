@@ -22,6 +22,8 @@ namespace IFC.Entities.Abstract.Equipments
 
         public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("695689");
         
+        protected IfcAbstractVertexVesselEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcTank discreteAccessory = CreateIfcEntity<IfcTank>(model);

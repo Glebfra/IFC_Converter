@@ -5,12 +5,13 @@ using Start.API;
 using Start.Entities.Abstract;
 using Start.Entities.Segments;
 using STARTtoIFC.Extensions.Entities;
+using STARTtoIFC.Extensions.Entities.Segments;
 
 namespace STARTtoIFC.Extensions
 {
     #if NEW
     
-    public static class IfcEntityFactory
+    internal static class IfcEntityFactory
     {
         public static IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities)
         {
@@ -42,13 +43,19 @@ namespace STARTtoIFC.Extensions
             }
         }
         
-        public static IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities, int numSegments)
+        public static IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
         {
             switch (entity.Type)
             {
-                case StartElementType.CONE_ELEMENT:
-                    return IfcConeElementEntityExtensions.CreateFromStart((StartConeElementEntity)entity, nodeEntities, numSegments);
-                
+                default:
+                    return null;
+            }
+        }
+        
+        public static IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
+        {
+            switch (entity.Type)
+            {
                 default:
                     return null;
             }

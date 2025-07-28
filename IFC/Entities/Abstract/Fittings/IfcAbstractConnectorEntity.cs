@@ -17,6 +17,8 @@ namespace IFC.Entities.Abstract.Fittings
     
     public abstract class IfcAbstractConnectorEntity : IfcAbstractFittingEntity
     {
+        protected IfcAbstractConnectorEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
         public abstract ActionProperty<double> Diameter { get; }
         
         public override IfcProduct CreateAndAdd(IModel model)

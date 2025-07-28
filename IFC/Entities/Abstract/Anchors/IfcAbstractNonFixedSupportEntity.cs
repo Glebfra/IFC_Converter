@@ -15,6 +15,8 @@ namespace IFC.Entities.Abstract.Anchors
     {
         protected bool _IsVertical;
         public abstract ActionProperty<double> Diameter { get; }
+        
+        protected IfcAbstractNonFixedSupportEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
 
         protected abstract IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement);
 

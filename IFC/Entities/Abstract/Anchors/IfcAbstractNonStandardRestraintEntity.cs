@@ -21,10 +21,13 @@ namespace IFC.Entities.Abstract.Anchors
 
     public abstract class IfcAbstractNonStandardRestraintEntity : IfcAbstractNonFixedSupportEntity
     {
-        public abstract IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; }
         public abstract StartNonStandardRestraint NonStandardRestraint { get; }
         public abstract int NumSegments { get; }
         public abstract double Height { get; }
+
+        private IfcAbstractSegmentEntity[] _abstractSegmentEntities;
+        
+        protected IfcAbstractNonStandardRestraintEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
@@ -35,10 +38,10 @@ namespace IFC.Entities.Abstract.Anchors
         protected new T CreateIfcEntity<T>(IModel model)
             where T : IfcDiscreteAccessory, IInstantiableEntity
         {
-            throw new NotImplementedException();
-            
             T discreteAccessory = base.CreateIfcEntity<T>(model);
             discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
+
+            _abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
 
             IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, Diameter / 2 * VectorExtensions.Forward);
             AddShapeRepresentation(model, discreteAccessory, representationItems);
@@ -46,7 +49,7 @@ namespace IFC.Entities.Abstract.Anchors
             return discreteAccessory;
         }
         
-        /*protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
+        protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
 
@@ -56,7 +59,7 @@ namespace IFC.Entities.Abstract.Anchors
                 bool isDoubleSided = restraintModule.Type != StartRestraintTypeEnum.RIGID_ONE_SIDED;
 
                 XbimVector3D direction = CreateAnchorDirection(restraintModule);
-                IEnumerable<XbimVector3D> segmentDirections = AbstractSegmentEntities.Select(entity => entity.Direction);
+                IEnumerable<XbimVector3D> segmentDirections = _abstractSegmentEntities.Select(entity => entity.ObjectMatrix3D.Value.Forward);
                 bool isParallel = segmentDirections.Any(segmentDirection => segmentDirection.IsParallel(direction));
 
                 XbimVector3D[] displacements;
@@ -99,7 +102,7 @@ namespace IFC.Entities.Abstract.Anchors
                 return restraintVector;
             }
             
-            foreach (IfcAbstractSegmentEntity segmentEntity in AbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity segmentEntity in _abstractSegmentEntities)
             {
                 if (segmentEntity.NodeEntities.All(item => item.ID != NonStandardRestraint.SectionStartNode) ||
                     segmentEntity.NodeEntities.All(item => item.ID != NonStandardRestraint.SectionEndNode))
@@ -157,7 +160,7 @@ namespace IFC.Entities.Abstract.Anchors
             representationItems.Add(IfcVertexGeometry.CreateCone(model, coneRadius, coneHeight, coneCoordinates, NumSegments, refDirection, upDirection));
 
             return representationItems;
-        }*/
+        }
     }
     
     #else

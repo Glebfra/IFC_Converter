@@ -14,18 +14,17 @@ namespace IFC.Entities.Fittings.Vertex
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
-        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         public override ActionProperty<double> Length { get; }
         public override double Angle { get; }
         public override double Diameter { get; }
         public override int NumSegments { get; }
 
-        public IfcVertexAngularExpansionJointEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double angle, double diameter, int numSegments)
+        public IfcVertexAngularExpansionJointEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double angle, double diameter, int numSegments) 
+            : base(objectMatrix3D)
         {
-            Name = new ActionProperty<IfcLabel>(name);
-            Tag = new ActionProperty<IfcIdentifier>(tag);
-            ObjectMatrix3D = new ActionProperty<XbimMatrix3D>(objectMatrix3D);
-            Length = new ActionProperty<double>(length);
+            Name = name;
+            Tag = tag;
+            Length = length;
             Angle = angle;
             Diameter = diameter;
             NumSegments = numSegments;

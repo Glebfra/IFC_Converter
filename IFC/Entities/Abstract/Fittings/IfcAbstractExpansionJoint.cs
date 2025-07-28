@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using Start.Entities.Abstract;
+using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Abstract.Fittings
 {
@@ -9,16 +12,18 @@ namespace IFC.Entities.Abstract.Fittings
     
     public abstract class IfcAbstractExpansionJointEntity : IfcAbstractFittingEntity
     {
+        protected IfcAbstractExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
         protected void ClipPipes()
         {
-            foreach (IfcAbstractEntity abstractEntity in ConnectedEntities)
+            IEnumerable<IIfcClippable> clippables = ConnectedEntities.OfType<IIfcClippable>();
+            foreach (IIfcClippable ifcClippable in clippables)
             {
-                if (abstractEntity is IIfcClippable ifcClippable)
-                {
-                    throw new NotImplementedException();
-                }
+                throw new NotImplementedException("Clipping functionality is not implemented yet.");
             }
         }
+
+        
     }
     
     #else

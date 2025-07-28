@@ -13,6 +13,11 @@ namespace IFC.Entities
         public readonly int ID;
         public readonly XbimMatrix3D ObjectMatrix3D;
 
+        public IfcNodeEntity(XbimMatrix3D objectMatrix3D)
+        {
+            ObjectMatrix3D = objectMatrix3D;
+        }
+
         public IfcNodeEntity(StartNodeEntity nodeEntity)
         {
             ID = nodeEntity.ID;

@@ -17,6 +17,8 @@ namespace IFC.Entities.Abstract.Fittings
     
     public abstract class IfcAbstractCadBendEntity : IfcAbstractBendEntity
     {
+        protected IfcAbstractCadBendEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);

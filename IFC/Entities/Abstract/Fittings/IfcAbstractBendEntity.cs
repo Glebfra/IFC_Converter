@@ -19,6 +19,8 @@ namespace IFC.Entities.Abstract.Fittings
         public abstract double BendRadius { get; }
         public abstract double PipeRadius { get; }
         
+        protected IfcAbstractBendEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
         protected virtual XbimVector3D CalculateCircleCenter()
         {
             XbimVector3D coordinates = ObjectMatrix3D.Value.Translation;
@@ -28,11 +30,6 @@ namespace IFC.Entities.Abstract.Fittings
             double lengthToCenter = BendRadius / Math.Cos(Angle / 2);
             
             return dirToCenter * lengthToCenter;
-        }
-        
-        protected virtual void ClipConnectedPipes()
-        {
-            throw new NotImplementedException();
         }
     }
     

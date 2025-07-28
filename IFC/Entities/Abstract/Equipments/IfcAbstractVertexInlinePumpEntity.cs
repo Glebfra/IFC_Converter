@@ -22,6 +22,8 @@ namespace IFC.Entities.Abstract.Equipments
 
         public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("5b1c6a");
         
+        protected IfcAbstractVertexInlinePumpEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPump discreteAccessory = CreateIfcEntity<IfcPump>(model);

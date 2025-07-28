@@ -17,6 +17,8 @@ namespace IFC.Entities.Abstract.Anchors
 
     public abstract class IfcAbstractConstantForceSupportHangerEntity : IfcAbstractConstantForceSupportEntity
     {
+        protected IfcAbstractConstantForceSupportHangerEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcDiscreteAccessory discreteAccessory = CreateIfcEntity<IfcDiscreteAccessory>(model);

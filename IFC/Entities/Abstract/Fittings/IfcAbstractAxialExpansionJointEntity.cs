@@ -20,6 +20,8 @@ namespace IFC.Entities.Abstract.Fittings
     {
         public abstract double Diameter { get; }
         public abstract int NumSegments { get; }
+        
+        protected IfcAbstractAxialExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {

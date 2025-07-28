@@ -23,6 +23,8 @@ namespace IFC.Entities.Abstract.Equipments
         public abstract ActionProperty<int> NumSegments { get; }
         public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("695689");
         
+        protected IfcAbstractVertexAirCoolerEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+        
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcChiller discreteAccessory = CreateIfcEntity<IfcChiller>(model);

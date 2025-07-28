@@ -18,10 +18,26 @@ namespace IFC.Entities.Abstract.Segments
 {
     #if NEW
     
-    public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcClippable
+    public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcClippable, IIfcTwoNodeEntity
     {
-        public abstract ActionProperty<double> Length { get; }
         public abstract ActionProperty<double> Diameter { get; }
+        public ActionProperty<double> Length { get; }
+        public IfcNodeEntity[] NodeEntities { get; }
+
+        public IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length)
+        {
+            XbimMatrix3D secondMatrix3D = XbimMatrix3D.CreateWorld(
+                matrix3D.Translation + matrix3D.Forward * length, 
+                matrix3D.Forward, 
+                matrix3D.Up
+            );
+            NodeEntities = new IfcNodeEntity[]
+            {
+                new IfcNodeEntity(matrix3D),
+                new IfcNodeEntity(secondMatrix3D)
+            };
+            Length = length;
+        }
 
         protected T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)
             where T : IfcPipeSegment, IInstantiableEntity

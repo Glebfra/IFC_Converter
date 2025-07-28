@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
@@ -30,6 +31,9 @@ namespace IFC.Entities.Abstract.Equipments
         public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("695689");
 
         private bool _isVertical;
+        private XbimVector3D _directionToPipe;
+        
+        protected IfcAbstractVertexTankEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
@@ -37,9 +41,11 @@ namespace IFC.Entities.Abstract.Equipments
             return discreteAccessory;
         }
 
-        /*protected new T CreateIfcEntity<T>(IModel model)
+        protected new T CreateIfcEntity<T>(IModel model)
             where T : IfcTank, IInstantiableEntity
         {
+            IfcAbstractSegmentEntity[] abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+            _directionToPipe = IfcAxis.GetPipeDirectionFromNode(abstractSegmentEntities[0], ObjectMatrix3D.Value.Translation).Normalized();
             _isVertical = _directionToPipe.IsParallel(VectorExtensions.Z);
             
             T chiller = base.CreateIfcEntity<T>(model);
@@ -106,7 +112,7 @@ namespace IFC.Entities.Abstract.Equipments
             facetedBreps[1] = IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]);
 
             return facetedBreps;
-        }*/
+        }
     }
     
     #else

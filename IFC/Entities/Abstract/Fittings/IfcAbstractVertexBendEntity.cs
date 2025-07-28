@@ -16,8 +16,73 @@ using Xbim.Ifc4.TopologyResource;
 namespace IFC.Entities.Abstract.Fittings
 {
     #if NEW
-    
-    
+
+    public abstract class IfcAbstractVertexBendEntity : IfcAbstractBendEntity
+    {
+        public abstract int NumSegments { get; }
+        public abstract double AngleStep { get; }
+        public abstract double BendAngleStep { get; }
+        
+        protected IfcAbstractVertexBendEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            return pipeFitting;
+        }
+        
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
+            
+            IfcCartesianPoint[,] ifcCartesianPoints = CreatePoints(model);
+            IfcFacetedBrep brep = CreateFacetedBrep(model, ifcCartesianPoints);
+            AddShapeRepresentation(model, pipeFitting, brep);
+
+            return pipeFitting;
+        }
+        
+        private IfcCartesianPoint[,] CreatePoints(IModel model)
+        {
+            IfcCartesianPoint[,] ifcCartesianPoints = new IfcCartesianPoint[NumSegments, NumSegments];
+            for (int i = 0; i < NumSegments; i++)
+            {
+                for (int j = 0; j < NumSegments; j++)
+                {
+                    double x = (BendRadius + PipeRadius * Math.Cos(j * AngleStep)) * Math.Cos(i * BendAngleStep);
+                    double y = PipeRadius * Math.Sin(j * AngleStep);
+                    double z = (BendRadius + PipeRadius * Math.Cos(j * AngleStep)) * Math.Sin(i * BendAngleStep);
+                    ifcCartesianPoints[i, j] = IfcAxis.CreatePoint(model, new XbimVector3D(x, y, z));
+                }
+            }
+
+            return ifcCartesianPoints;
+        }
+        
+        private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[,] points)
+        {
+            IfcFace[] faces = new IfcFace[(NumSegments - 1) * NumSegments];
+            int facesIndex = 0;
+            for (int i = 0; i < NumSegments - 1; i++)
+            {
+                for (int j = 0; j < NumSegments; j++)
+                {
+                    IfcCartesianPoint p1 = points[i, j];
+                    IfcCartesianPoint p2 = points[i, (j + 1) % NumSegments];
+                    IfcCartesianPoint p3 = points[i + 1, (j + 1) % NumSegments];
+                    IfcCartesianPoint p4 = points[i + 1, j];
+                    faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
+                }
+            }
+
+            return model.Instances.New<IfcFacetedBrep>(brep =>
+            {
+                brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
+            });
+        }
+    }
     
     #else
 

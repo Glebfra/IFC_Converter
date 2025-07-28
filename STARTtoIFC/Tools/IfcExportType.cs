@@ -1,4 +1,4 @@
-﻿namespace STARTtoIFC
+﻿namespace STARTtoIFC.Tools
 {
     internal class IfcExportType
     {

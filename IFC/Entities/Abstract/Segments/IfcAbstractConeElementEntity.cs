@@ -18,6 +18,8 @@ namespace IFC.Entities.Abstract.Segments
     {
         public abstract int NumSegments { get; }
         public abstract ActionProperty<double> SecondDiameter { get; }
+        
+        protected IfcAbstractConeElementEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {

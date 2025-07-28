@@ -1,9 +1,9 @@
-﻿namespace STARTtoIFC
+﻿namespace STARTtoIFC.Tools
 {
     internal class DataContainer
     {
-        public string InputFilePath { get; set; }
-        public string OutputFilePath { get; set; }
+        public string InputFilePath { get; set; } = string.Empty;
+        public string OutputFilePath { get; set; } = string.Empty;
         public int LanguageId { get; set; }
         public IfcExportTypeEnum ExportType { get; set; }
         public int NumSegments { get; set; }

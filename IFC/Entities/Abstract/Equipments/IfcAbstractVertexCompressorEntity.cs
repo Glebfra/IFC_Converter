@@ -22,6 +22,8 @@ namespace IFC.Entities.Abstract.Equipments
         public abstract ActionProperty<double>[] Diameters { get; }
         public abstract int NumSegments { get; }
         
+        protected IfcAbstractVertexCompressorEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+        
         public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("695689");
         
         public override IfcProduct CreateAndAdd(IModel model)

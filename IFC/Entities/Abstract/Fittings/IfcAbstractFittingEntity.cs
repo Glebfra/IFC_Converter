@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
@@ -14,15 +15,55 @@ namespace IFC.Entities.Abstract.Fittings
 {
     #if NEW 
     
-    public abstract class IfcAbstractFittingEntity : IfcAbstractEntity
+    public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity
     {
         public abstract ActionProperty<double> Length { get; }
+        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
+        public IfcNodeEntity NodeEntity { get; }
+
+        protected IfcAbstractFittingEntity(XbimMatrix3D objectMatrix3D)
+        {
+            NodeEntity = new IfcNodeEntity(objectMatrix3D);
+            ObjectMatrix3D = objectMatrix3D;
+        }
 
         protected new T CreateIfcEntity<T>(IModel model)
             where T : IfcPipeFitting, IInstantiableEntity
         {
             T pipeFitting = base.CreateIfcEntity<T>(model);
             return pipeFitting;
+        }
+
+        protected static XbimMatrix3D CreateObjectMatrix3D(XbimVector3D coordinates, XbimVector3D forward, XbimVector3D[] directions)
+        {
+            XbimVector3D up;
+            double angle = 0;
+            if (directions.Length == 2)
+            {
+                angle = forward.Angle(directions[1]);
+            }
+            if (angle == 0 && directions.Length == 3)
+            {
+                angle = forward.Angle(directions[2]);
+            }
+            if (angle != 0)
+            {
+                up = XbimVector3D.CrossProduct(forward, directions[1]).Normalized();
+            }
+            else
+            {
+                XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
+                if (forward != WorldUp && forward != WorldUp.Negated())
+                {
+                    up = WorldUp;
+                }
+                else
+                {
+                    up = new XbimVector3D(0, 1, 0);
+                }
+            }
+            
+            return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
     }
     

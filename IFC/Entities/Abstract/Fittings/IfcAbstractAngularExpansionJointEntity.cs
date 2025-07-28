@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -22,6 +23,8 @@ namespace IFC.Entities.Abstract.Fittings
         public abstract double Angle { get; }
         public abstract double Diameter { get; }
         public abstract int NumSegments { get; }
+        
+        protected IfcAbstractVertexAngularExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
@@ -33,6 +36,16 @@ namespace IFC.Entities.Abstract.Fittings
             where T : IfcPipeFitting, IInstantiableEntity
         {
             T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
+            AddShapeRepresentation(model, pipeFitting, representationItems);
+            
+            return pipeFitting;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
+        {
             XbimMatrix3D My = MatrixExtensions.My(Angle);
             
             XbimVector3D firstExtrudeDirection = VectorExtensions.Forward.Negated();
@@ -47,10 +60,10 @@ namespace IFC.Entities.Abstract.Fittings
                 CreateBranch(model, secondExtrudeDirection, secondProfileRefDirection),
                 IfcVertexGeometry.CreateSphere(model, Diameter / 2, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y)
             };
-            AddShapeRepresentation(model, pipeFitting, representationItems);
-            return pipeFitting;
+
+            return representationItems;
         }
-        
+
         private IfcExtrudedAreaSolid CreateBranch(IModel model, XbimVector3D extrudeDirection, XbimVector3D refDirection)
         {
             IfcDirection firstExtrudedDirection = IfcAxis.CreateDirection(model, extrudeDirection);

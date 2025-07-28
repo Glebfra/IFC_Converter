@@ -13,7 +13,6 @@ namespace IFC.Entities.Fittings.CAD
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
-        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         public override ActionProperty<double> Length { get; }
         public override ActionProperty<double> BranchDiameter { get; }
         public override ActionProperty<double> HeadDiameter { get; }
@@ -21,10 +20,10 @@ namespace IFC.Entities.Fittings.CAD
         public override ActionProperty<double> Angle { get; }
 
         public IfcFabricatedTeeEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double branchDiameter, double headDiameter, double height, double angle)
+            : base(objectMatrix3D)
         {
             Name = name;
             Tag = tag;
-            ObjectMatrix3D = objectMatrix3D;
             Length = length;
             BranchDiameter = branchDiameter;
             HeadDiameter = headDiameter;

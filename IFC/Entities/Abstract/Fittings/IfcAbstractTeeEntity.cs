@@ -25,6 +25,8 @@ namespace IFC.Entities.Abstract.Fittings
         public abstract ActionProperty<double> HeadDiameter { get; }
         public abstract ActionProperty<double> Height { get; }
         public abstract ActionProperty<double> Angle { get; }
+        
+        protected IfcAbstractTeeEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
@@ -47,7 +49,7 @@ namespace IFC.Entities.Abstract.Fittings
 
             return pipeFitting;
         }
-        
+
         private IfcExtrudedAreaSolid CreateHead(IModel model)
         {
             double circleRadius = HeadDiameter / 2;
