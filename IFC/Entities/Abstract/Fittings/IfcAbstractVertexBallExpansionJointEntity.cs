@@ -17,7 +17,7 @@ namespace IFC.Entities.Abstract.Fittings
     public abstract class IfcAbstractVertexBallExpansionJointEntity : IfcAbstractExpansionJointEntity
     {
         public abstract int NumSegments { get; }
-        public abstract double Radius { get; }
+        public abstract double Diameter { get; }
         
         protected IfcAbstractVertexBallExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
         
@@ -33,7 +33,7 @@ namespace IFC.Entities.Abstract.Fittings
             T pipeFitting = base.CreateIfcEntity<T>(model);
             pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
 
-            IfcFacetedBrep brep = IfcVertexGeometry.CreateSphere(model, Radius, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y);
+            IfcFacetedBrep brep = IfcVertexGeometry.CreateSphere(model, Diameter / 2, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y);
             AddShapeRepresentation(model, pipeFitting, brep);
 
             return pipeFitting;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
@@ -20,7 +21,7 @@ namespace IFC.Entities.Abstract.Fittings
     {
         public abstract ActionProperty<double>[] Diameters { get; }
         public abstract ActionProperty<int> NumSegments { get; }
-        
+
         protected IfcAbstractVertexReducerConcentricEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
@@ -34,7 +35,7 @@ namespace IFC.Entities.Abstract.Fittings
         {
             T pipeFitting = base.CreateIfcEntity<T>(model);
             pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
-
+            
             IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
             AddShapeRepresentation(model, pipeFitting, representationItems);
 

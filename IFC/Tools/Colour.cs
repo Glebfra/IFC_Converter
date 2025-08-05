@@ -2,23 +2,17 @@
 
 namespace IFC.Tools
 {
-    public class Colour
+    public readonly struct Colour
     {
-        public ActionProperty<byte> Red { get; }
-        public ActionProperty<byte> Green { get; }
-        public ActionProperty<byte> Blue { get; }
-
-        public event Action? ColorChanged; 
+        public byte Red { get; }
+        public byte Green { get; }
+        public byte Blue { get; }
 
         public Colour(byte red, byte green, byte blue)
         {
-            Red = new ActionProperty<byte>(red);
-            Green = new ActionProperty<byte>(green);
-            Blue = new ActionProperty<byte>(blue);
-
-            Red.OnValueChange += () => ColorChanged?.Invoke();
-            Green.OnValueChange += () => ColorChanged?.Invoke();
-            Blue.OnValueChange += () => ColorChanged?.Invoke();
+            Red = red;
+            Green = green;
+            Blue = blue;
         }
 
         public static Colour WHITE => new Colour(255, 255, 255);

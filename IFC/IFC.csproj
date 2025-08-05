@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NEW|AnyCPU' ">
     <OutputPath>bin\NEW\</OutputPath>
-    <DefineConstants>NEW</DefineConstants>
+    <DefineConstants>NEW;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -142,6 +142,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Anchors\IfcConstantForceSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcConstantForceSupportHangerEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcDamperEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcFixedAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcGuideDoubleDirectionSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcGuideSingleDirectionSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcHingedAnchorEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcNonStandardRestraintEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcRigidHangerEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcSlidingSupportEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcSpringHangerEntity.cs" />
+    <Compile Include="Entities\Anchors\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcNewEntity.cs" />
     <Compile Include="Extensions\IfcBendEntityExtensions.cs" />
     <Compile Include="Extensions\IfcDirectionExtensions.cs" />
@@ -209,18 +221,6 @@
     <Compile Include="Entities\Abstract\Segments\IfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractStraightSegment.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcDamperEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcFixedAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcConstantForceSupportHangerEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcGuideDoubleDirectionSupportEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcGuideSingleDirectionSupportEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcHingedAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcNonStandardRestraintEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcRigidHangerEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcSpringHangerEntity.cs" />
-    <Compile Include="Entities\Anchors\CAD\IfcSpringSupportEntity.cs" />
-    <Compile Include="Entities\Anchors\Vertex\IfcSlidingSupportEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexAirCoolerEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexCompressorEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexInlinePumpEntity.cs" />
@@ -266,7 +266,6 @@
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
-    <Compile Include="Exceptions\IfcConvertException.cs" />
     <Compile Include="Extensions\IfcAbstractSegmentEntityExtensions.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
     <Compile Include="Extensions\IfcNodeEntityExtensions.cs" />

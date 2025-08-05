@@ -10,11 +10,10 @@ namespace IFC.Entities.Abstract.Equipments
 {
     #if NEW
 
-    public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity, IIfcSegmentDependedEntity, IIfcOneNodeEntity
+    public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity, IIfcOneNodeEntity
     {
         public abstract ActionProperty<double> Length { get; }
-        public abstract IEnumerable<IfcAbstractSegmentEntity> AbstractSegmentEntities { get; }
-        
+
         public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         
         public IfcNodeEntity NodeEntity { get; }

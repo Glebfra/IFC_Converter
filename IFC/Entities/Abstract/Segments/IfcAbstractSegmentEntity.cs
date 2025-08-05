@@ -50,7 +50,22 @@ namespace IFC.Entities.Abstract.Segments
 
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
         {
-            throw new NotImplementedException("Clipping functionality is not implemented for this segment entity.");
+            if (IsStartNode(nodeEntity))
+                ObjectMatrix3D.Value = XbimMatrix3D.CreateWorld(
+                    ObjectMatrix3D.Value.Translation + ObjectMatrix3D.Value.Forward * clipLength,
+                    ObjectMatrix3D.Value.Forward,
+                    ObjectMatrix3D.Value.Up
+                );
+            Length.Value -= clipLength;
+        }
+        
+        private bool IsStartNode(IfcNodeEntity nodeEntity)
+        {
+            XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D startPipeCoordinates = ObjectMatrix3D.Value.Translation;
+            XbimVector3D endPipeCoordinates = ObjectMatrix3D.Value.Translation + ObjectMatrix3D.Value.Forward * Length.Value;
+
+            return (nodeCoordinates - startPipeCoordinates).Length < (nodeCoordinates - endPipeCoordinates).Length;
         }
     }
     

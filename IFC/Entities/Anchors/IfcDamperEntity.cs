@@ -1,11 +1,10 @@
 ﻿using IFC.Entities.Abstract.Anchors;
-using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.MeasureResource;
 
-namespace IFC.Entities.Anchors.CAD
+namespace IFC.Entities.Anchors
 {
     #if NEW
 
@@ -18,9 +17,14 @@ namespace IFC.Entities.Anchors.CAD
         public override double Height { get; }
         public override int NumSegments { get; }
         
-        public IfcDamperEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix, double diameter, ) : base(objectMatrix)
+        public IfcDamperEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix, double diameter, double height, int numSegments) 
+            : base(objectMatrix)
         {
-            
+            Name = name;
+            Tag = tag;
+            Diameter = diameter;
+            Height = height;
+            NumSegments = numSegments;
         }
     }
     

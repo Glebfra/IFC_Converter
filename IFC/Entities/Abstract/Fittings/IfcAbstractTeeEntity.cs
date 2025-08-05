@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Extensions;
@@ -25,12 +26,17 @@ namespace IFC.Entities.Abstract.Fittings
         public abstract ActionProperty<double> HeadDiameter { get; }
         public abstract ActionProperty<double> Height { get; }
         public abstract ActionProperty<double> Angle { get; }
+
+        protected IfcAbstractSegmentEntity[] _BranchPipes;
+        protected IfcAbstractSegmentEntity _HeadPipe;
         
         protected IfcAbstractTeeEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            FilterPipes();
+            ClipPipes();
             return pipeFitting;
         }
 
@@ -64,6 +70,42 @@ namespace IFC.Entities.Abstract.Fittings
             double circleRadius = BranchDiameter / 2;
             XbimVector3D coordinates = Length / 2 * VectorExtensions.Forward.Negated();
             return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
+        }
+
+        //TODO delete duplication
+        private void FilterPipes()
+        {
+            _BranchPipes = new IfcAbstractSegmentEntity[2];
+            
+            IfcAbstractSegmentEntity[] segmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+            
+            for (int i = 0; i < segmentEntities.Length; i++)
+            {
+                for (int j = i + 1; j < segmentEntities.Length; j++)
+                {
+                    XbimVector3D firstPipeDir = segmentEntities[i].ObjectMatrix3D.Value.Forward;
+                    XbimVector3D secondPipeDir = segmentEntities[j].ObjectMatrix3D.Value.Forward;
+                    
+                    if (!firstPipeDir.IsParallel(secondPipeDir, 1e-3))
+                        continue;
+                    _BranchPipes[0] = segmentEntities[i];
+                    _BranchPipes[1] = segmentEntities[j];
+                    _HeadPipe = segmentEntities[segmentEntities.Length - (i + j)];
+                }
+            }
+            if (_HeadPipe == null)
+                throw new NullReferenceException("Cannot find head pipe");
+            if (_BranchPipes == null)
+                throw new NullReferenceException("Cannot find branch pipes");
+        }
+
+        private void ClipPipes()
+        {
+            foreach (IfcAbstractSegmentEntity branchPipe in _BranchPipes)
+            {
+                branchPipe.Clip(NodeEntity, Length / 2);
+            }
+            _HeadPipe.Clip(NodeEntity, Height);
         }
     }
     

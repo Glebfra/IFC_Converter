@@ -36,7 +36,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NEW|AnyCPU' ">
     <OutputPath>bin\NEW\</OutputPath>
-    <DefineConstants>NEW</DefineConstants>
+    <DefineConstants>NEW;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -150,6 +150,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\Entities\Anchors\IfcHingedAnchorEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportHangerEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcFixedAnchorEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcGuideDoubleDirectionSupportEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcGuideSingleDirectionSupportEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcRigidHangerEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcSlidingSupportEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcSpringHangerEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcSpringSupportEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcAxialExpansionJointEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcCadBendEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcCapEntityExtensions.cs" />
@@ -161,6 +171,20 @@
     <Compile Include="Extensions\Entities\Fittings\IfcStandTeeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcStubInEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcSweepoletEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcUniversalExpansionJointEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexAngularExpansionJointEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexAxialExpansionJointEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexBallExpansionJointEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexBendEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexFlangeEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexLateralExpansionJointEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexReducerConcentricEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexReducerEccentricEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexSaddleBendEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexSingleFlangeEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexTorsionExpansionJointEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcWeldedTeeEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcWeldoletEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Segments\IfcConeElementEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Segments\IfcCylindricalShellEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Segments\IfcFlexibleSegmentEntityExtensions.cs" />

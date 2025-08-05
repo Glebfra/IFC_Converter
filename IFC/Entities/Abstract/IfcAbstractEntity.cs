@@ -62,6 +62,10 @@ namespace IFC.Entities.Abstract
 
         private void AddProperties(IModel model, IfcProduct product)
         {
+            #if DEBUG
+            PropertySets.Add(new Pset_Debug(ObjectMatrix3D));
+            #endif
+
             foreach (IPropertySet propertySet in PropertySets)
             {
                 model.Instances.New<IfcRelDefinesByProperties>(properties =>

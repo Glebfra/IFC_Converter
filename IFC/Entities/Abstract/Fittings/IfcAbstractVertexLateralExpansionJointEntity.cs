@@ -18,7 +18,7 @@ namespace IFC.Entities.Abstract.Fittings
 
     public abstract class IfcAbstractVertexLateralExpansionJointEntity : IfcAbstractExpansionJointEntity
     {
-        public abstract ActionProperty<double> Radius { get; }
+        public abstract ActionProperty<double> Diameter { get; }
         public abstract ActionProperty<double> Angle { get; }
         public abstract ActionProperty<int> NumSegments { get; }
         
@@ -49,8 +49,8 @@ namespace IFC.Entities.Abstract.Fittings
 
             IfcFacetedBrep[] brep = new IfcFacetedBrep[]
             {
-                IfcVertexGeometry.CreateSphere(model, Radius, firstDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y),
-                IfcVertexGeometry.CreateSphere(model, Radius, secondDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y)
+                IfcVertexGeometry.CreateSphere(model, Diameter / 2, firstDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y),
+                IfcVertexGeometry.CreateSphere(model, Diameter / 2, secondDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y)
             };
 
             return brep;

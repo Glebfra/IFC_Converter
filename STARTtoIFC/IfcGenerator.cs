@@ -27,8 +27,7 @@ namespace STARTtoIFC
             _nodeEntities = new Dictionary<int, IfcNodeEntity>();
             _twoNodeEntities = new Dictionary<int, IfcAbstractSegmentEntity>();
         }
-        
-        
+
         #if NEW
 
         public void Convert(StartDocument startDocument)
@@ -203,7 +202,7 @@ namespace STARTtoIFC
 
                     if (entity == null)
                     {
-                        logger.Error($"Cannot add {arrayItem.Type} with id {arrayItem.DataArrayIndex} to IFC.");
+                        logger.Error($"Cannot find a {arrayItem.Type} constructor for entity with id {arrayItem.DataArrayIndex}");
                         continue;
                     }
                     ifcProject.AddEntity(entity);

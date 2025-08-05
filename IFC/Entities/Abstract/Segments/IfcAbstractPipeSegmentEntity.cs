@@ -51,6 +51,8 @@ namespace IFC.Entities.Abstract.Segments
                 solid.ExtrudedDirection = extrudedDirection;
                 solid.Depth = Length.Value;
                 solid.SweptArea = profileDef;
+                
+                Length.OnValueChange += () => solid.Depth = Length.Value;
             });
         }
     }

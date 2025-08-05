@@ -15,15 +15,15 @@ namespace IFC.Entities.Fittings.Vertex
         public override ActionProperty<IfcIdentifier> Tag { get; }
         public override ActionProperty<double> Length { get; }
         public override int NumSegments { get; }
-        public override double Radius { get; }
+        public override double Diameter { get; }
         
-        public IfcVertexBallExpansionJointEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double radius, int numSegments) 
+        public IfcVertexBallExpansionJointEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter, int numSegments) 
             : base(objectMatrix3D)
         {
             Name = name;
             Tag = tag;
             Length = length;
-            Radius = radius;
+            Diameter = diameter;
             NumSegments = numSegments;
         }
     }

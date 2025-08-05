@@ -7,24 +7,24 @@ namespace IFC.Tools
 {
     public static class IfcColours
     {
-        public static IfcColourRgb CreateColour(IModel model, Colour colour)
+        public static IfcColourRgb CreateColour(IModel model, ActionProperty<Colour> colour)
         {
-            double[] normalizedColour = colour.ToNormal();
+            double[] normalizedColour = colour.Value.ToNormal();
             IfcColourRgb colourRgb = model.Instances.New<IfcColourRgb>(colourRgb =>
             {
                 colourRgb.Red = normalizedColour[0];
                 colourRgb.Green = normalizedColour[1];
                 colourRgb.Blue = normalizedColour[2];
             });
-            
-            colour.ColorChanged += () =>
+
+            colour.OnValueChange += () =>
             {
-                normalizedColour = colour.ToNormal();
+                normalizedColour = colour.Value.ToNormal();
                 colourRgb.Red = normalizedColour[0];
                 colourRgb.Green = normalizedColour[1];
                 colourRgb.Blue = normalizedColour[2];
             };
-            
+
             return colourRgb;
         }
 
@@ -59,7 +59,7 @@ namespace IFC.Tools
             return styledItems;
         }
 
-        public static IEnumerable<IfcStyledItem> StyleItems(IModel model, Colour colour, IEnumerable<IfcRepresentationItem> representationItems)
+        public static IEnumerable<IfcStyledItem> StyleItems(IModel model, ActionProperty<Colour> colour, IEnumerable<IfcRepresentationItem> representationItems)
         {
             IfcColourRgb colourRgb = CreateColour(model, colour);
             IfcSurfaceStyleShading surfaceStyleShading = CreateSurfaceStyleShading(model, colourRgb);
@@ -68,7 +68,7 @@ namespace IFC.Tools
             return StyleItems(model, surfaceStyle, representationItems);
         }
         
-        public static IEnumerable<IfcStyledItem> StyleItems(IModel model, Colour colour, IfcRepresentationItem representationItem)
+        public static IEnumerable<IfcStyledItem> StyleItems(IModel model, ActionProperty<Colour> colour, IfcRepresentationItem representationItem)
         {
             return StyleItems(model, colour, new[] { representationItem });
         }

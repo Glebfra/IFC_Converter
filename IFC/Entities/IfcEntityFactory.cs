@@ -1,7 +1,5 @@
 ﻿using IFC.Entities.Abstract;
 using IFC.Entities.Abstract.Segments;
-using IFC.Entities.Anchors.CAD;
-using IFC.Entities.Anchors.Vertex;
 using IFC.Entities.Equipments.Vertex;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Fittings.Vertex;

@@ -18,18 +18,18 @@ namespace IFC.Entities.Abstract.Fittings
         public abstract double Angle { get; }
         public abstract double BendRadius { get; }
         public abstract double PipeRadius { get; }
-        
+
         protected IfcAbstractBendEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
-        
-        protected virtual XbimVector3D CalculateCircleCenter()
+
+        protected void ClipPipes()
         {
-            XbimVector3D coordinates = ObjectMatrix3D.Value.Translation;
-            IfcAbstractSegmentEntity[] segmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
-            XbimVector3D[] directionToPipes = segmentEntities.Select(item => item.ObjectMatrix3D.Value.Forward).ToArray();
-            XbimVector3D dirToCenter = (directionToPipes[0].Normalized() + directionToPipes[1].Normalized()).Normalized();
-            double lengthToCenter = BendRadius / Math.Cos(Angle / 2);
-            
-            return dirToCenter * lengthToCenter;
+            IfcAbstractSegmentEntity[] abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+
+            double clipLength = BendRadius * Math.Tan(Angle / 2);
+            foreach (IfcAbstractSegmentEntity ifcPipeEntity in abstractSegmentEntities)
+            {
+                ifcPipeEntity.Clip(NodeEntity, clipLength);
+            }
         }
     }
     

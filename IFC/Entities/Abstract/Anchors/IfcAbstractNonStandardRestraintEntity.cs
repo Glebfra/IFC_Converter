@@ -19,6 +19,8 @@ namespace IFC.Entities.Abstract.Anchors
 {
     #if NEW
 
+    //TODO Create a different way of creation
+    [Obsolete("")]
     public abstract class IfcAbstractNonStandardRestraintEntity : IfcAbstractNonFixedSupportEntity
     {
         public abstract StartNonStandardRestraint NonStandardRestraint { get; }
