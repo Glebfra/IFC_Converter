@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using IFC.Entities.Interfaces;
+using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
+using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.IO;
 
@@ -93,6 +97,50 @@ namespace IFC
             {
                 model = IfcStore.Open(stream, StorageType.Ifc, XbimSchemaVersion.Ifc4, XbimModelType.MemoryModel);
             }
+
+            using (ITransaction transaction = model.BeginTransaction("Change to SI units"))
+            {
+                IfcSIUnit lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+                IEnumerable<IfcPropertySet> propertySets = model.Instances.OfType<IfcPropertySet>();
+                foreach (IfcPropertySet propertySet in propertySets)
+                {
+                    foreach (IfcProperty property in propertySet.HasProperties)
+                    {
+                        if (property is not IfcPropertySingleValue singleValue) 
+                            continue;
+                    
+                        if (singleValue.NominalValue is IfcLengthMeasure lengthMeasure)
+                        {
+                            singleValue.NominalValue = new IfcLengthMeasure(lengthMeasure * lengthUnit.Power);
+                        }
+
+                        if (singleValue.NominalValue is IfcPositiveLengthMeasure positiveLengthMeasure)
+                        {
+                            singleValue.NominalValue = new IfcPositiveLengthMeasure(positiveLengthMeasure * lengthUnit.Power);
+                        }
+                    
+                        if (singleValue.NominalValue is IfcNonNegativeLengthMeasure nonNegativeLengthMeasure)
+                        {
+                            singleValue.NominalValue = new IfcPositiveLengthMeasure(nonNegativeLengthMeasure * lengthUnit.Power);
+                        }
+                    }
+                }
+
+                IEnumerable<IfcCartesianPoint> cartesianPoints = model.Instances.OfType<IfcCartesianPoint>();
+                foreach (IfcCartesianPoint cartesianPoint in cartesianPoints)
+                {
+                    XbimVector3D newCoordinates = cartesianPoint.ToXbimVector3D() * lengthUnit.Power;
+                    cartesianPoint.SetVector(newCoordinates);
+                }
+
+                IEnumerable<IfcExtrudedAreaSolid> extrudedAreaSolids = model.Instances.OfType<IfcExtrudedAreaSolid>();
+                foreach (IfcExtrudedAreaSolid extrudedAreaSolid in extrudedAreaSolids)
+                {
+                    extrudedAreaSolid.Depth *= lengthUnit.Power;
+                }
+                transaction.Commit();
+            }
+
             return new IFCProject(model);
         }
 
@@ -108,9 +156,24 @@ namespace IFC
             _building.AddElement(ifcProduct);
         }
 
+        public void AddEntity(IIfcNewEntity entity)
+        {
+            IfcProduct ifcProduct = entity.CreateAndAdd(_model);
+            _ifcObjects.Add(ifcProduct);
+            _building.AddElement(ifcProduct);
+        }
+
         public void AddEntities(IEnumerable<IIfcEntity> entities)
         {
             foreach (IIfcEntity entity in entities)
+            {
+                AddEntity(entity);
+            }
+        }
+        
+        public void AddEntities(IEnumerable<IIfcNewEntity> entities)
+        {
+            foreach (IIfcNewEntity entity in entities)
             {
                 AddEntity(entity);
             }

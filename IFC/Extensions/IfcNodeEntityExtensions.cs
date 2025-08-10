@@ -12,7 +12,7 @@ namespace IFC.Extensions
 
         public static double GetDistanceBetweenTwoNodes(IfcNodeEntity first, IfcNodeEntity second)
         {
-            return (first.ObjectMatrix3D.Translation - second.ObjectMatrix3D.Translation).Modulus;
+            return GetDisplacementBetweenTwoNodes(first, second).Modulus;
         }
 
         public static XbimVector3D GetDisplacementToAnotherNode(this IfcNodeEntity obj, IfcNodeEntity other)

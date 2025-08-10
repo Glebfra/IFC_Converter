@@ -32,7 +32,7 @@ namespace IFC.PropertySets
 
             return pset;
         }
-        
+
         public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {
             return model.Instances.New<IfcPropertySet>(set =>

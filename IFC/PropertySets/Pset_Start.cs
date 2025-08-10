@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
@@ -10,11 +11,6 @@ namespace IFC.PropertySets
     public class Pset_Start : IPropertySet
     {
         public Dictionary<string, string> Data;
-
-        public Pset_Start(Dictionary<string, string> data)
-        {
-            Data = data;
-        }
 
         public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {
@@ -46,7 +42,10 @@ namespace IFC.PropertySets
                 data.Add(name, value);
             }
 
-            return new Pset_Start(data);
+            Pset_Start pset = new Pset_Start();
+            pset.Data = data;
+
+            return pset;
         }
     }
 }

@@ -11,9 +11,20 @@ namespace IFC.Tools
 {
     public static partial class IfcAxis
     {
-        public static XbimVector3D GetCoordinates(IfcProduct product)
+        public static IfcObjectPlacement CreatePointObjectPlacement(IModel model, ActionProperty<XbimMatrix3D> ObjectMatrix3D)
         {
-            return product.ObjectPlacement.ToMatrix3D().Offset();
+            IfcCartesianPoint point = CreatePoint(model, ObjectMatrix3D.Value.Translation);
+            ObjectMatrix3D.OnValueChange += () => point.SetVector(ObjectMatrix3D.Value.Translation);
+            
+            IfcAxis2Placement3D axis2Placement3D = CreateAxis2Placement3D(model, point);
+            IfcLocalPlacement localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+            
+            return new IfcObjectPlacement()
+            {
+                Point = point,
+                Axis2Placement3D = axis2Placement3D,
+                LocalPlacement = localPlacement
+            };
         }
         
         public static IfcObjectPlacement CreatePointObjectPlacement(IModel model, XbimMatrix3D ObjectMatrix3D)
@@ -25,6 +36,29 @@ namespace IFC.Tools
             return new IfcObjectPlacement()
             {
                 Point = point,
+                Axis2Placement3D = axis2Placement3D,
+                LocalPlacement = localPlacement
+            };
+        }
+        
+        public static IfcObjectPlacement CreatePointAndDirectionsObjectPlacement(IModel model, ActionProperty<XbimMatrix3D> ObjectMatrix3D)
+        {
+            IfcCartesianPoint point = CreatePoint(model, ObjectMatrix3D.Value.Translation);
+            IfcDirection forward = CreateDirection(model, ObjectMatrix3D.Value.Forward);
+            IfcDirection right = CreateDirection(model, ObjectMatrix3D.Value.Right);
+            
+            ObjectMatrix3D.OnValueChange += () => point.SetVector(ObjectMatrix3D.Value.Translation);
+            ObjectMatrix3D.OnValueChange += () => forward.SetVector(ObjectMatrix3D.Value.Forward);
+            ObjectMatrix3D.OnValueChange += () => right.SetVector(ObjectMatrix3D.Value.Right);
+            
+            IfcAxis2Placement3D axis2Placement3D = CreateAxis2Placement3D(model, point, forward, right);
+            IfcLocalPlacement localPlacement = CreateLocalPlacement(model, axis2Placement3D);
+            
+            return new IfcObjectPlacement()
+            {
+                Point = point,
+                Forward = forward,
+                Right = right,
                 Axis2Placement3D = axis2Placement3D,
                 LocalPlacement = localPlacement
             };

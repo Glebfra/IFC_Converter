@@ -1,16 +1,41 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.QuantityResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW 
+    
+    public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity
+    {
+        public abstract ActionProperty<double> Length { get; }
+        public IfcNodeEntity NodeEntity { get; }
+
+        protected IfcAbstractFittingEntity(XbimMatrix3D objectMatrix3D)
+            : base(objectMatrix3D)
+        {
+            NodeEntity = new IfcNodeEntity(objectMatrix3D);
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            return pipeFitting;
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
     {
         public abstract double Length { get; protected set; }
@@ -91,4 +116,6 @@ namespace IFC.Entities.Abstract.Fittings
             #endregion
         }
     }
+
+    #endif
 }

@@ -7,6 +7,7 @@ using IFC.Entities.Segments;
 using IFC.PropertySets;
 using Start.API;
 using Start.Entities.Segments;
+using Start.Extensions;
 using Start.StartProperties;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
@@ -17,42 +18,51 @@ using Xbim.Ifc4.Interfaces;
 
 namespace IFC.Extensions
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public static class IfcPipeSegmentExtensions
     {
-        public static IfcPipeSegmentEntity? CreateFromIfc(IfcPipeSegment pipeSegment)
+        public static IfcPipeSegmentEntity CreateFromIfc(IfcPipeSegment pipeSegment)
         {
             StartPipeEntity pipeEntity = new StartPipeEntity();
             pipeEntity.Name = pipeSegment.Name ?? string.Empty;
 
             XbimMatrix3D matrix3D = pipeSegment.ObjectPlacement.ToMatrix3D();
-            XbimVector3D coordinates = matrix3D.Translation;
-            XbimVector3D pipeProjection = GetPipeProjection(pipeSegment);
-            
-            IfcNodeEntity[] nodeEntities = new IfcNodeEntity[]
-            {
-                IfcNodeEntity.CreateFromIfc(coordinates),
-                IfcNodeEntity.CreateFromIfc(coordinates + pipeProjection)
-            };
+            IfcRepresentationItem[] representationItems = pipeSegment.GetRepresentationItems().ToArray();
+            IfcNodeEntity[] nodeEntities = CreateNodeEntities(representationItems, matrix3D);
+
+            XbimVector3D pipeProjection = nodeEntities[1].ObjectMatrix3D.Translation - nodeEntities[0].ObjectMatrix3D.Translation;
+            pipeEntity.SetProjection(pipeProjection);
 
             IIfcPropertySet? psetStart = pipeSegment.PropertySets.FirstOrDefault(set => set.Name == nameof(Pset_Start));
             if (psetStart != null)
-            {
                 UpdatePipeFromPsetStart(psetStart, ref pipeEntity);
-                return new IfcPipeSegmentEntity(pipeEntity, nodeEntities);
-            }
 
             IIfcPropertySet? psetTypeCommon = pipeSegment.PropertySets.FirstOrDefault(set => set.Name == nameof(Pset_PipeSegmentTypeCommon));
             if (psetTypeCommon != null)
+            {
                 UpdatePipeFromPsetTypeCommon(psetTypeCommon, ref pipeEntity);
-
-            IIfcElementQuantity? elementQuantity = pipeSegment.ElementQuantities.FirstOrDefault(quantity => quantity.Name == nameof(Qto_PipeSegmentBaseQuantities));
-            if (elementQuantity != null)
-                UpdatePipeFromQtoSegmentBase(elementQuantity, pipeProjection, ref pipeEntity);
+            }
 
             return new IfcPipeSegmentEntity(pipeEntity, nodeEntities);
         }
 
-        public static void UpdatePipeFromPsetStart(IIfcPropertySet psetStart, ref StartPipeEntity pipeEntity)
+        public static XbimVector3D ReplaceNearestNodeAndRescale(this IfcPipeSegmentEntity pipeSegmentEntity, IfcNodeEntity nodeEntity)
+        {
+            XbimVector3D displacement = pipeSegmentEntity.ReplaceNearestNode(nodeEntity);
+            double length = displacement.Length;
+            StartPipeEntity startPipeEntity = (StartPipeEntity)pipeSegmentEntity.StartAbstractEntity;
+            XbimVector3D oldProjection = startPipeEntity.GetProjection();
+            startPipeEntity.SetProjection(oldProjection + oldProjection.Normalized() * length);
+
+            return displacement;
+        }
+
+        private static void UpdatePipeFromPsetStart(IIfcPropertySet psetStart, ref StartPipeEntity pipeEntity)
         {
             double GetPropertyValue(string rawValue)
             {
@@ -96,52 +106,88 @@ namespace IFC.Extensions
                 pipeEntity.AdditionalWeightLoadAlongTheYAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheYAxis));
             if (data.TryGetValue(nameof(pipeEntity.AdditionalWeightLoadAlongTheZAxis), out string additionalWeightLoadAlongTheZAxis))
                 pipeEntity.AdditionalWeightLoadAlongTheZAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheZAxis));
-            if (data.TryGetValue(nameof(pipeEntity.ProjectionAlongOXAxis), out string projectionAlongOXAxis))
-                pipeEntity.ProjectionAlongOXAxis = LengthProperty.CreateFromSi(GetPropertyValue(projectionAlongOXAxis));
-            if (data.TryGetValue(nameof(pipeEntity.ProjectionAlongOYAxis), out string projectionAlongOYAxis))
-                pipeEntity.ProjectionAlongOYAxis = LengthProperty.CreateFromSi(GetPropertyValue(projectionAlongOYAxis));
-            if (data.TryGetValue(nameof(pipeEntity.ProjectionAlongOZAxis), out string projectionAlongOZAxis))
-                pipeEntity.ProjectionAlongOZAxis = LengthProperty.CreateFromSi(GetPropertyValue(projectionAlongOZAxis));
-            if (data.TryGetValue(nameof(pipeEntity.XCoord), out string xCoord))
-                pipeEntity.XCoord = LengthProperty.CreateFromSi(GetPropertyValue(xCoord));
-            if (data.TryGetValue(nameof(pipeEntity.YCoord), out string yCoord))
-                pipeEntity.YCoord = LengthProperty.CreateFromSi(GetPropertyValue(yCoord));
-            if (data.TryGetValue(nameof(pipeEntity.ZCoord), out string zCoord))
-                pipeEntity.ZCoord = LengthProperty.CreateFromSi(GetPropertyValue(zCoord));
         }
 
-        public static void UpdatePipeFromPsetTypeCommon(IIfcPropertySet psetTypeCommon, ref StartPipeEntity pipeEntity)
+        private static void UpdatePipeFromPsetTypeCommon(IIfcPropertySet psetTypeCommon, ref StartPipeEntity pipeEntity)
         {
             Pset_PipeSegmentTypeCommon pset = Pset_PipeSegmentTypeCommon.CreateFromPropertySet(psetTypeCommon);
             pipeEntity.Diameter = LengthProperty.CreateFromSi(pset.NominalDiameter);
             pipeEntity.WallThickness = LengthProperty.CreateFromSi(pset.NominalDiameter - pset.InnerDiameter);
         }
 
-        public static void UpdatePipeFromQtoSegmentBase(IIfcElementQuantity elementQuantity, XbimVector3D direction, ref StartPipeEntity pipeEntity)
+        private static bool UpdateFromCircleProfileDef()
         {
-            Qto_PipeSegmentBaseQuantities qto = Qto_PipeSegmentBaseQuantities.CreateFromQuantitySet(elementQuantity);
-            XbimVector3D newProjection = direction * qto.Length;
-            pipeEntity.ProjectionAlongOXAxis = LengthProperty.CreateFromSi(newProjection.X);
-            pipeEntity.ProjectionAlongOYAxis = LengthProperty.CreateFromSi(newProjection.Y);
-            pipeEntity.ProjectionAlongOZAxis = LengthProperty.CreateFromSi(newProjection.Z);
+            throw new NotImplementedException();
         }
 
-        public static XbimVector3D GetPipeProjection(IfcPipeSegment pipeSegment)
+        private static bool TryGetPositionFromExtrudedAreaSolid(IfcRepresentationItem representationItem, out XbimVector3D coordinates, out XbimVector3D direction)
         {
-            XbimMatrix3D matrix3D = pipeSegment.ObjectPlacement.ToMatrix3D();
-            XbimVector3D direction = XbimVector3D.Zero;
+            coordinates = XbimVector3D.Zero;
+            direction = XbimVector3D.Zero;
             
-            IfcRepresentationItem[] representationItems = pipeSegment.GetRepresentationItems().ToArray();
+            if (representationItem is not IfcExtrudedAreaSolid areaSolid) 
+                return false;
+            
+            if (areaSolid.Position != null)
+            {
+                XbimMatrix3D areaSolidMatrix3D = areaSolid.Position.ToMatrix3D();
+                direction = areaSolidMatrix3D.Transform(areaSolid.ExtrudedDirection.XbimVector3D()).Normalized() * areaSolid.Depth;
+                coordinates += areaSolidMatrix3D.Translation;
+                return true;
+            }
+            
+            direction = areaSolid.ExtrudedDirection.XbimVector3D() * areaSolid.Depth;
+            return true;
+        }
+
+        private static bool TryGetPositionFromRightCircularCylinder(IfcRepresentationItem representationItem, out XbimVector3D coordinates, out XbimVector3D direction)
+        {
+            coordinates = XbimVector3D.Zero;
+            direction = XbimVector3D.Zero;
+            
+            if (representationItem is not IfcRightCircularCylinder rightCircularCylinder) 
+                return false;
+            
+            if (rightCircularCylinder.Position != null)
+            {
+                XbimMatrix3D cylinderMatrix = rightCircularCylinder.Position.ToMatrix3D();
+                direction = cylinderMatrix.Forward * rightCircularCylinder.Height;
+                coordinates += rightCircularCylinder.Position.Location.ToXbimVector3D();
+                return true;
+            }
+
+            return false;
+        }
+
+        private static IfcNodeEntity[] CreateNodeEntities(IEnumerable<IfcRepresentationItem> representationItems, XbimMatrix3D matrix3D)
+        {
+            XbimVector3D coordinates = matrix3D.Translation;
+            XbimVector3D direction = matrix3D.Forward;
+            
             foreach (IfcRepresentationItem representationItem in representationItems)
             {
-                if (representationItem is IfcExtrudedAreaSolid areaSolid)
+                if (TryGetPositionFromExtrudedAreaSolid(representationItem, out XbimVector3D areaCoordinates, out XbimVector3D areaDirection))
                 {
-                    direction = matrix3D.Transform(areaSolid.ExtrudedDirection.XbimVector3D() * areaSolid.Depth);
+                    coordinates += matrix3D.Transform(areaCoordinates);
+                    direction = matrix3D.Transform(areaDirection);
+                    break;
+                }
+
+                if (TryGetPositionFromRightCircularCylinder(representationItem, out XbimVector3D circularCoordinates, out XbimVector3D circularDirection))
+                {
+                    coordinates += matrix3D.Transform(circularCoordinates);
+                    direction = matrix3D.Transform(circularDirection);
                     break;
                 }
             }
-            
-            return direction;
+
+            return new IfcNodeEntity[]
+            {
+                IfcNodeEntity.CreateFromIfc(coordinates),
+                IfcNodeEntity.CreateFromIfc(coordinates + direction)
+            };
         }
     }
+
+    #endif
 }

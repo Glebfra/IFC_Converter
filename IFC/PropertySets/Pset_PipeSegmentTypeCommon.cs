@@ -1,4 +1,7 @@
-﻿using Xbim.Common;
+﻿using System.Linq;
+using Start.Entities.Abstract;
+using Start.Entities.Segments;
+using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
@@ -14,8 +17,6 @@ namespace IFC.PropertySets
         public IfcPressureMeasure WorkingPressure;
         public IfcPressureMeasure[] PressureRange = new IfcPressureMeasure[2];
         public IfcThermodynamicTemperatureMeasure[] TemperatureRange = new IfcThermodynamicTemperatureMeasure[2];
-        
-        public Pset_PipeSegmentTypeCommon() {}
 
         public static Pset_PipeSegmentTypeCommon CreateFromPropertySet(IIfcPropertySet propertySet)
         {

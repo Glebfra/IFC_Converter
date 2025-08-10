@@ -16,6 +16,12 @@ using Xbim.Ifc4.Interfaces;
 
 namespace IFC.Extensions
 {
+    #if NEW
+    
+    
+    
+    #else
+    
     public static class IfcBendEntityExtensions
     {
         public static IfcCadBendEntity CreateFromIfc(IfcPipeFitting pipeFitting, IfcAbstractSegmentEntity[] segmentEntities)
@@ -81,4 +87,6 @@ namespace IFC.Extensions
             bendEntity.Radius = LengthProperty.CreateFromSi(pset.BendRadius);
         }
     }
+
+    #endif
 }

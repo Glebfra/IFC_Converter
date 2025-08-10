@@ -1,7 +1,6 @@
 ﻿using IFC.Entities.Abstract;
 using IFC.Entities.Abstract.Segments;
-using IFC.Entities.Anchors.CAD;
-using IFC.Entities.Anchors.Vertex;
+using IFC.Entities.Anchors;
 using IFC.Entities.Equipments.Vertex;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Fittings.Vertex;
@@ -15,6 +14,8 @@ using Start.Entities.Segments;
 
 namespace IFC.Entities
 {
+    #if !NEW
+    
     public static class IfcEntityFactory
     {
         public static IfcAbstractEntity? CreateEntity(StartAbstractEntity entity, IfcNodeEntity[] nodeEntities)
@@ -224,4 +225,6 @@ namespace IFC.Entities
             }
         }
     }
+
+    #endif
 }

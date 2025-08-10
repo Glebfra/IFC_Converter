@@ -13,6 +13,42 @@ using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Abstract.Anchors
 {
+    #if NEW
+
+    public abstract class IfcAbstractFixedSupportEntity : IfcAbstractAnchorEntity
+    {
+        public abstract ActionProperty<double> XDim { get; }
+        public abstract ActionProperty<double> YDim { get; }
+        
+        protected IfcAbstractFixedSupportEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcDiscreteAccessory discreteAccessory = CreateIfcEntity<IfcDiscreteAccessory>(model);
+            return discreteAccessory;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcDiscreteAccessory, IInstantiableEntity
+        {
+            T discreteAccessory = base.CreateIfcEntity<T>(model);
+            discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
+            AddShapeRepresentation(model, discreteAccessory, representationItems);
+            
+            return discreteAccessory;
+        }
+        
+        private IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
+        {
+            IfcExtrudedAreaSolid rectangle = IfcGeometry.CreateRectangle(model, XDim, YDim, XDim / 10, XbimVector3D.Zero);
+            return new[] { rectangle };
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractFixedSupportEntity : IfcAbstractAnchorEntity
     {
         public abstract double XDim { get; protected set; }
@@ -66,4 +102,6 @@ namespace IFC.Entities.Abstract.Anchors
             return new[] { rectangle };
         }
     }
+
+    #endif
 }

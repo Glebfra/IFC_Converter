@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -13,6 +14,54 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+
+    public abstract class IfcAbstractVertexValveEntity : IfcAbstractFittingEntity
+    {
+        public abstract ActionProperty<double> Diameter { get; }
+        public abstract ActionProperty<double> Angle { get; }
+        public abstract ActionProperty<int> NumSegments { get; }
+
+        protected IfcAbstractVertexValveEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            return pipeFitting;
+        }
+        
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
+            AddShapeRepresentation(model, pipeFitting, representationItems);
+
+            return pipeFitting;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
+        {
+            XbimVector3D displacement = Length / 2 * VectorExtensions.Forward;
+
+            IfcCartesianPoint[] firstCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement.Negated(), NumSegments);
+            IfcCartesianPoint[] secondCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement, NumSegments);
+            foreach (IfcCartesianPoint secondCirclePoint in secondCircle)
+                secondCirclePoint.RotateAroundYAxis(Angle);
+
+            IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
+            IfcFacetedBrep lowerBrep = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
+            IfcFacetedBrep upperBrep = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
+            IfcBooleanResult result = IfcGeometry.CreateBooleanResult(model, lowerBrep, upperBrep, IfcBooleanOperator.UNION);
+
+            return new IfcRepresentationItem[] { result };
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractVertexValveEntity : IfcAbstractFittingEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -70,4 +119,6 @@ namespace IFC.Entities.Abstract.Fittings
             }
         }
     }
+
+    #endif
 }

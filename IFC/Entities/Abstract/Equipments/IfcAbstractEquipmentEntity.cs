@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Tools;
@@ -7,6 +8,23 @@ using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Abstract.Equipments
 {
+    #if NEW
+
+    public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity, IIfcOneNodeEntity
+    {
+        public abstract ActionProperty<double> Length { get; }
+
+        public IfcNodeEntity NodeEntity { get; }
+
+        protected IfcAbstractEquipmentEntity(XbimMatrix3D objectMatrix)
+            : base(objectMatrix)
+        {
+            NodeEntity = new IfcNodeEntity(objectMatrix);
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractEquipmentEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
     {
         public abstract double Length { get; protected set; }
@@ -56,4 +74,6 @@ namespace IFC.Entities.Abstract.Equipments
             ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
     }
+
+    #endif
 }

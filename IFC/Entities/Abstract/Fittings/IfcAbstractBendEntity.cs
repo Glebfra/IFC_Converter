@@ -11,6 +11,30 @@ using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW 
+    
+    public abstract class IfcAbstractBendEntity : IfcAbstractFittingEntity
+    {
+        public abstract double Angle { get; }
+        public abstract double BendRadius { get; }
+        public abstract double PipeRadius { get; }
+
+        protected IfcAbstractBendEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+
+        protected void ClipPipes()
+        {
+            IfcAbstractSegmentEntity[] abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+
+            double clipLength = BendRadius * Math.Tan(Angle / 2);
+            foreach (IfcAbstractSegmentEntity ifcPipeEntity in abstractSegmentEntities)
+            {
+                ifcPipeEntity.Clip(NodeEntity, clipLength);
+            }
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractBendEntity : IfcAbstractFittingEntity
     {
         public abstract double Angle { get; protected set; }
@@ -70,4 +94,6 @@ namespace IFC.Entities.Abstract.Fittings
             #endregion
         }
     }
+
+    #endif
 }

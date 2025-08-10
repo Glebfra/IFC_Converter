@@ -2,9 +2,20 @@
 
 namespace IFC.Entities.Interfaces
 {
-    public interface IIfcTwoNodeEntity : IIfcEntity
+    #if NEW
+    
+    public interface IIfcTwoNodeEntity
+    {
+        public IfcNodeEntity[] NodeEntities { get; }
+    }
+    
+    #else
+    
+    public interface IIfcTwoNodeEntity
     {
         public IfcNodeEntity[] NodeEntities { get; }
         public XbimVector3D Direction { get; }
     }
+    
+    #endif
 }

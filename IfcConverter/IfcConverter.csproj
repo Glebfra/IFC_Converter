@@ -13,6 +13,7 @@
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,12 @@
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NEW|AnyCPU' ">
+      <OutputPath>bin\NEW\</OutputPath>
+      <DefineConstants>NEW;DEBUG</DefineConstants>
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>full</DebugType>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Newtonsoft.Json">
@@ -58,6 +65,10 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Extensions\IfcPipeElementExtensions.cs" />
+        <Compile Include="Extensions\IfcPipeSegmentExtensions.Start.cs">
+          <DependentUpon>IfcPipeElementExtensions.cs</DependentUpon>
+        </Compile>
         <Compile Include="IfcConverter.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

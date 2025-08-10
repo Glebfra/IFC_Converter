@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{E3781FA1-2D49-4C70-942B-89C40DF2EB29}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>IFCtoSTART</RootNamespace>
+        <AssemblyName>IFCtoSTART</AssemblyName>
+        <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Drawing" />
+        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Xml" />
+        <Reference Include="Xbim.Common">
+          <HintPath>..\packages\Xbim.Common.5.1.341\lib\net46\Xbim.Common.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.Ifc">
+          <HintPath>..\packages\Xbim.Ifc.5.1.341\lib\net46\Xbim.Ifc.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.Ifc2x3">
+          <HintPath>..\packages\Xbim.Ifc2x3.5.1.341\lib\net46\Xbim.Ifc2x3.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.Ifc4">
+          <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
+        </Reference>
+        <Reference Include="Xbim.IO.MemoryModel">
+          <HintPath>..\packages\Xbim.IO.MemoryModel.5.1.341\lib\net46\Xbim.IO.MemoryModel.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="GUI\ImportWindowForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="GUI\ImportWindowForm.Designer.cs">
+          <DependentUpon>ImportWindowForm.cs</DependentUpon>
+        </Compile>
+        <Compile Include="IfcImporter.cs" />
+        <Compile Include="IIfcImporter.cs" />
+        <Compile Include="Importers\IImporter.cs" />
+        <Compile Include="Importers\ImporterFactory.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="StartGenerator.cs" />
+        <Compile Include="Tools\ConversionResult.cs" />
+        <Compile Include="Tools\DataContainer.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\IFC\IFC.csproj">
+        <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
+        <Name>IFC</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Start\Start.csproj">
+        <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
+        <Name>Start</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

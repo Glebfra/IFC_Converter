@@ -33,8 +33,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'OLD|AnyCPU' ">
-    <OutputPath>bin\OLD\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NEW|AnyCPU' ">
+    <OutputPath>bin\NEW\</OutputPath>
+    <DefineConstants>NEW;DEBUG</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -201,6 +204,7 @@
     <Compile Include="Entities\StartNonStandardRestraintModule.cs" />
     <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
+    <Compile Include="Extensions\StartPipeEntityExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartProject.cs" />
     <Compile Include="StartProperties\AngleProperty.cs" />

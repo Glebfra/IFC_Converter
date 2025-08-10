@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -12,6 +13,38 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW 
+    
+    public abstract class IfcAbstractCadBendEntity : IfcAbstractBendEntity
+    {
+        protected IfcAbstractCadBendEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
+            return pipeFitting;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
+            
+            XbimVector3D bendDisplacement = BendRadius / Math.Cos(Angle / 2) * (VectorExtensions.Forward + VectorExtensions.Right).Normalized().Negated();
+            IfcSweptDiskSolid pipeBend = IfcGeometry.CreateCircularBend(
+                model, PipeRadius, BendRadius, Angle,
+                bendDisplacement, VectorExtensions.Forward, VectorExtensions.Right
+            );
+            AddShapeRepresentation(model, pipeFitting, pipeBend);
+
+            return pipeFitting;
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractCadBendEntity : IfcAbstractBendEntity
     {
         private readonly StartBendEntity _bendEntity;
@@ -25,12 +58,11 @@ namespace IFC.Entities.Abstract.Fittings
 
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            ObjectMatrix3D = ObjectMatrix3D.Translate(CalculateCircleCenter());
-            
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
+            XbimVector3D bendDisplacement = BendRadius / Math.Cos(Angle / 2) * (VectorExtensions.Forward + VectorExtensions.Right).Normalized().Negated();
             IfcSweptDiskSolid pipeBend = IfcGeometry.CreateCircularBend(
                 model, PipeRadius, BendRadius, Angle,
-                XbimVector3D.Zero, VectorExtensions.Forward, VectorExtensions.Right
+                bendDisplacement, VectorExtensions.Forward, VectorExtensions.Right
             );
             IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, pipeBend);
             IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
@@ -51,4 +83,6 @@ namespace IFC.Entities.Abstract.Fittings
             return _pipeFitting;
         }
     }
+
+    #endif
 }

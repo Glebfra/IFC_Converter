@@ -15,6 +15,73 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Equipments
 {
+    #if NEW
+
+    public abstract class IfcAbstractVertexPumpEntity : IfcAbstractEquipmentEntity
+    {
+        public abstract ActionProperty<int> NumSegments { get; }
+        public abstract ActionProperty<double>[] Diameters { get; }
+        
+        public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("695689");
+        
+        protected IfcAbstractVertexPumpEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+        
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPump discreteAccessory = CreateIfcEntity<IfcPump>(model);
+            return discreteAccessory;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPump, IInstantiableEntity
+        {
+            T chiller = base.CreateIfcEntity<T>(model);
+            chiller.PredefinedType = IfcPumpTypeEnum.SUMPPUMP;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateFlange(model);
+            AddShapeRepresentation(model, chiller, representationItems);
+            
+            return chiller;
+        }
+        
+        private IEnumerable<IfcFacetedBrep> CreateFlange(IModel model)
+        {
+            XbimVector3D[] displacements = new XbimVector3D[]
+            {
+                0.5 * Length * VectorExtensions.Z,
+                0.3 * Length * VectorExtensions.Z,
+                0.1 * Length * VectorExtensions.Z,
+            };
+            
+            IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
+            {
+                IfcVertexGeometry.CreateCircle(model, Diameters[0] * 0.5, displacements[0].Negated(), NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[0] * 0.55, displacements[1].Negated(), NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[0] * 0.75, displacements[1].Negated(), NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[0] * 0.75, displacements[2].Negated(), NumSegments),
+                
+                IfcVertexGeometry.CreateCircle(model, Diameters[1] * 0.5, displacements[0], NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[1] * 0.55, displacements[1], NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[1] * 0.75, displacements[1], NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[1] * 0.75, displacements[2], NumSegments),
+            };
+
+            IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[]
+            {
+                IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[1], circles[2]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[4], circles[5]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[5], circles[6]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[6], circles[7]),
+            };
+            
+            return facetedBreps;
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractVertexPumpEntity : IfcAbstractEquipmentEntity
     {
         public abstract int NumSegments { get; protected set; }
@@ -99,4 +166,6 @@ namespace IFC.Entities.Abstract.Equipments
             }
         }
     }
+
+    #endif
 }

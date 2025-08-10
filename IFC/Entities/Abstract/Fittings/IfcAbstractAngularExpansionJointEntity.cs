@@ -1,4 +1,5 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Start.Entities.Fittings;
@@ -15,6 +16,74 @@ using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    #if NEW
+    
+    public abstract class IfcAbstractVertexAngularExpansionJointEntity : IfcAbstractExpansionJointEntity
+    {
+        public abstract double Angle { get; }
+        public abstract double Diameter { get; }
+        public abstract int NumSegments { get; }
+        
+        protected IfcAbstractVertexAngularExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+
+        public override IfcProduct CreateAndAdd(IModel model)
+        {
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            return pipeFitting;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
+            AddShapeRepresentation(model, pipeFitting, representationItems);
+            
+            return pipeFitting;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
+        {
+            XbimMatrix3D My = MatrixExtensions.My(Angle);
+            
+            XbimVector3D firstExtrudeDirection = VectorExtensions.Forward.Negated();
+            XbimVector3D secondExtrudeDirection = XbimVector3D.Multiply(firstExtrudeDirection, My).Negated();
+            
+            XbimVector3D firstProfileRefDirection = VectorExtensions.Right;
+            XbimVector3D secondProfileRefDirection = XbimVector3D.Multiply(firstProfileRefDirection, My).Negated();
+
+            IfcRepresentationItem[] representationItems = new IfcRepresentationItem[]
+            {
+                CreateBranch(model, firstExtrudeDirection, firstProfileRefDirection),
+                CreateBranch(model, secondExtrudeDirection, secondProfileRefDirection),
+                IfcVertexGeometry.CreateSphere(model, Diameter / 2, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y)
+            };
+
+            return representationItems;
+        }
+
+        private IfcExtrudedAreaSolid CreateBranch(IModel model, XbimVector3D extrudeDirection, XbimVector3D refDirection)
+        {
+            IfcDirection firstExtrudedDirection = IfcAxis.CreateDirection(model, extrudeDirection);
+            IfcCircleProfileDef firstProfileDef = IfcGeometry.CreateCircleProfileDef(model, Diameter / 2, XbimVector3D.Zero, refDirection);
+            return CreateExtrudedArea(model, firstProfileDef, firstExtrudedDirection, Length / 2);
+        }
+        
+        private IfcExtrudedAreaSolid CreateExtrudedArea(IModel model, IfcProfileDef profileDef, IfcDirection direction, double length)
+        {
+            return model.Instances.New<IfcExtrudedAreaSolid>(solid =>
+            {
+                solid.Depth = length;
+                solid.ExtrudedDirection = direction;
+                solid.SweptArea = profileDef;
+            });
+        }
+    }
+    
+    #else
+    
     public abstract class IfcAbstractVertexAngularExpansionJointEntity : IfcAbstractExpansionJoint
     {
         public abstract double Radius { get; protected set; }
@@ -107,4 +176,6 @@ namespace IFC.Entities.Abstract.Fittings
             });
         }
     }
+
+    #endif
 }

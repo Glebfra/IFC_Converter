@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -15,7 +16,15 @@ namespace IFC.Extensions
         public static XbimVector3D Right => X;
         public static XbimVector3D Up => Y;
         public static XbimVector3D Forward => Z;
-    
+
+        public static XbimVector3D GetNearestVector(this XbimVector3D first, params XbimVector3D[] others)
+        {
+            return others
+                .Select(vector => vector - first)
+                .OrderBy(vector => vector.Length)
+                .First();
+        }
+
         public static double SignedAngle(this XbimVector3D first, XbimVector3D second)
         {
             return Math.Acos(XbimVector3D.DotProduct(first, second) / (first.Length * second.Length));

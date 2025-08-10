@@ -9,28 +9,45 @@ namespace IFC.Tools
 {
     public static partial class IfcAxis
     {
-        public static XbimVector3D GetExtrudedDirection(IfcExtrudedAreaSolid extrudedAreaSolid)
-        {
-            return extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
-        }
+        #if NEW
         
         public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, XbimVector3D coordinates)
         {
-            XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Forward;
-            double pipeLength = pipeEntity.RealLength.Value;
+            XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Value.Translation;
+            XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Value.Forward;
+            double pipeLength = pipeEntity.Length.Value;
             XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection * pipeLength;
             return (pipeStartCoordinates - coordinates).Length < (pipeEndCoordinates - coordinates).Length
                 ? pipeDirection
                 : pipeDirection * -1;
         }
         
+        #else
+        
+        public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, XbimVector3D coordinates)
+        {
+            XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Forward;
+            double pipeLength = pipeEntity.Length;
+            XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection * pipeLength;
+            return (pipeStartCoordinates - coordinates).Length < (pipeEndCoordinates - coordinates).Length
+                ? pipeDirection
+                : pipeDirection * -1;
+        }
+        
+        #endif
+        
         public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, IfcNodeEntity nodeEntity)
         {
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             return GetPipeDirectionFromNode(pipeEntity, coordinates);
         }
-        
+
+        public static XbimVector3D GetExtrudedDirection(IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            return extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
+        }
+
         public static IfcCartesianPoint CreatePoint(IModel model, XbimVector3D coordinates)
         {
             return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.X, coordinates.Y, coordinates.Z));
