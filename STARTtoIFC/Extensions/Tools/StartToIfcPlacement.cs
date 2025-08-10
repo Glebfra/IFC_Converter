@@ -32,9 +32,13 @@ namespace STARTtoIFC.Extensions.Tools
 
         public static XbimMatrix3D CreateReducerEccentricObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double displacementLength)
         {
+            IfcAbstractSegmentEntity[] orderedSegmentEntities = segmentEntities
+                .OrderBy(segment => segment.Diameter.Value)
+                .ToArray();
+            
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(segmentEntities[1], nodeEntity);
-            XbimVector3D up = segmentEntities.Select(segment =>
+            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(orderedSegmentEntities[1], nodeEntity);
+            XbimVector3D up = orderedSegmentEntities.Select(segment =>
             {
                 XbimVector3D directionToPipe = IfcAxis.GetPipeDirectionFromNode(segment, nodeEntity);
                 IfcNodeEntity startNode = nodeEntity;
@@ -61,7 +65,7 @@ namespace STARTtoIFC.Extensions.Tools
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
         
-        public static XbimMatrix3D CreatePipeObjectMatrix(StartAbstractSegmentEntity segmentEntity, IfcNodeEntity[] nodeEntities, out double length)
+        public static XbimMatrix3D CreatePipeObjectMatrix(StartAbstractSegmentEntity segmentEntity, IfcNodeEntity[] nodeEntities, out double length, out bool hasFakeDirection)
         {
             XbimVector3D coordinates = nodeEntities[0].ObjectMatrix3D.Translation;
             XbimVector3D nodesDirection = nodeEntities[1].ObjectMatrix3D.Translation - coordinates;
@@ -71,9 +75,9 @@ namespace STARTtoIFC.Extensions.Tools
                 segmentEntity.ProjectionAlongOZAxis.SIProperty
             );
             length = pipeProjection.Length;
+            hasFakeDirection = !pipeProjection.IsParallel(nodesDirection, 1e-3);
             
-            XbimVector3D direction = (pipeProjection * XbimVector3D.DotProduct(nodesDirection, pipeProjection)).Normalized() * length;
-            XbimVector3D forward = direction.Normalized();
+            XbimVector3D forward = pipeProjection;
             XbimVector3D worldUp = forward.IsParallel(VectorExtensions.Z) ? VectorExtensions.Y : VectorExtensions.Z;
             XbimVector3D right = XbimVector3D.CrossProduct(forward, worldUp).Normalized();
             XbimVector3D up = XbimVector3D.CrossProduct(forward, right).Normalized();

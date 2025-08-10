@@ -18,13 +18,12 @@ namespace IFC.Entities.Abstract.Fittings
     public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity
     {
         public abstract ActionProperty<double> Length { get; }
-        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         public IfcNodeEntity NodeEntity { get; }
 
         protected IfcAbstractFittingEntity(XbimMatrix3D objectMatrix3D)
+            : base(objectMatrix3D)
         {
             NodeEntity = new IfcNodeEntity(objectMatrix3D);
-            ObjectMatrix3D = objectMatrix3D;
         }
 
         protected new T CreateIfcEntity<T>(IModel model)

@@ -21,11 +21,16 @@ namespace IFC.Entities.Abstract
     {
         public abstract ActionProperty<IfcLabel> Name { get; }
         public abstract ActionProperty<IfcIdentifier> Tag { get; } 
-        public abstract ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         public virtual ActionProperty<Colour> Colour { get; } = new ActionProperty<Colour>(IFC.Tools.Colour.FromHEX("bebebe"));
         
+        public ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         public List<IPropertySet> PropertySets { get; } = new List<IPropertySet>();
         public List<IfcAbstractEntity> ConnectedEntities { get; } = new List<IfcAbstractEntity>();
+
+        protected IfcAbstractEntity(XbimMatrix3D objectMatrix3D)
+        {
+            ObjectMatrix3D = new ActionProperty<XbimMatrix3D>(objectMatrix3D);
+        }
 
         public abstract IfcProduct CreateAndAdd(IModel model);
 

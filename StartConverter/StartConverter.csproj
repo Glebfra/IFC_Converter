@@ -52,6 +52,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NEW|AnyCPU' ">
     <OutputPath>bin\NEW\</OutputPath>
     <DefineConstants>NEW;DEBUG</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

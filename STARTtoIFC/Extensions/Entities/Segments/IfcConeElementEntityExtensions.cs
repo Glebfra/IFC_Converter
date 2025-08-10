@@ -1,6 +1,7 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Segments;
 using Start.Entities.Segments;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -12,12 +13,12 @@ namespace STARTtoIFC.Extensions.Entities.Segments
     {
         public static IfcConeElementEntity CreateFromStart(StartConeElementEntity coneElement, IfcNodeEntity[] nodeEntities, int numSegments)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(coneElement, nodeEntities, out double length);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(coneElement, nodeEntities, out double length, out bool hasFakeDirection);
 
             double diameter = coneElement.Diameter.SIProperty;
             double secondDiameter = coneElement.SecondDiameter.SIProperty;
 
-            return new IfcConeElementEntity(
+            IfcConeElementEntity coneElementEntity = new IfcConeElementEntity(
                 coneElement.Name,
                 coneElement.Type.ToString(),
                 objectMatrix3D,
@@ -26,6 +27,12 @@ namespace STARTtoIFC.Extensions.Entities.Segments
                 secondDiameter,
                 numSegments
             );
+            
+            coneElementEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(coneElement));
+            coneElementEntity.PropertySets.Add(Pset_PipeSegmentTypeCommonExtensions.CreateFromStart(coneElement));
+            coneElementEntity.PropertySets.Add(Qto_PipeSegmentBaseQuantitiesExtensions.CreateFromStart(coneElement));
+
+            return coneElementEntity;
         }
     }
     

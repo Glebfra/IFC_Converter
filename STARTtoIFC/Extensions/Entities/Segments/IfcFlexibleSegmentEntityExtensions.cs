@@ -4,6 +4,7 @@ using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Segments;
 using IFC.Extensions;
 using Start.Entities.Segments;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -15,7 +16,7 @@ namespace STARTtoIFC.Extensions.Entities.Segments
     {
         public static IfcFlexibleSegmentEntity CreateFromStart(StartFlexibleElementEntity flexibleElement, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(flexibleElement, nodeEntities, out double length);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(flexibleElement, nodeEntities, out double length, out bool hasFakeDirection);
 
             double diameter = segmentEntities.Length switch
             {
@@ -24,13 +25,19 @@ namespace STARTtoIFC.Extensions.Entities.Segments
                 _ => 0.05
             };
 
-            return new IfcFlexibleSegmentEntity(
+            IfcFlexibleSegmentEntity flexibleSegmentEntity = new IfcFlexibleSegmentEntity(
                 flexibleElement.Name,
                 flexibleElement.Type.ToString(),
                 objectMatrix3D,
                 length,
                 diameter
             );
+            
+            flexibleSegmentEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(flexibleElement));
+            flexibleSegmentEntity.PropertySets.Add(Pset_PipeSegmentTypeCommonExtensions.CreateFromStart(flexibleElement));
+            flexibleSegmentEntity.PropertySets.Add(Qto_PipeSegmentBaseQuantitiesExtensions.CreateFromStart(flexibleElement));
+
+            return flexibleSegmentEntity;
         }
     }
     

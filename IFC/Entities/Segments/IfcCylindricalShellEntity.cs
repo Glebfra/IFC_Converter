@@ -13,7 +13,6 @@ namespace IFC.Entities.Segments
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
-        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         public override ActionProperty<double> Diameter { get; }
         
         public IfcCylindricalShellEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter) 
@@ -21,7 +20,6 @@ namespace IFC.Entities.Segments
         {
             Name = new ActionProperty<IfcLabel>(name);
             Tag = new ActionProperty<IfcIdentifier>(tag);
-            ObjectMatrix3D = new ActionProperty<XbimMatrix3D>(objectMatrix3D);
             Diameter = new ActionProperty<double>(diameter);
         }
     }

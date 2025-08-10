@@ -14,7 +14,7 @@ namespace STARTtoIFC.Extensions.Entities.Segments
     {
         public static IfcCylindricalShellEntity CreateFromStart(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(pipeEntity, nodeEntities, out double length);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(pipeEntity, nodeEntities, out double length, out bool hasFakeDirection);
             double diameter = pipeEntity.Diameter.SIProperty;
 
             IfcCylindricalShellEntity cylindricalShellEntity = new IfcCylindricalShellEntity(

@@ -1,4 +1,5 @@
 ﻿using IFC.Entities.Abstract.Anchors;
+using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common.Geometry;

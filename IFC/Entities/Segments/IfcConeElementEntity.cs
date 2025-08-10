@@ -13,7 +13,6 @@ namespace IFC.Entities.Segments
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
-        public override ActionProperty<XbimMatrix3D> ObjectMatrix3D { get; }
         public override ActionProperty<double> Diameter { get; }
         public override int NumSegments { get; }
         public override ActionProperty<double> SecondDiameter { get; }
@@ -23,7 +22,6 @@ namespace IFC.Entities.Segments
         {
             Name = name;
             Tag = tag;
-            ObjectMatrix3D = objectMatrix3D;
             Diameter = diameter;
             SecondDiameter = secondDiameter;
             NumSegments = numSegments;

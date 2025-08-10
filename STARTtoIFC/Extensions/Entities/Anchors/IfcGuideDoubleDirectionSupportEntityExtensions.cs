@@ -7,7 +7,9 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Anchors
 {
-    public static class IfcGuideDoubleDirectionSupportEntityExtensions
+    #if NEW
+    
+    internal static class IfcGuideDoubleDirectionSupportEntityExtensions
     {
         public static IfcGuideDoubleDirectionSupportEntity CreateFromStart(StartGuideDoubleDirectionSupportEntity doubleDirectionSupportEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
@@ -27,4 +29,6 @@ namespace STARTtoIFC.Extensions.Entities.Anchors
             return guideDoubleDirectionSupportEntity;
         }
     }
+
+    #endif
 }

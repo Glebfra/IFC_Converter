@@ -28,7 +28,7 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
                 diameters,
                 numSegments
             );
-            
+
             reducerEccentricEntity.ConnectedEntities.AddRange(segmentEntities);
 
             return reducerEccentricEntity;

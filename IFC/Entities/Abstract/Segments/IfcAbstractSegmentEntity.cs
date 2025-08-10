@@ -24,7 +24,15 @@ namespace IFC.Entities.Abstract.Segments
         public ActionProperty<double> Length { get; }
         public IfcNodeEntity[] NodeEntities { get; }
 
-        public IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length)
+        public IfcNodeEntity StartNode => NodeEntities[0];
+        public IfcNodeEntity EndNode => NodeEntities[1];
+        public XbimVector3D SegmentDirection => ObjectMatrix3D.Value.Forward * Length;
+        public XbimVector3D FakeDirection;
+
+        public bool HasFakeDirection { get; private set; }
+
+        public IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length) 
+            : base(matrix3D)
         {
             XbimMatrix3D secondMatrix3D = XbimMatrix3D.CreateWorld(
                 matrix3D.Translation + matrix3D.Forward * length, 
@@ -37,17 +45,10 @@ namespace IFC.Entities.Abstract.Segments
                 new IfcNodeEntity(secondMatrix3D)
             };
             Length = length;
-        }
 
-        protected T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)
-            where T : IfcPipeSegment, IInstantiableEntity
-        {
-            T pipeSegment = base.CreateIfcEntity<T>(model);
-            pipeSegment.PredefinedType = pipeSegmentType;
-            
-            return pipeSegment;
+            FakeDirection = SegmentDirection;
         }
-
+        
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
         {
             if (IsStartNode(nodeEntity))
@@ -59,6 +60,24 @@ namespace IFC.Entities.Abstract.Segments
             Length.Value -= clipLength;
         }
         
+        public void SetFakeDirection(IfcNodeEntity[] nodeEntities)
+        {
+            HasFakeDirection = true;
+            for (int i = 0; i < NodeEntities.Length; i++)
+                NodeEntities[i] = nodeEntities[i];
+
+            FakeDirection = EndNode.ObjectMatrix3D.Translation - StartNode.ObjectMatrix3D.Translation;
+        }
+
+        protected T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)
+            where T : IfcPipeSegment, IInstantiableEntity
+        {
+            T pipeSegment = base.CreateIfcEntity<T>(model);
+            pipeSegment.PredefinedType = pipeSegmentType;
+            
+            return pipeSegment;
+        }
+
         private bool IsStartNode(IfcNodeEntity nodeEntity)
         {
             XbimVector3D nodeCoordinates = nodeEntity.ObjectMatrix3D.Translation;
