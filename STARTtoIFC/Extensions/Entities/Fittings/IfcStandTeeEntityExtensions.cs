@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using Start.Entities.Fittings;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -30,6 +31,9 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             );
             
             standTeeEntity.ConnectedEntities.AddRange(segmentEntities);
+            standTeeEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(teeEntity));
+            standTeeEntity.PropertySets.Add(Pset_PipeFittingTypeJunctionExtensions.CreateFromStart(teeEntity));
+            standTeeEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(teeEntity));
 
             return standTeeEntity;
         }

@@ -4,6 +4,7 @@ using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using IFC.Tools;
 using Start.Entities.Fittings;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -29,6 +30,9 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             );
             
             milterJointEntity.ConnectedEntities.AddRange(segmentEntities);
+            milterJointEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(bendEntity));
+            milterJointEntity.PropertySets.Add(Pset_PipeFittingTypeBendExtensions.CreateFromStart(bendEntity));
+            milterJointEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(bendEntity));
 
             return milterJointEntity;
         }

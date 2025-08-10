@@ -197,6 +197,7 @@
     <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeJunctionExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Pset_PipeSegmentTypeCommonExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Pset_StartExtensions.cs" />
+    <Compile Include="Extensions\PropertySets\Qto_PipeFittingBaseQuantitiesExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Qto_PipeSegmentBaseQuantitiesExtensions.cs" />
     <Compile Include="Extensions\Tools\StartToIfcPlacement.cs" />
     <Compile Include="GUI\ExportWindow.cs">

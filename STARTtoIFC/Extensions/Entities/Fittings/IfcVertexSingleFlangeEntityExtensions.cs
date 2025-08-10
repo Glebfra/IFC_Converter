@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using Start.Entities.Fittings;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -28,6 +29,8 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             );
             
             singleFlangeEntity.ConnectedEntities.AddRange(segmentEntities);
+            singleFlangeEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(armatureEntity));
+            singleFlangeEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(armatureEntity));
 
             return singleFlangeEntity;
         }

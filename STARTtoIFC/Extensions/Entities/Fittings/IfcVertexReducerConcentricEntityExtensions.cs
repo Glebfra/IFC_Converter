@@ -3,6 +3,7 @@ using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using Start.Entities.Fittings;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -29,6 +30,8 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             );
             
             reducerConcentricEntity.ConnectedEntities.AddRange(segmentEntities);
+            reducerConcentricEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(reducer));
+            reducerConcentricEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(reducer));
 
             return reducerConcentricEntity;
         }

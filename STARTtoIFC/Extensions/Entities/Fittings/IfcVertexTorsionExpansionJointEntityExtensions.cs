@@ -3,6 +3,7 @@ using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using Start.API;
 using Start.Entities.Fittings;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -29,6 +30,8 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             );
             
             vertexTorsionExpansionJointEntity.ConnectedEntities.AddRange(segmentEntities);
+            vertexTorsionExpansionJointEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(torsionExpansionJoint));
+            vertexTorsionExpansionJointEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(torsionExpansionJoint));
 
             return vertexTorsionExpansionJointEntity;
         }

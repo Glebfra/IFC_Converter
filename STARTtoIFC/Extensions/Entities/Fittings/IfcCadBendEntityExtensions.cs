@@ -38,6 +38,7 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             
             cadBendEntity.ConnectedEntities.AddRange(segmentEntities);
             cadBendEntity.PropertySets.Add(Pset_PipeFittingTypeBendExtensions.CreateFromStart(bendEntity));
+            cadBendEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(bendEntity));
 
             return cadBendEntity;
         }

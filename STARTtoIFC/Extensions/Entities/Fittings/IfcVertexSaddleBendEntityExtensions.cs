@@ -3,6 +3,7 @@ using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using Start.Entities.Fittings;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -37,6 +38,9 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             );
             
             saddleBendEntity.ConnectedEntities.AddRange(segmentEntities);
+            saddleBendEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(bendEntity));
+            saddleBendEntity.PropertySets.Add(Pset_PipeFittingTypeBendExtensions.CreateFromStart(bendEntity));
+            saddleBendEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(bendEntity));
 
             return saddleBendEntity;
         }

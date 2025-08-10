@@ -1,6 +1,7 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
+using IFC.PropertySets;
 using Start.Entities.Fittings;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
@@ -30,6 +31,7 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
 
             ifcAxialExpansionJointEntity.ConnectedEntities.AddRange(segmentEntities);
             ifcAxialExpansionJointEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(axialExpansionJoint));
+            ifcAxialExpansionJointEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(axialExpansionJoint));
             
             return ifcAxialExpansionJointEntity;
         }
