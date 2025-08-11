@@ -12,7 +12,7 @@ namespace IFC.Entities.Segments
 {
     #if NEW
     
-    public sealed class IfcRigidElementEntity : IfcAbstractRigidElementEntity
+    public class IfcRigidElementEntity : IfcAbstractRigidElementEntity
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
@@ -21,8 +21,6 @@ namespace IFC.Entities.Segments
         public IfcRigidElementEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter)
             : base(objectMatrix3D, length)
         {
-            Colour.Value = IFC.Tools.Colour.FromHEX("009249");
-            
             Name = new ActionProperty<IfcLabel>(name);
             Tag = new ActionProperty<IfcIdentifier>(tag);
             Diameter = new ActionProperty<double>(diameter);

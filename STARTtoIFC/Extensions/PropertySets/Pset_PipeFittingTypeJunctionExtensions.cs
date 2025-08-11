@@ -1,6 +1,7 @@
 ﻿using System;
 using IFC.PropertySets;
 using Start.Entities.Fittings;
+using Xbim.Ifc4.MeasureResource;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
@@ -10,7 +11,12 @@ namespace STARTtoIFC.Extensions.PropertySets
     {
         public static Pset_PipeFittingTypeJunction CreateFromStart(StartTeeEntity teeEntity)
         {
-            throw new NotImplementedException();
+            Pset_PipeFittingTypeJunction pset = new Pset_PipeFittingTypeJunction()
+            {
+                JunctionType = new IfcLabel("TEE"),
+            };
+
+            return pset;
         }
     }
     

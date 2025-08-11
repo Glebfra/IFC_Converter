@@ -19,11 +19,9 @@ namespace IFC.Entities.Abstract.Fittings
             IEnumerable<IIfcClippable> clippables = ConnectedEntities.OfType<IIfcClippable>();
             foreach (IIfcClippable ifcClippable in clippables)
             {
-                throw new NotImplementedException("Clipping functionality is not implemented yet.");
+                ifcClippable.Clip(NodeEntity, Length / 2);
             }
         }
-
-        
     }
     
     #else

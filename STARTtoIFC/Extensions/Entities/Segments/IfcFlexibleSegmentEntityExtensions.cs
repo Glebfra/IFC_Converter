@@ -16,7 +16,7 @@ namespace STARTtoIFC.Extensions.Entities.Segments
     {
         public static IfcFlexibleSegmentEntity CreateFromStart(StartFlexibleElementEntity flexibleElement, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(flexibleElement, nodeEntities, out double length, out bool hasFakeDirection);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(flexibleElement, nodeEntities, out double length);
 
             double diameter = segmentEntities.Length switch
             {

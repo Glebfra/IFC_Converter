@@ -27,9 +27,6 @@ namespace IFC.Entities.Abstract.Segments
         public IfcNodeEntity StartNode => NodeEntities[0];
         public IfcNodeEntity EndNode => NodeEntities[1];
         public XbimVector3D SegmentDirection => ObjectMatrix3D.Value.Forward * Length;
-        public XbimVector3D FakeDirection;
-
-        public bool HasFakeDirection { get; private set; }
 
         public IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length) 
             : base(matrix3D)
@@ -45,8 +42,6 @@ namespace IFC.Entities.Abstract.Segments
                 new IfcNodeEntity(secondMatrix3D)
             };
             Length = length;
-
-            FakeDirection = SegmentDirection;
         }
         
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
@@ -58,15 +53,6 @@ namespace IFC.Entities.Abstract.Segments
                     ObjectMatrix3D.Value.Up
                 );
             Length.Value -= clipLength;
-        }
-        
-        public void SetFakeDirection(IfcNodeEntity[] nodeEntities)
-        {
-            HasFakeDirection = true;
-            for (int i = 0; i < NodeEntities.Length; i++)
-                NodeEntities[i] = nodeEntities[i];
-
-            FakeDirection = EndNode.ObjectMatrix3D.Translation - StartNode.ObjectMatrix3D.Translation;
         }
 
         protected T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)

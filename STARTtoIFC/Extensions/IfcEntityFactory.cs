@@ -25,6 +25,9 @@ namespace STARTtoIFC.Extensions
                 
                 case StartElementType.CYLINDRICAL_SHELL:
                     return IfcCylindricalShellEntityExtensions.CreateFromStart((StartPipeEntity)entity, nodeEntities);
+                
+                case StartElementType.CONE_ELEMENT:
+                    return IfcConeElementEntityExtensions.CreateFromStart((StartConeElementEntity)entity, nodeEntities);
 
                 default:
                     return null;

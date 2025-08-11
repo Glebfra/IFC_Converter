@@ -16,7 +16,9 @@ namespace IFC.Entities.Abstract.Segments
     #if NEW
     
     public abstract class IfcAbstractRigidElementEntity : IfcAbstractSegmentEntity
-    { 
+    {
+        public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("009249");
+        
         protected IfcAbstractRigidElementEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
         
         public override IfcProduct CreateAndAdd(IModel model)

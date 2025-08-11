@@ -11,9 +11,10 @@ namespace STARTtoIFC.Extensions.Entities.Segments
     
     internal static class IfcConeElementEntityExtensions
     {
-        public static IfcConeElementEntity CreateFromStart(StartConeElementEntity coneElement, IfcNodeEntity[] nodeEntities, int numSegments)
+        public static IfcConeElementEntity CreateFromStart(StartConeElementEntity coneElement, IfcNodeEntity[] nodeEntities)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(coneElement, nodeEntities, out double length, out bool hasFakeDirection);
+            int numSegments = 16;
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(coneElement, nodeEntities, out double length);
 
             double diameter = coneElement.Diameter.SIProperty;
             double secondDiameter = coneElement.SecondDiameter.SIProperty;
