@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Entities.Abstract;
-using Start.StartProperties;
 
 namespace Start.Entities.Segments
 {

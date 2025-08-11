@@ -1,6 +1,5 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Segments;
-using IFC.Extensions;
 using Start.Entities.Segments;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
@@ -8,8 +7,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Segments
 {
-    #if NEW
-    
     internal static class IfcPipeSegmentEntityExtensions
     {
         public static IfcPipeSegmentEntity CreateFromStart(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
@@ -31,6 +28,4 @@ namespace STARTtoIFC.Extensions.Entities.Segments
             return pipeSegment;
         }
     }
-    
-    #endif
 }

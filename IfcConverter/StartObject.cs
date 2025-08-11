@@ -1,5 +1,4 @@
-﻿using System;
-using Start.API;
+﻿using Start.API;
 
 namespace IfcConverter
 {

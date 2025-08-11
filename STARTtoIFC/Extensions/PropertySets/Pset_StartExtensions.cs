@@ -3,8 +3,6 @@ using Start.Entities.Abstract;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
-    #if NEW
-    
     internal static class Pset_StartExtensions
     {
         public static Pset_Start CreateFromStart(StartAbstractEntity startAbstractEntity)
@@ -15,6 +13,4 @@ namespace STARTtoIFC.Extensions.PropertySets
             };
         }
     }
-    
-    #endif
 }

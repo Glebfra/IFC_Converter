@@ -8,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcVertexAxialExpansionJointEntityExtensions
     {
         public static IfcVertexAxialExpansionJointEntity CreateFromStart(StartAxialExpansionJointEntity expansionJoint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -35,6 +33,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return axialExpansionJointEntity;
         }
     }
-    
-    #endif
 }

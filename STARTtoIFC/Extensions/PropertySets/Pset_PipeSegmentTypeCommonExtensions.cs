@@ -5,8 +5,6 @@ using Xbim.Ifc4.MeasureResource;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
-    #if NEW
-    
     internal static class Pset_PipeSegmentTypeCommonExtensions
     {
         public static Pset_PipeSegmentTypeCommon CreateFromStart(StartAbstractSegmentEntity abstractSegmentEntity)
@@ -22,6 +20,4 @@ namespace STARTtoIFC.Extensions.PropertySets
             return pset;
         }
     }
-    
-    #endif
 }

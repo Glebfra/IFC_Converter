@@ -2,7 +2,6 @@
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Segments;
-using IFC.Extensions;
 using Start.Entities.Segments;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
@@ -10,8 +9,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Segments
 {
-    #if NEW
-    
     internal static class IfcRigidElementEntityExtensions
     {
         public static IfcRigidElementEntity CreateFromStart(StartRigidElementEntity rigidElement, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities)
@@ -40,6 +37,4 @@ namespace STARTtoIFC.Extensions.Entities.Segments
             return ifcRigidElementEntity;
         }
     }
-    
-    #endif
 }

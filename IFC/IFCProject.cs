@@ -156,24 +156,9 @@ namespace IFC
             _building.AddElement(ifcProduct);
         }
 
-        public void AddEntity(IIfcNewEntity entity)
-        {
-            IfcProduct ifcProduct = entity.CreateAndAdd(_model);
-            _ifcObjects.Add(ifcProduct);
-            _building.AddElement(ifcProduct);
-        }
-
         public void AddEntities(IEnumerable<IIfcEntity> entities)
         {
             foreach (IIfcEntity entity in entities)
-            {
-                AddEntity(entity);
-            }
-        }
-        
-        public void AddEntities(IEnumerable<IIfcNewEntity> entities)
-        {
-            foreach (IIfcNewEntity entity in entities)
             {
                 AddEntity(entity);
             }

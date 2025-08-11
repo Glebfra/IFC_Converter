@@ -7,8 +7,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Segments
 {
-    #if NEW
-    
     internal static class IfcConeElementEntityExtensions
     {
         public static IfcConeElementEntity CreateFromStart(StartConeElementEntity coneElement, IfcNodeEntity[] nodeEntities)
@@ -36,6 +34,4 @@ namespace STARTtoIFC.Extensions.Entities.Segments
             return coneElementEntity;
         }
     }
-    
-    #endif
 }

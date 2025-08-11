@@ -8,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcCapEntityExtensions
     {
         public static IfcCapEntity CreateFromStart(StartCapEntity capEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
@@ -34,6 +32,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return ifcCapEntity;
         }
     }
-    
-    #endif
 }

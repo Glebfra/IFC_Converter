@@ -1,7 +1,6 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
-using IFC.PropertySets;
 using Start.Entities.Fittings;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
@@ -9,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcAxialExpansionJointEntityExtensions
     {
         public static IfcAxialExpansionJointEntity CreateFromStart(StartAxialExpansionJointEntity axialExpansionJoint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -36,6 +33,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return ifcAxialExpansionJointEntity;
         }
     }
-    
-    #endif
 }

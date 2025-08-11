@@ -3,8 +3,6 @@ using Start.Entities.Fittings;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
-    #if NEW
-    
     internal static class Pset_PipeFittingTypeBendExtensions
     {
         public static Pset_PipeFittingTypeBend CreateFromStart(StartBendEntity bendEntity)
@@ -15,6 +13,4 @@ namespace STARTtoIFC.Extensions.PropertySets
             };
         }
     }
-    
-    #endif
 }

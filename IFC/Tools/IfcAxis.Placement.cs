@@ -1,11 +1,8 @@
 ﻿using IFC.Extensions;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricConstraintResource;
-using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
-using Xbim.Ifc4.Kernel;
 
 namespace IFC.Tools
 {

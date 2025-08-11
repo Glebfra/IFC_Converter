@@ -1,6 +1,5 @@
 ﻿using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -13,11 +12,9 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
-    #if NEW
-    
     public abstract class IfcAbstractRigidElementEntity : IfcAbstractSegmentEntity
     {
-        public override ActionProperty<Colour> Colour { get; } = IFC.Tools.Colour.FromHEX("009249");
+        public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("009249");
         
         protected IfcAbstractRigidElementEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
         
@@ -56,27 +53,4 @@ namespace IFC.Entities.Abstract.Segments
             });
         }
     }
-    
-    #else
-    
-    public abstract class IfcAbstractRigidElementEntity : IfcAbstractStraightSegment
-    {
-        private StartRigidElementEntity _rigidElement;
-        private IfcPipeSegment? _pipeSegment;
-        
-        protected IfcAbstractRigidElementEntity(StartRigidElementEntity rigidElement, IfcNodeEntity[] nodeEntities) 
-            : base(rigidElement, nodeEntities)
-        {
-            _rigidElement = rigidElement;
-        }
-        
-        public override IfcProduct CreateAndAdd(IModel model)
-        {
-            _pipeSegment = CreatePipeSegment(model, _rigidElement.Name, IfcPipeSegmentTypeEnum.RIGIDSEGMENT);
-            AddProperties(model, _pipeSegment);
-            return _pipeSegment;
-        }
-    }
-
-    #endif
 }

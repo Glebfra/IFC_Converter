@@ -1,7 +1,6 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
-using Start.API;
 using Start.Entities.Fittings;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
@@ -9,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcVertexTorsionExpansionJointEntityExtensions
     {
         public static IfcVertexTorsionExpansionJointEntity CreateFromStart(StartTorsionExpansionJointEntity torsionExpansionJoint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -36,6 +33,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return vertexTorsionExpansionJointEntity;
         }
     }
-    
-    #endif
 }

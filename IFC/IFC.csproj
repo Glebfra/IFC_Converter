@@ -33,12 +33,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NEW|AnyCPU' ">
-    <OutputPath>bin\NEW\</OutputPath>
-    <DefineConstants>NEW;DEBUG</DefineConstants>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-  </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
@@ -156,12 +150,8 @@
     <Compile Include="Entities\Anchors\IfcSlidingSupportEntity.cs" />
     <Compile Include="Entities\Anchors\IfcSpringHangerEntity.cs" />
     <Compile Include="Entities\Anchors\IfcSpringSupportEntity.cs" />
-    <Compile Include="Entities\Interfaces\IIfcNewEntity.cs" />
-    <Compile Include="Extensions\IfcBendEntityExtensions.cs" />
+    <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Extensions\IfcDirectionExtensions.cs" />
-    <Compile Include="Extensions\IfcPipeSegmentExtensions.cs" />
-    <Compile Include="Extensions\IfcProductExtensions.cs" />
-    <Compile Include="Extensions\IfcWeldedTeeEntityExtensions.cs" />
     <Compile Include="PropertySets\Pset_Debug.cs" />
     <Compile Include="PropertySets\IPropertySet.cs" />
     <Compile Include="PropertySets\Pset_PipeFittingTypeBend.cs" />
@@ -222,7 +212,6 @@
     <Compile Include="Entities\Abstract\Segments\IfcAbstractPipeSegmentEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractRigidElementEntity.cs" />
     <Compile Include="Entities\Abstract\Segments\IfcAbstractSegmentEntity.cs" />
-    <Compile Include="Entities\Abstract\Segments\IfcAbstractStraightSegment.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexAirCoolerEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexCompressorEntity.cs" />
     <Compile Include="Entities\Equipments\Vertex\IfcVertexInlinePumpEntity.cs" />
@@ -256,10 +245,8 @@
     <Compile Include="Entities\Fittings\Vertex\IfcVertexValveEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexReducerEccentricEntity.cs" />
     <Compile Include="Entities\Fittings\Vertex\IfcVertexReducerConcentricEntity.cs" />
-    <Compile Include="Entities\IfcEntityFactory.cs" />
     <Compile Include="Entities\IfcNodeEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcClippable.cs" />
-    <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcOneNodeEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcSegmentDependedEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcTwoNodeEntity.cs" />
@@ -268,11 +255,8 @@
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
-    <Compile Include="Extensions\IfcAbstractSegmentEntityExtensions.cs" />
     <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
     <Compile Include="Extensions\IfcNodeEntityExtensions.cs" />
-    <Compile Include="Extensions\IndexedResult.cs" />
-    <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />

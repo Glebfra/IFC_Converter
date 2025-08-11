@@ -8,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcNonStandardTeeEntityExtensions
     {
         public static IfcNonStandardTeeEntity CreateFromStart(StartNonstandardTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
@@ -38,6 +36,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return nonstandardTeeEntity;
         }
     }
-    
-    #endif
 }

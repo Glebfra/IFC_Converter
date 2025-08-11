@@ -9,8 +9,6 @@ namespace IFC.Tools
 {
     public static partial class IfcAxis
     {
-        #if NEW
-        
         public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, XbimVector3D coordinates)
         {
             XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Value.Translation;
@@ -21,22 +19,7 @@ namespace IFC.Tools
                 ? pipeDirection
                 : pipeDirection * -1;
         }
-        
-        #else
-        
-        public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, XbimVector3D coordinates)
-        {
-            XbimVector3D pipeStartCoordinates = pipeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D pipeDirection = pipeEntity.ObjectMatrix3D.Forward;
-            double pipeLength = pipeEntity.Length;
-            XbimVector3D pipeEndCoordinates = pipeStartCoordinates + pipeDirection * pipeLength;
-            return (pipeStartCoordinates - coordinates).Length < (pipeEndCoordinates - coordinates).Length
-                ? pipeDirection
-                : pipeDirection * -1;
-        }
-        
-        #endif
-        
+
         public static XbimVector3D GetPipeDirectionFromNode(IfcAbstractSegmentEntity pipeEntity, IfcNodeEntity nodeEntity)
         {
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;

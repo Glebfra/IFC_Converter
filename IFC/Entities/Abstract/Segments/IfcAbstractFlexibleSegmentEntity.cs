@@ -1,6 +1,5 @@
 ﻿using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -13,8 +12,6 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
-    #if NEW
-    
     public abstract class IfcAbstractFlexibleSegmentEntity : IfcAbstractSegmentEntity
     {
         protected IfcAbstractFlexibleSegmentEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
@@ -54,27 +51,4 @@ namespace IFC.Entities.Abstract.Segments
             });
         }
     }
-    
-    #else
-    
-    public abstract class IfcAbstractFlexibleSegmentEntity : IfcAbstractStraightSegment
-    {
-        private StartFlexibleElementEntity _flexibleElement;
-        private IfcPipeSegment? _pipeSegment;
-        
-        protected IfcAbstractFlexibleSegmentEntity(StartFlexibleElementEntity flexibleElement, IfcNodeEntity[] nodeEntities) 
-            : base(flexibleElement, nodeEntities)
-        {
-            _flexibleElement = flexibleElement;
-        }
-        
-        public override IfcProduct CreateAndAdd(IModel model)
-        {
-            _pipeSegment = CreatePipeSegment(model, _flexibleElement.Name, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);
-            AddProperties(model, _pipeSegment);
-            return _pipeSegment;
-        }
-    }
-
-    #endif
 }

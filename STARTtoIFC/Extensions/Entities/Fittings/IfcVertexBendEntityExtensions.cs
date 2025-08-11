@@ -9,8 +9,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcVertexBendEntityExtensions
     {
         public static IfcVertexBendEntity CreateFromStart(StartBendEntity bendEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -39,6 +37,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return ifcBendEntity;
         }
     }
-    
-    #endif
 }

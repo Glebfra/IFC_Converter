@@ -4,8 +4,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
-    #if NEW
-    
     internal static class Qto_PipeSegmentBaseQuantitiesExtensions
     {
         public static Qto_PipeSegmentBaseQuantities CreateFromStart(StartAbstractSegmentEntity abstractSegmentEntity)
@@ -22,6 +20,4 @@ namespace STARTtoIFC.Extensions.PropertySets
             return qto;
         }
     }
-    
-    #endif
 }

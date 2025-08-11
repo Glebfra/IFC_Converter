@@ -10,8 +10,6 @@ using Xbim.Common.Geometry;
 
 namespace IfcConverter.Extensions
 {
-    #if NEW
-    
     public static partial class IfcPipeSegmentExtensions
     {
         public static StartPipeEntity ConvertToStartFromStartEntity(this IfcPipeSegmentEntity pipeSegmentEntity)
@@ -103,6 +101,4 @@ namespace IfcConverter.Extensions
             startPipeEntity.WallThickness = LengthProperty.CreateFromSi(pset.NominalDiameter - pset.InnerDiameter);
         }
     }
-
-    #endif
 }

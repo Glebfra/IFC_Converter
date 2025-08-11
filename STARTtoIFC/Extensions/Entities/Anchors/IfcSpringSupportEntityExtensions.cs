@@ -7,8 +7,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Anchors
 {
-    #if NEW
-    
     internal static class IfcSpringSupportEntityExtensions
     {
         public static IfcSpringSupportEntity CreateFromStart(StartSpringSupportEntity springSupport, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -32,6 +30,4 @@ namespace STARTtoIFC.Extensions.Entities.Anchors
             return springSupportEntity;
         }
     }
-    
-    #endif
 }

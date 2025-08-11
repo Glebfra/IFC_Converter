@@ -9,8 +9,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcVertexFlangeEntityExtensions
     {
         public static IfcVertexFlangeEntity CreateFromStart(StartArmatureEntity armature, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -36,6 +34,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return flangeEntity;
         }
     }
-    
-    #endif
 }

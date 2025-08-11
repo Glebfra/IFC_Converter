@@ -1,14 +1,10 @@
 ﻿using IFC.Entities.Abstract.Fittings;
-using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
-using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    #if NEW
-    
     public class IfcCapEntity : IfcAbstractCapEntity
     {
         public override ActionProperty<IfcLabel> Name { get; }
@@ -25,21 +21,4 @@ namespace IFC.Entities.Fittings.CAD
             Diameter = diameter;
         }
     }
-    
-    #else
-    
-    public sealed class IfcCapEntity : IfcAbstractCapEntity
-    {
-        public override double Length { get; protected set; }
-        public override double Diameter { get; protected set; }
-        
-        public IfcCapEntity(StartCapEntity capEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(capEntity, nodeEntity, segmentEntities)
-        {
-            Diameter = segmentEntities[0].Diameter;
-            Length = Diameter / 2;
-        }
-    }
-    
-    #endif
 }

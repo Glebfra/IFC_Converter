@@ -7,8 +7,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Anchors
 {
-    #if NEW
-    
     internal static class IfcConstantForceSupportHangerEntityExtensions
     {
         public static IfcConstantForceSupportHangerEntity CreateFromStart(StartConstantForceSupportHangerEntity constantForceSupport, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -29,6 +27,4 @@ namespace STARTtoIFC.Extensions.Entities.Anchors
             return constantForceSupportHangerEntity;
         }
     }
-    
-    #endif
 }

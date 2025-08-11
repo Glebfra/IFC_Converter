@@ -8,7 +8,6 @@ using IFC.Entities.Abstract.Segments;
 using Start;
 using Start.API;
 using Start.Entities;
-using Start.Entities.Abstract;
 using Start.Extensions;
 using STARTtoIFC.Extensions;
 using STARTtoIFC.Tools;

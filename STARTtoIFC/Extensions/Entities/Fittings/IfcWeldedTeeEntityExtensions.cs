@@ -8,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcWeldedTeeEntityExtensions
     {
         public static IfcWeldedTeeEntity CreateFromStart(StartTeeEntity teeEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
@@ -40,6 +38,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return weldedTeeEntity;
         }
     }
-    
-    #endif
 }

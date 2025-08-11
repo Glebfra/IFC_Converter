@@ -9,8 +9,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcVertexReducerEccentricEntityExtensions
     {
         public static IfcVertexReducerEccentricEntity CreateFromStart(StartReducerEntity reducer, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -37,6 +35,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return reducerEccentricEntity;
         }
     }
-    
-    #endif
 }

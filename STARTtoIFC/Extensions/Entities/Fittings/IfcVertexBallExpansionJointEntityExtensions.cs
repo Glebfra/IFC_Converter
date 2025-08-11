@@ -8,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Fittings
 {
-    #if NEW
-    
     internal static class IfcVertexBallExpansionJointEntityExtensions
     {
         public static IfcVertexBallExpansionJointEntity CreateFromStart(StartBallExpansionJointEntity ballExpansionJoint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -35,6 +33,4 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             return ballExpansionJointEntity;
         }
     }
-    
-    #endif
 }

@@ -8,8 +8,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Entities.Anchors
 {
-    #if NEW
-    
     internal static class IfcHingedAnchorEntityExtensions
     {
         public static IfcAbstractHingedAnchorEntity CreateFromStart(StartHingedAnchorEntity hingedAnchor, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
@@ -33,6 +31,4 @@ namespace STARTtoIFC.Extensions.Entities.Anchors
             return hingedAnchorEntity;
         }
     }
-    
-    #endif
 }

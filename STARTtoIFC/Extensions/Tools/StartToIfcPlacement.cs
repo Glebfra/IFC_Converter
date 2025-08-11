@@ -9,8 +9,6 @@ using Xbim.Common.Geometry;
 
 namespace STARTtoIFC.Extensions.Tools
 {
-    #if NEW
-    
     public static class StartToIfcPlacement
     {
         public static XbimMatrix3D CreateStandardObjectMatrix(IfcNodeEntity nodeEntity)
@@ -187,6 +185,4 @@ namespace STARTtoIFC.Extensions.Tools
             return XbimMatrix3D.CreateWorld(coordinates, branchDirection, up);
         }
     }
-    
-    #endif
 }

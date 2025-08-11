@@ -1,14 +1,10 @@
 ﻿using IFC.Entities.Abstract.Fittings;
-using IFC.Entities.Abstract.Segments;
 using IFC.Tools;
-using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Fittings.CAD
 {
-    #if NEW
-    
     public class IfcAxialExpansionJointEntity : IfcAbstractAxialExpansionJointEntity
     {
         public override ActionProperty<IfcLabel> Name { get; }
@@ -27,21 +23,4 @@ namespace IFC.Entities.Fittings.CAD
             NumSegments = numSegments;
         }
     }
-    
-    #else
-    
-    public sealed class IfcAxialExpansionJointEntity : IfcAbstractAxialExpansionJointEntity
-    {
-        public override double Length { get; protected set; }
-        public override double PipeDiameter { get; protected set; }
-
-        public IfcAxialExpansionJointEntity(StartAxialExpansionJointEntity axialExpansionJoint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(axialExpansionJoint, nodeEntity, segmentEntities)
-        {
-            Length = axialExpansionJoint.Length.SIProperty;
-            PipeDiameter = segmentEntities[0].Diameter;
-        }
-    }
-
-    #endif
 }
