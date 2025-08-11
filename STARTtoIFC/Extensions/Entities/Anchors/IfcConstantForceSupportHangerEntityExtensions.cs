@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors;
 using Start.Entities.Anchors;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -23,6 +24,7 @@ namespace STARTtoIFC.Extensions.Entities.Anchors
             );
             
             constantForceSupportHangerEntity.ConnectedEntities.AddRange(segmentEntities);
+            constantForceSupportHangerEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(constantForceSupport));
             
             return constantForceSupportHangerEntity;
         }

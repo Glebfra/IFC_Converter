@@ -2,6 +2,7 @@
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors;
 using Start.Entities.Anchors;
+using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
 
@@ -26,6 +27,7 @@ namespace STARTtoIFC.Extensions.Entities.Anchors
             );
             
             springSupportEntity.ConnectedEntities.AddRange(segmentEntities);
+            springSupportEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(springSupport));
 
             return springSupportEntity;
         }
