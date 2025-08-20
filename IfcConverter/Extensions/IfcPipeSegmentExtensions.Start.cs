@@ -40,10 +40,6 @@ namespace IfcConverter.Extensions
             startPipeEntity.Diameter = LengthProperty.CreateFromSi(pipeSegmentEntity.Diameter.Value);
 
             XbimMatrix3D objectMatrix3D = pipeSegmentEntity.ObjectMatrix3D;
-            startPipeEntity.XCoord = LengthProperty.CreateFromSi(objectMatrix3D.Translation.X);
-            startPipeEntity.YCoord = LengthProperty.CreateFromSi(objectMatrix3D.Translation.Y);
-            startPipeEntity.ZCoord = LengthProperty.CreateFromSi(objectMatrix3D.Translation.Z);
-
             XbimVector3D projection = objectMatrix3D.Forward * pipeSegmentEntity.Length;
             startPipeEntity.ProjectionAlongOXAxis = LengthProperty.CreateFromSi(projection.X);
             startPipeEntity.ProjectionAlongOYAxis = LengthProperty.CreateFromSi(projection.Y);

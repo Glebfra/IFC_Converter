@@ -138,6 +138,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Abstract\Segments\IfcAbstractCylindricalShellEntity.cs" />
     <Compile Include="Entities\Anchors\IfcConstantForceSupportEntity.cs" />
     <Compile Include="Entities\Anchors\IfcConstantForceSupportHangerEntity.cs" />
     <Compile Include="Entities\Anchors\IfcDamperEntity.cs" />

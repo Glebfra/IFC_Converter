@@ -1,13 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
-using Xbim.Ifc4.HvacDomain;
-using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.TopologyResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
@@ -18,63 +15,22 @@ namespace IFC.Entities.Abstract.Fittings
         public abstract double BendAngleStep { get; }
         
         protected IfcAbstractVertexBendEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
-        
-        public override IfcProduct CreateAndAdd(IModel model)
-        {
-            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
-            return pipeFitting;
-        }
-        
-        protected new T CreateIfcEntity<T>(IModel model)
-            where T : IfcPipeFitting, IInstantiableEntity
-        {
-            T pipeFitting = base.CreateIfcEntity<T>(model);
-            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
-            
-            IfcCartesianPoint[,] ifcCartesianPoints = CreatePoints(model);
-            IfcFacetedBrep brep = CreateFacetedBrep(model, ifcCartesianPoints);
-            AddShapeRepresentation(model, pipeFitting, brep);
 
-            return pipeFitting;
-        }
-        
-        private IfcCartesianPoint[,] CreatePoints(IModel model)
+        protected override IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
         {
-            IfcCartesianPoint[,] ifcCartesianPoints = new IfcCartesianPoint[NumSegments, NumSegments];
-            for (int i = 0; i < NumSegments; i++)
-            {
-                for (int j = 0; j < NumSegments; j++)
-                {
-                    double x = (BendRadius + PipeRadius * Math.Cos(j * AngleStep)) * Math.Cos(i * BendAngleStep);
-                    double y = PipeRadius * Math.Sin(j * AngleStep);
-                    double z = (BendRadius + PipeRadius * Math.Cos(j * AngleStep)) * Math.Sin(i * BendAngleStep);
-                    ifcCartesianPoints[i, j] = IfcAxis.CreatePoint(model, new XbimVector3D(x, y, z));
-                }
-            }
+            XbimVector3D displacement = CalculateDisplacement();
+            IfcAxisSettings axisSettings = new IfcAxisSettings(displacement, VectorExtensions.X, VectorExtensions.Z);
 
-            return ifcCartesianPoints;
-        }
-        
-        private IfcFacetedBrep CreateFacetedBrep(IModel model, IfcCartesianPoint[,] points)
-        {
-            IfcFace[] faces = new IfcFace[(NumSegments - 1) * NumSegments];
-            int facesIndex = 0;
-            for (int i = 0; i < NumSegments - 1; i++)
-            {
-                for (int j = 0; j < NumSegments; j++)
-                {
-                    IfcCartesianPoint p1 = points[i, j];
-                    IfcCartesianPoint p2 = points[i, (j + 1) % NumSegments];
-                    IfcCartesianPoint p3 = points[i + 1, (j + 1) % NumSegments];
-                    IfcCartesianPoint p4 = points[i + 1, j];
-                    faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
-                }
-            }
+            IfcFacetedBrep torus = IfcVertexGeometry.CreateTorus(
+                model,
+                BendRadius,
+                PipeRadius,
+                Angle,
+                NumSegments,
+                axisSettings
+            );
 
-            return model.Instances.New<IfcFacetedBrep>(brep =>
-            {
-                brep.Outer = model.Instances.New<IfcClosedShell>(closedShell => closedShell.CfsFaces.AddRange(faces));
-            });
+            return new IfcRepresentationItem[] { torus };
         }
     }
 }

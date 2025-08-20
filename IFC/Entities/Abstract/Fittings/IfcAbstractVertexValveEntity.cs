@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities.Abstract.Segments;
+using IFC.Entities.Interfaces;
 using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
@@ -22,6 +25,7 @@ namespace IFC.Entities.Abstract.Fittings
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
             return pipeFitting;
         }
         
@@ -41,8 +45,8 @@ namespace IFC.Entities.Abstract.Fittings
         {
             XbimVector3D displacement = Length / 2 * VectorExtensions.Forward;
 
-            IfcCartesianPoint[] firstCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement.Negated(), NumSegments);
-            IfcCartesianPoint[] secondCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement, NumSegments);
+            IfcCartesianPoint[] firstCircle = IfcVertexGeometry.CreateCircle(model, Diameter * 0.75, displacement.Negated(), NumSegments);
+            IfcCartesianPoint[] secondCircle = IfcVertexGeometry.CreateCircle(model, Diameter * 0.75, displacement, NumSegments);
             foreach (IfcCartesianPoint secondCirclePoint in secondCircle)
                 secondCirclePoint.RotateAroundYAxis(Angle);
 
@@ -52,6 +56,15 @@ namespace IFC.Entities.Abstract.Fittings
             IfcBooleanResult result = IfcGeometry.CreateBooleanResult(model, lowerBrep, upperBrep, IfcBooleanOperator.UNION);
 
             return new IfcRepresentationItem[] { result };
+        }
+
+        private void ClipPipes()
+        {
+            IEnumerable<IIfcClippable> clippables = ConnectedEntities.OfType<IIfcClippable>();
+            foreach (IIfcClippable ifcClippable in clippables)
+            {
+                ifcClippable.Clip(NodeEntity, Length/ 2);
+            }
         }
     }
 }

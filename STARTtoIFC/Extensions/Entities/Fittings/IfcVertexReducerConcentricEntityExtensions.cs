@@ -13,6 +13,8 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
     {
         public static IfcVertexReducerConcentricEntity CreateFromStart(StartReducerEntity reducer, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
+            segmentEntities = segmentEntities.OrderBy(segment => segment.Diameter.Value).ToArray();
+            
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateReducerConcentricObjectMatrix(nodeEntity, segmentEntities);
 
             double length = reducer.LengthOfConicalPart.SIProperty;

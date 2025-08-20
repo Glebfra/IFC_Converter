@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities.Interfaces;
 using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
@@ -21,6 +23,7 @@ namespace IFC.Entities.Abstract.Fittings
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
             return pipeFitting;
         }
         
@@ -69,6 +72,15 @@ namespace IFC.Entities.Abstract.Fittings
             };
 
             return facetedBreps;
+        }
+
+        private void ClipPipes()
+        {
+            IEnumerable<IIfcClippable> clippables = ConnectedEntities.OfType<IIfcClippable>();
+            foreach (IIfcClippable ifcClippable in clippables)
+            {
+                ifcClippable.Clip(NodeEntity, Length / 2);
+            }
         }
     }
 }

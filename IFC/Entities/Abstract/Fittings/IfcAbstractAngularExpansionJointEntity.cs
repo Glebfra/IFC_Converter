@@ -23,6 +23,7 @@ namespace IFC.Entities.Abstract.Fittings
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
             return pipeFitting;
         }
 
@@ -50,9 +51,7 @@ namespace IFC.Entities.Abstract.Fittings
 
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[]
             {
-                CreateBranch(model, firstExtrudeDirection, firstProfileRefDirection),
-                CreateBranch(model, secondExtrudeDirection, secondProfileRefDirection),
-                IfcVertexGeometry.CreateSphere(model, Diameter / 2, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y)
+                IfcVertexGeometry.CreateSphere(model, Diameter * 0.75, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y)
             };
 
             return representationItems;

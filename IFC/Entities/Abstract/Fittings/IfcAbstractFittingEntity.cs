@@ -9,6 +9,7 @@ namespace IFC.Entities.Abstract.Fittings
     public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity
     {
         public abstract ActionProperty<double> Length { get; }
+        public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("5f4e7c");
         public IfcNodeEntity NodeEntity { get; }
 
         protected IfcAbstractFittingEntity(XbimMatrix3D objectMatrix3D)

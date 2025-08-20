@@ -146,12 +146,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\Entities\Anchors\IfcDamperEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcHingedAnchorEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportHangerEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcFixedAnchorEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcGuideDoubleDirectionSupportEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcGuideSingleDirectionSupportEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Anchors\IfcNonStandardRestraintEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcRigidHangerEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcSlidingSupportEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcSpringHangerEntityExtensions.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="Extensions\Entities\Fittings\IfcVertexSaddleBendEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcVertexSingleFlangeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcVertexTorsionExpansionJointEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\IfcVertexValveEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcWeldedTeeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcWeldoletEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Segments\IfcConeElementEntityExtensions.cs" />

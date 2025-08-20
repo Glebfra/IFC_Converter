@@ -30,6 +30,16 @@ namespace IFC.Extensions
             return Math.Acos(XbimVector3D.DotProduct(first, second) / (first.Length * second.Length));
         }
 
+        public static ActionProperty<XbimVector3D> CrossProduct(ActionProperty<XbimVector3D> first, ActionProperty<XbimVector3D> other)
+        {
+            ActionProperty<XbimVector3D> cross = XbimVector3D.CrossProduct(first, other);
+
+            first.OnValueChange += () => cross.Value = XbimVector3D.CrossProduct(first, other);
+            other.OnValueChange += () => cross.Value = XbimVector3D.CrossProduct(first, other);
+
+            return cross;
+        }
+
         public static bool IsParallel(this XbimVector3D v1, XbimVector3D v2, double tolerance = 1e-3)
         {
             return Math.Abs(1 / (v1.Length * v2.Length) * Math.Abs(XbimVector3D.DotProduct(v1, v2)) - 1) < tolerance;

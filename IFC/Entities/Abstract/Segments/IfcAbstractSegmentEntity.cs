@@ -17,7 +17,10 @@ namespace IFC.Entities.Abstract.Segments
         public IfcNodeEntity EndNode => NodeEntities[1];
         public XbimVector3D SegmentDirection => ObjectMatrix3D.Value.Forward * Length;
 
-        public IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length) 
+        private readonly XbimVector3D _pipeDirection;
+        private readonly XbimVector3D _fakeDirection;
+
+        protected IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length) 
             : base(matrix3D)
         {
             XbimMatrix3D secondMatrix3D = XbimMatrix3D.CreateWorld(
@@ -32,16 +35,41 @@ namespace IFC.Entities.Abstract.Segments
             };
             Length = length;
         }
-        
+
+        protected IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length, IfcNodeEntity[] nodeEntities)
+            : base(matrix3D)
+        {
+            NodeEntities = nodeEntities;
+            Length = length;
+
+            _pipeDirection = matrix3D.Forward * Length;
+            _fakeDirection = EndNode.ObjectMatrix3D.Translation - StartNode.ObjectMatrix3D.Translation;
+        }
+
         public void Clip(IfcNodeEntity nodeEntity, double clipLength)
         {
             if (IsStartNode(nodeEntity))
-                ObjectMatrix3D.Value = XbimMatrix3D.CreateWorld(
-                    ObjectMatrix3D.Value.Translation + ObjectMatrix3D.Value.Forward * clipLength,
-                    ObjectMatrix3D.Value.Forward,
-                    ObjectMatrix3D.Value.Up
-                );
+                MovePipe(ObjectMatrix3D.Value.Forward * clipLength);
             Length.Value -= clipLength;
+        }
+
+        public void MovePipe(XbimVector3D displacement)
+        {
+            ObjectMatrix3D.Value = XbimMatrix3D.CreateWorld(
+                ObjectMatrix3D.Value.Translation + displacement,
+                ObjectMatrix3D.Value.Forward,
+                ObjectMatrix3D.Value.Up
+            );
+        }
+
+        public XbimVector3D GetFakeDisplacementVector(IfcNodeEntity nodeEntity)
+        {
+            XbimVector3D startCoordinates = ObjectMatrix3D.Value.Translation;
+            XbimVector3D endCoordinates = startCoordinates + ObjectMatrix3D.Value.Forward * Length;
+            bool isNegated = (nodeEntity.ObjectMatrix3D.Translation - startCoordinates).Length <
+                             (nodeEntity.ObjectMatrix3D.Translation - endCoordinates).Length;
+            XbimVector3D displacement = _fakeDirection - _pipeDirection;
+            return isNegated ? displacement : displacement.Negated();
         }
 
         protected T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)

@@ -18,7 +18,8 @@ namespace STARTtoIFC.Extensions.Entities.Segments
                 pipeEntity.Type.ToString(),
                 objectMatrix3D,
                 length,
-                pipeEntity.Diameter.SIProperty
+                pipeEntity.Diameter.SIProperty,
+                nodeEntities
             );
 
             pipeSegment.PropertySets.Add(Pset_StartExtensions.CreateFromStart(pipeEntity));

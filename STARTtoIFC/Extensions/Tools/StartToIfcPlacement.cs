@@ -36,13 +36,9 @@ namespace STARTtoIFC.Extensions.Tools
             
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(orderedSegmentEntities[1], nodeEntity);
-            XbimVector3D up = orderedSegmentEntities.Select(segment =>
-            {
-                XbimVector3D directionToPipe = IfcAxis.GetPipeDirectionFromNode(segment, nodeEntity);
-                IfcNodeEntity startNode = nodeEntity;
-                IfcNodeEntity endNode = segment.NodeEntities.First(node => node != nodeEntity);
-                return endNode.ObjectMatrix3D.Translation - startNode.ObjectMatrix3D.Translation - directionToPipe * segment.Length;
-            }).First(item => item != XbimVector3D.Zero);
+            XbimVector3D up = orderedSegmentEntities
+                .Select(segment => segment.GetFakeDisplacementVector(nodeEntity))
+                .First(item => item != XbimVector3D.Zero);
             
             displacementLength = up.Length;
             up = up.Normalized();

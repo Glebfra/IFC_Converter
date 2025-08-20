@@ -120,10 +120,7 @@ namespace STARTtoIFC.Extensions
                     return IfcConnectorEntityExtensions.CreateFromStart((StartConnectorEntity)entity, nodeEntity, segmentEntities);
 
                 #endregion
-                
-                // case StartElementType.DAMPER:
-                //     return IfcDamperEntity((StartDamperEntity)entity, nodeEntity, segmentEntities);
-                
+
                 default:
                     return null;
             }
@@ -178,6 +175,12 @@ namespace STARTtoIFC.Extensions
                 
                 case StartElementType.SLIDING_SUPPORT:
                     return IfcSlidingSupportEntityExtensions.CreateFromStart((StartSlidingSupportEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.NONSTANDARD_RESTRAINT:
+                    return IfcNonStandardRestraintEntityExtensions.CreateFromStart((StartNonStandardRestraint)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.DAMPER:
+                    return IfcDamperEntityExtensions.CreateFromStart((StartDamperEntity)entity, nodeEntity, segmentEntities, numSegments);
 
                 #endregion
 
@@ -212,6 +215,9 @@ namespace STARTtoIFC.Extensions
                 
                 case StartElementType.TORSION_EXPANSION_JOINT:
                     return IfcVertexTorsionExpansionJointEntityExtensions.CreateFromStart((StartTorsionExpansionJointEntity)entity, nodeEntity, segmentEntities, numSegments);
+                
+                case StartElementType.VALVE:
+                    return IfcVertexValveEntityExtensions.CreateFromStart((StartArmatureEntity)entity, nodeEntity, segmentEntities, numSegments);
 
                 #endregion
 

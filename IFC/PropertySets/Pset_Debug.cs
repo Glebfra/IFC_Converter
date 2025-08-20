@@ -6,7 +6,7 @@ using Xbim.Ifc4.PropertyResource;
 
 namespace IFC.PropertySets
 {
-    public class Pset_Debug : IPropertySet
+    internal class Pset_Debug : IPropertySet
     {
         public XbimMatrix3D ObjectMatrix3D;
 

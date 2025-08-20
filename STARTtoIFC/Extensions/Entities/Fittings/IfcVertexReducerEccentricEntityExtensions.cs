@@ -2,6 +2,7 @@
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
+using IFC.Extensions;
 using Start.Entities.Fittings;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
@@ -13,8 +14,17 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
     {
         public static IfcVertexReducerEccentricEntity CreateFromStart(StartReducerEntity reducer, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateReducerEccentricObjectMatrix(nodeEntity, segmentEntities, out double displacementLength);
+            segmentEntities = segmentEntities
+                .OrderBy(segment => segment.Diameter.Value)
+                .ToArray();
             
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateReducerEccentricObjectMatrix(nodeEntity, segmentEntities, out double displacementLength);
+
+            if ((segmentEntities[1].StartNode.GetDistanceToAnotherNode(nodeEntity) < segmentEntities[1].EndNode.GetDistanceToAnotherNode(nodeEntity)))
+            {
+                segmentEntities[1].MovePipe(objectMatrix3D.Up * displacementLength);
+            }
+
             double length = reducer.LengthOfConicalPart.SIProperty;
             double[] diameters = segmentEntities.Select(segment => segment.Diameter.Value).ToArray();
 

@@ -16,8 +16,6 @@ using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Abstract.Anchors
 {
-    //TODO Create a different way of creation
-    [Obsolete("")]
     public abstract class IfcAbstractNonStandardRestraintEntity : IfcAbstractNonFixedSupportEntity
     {
         public abstract StartNonStandardRestraint NonStandardRestraint { get; }
@@ -42,7 +40,7 @@ namespace IFC.Entities.Abstract.Anchors
 
             _abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
 
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, Diameter / 2 * VectorExtensions.Forward);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
             AddShapeRepresentation(model, discreteAccessory, representationItems);
             
             return discreteAccessory;

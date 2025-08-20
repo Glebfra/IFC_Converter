@@ -2,6 +2,7 @@
 {
     internal class DataContainer
     {
-        public string IfcFilePath { get; set; } = string.Empty;
+        public string IfcFilePath = string.Empty;
+        public ImportType ImportType = ImportType.AUTO;
     }
 }

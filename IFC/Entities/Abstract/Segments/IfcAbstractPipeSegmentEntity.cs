@@ -16,6 +16,8 @@ namespace IFC.Entities.Abstract.Segments
     {
         protected IfcAbstractPipeSegmentEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
         
+        protected IfcAbstractPipeSegmentEntity(XbimMatrix3D matrix3D, double length, IfcNodeEntity[] nodeEntities) : base(matrix3D, length, nodeEntities) { }
+
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeSegment pipeSegment = CreateIfcEntity<IfcPipeSegment>(model, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);
@@ -48,7 +50,7 @@ namespace IFC.Entities.Abstract.Segments
                 solid.ExtrudedDirection = extrudedDirection;
                 solid.Depth = Length.Value;
                 solid.SweptArea = profileDef;
-                
+
                 Length.OnValueChange += () => solid.Depth = Length.Value;
             });
         }

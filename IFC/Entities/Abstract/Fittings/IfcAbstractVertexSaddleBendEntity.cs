@@ -37,7 +37,7 @@ namespace IFC.Entities.Abstract.Fittings
             return pipeFitting;
         }
 
-        private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
+        protected override IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
         {
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
             IfcAxisSettings axisSettings = new IfcAxisSettings(XbimVector3D.Zero, VectorExtensions.X, VectorExtensions.Y);

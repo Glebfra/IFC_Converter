@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace IFC.Tools
 {
+    [DebuggerDisplay("Value = {Value.ToString()}")]
     public class ActionProperty<T>
     {
         public T Value

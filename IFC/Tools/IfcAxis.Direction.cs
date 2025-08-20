@@ -1,8 +1,8 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
+using IFC.Extensions;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 
 namespace IFC.Tools
@@ -26,19 +26,19 @@ namespace IFC.Tools
             return GetPipeDirectionFromNode(pipeEntity, coordinates);
         }
 
-        public static XbimVector3D GetExtrudedDirection(IfcExtrudedAreaSolid extrudedAreaSolid)
+        public static IfcCartesianPoint CreatePoint(IModel model, ActionProperty<XbimVector3D> coordinates)
         {
-            return extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
+            IfcCartesianPoint cartesianPoint = model.Instances.New<IfcCartesianPoint>(p => p.SetVector(coordinates));
+            coordinates.OnValueChange += () => cartesianPoint.SetVector(coordinates);
+            return cartesianPoint;
         }
 
-        public static IfcCartesianPoint CreatePoint(IModel model, XbimVector3D coordinates)
+        public static IfcDirection CreateDirection(IModel model, ActionProperty<XbimVector3D> direction)
         {
-            return model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(coordinates.X, coordinates.Y, coordinates.Z));
-        }
-
-        public static IfcDirection CreateDirection(IModel model, XbimVector3D direction)
-        {
-            return model.Instances.New<IfcDirection>(d => d.SetXYZ(direction.X, direction.Y, direction.Z));
+            IfcDirection ifcDirection = model.Instances.New<IfcDirection>(d => d.SetVector(direction));
+            direction.OnValueChange += () => ifcDirection.SetVector(direction);
+            
+            return ifcDirection;
         }
     }
 }

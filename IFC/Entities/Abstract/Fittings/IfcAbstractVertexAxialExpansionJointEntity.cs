@@ -21,6 +21,7 @@ namespace IFC.Entities.Abstract.Fittings
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
             return pipeFitting;
         }
 

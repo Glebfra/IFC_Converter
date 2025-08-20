@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
@@ -22,6 +24,7 @@ namespace IFC.Entities.Abstract.Fittings
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
             return pipeFitting;
         }
         
@@ -43,6 +46,12 @@ namespace IFC.Entities.Abstract.Fittings
             XbimVector3D displacement = VectorExtensions.Y.Negated() * DisplacementLength;
             IfcFacetedBrep facetedBrep = IfcVertexGeometry.CreateClippedCone(model, Diameters[0] / 2, Diameters[1] / 2, Length, NumSegments, axisSettings, displacement);
             return new IfcRepresentationItem[] { facetedBrep };
+        }
+
+        private void ClipPipes()
+        {
+            IfcAbstractSegmentEntity[] segmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+            segmentEntities[1].Clip(NodeEntity, Length);
         }
     }
 }

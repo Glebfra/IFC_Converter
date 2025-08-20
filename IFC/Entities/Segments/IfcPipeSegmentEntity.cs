@@ -18,5 +18,13 @@ namespace IFC.Entities.Segments
             Tag = new ActionProperty<IfcIdentifier>(tag);
             Diameter = new ActionProperty<double>(diameter);
         }
+
+        public IfcPipeSegmentEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter, IfcNodeEntity[] nodeEntities)
+            : base(objectMatrix3D, length, nodeEntities)
+        {
+            Name = new ActionProperty<IfcLabel>(name);
+            Tag = new ActionProperty<IfcIdentifier>(tag);
+            Diameter = new ActionProperty<double>(diameter);
+        }
     }
 }

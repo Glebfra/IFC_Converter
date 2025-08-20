@@ -1,4 +1,5 @@
-﻿using IFC.Tools;
+﻿using System.Collections.Generic;
+using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -23,6 +24,7 @@ namespace IFC.Entities.Abstract.Fittings
             return pipeFitting;
         }
 
+        //TODO Create a shape
         protected new T CreateIfcEntity<T>(IModel model)
             where T : IfcPipeFitting, IInstantiableEntity
         {
@@ -32,15 +34,17 @@ namespace IFC.Entities.Abstract.Fittings
             return pipeFitting;
         }
         
-        private IfcExtrudedAreaSolid CreateExtrudedArea(IModel model, IfcAxis2Placement3D placement3D, XbimVector3D direction, IfcProfileDef profileDef, double length)
+        private IEnumerable<IfcRepresentationItem> CreateExtrudedArea(IModel model, IfcAxis2Placement3D placement3D, XbimVector3D direction, IfcProfileDef profileDef, double length)
         {
-            return model.Instances.New<IfcExtrudedAreaSolid>(solid =>
+            IfcRepresentationItem representationItem = model.Instances.New<IfcExtrudedAreaSolid>(solid =>
             {
                 solid.Position = placement3D;
                 solid.ExtrudedDirection = IfcAxis.CreateDirection(model, direction);
                 solid.Depth = length;
                 solid.SweptArea = profileDef;
             });
+
+            return new IfcRepresentationItem[] { representationItem };
         }
     }
 }
