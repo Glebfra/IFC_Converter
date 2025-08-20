@@ -13,6 +13,7 @@
         <FileAlignment>512</FileAlignment>
         <LangVersion>default</LangVersion>
         <Nullable>enable</Nullable>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -69,11 +70,17 @@
         <Compile Include="Importers\ImporterFactory.cs" />
         <Compile Include="Importers\StandardImporter.cs" />
         <Compile Include="Importers\StartImporter.cs" />
+        <Compile Include="Localization\LocalizationResource.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>LocalizationResource.resx</DependentUpon>
+        </Compile>
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="StartGenerator.cs" />
         <Compile Include="Tools\ConversionResult.cs" />
         <Compile Include="Tools\DataContainer.cs" />
         <Compile Include="Tools\ImportType.cs" />
+        <Compile Include="Tools\ImportTypeEnum.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\IFC\IFC.csproj">
@@ -84,6 +91,24 @@
         <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
         <Name>Start</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="GUI\ImportWindowForm.resx">
+        <DependentUpon>ImportWindowForm.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Localization\LocalizationResource.en.resx">
+        <DependentUpon>LocalizationResource.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Localization\LocalizationResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Localization\LocalizationResource.ru.resx">
+        <DependentUpon>LocalizationResource.resx</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Localization\LocalizationResource.zh.resx">
+        <DependentUpon>LocalizationResource.resx</DependentUpon>
+      </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

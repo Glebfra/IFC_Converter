@@ -4,12 +4,12 @@ namespace IFCtoSTART.Importers
 {
     internal static class ImporterFactory
     {
-        public static IImporter CreateImporter(ImportType importType)
+        public static IImporter CreateImporter(ImportTypeEnum importTypeEnum)
         {
-            return importType switch
+            return importTypeEnum switch
             {
-                ImportType.STANDARD => new StandardImporter(),
-                ImportType.START => new StartImporter(),
+                ImportTypeEnum.STANDARD => new StandardImporter(),
+                ImportTypeEnum.START => new StartImporter(),
                 _ => new StandardImporter()
             };
         }

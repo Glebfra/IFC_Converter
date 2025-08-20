@@ -28,8 +28,8 @@ namespace STARTtoIFC.GUI
             Text = LocalizationResource.ExportWindowForm_Text;
             exportButton.Text = LocalizationResource.ExportWindowForm_ExportButton_Text;
             selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
-            outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilePath_Label;
-            exportTypeLabel.Text = LocalizationResource.ExportWindowForm_ExportType_Label;
+            outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilePath_Label_Text;
+            exportTypeLabel.Text = LocalizationResource.ExportWindowForm_ExportType_Label_Text;
             vertexSegmentsLabel.Text = LocalizationResource.ExportWindowForm_VertexSegments_Textbox;
 
             ArrayList types = new ArrayList

@@ -14,13 +14,13 @@
     <data name="ExportWindowForm_Text" xml:space="preserve">
         <value>输出到IFC格式</value>
     </data>
-    <data name="ExportWindowForm_OutputFilePath_Label" xml:space="preserve">
+    <data name="ExportWindowForm_OutputFilePath_Label_Text" xml:space="preserve">
         <value>选择IFC文件的保存路径</value>
     </data>
     <data name="ExportWindowForm_selectOutputFilePathButton_Text" xml:space="preserve">
         <value>浏览</value>
     </data>
-    <data name="ExportWindowForm_ExportType_Label" xml:space="preserve">
+    <data name="ExportWindowForm_ExportType_Label_Text" xml:space="preserve">
         <value>输出类型</value>
     </data>
     <data name="ExportWindowForm_VertexSegments_Textbox" xml:space="preserve">

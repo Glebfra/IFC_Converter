@@ -23,7 +23,7 @@
     <data name="ExportWindowForm_Text" xml:space="preserve">
         <value>Экспорт в IFC</value>
     </data>
-    <data name="ExportWindowForm_OutputFilePath_Label" xml:space="preserve">
+    <data name="ExportWindowForm_OutputFilePath_Label_Text" xml:space="preserve">
         <value>Укажите полный путь для сохранения .ifc файла</value>
     </data>
     <data name="DirectoryDoesNotExists_Error" xml:space="preserve">
@@ -44,7 +44,7 @@
     <data name="ExportWindowForm_ExportType_Topological" xml:space="preserve">
         <value>САПР</value>
     </data>
-    <data name="ExportWindowForm_ExportType_Label" xml:space="preserve">
+    <data name="ExportWindowForm_ExportType_Label_Text" xml:space="preserve">
         <value>Тип экспорта</value>
     </data>
     <data name="ExportWindowForm_ExportType_Error" xml:space="preserve">

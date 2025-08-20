@@ -69,6 +69,10 @@
         <Compile Include="StartObject.cs" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\IFCtoSTART\IFCtoSTART.csproj">
+        <Project>{e3781fa1-2d49-4c70-942b-89c40df2eb29}</Project>
+        <Name>IFCtoSTART</Name>
+      </ProjectReference>
       <ProjectReference Include="..\IFC\IFC.csproj">
         <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
         <Name>IFC</Name>

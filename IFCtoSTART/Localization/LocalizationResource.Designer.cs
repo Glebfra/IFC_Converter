@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace STARTtoIFC.Localization {
+namespace IFCtoSTART.Localization {
     using System;
     
     
@@ -38,7 +38,7 @@ namespace STARTtoIFC.Localization {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("STARTtoIFC.Localization.LocalizationResource", typeof(LocalizationResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IFCtoSTART.Localization.LocalizationResource", typeof(LocalizationResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -69,110 +69,92 @@ namespace STARTtoIFC.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export.
+        ///   Looks up a localized string similar to Import.
         /// </summary>
-        internal static string ExportWindowForm_ExportButton_Text {
+        internal static string ImportWindowForm_ImportButton_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_ExportButton_Text", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_ImportButton_Text", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unknown export type.
+        ///   Looks up a localized string similar to Auto.
         /// </summary>
-        internal static string ExportWindowForm_ExportType_Error {
+        internal static string ImportWindowForm_ImportType_Auto {
             get {
-                return ResourceManager.GetString("ExportWindowForm_ExportType_Error", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Auto", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export type.
+        ///   Looks up a localized string similar to Unknown import type.
         /// </summary>
-        internal static string ExportWindowForm_ExportType_Label_Text {
+        internal static string ImportWindowForm_ImportType_Error {
             get {
-                return ResourceManager.GetString("ExportWindowForm_ExportType_Label_Text", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Error", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CAD.
+        ///   Looks up a localized string similar to Import type.
         /// </summary>
-        internal static string ExportWindowForm_ExportType_Topological {
+        internal static string ImportWindowForm_ImportType_Label_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_ExportType_Topological", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Label_Text", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vertex.
+        ///   Looks up a localized string similar to Standard.
         /// </summary>
-        internal static string ExportWindowForm_ExportType_Vertex {
+        internal static string ImportWindowForm_ImportType_Standard {
             get {
-                return ResourceManager.GetString("ExportWindowForm_ExportType_Vertex", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        internal static string ImportWindowForm_ImportType_Start {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Start", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The path to .ifc file cannot be empty.
         /// </summary>
-        internal static string ExportWindowForm_OutputFilePath_Empty_Error {
+        internal static string ImportWindowForm_InputFilePath_Empty_Error {
             get {
-                return ResourceManager.GetString("ExportWindowForm_OutputFilePath_Empty_Error", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_InputFilePath_Empty_Error", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a full path of IFC file to be saved.
+        ///   Looks up a localized string similar to Enter a full path of IFC file to be imported.
         /// </summary>
-        internal static string ExportWindowForm_OutputFilePath_Label_Text {
+        internal static string ImportWindowForm_InputFilePath_Label_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_OutputFilePath_Label_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select the file to be saved.
-        /// </summary>
-        internal static string ExportWindowForm_SaveDialogFile_Title {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_SaveDialogFile_Title", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_InputFilePath_Label_Text", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Browse....
         /// </summary>
-        internal static string ExportWindowForm_selectOutputFilePathButton_Text {
+        internal static string ImportWindowForm_selectInputFilePathButton_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_selectOutputFilePathButton_Text", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_selectInputFilePathButton_Text", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export to IFC.
+        ///   Looks up a localized string similar to Import from IFC.
         /// </summary>
-        internal static string ExportWindowForm_Text {
+        internal static string ImportWindowForm_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vertex segments.
-        /// </summary>
-        internal static string ExportWindowForm_VertexSegments_Textbox {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_VertexSegments_Textbox", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vertex segments num shoud be above 4.
-        /// </summary>
-        internal static string ExportWindowForm_VertexSegmentsNum_Error {
-            get {
-                return ResourceManager.GetString("ExportWindowForm_VertexSegmentsNum_Error", resourceCulture);
+                return ResourceManager.GetString("ImportWindowForm_Text", resourceCulture);
             }
         }
         

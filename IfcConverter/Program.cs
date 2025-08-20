@@ -1,40 +1,18 @@
 ﻿using System;
 using System.IO;
+using IFCtoSTART;
+using Start.API;
 
 namespace IfcConverter
 {
     internal class Program
     {
+        [STAThread]
         public static void Main(string[] args)
         {
-            string ifcFilePath, ctpFilePath;
-            while (true)
-            {
-                Console.WriteLine("Write the path to .ifc file");
-                ifcFilePath = Console.ReadLine();
-                ifcFilePath = ifcFilePath.Replace("\"", "");
-                
-                if (string.IsNullOrEmpty(ifcFilePath))
-                {
-                    Console.WriteLine("FilePath cannot be empty");
-                    continue;
-                }
-
-                if (!ifcFilePath.EndsWith(".ifc"))
-                {
-                    Console.WriteLine("Input file should be .ifc formatted");
-                    continue;
-                }
-                
-                if (!File.Exists(ifcFilePath))
-                {
-                    Console.WriteLine("File does not exist");
-                    continue;
-                }
-
-                break;
-            }
-
+            IfcImporter ifcImporter = new IfcImporter();
+            
+            string ctpFilePath;
             while (true)
             {
                 Console.WriteLine("Write the path to .ctp file");
@@ -62,9 +40,12 @@ namespace IfcConverter
                 break;
             }
 
-            using (IfcConverter ifcConverter = new IfcConverter())
+            using (StartAutoServer autoServer = new StartAutoServer())
             {
-                ifcConverter.Import(ifcFilePath, ctpFilePath);
+                object? startDocument = autoServer.LoadStartDocumentRaw(0x4, ctpFilePath);
+                if (startDocument == null) throw new NullReferenceException("Object ref is null");
+                int code = ifcImporter.Import(startDocument, 1049);
+                Console.WriteLine($"Output code: {code}");
             }
         }
     }

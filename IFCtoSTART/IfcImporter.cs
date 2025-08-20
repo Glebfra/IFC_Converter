@@ -3,7 +3,9 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using IFCtoSTART.GUI;
 using IFCtoSTART.Tools;
+using Start.API;
 
 namespace IFCtoSTART
 {
@@ -19,12 +21,27 @@ namespace IFCtoSTART
             return 1;
         }
         
+        [STAThread]
         public int Import(object startDocumentObject, int languageId)
         {
             try
             {
                 Application.EnableVisualStyles();
                 Localize(languageId);
+                
+                StartDocument startDocument = new StartDocument(startDocumentObject);
+                DataContainer dataContainer = new DataContainer();
+
+                DialogResult dialogResult;
+                using (ImportWindowForm importWindowForm = new ImportWindowForm(dataContainer))
+                {
+                    dialogResult = importWindowForm.ShowDialog();
+                }
+                
+                if (dialogResult == DialogResult.Cancel)
+                {
+                    return (int)ConversionResult.Canceled;
+                }
                 
                 return (int)ConversionResult.Success;
             }

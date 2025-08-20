@@ -20,9 +20,9 @@ namespace IFCtoSTART
 
         public void Convert(StartDocument startDocument)
         {
-            IImporter importer = ImporterFactory.CreateImporter(_dataContainer.ImportType);
+            IImporter importer = ImporterFactory.CreateImporter(_dataContainer.ImportTypeEnum);
             
-            using (IFCProject ifcProject = IFCProject.OpenProject(_dataContainer.IfcFilePath))
+            using (IFCProject ifcProject = IFCProject.OpenProject(_dataContainer.InputFilePath))
             {
                 IfcProduct[] products = ifcProject.GetProducts().ToArray();
             }

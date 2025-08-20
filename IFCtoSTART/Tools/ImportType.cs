@@ -1,9 +1,14 @@
 ﻿namespace IFCtoSTART.Tools
 {
-    internal enum ImportType
+    internal class ImportType
     {
-        AUTO,
-        STANDARD,
-        START
+        public ImportTypeEnum Type { get; set; }
+        public string TypeName { get; set; }
+
+        public ImportType(ImportTypeEnum type, string typeName)
+        {
+            Type = type;
+            TypeName = typeName;
+        }
     }
 }
