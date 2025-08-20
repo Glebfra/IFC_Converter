@@ -42,8 +42,18 @@ namespace IFCtoSTART
                 {
                     return (int)ConversionResult.Canceled;
                 }
-                
-                return (int)ConversionResult.Success;
+
+                try
+                {
+                    StartGenerator startGenerator = new StartGenerator(dataContainer);
+                    startGenerator.Convert(startDocument);
+                    
+                    return (int)ConversionResult.Success;
+                }
+                catch (Exception e)
+                {
+                    return (int)ConversionResult.Fail;
+                }
             }
             catch (Exception e)
             {

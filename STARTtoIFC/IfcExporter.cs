@@ -75,7 +75,6 @@ namespace STARTtoIFC
             } 
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
                 return (int)ConversionResult.Fail;
             }
         }
