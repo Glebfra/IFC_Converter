@@ -35,6 +35,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
@@ -58,6 +61,15 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Extensions\Entities\IfcNodeEntityExtensions.cs" />
+        <Compile Include="Extensions\Entities\IfcPipeSegmentEntityExtensions.cs" />
+        <Compile Include="Extensions\Entities\IfcProductExtensions.cs" />
+        <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeBendExtensions.cs" />
+        <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeJunctionExtensions.cs" />
+        <Compile Include="Extensions\PropertySets\Pset_PipeSegmentTypeCommonExtensions.cs" />
+        <Compile Include="Extensions\PropertySets\Pset_StartExtensions.cs" />
+        <Compile Include="Extensions\PropertySets\Qto_PipeFittingBaseQuantitiesExtensions.cs" />
+        <Compile Include="Extensions\PropertySets\Qto_PipeSegmentBaseQuantitiesExtensions.cs" />
         <Compile Include="GUI\ImportWindowForm.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -69,7 +81,6 @@
         <Compile Include="Importers\IImporter.cs" />
         <Compile Include="Importers\ImporterFactory.cs" />
         <Compile Include="Importers\StandardImporter.cs" />
-        <Compile Include="Importers\StartImporter.cs" />
         <Compile Include="Localization\LocalizationResource.Designer.cs">
           <DesignTime>True</DesignTime>
           <AutoGen>True</AutoGen>
@@ -81,6 +92,7 @@
         <Compile Include="Tools\DataContainer.cs" />
         <Compile Include="Tools\ImportType.cs" />
         <Compile Include="Tools\ImportTypeEnum.cs" />
+        <Compile Include="Tools\StartObject.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\IFC\IFC.csproj">

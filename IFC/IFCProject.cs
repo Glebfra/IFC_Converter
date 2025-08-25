@@ -23,6 +23,8 @@ namespace IFC
 {
     public class IFCProject : IDisposable
     {
+        public IModel Model => _model;
+        
         private ITransaction _transaction;
         private readonly IfcStore _model;
         private readonly IfcBuilding _building;
@@ -168,11 +170,6 @@ namespace IFC
         {
             _ifcObjects.Add(product);
             _building.AddElement(product);
-        }
-
-        public IModel GetModel()
-        {
-            return _model;
         }
 
         public void GroupObjects(string groupName)

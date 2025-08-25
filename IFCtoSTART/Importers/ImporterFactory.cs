@@ -9,7 +9,6 @@ namespace IFCtoSTART.Importers
             return importTypeEnum switch
             {
                 ImportTypeEnum.STANDARD => new StandardImporter(),
-                ImportTypeEnum.START => new StartImporter(),
                 _ => new StandardImporter()
             };
         }

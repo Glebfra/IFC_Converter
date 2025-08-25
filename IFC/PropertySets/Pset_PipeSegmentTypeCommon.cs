@@ -1,5 +1,4 @@
 ﻿using Xbim.Common;
-using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.PropertyResource;
@@ -14,49 +13,6 @@ namespace IFC.PropertySets
         public IfcPressureMeasure WorkingPressure;
         public IfcPressureMeasure[] PressureRange = new IfcPressureMeasure[2];
         public IfcThermodynamicTemperatureMeasure[] TemperatureRange = new IfcThermodynamicTemperatureMeasure[2];
-
-        public static Pset_PipeSegmentTypeCommon CreateFromPropertySet(IIfcPropertySet propertySet)
-        {
-            Pset_PipeSegmentTypeCommon pset = new Pset_PipeSegmentTypeCommon();
-            foreach (IIfcProperty property in propertySet.HasProperties)
-            {
-                switch (property)
-                {
-                    case IfcPropertySingleValue singleValue:
-                        switch (property.Name)
-                        {
-                            case nameof(InnerDiameter):
-                                pset.InnerDiameter = (IfcPositiveLengthMeasure)singleValue.NominalValue;
-                                break;
-                            case nameof(NominalDiameter):
-                                pset.NominalDiameter = (IfcPositiveLengthMeasure)singleValue.NominalValue;
-                                break;
-                            case nameof(OuterDiameter):
-                                pset.OuterDiameter = (IfcPositiveLengthMeasure)singleValue.NominalValue;
-                                break;
-                            case nameof(WorkingPressure):
-                                pset.WorkingPressure = (IfcPressureMeasure)singleValue.NominalValue;
-                                break;
-                        }
-                        break;
-                    case IfcPropertyBoundedValue boundedValue:
-                        switch (property.Name)
-                        {
-                            case nameof(PressureRange):
-                                pset.PressureRange[0] = (IfcPressureMeasure)boundedValue.LowerBoundValue;
-                                pset.PressureRange[1] = (IfcPressureMeasure)boundedValue.UpperBoundValue;
-                                break;
-                            case nameof(TemperatureRange):
-                                pset.TemperatureRange[0] = (IfcThermodynamicTemperatureMeasure)boundedValue.LowerBoundValue;
-                                pset.TemperatureRange[1] = (IfcThermodynamicTemperatureMeasure)boundedValue.UpperBoundValue;
-                                break;
-                        }
-                        break;
-                }
-            }
-
-            return pset;
-        }
 
         public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {

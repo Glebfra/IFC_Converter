@@ -1,52 +1,22 @@
-﻿using Start.API;
-using Start.Entities;
-using Start.StartProperties;
-using Xbim.Common.Geometry;
+﻿using Xbim.Common.Geometry;
 
 namespace IFC.Entities
 {
     public class IfcNodeEntity
     {
-        private static int _id;
-        
-        public readonly StartNodeEntity NodeEntity;
-        public readonly int ID;
-        public readonly XbimMatrix3D ObjectMatrix3D;
+        public int ID { get; }
+        public XbimMatrix3D ObjectMatrix3D { get; }
 
         public IfcNodeEntity(XbimMatrix3D objectMatrix3D)
         {
             ObjectMatrix3D = objectMatrix3D;
+            ID = 0;
         }
 
-        public IfcNodeEntity(StartNodeEntity nodeEntity)
+        public IfcNodeEntity(XbimMatrix3D objectMatrix3D, int id)
         {
-            ID = nodeEntity.ID;
-            XbimVector3D coordinates = new XbimVector3D(
-                nodeEntity.XCoord.SIProperty,
-                nodeEntity.YCoord.SIProperty,
-                nodeEntity.ZCoord.SIProperty
-            );
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
-            NodeEntity = nodeEntity;
-        }
-
-        public static IfcNodeEntity CreateFromIfc(XbimVector3D coordinates, int id)
-        {
-            StartNodeEntity nodeEntity = new StartNodeEntity()
-            {
-                ID = id,
-                XCoord = new LengthProperty(coordinates.X),
-                YCoord = new LengthProperty(coordinates.Y),
-                ZCoord = new LengthProperty(coordinates.Z),
-                Type = StartElementType.NODE,
-            };
-
-            return new IfcNodeEntity(nodeEntity);
-        }
-
-        public static IfcNodeEntity CreateFromIfc(XbimVector3D coordinates)
-        {
-            return CreateFromIfc(coordinates, _id++);
+            ObjectMatrix3D = objectMatrix3D;
+            ID = id;
         }
 
         public bool Equals(IfcNodeEntity other)

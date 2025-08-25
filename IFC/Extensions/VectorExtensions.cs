@@ -24,6 +24,11 @@ namespace IFC.Extensions
                 .OrderBy(vector => vector.Length)
                 .First();
         }
+        
+        public static double GetDistance(this XbimVector3D first, XbimVector3D second)
+        {
+            return (second - first).Length;
+        }
 
         public static double SignedAngle(this XbimVector3D first, XbimVector3D second)
         {

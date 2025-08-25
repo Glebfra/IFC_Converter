@@ -31,7 +31,7 @@ namespace IFC.Entities.Abstract.Segments
             NodeEntities = new IfcNodeEntity[]
             {
                 new IfcNodeEntity(matrix3D),
-                new IfcNodeEntity(secondMatrix3D)
+                new IfcNodeEntity(secondMatrix3D),
             };
             Length = length;
         }

@@ -11,6 +11,7 @@ using Start.Entities;
 using Start.Extensions;
 using STARTtoIFC.Extensions;
 using STARTtoIFC.Tools;
+using Xbim.Common.Geometry;
 
 namespace STARTtoIFC
 {
@@ -42,7 +43,13 @@ namespace STARTtoIFC
                 foreach (StartDataArrayItem nodeItem in nodeItems)
                 {
                     StartNodeEntity startNodeEntity = (StartNodeEntity)nodeItem.Entity;
-                    IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(startNodeEntity);
+                    XbimVector3D nodeCoordinates = new XbimVector3D(
+                        startNodeEntity.XCoord.SIProperty,
+                        startNodeEntity.YCoord.SIProperty,
+                        startNodeEntity.ZCoord.SIProperty
+                    );
+                    XbimMatrix3D objectMatrix3D = new XbimMatrix3D(nodeCoordinates);
+                    IfcNodeEntity ifcNodeEntity = new IfcNodeEntity(objectMatrix3D, startNodeEntity.ID);
                     _nodeEntities.Add(startNodeEntity.ID, ifcNodeEntity);
                     logger.Log($"Added Node with id {startNodeEntity.ID} to IFC.");
                 }
