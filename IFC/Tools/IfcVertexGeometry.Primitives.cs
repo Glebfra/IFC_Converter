@@ -170,7 +170,7 @@ namespace IFC.Tools
                     IfcCartesianPoint p2 = points[i, (j + 1) % length2];
                     IfcCartesianPoint p3 = points[i + 1, (j + 1) % length2];
                     IfcCartesianPoint p4 = points[i + 1, j];
-                    faces[facesIndex++] = IfcVertexGeometry.CreateRectangleFace(model, p1, p2, p3, p4);
+                    faces[facesIndex++] = CreateRectangleFace(model, p1, p2, p3, p4);
                 }
             }
 

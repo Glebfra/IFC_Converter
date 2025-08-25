@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Equipments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -11,47 +8,33 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Equipments
 {
     public abstract class IfcAbstractVertexAirCoolerEntity : IfcAbstractEquipmentEntity
     {
-        public abstract int NumSegments { get; protected set; }
+        public abstract ActionProperty<double>[] Diameters { get; }
+        public abstract ActionProperty<int> NumSegments { get; }
+        public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("695689");
         
-        public override Colour Colour { get; protected set; } = Colour.FromHEX("695689");
-        
-        private readonly StartAirCoolerEntity _airCooler;
-        private IfcChiller? _chiller;
-        
-        protected IfcAbstractVertexAirCoolerEntity(StartAirCoolerEntity airCooler, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(airCooler, nodeEntity, segmentEntities)
-        {
-            _airCooler = airCooler;
-        }
+        protected IfcAbstractVertexAirCoolerEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
+            IfcChiller discreteAccessory = CreateIfcEntity<IfcChiller>(model);
+            return discreteAccessory;
+        }
 
-            IEnumerable<IfcFacetedBrep> facetedBreps = CreateFlange(model);
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            ColourEntity(model, facetedBreps);
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcChiller, IInstantiableEntity
+        {
+            T chiller = base.CreateIfcEntity<T>(model);
+            chiller.PredefinedType = IfcChillerTypeEnum.AIRCOOLED;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateFlange(model);
+            AddShapeRepresentation(model, chiller, representationItems);
             
-            _chiller = model.Instances.New<IfcChiller>(fitting =>
-            {
-                fitting.PredefinedType = IfcChillerTypeEnum.AIRCOOLED;
-                fitting.Name = _airCooler.Name;
-                fitting.Tag = Tag;
-                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
-                fitting.Representation = shape;
-            });
-
-            AddProperties(model, _chiller);
-            ClipPipes();
-
-            return _chiller;
+            return chiller;
         }
         
         private IEnumerable<IfcFacetedBrep> CreateFlange(IModel model)
@@ -62,20 +45,18 @@ namespace IFC.Entities.Abstract.Equipments
                 0.3 * Length * VectorExtensions.Z,
                 0.1 * Length * VectorExtensions.Z,
             };
-            
-            double[] radiuses = AbstractSegmentEntities.Select(entity => entity.Diameter / 2).ToArray();
 
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {
-                IfcVertexGeometry.CreateCircle(model, radiuses[0], displacements[0].Negated(), NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[0] * 1.1, displacements[1].Negated(), NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[0] * 1.5, displacements[1].Negated(), NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[0] * 1.5, displacements[2].Negated(), NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[0], displacements[0].Negated(), NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[0] * 0.55, displacements[1].Negated(), NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[0] * 0.75, displacements[1].Negated(), NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[0] * 0.75, displacements[2].Negated(), NumSegments),
                 
-                IfcVertexGeometry.CreateCircle(model, radiuses[1], displacements[0], NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[1] * 1.1, displacements[1], NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[1] * 1.5, displacements[1], NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[1] * 1.5, displacements[2], NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[1], displacements[0], NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[1] * 0.55, displacements[1], NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[1] * 0.75, displacements[1], NumSegments),
+                IfcVertexGeometry.CreateCircle(model, Diameters[1] * 0.75, displacements[2], NumSegments),
             };
 
             IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[]
@@ -89,14 +70,6 @@ namespace IFC.Entities.Abstract.Equipments
             };
             
             return facetedBreps;
-        }
-
-        private void ClipPipes()
-        {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
-            {
-                ifcAbstractSegmentEntity.Clip(NodeEntity, 0.5 * Length);
-            }
         }
     }
 }

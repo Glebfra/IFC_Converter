@@ -7,6 +7,10 @@ namespace Start.Entities.Segments
 {
     public class StartPipeEntity : StartAbstractSegmentEntity
     {
+        [JsonIgnore]
+        [StartIgnore]
+        public override StartElementType Type { get; set; } = StartElementType.PIPE_ELEMENT;
+        
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; } = string.Empty;
 
@@ -17,10 +21,6 @@ namespace Start.Entities.Segments
         [JsonProperty(StartPropertyName.CorrosionAllowance)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty CorrosionAllowance { get; set; } = LengthProperty.Zero;
-
-        [JsonProperty(StartPropertyName.Weight)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
-        public MassUnitProperty PipeUnitWeight { get; set; } = MassUnitProperty.Zero;
 
         [JsonProperty(StartPropertyName.InsulationWeight)]
         [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
@@ -56,29 +56,5 @@ namespace Start.Entities.Segments
         [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheZAxis)]
         [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
         public MassUnitProperty AdditionalWeightLoadAlongTheZAxis { get; set; } = MassUnitProperty.Zero;
-        
-        [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty ProjectionAlongOXAxis { get; set; } = LengthProperty.Zero;
-    
-        [JsonProperty(StartPropertyName.ProjectionAlongOYAxis)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty ProjectionAlongOYAxis { get; set; } = LengthProperty.Zero;
-
-        [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty ProjectionAlongOZAxis { get; set; } = LengthProperty.Zero;
-
-        [JsonProperty(StartPropertyName.XCoord)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty XCoord { get; set; } = LengthProperty.Zero;
-        
-        [JsonProperty(StartPropertyName.YCoord)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty YCoord { get; set; } = LengthProperty.Zero;
-        
-        [JsonProperty(StartPropertyName.ZCoord)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty ZCoord { get; set; } = LengthProperty.Zero;
     }
 }

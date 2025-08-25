@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Equipments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -10,66 +10,51 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Equipments
 {
     public abstract class IfcAbstractVertexTankEntity : IfcAbstractEquipmentEntity
     {
-        public abstract int NumSegments { get; protected set; }
-        public abstract double PipeDiameter { get; protected set; }
-        public abstract double TankHeight { get; protected set; }
-        public abstract double TankRadius { get; protected set; }
-        public abstract double FlangeHeight { get; protected set; }
-        public abstract double FlangeRadius { get; protected set; }
+        public abstract ActionProperty<int> NumSegments { get; }
+        public abstract ActionProperty<double> PipeDiameter { get; }
+        public abstract ActionProperty<double> TankHeight { get; }
+        public abstract ActionProperty<double> TankRadius { get; }
+        public abstract ActionProperty<double> FlangeHeight { get; }
+        public abstract ActionProperty<double> FlangeRadius { get; }
         
-        public sealed override double Length { get; protected set; } = 0;
-        public override Colour Colour { get; protected set; } = Colour.FromHEX("695689");
+        public sealed override ActionProperty<double> Length { get; } = 0;
+        public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("695689");
 
-        private readonly XbimVector3D _directionToPipe;
-        private readonly bool _isVertical;
-        private readonly StartTankEntity _tankEntity;
-        private IfcTank? _tank;
-
-        protected IfcAbstractVertexTankEntity(StartTankEntity tankEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(tankEntity, nodeEntity, segmentEntities)
-        {
-            _tankEntity = tankEntity;
-            
-            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D forward = VectorExtensions.Z;
-            XbimVector3D up = VectorExtensions.Y;
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-            
-            _directionToPipe = IfcAxis.GetPipeDirectionFromNode(AbstractSegmentEntities[0], coordinates).Normalized();
-            _isVertical = _directionToPipe.IsParallel(VectorExtensions.Z);
-        }
+        private bool _isVertical;
+        private XbimVector3D _directionToPipe;
+        
+        protected IfcAbstractVertexTankEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
+            IfcTank discreteAccessory = CreateIfcEntity<IfcTank>(model);
+            return discreteAccessory;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcTank, IInstantiableEntity
+        {
+            IfcAbstractSegmentEntity[] abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+            _directionToPipe = IfcAxis.GetPipeDirectionFromNode(abstractSegmentEntities[0], ObjectMatrix3D.Value.Translation).Normalized();
+            _isVertical = _directionToPipe.IsParallel(VectorExtensions.Z);
+            
+            T chiller = base.CreateIfcEntity<T>(model);
+            chiller.PredefinedType = IfcTankTypeEnum.STORAGE;
             
             IEnumerable<IfcRepresentationItem> representationItems = _isVertical
                 ? CreateVerticalTank(model)
                 : CreateHorizontalTank(model);
-
-            IfcShapeRepresentation representation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, representation);
-            ColourEntity(model, representationItems);
-
-            _tank = model.Instances.New<IfcTank>(tank =>
-            {
-                tank.Name = _tankEntity.Name;
-                tank.Tag = Tag;
-                tank.PredefinedType = IfcTankTypeEnum.STORAGE;
-                tank.Representation = shape;
-                tank.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            AddProperties(model, _tank);
-
-            return _tank;
+            
+            AddShapeRepresentation(model, chiller, representationItems);
+            
+            return chiller;
         }
-
+        
         private IEnumerable<IfcRepresentationItem> CreateVerticalTank(IModel model)
         {
             XbimVector3D tankDisplacement = XbimVector3D.Zero;
@@ -85,8 +70,8 @@ namespace IFC.Entities.Abstract.Equipments
 
         private IEnumerable<IfcRepresentationItem> CreateHorizontalTank(IModel model)
         {
-            XbimVector3D tankDisplacement = _directionToPipe * TankRadius + ObjectMatrix3D.Forward.Negated() * TankHeight * 0.5;
-            XbimVector3D xAxis = ObjectMatrix3D.Forward;
+            XbimVector3D tankDisplacement = _directionToPipe * TankRadius + ObjectMatrix3D.Value.Forward.Negated() * TankHeight * 0.5;
+            XbimVector3D xAxis = ObjectMatrix3D.Value.Forward;
             XbimVector3D yAxis = XbimVector3D.CrossProduct(_directionToPipe, xAxis);
             
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
-using Start.Entities.Abstract;
+using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
@@ -10,22 +9,11 @@ namespace IFC.Entities.Abstract.Anchors
 {
     public abstract class IfcAbstractNonFixedSupportEntity : IfcAbstractAnchorEntity
     {
-        public abstract double Diameter { get; protected set; }
-
-        public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-
         protected bool _IsVertical;
+        public abstract ActionProperty<double> Diameter { get; }
         
-        protected IfcAbstractNonFixedSupportEntity(StartAbstractEntity abstractEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(abstractEntity, nodeEntity, segmentEntities)
-        {
-            _IsVertical = segmentEntities[0].ObjectMatrix3D.Forward.IsParallel(VectorExtensions.Z);
-            
-            XbimVector3D forward = new XbimVector3D(0, 0, 1);
-            XbimVector3D up = new XbimVector3D(0, 1, 0);
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(NodeEntity.ObjectMatrix3D.Translation, forward, up);
-        }
-        
+        protected IfcAbstractNonFixedSupportEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
+
         protected abstract IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement);
 
         protected IEnumerable<IfcRepresentationItem> CreateAnchor(IModel model, XbimVector3D normalDisplacement)

@@ -2,7 +2,7 @@
 
 namespace IFC.Tools
 {
-    public class Colour
+    public readonly struct Colour
     {
         public byte Red { get; }
         public byte Green { get; }

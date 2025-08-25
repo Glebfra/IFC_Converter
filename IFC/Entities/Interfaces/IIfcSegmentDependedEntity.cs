@@ -1,9 +1,10 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
+using IFC.Entities.Abstract.Segments;
 
 namespace IFC.Entities.Interfaces
 {
     public interface IIfcSegmentDependedEntity
     {
-        public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
+        public IEnumerable<IfcAbstractSegmentEntity> AbstractSegmentEntities { get; }
     }
 }

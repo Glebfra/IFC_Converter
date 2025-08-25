@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities.Abstract.Segments;
+using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -10,95 +10,59 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
-using Xbim.Ifc4.QuantityResource;
-using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
     public abstract class IfcAbstractMilterJointEntity : IfcAbstractFittingEntity
     {
-        public abstract double Diameter { get; protected set; }
+        public abstract ActionProperty<double> Diameter { get; }
         
-        private readonly StartBendEntity _bendEntity;
-        private IfcPipeFitting? _pipeFitting;
-        
-        protected IfcAbstractMilterJointEntity(StartBendEntity bendEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(bendEntity, nodeEntity, segmentEntities)
-        {
-            _bendEntity = bendEntity;
-        }
-        
+        protected IfcAbstractMilterJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointObjectPlacement(model, ObjectMatrix3D);
-            
-            List<IfcRepresentationItem> ifcRepresentationItems = AbstractSegmentEntities
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
+            return pipeFitting;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
+            AddShapeRepresentation(model, pipeFitting, representationItems);
+
+            return pipeFitting;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
+        {
+            IfcAbstractSegmentEntity[] segmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+
+            List<IfcRepresentationItem> representationItems = segmentEntities
                 .Select(segmentEntity => CreateExtrudedAreaSolid(model, segmentEntity, 0))
                 .Cast<IfcRepresentationItem>()
                 .ToList();
-
-            IfcExtrudedAreaSolid[] segments = AbstractSegmentEntities.Select(item => CreateExtrudedAreaSolid(model, item, Length / 2)).ToArray();
-            ifcRepresentationItems.Add(IfcGeometry.CreateBooleanResult(model, segments[0], segments[1], IfcBooleanOperator.INTERSECTION));
-
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, ifcRepresentationItems);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            ColourEntity(model, ifcRepresentationItems);
             
-            _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
-            {
-                fitting.Name = _bendEntity.Name;
-                fitting.Tag = Tag;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
-                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
-                fitting.Representation = shape;
-            });
-            
-            AddProperties(model, _pipeFitting);
-            ClipPipes();
+            IfcExtrudedAreaSolid[] segments = segmentEntities.Select(item => CreateExtrudedAreaSolid(model, item, Length / 2)).ToArray();
+            representationItems.Add(IfcGeometry.CreateBooleanResult(model, segments, IfcBooleanOperator.INTERSECTION));
 
-            return _pipeFitting;
-        }
-        
-        protected override void AddProperties(IModel model, IfcProduct product)
-        {
-            base.AddProperties(model, product);
-
-            #region Qto_PipeFittingBaseQuantities
-
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
-                {
-                    quantity.Name = "Qto_PipeFittingBaseQuantities";
-                    quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
-                    {
-                        length.Name = "Length";
-                        length.LengthValue = Length;
-                        length.Formula = "radius*angle; [angle]=rad, [radius]=metre";
-                    }));
-                    quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
-                    {
-                        weight.Name = "NetWeight";
-                        weight.WeightValue = _bendEntity.Weight.SIProperty;
-                    }));
-                });
-            });
-
-            #endregion
+            return representationItems;
         }
         
         private IfcExtrudedAreaSolid CreateExtrudedAreaSolid(IModel model, IfcAbstractSegmentEntity ifcAbstractSegment, double displacement)
         {
-            XbimVector3D directionToPipe = IfcAxis.GetPipeDirectionFromNode(ifcAbstractSegment, ObjectMatrix3D.Translation).Normalized();
-            XbimVector3D localUp = ObjectMatrix3D.Up;
+            XbimVector3D directionToPipe = IfcAxis.GetPipeDirectionFromNode(ifcAbstractSegment, ObjectMatrix3D.Value.Translation).Normalized();
+            XbimVector3D localUp = ObjectMatrix3D.Value.Up;
         
-            IfcCartesianPoint point = IfcAxis.CreatePoint(model, XbimVector3D.Zero - directionToPipe * displacement);
-            IfcDirection extrudedDirection = IfcAxis.CreateDirection(model, new XbimVector3D(0, 0, 1));
+            IfcCartesianPoint point = IfcAxis.CreatePoint(model, directionToPipe * displacement);
+            IfcDirection extrudedDirection = IfcAxis.CreateDirection(model, VectorExtensions.Forward);
 
-            IfcDirection ifcDirectionToPipe = IfcAxis.CreateDirection(model, directionToPipe);
+            IfcDirection ifcDirectionToPipe = IfcAxis.CreateDirection(model, directionToPipe.Negated());
             IfcDirection ifcLocalUp = IfcAxis.CreateDirection(model, localUp);
             IfcAxis2Placement3D placement3D = IfcAxis.CreateAxis2Placement3D(model, point, ifcDirectionToPipe, ifcLocalUp);
         
@@ -117,12 +81,13 @@ namespace IFC.Entities.Abstract.Fittings
                 solid.Position = placement3D;
             });
         }
-
+        
         private void ClipPipes()
         {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
+            IfcAbstractSegmentEntity[] segmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+            foreach (IfcAbstractSegmentEntity segmentEntity in segmentEntities)
             {
-                ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
+                segmentEntity.Clip(NodeEntity, Length / 2);
             }
         }
     }

@@ -1,22 +1,27 @@
-﻿using Start.Entities;
-using Xbim.Common.Geometry;
+﻿using Xbim.Common.Geometry;
 
 namespace IFC.Entities
 {
     public class IfcNodeEntity
     {
-        public readonly int ID;
-        public readonly XbimMatrix3D ObjectMatrix3D;
+        public int ID { get; }
+        public XbimMatrix3D ObjectMatrix3D { get; }
 
-        public IfcNodeEntity(StartNodeEntity nodeEntity)
+        public IfcNodeEntity(XbimMatrix3D objectMatrix3D)
         {
-            ID = nodeEntity.ID;
-            XbimVector3D coordinates = new XbimVector3D(
-                nodeEntity.XCoord.SIProperty,
-                nodeEntity.YCoord.SIProperty,
-                nodeEntity.ZCoord.SIProperty
-            );
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, new XbimVector3D(1, 0, 0), new XbimVector3D(0, 0, 1));
+            ObjectMatrix3D = objectMatrix3D;
+            ID = 0;
+        }
+
+        public IfcNodeEntity(XbimMatrix3D objectMatrix3D, int id)
+        {
+            ObjectMatrix3D = objectMatrix3D;
+            ID = id;
+        }
+
+        public bool Equals(IfcNodeEntity other)
+        {
+            return ObjectMatrix3D.Translation == other.ObjectMatrix3D.Translation;
         }
     }
 }

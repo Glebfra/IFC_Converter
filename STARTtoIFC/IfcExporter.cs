@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Start.API;
+using STARTtoIFC.GUI;
+using STARTtoIFC.Tools;
 
 namespace STARTtoIFC
 {
@@ -73,7 +75,6 @@ namespace STARTtoIFC
             } 
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
                 return (int)ConversionResult.Fail;
             }
         }

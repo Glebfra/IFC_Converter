@@ -10,8 +10,26 @@
         public PressureProperty(double startProperty) : base(startProperty)
         {
         }
+        
+        public PressureProperty() {}
 
         public static PressureProperty Zero => new PressureProperty(0);
+        
+        public static PressureProperty CreateFromStart(double startProperty)
+        {
+            PressureProperty forceProperty = new PressureProperty();
+            forceProperty.StartProperty = startProperty;
+            forceProperty.SIProperty = forceProperty.ConvertFromStart(startProperty);
+            return forceProperty;
+        }
+        
+        public static PressureProperty CreateFromSi(double siProperty)
+        {
+            PressureProperty forceProperty = new PressureProperty();
+            forceProperty.StartProperty = forceProperty.ConvertFromSI(siProperty);
+            forceProperty.SIProperty = siProperty;
+            return forceProperty;
+        }
 
         protected override double ConvertFromStart(double startProperty)
         {

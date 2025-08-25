@@ -1,21 +1,20 @@
-﻿using IFC.Entities.Abstract.Segments;
-using Start.Entities.Abstract;
+﻿using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities.Interfaces;
+using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Abstract.Fittings
 {
-    public abstract class IfcAbstractExpansionJoint : IfcAbstractFittingEntity
+    public abstract class IfcAbstractExpansionJointEntity : IfcAbstractFittingEntity
     {
-        protected IfcAbstractExpansionJoint(StartAbstractFittingEntity fittingEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(fittingEntity, nodeEntity, segmentEntities)
-        {
-            
-        }
+        protected IfcAbstractExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
         
         protected void ClipPipes()
         {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
+            IEnumerable<IIfcClippable> clippables = ConnectedEntities.OfType<IIfcClippable>();
+            foreach (IIfcClippable ifcClippable in clippables)
             {
-                ifcAbstractSegmentEntity.Clip(NodeEntity, Length / 2);
+                ifcClippable.Clip(NodeEntity, Length / 2);
             }
         }
     }

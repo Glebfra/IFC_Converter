@@ -1,22 +1,26 @@
-﻿using System.Linq;
-using IFC.Entities.Abstract.Fittings;
-using IFC.Entities.Abstract.Segments;
-using Start.Entities.Fittings;
+﻿using IFC.Entities.Abstract.Fittings;
+using IFC.Tools;
+using Xbim.Common.Geometry;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    public sealed class IfcVertexFlangeEntity : IfcAbstractVertexFlangeEntity
+    public class IfcVertexFlangeEntity : IfcAbstractVertexFlangeEntity
     {
-        public override double Length { get; protected set; }
-        public override int NumSegments { get; protected set; }
-        public override double[] Radiuses { get; protected set; }
-        
-        public IfcVertexFlangeEntity(StartArmatureEntity armatureEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments) 
-            : base(armatureEntity, nodeEntity, segmentEntities)
+        public override ActionProperty<IfcLabel> Name { get; }
+        public override ActionProperty<IfcIdentifier> Tag { get; }
+        public override ActionProperty<double> Length { get; }
+        public override double[] Diameters { get; }
+        public override int NumSegments { get; }
+
+        public IfcVertexFlangeEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double[] diameters, int numSegments) 
+            : base(objectMatrix3D)
         {
+            Name = name;
+            Tag = tag;
+            Length = length;
+            Diameters = diameters;
             NumSegments = numSegments;
-            Length = armatureEntity.Length.SIProperty;
-            Radiuses = segmentEntities.Select(entity => entity.Diameter / 2).ToArray();
         }
     }
 }

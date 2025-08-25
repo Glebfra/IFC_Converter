@@ -1,52 +1,38 @@
 ﻿using System.Collections.Generic;
-using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Anchors;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Abstract.Anchors
 {
     public abstract class IfcAbstractConstantForceSupportHangerEntity : IfcAbstractConstantForceSupportEntity
     {
-        private readonly StartConstantForceSupportHangerEntity _constantForceSupport;
-        private IfcDiscreteAccessory? _discreteAccessory;
-        
-        protected IfcAbstractConstantForceSupportHangerEntity(StartConstantForceSupportHangerEntity constantForceSupport, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(constantForceSupport, nodeEntity, segmentEntities)
-        {
-            _constantForceSupport = constantForceSupport;
-        }
+        protected IfcAbstractConstantForceSupportHangerEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, -Diameter / 2 * VectorExtensions.Forward);
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            ColourEntity(model, representationItems);
-            
-            _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
-            {
-                accessory.Name = _constantForceSupport.Name;
-                accessory.Tag = Tag;
-                accessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
-                accessory.Representation = shape;
-                accessory.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            AddProperties(model, _discreteAccessory);
-
-            return _discreteAccessory;
+            IfcDiscreteAccessory discreteAccessory = CreateIfcEntity<IfcDiscreteAccessory>(model);
+            return discreteAccessory;
         }
         
-        protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcDiscreteAccessory, IInstantiableEntity
+        {
+            T discreteAccessory = base.CreateIfcEntity<T>(model);
+            discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
+            AddShapeRepresentation(model, discreteAccessory, representationItems);
+            
+            return discreteAccessory;
+        }
+        
+        protected IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[4];
 

@@ -89,9 +89,9 @@ namespace STARTtoIFC.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Export type.
         /// </summary>
-        internal static string ExportWindowForm_ExportType_Label {
+        internal static string ExportWindowForm_ExportType_Label_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_ExportType_Label", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_ExportType_Label_Text", resourceCulture);
             }
         }
         
@@ -125,9 +125,9 @@ namespace STARTtoIFC.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Enter a full path of IFC file to be saved.
         /// </summary>
-        internal static string ExportWindowForm_OutputFilePath_Label {
+        internal static string ExportWindowForm_OutputFilePath_Label_Text {
             get {
-                return ResourceManager.GetString("ExportWindowForm_OutputFilePath_Label", resourceCulture);
+                return ResourceManager.GetString("ExportWindowForm_OutputFilePath_Label_Text", resourceCulture);
             }
         }
         

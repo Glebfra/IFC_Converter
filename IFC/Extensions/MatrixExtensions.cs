@@ -54,6 +54,11 @@ namespace IFC.Extensions
             );
         }
 
+        public static XbimVector3D Offset(this XbimMatrix3D matrix3D)
+        {
+            return new XbimVector3D(matrix3D.OffsetX, matrix3D.OffsetY, matrix3D.OffsetZ);
+        }
+
         public static XbimMatrix3D CreateWorld(XbimVector3D translation, XbimVector3D forward)
         {
             forward = forward.Normalized();
@@ -76,11 +81,6 @@ namespace IFC.Extensions
             matrix3D.OffsetX += translationVector.X;
             matrix3D.OffsetY += translationVector.Y;
             matrix3D.OffsetZ += translationVector.Z;
-            return matrix3D;
-        }
-
-        public static XbimMatrix3D Copy(this XbimMatrix3D matrix3D)
-        {
             return matrix3D;
         }
     }

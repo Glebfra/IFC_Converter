@@ -1,67 +1,55 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
-    public abstract class IfcAbstractVertexLateralExpansionJointEntity : IfcAbstractExpansionJoint
+    public abstract class IfcAbstractVertexLateralExpansionJointEntity : IfcAbstractExpansionJointEntity
     {
-        public abstract int NumSegments { get; protected set; }
-        public abstract double Radius { get; protected set; }
-        public abstract double Angle { get; protected set; }
+        public abstract ActionProperty<double> Diameter { get; }
+        public abstract ActionProperty<double> Angle { get; }
+        public abstract ActionProperty<int> NumSegments { get; }
         
-        private readonly StartLateralExpansionJointEntity _lateralExpansion;
-        private IfcPipeFitting? _pipeFitting;
-        
-        protected IfcAbstractVertexLateralExpansionJointEntity(StartLateralExpansionJointEntity lateralExpansion, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(lateralExpansion, nodeEntity, segmentEntities)
-        {
-            _lateralExpansion = lateralExpansion;
-        }
-        
+        protected IfcAbstractVertexLateralExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
+
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
+            return pipeFitting;
+        }
+        
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.BEND;
 
+            IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
+            AddShapeRepresentation(model, pipeFitting, representationItems);
+
+            return pipeFitting;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
+        {
             XbimVector3D firstDisplacement = VectorExtensions.Forward.Negated() * (Length / 2);
             XbimVector3D secondDisplacement = XbimVector3D.Multiply(VectorExtensions.Forward * (Length / 2), MatrixExtensions.My(Angle));
 
-            IfcFacetedBrep[] brep = new IfcFacetedBrep[2];
-            brep[0] = IfcVertexGeometry.CreateSphere(model, Radius, firstDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y);
-            brep[1] = IfcVertexGeometry.CreateSphere(model, Radius, secondDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y);
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, brep);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            ColourEntity(model, brep);
-            
-            _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
+            IfcFacetedBrep[] brep = new IfcFacetedBrep[]
             {
-                fitting.Name = _lateralExpansion.Name;
-                fitting.Tag = Tag;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
-                fitting.Representation = shape;
-                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            
-            ClipPipes();
-            AddProperties(model, _pipeFitting);
+                IfcVertexGeometry.CreateSphere(model, Diameter / 2, firstDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y),
+                IfcVertexGeometry.CreateSphere(model, Diameter / 2, secondDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y)
+            };
 
-            return _pipeFitting;
-        }
-
-        private new void ClipPipes()
-        {
-            foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in AbstractSegmentEntities)
-            {
-                ifcAbstractSegmentEntity.Clip(NodeEntity, Length);
-            }
+            return brep;
         }
     }
 }

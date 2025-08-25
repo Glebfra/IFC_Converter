@@ -101,10 +101,11 @@ namespace IFC.Tools
             {
                 for (int j = 0; j < numSegments; j++)
                 {
-                    double x = (torusRadius + circleRadius * Math.Cos(j * angleStep)) * Math.Cos(i * BendAngleStep);
-                    double y = circleRadius * Math.Sin(j * angleStep);
-                    double z = (torusRadius + circleRadius * Math.Cos(j * angleStep)) * Math.Sin(i * BendAngleStep);
-                    ifcCartesianPoints[i, j] = IfcAxis.CreatePoint(model, new XbimVector3D(x, y, z));
+                    XbimVector3D x = axisSettings.XAxis * (torusRadius + circleRadius * Math.Cos(j * angleStep)) * Math.Cos(i * BendAngleStep);
+                    XbimVector3D y = axisSettings.YAxis * (torusRadius + circleRadius * Math.Cos(j * angleStep)) * Math.Sin(i * BendAngleStep);
+                    XbimVector3D z = axisSettings.ZAxis * circleRadius * Math.Sin(j * angleStep);
+                    XbimVector3D point = x + y + z + axisSettings.Origin;
+                    ifcCartesianPoints[i, j] = IfcAxis.CreatePoint(model, point);
                 }
             }
 

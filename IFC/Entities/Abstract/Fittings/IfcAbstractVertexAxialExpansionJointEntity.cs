@@ -1,7 +1,6 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
@@ -9,35 +8,44 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Fittings
 {
-    public abstract class IfcAbstractVertexAxialExpansionJointEntity : IfcAbstractExpansionJoint
+    public abstract class IfcAbstractVertexAxialExpansionJointEntity : IfcAbstractExpansionJointEntity
     {
-        public abstract double PipeDiameter { get; protected set; }
-        public abstract int NumSegments { get; protected set; }
-
-        private readonly StartAxialExpansionJointEntity _expansionJoint;
-        private IfcPipeFitting? _pipeFitting;
+        public abstract double Diameter { get; }
+        public abstract int NumSegments { get; }
         
-        protected IfcAbstractVertexAxialExpansionJointEntity(StartAxialExpansionJointEntity expansionJoint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(expansionJoint, nodeEntity, segmentEntities)
-        {
-            _expansionJoint = expansionJoint;
-        }
+        protected IfcAbstractVertexAxialExpansionJointEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-            
+            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
+            return pipeFitting;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
+        {
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
+
+            IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
+            AddShapeRepresentation(model, pipeFitting, representationItems);
+
+            return pipeFitting;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
+        {
             XbimVector3D[] displacements = new XbimVector3D[]
             {
                 0.5 * Length * VectorExtensions.Z,
                 XbimVector3D.Zero,
             };
             
-            double[] radiuses = new double[] { PipeDiameter / 2 * 1.1, PipeDiameter / 2 * 0.9 };
+            double[] radiuses = new double[] { Diameter / 2 * 1.1, Diameter / 2 * 0.9 };
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {
                 IfcVertexGeometry.CreateCircle(model, radiuses[0], displacements[0].Negated(), NumSegments),
@@ -52,23 +60,8 @@ namespace IFC.Entities.Abstract.Fittings
                 IfcVertexGeometry.CreateClippedCone(model, circles[1], circles[2]),
                 IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]),
             };
-            
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, facetedBreps);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            ColourEntity(model, facetedBreps);
-            
-            _pipeFitting = model.Instances.New<IfcPipeFitting>(fitting =>
-            {
-                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
-                fitting.Representation = shape;
-                fitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
-                fitting.Tag = Tag;
-                fitting.Name = _expansionJoint.Name;
-            });
-            ClipPipes();
-            AddProperties(model, _pipeFitting);
 
-            return _pipeFitting;
+            return facetedBreps;
         }
     }
 }
