@@ -1,94 +1,28 @@
-﻿using System.Linq;
-using IFC.Entities.Abstract.Segments;
-using IFC.Entities.Interfaces;
+﻿using IFC.Entities.Interfaces;
 using IFC.Tools;
-using Start.Entities.Abstract;
 using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.QuantityResource;
+using Xbim.Ifc4.HvacDomain;
 
 namespace IFC.Entities.Abstract.Fittings
 {
-    public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity, IIfcSegmentDependedEntity
+    public abstract class IfcAbstractFittingEntity : IfcAbstractEntity, IIfcOneNodeEntity
     {
-        public abstract double Length { get; protected set; }
-        public sealed override XbimMatrix3D ObjectMatrix3D { get; protected set; }
-        public override Colour Colour { get; protected set; } = Colour.FromHEX("5f4e7c");
-        
+        public abstract ActionProperty<double> Length { get; }
+        public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("5f4e7c");
         public IfcNodeEntity NodeEntity { get; }
-        public IfcAbstractSegmentEntity[] AbstractSegmentEntities { get; set; }
 
-        private readonly StartAbstractFittingEntity _fittingEntity;
-        
-        protected IfcAbstractFittingEntity(StartAbstractFittingEntity fittingEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(fittingEntity)
+        protected IfcAbstractFittingEntity(XbimMatrix3D objectMatrix3D)
+            : base(objectMatrix3D)
         {
-            _fittingEntity = fittingEntity;
-            NodeEntity = nodeEntity;
-            AbstractSegmentEntities = segmentEntities;
-            
-            XbimVector3D coordinates = NodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D[] directionToPipes = AbstractSegmentEntities.Select(entity => IfcAxis.GetPipeDirectionFromNode(entity, coordinates)).ToArray();
-            XbimVector3D forward = directionToPipes[0].Negated();
-            XbimVector3D up;
-
-            double angle = 0;
-            if (AbstractSegmentEntities.Length == 2)
-            {
-                angle = forward.Angle(directionToPipes[1]);
-            }
-            if (angle == 0 && directionToPipes.Length == 3)
-            {
-                angle = forward.Angle(directionToPipes[2]);
-            }
-            if (angle != 0)
-            {
-                up = XbimVector3D.CrossProduct(forward, directionToPipes[1]).Normalized();
-            }
-            else
-            {
-                XbimVector3D WorldUp = new XbimVector3D(0, 0, 1);
-                if (forward != WorldUp && forward != WorldUp.Negated())
-                {
-                    up = WorldUp;
-                }
-                else
-                {
-                    up = new XbimVector3D(0, 1, 0);
-                }
-            }
-            
-            ObjectMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+            NodeEntity = new IfcNodeEntity(objectMatrix3D);
         }
 
-        protected override void AddProperties(IModel model, IfcProduct product)
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcPipeFitting, IInstantiableEntity
         {
-            base.AddProperties(model, product);
-
-            #region Qto_PipeFittingBaseQuantities
-
-            model.Instances.New<IfcRelDefinesByProperties>(properties =>
-            {
-                properties.RelatedObjects.Add(product);
-                properties.RelatingPropertyDefinition = model.Instances.New<IfcElementQuantity>(quantity =>
-                {
-                    quantity.Name = "Qto_PipeFittingBaseQuantities";
-                    quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
-                    {
-                        length.Name = "Length";
-                        length.LengthValue = Length;
-                    }));
-                    quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(weight =>
-                    {
-                        weight.Name = "NetWeight";
-                        weight.WeightValue = _fittingEntity.Weight.SIProperty;
-                    }));
-                });
-            });
-
-            #endregion
+            T pipeFitting = base.CreateIfcEntity<T>(model);
+            return pipeFitting;
         }
     }
 }

@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using IFC.Entities.Interfaces;
+using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
+using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.IO;
 
@@ -18,11 +23,22 @@ namespace IFC
 {
     public class IFCProject : IDisposable
     {
+        public IModel Model => _model;
+        
         private ITransaction _transaction;
         private readonly IfcStore _model;
         private readonly IfcBuilding _building;
         private readonly List<IfcProduct> _ifcObjects;
 
+        public IFCProject(IfcStore model)
+        {
+            _model = model;
+            _building = _model.Instances.FirstOrDefault<IfcBuilding>();
+            _transaction = _model.BeginTransaction("Objects adding");
+
+            _ifcObjects = new List<IfcProduct>();
+        }
+        
         public static IFCProject CreateProject(string name)
         {
             // TODO update application version
@@ -36,12 +52,10 @@ namespace IFC
             model.Header.FileDescription.Description.Add("ViewDefinition [DesignTransferView]");
             model.Header.FileDescription.Description.Add("Version 2.0");
             model.Header.FileName.Name = name;
-            
-            AddUnits(model);
-            
+
             ITransaction transaction = model.BeginTransaction("Model creation");
             IfcProject project = model.Instances.New<IfcProject>(p => p.Name = name);
-            project.Initialize(ProjectUnits.SIUnitsUK);
+            GenerateUnits(model, project);
 
             XbimVector3D coordinates = XbimVector3D.Zero;
             XbimVector3D forward = new XbimVector3D(0, 0, 1);
@@ -78,13 +92,63 @@ namespace IFC
             return new IFCProject(model);
         }
 
-        public IFCProject(IfcStore model)
+        public static IFCProject OpenProject(string filePath)
         {
-            _model = model;
-            _building = _model.Instances.FirstOrDefault<IfcBuilding>();
-            _transaction = _model.BeginTransaction("Objects adding");
+            IfcStore model;
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
+            {
+                model = IfcStore.Open(stream, StorageType.Ifc, XbimSchemaVersion.Ifc4, XbimModelType.MemoryModel);
+            }
 
-            _ifcObjects = new List<IfcProduct>();
+            using (ITransaction transaction = model.BeginTransaction("Change to SI units"))
+            {
+                IfcSIUnit lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+                IEnumerable<IfcPropertySet> propertySets = model.Instances.OfType<IfcPropertySet>();
+                foreach (IfcPropertySet propertySet in propertySets)
+                {
+                    foreach (IfcProperty property in propertySet.HasProperties)
+                    {
+                        if (property is not IfcPropertySingleValue singleValue) 
+                            continue;
+                    
+                        if (singleValue.NominalValue is IfcLengthMeasure lengthMeasure)
+                        {
+                            singleValue.NominalValue = new IfcLengthMeasure(lengthMeasure * lengthUnit.Power);
+                        }
+
+                        if (singleValue.NominalValue is IfcPositiveLengthMeasure positiveLengthMeasure)
+                        {
+                            singleValue.NominalValue = new IfcPositiveLengthMeasure(positiveLengthMeasure * lengthUnit.Power);
+                        }
+                    
+                        if (singleValue.NominalValue is IfcNonNegativeLengthMeasure nonNegativeLengthMeasure)
+                        {
+                            singleValue.NominalValue = new IfcPositiveLengthMeasure(nonNegativeLengthMeasure * lengthUnit.Power);
+                        }
+                    }
+                }
+
+                IEnumerable<IfcCartesianPoint> cartesianPoints = model.Instances.OfType<IfcCartesianPoint>();
+                foreach (IfcCartesianPoint cartesianPoint in cartesianPoints)
+                {
+                    XbimVector3D newCoordinates = cartesianPoint.ToXbimVector3D() * lengthUnit.Power;
+                    cartesianPoint.SetVector(newCoordinates);
+                }
+
+                IEnumerable<IfcExtrudedAreaSolid> extrudedAreaSolids = model.Instances.OfType<IfcExtrudedAreaSolid>();
+                foreach (IfcExtrudedAreaSolid extrudedAreaSolid in extrudedAreaSolids)
+                {
+                    extrudedAreaSolid.Depth *= lengthUnit.Power;
+                }
+                transaction.Commit();
+            }
+
+            return new IFCProject(model);
+        }
+
+        public IEnumerable<IfcProduct> GetProducts()
+        {
+            return _model.Instances.OfType<IfcProduct>();
         }
 
         public void AddEntity(IIfcEntity entity)
@@ -106,11 +170,6 @@ namespace IFC
         {
             _ifcObjects.Add(product);
             _building.AddElement(product);
-        }
-
-        public IModel GetModel()
-        {
-            return _model;
         }
 
         public void GroupObjects(string groupName)
@@ -136,8 +195,10 @@ namespace IFC
             _model.Dispose();
         }
 
-        private static void AddUnits(IModel model)
+        private static void GenerateUnits(IModel model, IIfcProject project)
         {
+            project.Initialize(ProjectUnits.SIUnitsUK);
+            
             IfcSIUnit lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
             lengthUnit.Name = IfcSIUnitName.METRE;
             lengthUnit.Prefix = null;

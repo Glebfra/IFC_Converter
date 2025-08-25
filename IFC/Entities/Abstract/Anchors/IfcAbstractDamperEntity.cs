@@ -1,17 +1,12 @@
-﻿using IFC.Entities.Abstract.Segments;
-using IFC.Tools;
-using Start.Entities.Anchors;
+﻿using IFC.Tools;
+using Xbim.Common.Geometry;
 
 namespace IFC.Entities.Abstract.Anchors
 {
     public abstract class IfcAbstractDamperEntity : IfcAbstractNonStandardRestraintEntity
     {
-        public override Colour Colour { get; protected set; } = Colour.FromHEX("0000ef");
+        public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("0000ef");
 
-        protected IfcAbstractDamperEntity(StartDamperEntity damperEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(damperEntity, nodeEntity, segmentEntities)
-        {
-            
-        }
+        protected IfcAbstractDamperEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
     }
 }

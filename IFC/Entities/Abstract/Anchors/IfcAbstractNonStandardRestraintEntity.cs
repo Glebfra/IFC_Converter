@@ -12,58 +12,51 @@ using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFC.Entities.Abstract.Anchors
 {
     public abstract class IfcAbstractNonStandardRestraintEntity : IfcAbstractNonFixedSupportEntity
     {
-        public abstract int NumSegments { get; protected set; }
-        public abstract double Height { get; protected set; }
+        public abstract StartNonStandardRestraint NonStandardRestraint { get; }
+        public abstract int NumSegments { get; }
+        public abstract double Height { get; }
 
-        private readonly StartNonStandardRestraint _nonStandardRestraint;
-        private IfcDiscreteAccessory? _discreteAccessory;
+        private IfcAbstractSegmentEntity[] _abstractSegmentEntities;
         
-        protected IfcAbstractNonStandardRestraintEntity(StartNonStandardRestraint nonStandardRestraint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(nonStandardRestraint, nodeEntity, segmentEntities)
-        {
-            _nonStandardRestraint = nonStandardRestraint;
-        }
+        protected IfcAbstractNonStandardRestraintEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
-            
+            IfcDiscreteAccessory discreteAccessory = CreateIfcEntity<IfcDiscreteAccessory>(model);
+            return discreteAccessory;
+        }
+
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcDiscreteAccessory, IInstantiableEntity
+        {
+            T discreteAccessory = base.CreateIfcEntity<T>(model);
+            discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
+
+            _abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().ToArray();
+
             IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
-            IfcShapeRepresentation shapeRepresentation = IfcVertexGeometry.CreateShapeRepresentation(model, representationItems);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            ColourEntity(model, representationItems);
-
-            _discreteAccessory = model.Instances.New<IfcDiscreteAccessory>(accessory =>
-            {
-                accessory.Name = _nonStandardRestraint.Name;
-                accessory.Tag = Tag;
-                accessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
-                accessory.Representation = shape;
-                accessory.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            AddProperties(model, _discreteAccessory);
-
-            return _discreteAccessory;
+            AddShapeRepresentation(model, discreteAccessory, representationItems);
+            
+            return discreteAccessory;
         }
         
         protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
 
-            foreach (StartNonStandardRestraintModule restraintModule in _nonStandardRestraint.Restraints)
+            foreach (StartNonStandardRestraintModule restraintModule in NonStandardRestraint.Restraints)
             {
                 bool hasSpring = restraintModule.Type == StartRestraintTypeEnum.ELASTIC;
                 bool isDoubleSided = restraintModule.Type != StartRestraintTypeEnum.RIGID_ONE_SIDED;
 
                 XbimVector3D direction = CreateAnchorDirection(restraintModule);
-                IEnumerable<XbimVector3D> segmentDirections = AbstractSegmentEntities.Select(entity => entity.Direction);
+                IEnumerable<XbimVector3D> segmentDirections = _abstractSegmentEntities.Select(entity => entity.ObjectMatrix3D.Value.Forward);
                 bool isParallel = segmentDirections.Any(segmentDirection => segmentDirection.IsParallel(direction));
 
                 XbimVector3D[] displacements;
@@ -106,16 +99,16 @@ namespace IFC.Entities.Abstract.Anchors
                 return restraintVector;
             }
             
-            foreach (IfcAbstractSegmentEntity segmentEntity in AbstractSegmentEntities)
+            foreach (IfcAbstractSegmentEntity segmentEntity in _abstractSegmentEntities)
             {
-                if (segmentEntity.NodeEntities.All(item => item.ID != _nonStandardRestraint.SectionStartNode) ||
-                    segmentEntity.NodeEntities.All(item => item.ID != _nonStandardRestraint.SectionEndNode))
+                if (segmentEntity.NodeEntities.All(item => item.ID != NonStandardRestraint.SectionStartNode) ||
+                    segmentEntity.NodeEntities.All(item => item.ID != NonStandardRestraint.SectionEndNode))
                 {
                     continue;
                 }
                 
-                IfcNodeEntity startNode = segmentEntity.NodeEntities.First(item => item.ID == _nonStandardRestraint.SectionStartNode);
-                IfcNodeEntity endNode = segmentEntity.NodeEntities.First(item => item.ID == _nonStandardRestraint.SectionEndNode);
+                IfcNodeEntity startNode = segmentEntity.NodeEntities.First(item => item.ID == NonStandardRestraint.SectionStartNode);
+                IfcNodeEntity endNode = segmentEntity.NodeEntities.First(item => item.ID == NonStandardRestraint.SectionEndNode);
                 
                 XbimVector3D forward = endNode.ObjectMatrix3D.Translation - startNode.ObjectMatrix3D.Translation;
                 XbimMatrix3D fictiveObjectMatrix = MatrixExtensions.CreateWorld(XbimVector3D.Zero, forward);

@@ -7,6 +7,10 @@ namespace Start.Entities.Fittings
 {
     public class StartTeeEntity : StartAbstractFittingEntity
     {
+        [JsonIgnore]
+        [StartIgnore]
+        public override StartElementType Type { get; set; } = StartElementType.WELDED_TEE;
+        
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty HeaderThickness { get; set; } = LengthProperty.Zero;

@@ -1,38 +1,44 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
 using IFC.Extensions;
 using IFC.Tools;
-using Start.Entities.Equipments;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Equipments
 {
     public abstract class IfcAbstractVertexVesselEntity : IfcAbstractEquipmentEntity
     {
-        public abstract int NumSegments { get; protected set; }
-        public abstract double Diameter { get; protected set; }
+        public abstract ActionProperty<int> NumSegments { get; }
+        public abstract ActionProperty<double> Diameter { get; }
 
-        public override Colour Colour { get; protected set; } = Colour.FromHEX("695689");
-
-        private readonly StartVesselEntity _vessel;
-        private IfcTank? _tank;
+        public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("695689");
         
-        protected IfcAbstractVertexVesselEntity(StartVesselEntity vessel, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities) 
-            : base(vessel, nodeEntity, segmentEntities)
-        {
-            _vessel = vessel;
-        }
+        protected IfcAbstractVertexVesselEntity(XbimMatrix3D objectMatrix) : base(objectMatrix) { }
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
+            IfcTank discreteAccessory = CreateIfcEntity<IfcTank>(model);
+            return discreteAccessory;
+        }
 
-            IfcRepresentationItem[] representationItems = new IfcRepresentationItem[2];
+        protected new T CreateIfcEntity<T>(IModel model)
+            where T : IfcTank, IInstantiableEntity
+        {
+            T chiller = base.CreateIfcEntity<T>(model);
+            chiller.PredefinedType = IfcTankTypeEnum.VESSEL;
+            
+            IEnumerable<IfcRepresentationItem> representationItems = CreateFlange(model);
+            AddShapeRepresentation(model, chiller, representationItems);
+            
+            return chiller;
+        }
+
+        private IEnumerable<IfcRepresentationItem> CreateFlange(IModel model)
+        {
             XbimVector3D firstCircleDisplacement = Length / 2 * VectorExtensions.Forward.Negated();
             
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
@@ -42,26 +48,12 @@ namespace IFC.Entities.Abstract.Equipments
                 IfcVertexGeometry.CreateCircle(model, Diameter * 0.55, XbimVector3D.Zero, NumSegments),
                 IfcVertexGeometry.CreateCircle(model, Diameter * 0.5, firstCircleDisplacement.Negated(), NumSegments)
             };
-            
-            representationItems[0] = IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]);
-            representationItems[1] = IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]);
-            
-            IfcShapeRepresentation shapeRepresentation = IfcGeometry.CreateShapeRepresentation(model, representationItems);
-            IfcProductDefinitionShape shape = IfcGeometry.CreateProductDefinitionShape(model, shapeRepresentation);
-            ColourEntity(model, representationItems);
-            
-            _tank = model.Instances.New<IfcTank>(fitting =>
+
+            return new IfcRepresentationItem[]
             {
-                fitting.Name = _vessel.Name;
-                fitting.Tag = Tag;
-                fitting.PredefinedType = IfcTankTypeEnum.VESSEL;
-                fitting.Representation = shape;
-                fitting.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-
-            AddProperties(model, _tank);
-
-            return _tank;
+                IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]),
+                IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3])
+            };
         }
     }
 }

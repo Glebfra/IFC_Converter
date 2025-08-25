@@ -1,21 +1,26 @@
 ﻿using IFC.Entities.Abstract.Fittings;
-using IFC.Entities.Abstract.Segments;
-using Start.Entities.Fittings;
+using IFC.Tools;
+using Xbim.Common.Geometry;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Fittings.Vertex
 {
-    public sealed class IfcVertexBallExpansionJointEntity : IfcAbstractVertexBallExpansionJointEntity
+    public class IfcVertexBallExpansionJointEntity : IfcAbstractVertexBallExpansionJointEntity
     {
-        public override double Length { get; protected set; }
-        public override int NumSegments { get; protected set; }
-        public override double Radius { get; protected set; }
+        public override ActionProperty<IfcLabel> Name { get; }
+        public override ActionProperty<IfcIdentifier> Tag { get; }
+        public override ActionProperty<double> Length { get; }
+        public override int NumSegments { get; }
+        public override double Diameter { get; }
         
-        public IfcVertexBallExpansionJointEntity(StartBallExpansionJointEntity ballExpansionJoint, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments) 
-            : base(ballExpansionJoint, nodeEntity, segmentEntities)
+        public IfcVertexBallExpansionJointEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter, int numSegments) 
+            : base(objectMatrix3D)
         {
+            Name = name;
+            Tag = tag;
+            Length = length;
+            Diameter = diameter;
             NumSegments = numSegments;
-            Length = ballExpansionJoint.Length.SIProperty;
-            Radius = Length;
         }
     }
 }

@@ -7,6 +7,10 @@ namespace Start.Entities
 {
     public class StartNodeEntity : StartAbstractEntity
     {
+        [JsonIgnore]
+        [StartIgnore]
+        public override StartElementType Type { get; set; } = StartElementType.NODE;
+        
         [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
         [JsonConverter(typeof(StartPropertyJsonConverter<MassProperty, double>))]
         public MassProperty AdditionalLoadFromWeight { get; set; } = MassProperty.Zero;

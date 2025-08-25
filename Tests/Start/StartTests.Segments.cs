@@ -31,9 +31,6 @@ namespace Tests.Start
             Assert.AreEqual(0, startPipeEntity.ProjectionAlongOZAxis.StartProperty, TOLERANCE);
             Assert.AreEqual(1, startPipeEntity.StrengthFactorOfTheTraverseWeld.StartProperty, TOLERANCE);
             Assert.AreEqual(0.01, startPipeEntity.WallThickness.StartProperty, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.XCoord.StartProperty, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.YCoord.StartProperty, TOLERANCE);
-            Assert.AreEqual(0, startPipeEntity.ZCoord.StartProperty, TOLERANCE);
             Assert.AreEqual(0, startPipeEntity.AdditionalWeightLoad.StartProperty, TOLERANCE);
         }
 
@@ -113,9 +110,6 @@ namespace Tests.Start
             Assert.AreEqual(1, coneElementEntity.StrengthFactorOfTheTraverseWeld.StartProperty, TOLERANCE);
             Assert.AreEqual(0, coneElementEntity.Temperature.StartProperty, TOLERANCE);
             Assert.AreEqual(0, coneElementEntity.TestPressure.StartProperty, TOLERANCE);
-            Assert.AreEqual(0, coneElementEntity.XCoord.StartProperty, TOLERANCE);
-            Assert.AreEqual(0, coneElementEntity.YCoord.StartProperty, TOLERANCE);
-            Assert.AreEqual(0, coneElementEntity.ZCoord.StartProperty, TOLERANCE);
         }
     }
 }

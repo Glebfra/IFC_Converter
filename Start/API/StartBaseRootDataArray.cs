@@ -13,6 +13,59 @@ namespace Start.API
             _startBaseRootDataArray = startBaseRootDataArray;
         }
 
+        public object AddElement(StartElementType type, out int index)
+        {
+            object element = new object();
+            object[] args = { type, element };
+
+            ParameterModifier parameterModifier = new ParameterModifier(2) { [1] = true };
+            ParameterModifier[] modifiers = { parameterModifier };
+
+            index = (int)_startBaseRootDataArray.GetType().InvokeMember(
+                "AddElement", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
+            );
+
+            return args[1];
+        }
+
+        public object AddElementAndNode(StartElementType type, int nSNode, int nENode, out int index)
+        {
+            object element = new object();
+            object[] args = { type, nSNode, nENode, element };
+
+            ParameterModifier parameterModifier = new ParameterModifier(4) { [3] = true };
+            ParameterModifier[] modifiers = { parameterModifier };
+
+            index = (int)_startBaseRootDataArray.GetType().InvokeMember(
+                "AddElementAndNode", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
+            );
+
+            return args[3];
+        }
+        
+        public object AddElementAndNode(StartElementType type, int nSNode, out int index)
+        {
+            object element = new object();
+            object[] args = { type, nSNode, element };
+
+            ParameterModifier parameterModifier = new ParameterModifier(3) { [2] = true };
+            ParameterModifier[] modifiers = { parameterModifier };
+
+            index = (int)_startBaseRootDataArray.GetType().InvokeMember(
+                "AddElementAndNode", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
+            );
+
+            return args[2];
+        }
+
+        public void SetDataBlockJson(int mode, string json)
+        {
+            object[] args = new object[] { mode, json };
+            _startBaseRootDataArray.GetType().InvokeMember(
+                "SetDataBlockJson", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
+            );
+        }
+
         public StartBaseRoot GetElementDispatch(int id, StartElementType minType, StartElementType maxType)
         {
             object element = new object();

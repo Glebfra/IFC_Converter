@@ -30,5 +30,10 @@ namespace IFC.Extensions
         {
             return new XbimVector3D(point.X, point.Y, point.Z);
         }
+
+        public static void SetVector(this IfcCartesianPoint point, XbimVector3D vector3D)
+        {
+            point.SetXYZ(vector3D.X, vector3D.Y, vector3D.Z);
+        }
     }
 }

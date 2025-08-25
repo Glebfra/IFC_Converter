@@ -7,6 +7,10 @@ namespace Start.Entities.Fittings
 {
     public class StartBendEntity : StartAbstractFittingEntity
     {
+        [JsonIgnore]
+        [StartIgnore]
+        public override StartElementType Type { get; set; } = StartElementType.PIPE_BEND;
+        
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty WallThickness { get; set; } = LengthProperty.Zero;

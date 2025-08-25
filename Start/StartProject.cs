@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Start.API;
@@ -69,6 +70,21 @@ namespace Start
             return _dataArray.GetNumberElements(minType, maxType);
         }
 
+        public StartBaseRoot AddElement(StartElementType type, out int index)
+        {
+            return new StartBaseRoot(_dataArray.AddElement(type, out index));
+        }
+
+        public StartBaseRoot AddElementAndNode(StartElementType type, int nSNode, int nENode, out int index)
+        {
+            return new StartBaseRoot(_dataArray.AddElementAndNode(type, nSNode, nENode, out index));
+        }
+        
+        public StartBaseRoot AddElementAndNode(StartElementType type, int nSNode, out int index)
+        {
+            return new StartBaseRoot(_dataArray.AddElementAndNode(type, nSNode, out index));
+        }
+
         public string GetDataJson()
         {
             return _dataArray.GetDataJson(StartElementType.ALL, StartElementType.ALL);
@@ -79,7 +95,7 @@ namespace Start
             StartDataArrayItem[]? allDataArrayItems = JsonConvert.DeserializeObject<StartDataArrayItem[]>(GetDataJson());
             if (allDataArrayItems == null) 
                 throw new NullReferenceException($"{nameof(GetDataArrayItems)} Cannot deserialize objects");
-            
+
             StartDataArrayItem[] dataArrayItems = allDataArrayItems.Select(item => 
             {
                 try

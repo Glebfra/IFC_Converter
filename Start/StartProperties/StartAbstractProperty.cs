@@ -4,29 +4,31 @@ using System.Diagnostics;
 namespace Start.StartProperties
 {
     [DebuggerDisplay("Start: {StartProperty} ({StartUnit}), SI: {SIProperty} ({SIUnit})")]
-    public class StartAbstractProperty<T> : IStartProperty<T>
+    public abstract class StartAbstractProperty<T> : IStartProperty<T>
     {
-        public T StartProperty { get; }
-        public T SIProperty { get; }
+        public T StartProperty { get; protected set; }
+        public T SIProperty { get; protected set; }
 
         public virtual string StartUnit { get; } = string.Empty;
         public virtual string SIUnit { get; } = string.Empty;
 
-        public StartAbstractProperty(T startProperty)
+        protected StartAbstractProperty() {}
+
+        protected StartAbstractProperty(T startProperty)
         {
             StartProperty = startProperty;
             SIProperty = ConvertFromStart(startProperty);
         }
         
-        protected virtual T ConvertFromStart(T startProperty)
+        public StartAbstractProperty(T startProperty, T siProperty)
         {
-            return startProperty;
+            StartProperty = startProperty;
+            SIProperty = siProperty;
         }
 
-        protected virtual T ConvertFromSI(T siProperty)
-        {
-            return siProperty;
-        }
+        protected abstract T ConvertFromStart(T startProperty);
+
+        protected abstract T ConvertFromSI(T siProperty);
 
         public Type GetPropertyType()
         {

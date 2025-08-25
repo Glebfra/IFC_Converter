@@ -15,7 +15,7 @@ namespace Start.Entities.Abstract
         
         [JsonIgnore]
         [StartIgnore]
-        public StartElementType Type { get; set; } = StartElementType.ALL;
+        public virtual StartElementType Type { get; set; } = StartElementType.ALL;
 
         public Dictionary<string, string> GetData()
         {
