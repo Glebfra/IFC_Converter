@@ -12,6 +12,7 @@ using Start;
 using Start.API;
 using Start.Entities;
 using Start.Entities.Abstract;
+using Start.Entities.Fittings;
 using Start.Entities.Segments;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
@@ -40,12 +41,24 @@ namespace IFCtoSTART
                 IfcPipeSegment[] ifcPipeSegments = importer.GetPipeSegments(products);
                 IfcPipeSegmentEntity[] segmentEntities = importer.CreatePipeSegments(ifcPipeSegments);
 
-                IfcPipeFitting[] ifcBendPipeFittings = importer.GetBends(products);
+                // IfcPipeFitting[] ifcBendPipeFittings = importer.GetBends(products);
+                // IfcCadBendEntity[] bendEntities = importer.CreateBends(ifcBendPipeFittings, segmentEntities);
 
                 using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
                 {
                     GeneratePipeEntities(startProject, segmentEntities);
                 }
+            }
+        }
+
+        private void GenerateBendEntities(StartProject startProject, IfcCadBendEntity[] ifcCadBendEntities)
+        {
+            foreach (IfcCadBendEntity ifcCadBendEntity in ifcCadBendEntities)
+            {
+                StartBendEntity startBendEntity = ifcCadBendEntity.ToStartBendEntity();
+                StartObject startBendObject = GenerateStartEntity(startProject, startBendEntity);
+                StartObject startNodeObject = GetOrCreateNode(startProject, ifcCadBendEntity.NodeEntity);
+                ConnectNodes(startBendObject, startNodeObject);
             }
         }
 

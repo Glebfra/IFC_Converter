@@ -1,6 +1,8 @@
 ﻿using IFC.PropertySets;
+using IFC.Tools;
 using Start.Entities.Abstract;
 using Xbim.Common.Geometry;
+using Xbim.Ifc4.MeasureResource;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
@@ -9,14 +11,14 @@ namespace STARTtoIFC.Extensions.PropertySets
         public static Qto_PipeSegmentBaseQuantities CreateFromStart(StartAbstractSegmentEntity abstractSegmentEntity)
         {
             Qto_PipeSegmentBaseQuantities qto = new Qto_PipeSegmentBaseQuantities();
-            qto.NetWeight = abstractSegmentEntity.PipeUnitWeight.SIProperty;
+            qto.NetWeight = new ActionProperty<IfcMassMeasure>(abstractSegmentEntity.PipeUnitWeight.SIProperty);
             
             XbimVector3D projection = new XbimVector3D(
                 abstractSegmentEntity.ProjectionAlongOXAxis.SIProperty,
                 abstractSegmentEntity.ProjectionAlongOYAxis.SIProperty,
                 abstractSegmentEntity.ProjectionAlongOZAxis.SIProperty
             );
-            qto.Length = projection.Length;
+            qto.Length = new ActionProperty<IfcLengthMeasure>(projection.Length);
             return qto;
         }
     }

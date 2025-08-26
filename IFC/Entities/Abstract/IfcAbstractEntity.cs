@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities.Interfaces;
 using IFC.PropertySets;
 using IFC.Tools;
@@ -28,10 +29,14 @@ namespace IFC.Entities.Abstract
         }
 
         public abstract IfcProduct CreateAndAdd(IModel model);
+        
+        protected virtual void PreCreate() { }
 
         protected T CreateIfcEntity<T>(IModel model)
             where T : IfcElement, IInstantiableEntity
         {
+            PreCreate();
+            
             IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, ObjectMatrix3D);
 
             T ifcElement = model.Instances.New<T>(product =>
@@ -65,7 +70,7 @@ namespace IFC.Entities.Abstract
             #if DEBUG
             PropertySets.Add(new Pset_Debug(ObjectMatrix3D));
             #endif
-
+            
             foreach (IPropertySet propertySet in PropertySets)
             {
                 model.Instances.New<IfcRelDefinesByProperties>(properties =>

@@ -61,6 +61,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Extensions\Entities\IfcCadBendEntityExtensions.cs" />
         <Compile Include="Extensions\Entities\IfcNodeEntityExtensions.cs" />
         <Compile Include="Extensions\Entities\IfcPipeSegmentEntityExtensions.cs" />
         <Compile Include="Extensions\Entities\IfcProductExtensions.cs" />

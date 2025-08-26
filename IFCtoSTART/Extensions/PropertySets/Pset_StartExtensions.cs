@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using IFC.PropertySets;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
@@ -8,6 +10,20 @@ namespace IFCtoSTART.Extensions.PropertySets
 {
     internal static class Pset_StartExtensions
     {
+        public static double GetDoublePropertyValue(string rawValue)
+        {
+            Regex regex = new Regex(@"-(\d+,\d+)|-(\d+.\d+)|-\d+|(\d+,\d+)|(\d+.\d+)|\d+");
+            Match match = regex.Match(rawValue);
+            return Convert.ToDouble(match.Value);
+        }
+
+        public static int GetIntPropertyValue(string rawValue)
+        {
+            Regex regex = new Regex(@"-(\d+)|\d+");
+            Match match = regex.Match(rawValue);
+            return Convert.ToInt32(match.Value);
+        }
+        
         public static Pset_Start CreateFromPropertySet(IIfcPropertySet propertySet)
         {
             Dictionary<string, string> data = new Dictionary<string, string>();

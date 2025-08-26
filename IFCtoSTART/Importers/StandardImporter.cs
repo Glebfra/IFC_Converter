@@ -56,7 +56,9 @@ namespace IFCtoSTART.Importers
                 double length = GetPipeLength(propertySets);
                 double diameter = GetPipeDiameter(propertySets);
 
-                pipeSegmentEntities[i] = new IfcPipeSegmentEntity(name, tag, objectMatrix3D, length, diameter);
+                IfcPipeSegmentEntity pipeSegmentEntity = new IfcPipeSegmentEntity(name, tag, objectMatrix3D, length, diameter);
+                pipeSegmentEntity.PropertySets.AddRange(propertySets);
+                pipeSegmentEntities[i] = pipeSegmentEntity;
             }
 
             return pipeSegmentEntities;
@@ -74,7 +76,7 @@ namespace IFCtoSTART.Importers
                 XbimMatrix3D objectMatrix3D = bend.ObjectPlacement.ToObjectMatrix3D();
                 XbimVector3D coordinates = objectMatrix3D.Translation;
 
-                IfcAbstractSegmentEntity[] fittingSegments = abstractSegmentEntities
+                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities
                     .OrderBy(segment => segment.ObjectMatrix3D.Value.Translation.GetDistance(coordinates))
                     .Take(2)
                     .ToArray();
@@ -84,10 +86,10 @@ namespace IFCtoSTART.Importers
                 double angle = GetBendAngle(propertySets);
                 double bendRadius = GetBendRadius(propertySets);
                 double length = angle * bendRadius;
-                double pipeDiameter = fittingSegments.Max(segment => segment.Diameter);
+                double pipeDiameter = nearestSegments.Max(segment => segment.Diameter);
                 
                 double clipLength = bendRadius * Math.Tan(angle / 2);
-                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in fittingSegments)
+                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in nearestSegments)
                 {
                     ifcAbstractSegmentEntity.Clip(nodeEntity, -clipLength);
                 }
@@ -101,7 +103,7 @@ namespace IFCtoSTART.Importers
                     bendRadius,
                     pipeDiameter / 2
                 );
-                cadBendEntity.ConnectedEntities.AddRange(fittingSegments);
+                cadBendEntity.ConnectedEntities.AddRange(nearestSegments);
                 cadBendEntity.PropertySets.AddRange(propertySets);
                 
                 bendEntities[i] = cadBendEntity;
@@ -118,25 +120,25 @@ namespace IFCtoSTART.Importers
         protected static double GetBendAngle(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeFittingTypeBend psetPipeFittingTypeBend = propertySets.OfType<Pset_PipeFittingTypeBend>().First();
-            return psetPipeFittingTypeBend.BendAngle;
+            return psetPipeFittingTypeBend.BendAngle.Value;
         }
 
         protected static double GetBendRadius(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeFittingTypeBend psetPipeFittingTypeBend = propertySets.OfType<Pset_PipeFittingTypeBend>().First();
-            return psetPipeFittingTypeBend.BendRadius;
+            return psetPipeFittingTypeBend.BendRadius.Value;
         }
 
         protected static double GetPipeLength(IEnumerable<IPropertySet> propertySets)
         {
             Qto_PipeSegmentBaseQuantities qtoPipeSegmentBaseQuantities = propertySets.OfType<Qto_PipeSegmentBaseQuantities>().First();
-            return qtoPipeSegmentBaseQuantities.Length;
+            return qtoPipeSegmentBaseQuantities.Length.Value;
         }
 
         protected static double GetPipeDiameter(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeSegmentTypeCommon psetPipeSegmentTypeCommon = propertySets.OfType<Pset_PipeSegmentTypeCommon>().First();
-            return psetPipeSegmentTypeCommon.OuterDiameter;
+            return psetPipeSegmentTypeCommon.OuterDiameter.Value;
         }
     }
 }

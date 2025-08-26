@@ -9,22 +9,19 @@ namespace IFC.Entities.Segments
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
-        public override ActionProperty<double> Diameter { get; }
 
         public IfcPipeSegmentEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter)
-            : base(objectMatrix3D, length)
+            : base(objectMatrix3D, length, diameter)
         {
             Name = new ActionProperty<IfcLabel>(name);
             Tag = new ActionProperty<IfcIdentifier>(tag);
-            Diameter = new ActionProperty<double>(diameter);
         }
 
         public IfcPipeSegmentEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter, IfcNodeEntity[] nodeEntities)
-            : base(objectMatrix3D, length, nodeEntities)
+            : base(objectMatrix3D, length, diameter, nodeEntities)
         {
             Name = new ActionProperty<IfcLabel>(name);
             Tag = new ActionProperty<IfcIdentifier>(tag);
-            Diameter = new ActionProperty<double>(diameter);
         }
     }
 }

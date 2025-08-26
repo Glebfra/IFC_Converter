@@ -1,5 +1,7 @@
 ﻿using IFC.PropertySets;
+using IFC.Tools;
 using Start.Entities.Fittings;
+using Xbim.Ifc4.MeasureResource;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
@@ -9,7 +11,7 @@ namespace STARTtoIFC.Extensions.PropertySets
         {
             return new Pset_PipeFittingTypeBend()
             {
-                BendRadius = bendEntity.Radius.SIProperty,
+                BendRadius = new ActionProperty<IfcPositiveLengthMeasure>(bendEntity.Radius.SIProperty),
             };
         }
     }

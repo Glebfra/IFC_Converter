@@ -16,7 +16,7 @@ namespace IFC.Entities.Abstract.Segments
         public abstract ActionProperty<double> SecondDiameter { get; }
         public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("46008b");
 
-        protected IfcAbstractConeElementEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
+        protected IfcAbstractConeElementEntity(XbimMatrix3D matrix3D, double length, double diameter) : base(matrix3D, length, diameter) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using IFC.Entities.Segments;
 using IFC.PropertySets;
+using IFCtoSTART.Extensions.PropertySets;
 using Start.API;
 using Start.Entities.Segments;
 using Start.StartProperties;
@@ -39,13 +40,6 @@ namespace IFCtoSTART.Extensions.Entities
 
         private static void UpdateStartEntityFromStartPset(ref StartPipeEntity startPipeEntity, Pset_Start psetStart)
         {
-            double GetPropertyValue(string rawValue)
-            {
-                Regex regex = new Regex(@"-(\d+,\d+)|-(\d+.\d+)|-\d+|(\d+,\d+)|(\d+.\d+)|\d+");
-                Match match = regex.Match(rawValue);
-                return Convert.ToDouble(match.Value);
-            }
-            
             Dictionary<string, string> data = psetStart.Data;
             
             if (data.TryGetValue(nameof(startPipeEntity.MaterialName), out string materialName))
@@ -73,5 +67,7 @@ namespace IFCtoSTART.Extensions.Entities
             if (data.TryGetValue(nameof(startPipeEntity.AdditionalWeightLoadAlongTheZAxis), out string additionalWeightLoadAlongTheZAxis))
                 startPipeEntity.AdditionalWeightLoadAlongTheZAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheZAxis));
         }
+        
+        private static double GetPropertyValue(string rawValue) => Pset_StartExtensions.GetDoublePropertyValue(rawValue);
     }
 }

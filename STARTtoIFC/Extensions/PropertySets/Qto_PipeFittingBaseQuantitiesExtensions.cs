@@ -1,5 +1,7 @@
 ﻿using IFC.PropertySets;
+using IFC.Tools;
 using Start.Entities.Abstract;
+using Xbim.Ifc4.MeasureResource;
 
 namespace STARTtoIFC.Extensions.PropertySets
 {
@@ -9,7 +11,7 @@ namespace STARTtoIFC.Extensions.PropertySets
         {
             Qto_PipeFittingBaseQuantities qto = new Qto_PipeFittingBaseQuantities()
             {
-                NetWeight = fittingEntity.Weight.SIProperty,
+                NetWeight = new ActionProperty<IfcMassMeasure>(fittingEntity.Weight.SIProperty),
             };
 
             return qto;
