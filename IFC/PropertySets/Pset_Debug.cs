@@ -1,4 +1,5 @@
-﻿using Xbim.Common;
+﻿using IFC.Tools;
+using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
@@ -8,9 +9,9 @@ namespace IFC.PropertySets
 {
     internal class Pset_Debug : IPropertySet
     {
-        public XbimMatrix3D ObjectMatrix3D;
+        public ActionProperty<XbimMatrix3D> ObjectMatrix3D;
 
-        public Pset_Debug(XbimMatrix3D objectMatrix3D)
+        public Pset_Debug(ActionProperty<XbimMatrix3D> objectMatrix3D)
         {
             ObjectMatrix3D = objectMatrix3D;
         }
@@ -23,22 +24,30 @@ namespace IFC.PropertySets
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "Coordinates";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Translation.ToString());
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Value.Translation.ToString());
+                    
+                    ObjectMatrix3D.OnValueChange += () => value.NominalValue = new IfcText(ObjectMatrix3D.Value.Translation.ToString());
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "Forward direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Forward.ToString());
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Value.Forward.ToString());
+                    
+                    ObjectMatrix3D.OnValueChange += () => value.NominalValue = new IfcText(ObjectMatrix3D.Value.Forward.ToString());
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "Right direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Right.ToString());
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Value.Right.ToString());
+                    
+                    ObjectMatrix3D.OnValueChange += () => value.NominalValue = new IfcText(ObjectMatrix3D.Value.Right.ToString());
                 }));
                 set.HasProperties.Add(model.Instances.New<IfcPropertySingleValue>(value =>
                 {
                     value.Name = "Up direction";
-                    value.NominalValue = new IfcText(ObjectMatrix3D.Up.ToString());
+                    value.NominalValue = new IfcText(ObjectMatrix3D.Value.Up.ToString());
+                    
+                    ObjectMatrix3D.OnValueChange += () => value.NominalValue = new IfcText(ObjectMatrix3D.Value.Up.ToString());
                 }));
             });
         }

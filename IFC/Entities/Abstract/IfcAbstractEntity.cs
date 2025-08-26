@@ -29,8 +29,10 @@ namespace IFC.Entities.Abstract
         }
 
         public abstract IfcProduct CreateAndAdd(IModel model);
-        
+
         protected virtual void PreCreate() { }
+        
+        protected virtual void PostCreate() { }
 
         protected T CreateIfcEntity<T>(IModel model)
             where T : IfcElement, IInstantiableEntity
@@ -50,6 +52,8 @@ namespace IFC.Entities.Abstract
             });
             
             AddProperties(model, ifcElement);
+            
+            PostCreate();
             return ifcElement;
         }
 

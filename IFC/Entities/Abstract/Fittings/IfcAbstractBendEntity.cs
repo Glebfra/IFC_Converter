@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
+using IFC.PropertySets;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometryResource;
@@ -28,7 +29,26 @@ namespace IFC.Entities.Abstract.Fittings
         }
 
         protected abstract IEnumerable<IfcRepresentationItem> CreateShape(IModel model);
-        
+
+        protected override void PreCreate()
+        {
+            base.PreCreate();
+
+            Pset_PipeFittingTypeBend? psetPipeFittingTypeBend = PropertySets.OfType<Pset_PipeFittingTypeBend>().FirstOrDefault();
+            if (psetPipeFittingTypeBend != null)
+            {
+                psetPipeFittingTypeBend.BendRadius.Value = BendRadius;
+                psetPipeFittingTypeBend.BendAngle.Value = Angle;
+            }
+
+            Qto_PipeFittingBaseQuantities? qtoPipeFittingBaseQuantities = PropertySets.OfType<Qto_PipeFittingBaseQuantities>().FirstOrDefault();
+            if (qtoPipeFittingBaseQuantities != null)
+            {
+                qtoPipeFittingBaseQuantities.Length.Value = Length.Value;
+                Length.OnValueChange += () => qtoPipeFittingBaseQuantities.Length.Value = Length.Value;
+            }
+        }
+
         protected new T CreateIfcEntity<T>(IModel model)
             where T : IfcPipeFitting, IInstantiableEntity
         {
