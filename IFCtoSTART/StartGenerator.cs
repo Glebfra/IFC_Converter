@@ -50,14 +50,14 @@ namespace IFCtoSTART
                 IfcPipeFitting[] ifcBendPipeFittings = importer.GetBends(products);
                 IfcCadBendEntity[] bendEntities = importer.CreateBends(ifcBendPipeFittings, segmentEntities);
                 
-                // IfcPipeFitting[] ifcTeeFittings = importer.GetTees(products);
-                // IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
+                IfcPipeFitting[] ifcTeeFittings = importer.GetTees(products);
+                IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
                 
                 using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
                 {
                     GeneratePipeEntities(startProject, segmentEntities);
                     GenerateBendEntities(startProject, bendEntities);
-                    // GenerateTeeEntities(startProject, teeEntities);
+                    GenerateTeeEntities(startProject, teeEntities);
                 }
             }
         }
