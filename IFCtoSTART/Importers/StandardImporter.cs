@@ -8,6 +8,7 @@ using IFC.Entities.Segments;
 using IFC.Extensions;
 using IFC.PropertySets;
 using IFCtoSTART.Extensions.Entities;
+using IFCtoSTART.Tools;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
@@ -75,24 +76,14 @@ namespace IFCtoSTART.Importers
                 
                 XbimMatrix3D objectMatrix3D = bend.ObjectPlacement.ToObjectMatrix3D();
                 XbimVector3D coordinates = objectMatrix3D.Translation;
-
-                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities
-                    .OrderBy(segment => segment.ObjectMatrix3D.Value.Translation.GetDistance(coordinates))
-                    .Take(2)
-                    .ToArray();
-                IfcNodeEntity nodeEntity = new IfcNodeEntity(objectMatrix3D);
+                
+                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities.GetNearestSegments(coordinates, 2).ToArray();
 
                 IPropertySet[] propertySets = bend.GetPropertySets().ToArray();
                 double angle = GetBendAngle(propertySets);
                 double bendRadius = GetBendRadius(propertySets);
                 double length = angle * bendRadius;
-                double pipeDiameter = nearestSegments.Max(segment => segment.Diameter);
-                
-                double clipLength = bendRadius * Math.Tan(angle / 2);
-                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in nearestSegments)
-                {
-                    ifcAbstractSegmentEntity.Clip(nodeEntity, -clipLength);
-                }
+                double pipeDiameter = nearestSegments.Max(segment => segment.Diameter.Value);
 
                 IfcCadBendEntity cadBendEntity = new IfcCadBendEntity(
                     name,
@@ -105,6 +96,14 @@ namespace IFCtoSTART.Importers
                 );
                 cadBendEntity.ConnectedEntities.AddRange(nearestSegments);
                 cadBendEntity.PropertySets.AddRange(propertySets);
+                
+                double clipLength = bendRadius * Math.Tan(angle / 2);
+                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in nearestSegments)
+                {
+                    ifcAbstractSegmentEntity.Clip(cadBendEntity.NodeEntity, -clipLength);
+                    IndexedResult<IfcNodeEntity> nearestNodeResult = ifcAbstractSegmentEntity.NodeEntities.GetNearestNode(cadBendEntity.NodeEntity);
+                    ifcAbstractSegmentEntity.NodeEntities[nearestNodeResult.Index] = cadBendEntity.NodeEntity;
+                }
                 
                 bendEntities[i] = cadBendEntity;
             }

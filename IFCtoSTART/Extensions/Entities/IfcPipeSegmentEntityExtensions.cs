@@ -30,10 +30,8 @@ namespace IFCtoSTART.Extensions.Entities
             startPipeEntity.ProjectionAlongOZAxis = LengthProperty.CreateFromSi(projection.Z);
 
             Pset_Start? psetStart = ifcPipeSegmentEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
-            if (psetStart != null)
-            {
+            if (psetStart != null) 
                 UpdateStartEntityFromStartPset(ref startPipeEntity, psetStart);
-            }
 
             return startPipeEntity;
         }
@@ -41,7 +39,9 @@ namespace IFCtoSTART.Extensions.Entities
         private static void UpdateStartEntityFromStartPset(ref StartPipeEntity startPipeEntity, Pset_Start psetStart)
         {
             Dictionary<string, string> data = psetStart.Data;
-            
+
+            if (data.TryGetValue(nameof(startPipeEntity.ManufacturingTechnologyEnum), out string manufacturingTechnology))
+                startPipeEntity.ManufacturingTechnologyEnum = ManufacturingTechnologyExtensions.GetManufacturingTechnology(manufacturingTechnology);
             if (data.TryGetValue(nameof(startPipeEntity.MaterialName), out string materialName))
                 startPipeEntity.MaterialName = materialName;
             if (data.TryGetValue(nameof(startPipeEntity.MillTolerance), out string millTolerance))

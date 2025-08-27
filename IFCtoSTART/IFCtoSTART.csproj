@@ -61,10 +61,13 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Extensions\Entities\IfcAbstractSegmentEntityExtensions.cs" />
         <Compile Include="Extensions\Entities\IfcCadBendEntityExtensions.cs" />
         <Compile Include="Extensions\Entities\IfcNodeEntityExtensions.cs" />
         <Compile Include="Extensions\Entities\IfcPipeSegmentEntityExtensions.cs" />
         <Compile Include="Extensions\Entities\IfcProductExtensions.cs" />
+        <Compile Include="Extensions\Entities\IfcWeldedTeeEntityExtensions.cs" />
+        <Compile Include="Extensions\ManufacturingTechnologyExtensions.cs" />
         <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeBendExtensions.cs" />
         <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeJunctionExtensions.cs" />
         <Compile Include="Extensions\PropertySets\Pset_PipeSegmentTypeCommonExtensions.cs" />
@@ -93,6 +96,7 @@
         <Compile Include="Tools\DataContainer.cs" />
         <Compile Include="Tools\ImportType.cs" />
         <Compile Include="Tools\ImportTypeEnum.cs" />
+        <Compile Include="Tools\IndexedResult.cs" />
         <Compile Include="Tools\StartObject.cs" />
     </ItemGroup>
     <ItemGroup>

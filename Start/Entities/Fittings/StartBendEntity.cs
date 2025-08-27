@@ -11,6 +11,9 @@ namespace Start.Entities.Fittings
         [StartIgnore]
         public override StartElementType Type { get; set; } = StartElementType.ELBOW;
         
+        [JsonProperty(StartPropertyName.MaterialName)]
+        public string MaterialName { get; set; } = string.Empty;
+        
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty WallThickness { get; set; } = LengthProperty.Zero;
