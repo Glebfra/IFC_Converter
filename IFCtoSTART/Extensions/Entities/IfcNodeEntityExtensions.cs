@@ -1,4 +1,9 @@
-﻿using IFC.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities;
+using IFC.Extensions;
+using IFCtoSTART.Tools;
+using Start.API;
 using Start.Entities;
 using Start.StartProperties;
 using Xbim.Common.Geometry;
@@ -12,7 +17,8 @@ namespace IFCtoSTART.Extensions.Entities
         public static StartNodeEntity ToStartEntity(this IfcNodeEntity ifcNodeEntity)
         {
             StartNodeEntity startNodeEntity = new StartNodeEntity();
-            startNodeEntity.ID = _id++;
+            startNodeEntity.Name = _id++.ToString();
+            startNodeEntity.Type = StartElementType.NODE;
 
             XbimVector3D coordinates = ifcNodeEntity.ObjectMatrix3D.Translation;
             startNodeEntity.XCoord = LengthProperty.CreateFromSi(coordinates.X);
@@ -20,6 +26,14 @@ namespace IFCtoSTART.Extensions.Entities
             startNodeEntity.ZCoord = LengthProperty.CreateFromSi(coordinates.Z);
 
             return startNodeEntity;
+        }
+
+        public static IndexedResult<IfcNodeEntity> GetNearestNode(this IEnumerable<IfcNodeEntity> nodeEntities, IfcNodeEntity other)
+        {
+            return nodeEntities
+                .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
+                .OrderBy(result => result.Object.GetDistanceToAnotherNode(other))
+                .First();
         }
     }
 }

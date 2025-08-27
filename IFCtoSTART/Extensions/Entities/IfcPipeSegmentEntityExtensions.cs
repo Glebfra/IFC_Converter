@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using IFC.Entities.Segments;
 using IFC.PropertySets;
+using IFCtoSTART.Extensions.PropertySets;
 using Start.API;
 using Start.Entities.Segments;
 using Start.StartProperties;
@@ -29,25 +30,18 @@ namespace IFCtoSTART.Extensions.Entities
             startPipeEntity.ProjectionAlongOZAxis = LengthProperty.CreateFromSi(projection.Z);
 
             Pset_Start? psetStart = ifcPipeSegmentEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
-            if (psetStart != null)
-            {
+            if (psetStart != null) 
                 UpdateStartEntityFromStartPset(ref startPipeEntity, psetStart);
-            }
 
             return startPipeEntity;
         }
 
         private static void UpdateStartEntityFromStartPset(ref StartPipeEntity startPipeEntity, Pset_Start psetStart)
         {
-            double GetPropertyValue(string rawValue)
-            {
-                Regex regex = new Regex(@"-(\d+,\d+)|-(\d+.\d+)|-\d+|(\d+,\d+)|(\d+.\d+)|\d+");
-                Match match = regex.Match(rawValue);
-                return Convert.ToDouble(match.Value);
-            }
-            
             Dictionary<string, string> data = psetStart.Data;
-            
+
+            if (data.TryGetValue(nameof(startPipeEntity.ManufacturingTechnologyEnum), out string manufacturingTechnology))
+                startPipeEntity.ManufacturingTechnologyEnum = ManufacturingTechnologyExtensions.GetManufacturingTechnology(manufacturingTechnology);
             if (data.TryGetValue(nameof(startPipeEntity.MaterialName), out string materialName))
                 startPipeEntity.MaterialName = materialName;
             if (data.TryGetValue(nameof(startPipeEntity.MillTolerance), out string millTolerance))
@@ -73,5 +67,7 @@ namespace IFCtoSTART.Extensions.Entities
             if (data.TryGetValue(nameof(startPipeEntity.AdditionalWeightLoadAlongTheZAxis), out string additionalWeightLoadAlongTheZAxis))
                 startPipeEntity.AdditionalWeightLoadAlongTheZAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheZAxis));
         }
+        
+        private static double GetPropertyValue(string rawValue) => Pset_StartExtensions.GetDoublePropertyValue(rawValue);
     }
 }

@@ -14,9 +14,9 @@ namespace IFC.Entities.Abstract.Segments
 {
     public abstract class IfcAbstractPipeSegmentEntity : IfcAbstractSegmentEntity
     {
-        protected IfcAbstractPipeSegmentEntity(XbimMatrix3D matrix3D, double length) : base(matrix3D, length) { }
+        protected IfcAbstractPipeSegmentEntity(XbimMatrix3D matrix3D, double length, double diameter) : base(matrix3D, length, diameter) { }
         
-        protected IfcAbstractPipeSegmentEntity(XbimMatrix3D matrix3D, double length, IfcNodeEntity[] nodeEntities) : base(matrix3D, length, nodeEntities) { }
+        protected IfcAbstractPipeSegmentEntity(XbimMatrix3D matrix3D, double length, double diameter, IfcNodeEntity[] nodeEntities) : base(matrix3D, length, diameter, nodeEntities) { }
 
         public override IfcProduct CreateAndAdd(IModel model)
         {

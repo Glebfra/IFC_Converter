@@ -11,6 +11,12 @@ namespace Start.Entities.Fittings
         [StartIgnore]
         public override StartElementType Type { get; set; } = StartElementType.WELDED_TEE;
         
+        [JsonProperty(StartPropertyName.MaterialName)]
+        public string MaterialName { get; set; } = string.Empty;
+        
+        [JsonProperty(StartPropertyName.ManufacturingTechnology)]
+        public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
+        
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty HeaderThickness { get; set; } = LengthProperty.Zero;

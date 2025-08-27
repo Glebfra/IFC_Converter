@@ -2,6 +2,7 @@
 using System.Linq;
 using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
+using IFC.PropertySets;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -28,9 +29,36 @@ namespace IFC.Entities.Abstract.Fittings
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            return pipeFitting;
+        }
+
+        protected override void PreCreate()
+        {
+            base.PreCreate();
+            
+            Pset_PipeFittingTypeJunction? psetPipeFittingTypeJunction = PropertySets.OfType<Pset_PipeFittingTypeJunction>().FirstOrDefault();
+            if (psetPipeFittingTypeJunction != null)
+            {
+                psetPipeFittingTypeJunction.JunctionLeftAngle.Value = Angle.Value;
+                psetPipeFittingTypeJunction.JunctionRightAngle.Value = Math.PI - Angle.Value;
+                
+                Angle.OnValueChange += () => psetPipeFittingTypeJunction.JunctionLeftAngle.Value = Angle.Value;
+                Angle.OnValueChange += () => psetPipeFittingTypeJunction.JunctionRightAngle.Value = Math.PI - Angle.Value;
+            }
+            
+            Qto_PipeFittingBaseQuantities? qtoPipeFittingBaseQuantities = PropertySets.OfType<Qto_PipeFittingBaseQuantities>().FirstOrDefault();
+            if (qtoPipeFittingBaseQuantities != null)
+            {
+                qtoPipeFittingBaseQuantities.Length.Value = Length.Value;
+                Length.OnValueChange += () => qtoPipeFittingBaseQuantities.Length.Value = Length.Value;
+            }
+        }
+
+        protected override void PostCreate()
+        {
+            base.PostCreate();
             FilterPipes();
             ClipPipes();
-            return pipeFitting;
         }
 
         protected new T CreateIfcEntity<T>(IModel model)
@@ -64,8 +92,7 @@ namespace IFC.Entities.Abstract.Fittings
             XbimVector3D coordinates = Length / 2 * VectorExtensions.Forward.Negated();
             return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
         }
-
-        //TODO delete duplication
+        
         private void FilterPipes()
         {
             _BranchPipes = new IfcAbstractSegmentEntity[2];

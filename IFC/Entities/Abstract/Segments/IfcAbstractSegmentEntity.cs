@@ -1,15 +1,18 @@
-﻿using IFC.Entities.Interfaces;
+﻿using System.Linq;
+using IFC.Entities.Interfaces;
+using IFC.PropertySets;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
     public abstract class IfcAbstractSegmentEntity : IfcAbstractEntity, IIfcClippable, IIfcTwoNodeEntity
     {
-        public abstract ActionProperty<double> Diameter { get; }
+        public ActionProperty<double> Diameter { get; }
         public ActionProperty<double> Length { get; }
         public IfcNodeEntity[] NodeEntities { get; }
 
@@ -20,7 +23,7 @@ namespace IFC.Entities.Abstract.Segments
         private readonly XbimVector3D _pipeDirection;
         private readonly XbimVector3D _fakeDirection;
 
-        protected IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length) 
+        protected IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length, double diameter) 
             : base(matrix3D)
         {
             XbimMatrix3D secondMatrix3D = XbimMatrix3D.CreateWorld(
@@ -34,13 +37,15 @@ namespace IFC.Entities.Abstract.Segments
                 new IfcNodeEntity(secondMatrix3D),
             };
             Length = length;
+            Diameter = diameter;
         }
 
-        protected IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length, IfcNodeEntity[] nodeEntities)
+        protected IfcAbstractSegmentEntity(XbimMatrix3D matrix3D, double length, double diameter, IfcNodeEntity[] nodeEntities)
             : base(matrix3D)
         {
             NodeEntities = nodeEntities;
             Length = length;
+            Diameter = diameter;
 
             _pipeDirection = matrix3D.Forward * Length;
             _fakeDirection = EndNode.ObjectMatrix3D.Translation - StartNode.ObjectMatrix3D.Translation;
@@ -72,12 +77,31 @@ namespace IFC.Entities.Abstract.Segments
             return isNegated ? displacement : displacement.Negated();
         }
 
+        protected override void PreCreate()
+        {
+            base.PreCreate();
+
+            Pset_PipeSegmentTypeCommon? psetPipeSegmentTypeCommon = PropertySets.OfType<Pset_PipeSegmentTypeCommon>().FirstOrDefault();
+            if (psetPipeSegmentTypeCommon != null)
+            {
+                psetPipeSegmentTypeCommon.NominalDiameter.Value = Diameter.Value;
+                Diameter.OnValueChange += () => psetPipeSegmentTypeCommon.NominalDiameter.Value = Diameter.Value;
+            }
+
+            Qto_PipeSegmentBaseQuantities? qtoPipeSegmentBaseQuantities = PropertySets.OfType<Qto_PipeSegmentBaseQuantities>().FirstOrDefault();
+            if (qtoPipeSegmentBaseQuantities != null)
+            {
+                qtoPipeSegmentBaseQuantities.Length.Value = Length.Value;
+                Length.OnValueChange += () => qtoPipeSegmentBaseQuantities.Length.Value = Length.Value;
+            }
+        }
+
         protected T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)
             where T : IfcPipeSegment, IInstantiableEntity
         {
             T pipeSegment = base.CreateIfcEntity<T>(model);
             pipeSegment.PredefinedType = pipeSegmentType;
-            
+
             return pipeSegment;
         }
 

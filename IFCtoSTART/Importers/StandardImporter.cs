@@ -7,7 +7,11 @@ using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Segments;
 using IFC.Extensions;
 using IFC.PropertySets;
+using IFC.Tools;
 using IFCtoSTART.Extensions.Entities;
+using IFCtoSTART.Extensions.PropertySets;
+using IFCtoSTART.Tools;
+using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
@@ -56,7 +60,9 @@ namespace IFCtoSTART.Importers
                 double length = GetPipeLength(propertySets);
                 double diameter = GetPipeDiameter(propertySets);
 
-                pipeSegmentEntities[i] = new IfcPipeSegmentEntity(name, tag, objectMatrix3D, length, diameter);
+                IfcPipeSegmentEntity pipeSegmentEntity = new IfcPipeSegmentEntity(name, tag, objectMatrix3D, length, diameter);
+                pipeSegmentEntity.PropertySets.AddRange(propertySets);
+                pipeSegmentEntities[i] = pipeSegmentEntity;
             }
 
             return pipeSegmentEntities;
@@ -73,24 +79,14 @@ namespace IFCtoSTART.Importers
                 
                 XbimMatrix3D objectMatrix3D = bend.ObjectPlacement.ToObjectMatrix3D();
                 XbimVector3D coordinates = objectMatrix3D.Translation;
-
-                IfcAbstractSegmentEntity[] fittingSegments = abstractSegmentEntities
-                    .OrderBy(segment => segment.ObjectMatrix3D.Value.Translation.GetDistance(coordinates))
-                    .Take(2)
-                    .ToArray();
-                IfcNodeEntity nodeEntity = new IfcNodeEntity(objectMatrix3D);
+                
+                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities.GetNearestSegments(coordinates, 2).ToArray();
 
                 IPropertySet[] propertySets = bend.GetPropertySets().ToArray();
                 double angle = GetBendAngle(propertySets);
                 double bendRadius = GetBendRadius(propertySets);
                 double length = angle * bendRadius;
-                double pipeDiameter = fittingSegments.Max(segment => segment.Diameter);
-                
-                double clipLength = bendRadius * Math.Tan(angle / 2);
-                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in fittingSegments)
-                {
-                    ifcAbstractSegmentEntity.Clip(nodeEntity, -clipLength);
-                }
+                double pipeDiameter = nearestSegments.Max(segment => segment.Diameter.Value);
 
                 IfcCadBendEntity cadBendEntity = new IfcCadBendEntity(
                     name,
@@ -101,8 +97,16 @@ namespace IFCtoSTART.Importers
                     bendRadius,
                     pipeDiameter / 2
                 );
-                cadBendEntity.ConnectedEntities.AddRange(fittingSegments);
+                cadBendEntity.ConnectedEntities.AddRange(nearestSegments);
                 cadBendEntity.PropertySets.AddRange(propertySets);
+                
+                double clipLength = bendRadius * Math.Tan(angle / 2);
+                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in nearestSegments)
+                {
+                    ifcAbstractSegmentEntity.Clip(cadBendEntity.NodeEntity, -clipLength);
+                    IndexedResult<IfcNodeEntity> nearestNodeResult = ifcAbstractSegmentEntity.NodeEntities.GetNearestNode(cadBendEntity.NodeEntity);
+                    ifcAbstractSegmentEntity.NodeEntities[nearestNodeResult.Index] = cadBendEntity.NodeEntity;
+                }
                 
                 bendEntities[i] = cadBendEntity;
             }
@@ -112,31 +116,122 @@ namespace IFCtoSTART.Importers
 
         public virtual IfcWeldedTeeEntity[] CreateWeldedTees(IfcPipeFitting[] tees, IfcAbstractSegmentEntity[] abstractSegmentEntities)
         {
-            throw new System.NotImplementedException();
+            IfcWeldedTeeEntity[] weldedTeeEntities = new IfcWeldedTeeEntity[tees.Length];
+            for (int i = 0; i < tees.Length; i++)
+            {
+                IfcPipeFitting tee = tees[i];
+                IfcLabel name = tee.Name ?? new IfcLabel("");
+                IfcIdentifier tag = tee.Tag ?? new IfcIdentifier("");
+                
+                XbimMatrix3D objectMatrix3D = tee.ObjectPlacement.ToObjectMatrix3D();
+                XbimVector3D coordinates = objectMatrix3D.Translation;
+                
+                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities.GetNearestSegments(coordinates, 3).ToArray();
+                FilterTeeSegments(nearestSegments, coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle);
+
+                IPropertySet[] propertySets = tee.GetPropertySets().ToArray();
+                double length = GetTeeLength(propertySets);
+                double height = GetTeeHeight(propertySets);
+                double branchDiameter = Math.Max(branchPipes[0].Diameter, branchPipes[1].Diameter);
+                double headDiameter = headPipe.Diameter;
+                
+                IfcWeldedTeeEntity weldedTeeEntity = new IfcWeldedTeeEntity(
+                    name,
+                    tag,
+                    objectMatrix3D,
+                    length,
+                    branchDiameter,
+                    headDiameter,
+                    height,
+                    angle
+                );
+                
+                weldedTeeEntity.ConnectedEntities.AddRange(nearestSegments);
+                weldedTeeEntity.PropertySets.AddRange(propertySets);
+                
+                double headClipLength = height + branchDiameter / 2;
+                double branchClipLength = length / 2;
+                
+                headPipe.Clip(weldedTeeEntity.NodeEntity, -headClipLength);
+                IndexedResult<IfcNodeEntity> headPipeNearestNodeResult = headPipe.NodeEntities.GetNearestNode(weldedTeeEntity.NodeEntity);
+                headPipe.NodeEntities[headPipeNearestNodeResult.Index] = weldedTeeEntity.NodeEntity;
+                
+                foreach (IfcAbstractSegmentEntity branchPipe in branchPipes)
+                {
+                    branchPipe.Clip(weldedTeeEntity.NodeEntity, -branchClipLength);
+                    IndexedResult<IfcNodeEntity> branchPipeNearestNodeResult = branchPipe.NodeEntities.GetNearestNode(weldedTeeEntity.NodeEntity);
+                    branchPipe.NodeEntities[branchPipeNearestNodeResult.Index] = weldedTeeEntity.NodeEntity;
+                }
+
+                weldedTeeEntities[i] = weldedTeeEntity;
+            }
+
+            return weldedTeeEntities;
+        }
+
+        protected static void FilterTeeSegments(IfcAbstractSegmentEntity[] segmentEntities, XbimVector3D coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle)
+        {
+            branchPipes = new IfcAbstractSegmentEntity[2];
+            headPipe = null;
+            for (int i = 0; i < segmentEntities.Length; i++)
+            {
+                for (int j = i + 1; j < segmentEntities.Length; j++)
+                {
+                    XbimVector3D firstPipeDir = segmentEntities[i].ObjectMatrix3D.Value.Forward;
+                    XbimVector3D secondPipeDir = segmentEntities[j].ObjectMatrix3D.Value.Forward;
+                    
+                    if (!firstPipeDir.IsParallel(secondPipeDir, 1e-3))
+                        continue;
+                    branchPipes[0] = segmentEntities[i];
+                    branchPipes[1] = segmentEntities[j];
+                    headPipe = segmentEntities[segmentEntities.Length - (i + j)];
+                }
+            }
+            if (headPipe == null)
+                throw new NullReferenceException("Cannot find head pipe");
+            if (branchPipes == null)
+                throw new NullReferenceException("Cannot find branch pipes");
+            
+            XbimVector3D branchDirection = IfcAxis.GetPipeDirectionFromNode(branchPipes[1], coordinates);
+            XbimVector3D headDirection = IfcAxis.GetPipeDirectionFromNode(headPipe, coordinates).Normalized();
+            
+            angle = branchDirection.Angle(headDirection);
+        }
+
+        protected static double GetTeeLength(IEnumerable<IPropertySet> propertySets)
+        {
+            Pset_Start psetStart = propertySets.OfType<Pset_Start>().First();
+            return Pset_StartExtensions.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.HeaderLength)]);
+        }
+
+        protected static double GetTeeHeight(IEnumerable<IPropertySet> propertySets)
+        {
+            Pset_Start psetStart = propertySets.OfType<Pset_Start>().First();
+            return Pset_StartExtensions.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.CrotchHeight)]);
         }
         
         protected static double GetBendAngle(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeFittingTypeBend psetPipeFittingTypeBend = propertySets.OfType<Pset_PipeFittingTypeBend>().First();
-            return psetPipeFittingTypeBend.BendAngle;
+            return psetPipeFittingTypeBend.BendAngle.Value;
         }
 
         protected static double GetBendRadius(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeFittingTypeBend psetPipeFittingTypeBend = propertySets.OfType<Pset_PipeFittingTypeBend>().First();
-            return psetPipeFittingTypeBend.BendRadius;
+            return psetPipeFittingTypeBend.BendRadius.Value;
         }
 
         protected static double GetPipeLength(IEnumerable<IPropertySet> propertySets)
         {
             Qto_PipeSegmentBaseQuantities qtoPipeSegmentBaseQuantities = propertySets.OfType<Qto_PipeSegmentBaseQuantities>().First();
-            return qtoPipeSegmentBaseQuantities.Length;
+            return qtoPipeSegmentBaseQuantities.Length.Value;
         }
 
         protected static double GetPipeDiameter(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeSegmentTypeCommon psetPipeSegmentTypeCommon = propertySets.OfType<Pset_PipeSegmentTypeCommon>().First();
-            return psetPipeSegmentTypeCommon.OuterDiameter;
+            return psetPipeSegmentTypeCommon.OuterDiameter.Value;
         }
     }
 }
