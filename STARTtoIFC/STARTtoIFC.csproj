@@ -146,6 +146,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Export\IfcExporter.cs" />
+    <Compile Include="Export\IfcGenerator.cs" />
+    <Compile Include="Export\IIfcExporter.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcDamperEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcHingedAnchorEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportEntityExtensions.cs" />
@@ -184,6 +187,8 @@
     <Compile Include="Extensions\Entities\Fittings\IfcVertexValveEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcWeldedTeeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcWeldoletEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\StartBendEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\StartTeeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\IfcNodeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\IfcProductExtensions.cs" />
     <Compile Include="Extensions\Entities\Segments\IfcAbstractSegmentEntityExtensions.cs" />
@@ -192,6 +197,7 @@
     <Compile Include="Extensions\Entities\Segments\IfcFlexibleSegmentEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Segments\IfcPipeSegmentEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Segments\IfcRigidElementEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Segments\StartPipeEntityExtensions.cs" />
     <Compile Include="Extensions\IfcEntityFactory.cs" />
     <Compile Include="Extensions\ManufacturingTechnologyExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeBendExtensions.cs" />
@@ -213,21 +219,18 @@
     <Compile Include="GUI\ImportWindowForm.Designer.cs">
       <DependentUpon>ImportWindowForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IfcGenerator.cs" />
-    <Compile Include="IfcExporter.cs" />
-    <Compile Include="IfcImporter.cs" />
-    <Compile Include="IIfcExporter.cs" />
-    <Compile Include="IIfcImporter.cs" />
-    <Compile Include="Importers\IImporter.cs" />
-    <Compile Include="Importers\ImporterFactory.cs" />
-    <Compile Include="Importers\StandardImporter.cs" />
+    <Compile Include="Import\IfcImporter.cs" />
+    <Compile Include="Import\IIfcImporter.cs" />
+    <Compile Include="Import\Importers\IImporter.cs" />
+    <Compile Include="Import\Importers\ImporterFactory.cs" />
+    <Compile Include="Import\Importers\StandardImporter.cs" />
+    <Compile Include="Import\StartGenerator.cs" />
     <Compile Include="Localization\LocalizationResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartGenerator.cs" />
     <Compile Include="Tools\ConversionResult.cs" />
     <Compile Include="Tools\ImportDataContainer.cs" />
     <Compile Include="Tools\ExportDataContainer.cs" />
