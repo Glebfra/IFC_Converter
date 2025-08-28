@@ -1,6 +1,6 @@
-﻿using IFCtoSTART.Tools;
+﻿using STARTtoIFC.Tools;
 
-namespace IFCtoSTART.Importers
+namespace STARTtoIFC.Importers
 {
     internal static class ImporterFactory
     {

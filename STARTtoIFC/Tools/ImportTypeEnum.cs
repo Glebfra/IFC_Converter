@@ -1,4 +1,4 @@
-﻿namespace IFCtoSTART.Tools
+﻿namespace STARTtoIFC.Tools
 {
     internal enum ImportTypeEnum
     {

@@ -3,11 +3,11 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using IFCtoSTART.GUI;
-using IFCtoSTART.Tools;
 using Start.API;
+using STARTtoIFC.GUI;
+using STARTtoIFC.Tools;
 
-namespace IFCtoSTART
+namespace STARTtoIFC
 {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
@@ -30,7 +30,7 @@ namespace IFCtoSTART
                 Localize(languageId);
                 
                 StartDocument startDocument = new StartDocument(startDocumentObject);
-                DataContainer dataContainer = new DataContainer();
+                ImportDataContainer dataContainer = new ImportDataContainer();
 
                 DialogResult dialogResult;
                 using (ImportWindowForm importWindowForm = new ImportWindowForm(dataContainer))

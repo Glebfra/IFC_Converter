@@ -2,13 +2,13 @@
 using System.Linq;
 using IFC.Entities;
 using IFC.Extensions;
-using IFCtoSTART.Tools;
 using Start.API;
 using Start.Entities;
 using Start.StartProperties;
+using STARTtoIFC.Tools;
 using Xbim.Common.Geometry;
 
-namespace IFCtoSTART.Extensions.Entities
+namespace STARTtoIFC.Extensions.Entities
 {
     internal static class IfcNodeEntityExtensions
     {

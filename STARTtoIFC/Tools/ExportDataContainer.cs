@@ -1,6 +1,6 @@
 ﻿namespace STARTtoIFC.Tools
 {
-    internal class DataContainer
+    internal class ExportDataContainer
     {
         public string InputFilePath { get; set; } = string.Empty;
         public string OutputFilePath { get; set; } = string.Empty;

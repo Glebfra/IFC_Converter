@@ -8,17 +8,18 @@ using IFC.Entities.Segments;
 using IFC.Extensions;
 using IFC.PropertySets;
 using IFC.Tools;
-using IFCtoSTART.Extensions.Entities;
-using IFCtoSTART.Extensions.PropertySets;
-using IFCtoSTART.Tools;
 using Start.Entities.Fittings;
+using STARTtoIFC.Extensions.Entities;
+using STARTtoIFC.Extensions.Entities.Segments;
+using STARTtoIFC.Extensions.PropertySets;
+using STARTtoIFC.Tools;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 
-namespace IFCtoSTART.Importers
+namespace STARTtoIFC.Importers
 {
     internal class StandardImporter : IImporter
     {

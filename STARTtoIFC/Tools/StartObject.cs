@@ -1,6 +1,6 @@
 ﻿using Start.API;
 
-namespace IFCtoSTART.Tools
+namespace STARTtoIFC.Tools
 {
     internal struct StartObject
     {

@@ -2,16 +2,16 @@
 using System.Collections;
 using System.IO;
 using System.Windows.Forms;
-using IFCtoSTART.Localization;
-using IFCtoSTART.Tools;
+using STARTtoIFC.Localization;
+using STARTtoIFC.Tools;
 
-namespace IFCtoSTART.GUI
+namespace STARTtoIFC.GUI
 {
     internal partial class ImportWindowForm : Form
     {
-        private readonly DataContainer _dataContainer;
+        private readonly ImportDataContainer _dataContainer;
         
-        public ImportWindowForm(DataContainer dataContainer)
+        public ImportWindowForm(ImportDataContainer dataContainer)
         {
             _dataContainer = dataContainer;
             

@@ -9,16 +9,16 @@ namespace STARTtoIFC.GUI
 {
     internal partial class ExportWindowForm : Form
     {
-        private readonly DataContainer _dataContainer;
+        private readonly ExportDataContainer _exportDataContainer;
 
-        public ExportWindowForm(DataContainer dataContainer)
+        public ExportWindowForm(ExportDataContainer exportDataContainer)
         {
             InitializeComponent();
             LocalizeComponents();
 
-            _dataContainer = dataContainer;
+            _exportDataContainer = exportDataContainer;
 
-            string inputFilePath = _dataContainer.InputFilePath;
+            string inputFilePath = _exportDataContainer.InputFilePath;
             string outputFilePath = inputFilePath.Replace(".ctp", ".ifc");
             outputFilePathTextbox.Text = outputFilePath;
         }
@@ -61,9 +61,9 @@ namespace STARTtoIFC.GUI
                 return;
             }
             
-            _dataContainer.OutputFilePath = outputFilePath;
-            _dataContainer.ExportType = exportType.Type;
-            _dataContainer.NumSegments = vertexNum;
+            _exportDataContainer.OutputFilePath = outputFilePath;
+            _exportDataContainer.ExportType = exportType.Type;
+            _exportDataContainer.NumSegments = vertexNum;
             
             DialogResult = DialogResult.OK;
         }

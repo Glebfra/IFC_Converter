@@ -17,13 +17,13 @@ namespace STARTtoIFC
 {
     internal class IfcGenerator
     {
-        private DataContainer _dataContainer;
+        private ExportDataContainer _exportDataContainer;
         private Dictionary<int, IfcNodeEntity> _nodeEntities;
         private Dictionary<int, IfcAbstractSegmentEntity> _twoNodeEntities;
 
-        public IfcGenerator(DataContainer dataContainer)
+        public IfcGenerator(ExportDataContainer exportDataContainer)
         {
-            _dataContainer = dataContainer;
+            _exportDataContainer = exportDataContainer;
 
             _nodeEntities = new Dictionary<int, IfcNodeEntity>();
             _twoNodeEntities = new Dictionary<int, IfcAbstractSegmentEntity>();
@@ -62,10 +62,10 @@ namespace STARTtoIFC
                     ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.RIGID_ELEMENT, true);
                     ConvertTwoNodeObjects(ifcProject, startDataArrayItems, StartElementType.FLEXIBLE_ELEMENT, true);
 
-                    ConvertOneNodeObjects(ifcProject, startDataArrayItems, _dataContainer.NumSegments);
+                    ConvertOneNodeObjects(ifcProject, startDataArrayItems, _exportDataContainer.NumSegments);
 
                     ifcProject.GroupObjects("Pipe system");
-                    ifcProject.SaveAs(_dataContainer.OutputFilePath);
+                    ifcProject.SaveAs(_exportDataContainer.OutputFilePath);
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace STARTtoIFC
         )
         {
             Logger logger = Logger.GetInstance();
-            bool isVertex = _dataContainer.ExportType == IfcExportTypeEnum.VERTEX;
+            bool isVertex = _exportDataContainer.ExportType == IfcExportTypeEnum.VERTEX;
             
             StartDataArrayItem[] arrayItems = dataArrayItems
                 .Where(item => !StartElementTypeExtensions.TwoNodeElementTypes.Contains(item.Type) && item.Type != StartElementType.NODE)

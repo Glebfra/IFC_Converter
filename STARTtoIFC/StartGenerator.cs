@@ -4,9 +4,6 @@ using IFC;
 using IFC.Entities;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Segments;
-using IFCtoSTART.Extensions.Entities;
-using IFCtoSTART.Importers;
-using IFCtoSTART.Tools;
 using Newtonsoft.Json;
 using Start;
 using Start.API;
@@ -14,18 +11,23 @@ using Start.Entities;
 using Start.Entities.Abstract;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
+using STARTtoIFC.Extensions.Entities;
+using STARTtoIFC.Extensions.Entities.Fittings;
+using STARTtoIFC.Extensions.Entities.Segments;
+using STARTtoIFC.Importers;
+using STARTtoIFC.Tools;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
 
-namespace IFCtoSTART
+namespace STARTtoIFC
 {
     internal class StartGenerator
     {
-        private DataContainer _dataContainer;
+        private ImportDataContainer _dataContainer;
         private Dictionary<IfcNodeEntity, StartObject> _startNodeObjects;
         private Dictionary<IfcPipeSegmentEntity, StartObject> _startPipeObjects;
 
-        public StartGenerator(DataContainer dataContainer)
+        public StartGenerator(ImportDataContainer dataContainer)
         {
             _dataContainer = dataContainer;
             _startNodeObjects = new Dictionary<IfcNodeEntity, StartObject>();

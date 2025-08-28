@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using IFC.PropertySets;
-using IFCtoSTART.Extensions.PropertySets;
+using STARTtoIFC.Extensions.PropertySets;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 
-namespace IFCtoSTART.Extensions.Entities
+namespace STARTtoIFC.Extensions.Entities
 {
     internal static class IfcProductExtensions
     {

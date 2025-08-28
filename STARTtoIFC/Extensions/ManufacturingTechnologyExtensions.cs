@@ -1,7 +1,7 @@
 ﻿using System;
 using Start.API;
 
-namespace IFCtoSTART.Extensions
+namespace STARTtoIFC.Extensions
 {
     internal static class ManufacturingTechnologyExtensions
     {

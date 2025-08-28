@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace IFCtoSTART.GUI
+namespace STARTtoIFC.GUI
 {
     internal partial class ImportWindowForm
     {

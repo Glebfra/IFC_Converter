@@ -32,14 +32,14 @@ namespace STARTtoIFC
                 Localize(languageId);
 
                 StartDocument startDocument = new StartDocument(startDocumentObject);
-                DataContainer dataContainer = new DataContainer()
+                ExportDataContainer exportDataContainer = new ExportDataContainer()
                 {
                     InputFilePath = startDocument.GetPathName(),
                     LanguageId = languageId
                 };
 
                 DialogResult dialogResult;
-                using (ExportWindowForm exportWindowForm = new ExportWindowForm(dataContainer))
+                using (ExportWindowForm exportWindowForm = new ExportWindowForm(exportDataContainer))
                 {
                     dialogResult = exportWindowForm.ShowDialog();
                 }
@@ -52,13 +52,13 @@ namespace STARTtoIFC
                 try
                 {
                     logger.Info($"Converting start at {DateTime.Now}");
-                    IfcGenerator ifcGenerator = new IfcGenerator(dataContainer);
+                    IfcGenerator ifcGenerator = new IfcGenerator(exportDataContainer);
                     ifcGenerator.Convert(startDocument);
                     logger.Info($"Convert is successfully ended at {DateTime.Now}");
                 
                     if (logger.HasErrors())
                     {
-                        logger.SaveAs(dataContainer.OutputFilePath + ".log");
+                        logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
                     }
                     else
                     {
@@ -69,7 +69,7 @@ namespace STARTtoIFC
                 catch (Exception e)
                 {
                     logger.Error(e.ToString());
-                    logger.SaveAs(dataContainer.OutputFilePath + ".log");
+                    logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
                     return (int)ConversionResult.Fail;
                 }
             } 

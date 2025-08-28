@@ -4,7 +4,7 @@ using IFC.Entities.Segments;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
 
-namespace IFCtoSTART.Importers
+namespace STARTtoIFC.Importers
 {
     internal interface IImporter
     {

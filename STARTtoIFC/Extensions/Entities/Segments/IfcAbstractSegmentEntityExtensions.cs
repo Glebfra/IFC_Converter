@@ -4,7 +4,7 @@ using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using Xbim.Common.Geometry;
 
-namespace IFCtoSTART.Extensions.Entities
+namespace STARTtoIFC.Extensions.Entities.Segments
 {
     internal static class IfcAbstractSegmentEntityExtensions
     {

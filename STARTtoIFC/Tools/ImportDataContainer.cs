@@ -1,6 +1,6 @@
-﻿namespace IFCtoSTART.Tools
+﻿namespace STARTtoIFC.Tools
 {
-    internal class DataContainer
+    internal class ImportDataContainer
     {
         public string InputFilePath = string.Empty;
         public ImportTypeEnum ImportTypeEnum = ImportTypeEnum.AUTO;
