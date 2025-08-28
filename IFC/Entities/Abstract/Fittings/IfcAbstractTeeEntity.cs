@@ -14,24 +14,61 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    /// <summary>
+    /// Abstract base class representing a tee fitting entity in an IFC model.
+    /// </summary>
     public abstract class IfcAbstractTeeEntity : IfcAbstractFittingEntity
     {
+        /// <summary>
+        /// Gets the diameter of the branch pipe.
+        /// </summary>
         public abstract ActionProperty<double> BranchDiameter { get; }
+        
+        /// <summary>
+        /// Gets the diameter of the head pipe.
+        /// </summary>
         public abstract ActionProperty<double> HeadDiameter { get; }
+        
+        /// <summary>
+        /// Gets the height of the tee fitting.
+        /// </summary>
         public abstract ActionProperty<double> Height { get; }
+        
+        /// <summary>
+        /// Gets the angle between the branch and head pipes.
+        /// </summary>
         public abstract ActionProperty<double> Angle { get; }
 
+        /// <summary>
+        /// Stores the branch pipes connected to the tee fitting.
+        /// </summary>
         protected IfcAbstractSegmentEntity[] _BranchPipes;
+        
+        /// <summary>
+        /// Stores the head pipe connected to the tee fitting.
+        /// </summary>
         protected IfcAbstractSegmentEntity _HeadPipe;
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IfcAbstractTeeEntity"/> class.
+        /// </summary>
+        /// <param name="objectMatrix3D">The transformation matrix for the object.</param>
         protected IfcAbstractTeeEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
 
+        /// <summary>
+        /// Creates and adds an <see cref="IfcPipeFitting"/> entity to the specified model.
+        /// </summary>
+        /// <param name="model">The IFC model to which the entity will be added.</param>
+        /// <returns>The created <see cref="IfcPipeFitting"/> entity.</returns>
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
             return pipeFitting;
         }
 
+        /// <summary>
+        /// Performs pre-creation operations, such as setting property values and event handlers.
+        /// </summary>
         protected override void PreCreate()
         {
             base.PreCreate();
@@ -54,6 +91,9 @@ namespace IFC.Entities.Abstract.Fittings
             }
         }
 
+        /// <summary>
+        /// Performs post-creation operations, such as filtering and clipping pipes.
+        /// </summary>
         protected override void PostCreate()
         {
             base.PostCreate();
@@ -61,6 +101,12 @@ namespace IFC.Entities.Abstract.Fittings
             ClipPipes();
         }
 
+        /// <summary>
+        /// Creates an IFC entity of type <typeparamref name="T"/> and adds it to the specified model.
+        /// </summary>
+        /// <typeparam name="T">The type of the IFC entity to create. Must be a subclass of <see cref="IfcPipeFitting"/>.</typeparam>
+        /// <param name="model">The IFC model to which the entity will be added.</param>
+        /// <returns>The created IFC entity of type <typeparamref name="T"/>.</returns>
         protected new T CreateIfcEntity<T>(IModel model)
             where T : IfcPipeFitting, IInstantiableEntity
         {
@@ -77,6 +123,11 @@ namespace IFC.Entities.Abstract.Fittings
             return pipeFitting;
         }
 
+        /// <summary>
+        /// Creates the head pipe representation as an extruded area solid.
+        /// </summary>
+        /// <param name="model">The IFC model to which the representation will be added.</param>
+        /// <returns>The created <see cref="IfcExtrudedAreaSolid"/> representing the head pipe.</returns>
         private IfcExtrudedAreaSolid CreateHead(IModel model)
         {
             double circleRadius = HeadDiameter / 2;
@@ -86,6 +137,11 @@ namespace IFC.Entities.Abstract.Fittings
             return IfcGeometry.CreateCylinder(model, circleRadius, Height, coordinates, forward, right);
         }
         
+        /// <summary>
+        /// Creates the branch pipe representation as an extruded area solid.
+        /// </summary>
+        /// <param name="model">The IFC model to which the representation will be added.</param>
+        /// <returns>The created <see cref="IfcExtrudedAreaSolid"/> representing the branch pipe.</returns>
         private IfcExtrudedAreaSolid CreateBranch(IModel model)
         {
             double circleRadius = BranchDiameter / 2;
@@ -93,6 +149,10 @@ namespace IFC.Entities.Abstract.Fittings
             return IfcGeometry.CreateCylinder(model, circleRadius, Length, coordinates, VectorExtensions.Forward, VectorExtensions.Right);
         }
         
+        /// <summary>
+        /// Filters the connected pipes to identify the branch and head pipes.
+        /// </summary>
+        /// <exception cref="NullReferenceException">Thrown if branch or head pipes cannot be identified.</exception>
         private void FilterPipes()
         {
             _BranchPipes = new IfcAbstractSegmentEntity[2];
@@ -119,6 +179,9 @@ namespace IFC.Entities.Abstract.Fittings
                 throw new NullReferenceException("Cannot find branch pipes");
         }
 
+        /// <summary>
+        /// Clips the connected pipes to fit the tee fitting.
+        /// </summary>
         private void ClipPipes()
         {
             foreach (IfcAbstractSegmentEntity branchPipe in _BranchPipes)

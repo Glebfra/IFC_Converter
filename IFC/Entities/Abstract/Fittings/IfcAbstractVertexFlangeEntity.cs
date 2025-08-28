@@ -13,13 +13,32 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFC.Entities.Abstract.Fittings
 {
+    /// <summary>
+    /// Abstract base class representing a vertex flange entity in an IFC model.
+    /// </summary>
     public abstract class IfcAbstractVertexFlangeEntity : IfcAbstractFittingEntity
     {
+        /// <summary>
+        /// Gets the diameters of the flange.
+        /// </summary>
         public abstract double[] Diameters { get; }
+        
+        /// <summary>
+        /// Gets the number of segments used to approximate the geometry of the flange.
+        /// </summary>
         public abstract int NumSegments { get; }
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IfcAbstractVertexFlangeEntity"/> class.
+        /// </summary>
+        /// <param name="objectMatrix3D">The transformation matrix for the object.</param>
         protected IfcAbstractVertexFlangeEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }
         
+        /// <summary>
+        /// Creates and adds an <see cref="IfcPipeFitting"/> entity to the specified model.
+        /// </summary>
+        /// <param name="model">The IFC model to which the entity will be added.</param>
+        /// <returns>The created <see cref="IfcPipeFitting"/> entity.</returns>
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
@@ -27,6 +46,12 @@ namespace IFC.Entities.Abstract.Fittings
             return pipeFitting;
         }
         
+        /// <summary>
+        /// Creates an IFC entity of type <typeparamref name="T"/> and adds it to the specified model.
+        /// </summary>
+        /// <typeparam name="T">The type of the IFC entity to create. Must be a subclass of <see cref="IfcPipeFitting"/>.</typeparam>
+        /// <param name="model">The IFC model to which the entity will be added.</param>
+        /// <returns>The created IFC entity of type <typeparamref name="T"/>.</returns>
         protected new T CreateIfcEntity<T>(IModel model)
             where T : IfcPipeFitting, IInstantiableEntity
         {
@@ -39,6 +64,11 @@ namespace IFC.Entities.Abstract.Fittings
             return pipeFitting;
         }
 
+        /// <summary>
+        /// Creates the shape representation for the vertex flange entity.
+        /// </summary>
+        /// <param name="model">The IFC model to which the shape will be added.</param>
+        /// <returns>A collection of <see cref="IfcRepresentationItem"/> representing the shape.</returns>
         private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
         {
             XbimVector3D[] displacements = new XbimVector3D[]
@@ -74,6 +104,9 @@ namespace IFC.Entities.Abstract.Fittings
             return facetedBreps;
         }
 
+        /// <summary>
+        /// Clips the connected pipes to fit the flange geometry.
+        /// </summary>
         private void ClipPipes()
         {
             IEnumerable<IIfcClippable> clippables = ConnectedEntities.OfType<IIfcClippable>();

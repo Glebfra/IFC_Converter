@@ -12,18 +12,42 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract.Segments
 {
+    /// <summary>
+    /// Represents an abstract flexible segment entity in the IFC model.
+    /// </summary>
     public abstract class IfcAbstractFlexibleSegmentEntity : IfcAbstractSegmentEntity
     {
+        /// <summary>
+        /// Gets the color of the flexible segment entity.
+        /// </summary>
         public override ActionProperty<Colour> Colour { get; } = Tools.Colour.FromHEX("00509f");
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IfcAbstractFlexibleSegmentEntity"/> class with the specified matrix, length, and diameter.
+        /// </summary>
+        /// <param name="matrix3D">The transformation matrix of the flexible segment.</param>
+        /// <param name="length">The length of the flexible segment.</param>
+        /// <param name="diameter">The diameter of the flexible segment.</param>
         protected IfcAbstractFlexibleSegmentEntity(XbimMatrix3D matrix3D, double length, double diameter) : base(matrix3D, length, diameter) { }
         
+        /// <summary>
+        /// Creates and adds an IFC product to the model.
+        /// </summary>
+        /// <param name="model">The model to which the product will be added.</param>
+        /// <returns>The created IFC product.</returns>
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeSegment pipeSegment = CreateIfcEntity<IfcPipeSegment>(model, IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT);
             return pipeSegment;
         }
         
+        /// <summary>
+        /// Creates an IFC entity of the specified type and adds it to the model.
+        /// </summary>
+        /// <typeparam name="T">The type of the IFC entity to create.</typeparam>
+        /// <param name="model">The model to which the entity will be added.</param>
+        /// <param name="pipeSegmentType">The predefined type of the pipe segment.</param>
+        /// <returns>The created IFC entity.</returns>
         private new T CreateIfcEntity<T>(IModel model, IfcPipeSegmentTypeEnum pipeSegmentType)
             where T : IfcPipeSegment, IInstantiableEntity
         {
@@ -38,6 +62,11 @@ namespace IFC.Entities.Abstract.Segments
             return pipeSegment;
         }
         
+        /// <summary>
+        /// Creates the geometric shape of the pipe segment.
+        /// </summary>
+        /// <param name="model">The model to which the shape will be added.</param>
+        /// <returns>The created representation item for the pipe shape.</returns>
         private IfcRepresentationItem CreatePipeShape(IModel model)
         {
             IfcDirection extrudedDirection = IfcAxis.CreateDirection(model, VectorExtensions.Forward);
