@@ -177,6 +177,96 @@ namespace STARTtoIFC.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        internal static string ImportWindowForm_ImportButton_Text {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto.
+        /// </summary>
+        internal static string ImportWindowForm_ImportType_Auto {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown import type.
+        /// </summary>
+        internal static string ImportWindowForm_ImportType_Error {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import type.
+        /// </summary>
+        internal static string ImportWindowForm_ImportType_Label_Text {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Label_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        internal static string ImportWindowForm_ImportType_Standard {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        internal static string ImportWindowForm_ImportType_Start {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path to .ifc file cannot be empty.
+        /// </summary>
+        internal static string ImportWindowForm_InputFilePath_Empty_Error {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_InputFilePath_Empty_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a full path of IFC file to be imported.
+        /// </summary>
+        internal static string ImportWindowForm_InputFilePath_Label_Text {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_InputFilePath_Label_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse....
+        /// </summary>
+        internal static string ImportWindowForm_selectInputFilePathButton_Text {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_selectInputFilePathButton_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from IFC.
+        /// </summary>
+        internal static string ImportWindowForm_Text {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string MessageBox_Title_Error {

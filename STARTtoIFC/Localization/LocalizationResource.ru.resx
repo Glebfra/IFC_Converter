@@ -56,4 +56,25 @@
     <data name="ExportWindowForm_VertexSegmentsNum_Error" xml:space="preserve">
         <value>Количество вершинных сегментов должно быть больше 4</value>
     </data>
+    <data name="ImportWindowForm_ImportButton_Text" xml:space="preserve">
+        <value>Импорт</value>
+    </data>
+    <data name="ImportWindowForm_ImportType_Error" xml:space="preserve">
+        <value>Неизвестный тип импорта</value>
+    </data>
+    <data name="ImportWindowForm_ImportType_Label_Text" xml:space="preserve">
+        <value>Тип импорта</value>
+    </data>
+    <data name="ImportWindowForm_InputFilePath_Empty_Error" xml:space="preserve">
+        <value>Путь к файлу .ifc не может быть пустым.</value>
+    </data>
+    <data name="ImportWindowForm_InputFilePath_Label_Text" xml:space="preserve">
+        <value>Укажите полный путь для импорта .ifc файла</value>
+    </data>
+    <data name="ImportWindowForm_selectInputFilePathButton_Text" xml:space="preserve">
+        <value>Обзор...</value>
+    </data>
+    <data name="ImportWindowForm_Text" xml:space="preserve">
+        <value>Импорт из IFC</value>
+    </data>
 </root>

@@ -1,7 +1,13 @@
-﻿using IFC.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
+using IFC.PropertySets;
+using Start.API;
 using Start.Entities.Fittings;
+using Start.StartProperties;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
@@ -36,6 +42,23 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             weldedTeeEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(teeEntity));
 
             return weldedTeeEntity;
+        }
+        
+        public static StartTeeEntity ToStartTeeEntity(this IfcWeldedTeeEntity weldedTeeEntity)
+        {
+            StartTeeEntity startTeeEntity = new StartTeeEntity();
+            startTeeEntity.Name = weldedTeeEntity.Name.Value;
+
+            bool hasStartType = Enum.TryParse(weldedTeeEntity.Tag.Value, out StartElementType elementType);
+            startTeeEntity.Type = hasStartType ? elementType : StartElementType.WELDED_TEE;
+            startTeeEntity.HeaderLength = LengthProperty.CreateFromSi(weldedTeeEntity.Length);
+            startTeeEntity.CrotchHeight = LengthProperty.CreateFromSi(weldedTeeEntity.Height);
+            
+            Pset_Start? psetStart = weldedTeeEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
+            if (psetStart != null)
+                startTeeEntity.UpdateFromStartPset(psetStart);
+
+            return startTeeEntity;
         }
     }
 }

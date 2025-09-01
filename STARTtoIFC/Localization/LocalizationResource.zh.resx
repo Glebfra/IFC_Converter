@@ -56,4 +56,10 @@
     <data name="UnauthorizedAccess_Error" xml:space="preserve">
         <value>您没有足够的权限在此路径写入文件</value>
     </data>
+    <data name="ImportWindowForm_InputFilePath_Empty_Error" xml:space="preserve">
+        <value>IFC文件的路径不能为空</value>
+    </data>
+    <data name="ImportWindowForm_selectInputFilePathButton_Text" xml:space="preserve">
+        <value>浏览</value>
+    </data>
 </root>

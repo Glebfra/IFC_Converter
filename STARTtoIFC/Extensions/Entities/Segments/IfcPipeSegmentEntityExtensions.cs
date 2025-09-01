@@ -1,6 +1,11 @@
-﻿using IFC.Entities;
+﻿using System;
+using System.Linq;
+using IFC.Entities;
 using IFC.Entities.Segments;
+using IFC.PropertySets;
+using Start.API;
 using Start.Entities.Segments;
+using Start.StartProperties;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
@@ -27,6 +32,28 @@ namespace STARTtoIFC.Extensions.Entities.Segments
             pipeSegment.PropertySets.Add(Qto_PipeSegmentBaseQuantitiesExtensions.CreateFromStart(pipeEntity));
 
             return pipeSegment;
+        }
+        
+        public static StartPipeEntity ToStartPipeEntity(this IfcPipeSegmentEntity ifcPipeSegmentEntity)
+        {
+            StartPipeEntity startPipeEntity = new StartPipeEntity();
+            startPipeEntity.Name = ifcPipeSegmentEntity.Name.Value;
+
+            bool hasStartType = Enum.TryParse(ifcPipeSegmentEntity.Tag.Value, out StartElementType elementType);
+            startPipeEntity.Type = hasStartType ? elementType : StartElementType.PIPE_ELEMENT;
+            
+            startPipeEntity.Diameter = LengthProperty.CreateFromSi(ifcPipeSegmentEntity.Diameter.Value);
+
+            XbimVector3D projection = ifcPipeSegmentEntity.ObjectMatrix3D.Value.Forward * ifcPipeSegmentEntity.Length;
+            startPipeEntity.ProjectionAlongOXAxis = LengthProperty.CreateFromSi(projection.X);
+            startPipeEntity.ProjectionAlongOYAxis = LengthProperty.CreateFromSi(projection.Y);
+            startPipeEntity.ProjectionAlongOZAxis = LengthProperty.CreateFromSi(projection.Z);
+
+            Pset_Start? psetStart = ifcPipeSegmentEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
+            if (psetStart != null) 
+                startPipeEntity.UpdateFromStartPset(psetStart);
+
+            return startPipeEntity;
         }
     }
 }

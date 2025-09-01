@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
+using IFC.PropertySets;
+using Start.API;
 using Start.Entities.Fittings;
+using Start.StartProperties;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Extensions.Tools;
 using Xbim.Common.Geometry;
@@ -36,6 +41,22 @@ namespace STARTtoIFC.Extensions.Entities.Fittings
             cadBendEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(bendEntity));
 
             return cadBendEntity;
+        }
+        
+        public static StartBendEntity ToStartBendEntity(this IfcCadBendEntity ifcCadBendEntity)
+        {
+            StartBendEntity startBendEntity = new StartBendEntity();
+            startBendEntity.Name = ifcCadBendEntity.Name.Value;
+
+            bool hasStartType = Enum.TryParse(ifcCadBendEntity.Tag.Value, out StartElementType elementType);
+            startBendEntity.Type = hasStartType ? elementType : StartElementType.ELBOW;
+            startBendEntity.Radius = LengthProperty.CreateFromSi(ifcCadBendEntity.BendRadius);
+
+            Pset_Start? psetStart = ifcCadBendEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
+            if (psetStart != null)
+                startBendEntity.UpdateFromStartPset(psetStart);
+
+            return startBendEntity;
         }
     }
 }

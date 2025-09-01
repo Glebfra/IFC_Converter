@@ -63,13 +63,13 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\IFCtoSTART\IFCtoSTART.csproj">
-        <Project>{e3781fa1-2d49-4c70-942b-89c40df2eb29}</Project>
-        <Name>IFCtoSTART</Name>
-      </ProjectReference>
       <ProjectReference Include="..\IFC\IFC.csproj">
         <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
         <Name>IFC</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\STARTtoIFC\STARTtoIFC.csproj">
+        <Project>{e9de248d-90bc-408e-9489-22d172c7b514}</Project>
+        <Name>STARTtoIFC</Name>
       </ProjectReference>
       <ProjectReference Include="..\Start\Start.csproj">
         <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
