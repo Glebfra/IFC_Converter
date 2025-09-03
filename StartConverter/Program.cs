@@ -10,7 +10,7 @@ namespace StartConverter
         [STAThread]
         public static void Main(string[] args)
         {
-            IfcExporter ifcExporter = new IfcExporter();
+            IfcConverter ifcConverter = new IfcConverter();
             
             string filePath;
             while (true)
@@ -44,7 +44,7 @@ namespace StartConverter
             {
                 object? startDocument = startAutoServer.LoadStartDocumentRaw(0x4, filePath);
                 if (startDocument == null) throw new NullReferenceException("Object ref is null");
-                int code = ifcExporter.Export(startDocument, 1049);
+                int code = ifcConverter.Export(startDocument, 1049);
                 Console.WriteLine($"Output code: {code}");
             }
         }

@@ -13,6 +13,9 @@ namespace STARTtoIFC.Extensions.Entities
             List<IPropertySet> propertySets = new List<IPropertySet>();
             foreach (IIfcPropertySet productPropertySet in product.PropertySets)
             {
+                if (productPropertySet.Name == null)
+                    continue;
+                
                 switch (productPropertySet.Name)
                 {
                     case nameof(Pset_Start):
@@ -26,6 +29,9 @@ namespace STARTtoIFC.Extensions.Entities
                         break;
                     case nameof(Pset_PipeSegmentTypeCommon):
                         propertySets.Add(Pset_PipeSegmentTypeCommonExtensions.CreateFromPropertySet(productPropertySet));
+                        break;
+                    case nameof(AVEVA_EntityParameters):
+                        propertySets.Add(AVEVA_EntityParametersExtensions.CreateFromPropertySet(productPropertySet));
                         break;
                 }
             }

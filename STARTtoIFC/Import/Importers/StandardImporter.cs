@@ -13,24 +13,37 @@ using STARTtoIFC.Extensions.Entities;
 using STARTtoIFC.Extensions.Entities.Segments;
 using STARTtoIFC.Extensions.PropertySets;
 using STARTtoIFC.Tools;
+using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
 
 namespace STARTtoIFC.Importers
 {
     internal class StandardImporter : IImporter
     {
-        public virtual IfcPipeSegment[] GetPipeSegments(IfcProduct[] products)
+        protected IModel _Model;
+        protected IfcSIUnit _LengthUnit;
+        
+        public StandardImporter(IModel model)
+        {
+            _Model = model;
+            _LengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+        }
+        
+        // ReSharper disable once CoVariantArrayConversion
+        public virtual IfcElement[] GetPipeSegments(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeSegment>()
                 .ToArray();
         }
 
-        public virtual IfcPipeFitting[] GetBends(IfcProduct[] products)
+        // ReSharper disable once CoVariantArrayConversion
+        public virtual IfcElement[] GetBends(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
@@ -38,7 +51,8 @@ namespace STARTtoIFC.Importers
                 .ToArray();
         }
 
-        public virtual IfcPipeFitting[] GetTees(IfcProduct[] products)
+        // ReSharper disable once CoVariantArrayConversion
+        public virtual IfcElement[] GetTees(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
@@ -46,13 +60,13 @@ namespace STARTtoIFC.Importers
                 .ToArray();
         }
 
-        public virtual IfcPipeSegmentEntity[] CreatePipeSegments(IfcPipeSegment[] pipeSegments)
+        public virtual IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
         {
-            IfcPipeSegmentEntity[] pipeSegmentEntities = new IfcPipeSegmentEntity[pipeSegments.Length];
+            IfcPipeSegmentEntity[] pipeSegmentEntities = new IfcPipeSegmentEntity[pipes.Length];
 
-            for (int i = 0; i < pipeSegments.Length; i++)
+            for (int i = 0; i < pipes.Length; i++)
             {
-                IfcPipeSegment pipeSegment = pipeSegments[i];
+                IfcElement pipeSegment = pipes[i];
                 IfcLabel name = pipeSegment.Name ?? new IfcLabel("");
                 IfcIdentifier tag = pipeSegment.Tag ?? new IfcIdentifier("");
                 XbimMatrix3D objectMatrix3D = pipeSegment.ObjectPlacement.ToObjectMatrix3D();
@@ -69,12 +83,12 @@ namespace STARTtoIFC.Importers
             return pipeSegmentEntities;
         }
 
-        public virtual IfcCadBendEntity[] CreateBends(IfcPipeFitting[] bends, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        public virtual IfcCadBendEntity[] CreateBends(IfcElement[] bends, IfcAbstractSegmentEntity[] abstractSegmentEntities)
         {
             IfcCadBendEntity[] bendEntities = new IfcCadBendEntity[bends.Length];
             for (int i = 0; i < bends.Length; i++)
             {
-                IfcPipeFitting bend = bends[i];
+                IfcElement bend = bends[i];
                 IfcLabel name = bend.Name ?? new IfcLabel("");
                 IfcIdentifier tag = bend.Tag ?? new IfcIdentifier("");
                 
@@ -115,12 +129,12 @@ namespace STARTtoIFC.Importers
             return bendEntities;
         }
 
-        public virtual IfcWeldedTeeEntity[] CreateWeldedTees(IfcPipeFitting[] tees, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        public virtual IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, IfcAbstractSegmentEntity[] abstractSegmentEntities)
         {
             IfcWeldedTeeEntity[] weldedTeeEntities = new IfcWeldedTeeEntity[tees.Length];
             for (int i = 0; i < tees.Length; i++)
             {
-                IfcPipeFitting tee = tees[i];
+                IfcElement tee = tees[i];
                 IfcLabel name = tee.Name ?? new IfcLabel("");
                 IfcIdentifier tag = tee.Tag ?? new IfcIdentifier("");
                 

@@ -44,6 +44,16 @@ namespace IFC.Extensions
             );
         }
 
+        public static XbimMatrix3D RescaleTranslation(this XbimMatrix3D matrix3D, double scaleFactor)
+        {
+            return new XbimMatrix3D(
+                matrix3D.M11, matrix3D.M12, matrix3D.M13, matrix3D.M14,
+                matrix3D.M21, matrix3D.M22, matrix3D.M23, matrix3D.M24,
+                matrix3D.M31, matrix3D.M32, matrix3D.M33, matrix3D.M34,
+                matrix3D.OffsetX * scaleFactor, matrix3D.OffsetY * scaleFactor, matrix3D.OffsetZ * scaleFactor, matrix3D.M44
+            );
+        }
+
         public static XbimMatrix3D Translation(XbimVector3D translation)
         {
             return new XbimMatrix3D(

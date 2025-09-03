@@ -200,6 +200,7 @@
     <Compile Include="Extensions\Entities\Segments\StartPipeEntityExtensions.cs" />
     <Compile Include="Extensions\IfcEntityFactory.cs" />
     <Compile Include="Extensions\ManufacturingTechnologyExtensions.cs" />
+    <Compile Include="Extensions\PropertySets\AVEVA_EntityParametersExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeBendExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeJunctionExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Pset_PipeSegmentTypeCommonExtensions.cs" />
@@ -207,11 +208,11 @@
     <Compile Include="Extensions\PropertySets\Qto_PipeFittingBaseQuantitiesExtensions.cs" />
     <Compile Include="Extensions\PropertySets\Qto_PipeSegmentBaseQuantitiesExtensions.cs" />
     <Compile Include="Extensions\Tools\StartToIfcPlacement.cs" />
-    <Compile Include="GUI\ExportWindow.cs">
+    <Compile Include="GUI\ExportWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\ExportWindow.Designer.cs">
-      <DependentUpon>ExportWindow.cs</DependentUpon>
+    <Compile Include="GUI\ExportWindowForm.Designer.cs">
+      <DependentUpon>ExportWindowForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\ImportWindowForm.cs">
       <SubType>Form</SubType>
@@ -219,8 +220,11 @@
     <Compile Include="GUI\ImportWindowForm.Designer.cs">
       <DependentUpon>ImportWindowForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IfcConverter.cs" />
+    <Compile Include="IIfcConverter.cs" />
     <Compile Include="Import\IfcImporter.cs" />
     <Compile Include="Import\IIfcImporter.cs" />
+    <Compile Include="Import\Importers\AvevaImporter.cs" />
     <Compile Include="Import\Importers\IImporter.cs" />
     <Compile Include="Import\Importers\ImporterFactory.cs" />
     <Compile Include="Import\Importers\StandardImporter.cs" />
@@ -253,11 +257,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUI\ExportWindow.resx">
-      <DependentUpon>ExportWindow.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\ExportWindowForm.resx">
+      <DependentUpon>ExportWindowForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ExportWindow.zh.resx">
-      <DependentUpon>ExportWindow.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\ExportWindowForm.zh.resx">
+      <DependentUpon>ExportWindowForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ImportWindowForm.resx">
       <DependentUpon>ImportWindowForm.cs</DependentUpon>

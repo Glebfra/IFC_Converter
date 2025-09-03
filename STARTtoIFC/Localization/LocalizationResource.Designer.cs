@@ -195,6 +195,15 @@ namespace STARTtoIFC.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aveva.
+        /// </summary>
+        internal static string ImportWindowForm_ImportType_Aveva {
+            get {
+                return ResourceManager.GetString("ImportWindowForm_ImportType_Aveva", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown import type.
         /// </summary>
         internal static string ImportWindowForm_ImportType_Error {

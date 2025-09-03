@@ -1,7 +1,9 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace STARTtoIFC
 {
+    [Obsolete("Use IfcConverter instead")]
     [Guid("2649402A-A530-4CB8-A0C3-22661C463823")]
     public interface IIfcExporter
     {

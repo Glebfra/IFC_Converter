@@ -18,6 +18,7 @@ using STARTtoIFC.Importers;
 using STARTtoIFC.Tools;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.ProductExtension;
 
 namespace STARTtoIFC
 {
@@ -40,19 +41,19 @@ namespace STARTtoIFC
         /// <param name="startDocument">StartDocument</param>
         public void Convert(StartDocument startDocument)
         {
-            IImporter importer = ImporterFactory.CreateImporter(_dataContainer.ImportTypeEnum);
-            
             using (IFCProject ifcProject = IFCProject.OpenProject(_dataContainer.InputFilePath))
             {
+                IImporter importer = ImporterFactory.CreateImporter(ifcProject.Model, _dataContainer.ImportTypeEnum);
+                
                 IfcProduct[] products = ifcProject.GetProducts().ToArray();
                 
-                IfcPipeSegment[] ifcPipeSegments = importer.GetPipeSegments(products);
+                IfcElement[] ifcPipeSegments = importer.GetPipeSegments(products);
                 IfcPipeSegmentEntity[] segmentEntities = importer.CreatePipeSegments(ifcPipeSegments);
                 
-                IfcPipeFitting[] ifcBendPipeFittings = importer.GetBends(products);
+                IfcElement[] ifcBendPipeFittings = importer.GetBends(products);
                 IfcCadBendEntity[] bendEntities = importer.CreateBends(ifcBendPipeFittings, segmentEntities);
                 
-                IfcPipeFitting[] ifcTeeFittings = importer.GetTees(products);
+                IfcElement[] ifcTeeFittings = importer.GetTees(products);
                 IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
                 
                 using (StartProject startProject = StartProject.OpenFromDocument(startDocument))

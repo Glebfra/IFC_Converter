@@ -32,6 +32,7 @@ namespace STARTtoIFC.GUI
                 new ImportType(ImportTypeEnum.AUTO, LocalizationResource.ImportWindowForm_ImportType_Auto),
                 new ImportType(ImportTypeEnum.STANDARD, LocalizationResource.ImportWindowForm_ImportType_Standard),
                 new ImportType(ImportTypeEnum.START, LocalizationResource.ImportWindowForm_ImportType_Start),
+                new ImportType(ImportTypeEnum.AVEVA, LocalizationResource.ImportWindowForm_ImportType_Aveva)
             };
             importTypeCombobox.DataSource = types;
             importTypeCombobox.DisplayMember = "TypeName";

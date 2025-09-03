@@ -86,4 +86,7 @@
     <data name="ImportWindowForm_Text" xml:space="preserve">
         <value>Import from IFC</value>
     </data>
+    <data name="ImportWindowForm_ImportType_Aveva" xml:space="preserve">
+        <value>Aveva</value>
+    </data>
 </root>

@@ -153,8 +153,11 @@
     <Compile Include="Entities\Anchors\IfcSpringHangerEntity.cs" />
     <Compile Include="Entities\Anchors\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
+    <Compile Include="Extensions\Ifc2AxisPlacement3DExtensions.cs" />
     <Compile Include="Extensions\IfcDirectionExtensions.cs" />
     <Compile Include="Extensions\IIfcObjectPlacementExtensions.cs" />
+    <Compile Include="PropertySets\AVEVA_EntityParameters.cs" />
+    <Compile Include="PropertySets\AVEVA_Pset.cs" />
     <Compile Include="PropertySets\Pset_Debug.cs" />
     <Compile Include="PropertySets\IPropertySet.cs" />
     <Compile Include="PropertySets\Pset_PipeFittingTypeBend.cs" />

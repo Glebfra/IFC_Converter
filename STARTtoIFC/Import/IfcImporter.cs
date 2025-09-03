@@ -9,6 +9,7 @@ using STARTtoIFC.Tools;
 
 namespace STARTtoIFC
 {
+    [Obsolete("Use IfcConverter instead")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     [Guid("079501D2-E3F2-4F69-8236-C578FB94013F")]
@@ -27,6 +28,8 @@ namespace STARTtoIFC
             try
             {
                 Application.EnableVisualStyles();
+                Logger logger = Logger.GetInstance();
+                
                 Localize(languageId);
                 
                 StartDocument startDocument = new StartDocument(startDocumentObject);
@@ -45,13 +48,25 @@ namespace STARTtoIFC
 
                 try
                 {
+                    logger.Info($"Converting start at {DateTime.Now}");
                     StartGenerator startGenerator = new StartGenerator(dataContainer);
                     startGenerator.Convert(startDocument);
+                    logger.Info($"Convert is successfully ended at {DateTime.Now}");
                     
+                    if (logger.HasErrors())
+                    {
+                        logger.SaveAs(dataContainer.InputFilePath + ".log");
+                    }
+                    else
+                    {
+                        logger.Flush();
+                    }
                     return (int)ConversionResult.Success;
                 }
                 catch (Exception e)
                 {
+                    logger.Error(e.ToString());
+                    logger.SaveAs(dataContainer.InputFilePath + ".log");
                     return (int)ConversionResult.Fail;
                 }
             }

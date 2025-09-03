@@ -4,6 +4,7 @@
     {
         AUTO,
         STANDARD,
-        START
+        START,
+        AVEVA,
     }
 }
