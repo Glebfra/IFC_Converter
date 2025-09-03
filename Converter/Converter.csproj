@@ -4,14 +4,16 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{C956286A-D1F3-4B20-8EA8-9CE56ED88346}</ProjectGuid>
-        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-        <OutputType>Library</OutputType>
+        <ProjectGuid>{9529D2E2-B093-445F-916E-7091F3FC2017}</ProjectGuid>
+        <OutputType>Exe</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>Tests</RootNamespace>
-        <AssemblyName>Tests</AssemblyName>
+        <RootNamespace>Converter</RootNamespace>
+        <AssemblyName>Converter</AssemblyName>
         <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -25,7 +27,7 @@
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>none</DebugType>
+        <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
         <OutputPath>bin\Release\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
@@ -37,47 +39,26 @@
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
-        <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
-            <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-        </Reference>
-        <Reference Include="Xbim.Common">
-          <HintPath>..\packages\Xbim.Common.5.1.341\lib\net46\Xbim.Common.dll</HintPath>
-        </Reference>
-        <Reference Include="Xbim.Ifc">
-          <HintPath>..\packages\Xbim.Ifc.5.1.341\lib\net46\Xbim.Ifc.dll</HintPath>
-        </Reference>
-        <Reference Include="Xbim.Ifc2x3">
-          <HintPath>..\packages\Xbim.Ifc2x3.5.1.341\lib\net46\Xbim.Ifc2x3.dll</HintPath>
-        </Reference>
-        <Reference Include="Xbim.Ifc4">
-          <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
-        </Reference>
-        <Reference Include="Xbim.IO.MemoryModel">
-          <HintPath>..\packages\Xbim.IO.MemoryModel.5.1.341\lib\net46\Xbim.IO.MemoryModel.dll</HintPath>
-        </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Start\StartTests.cs" />
+        <Compile Include="ConvertArguments.cs" />
+        <Compile Include="ConvertTypeEnum.cs" />
+        <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Start\StartTests.Fittings.cs">
-          <DependentUpon>StartTests.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Start\StartTests.Segments.cs">
-          <DependentUpon>StartTests.cs</DependentUpon>
-        </Compile>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\IFC\IFC.csproj">
-        <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
-        <Name>IFC</Name>
+      <ProjectReference Include="..\IFCConverter\IFCConverter.csproj">
+        <Project>{e9de248d-90bc-408e-9489-22d172c7b514}</Project>
+        <Name>IFCConverter</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\STARTtoIFC\STARTtoIFC.csproj">
+        <Project>{e9de248d-90bc-408e-9489-22d172c7b514}</Project>
+        <Name>STARTtoIFC</Name>
       </ProjectReference>
       <ProjectReference Include="..\Start\Start.csproj">
         <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
         <Name>Start</Name>
       </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="Start\Test.ctp" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

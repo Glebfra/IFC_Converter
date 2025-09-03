@@ -1,0 +1,14 @@
+﻿using System;
+using System.Runtime.InteropServices;
+
+namespace IFCConverter
+{
+    [Obsolete("Use IfcConverter instead")]
+    [Guid("2649402A-A530-4CB8-A0C3-22661C463823")]
+    public interface IIfcExporter
+    {
+        int Export(object startDocumentObject, int languageId);
+
+        int Test();
+    }
+}
