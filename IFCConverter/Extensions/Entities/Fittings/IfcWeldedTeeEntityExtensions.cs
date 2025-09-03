@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;

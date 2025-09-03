@@ -1,7 +1,6 @@
 ﻿using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Segments;
-using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProductExtension;
 

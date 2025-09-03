@@ -2,7 +2,6 @@
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
-using IFC.PropertySets;
 using IFCConverter.Extensions.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Fittings;

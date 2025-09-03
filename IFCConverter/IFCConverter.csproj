@@ -146,9 +146,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Export\IfcExporter.cs" />
-    <Compile Include="Export\IfcGenerator.cs" />
-    <Compile Include="Export\IIfcExporter.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcDamperEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcHingedAnchorEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportEntityExtensions.cs" />
@@ -221,20 +218,19 @@
       <DependentUpon>ImportWindowForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IfcConverter.cs" />
+    <Compile Include="IfcGenerator.cs" />
     <Compile Include="IIfcConverter.cs" />
-    <Compile Include="Import\IfcImporter.cs" />
-    <Compile Include="Import\IIfcImporter.cs" />
-    <Compile Include="Import\Importers\AvevaImporter.cs" />
-    <Compile Include="Import\Importers\IImporter.cs" />
-    <Compile Include="Import\Importers\ImporterFactory.cs" />
-    <Compile Include="Import\Importers\StandardImporter.cs" />
-    <Compile Include="Import\StartGenerator.cs" />
+    <Compile Include="Importers\AvevaImporter.cs" />
+    <Compile Include="Importers\IImporter.cs" />
+    <Compile Include="Importers\ImporterFactory.cs" />
+    <Compile Include="Importers\StandardImporter.cs" />
     <Compile Include="Localization\LocalizationResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartGenerator.cs" />
     <Compile Include="Tools\ConversionResult.cs" />
     <Compile Include="Tools\ImportDataContainer.cs" />
     <Compile Include="Tools\ExportDataContainer.cs" />
