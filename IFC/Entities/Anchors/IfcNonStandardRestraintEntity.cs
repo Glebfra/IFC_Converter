@@ -1,6 +1,5 @@
 ﻿using IFC.Entities.Abstract.Anchors;
 using IFC.Tools;
-using Start.Entities;
 using Start.Entities.Anchors;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.MeasureResource;
