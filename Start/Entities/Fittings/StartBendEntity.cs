@@ -41,7 +41,7 @@ namespace Start.Entities.Fittings
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty MillToleranceOutside { get; set; } = LengthProperty.Zero;
 
-        [JsonProperty(StartPropertyName.PipeName)]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; } = string.Empty;
     }
 }

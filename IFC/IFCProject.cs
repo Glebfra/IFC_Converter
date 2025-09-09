@@ -21,7 +21,7 @@ namespace IFC
     {
         public IModel Model => _model;
         
-        private ITransaction _transaction;
+        private ITransaction? _transaction;
         private readonly IfcStore _model;
         private readonly IfcBuilding _building;
         private readonly List<IfcProduct> _ifcObjects;
@@ -49,42 +49,44 @@ namespace IFC
             model.Header.FileDescription.Description.Add("Version 2.0");
             model.Header.FileName.Name = name;
 
-            ITransaction transaction = model.BeginTransaction("Model creation");
-            IfcProject project = model.Instances.New<IfcProject>(p => p.Name = name);
-            GenerateUnits(model, project);
-
-            XbimVector3D coordinates = XbimVector3D.Zero;
-            XbimVector3D forward = new XbimVector3D(0, 0, 1);
-            XbimVector3D up = new XbimVector3D(0, 1, 0);
-            XbimMatrix3D worldMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, worldMatrix3D);
-
-            IfcGeometricRepresentationContext context = model.Instances.New<IfcGeometricRepresentationContext>(representationContext =>
+            using (ITransaction transaction = model.BeginTransaction("Model creation"))
             {
-                representationContext.ContextIdentifier = "Start context";
-                representationContext.Precision = 1e-5;
-                representationContext.ContextType = "Model";
-                representationContext.CoordinateSpaceDimension = 3;
-                representationContext.WorldCoordinateSystem = objectPlacement.Axis2Placement3D;
-            });
+                IfcProject project = model.Instances.New<IfcProject>(p => p.Name = name);
+                GenerateUnits(model, project);
+
+                XbimVector3D coordinates = XbimVector3D.Zero;
+                XbimVector3D forward = new XbimVector3D(0, 0, 1);
+                XbimVector3D up = new XbimVector3D(0, 1, 0);
+                XbimMatrix3D worldMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+                IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, worldMatrix3D);
+
+                IfcGeometricRepresentationContext context = model.Instances.New<IfcGeometricRepresentationContext>(representationContext =>
+                {
+                    representationContext.ContextIdentifier = "Start context";
+                    representationContext.Precision = 1e-5;
+                    representationContext.ContextType = "Model";
+                    representationContext.CoordinateSpaceDimension = 3;
+                    representationContext.WorldCoordinateSystem = objectPlacement.Axis2Placement3D;
+                });
         
-            IfcSite site = model.Instances.New<IfcSite>(ifcSite =>
-            {
-                ifcSite.Name = "Site";
-                ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                ifcSite.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            project.AddSite(site);
+                IfcSite site = model.Instances.New<IfcSite>(ifcSite =>
+                {
+                    ifcSite.Name = "Site";
+                    ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
+                    ifcSite.ObjectPlacement = objectPlacement.LocalPlacement;
+                });
+                project.AddSite(site);
 
-            IfcBuilding building = model.Instances.New<IfcBuilding>(ifcBuilding =>
-            {
-                ifcBuilding.Name = "Building";
-                ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                ifcBuilding.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            site.AddBuilding(building);
-            transaction.Commit();
-
+                IfcBuilding building = model.Instances.New<IfcBuilding>(ifcBuilding =>
+                {
+                    ifcBuilding.Name = "Building";
+                    ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
+                    ifcBuilding.ObjectPlacement = objectPlacement.LocalPlacement;
+                });
+                site.AddBuilding(building);
+                transaction.Commit();
+            }
+            
             return new IFCProject(model);
         }
 
@@ -97,6 +99,17 @@ namespace IFC
             }
 
             return new IFCProject(model);
+        }
+
+        public void BeginTransaction(string name)
+        {
+            _transaction = _model.BeginTransaction(name);
+        }
+
+        public void EndTransaction()
+        {
+            _transaction?.Commit();
+            _transaction?.Dispose();
         }
 
         public IEnumerable<IfcProduct> GetProducts()
@@ -138,13 +151,13 @@ namespace IFC
 
         public void SaveAs(string filepath)
         {
-            _transaction.Commit();
+            _transaction?.Commit();
             _model.SaveAs(filepath, StorageType.Ifc);
         }
 
         public void Dispose()
         {
-            _transaction.Dispose();
+            _transaction?.Dispose();
             _model.Dispose();
         }
 

@@ -11,8 +11,10 @@ namespace IFCConverter.Extensions.Entities.Segments
         public static IEnumerable<IfcAbstractSegmentEntity> GetNearestSegments(this IEnumerable<IfcAbstractSegmentEntity> abstractSegmentEntities, XbimVector3D point, int count)
         {
             return abstractSegmentEntities
-                .OrderBy(entity => entity.ObjectMatrix3D.Value.Translation.GetDistance(point))
-                .Take(count);
+                .Select(segment => new { Segment = segment, NearestNode = segment.NodeEntities.GetNearestNode(point) })
+                .OrderBy(entity => entity.NearestNode.Object.GetDistanceToPoint(point))
+                .Take(count)
+                .Select(item => item.Segment);
         }
     }
 }

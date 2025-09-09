@@ -9,7 +9,7 @@ namespace IFC.PropertySets
     public class AVEVA_Pset : IPropertySet
     {
         public IfcLengthMeasure[] POS = new IfcLengthMeasure[3];
-        public IfcLengthMeasure[] ORI = new IfcLengthMeasure[9];
+        public IfcReal[] ORI = new IfcReal[9];
 
         public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {

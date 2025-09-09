@@ -112,9 +112,8 @@ namespace IFCConverter.Extensions.Tools
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
 
-        public static XbimMatrix3D CreateFittingObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double angle)
+        public static XbimMatrix3D CreateFittingObjectMatrix(XbimVector3D coordinates, IfcAbstractSegmentEntity[] segmentEntities, out double angle)
         {
-            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D[] directionToPipes = segmentEntities.Select(entity => IfcAxis.GetPipeDirectionFromNode(entity, coordinates)).ToArray();
             XbimVector3D forward = directionToPipes[0].Negated();
             XbimVector3D up;
@@ -148,7 +147,13 @@ namespace IFCConverter.Extensions.Tools
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
 
-        public static XbimMatrix3D CreateTeeObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double angle, out IfcAbstractSegmentEntity headPipe, out IfcAbstractSegmentEntity[] branchPipes)
+        public static XbimMatrix3D CreateFittingObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double angle)
+        {
+            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
+            return CreateFittingObjectMatrix(coordinates, segmentEntities, out angle);
+        }
+
+        public static XbimMatrix3D CreateTeeObjectMatrix(XbimVector3D coordinates, IfcAbstractSegmentEntity[] segmentEntities, out double angle, out IfcAbstractSegmentEntity headPipe, out IfcAbstractSegmentEntity[] branchPipes)
         {
             headPipe = null;
             branchPipes = new IfcAbstractSegmentEntity[2];
@@ -171,7 +176,6 @@ namespace IFCConverter.Extensions.Tools
             if (branchPipes == null)
                 throw new NullReferenceException("Cannot find branch pipes");
             
-            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D branchDirection = IfcAxis.GetPipeDirectionFromNode(branchPipes[1], coordinates);
             XbimVector3D headDirection = IfcAxis.GetPipeDirectionFromNode(headPipe, coordinates).Normalized();
             XbimVector3D up = XbimVector3D.CrossProduct(branchDirection, headDirection);
@@ -179,6 +183,12 @@ namespace IFCConverter.Extensions.Tools
             angle = branchDirection.Angle(headDirection);
 
             return XbimMatrix3D.CreateWorld(coordinates, branchDirection, up);
+        }
+
+        public static XbimMatrix3D CreateTeeObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double angle, out IfcAbstractSegmentEntity headPipe, out IfcAbstractSegmentEntity[] branchPipes)
+        {
+            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
+            return CreateTeeObjectMatrix(coordinates, segmentEntities, out angle, out headPipe, out branchPipes);
         }
     }
 }

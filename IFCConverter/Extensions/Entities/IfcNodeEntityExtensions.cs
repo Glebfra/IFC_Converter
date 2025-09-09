@@ -32,7 +32,15 @@ namespace IFCConverter.Extensions.Entities
         {
             return nodeEntities
                 .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
-                .OrderBy(result => result.Object.GetDistanceToAnotherNode(other))
+                .OrderBy(result => result.Object.GetDistanceToNode(other))
+                .First();
+        }
+
+        public static IndexedResult<IfcNodeEntity> GetNearestNode(this IEnumerable<IfcNodeEntity> nodeEntities, XbimVector3D point)
+        {
+            return nodeEntities
+                .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
+                .OrderBy(result => result.Object.GetDistanceToPoint(point))
                 .First();
         }
     }

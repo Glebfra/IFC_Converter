@@ -16,6 +16,9 @@ namespace IFCConverter.Extensions.Entities
                 if (productPropertySet.Name == null)
                     continue;
                 
+                if (productPropertySet.Name.ToString().Contains(nameof(AVEVA_Pset)))
+                    propertySets.Add(AVEVA_PsetExtensions.CreateFromPropertySet(productPropertySet));
+                
                 switch (productPropertySet.Name)
                 {
                     case nameof(Pset_Start):
@@ -35,7 +38,7 @@ namespace IFCConverter.Extensions.Entities
                         break;
                 }
             }
-            
+
             foreach (IIfcElementQuantity productElementQuantity in product.ElementQuantities)
             {
                 switch (productElementQuantity.Name)

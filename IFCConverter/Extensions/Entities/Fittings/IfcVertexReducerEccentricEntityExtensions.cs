@@ -20,7 +20,7 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateReducerEccentricObjectMatrix(nodeEntity, segmentEntities, out double displacementLength);
 
-            if ((segmentEntities[1].StartNode.GetDistanceToAnotherNode(nodeEntity) < segmentEntities[1].EndNode.GetDistanceToAnotherNode(nodeEntity)))
+            if ((segmentEntities[1].StartNode.GetDistanceToNode(nodeEntity) < segmentEntities[1].EndNode.GetDistanceToNode(nodeEntity)))
             {
                 segmentEntities[1].MovePipe(objectMatrix3D.Up * displacementLength);
             }
