@@ -10,7 +10,6 @@ using IFC.PropertySets;
 using IFC.Tools;
 using IFCConverter.Extensions.Entities;
 using IFCConverter.Extensions.Entities.Segments;
-using IFCConverter.Extensions.PropertySets;
 using IFCConverter.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
@@ -216,13 +215,13 @@ namespace IFCConverter.Importers
         protected static double GetTeeLength(IEnumerable<IPropertySet> propertySets)
         {
             Pset_Start psetStart = propertySets.OfType<Pset_Start>().First();
-            return Pset_StartExtensions.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.HeaderLength)]);
+            return Pset_Start.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.HeaderLength)]);
         }
 
         protected static double GetTeeHeight(IEnumerable<IPropertySet> propertySets)
         {
             Pset_Start psetStart = propertySets.OfType<Pset_Start>().First();
-            return Pset_StartExtensions.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.CrotchHeight)]);
+            return Pset_Start.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.CrotchHeight)]);
         }
         
         protected static double GetBendAngle(IEnumerable<IPropertySet> propertySets)

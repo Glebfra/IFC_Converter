@@ -3,7 +3,6 @@ using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Segments;
 using IFC.PropertySets;
-using IFCConverter.Extensions.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.API;
 using Start.Entities.Segments;
@@ -27,9 +26,9 @@ namespace IFCConverter.Extensions.Entities.Segments
                 nodeEntities
             );
 
-            pipeSegment.PropertySets.Add(Pset_StartExtensions.CreateFromStart(pipeEntity));
-            pipeSegment.PropertySets.Add(Pset_PipeSegmentTypeCommonExtensions.CreateFromStart(pipeEntity));
-            pipeSegment.PropertySets.Add(Qto_PipeSegmentBaseQuantitiesExtensions.CreateFromStart(pipeEntity));
+            pipeSegment.PropertySets.Add(Pset_Start.CreateFromStart(pipeEntity));
+            pipeSegment.PropertySets.Add(Pset_PipeSegmentTypeCommon.CreateFromStart(pipeEntity));
+            pipeSegment.PropertySets.Add(Qto_PipeSegmentBaseQuantities.CreateFromStart(pipeEntity));
 
             return pipeSegment;
         }

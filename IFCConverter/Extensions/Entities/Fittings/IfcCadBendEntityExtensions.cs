@@ -4,7 +4,6 @@ using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using IFC.PropertySets;
-using IFCConverter.Extensions.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.API;
 using Start.Entities.Fittings;
@@ -35,9 +34,9 @@ namespace IFCConverter.Extensions.Entities.Fittings
             );
             
             cadBendEntity.ConnectedEntities.AddRange(segmentEntities);
-            cadBendEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(bendEntity));
-            cadBendEntity.PropertySets.Add(Pset_PipeFittingTypeBendExtensions.CreateFromStart(bendEntity));
-            cadBendEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(bendEntity));
+            cadBendEntity.PropertySets.Add(Pset_Start.CreateFromStart(bendEntity));
+            cadBendEntity.PropertySets.Add(Pset_PipeFittingTypeBend.CreateFromStart(bendEntity));
+            cadBendEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(bendEntity));
 
             return cadBendEntity;
         }

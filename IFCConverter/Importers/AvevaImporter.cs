@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
@@ -8,7 +9,6 @@ using IFC.Extensions;
 using IFC.PropertySets;
 using IFCConverter.Extensions.Entities;
 using IFCConverter.Extensions.Entities.Segments;
-using IFCConverter.Extensions.PropertySets;
 using IFCConverter.Extensions.Tools;
 using IFCConverter.Tools;
 using Xbim.Common;
@@ -17,8 +17,6 @@ using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.ProfileResource;
-using Xbim.Ifc4.RepresentationResource;
 
 namespace IFCConverter.Importers
 {
@@ -50,19 +48,14 @@ namespace IFCConverter.Importers
                 IfcLabel name = pipe.Name ?? new IfcLabel("");
                 IfcIdentifier tag = pipe.Tag ?? new IfcIdentifier("");
                 
-                IfcExtrudedAreaSolid? extrudedAreaSolid = null;
-                foreach (IfcRepresentation ifcRepresentation in pipe.Representation.Representations)
-                {
-                    extrudedAreaSolid = ifcRepresentation.Items.OfType<IfcExtrudedAreaSolid>().FirstOrDefault();
-                    if (extrudedAreaSolid != null)
-                        break;
-                }
-                if (extrudedAreaSolid == null)
-                    throw new NullReferenceException("Pipe does not have IfcExtrudedAreaSolid representation.");
-                
+                IfcExtrudedAreaSolid extrudedAreaSolid = pipe
+                    .GetRepresentationItems()
+                    .OfType<IfcExtrudedAreaSolid>()
+                    .First();
+
                 XbimMatrix3D shapeMatrix3D = extrudedAreaSolid.Position.ToObjectMatrix3D().RescaleTranslation(_LengthUnit.Power);
-                double length = GetPipeLength(extrudedAreaSolid) * _LengthUnit.Power;
-                double diameter = GetPipeDiameter(extrudedAreaSolid) * _LengthUnit.Power;
+                double length = extrudedAreaSolid.GetLength() * _LengthUnit.Power;
+                double diameter = extrudedAreaSolid.GetCircleRadius() * 2 * _LengthUnit.Power;
                 
                 IPropertySet[] propertySets = pipe.GetPropertySets().ToArray();
 
@@ -82,7 +75,7 @@ namespace IFCConverter.Importers
                 IfcElement bend = bends[i];
                 IfcLabel name = bend.Name ?? new IfcLabel("");
                 IfcIdentifier tag = bend.Tag ?? new IfcIdentifier("");
-                
+
                 IPropertySet[] propertySets = bend.GetPropertySets().ToArray();
                 
                 AVEVA_EntityParameters? avevaEntityParameters = propertySets.OfType<AVEVA_EntityParameters>().FirstOrDefault();
@@ -93,31 +86,53 @@ namespace IFCConverter.Importers
                 if (avevaPset == null)
                     throw new Exception("Bend does not have AVEVA_Pset property set.");
 
+                IfcRevolvedAreaSolid revolvedAreaSolid = bend
+                    .GetRepresentationItems()
+                    .OfType<IfcRevolvedAreaSolid>()
+                    .First();
+                XbimVector3D[] boundPoints = revolvedAreaSolid.GetBoundPoints();
+                boundPoints = boundPoints
+                    .Select(point => point * _LengthUnit.Power)
+                    .ToArray();
+                IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
+                    .GetConnectedSegments(boundPoints)
+                    .ToArray();
+
                 XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
-                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities.GetNearestSegments(coordinates, 2).ToArray();
-                XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, nearestSegments, out double angle);
-                double pipeRadius = Math.Max(nearestSegments[0].Diameter, nearestSegments[1].Diameter);
+                double bendRadius = revolvedAreaSolid.GetRadius() * _LengthUnit.Power;
+                double angle = revolvedAreaSolid.GetAngle();
+                XbimMatrix3D objectMatrix3D;
+                double pipeRadius;
 
-                IndexedResult<IfcNodeEntity>[] nearestNodes = nearestSegments
-                    .Select(segment => segment.NodeEntities.GetNearestNode(coordinates))
-                    .ToArray();
+                if (connectedSegments.Length is 2)
+                {
+                    objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out angle);
+                    pipeRadius = Math.Max(connectedSegments[0].Diameter, connectedSegments[1].Diameter);
+                }
+                else if (connectedSegments.Length is 1)
+                {
+                    objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(coordinates);
+                    pipeRadius = connectedSegments[0].Diameter;
+                }
+                else
+                {
+                    throw new NullReferenceException($"Cannot find connected segments to {nameof(bend)}");
+                }
 
-                XbimVector3D[] points = nearestNodes
-                    .Select(node => node.Object.ObjectMatrix3D.Translation)
-                    .ToArray();
-                double bendRadius = GetBendRadius(points, angle);
                 double length = bendRadius * angle;
-
+                
                 IfcCadBendEntity bendEntity = new IfcCadBendEntity(name, tag, objectMatrix3D, length, angle, bendRadius, pipeRadius);
                 bendEntity.PropertySets.AddRange(propertySets);
-                bendEntity.ConnectedEntities.AddRange(nearestSegments);
+                bendEntity.ConnectedEntities.AddRange(connectedSegments);
                 bendEntities[i] = bendEntity;
-
+                
                 double clipLength = bendRadius * Math.Tan(angle / 2);
-                for (int j = 0; j < nearestSegments.Length; j++)
+                foreach (IfcAbstractSegmentEntity connectedSegment in connectedSegments)
                 {
-                    nearestSegments[j].Clip(bendEntity.NodeEntity, -clipLength);
-                    nearestSegments[j].NodeEntities[nearestNodes[j].Index] = bendEntity.NodeEntity;
+                    IfcNodeEntity bendNodeEntity = bendEntity.NodeEntity;
+                    IndexedResult<IfcNodeEntity> connectedNodeEntity = connectedSegment.NodeEntities.GetNearestNode(bendNodeEntity);
+                    connectedSegment.Clip(bendNodeEntity, -clipLength);
+                    connectedSegment.NodeEntities[connectedNodeEntity.Index] = bendNodeEntity;
                 }
             }
 
@@ -143,31 +158,40 @@ namespace IFCConverter.Importers
                 if (avevaPset == null)
                     throw new Exception("Bend does not have AVEVA_Pset property set.");
 
+                IfcExtrudedAreaSolid[] extrudedAreaSolids = tee
+                    .GetRepresentationItems()
+                    .OfType<IfcExtrudedAreaSolid>()
+                    .ToArray();
+                XbimVector3D[] boundPoints = extrudedAreaSolids
+                    .SelectMany(solid => solid.GetBoundPoints())
+                    .ToArray();
+                boundPoints = boundPoints
+                    .Select(point => point * _LengthUnit.Power)
+                    .ToArray();
+                
+                IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
+                    .GetConnectedSegments(boundPoints)
+                    .ToArray();
+
                 XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
-                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities.GetNearestSegments(coordinates, 3).ToArray();
-                XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateTeeObjectMatrix(coordinates, nearestSegments,
-                    out double angle, 
-                    out IfcAbstractSegmentEntity headPipe,
-                    out IfcAbstractSegmentEntity[] branchPipes
+                XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateTeeObjectMatrix(coordinates, connectedSegments,
+                    out double angle, out IfcAbstractSegmentEntity headPipe, out IfcAbstractSegmentEntity[] branchPipes
                 );
+                
                 double branchDiameter = Math.Max(branchPipes[0].Diameter, branchPipes[1].Diameter);
                 double headDiameter = headPipe.Diameter;
-
-                IfcExtrudedAreaSolid[] extrudedAreaSolids = tee.Representation.Representations
-                    .SelectMany(representation => representation.Items)
-                    .Cast<IfcExtrudedAreaSolid>()
-                    .ToArray();
+                
                 IfcExtrudedAreaSolid headExtrudedAreaSolid = extrudedAreaSolids
                     .First(solid => solid.Position.ToObjectMatrix3D().Forward.IsParallel(headPipe.ObjectMatrix3D.Value.Forward));
                 IfcExtrudedAreaSolid branchExtrudedAreaSolid = extrudedAreaSolids
-                    .First(solid => solid.Position.ToObjectMatrix3D().Forward.IsNormal(headPipe.ObjectMatrix3D.Value.Forward, 1e-3));
+                    .First(solid => solid.Position.ToObjectMatrix3D().Forward.IsNormal(headPipe.ObjectMatrix3D.Value.Forward, 1e-2));
 
-                double length = branchExtrudedAreaSolid.Depth * _LengthUnit.Power;
-                double height = headExtrudedAreaSolid.Depth * _LengthUnit.Power;
-
+                double length = branchExtrudedAreaSolid.GetLength() * _LengthUnit.Power;
+                double height = headExtrudedAreaSolid.GetLength() * _LengthUnit.Power;
+                
                 IfcWeldedTeeEntity weldedTeeEntity = new IfcWeldedTeeEntity(name, tag, objectMatrix3D, length, branchDiameter, headDiameter, height, angle);
                 weldedTeeEntity.PropertySets.AddRange(propertySets);
-                weldedTeeEntity.ConnectedEntities.AddRange(nearestSegments);
+                weldedTeeEntity.ConnectedEntities.AddRange(connectedSegments);
                 weldedTeeEntities[i] = weldedTeeEntity;
 
                 IfcNodeEntity weldedTeeNode = weldedTeeEntity.NodeEntity;
@@ -177,14 +201,16 @@ namespace IFCConverter.Importers
                     IndexedResult<IfcNodeEntity> branchNodeResult = branchPipe.NodeEntities.GetNearestNode(weldedTeeNode);
                     branchPipe.NodeEntities[branchNodeResult.Index] = weldedTeeNode;
                 }
+
                 headPipe.Clip(weldedTeeNode, -height);
                 IndexedResult<IfcNodeEntity> headNodeResult = headPipe.NodeEntities.GetNearestNode(weldedTeeNode);
                 headPipe.NodeEntities[headNodeResult.Index] = weldedTeeNode;
             }
+            
             return weldedTeeEntities;
         }
 
-        protected static IfcElement[] GetElementByType(IfcProduct[] products, IfcText type)
+        private static IfcElement[] GetElementByType(IEnumerable<IfcProduct> products, IfcText type)
         {
             return products
                 .Select(product => new { Product = product, PropertySets = product.GetPropertySets() })
@@ -196,24 +222,6 @@ namespace IFCConverter.Importers
                 .Select(item => item.Product)
                 .Cast<IfcElement>()
                 .ToArray();
-        }
-
-        protected static double GetPipeLength(IfcExtrudedAreaSolid extrudedAreaSolid)
-        {
-            return extrudedAreaSolid.Depth;
-        }
-
-        protected static double GetPipeDiameter(IfcExtrudedAreaSolid extrudedAreaSolid)
-        {
-            IfcCircleProfileDef? circleProfileDef = extrudedAreaSolid.SweptArea as IfcCircleProfileDef;
-            if (circleProfileDef == null)
-                throw new Exception("Pipe profile is not a circle.");
-            return circleProfileDef.Radius * 2;
-        }
-
-        private static double GetBendRadius(XbimVector3D[] points, double angle)
-        {
-            return (points[1] - points[0]).Length / (2 * Math.Sin(angle / 2));
         }
     }
 }

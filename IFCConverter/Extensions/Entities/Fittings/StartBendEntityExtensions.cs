@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using IFC.PropertySets;
-using IFCConverter.Extensions.PropertySets;
 using Start.Entities.Fittings;
 using Start.StartProperties;
 
@@ -30,6 +29,6 @@ namespace IFCConverter.Extensions.Entities.Fittings
                 startBendEntity.Weight = MassProperty.CreateFromSi(GetPropertyValue(weight));
         }
         
-        private static double GetPropertyValue(string rawValue) => Pset_StartExtensions.GetDoublePropertyValue(rawValue);
+        private static double GetPropertyValue(string rawValue) => Pset_Start.GetDoublePropertyValue(rawValue);
     }
 }

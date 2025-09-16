@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using IFC.PropertySets;
-using IFCConverter.Extensions.PropertySets;
 using Start.Entities.Segments;
 using Start.StartProperties;
 
@@ -40,6 +39,6 @@ namespace IFCConverter.Extensions.Entities.Segments
                 startPipeEntity.AdditionalWeightLoadAlongTheZAxis = MassUnitProperty.CreateFromSi(GetPropertyValue(additionalWeightLoadAlongTheZAxis));
         }
         
-        private static double GetPropertyValue(string rawValue) => Pset_StartExtensions.GetDoublePropertyValue(rawValue);
+        private static double GetPropertyValue(string rawValue) => Pset_Start.GetDoublePropertyValue(rawValue);
     }
 }

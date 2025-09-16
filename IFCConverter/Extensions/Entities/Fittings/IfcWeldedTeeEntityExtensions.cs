@@ -4,7 +4,6 @@ using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using IFC.PropertySets;
-using IFCConverter.Extensions.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.API;
 using Start.Entities.Fittings;
@@ -36,9 +35,9 @@ namespace IFCConverter.Extensions.Entities.Fittings
             );
             
             weldedTeeEntity.ConnectedEntities.AddRange(segmentEntities);
-            weldedTeeEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(teeEntity));
-            weldedTeeEntity.PropertySets.Add(Pset_PipeFittingTypeJunctionExtensions.CreateFromStart(teeEntity));
-            weldedTeeEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(teeEntity));
+            weldedTeeEntity.PropertySets.Add(Pset_Start.CreateFromStart(teeEntity));
+            weldedTeeEntity.PropertySets.Add(Pset_PipeFittingTypeJunction.CreateFromStart(teeEntity));
+            weldedTeeEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(teeEntity));
 
             return weldedTeeEntity;
         }

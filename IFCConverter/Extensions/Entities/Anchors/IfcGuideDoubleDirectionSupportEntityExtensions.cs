@@ -1,7 +1,7 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common.Geometry;
@@ -24,7 +24,7 @@ namespace IFCConverter.Extensions.Entities.Anchors
             );
             
             guideDoubleDirectionSupportEntity.ConnectedEntities.AddRange(segmentEntities);
-            guideDoubleDirectionSupportEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(doubleDirectionSupportEntity));
+            guideDoubleDirectionSupportEntity.PropertySets.Add(Pset_Start.CreateFromStart(doubleDirectionSupportEntity));
             
             return guideDoubleDirectionSupportEntity;
         }

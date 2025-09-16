@@ -1,6 +1,6 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Segments;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Segments;
 using Xbim.Common.Geometry;
@@ -27,9 +27,9 @@ namespace IFCConverter.Extensions.Entities.Segments
                 numSegments
             );
             
-            coneElementEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(coneElement));
-            coneElementEntity.PropertySets.Add(Pset_PipeSegmentTypeCommonExtensions.CreateFromStart(coneElement));
-            coneElementEntity.PropertySets.Add(Qto_PipeSegmentBaseQuantitiesExtensions.CreateFromStart(coneElement));
+            coneElementEntity.PropertySets.Add(Pset_Start.CreateFromStart(coneElement));
+            coneElementEntity.PropertySets.Add(Pset_PipeSegmentTypeCommon.CreateFromStart(coneElement));
+            coneElementEntity.PropertySets.Add(Qto_PipeSegmentBaseQuantities.CreateFromStart(coneElement));
 
             return coneElementEntity;
         }

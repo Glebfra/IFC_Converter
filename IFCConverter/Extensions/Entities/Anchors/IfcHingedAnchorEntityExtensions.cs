@@ -2,7 +2,7 @@
 using IFC.Entities.Abstract.Anchors;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common.Geometry;
@@ -28,7 +28,7 @@ namespace IFCConverter.Extensions.Entities.Anchors
             );
             
             hingedAnchorEntity.ConnectedEntities.AddRange(segmentEntities);
-            hingedAnchorEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(hingedAnchor));
+            hingedAnchorEntity.PropertySets.Add(Pset_Start.CreateFromStart(hingedAnchor));
 
             return hingedAnchorEntity;
         }

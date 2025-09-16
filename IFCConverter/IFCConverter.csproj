@@ -120,6 +120,9 @@
     <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -197,14 +200,6 @@
     <Compile Include="Extensions\Entities\Segments\StartPipeEntityExtensions.cs" />
     <Compile Include="Extensions\IfcEntityFactory.cs" />
     <Compile Include="Extensions\ManufacturingTechnologyExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\AVEVA_EntityParametersExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\AVEVA_PsetExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeBendExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\Pset_PipeFittingTypeJunctionExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\Pset_PipeSegmentTypeCommonExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\Pset_StartExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\Qto_PipeFittingBaseQuantitiesExtensions.cs" />
-    <Compile Include="Extensions\PropertySets\Qto_PipeSegmentBaseQuantitiesExtensions.cs" />
     <Compile Include="Extensions\Tools\StartToIfcPlacement.cs" />
     <Compile Include="GUI\ExportWindowForm.cs">
       <SubType>Form</SubType>

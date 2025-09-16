@@ -1,7 +1,7 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common.Geometry;
@@ -28,7 +28,7 @@ namespace IFCConverter.Extensions.Entities.Anchors
             );
             
             ifcDamperEntity.ConnectedEntities.AddRange(segmentEntities);
-            ifcDamperEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(damperEntity));
+            ifcDamperEntity.PropertySets.Add(Pset_Start.CreateFromStart(damperEntity));
 
             return ifcDamperEntity;
         }

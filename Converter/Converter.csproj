@@ -51,10 +51,6 @@
         <Project>{e9de248d-90bc-408e-9489-22d172c7b514}</Project>
         <Name>IFCConverter</Name>
       </ProjectReference>
-      <ProjectReference Include="..\STARTtoIFC\STARTtoIFC.csproj">
-        <Project>{e9de248d-90bc-408e-9489-22d172c7b514}</Project>
-        <Name>STARTtoIFC</Name>
-      </ProjectReference>
       <ProjectReference Include="..\Start\Start.csproj">
         <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
         <Name>Start</Name>

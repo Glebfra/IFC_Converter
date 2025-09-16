@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using IFC.PropertySets;
-using IFCConverter.Extensions.PropertySets;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 
@@ -17,24 +17,24 @@ namespace IFCConverter.Extensions.Entities
                     continue;
                 
                 if (productPropertySet.Name.ToString().Contains(nameof(AVEVA_Pset)))
-                    propertySets.Add(AVEVA_PsetExtensions.CreateFromPropertySet(productPropertySet));
+                    propertySets.Add(AVEVA_Pset.CreateFromPropertySet(productPropertySet));
                 
                 switch (productPropertySet.Name)
                 {
                     case nameof(Pset_Start):
-                        propertySets.Add(Pset_StartExtensions.CreateFromPropertySet(productPropertySet));
+                        propertySets.Add(Pset_Start.CreateFromPropertySet(productPropertySet));
                         break;
                     case nameof(Pset_PipeFittingTypeBend):
-                        propertySets.Add(Pset_PipeFittingTypeBendExtensions.CreateFromPropertySet(productPropertySet));
+                        propertySets.Add(Pset_PipeFittingTypeBend.CreateFromPropertySet(productPropertySet));
                         break;
                     case nameof(Pset_PipeFittingTypeJunction):
-                        propertySets.Add(Pset_PipeFittingTypeBendExtensions.CreateFromPropertySet(productPropertySet));
+                        propertySets.Add(Pset_PipeFittingTypeBend.CreateFromPropertySet(productPropertySet));
                         break;
                     case nameof(Pset_PipeSegmentTypeCommon):
-                        propertySets.Add(Pset_PipeSegmentTypeCommonExtensions.CreateFromPropertySet(productPropertySet));
+                        propertySets.Add(Pset_PipeSegmentTypeCommon.CreateFromPropertySet(productPropertySet));
                         break;
                     case nameof(AVEVA_EntityParameters):
-                        propertySets.Add(AVEVA_EntityParametersExtensions.CreateFromPropertySet(productPropertySet));
+                        propertySets.Add(AVEVA_EntityParameters.CreateFromPropertySet(productPropertySet));
                         break;
                 }
             }
@@ -44,15 +44,21 @@ namespace IFCConverter.Extensions.Entities
                 switch (productElementQuantity.Name)
                 {
                     case nameof(Qto_PipeSegmentBaseQuantities):
-                        propertySets.Add(Qto_PipeSegmentBaseQuantitiesExtensions.CreateFromQuantitySet(productElementQuantity));
+                        propertySets.Add(Qto_PipeSegmentBaseQuantities.CreateFromQuantitySet(productElementQuantity));
                         break;
-                    case nameof(Qto_PipeFittingBaseQuantitiesExtensions):
-                        propertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromPropertySet(productElementQuantity));
+                    case nameof(Qto_PipeFittingBaseQuantities):
+                        propertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromPropertySet(productElementQuantity));
                         break;
                 }
             }
 
             return propertySets;
+        }
+
+        public static IEnumerable<IIfcRepresentationItem> GetRepresentationItems(this IfcProduct product)
+        {
+            return product.Representation.Representations
+                .SelectMany(representation => representation.Items);
         }
     }
 }

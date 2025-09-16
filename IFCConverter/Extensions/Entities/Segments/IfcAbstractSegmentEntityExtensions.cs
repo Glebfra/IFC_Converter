@@ -16,5 +16,17 @@ namespace IFCConverter.Extensions.Entities.Segments
                 .Take(count)
                 .Select(item => item.Segment);
         }
+
+        public static bool IsContainPoint(this IfcAbstractSegmentEntity abstractSegmentEntity, XbimVector3D point, double precision = 1e-3)
+        {
+            return abstractSegmentEntity.NodeEntities.Any(nodeEntity => nodeEntity.GetDistanceToPoint(point) < precision);
+        }
+
+        public static IEnumerable<IfcAbstractSegmentEntity> GetConnectedSegments(this IEnumerable<IfcAbstractSegmentEntity> abstractSegmentEntities, IReadOnlyList<XbimVector3D> boundPoints, double precision = 1e-3)
+        {
+            return abstractSegmentEntities
+                .Where(segment => boundPoints.Any(boundPoint => segment.IsContainPoint(boundPoint, precision)))
+                .Take(boundPoints.Count);
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
@@ -28,8 +28,8 @@ namespace IFCConverter.Extensions.Entities.Fittings
             );
             
             angularExpansionJointEntity.ConnectedEntities.AddRange(segmentEntities);
-            angularExpansionJointEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(angularExpansion));
-            angularExpansionJointEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(angularExpansion));
+            angularExpansionJointEntity.PropertySets.Add(Pset_Start.CreateFromStart(angularExpansion));
+            angularExpansionJointEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(angularExpansion));
 
             return angularExpansionJointEntity;
         }

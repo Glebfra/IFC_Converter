@@ -1,7 +1,7 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Anchors;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Anchors;
 using Xbim.Common.Geometry;
@@ -27,7 +27,7 @@ namespace IFCConverter.Extensions.Entities.Anchors
             );
             
             slidingSupportEntity.ConnectedEntities.AddRange(segmentEntities);
-            slidingSupportEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(slidingSupport));
+            slidingSupportEntity.PropertySets.Add(Pset_Start.CreateFromStart(slidingSupport));
 
             return slidingSupportEntity;
         }

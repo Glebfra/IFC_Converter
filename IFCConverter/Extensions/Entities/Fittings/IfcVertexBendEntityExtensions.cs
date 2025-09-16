@@ -2,7 +2,7 @@
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
@@ -30,9 +30,9 @@ namespace IFCConverter.Extensions.Entities.Fittings
             );
             
             ifcBendEntity.ConnectedEntities.AddRange(segmentEntities);
-            ifcBendEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(bendEntity));
-            ifcBendEntity.PropertySets.Add(Pset_PipeFittingTypeBendExtensions.CreateFromStart(bendEntity));
-            ifcBendEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(bendEntity));
+            ifcBendEntity.PropertySets.Add(Pset_Start.CreateFromStart(bendEntity));
+            ifcBendEntity.PropertySets.Add(Pset_PipeFittingTypeBend.CreateFromStart(bendEntity));
+            ifcBendEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(bendEntity));
 
             return ifcBendEntity;
         }

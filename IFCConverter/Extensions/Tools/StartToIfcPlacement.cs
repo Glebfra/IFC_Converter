@@ -11,12 +11,16 @@ namespace IFCConverter.Extensions.Tools
 {
     public static class StartToIfcPlacement
     {
-        public static XbimMatrix3D CreateStandardObjectMatrix(IfcNodeEntity nodeEntity)
+        public static XbimMatrix3D CreateStandardObjectMatrix(XbimVector3D coordinates)
         {
-            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             XbimVector3D forward = new XbimVector3D(0, 0, 1);
             XbimVector3D up = new XbimVector3D(0, 1, 0);
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
+        }
+        
+        public static XbimMatrix3D CreateStandardObjectMatrix(IfcNodeEntity nodeEntity)
+        {
+            return CreateStandardObjectMatrix(nodeEntity.ObjectMatrix3D.Translation);
         }
 
         public static XbimMatrix3D CreateReducerConcentricObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)

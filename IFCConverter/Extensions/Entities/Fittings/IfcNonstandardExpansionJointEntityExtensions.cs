@@ -1,7 +1,7 @@
 ﻿using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
-using IFCConverter.Extensions.PropertySets;
+using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
@@ -26,8 +26,8 @@ namespace IFCConverter.Extensions.Entities.Fittings
             );
             
             nonstandardExpansionJointEntity.ConnectedEntities.AddRange(segmentEntities);
-            nonstandardExpansionJointEntity.PropertySets.Add(Pset_StartExtensions.CreateFromStart(nonstandardExpansion));
-            nonstandardExpansionJointEntity.PropertySets.Add(Qto_PipeFittingBaseQuantitiesExtensions.CreateFromStart(nonstandardExpansion));
+            nonstandardExpansionJointEntity.PropertySets.Add(Pset_Start.CreateFromStart(nonstandardExpansion));
+            nonstandardExpansionJointEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(nonstandardExpansion));
 
             return nonstandardExpansionJointEntity;
         }
