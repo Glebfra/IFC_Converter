@@ -22,11 +22,6 @@ namespace IFC.Extensions
             XbimVector3D globalSecondPoint = globalFirstPoint + areaSolidMatrix3D.Transform(internalSecondPoint);
 
             return new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
-
-            points[0] = areaSolidMatrix3D.Translation;
-            points[1] = points[0] + forward * length;
-            
-            return points;
         }
 
         public static double GetLength(this IfcExtrudedAreaSolid extrudedAreaSolid)

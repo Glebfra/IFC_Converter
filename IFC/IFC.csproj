@@ -158,9 +158,11 @@
     <Compile Include="Entities\Anchors\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
     <Compile Include="Extensions\Ifc2AxisPlacement3DExtensions.cs" />
+    <Compile Include="Extensions\IfcCartesianPointList3DExtensions.cs" />
     <Compile Include="Extensions\IfcDirectionExtensions.cs" />
     <Compile Include="Extensions\IfcExtrudedAreaSolidExtensions.cs" />
     <Compile Include="Extensions\IfcRevolvedAreaSolidExtensions.cs" />
+    <Compile Include="Extensions\IfcTriangulatedFaceSetExtensions.cs" />
     <Compile Include="Extensions\IIfcObjectPlacementExtensions.cs" />
     <Compile Include="PropertySets\AVEVA_EntityParameters.cs" />
     <Compile Include="PropertySets\AVEVA_Pset.cs" />
