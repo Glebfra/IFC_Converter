@@ -80,7 +80,7 @@ namespace IFCConverter
         }
 
         [STAThread]
-        public int ImportFromFile(object startDocumentObject, int languageId)
+        public int ImportFromFileImport(object startAutoServerObject, int languageId)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace IFCConverter
                 
                 Localize(languageId);
                 
-                StartDocument startDocument = new StartDocument(startDocumentObject);
+                StartDocument startDocument = new StartDocument(startAutoServerObject);
                 ImportDataContainer importDataContainer = new ImportDataContainer();
 
                 DialogResult dialogResult;
@@ -135,9 +135,10 @@ namespace IFCConverter
         }
 
         [STAThread]
-        public int ImportFromDrop(object startAutoServerObject, int languageId)
+        public int ImportFromFileOpen(object startDocumentObject, int languageId)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("It's not realized yet!");
+            return 1;
         }
 
         private void Localize(int languageId)

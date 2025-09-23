@@ -4,6 +4,7 @@ using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
+using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using IFC.Extensions;
 using IFC.PropertySets;
@@ -56,6 +57,15 @@ namespace IFCConverter.Importers
             return products
                 .OfType<IfcPipeFitting>()
                 .Where(fitting => fitting.PredefinedType == IfcPipeFittingTypeEnum.JUNCTION)
+                .ToArray();
+        }
+
+        // ReSharper disable once CoVariantArrayConversion
+        public virtual IfcElement[] GetReducers(IfcProduct[] products)
+        {
+            return products
+                .OfType<IfcPipeFitting>()
+                .Where(fitting => fitting.PredefinedType == IfcPipeFittingTypeEnum.CONNECTOR)
                 .ToArray();
         }
 
@@ -181,6 +191,52 @@ namespace IFCConverter.Importers
             }
 
             return weldedTeeEntities;
+        }
+
+        public virtual IfcVertexReducerConcentricEntity[] CreateConcentricReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        {
+            IfcVertexReducerConcentricEntity[] reducerConcentricEntities = new IfcVertexReducerConcentricEntity[reducers.Length];
+            for (int i = 0; i < reducers.Length; i++)
+            {
+                IfcElement reducer = reducers[i];
+                IfcLabel name = reducer.Name ?? new IfcLabel("");
+                IfcIdentifier tag = reducer.Tag ?? new IfcIdentifier("");
+                
+                XbimMatrix3D objectMatrix3D = reducer.ObjectPlacement.ToObjectMatrix3D();
+                XbimVector3D coordinates = objectMatrix3D.Translation;
+                IfcAbstractSegmentEntity[] nearestSegments = abstractSegmentEntities.GetNearestSegments(coordinates, 2).ToArray();
+                
+                IPropertySet[] propertySets = reducer.GetPropertySets().ToArray();
+                double length = GetPipeLength(propertySets);
+                double smallDiameter = nearestSegments.Min(segment => segment.Diameter.Value);
+                double largeDiameter = nearestSegments.Max(segment => segment.Diameter.Value);
+                
+                double[] diameters = nearestSegments
+                    .Select(segment => segment.Diameter.Value)
+                    .OrderBy(diameter => diameter)
+                    .ToArray();
+                
+                IfcVertexReducerConcentricEntity reducerConcentricEntity = new IfcVertexReducerConcentricEntity(
+                    name,
+                    tag,
+                    objectMatrix3D,
+                    length,
+                    diameters,
+                    16
+                );
+                reducerConcentricEntity.ConnectedEntities.AddRange(nearestSegments);
+                reducerConcentricEntity.PropertySets.AddRange(propertySets);
+                
+                double clipLength = length / 2;
+                foreach (IfcAbstractSegmentEntity ifcAbstractSegmentEntity in nearestSegments)
+                {
+                    ifcAbstractSegmentEntity.Clip(reducerConcentricEntity.NodeEntity, -clipLength);
+                    IndexedResult<IfcNodeEntity> nearestNodeResult = ifcAbstractSegmentEntity.NodeEntities.GetNearestNode(reducerConcentricEntity.NodeEntity);
+                    ifcAbstractSegmentEntity.NodeEntities[nearestNodeResult.Index] = reducerConcentricEntity.NodeEntity;
+                }
+            }
+
+            return reducerConcentricEntities;
         }
 
         protected static void FilterTeeSegments(IfcAbstractSegmentEntity[] segmentEntities, XbimVector3D coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle)

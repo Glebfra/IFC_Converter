@@ -1,5 +1,6 @@
 ﻿using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
+using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProductExtension;
@@ -30,6 +31,13 @@ namespace IFCConverter.Importers
         public IfcElement[] GetTees(IfcProduct[] products);
         
         /// <summary>
+        /// Retrieves an array of IfcPipeFitting objects representing tees from the provided IfcProduct array.
+        /// </summary>
+        /// <param name="products">An array of IfcProduct objects to extract tees from.</param>
+        /// <returns>An array of IfcProduct objects representing reducers.</returns>
+        public IfcElement[] GetReducers(IfcProduct[] products);
+        
+        /// <summary>
         /// Creates an array of IfcPipeSegmentEntity objects from the provided IfcPipeSegment array.
         /// </summary>
         /// <param name="pipes">An array of IfcElement objects to convert into entities.</param>
@@ -51,5 +59,13 @@ namespace IFCConverter.Importers
         /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the tees.</param>
         /// <returns>An array of IfcWeldedTeeEntity objects.</returns>
         public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, IfcAbstractSegmentEntity[] abstractSegmentEntities);
+        
+        /// <summary>
+        /// Creates an array of IfcWeldedTeeEntity objects from the provided tees and abstract segment entities.
+        /// </summary>
+        /// <param name="reducers">An array of IfcElement objects representing reducers.</param>
+        /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the reducers.</param>
+        /// <returns>An array of IfcVertexReducerConcentricEntity objects.</returns>
+        public IfcVertexReducerConcentricEntity[] CreateConcentricReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities);
     }
 }

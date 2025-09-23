@@ -24,20 +24,10 @@ namespace IFCConverter.Importers
     {
         public AvevaImporter(IModel model) : base(model) { }
         
-        public override IfcElement[] GetPipeSegments(IfcProduct[] products)
-        {
-            return GetElementByType(products, "TUBING");
-        }
-
-        public override IfcElement[] GetBends(IfcProduct[] products)
-        {
-            return GetElementByType(products, "ELBOW");
-        }
-        
-        public override IfcElement[] GetTees(IfcProduct[] products)
-        {
-            return GetElementByType(products, "TEE");
-        }
+        public override IfcElement[] GetPipeSegments(IfcProduct[] products) => GetElementByType(products, "TUBING");
+        public override IfcElement[] GetBends(IfcProduct[] products) => GetElementByType(products, "ELBOW");
+        public override IfcElement[] GetTees(IfcProduct[] products) => GetElementByType(products, "TEE");
+        public override IfcElement[] GetReducers(IfcProduct[] products) => GetElementByType(products, "REDUCER");
 
         public override IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
         {
