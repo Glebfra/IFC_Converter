@@ -234,23 +234,32 @@ namespace IFCConverter.Importers
                 double[] diameters = reducerProperties.Radiuses
                     .Select(radius => radius * _LengthUnit.Power * 2)
                     .ToArray();
+                double length = reducerProperties.Length * _LengthUnit.Power;
 
                 IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
                     .GetConnectedSegments(boundPoints)
                     .ToArray();
                 
                 XbimVector3D coordinates = reducerProperties.Center * _LengthUnit.Power;
-                XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateReducerEccentricObjectMatrix(coordinates, connectedSegments, out double displacementLength);
-                double largeDiameter = reducerProperties.Radiuses[0] * 2;
-                double smallDiameter = reducerProperties.Radiuses[1] * 2;
+                XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out double angle);
+                double largeDiameter = diameters[0];
+                double smallDiameter = diameters[1];
 
                 IfcVertexReducerEccentricEntity eccentricReducerEntity = new IfcVertexReducerEccentricEntity(
-                    name, tag, objectMatrix3D, reducerProperties.Length, displacementLength, diameters, 16
+                    name, tag, objectMatrix3D, length, 0, diameters, 16
                 );
                 
                 eccentricReducerEntity.PropertySets.AddRange(propertySets);
                 eccentricReducerEntity.ConnectedEntities.AddRange(connectedSegments);
                 eccentricReducerEntities[i] = eccentricReducerEntity;
+                
+                IfcNodeEntity reducerNode = eccentricReducerEntity.NodeEntity;
+                foreach (IfcAbstractSegmentEntity connectedSegment in connectedSegments)
+                {
+                    connectedSegment.Clip(reducerNode, -length / 2);
+                    IndexedResult<IfcNodeEntity> connectedNodeResult = connectedSegment.NodeEntities.GetNearestNode(reducerNode);
+                    connectedSegment.NodeEntities[connectedNodeResult.Index] = reducerNode;
+                }
             }
 
             return eccentricReducerEntities;

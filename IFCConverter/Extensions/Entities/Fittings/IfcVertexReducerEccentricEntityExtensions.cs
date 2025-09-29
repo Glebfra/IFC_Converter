@@ -1,11 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Extensions;
 using IFC.PropertySets;
 using IFCConverter.Extensions.Tools;
+using Start.API;
 using Start.Entities.Fittings;
+using Start.StartProperties;
 using Xbim.Common.Geometry;
 
 namespace IFCConverter.Extensions.Entities.Fittings
@@ -43,6 +46,28 @@ namespace IFCConverter.Extensions.Entities.Fittings
             reducerEccentricEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(reducer));
 
             return reducerEccentricEntity;
+        }
+
+        public static StartReducerEntity ToStartReducerEntity(this IfcVertexReducerEccentricEntity reducerEccentricEntity)
+        {
+            StartReducerEntity startReducerEntity = new StartReducerEntity();
+            startReducerEntity.Name = reducerEccentricEntity.Name.Value;
+            bool hasStartType = Enum.TryParse(reducerEccentricEntity.Tag.Value, out StartElementType elementType);
+            startReducerEntity.Type = hasStartType ? elementType : StartElementType.REDUCER_ECCENTRIC;
+            
+            startReducerEntity.LengthOfConicalPart = LengthProperty.CreateFromSi(reducerEccentricEntity.Length);
+            
+            double[] diameters = reducerEccentricEntity.Diameters
+                .Select(diameter => diameter.Value)
+                .ToArray();
+            startReducerEntity.MinDiameter = LengthProperty.CreateFromSi(diameters.Min());
+            startReducerEntity.MaxDiameter = LengthProperty.CreateFromSi(diameters.Max());
+
+            Pset_Start? psetStart = reducerEccentricEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
+            if (psetStart != null)
+                startReducerEntity.UpdateFromStartPset(psetStart);
+
+            return startReducerEntity;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Fittings.CAD;
+using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using IFCConverter.Extensions.Entities;
 using IFCConverter.Extensions.Entities.Fittings;
@@ -55,11 +56,15 @@ namespace IFCConverter
                 IfcElement[] ifcTeeFittings = importer.GetTees(products);
                 IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
                 
+                IfcElement[] ifcReducerFittings = importer.GetReducers(products);
+                IfcVertexReducerEccentricEntity[] reducerEntities = importer.CreateEccentricReducers(ifcReducerFittings, segmentEntities);
+
                 using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
                 {
                     GeneratePipeEntities(startProject, segmentEntities);
                     GenerateBendEntities(startProject, bendEntities);
                     GenerateTeeEntities(startProject, teeEntities);
+                    GenerateReducerEntities(startProject, reducerEntities);
                 }
             }
         }
@@ -128,6 +133,30 @@ namespace IFCConverter
                     .ToArray();
                 ConnectNodes(startPipeObject, startNodesObjects);
                 _startPipeObjects.Add(ifcPipeSegmentEntity, startPipeObject);
+            }
+        }
+
+        /// <summary>
+        /// Generates reducer entities and connects them to the corresponding pipe segments and nodes.
+        /// </summary>
+        /// <param name="startProject">Start project</param>
+        /// <param name="reducerEntities">IfcVertexReducerEccentricEntities</param>
+        private void GenerateReducerEntities(StartProject startProject, IEnumerable<IfcVertexReducerEccentricEntity> reducerEntities)
+        {
+            foreach (IfcVertexReducerEccentricEntity ifcReducerEntity in reducerEntities)
+            {
+                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcReducerEntity.ConnectedEntities
+                    .OfType<IfcPipeSegmentEntity>()
+                    .ToArray();
+                StartObject[] startPipeObjects = pipeSegmentEntities
+                    .Select(segment => _startPipeObjects[segment])
+                    .ToArray();
+                
+                StartReducerEntity startReducerEntity = ifcReducerEntity.ToStartReducerEntity();
+                StartObject startReducerObject = GenerateStartEntity(startProject, startReducerEntity);
+                StartObject startNodeObject = GetOrCreateNode(startProject, ifcReducerEntity.NodeEntity);
+                ConnectNodes(startReducerObject, startNodeObject);
+                ConnectObjects(startReducerObject, startPipeObjects);
             }
         }
 

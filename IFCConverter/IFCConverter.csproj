@@ -188,6 +188,7 @@
     <Compile Include="Extensions\Entities\Fittings\IfcWeldedTeeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\IfcWeldoletEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\StartBendEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\Fittings\StartReducerEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\Fittings\StartTeeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\IfcNodeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\IfcProductExtensions.cs" />
