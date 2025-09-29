@@ -19,6 +19,7 @@ namespace IFC.Extensions
         public XbimVector3D[] BoundPoints;
         public XbimVector3D Center;
         public double[] Radiuses;
+        public double Length;
     }
 
     public static class IfcTriangulatedFaceSetExtensions
@@ -104,12 +105,14 @@ namespace IFC.Extensions
                 (boundPoints[0] - firstCircleLocalPoints[0]).Length,
                 (boundPoints[1] - secondCircleLocalPoints[0]).Length,
             };
+            double length = (boundPoints[1] - boundPoints[0]).Length;
 
             return new ReducerProperties()
             {
                 BoundPoints = boundPoints,
                 Center = globalCoordinates,
-                Radiuses = radiuses
+                Radiuses = radiuses,
+                Length = length
             };
         }
     }

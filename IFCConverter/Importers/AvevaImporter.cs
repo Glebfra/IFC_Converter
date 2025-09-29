@@ -4,6 +4,7 @@ using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
+using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using IFC.Extensions;
 using IFC.PropertySets;
@@ -198,6 +199,61 @@ namespace IFCConverter.Importers
             }
             
             return weldedTeeEntities;
+        }
+
+        public override IfcVertexReducerEccentricEntity[] CreateEccentricReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        {
+            IfcVertexReducerEccentricEntity[] eccentricReducerEntities = new IfcVertexReducerEccentricEntity[reducers.Length];
+            for (int i = 0; i < reducers.Length; i++)
+            {
+                IfcElement reducer = reducers[i];
+                IfcLabel name = reducer.Name ?? new IfcLabel("");
+                IfcIdentifier tag = reducer.Tag ?? new IfcIdentifier("");
+                
+                IPropertySet[] propertySets = reducer.GetPropertySets().ToArray();
+                
+                AVEVA_EntityParameters? avevaEntityParameters = propertySets.OfType<AVEVA_EntityParameters>().FirstOrDefault();
+                if (avevaEntityParameters == null)
+                    throw new Exception("Bend does not have AVEVA_EntityParameters property set.");
+                
+                AVEVA_Pset? avevaPset = propertySets.OfType<AVEVA_Pset>().FirstOrDefault();
+                if (avevaPset == null)
+                    throw new Exception("Bend does not have AVEVA_Pset property set.");
+
+                IfcTriangulatedFaceSet? faceSet = reducer
+                    .GetRepresentationItems()
+                    .OfType<IfcTriangulatedFaceSet>()
+                    .FirstOrDefault();
+                if (faceSet == null)
+                    throw new NullReferenceException("Reducer does not have IfcTriangulatedFaceSet representation.");
+                
+                ReducerProperties reducerProperties = faceSet.GetReducerProperties(avevaPset);
+                XbimVector3D[] boundPoints = reducerProperties.BoundPoints
+                    .Select(point => point * _LengthUnit.Power)
+                    .ToArray();
+                double[] diameters = reducerProperties.Radiuses
+                    .Select(radius => radius * _LengthUnit.Power * 2)
+                    .ToArray();
+
+                IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
+                    .GetConnectedSegments(boundPoints)
+                    .ToArray();
+                
+                XbimVector3D coordinates = reducerProperties.Center * _LengthUnit.Power;
+                XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateReducerEccentricObjectMatrix(coordinates, connectedSegments, out double displacementLength);
+                double largeDiameter = reducerProperties.Radiuses[0] * 2;
+                double smallDiameter = reducerProperties.Radiuses[1] * 2;
+
+                IfcVertexReducerEccentricEntity eccentricReducerEntity = new IfcVertexReducerEccentricEntity(
+                    name, tag, objectMatrix3D, reducerProperties.Length, displacementLength, diameters, 16
+                );
+                
+                eccentricReducerEntity.PropertySets.AddRange(propertySets);
+                eccentricReducerEntity.ConnectedEntities.AddRange(connectedSegments);
+                eccentricReducerEntities[i] = eccentricReducerEntity;
+            }
+
+            return eccentricReducerEntities;
         }
 
         private static IfcElement[] GetElementByType(IEnumerable<IfcProduct> products, IfcText type)

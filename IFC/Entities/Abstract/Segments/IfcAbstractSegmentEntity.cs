@@ -120,10 +120,20 @@ namespace IFC.Entities.Abstract.Segments
         /// <returns>The fake displacement vector.</returns>
         public XbimVector3D GetFakeDisplacementVector(IfcNodeEntity nodeEntity)
         {
+            return GetFakeDisplacementVector(nodeEntity.ObjectMatrix3D.Translation);
+        }
+
+        /// <summary>
+        /// Gets the fake displacement vector for the specified node entity.
+        /// </summary>
+        /// <param name="coordinates">The coordinates for which to calculate the displacement vector.</param>
+        /// <returns>The fake displacement vector.</returns>
+        public XbimVector3D GetFakeDisplacementVector(XbimVector3D coordinates)
+        {
             XbimVector3D startCoordinates = ObjectMatrix3D.Value.Translation;
             XbimVector3D endCoordinates = startCoordinates + ObjectMatrix3D.Value.Forward * Length;
-            bool isNegated = (nodeEntity.ObjectMatrix3D.Translation - startCoordinates).Length <
-                             (nodeEntity.ObjectMatrix3D.Translation - endCoordinates).Length;
+            bool isNegated = (coordinates - startCoordinates).Length <
+                             (coordinates - endCoordinates).Length;
             XbimVector3D displacement = _fakeDirection - _pipeDirection;
             return isNegated ? displacement : displacement.Negated();
         }

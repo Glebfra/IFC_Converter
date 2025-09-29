@@ -32,16 +32,14 @@ namespace IFCConverter.Extensions.Tools
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
 
-        public static XbimMatrix3D CreateReducerEccentricObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double displacementLength)
+        public static XbimMatrix3D CreateReducerEccentricObjectMatrix(XbimVector3D coordinates, IfcAbstractSegmentEntity[] segmentEntities, out double displacementLength)
         {
             IfcAbstractSegmentEntity[] orderedSegmentEntities = segmentEntities
                 .OrderBy(segment => segment.Diameter.Value)
                 .ToArray();
-            
-            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(orderedSegmentEntities[1], nodeEntity);
+            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(orderedSegmentEntities[1], coordinates);
             XbimVector3D up = orderedSegmentEntities
-                .Select(segment => segment.GetFakeDisplacementVector(nodeEntity))
+                .Select(segment => segment.GetFakeDisplacementVector(coordinates))
                 .First(item => item != XbimVector3D.Zero);
             
             displacementLength = up.Length;
@@ -49,6 +47,11 @@ namespace IFCConverter.Extensions.Tools
             forward = forward.Normalized();
 
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
+        }
+
+        public static XbimMatrix3D CreateReducerEccentricObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double displacementLength)
+        {
+            return CreateReducerEccentricObjectMatrix(nodeEntity.ObjectMatrix3D.Translation, segmentEntities, out displacementLength);
         }
 
         public static XbimMatrix3D CreateFixedAnchorObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)

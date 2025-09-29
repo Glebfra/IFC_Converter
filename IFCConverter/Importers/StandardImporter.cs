@@ -239,6 +239,11 @@ namespace IFCConverter.Importers
             return reducerConcentricEntities;
         }
 
+        public virtual IfcVertexReducerEccentricEntity[] CreateEccentricReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        {
+            throw new NotImplementedException();
+        }
+
         protected static void FilterTeeSegments(IfcAbstractSegmentEntity[] segmentEntities, XbimVector3D coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle)
         {
             branchPipes = new IfcAbstractSegmentEntity[2];
