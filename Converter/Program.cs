@@ -24,7 +24,7 @@ namespace Converter
             }
             else if (convertArguments.ConvertType == ConvertTypeEnum.IFCtoSTART)
             {
-                result = converter.ImportFromFileImport(startDocument, 1049);
+                result = converter.ImportFromFileOpen(startDocument, 1049);
             }
             else
             {

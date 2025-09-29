@@ -1,56 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using IFC.PropertySets;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
 
 namespace IFC.Extensions
 {
+    public struct BendProperties
+    {
+        public XbimVector3D[] BoundPoints;
+        public XbimVector3D Center;
+        public double Radius;
+        public double Angle;
+    }
+
     public static class IfcTriangulatedFaceSetExtensions
     {
-        public static double GetTorusRadius(this IfcTriangulatedFaceSet faceSet, double circleRadius)
+        public static BendProperties GetBendProperties(this IfcTriangulatedFaceSet faceSet, AVEVA_Pset avevaPset)
         {
+            XbimMatrix3D objectMatrix3D = avevaPset.GetObjectMatrix();
+            XbimVector3D coordinates = objectMatrix3D.Translation;
             XbimVector3D[] vertices = faceSet.Coordinates.GetCoordinates().ToArray();
 
-            XbimVector3D point = vertices[0];
-            double xx = point.X * point.X;
-            double yy = point.Y * point.Y;
-            double zz = point.Z * point.Z;
-            double temp = (xx + yy + zz - circleRadius * circleRadius);
-            double a = 1;
-            double b = -2 * temp - 4 * (xx + yy);
-            double c = temp * temp;
+            XbimVector3D minPoint = new XbimVector3D(
+                vertices.Min(vertex => vertex.X),
+                vertices.Min(vertex => vertex.Y),
+                vertices.Min(vertex => vertex.Z)
+            );
+            
+            XbimVector3D maxPoint = new XbimVector3D(
+                vertices.Max(vertex => vertex.X),
+                vertices.Max(vertex => vertex.Y),
+                vertices.Max(vertex => vertex.Z)
+            );
 
-            double D = b * b - 4 * a * c;
-            double sqrtD = Math.Sqrt(D);
-            
-            List<double> roots = new List<double>();
-            if (D < 0)
-                throw new ArgumentException("Cannot compute torus radius from given face set.");
-            if (D == 0)
+            XbimVector3D[] boundPoints = new XbimVector3D[]
             {
-                roots.Add(-b / (2 * a));
-            }
+                coordinates - objectMatrix3D.Right.DotProduct(coordinates - minPoint) * objectMatrix3D.Right,
+                coordinates + objectMatrix3D.Up.DotProduct(maxPoint - coordinates) * objectMatrix3D.Up,
+            };
 
-            if (D > 0)
-            {
-                roots.Add((-b + sqrtD) / (2 * a));
-                roots.Add((-b - sqrtD) / (2 * a));
-            }
+            XbimVector3D center = coordinates -
+                                  objectMatrix3D.Right.DotProduct(coordinates - minPoint) * objectMatrix3D.Right +
+                                  objectMatrix3D.Up.DotProduct(maxPoint - coordinates) * objectMatrix3D.Up;
+
+            XbimVector3D[] displacementVectors = boundPoints.Select(boundPoint => boundPoint - center).ToArray();
+            double radius = displacementVectors[0].Length;
+            double angle = displacementVectors[0].Angle(displacementVectors[1]);
             
-            if (roots.Count == 1 && roots[0] > 0)
-                return Math.Sqrt(roots[0]);
-            if (roots.Count == 2)
+            return new BendProperties()
             {
-                if (roots[0] > 0 && roots[1] > 0)
-                    return Math.Max(Math.Sqrt(roots[0]), Math.Sqrt(roots[1]));
-                if (roots[0] > 0)
-                    return Math.Sqrt(roots[0]);
-                if (roots[1] > 0)
-                    return Math.Sqrt(roots[1]);
-            }
-            
-            throw new ArgumentException("Cannot compute torus radius from given face set.");
+                BoundPoints = boundPoints,
+                Center = center,
+                Radius = radius,
+                Angle = angle
+            };
         }
     }
 }
