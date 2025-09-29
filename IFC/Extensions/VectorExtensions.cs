@@ -26,6 +26,22 @@ namespace IFC.Extensions
                 .OrderBy(vector => vector.Length)
                 .First();
         }
+
+        public static XbimVector3D Sum(this IEnumerable<XbimVector3D> vectors)
+        {
+            XbimVector3D[] xbimVector3Ds = vectors as XbimVector3D[] ?? vectors.ToArray();
+            IEnumerable<double> xs = xbimVector3Ds.Select(v => v.X);
+            IEnumerable<double> ys = xbimVector3Ds.Select(v => v.Y);
+            IEnumerable<double> zs = xbimVector3Ds.Select(v => v.Z);
+            
+            return new XbimVector3D(xs.Sum(), ys.Sum(), zs.Sum());
+        }
+
+        public static XbimVector3D Average(this IEnumerable<XbimVector3D> vectors)
+        {
+            XbimVector3D[] xbimVector3Ds = vectors as XbimVector3D[] ?? vectors.ToArray();
+            return 1.0 / xbimVector3Ds.Count() * xbimVector3Ds.Sum();
+        }
         
         public static double GetDistance(this XbimVector3D first, XbimVector3D second)
         {
