@@ -55,7 +55,10 @@ namespace IFCConverter
                     IfcGenerator ifcGenerator = new IfcGenerator(exportDataContainer);
                     ifcGenerator.Convert(startDocument);
                     logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                
+                    
+                    #if DEBUG
+                    logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
+                    #else
                     if (logger.HasErrors())
                     {
                         logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
@@ -64,6 +67,8 @@ namespace IFCConverter
                     {
                         logger.Flush();
                     }
+                    #endif
+                    
                     return (int)ConversionResult.Success;
                 }
                 catch (Exception e)
@@ -117,14 +122,19 @@ namespace IFCConverter
                     startGenerator.Convert(startDocument);
                     logger.Info($"Convert is successfully ended at {DateTime.Now}");
                     
+                    #if DEBUG
+                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                    #else
                     if (logger.HasErrors())
                     {
-                        logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                        logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
                     }
                     else
                     {
                         logger.Flush();
                     }
+                    #endif
+                    
                     return (int)ConversionResult.Success;
                 }
                 catch (Exception e)

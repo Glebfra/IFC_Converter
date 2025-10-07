@@ -25,13 +25,6 @@ namespace IFC.Extensions
                 (1 - angleCos) * xz - angleSin * y, (1 - angleCos) * yz + angleSin * x, angleCos + (1 - angleCos) * zz, 0, 
                 0, 0, 0, 1
             );
-
-            // return new XbimMatrix3D(
-            //     angleCos + (1 - angleCos) * xx, (1 - angleCos) * xy + angleSin * z, (1 - angleCos) * xz - angleSin * y, 0,
-            //     (1 - angleCos) * xy - angleSin * z, angleCos + (1 - angleCos) * yy, (1 - angleCos) * yz + angleSin * x, 0, 
-            //     (1 - angleCos) * xz + angleSin * y, (1 - angleCos) * yz - angleSin * x, angleCos + (1 - angleCos) * zz, 0,
-            //     0, 0, 0, 1
-            // );
         }
 
         public static XbimMatrix3D Transponse(this XbimMatrix3D matrix3D)

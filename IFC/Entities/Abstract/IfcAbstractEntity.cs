@@ -53,6 +53,11 @@ namespace IFC.Entities.Abstract
             ObjectMatrix3D = new ActionProperty<XbimMatrix3D>(objectMatrix3D);
         }
 
+        public override string ToString()
+        {
+            return $"{GetType().Name} - Name: {Name}, Tag: {Tag}";
+        }
+
         /// <summary>
         /// Creates and adds an IFC product to the model.
         /// </summary>

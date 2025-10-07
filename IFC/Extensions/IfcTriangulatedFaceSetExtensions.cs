@@ -1,27 +1,12 @@
 ﻿using System;
 using System.Linq;
 using IFC.PropertySets;
+using IFC.Tools;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
 
 namespace IFC.Extensions
 {
-    public struct BendProperties
-    {
-        public XbimVector3D[] BoundPoints;
-        public XbimVector3D Center;
-        public double Radius;
-        public double Angle;
-    }
-
-    public struct ReducerProperties
-    {
-        public XbimVector3D[] BoundPoints;
-        public XbimVector3D Center;
-        public double[] Radiuses;
-        public double Length;
-    }
-
     public static class IfcTriangulatedFaceSetExtensions
     {
         private const double TOLERANCE = 1e-6;
@@ -72,7 +57,7 @@ namespace IFC.Extensions
             XbimMatrix3D objectToWorldMatrix3D = avevaPset.GetObjectMatrix();
             XbimVector3D globalCoordinates = objectToWorldMatrix3D.Translation;
             XbimVector3D[] globalVertices = faceSet.Coordinates.GetCoordinates().ToArray();
-            
+
             XbimVector3D globalMinPoint = new XbimVector3D(
                 globalVertices.Min(vertex => vertex.X),
                 globalVertices.Min(vertex => vertex.Y),
@@ -83,7 +68,7 @@ namespace IFC.Extensions
                 globalVertices.Max(vertex => vertex.Y),
                 globalVertices.Max(vertex => vertex.Z)
             );
-            
+
             XbimMatrix3D worldToObjectMatrix3D = objectToWorldMatrix3D.Inverted();
             XbimVector3D localMinPoint = worldToObjectMatrix3D.Transform(globalMinPoint);
             XbimVector3D localMaxPoint = worldToObjectMatrix3D.Transform(globalMaxPoint);
@@ -92,11 +77,12 @@ namespace IFC.Extensions
             XbimVector3D[] firstCircleLocalPoints = localVertices.Where(vertex => Math.Abs(vertex.X - localMinPoint.X) < TOLERANCE).ToArray();
             XbimVector3D[] secondCircleLocalPoints = localVertices.Where(vertex => Math.Abs(vertex.X - localMaxPoint.X) < TOLERANCE).ToArray();
 
+            XbimVector3D firstCircleLocalCenterPoint = firstCircleLocalPoints.Average();
             XbimVector3D secondCircleLocalCenterPoint = secondCircleLocalPoints.Average();
 
             XbimVector3D[] boundPoints = new XbimVector3D[]
             {
-                globalCoordinates,
+                objectToWorldMatrix3D.Transform(firstCircleLocalCenterPoint),
                 objectToWorldMatrix3D.Transform(secondCircleLocalCenterPoint)
             };
 

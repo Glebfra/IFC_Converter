@@ -32,6 +32,7 @@ namespace IFCConverter
         public void Convert(StartDocument startDocument)
         {
             Logger logger = Logger.GetInstance();
+            logger.Info("STARTtoIFC exporter v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
 
             using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
             {

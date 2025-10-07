@@ -25,12 +25,10 @@ namespace IFCConverter.Importers
 {
     internal class StandardImporter : IImporter
     {
-        protected IModel _Model;
         protected IfcSIUnit _LengthUnit;
         
         public StandardImporter(IModel model)
         {
-            _Model = model;
             _LengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
         }
         
@@ -239,7 +237,7 @@ namespace IFCConverter.Importers
             return reducerConcentricEntities;
         }
 
-        public virtual IfcVertexReducerEccentricEntity[] CreateEccentricReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        public virtual IfcVertexReducerEccentricEntity[] CreateReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities)
         {
             throw new NotImplementedException();
         }

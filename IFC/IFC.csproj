@@ -277,6 +277,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ActionProperty.cs" />
     <Compile Include="Tools\Colour.cs" />
+    <Compile Include="Tools\EntityProperties.cs" />
     <Compile Include="Tools\IfcAxis.cs" />
     <Compile Include="Tools\IfcAxis.Direction.cs">
       <DependentUpon>IfcAxis.cs</DependentUpon>

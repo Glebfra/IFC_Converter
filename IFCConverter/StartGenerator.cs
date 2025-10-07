@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IFC;
 using IFC.Entities;
+using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
@@ -41,31 +43,50 @@ namespace IFCConverter
         /// <param name="startDocument">StartDocument</param>
         public void Convert(StartDocument startDocument)
         {
-            using (IFCProject ifcProject = IFCProject.OpenProject(_dataContainer.InputFilePath))
-            {
-                IImporter importer = ImporterFactory.CreateImporter(ifcProject.Model, _dataContainer.ImportTypeEnum);
-                
-                IfcProduct[] products = ifcProject.GetProducts().ToArray();
-                
-                IfcElement[] ifcPipeSegments = importer.GetPipeSegments(products);
-                IfcPipeSegmentEntity[] segmentEntities = importer.CreatePipeSegments(ifcPipeSegments);
-                
-                IfcElement[] ifcBendPipeFittings = importer.GetBends(products);
-                IfcCadBendEntity[] bendEntities = importer.CreateBends(ifcBendPipeFittings, segmentEntities);
-                
-                IfcElement[] ifcTeeFittings = importer.GetTees(products);
-                IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
-                
-                IfcElement[] ifcReducerFittings = importer.GetReducers(products);
-                IfcVertexReducerEccentricEntity[] reducerEntities = importer.CreateEccentricReducers(ifcReducerFittings, segmentEntities);
+            Logger logger = Logger.GetInstance();
+            logger.Info("IFCtoSTART importer v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
 
-                using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
+            try
+            {
+                using (IFCProject ifcProject = IFCProject.OpenProject(_dataContainer.InputFilePath))
                 {
-                    GeneratePipeEntities(startProject, segmentEntities);
-                    GenerateBendEntities(startProject, bendEntities);
-                    GenerateTeeEntities(startProject, teeEntities);
-                    GenerateReducerEntities(startProject, reducerEntities);
+                    logger.Info($"Opened IFC file: {_dataContainer.InputFilePath}");
+                    logger.Info($"IFC schema: {ifcProject.Model.SchemaVersion}");
+                    
+                    IImporter importer = ImporterFactory.CreateImporter(ifcProject.Model, _dataContainer.ImportTypeEnum);
+                    logger.Info($"Using importer: {importer.GetType().Name}");
+                    
+                    IfcProduct[] products = ifcProject.GetProducts().ToArray();
+                    logger.Info($"Found products: {products.Length}");
+                    
+                    IfcElement[] ifcPipeSegments = importer.GetPipeSegments(products);
+                    logger.Info($"Found pipe segments: {ifcPipeSegments.Length}");
+                    IfcPipeSegmentEntity[] segmentEntities = importer.CreatePipeSegments(ifcPipeSegments);
+
+                    IfcElement[] ifcBendPipeFittings = importer.GetBends(products);
+                    logger.Info($"Found bends: {ifcBendPipeFittings.Length}");
+                    IfcCadBendEntity[] bendEntities = importer.CreateBends(ifcBendPipeFittings, segmentEntities);
+
+                    IfcElement[] ifcTeeFittings = importer.GetTees(products);
+                    logger.Info($"Found tees: {ifcTeeFittings.Length}");
+                    IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
+
+                    IfcElement[] ifcReducerFittings = importer.GetReducers(products);
+                    logger.Info($"Found reducers: {ifcReducerFittings.Length}");
+                    IfcVertexReducerEccentricEntity[] reducerEntities = importer.CreateReducers(ifcReducerFittings, segmentEntities);
+
+                    using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
+                    {
+                        GeneratePipeEntities(startProject, segmentEntities);
+                        GenerateTeeEntities(startProject, teeEntities);
+                        GenerateBendEntities(startProject, bendEntities);
+                        GenerateReducerEntities(startProject, reducerEntities);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
             }
         }
 

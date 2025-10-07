@@ -59,21 +59,13 @@ namespace IFCConverter.Importers
         /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the tees.</param>
         /// <returns>An array of IfcWeldedTeeEntity objects.</returns>
         public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, IfcAbstractSegmentEntity[] abstractSegmentEntities);
-        
-        /// <summary>
-        /// Creates an array of IfcWeldedTeeEntity objects from the provided tees and abstract segment entities.
-        /// </summary>
-        /// <param name="reducers">An array of IfcElement objects representing reducers.</param>
-        /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the reducers.</param>
-        /// <returns>An array of IfcVertexReducerConcentricEntity objects.</returns>
-        public IfcVertexReducerConcentricEntity[] CreateConcentricReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities);
-        
+
         /// <summary>
         /// Creates an array of IfcWeldedTeeEntity objects from the provided tees and abstract segment entities.
         /// </summary>
         /// <param name="reducers">An array of IfcElement objects representing reducers.</param>
         /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the reducers.</param>
         /// <returns>An array of IfcVertexReducerEccentricEntity objects.</returns>
-        public IfcVertexReducerEccentricEntity[] CreateEccentricReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities);
+        public IfcVertexReducerEccentricEntity[] CreateReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities);
     }
 }

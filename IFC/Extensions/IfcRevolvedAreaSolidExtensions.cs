@@ -1,12 +1,14 @@
-﻿using Xbim.Common.Geometry;
+﻿using IFC.Tools;
+using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.ProfileResource;
 
 namespace IFC.Extensions
 {
     public static class IfcRevolvedAreaSolidExtensions
     {
-        public static XbimVector3D[] GetBoundPoints(this IfcRevolvedAreaSolid revolvedAreaSolid)
+        public static BendProperties GetBendProperties(this IfcRevolvedAreaSolid revolvedAreaSolid)
         {
             XbimVector3D internalAxisLocation = revolvedAreaSolid.Axis.Location.ToXbimVector3D();
             XbimVector3D internalAxisDirection = revolvedAreaSolid.Axis.Axis.XbimVector3D();
@@ -21,23 +23,20 @@ namespace IFC.Extensions
 
             XbimVector3D globalFirstPoint = areaSolidMatrix3D.Transform(internalFirstPoint) + areaSolidDisplacement;
             XbimVector3D globalSecondPoint = areaSolidMatrix3D.Transform(internalSecondPoint) + areaSolidDisplacement;
+            XbimVector3D globalAxisLocation = areaSolidMatrix3D.Translation + internalAxisLocation;
+            
+            XbimVector3D[] boundPoints = new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
 
-            return new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
-        }
+            double pipeDiameter = revolvedAreaSolid.SweptArea is IfcCircleProfileDef circleProfileDef ? circleProfileDef.Radius * 2 : 0;
 
-        public static XbimMatrix3D GetObjectMatrix(this IfcRevolvedAreaSolid revolvedAreaSolid)
-        {
-            return revolvedAreaSolid.Position.ToObjectMatrix3D();
-        }
-
-        public static double GetAngle(this IfcRevolvedAreaSolid revolvedAreaSolid)
-        {
-            return revolvedAreaSolid.Angle;
-        }
-
-        public static double GetRadius(this IfcRevolvedAreaSolid revolvedAreaSolid)
-        {
-            return revolvedAreaSolid.Axis.Location.ToXbimVector3D().Length;
+            return new BendProperties()
+            {
+                Angle = angle,
+                BoundPoints = boundPoints,
+                Center = globalAxisLocation,
+                Radius = internalAxisLocation.Length,
+                PipeDiameter = pipeDiameter
+            };
         }
     }
 }
