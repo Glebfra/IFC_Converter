@@ -70,7 +70,7 @@ namespace IFC.Extensions
 
         public static bool IsEqualFixed(this XbimVector3D vector3D, XbimVector3D other, double precision = 1e-9)
         {
-            return Math.Abs(vector3D.GetDistance(other)) < precision;
+            return Math.Abs(vector3D.GetDistance(other)) <= precision;
         }
 
         public static bool IsEqualFixed(this XbimVector3D vector3D, IEnumerable<XbimVector3D> others, double precision = 1e-9)

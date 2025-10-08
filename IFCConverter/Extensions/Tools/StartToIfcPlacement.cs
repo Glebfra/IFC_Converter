@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities;
 using IFC.Entities.Abstract.Segments;
@@ -45,7 +46,7 @@ namespace IFCConverter.Extensions.Tools
             displacementLength = up.Length;
             up = up.Normalized();
             forward = forward.Normalized();
-
+            
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
 
@@ -119,14 +120,14 @@ namespace IFCConverter.Extensions.Tools
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
 
-        public static XbimMatrix3D CreateFittingObjectMatrix(XbimVector3D coordinates, IfcAbstractSegmentEntity[] segmentEntities, out double angle)
+        public static XbimMatrix3D CreateFittingObjectMatrix(XbimVector3D coordinates, IReadOnlyList<IfcAbstractSegmentEntity> segmentEntities, out double angle)
         {
             XbimVector3D[] directionToPipes = segmentEntities.Select(entity => IfcAxis.GetPipeDirectionFromNode(entity, coordinates)).ToArray();
             XbimVector3D forward = directionToPipes[0].Negated();
             XbimVector3D up;
 
             angle = 0;
-            if (segmentEntities.Length == 2)
+            if (segmentEntities.Count == 2)
             {
                 angle = forward.Angle(directionToPipes[1]);
             }

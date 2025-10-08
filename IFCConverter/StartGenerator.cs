@@ -53,7 +53,7 @@ namespace IFCConverter
                     logger.Info($"Opened IFC file: {_dataContainer.InputFilePath}");
                     logger.Info($"IFC schema: {ifcProject.Model.SchemaVersion}");
                     
-                    IImporter importer = ImporterFactory.CreateImporter(ifcProject.Model, _dataContainer.ImportTypeEnum);
+                    IImporter importer = ImporterFactory.CreateImporter(ifcProject, _dataContainer.ImportTypeEnum);
                     logger.Info($"Using importer: {importer.GetType().Name}");
                     
                     IfcProduct[] products = ifcProject.GetProducts().ToArray();
@@ -61,20 +61,20 @@ namespace IFCConverter
                     
                     IfcElement[] ifcPipeSegments = importer.GetPipeSegments(products);
                     logger.Info($"Found pipe segments: {ifcPipeSegments.Length}");
-                    IfcPipeSegmentEntity[] segmentEntities = importer.CreatePipeSegments(ifcPipeSegments);
-
+                    List<IfcPipeSegmentEntity> segmentEntities = importer.CreatePipeSegments(ifcPipeSegments).ToList();
+                    
                     IfcElement[] ifcBendPipeFittings = importer.GetBends(products);
                     logger.Info($"Found bends: {ifcBendPipeFittings.Length}");
                     IfcCadBendEntity[] bendEntities = importer.CreateBends(ifcBendPipeFittings, segmentEntities);
-
+                    
                     IfcElement[] ifcTeeFittings = importer.GetTees(products);
                     logger.Info($"Found tees: {ifcTeeFittings.Length}");
                     IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
-
+                    
                     IfcElement[] ifcReducerFittings = importer.GetReducers(products);
                     logger.Info($"Found reducers: {ifcReducerFittings.Length}");
-                    IfcVertexReducerEccentricEntity[] reducerEntities = importer.CreateReducers(ifcReducerFittings, segmentEntities);
-
+                    IfcAbstractReducerEntity[] reducerEntities = importer.CreateReducers(ifcReducerFittings, segmentEntities);
+                    
                     using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
                     {
                         GeneratePipeEntities(startProject, segmentEntities);
@@ -162,9 +162,9 @@ namespace IFCConverter
         /// </summary>
         /// <param name="startProject">Start project</param>
         /// <param name="reducerEntities">IfcVertexReducerEccentricEntities</param>
-        private void GenerateReducerEntities(StartProject startProject, IEnumerable<IfcVertexReducerEccentricEntity> reducerEntities)
+        private void GenerateReducerEntities(StartProject startProject, IEnumerable<IfcAbstractReducerEntity> reducerEntities)
         {
-            foreach (IfcVertexReducerEccentricEntity ifcReducerEntity in reducerEntities)
+            foreach (IfcAbstractReducerEntity ifcReducerEntity in reducerEntities)
             {
                 IfcPipeSegmentEntity[] pipeSegmentEntities = ifcReducerEntity.ConnectedEntities
                     .OfType<IfcPipeSegmentEntity>()

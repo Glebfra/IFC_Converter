@@ -80,6 +80,9 @@ namespace IFC.Extensions
             XbimVector3D firstCircleLocalCenterPoint = firstCircleLocalPoints.Average();
             XbimVector3D secondCircleLocalCenterPoint = secondCircleLocalPoints.Average();
 
+            XbimVector3D centerDisplacement = secondCircleLocalCenterPoint - firstCircleLocalCenterPoint;
+            XbimVector3D axisDisplacement = centerDisplacement.DotProduct(objectToWorldMatrix3D.Forward) * objectToWorldMatrix3D.Forward;
+
             XbimVector3D[] boundPoints = new XbimVector3D[]
             {
                 objectToWorldMatrix3D.Transform(firstCircleLocalCenterPoint),
@@ -97,6 +100,7 @@ namespace IFC.Extensions
             {
                 BoundPoints = boundPoints,
                 Center = globalCoordinates,
+                AxisDisplacement = axisDisplacement,
                 Radiuses = radiuses,
                 Length = length
             };

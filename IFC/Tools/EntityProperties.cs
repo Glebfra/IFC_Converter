@@ -15,6 +15,7 @@ namespace IFC.Tools
     {
         public XbimVector3D[] BoundPoints;
         public XbimVector3D Center;
+        public XbimVector3D AxisDisplacement;
         public double[] Radiuses;
         public double Length;
     }

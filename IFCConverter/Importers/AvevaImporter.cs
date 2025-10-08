@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Abstract.Segments;
@@ -14,7 +15,6 @@ using IFCConverter.Extensions.Entities;
 using IFCConverter.Extensions.Entities.Segments;
 using IFCConverter.Extensions.Tools;
 using IFCConverter.Tools;
-using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Kernel;
@@ -25,7 +25,7 @@ namespace IFCConverter.Importers
 {
     internal class AvevaImporter : StandardImporter
     {
-        public AvevaImporter(IModel model) : base(model) { }
+        public AvevaImporter(IFCProject ifcProject) : base(ifcProject) { }
         
         public override IfcElement[] GetPipeSegments(IfcProduct[] products) => GetElementByType(products, "TUBING");
         public override IfcElement[] GetBends(IfcProduct[] products) => GetElementByType(products, "ELBOW");
@@ -71,7 +71,7 @@ namespace IFCConverter.Importers
             return pipeSegmentEntities.ToArray();
         }
 
-        public override IfcCadBendEntity[] CreateBends(IfcElement[] bends, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        public override IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
             
@@ -82,7 +82,7 @@ namespace IFCConverter.Importers
                 {
                     IfcLabel name = bendElement.Name ?? new IfcLabel("");
                     IfcIdentifier tag = bendElement.Tag ?? new IfcIdentifier("");
-
+                    
                     IPropertySet[] propertySets = bendElement.GetPropertySets().ToArray();
                     
                     AVEVA_EntityParameters? avevaEntityParameters = propertySets.OfType<AVEVA_EntityParameters>().FirstOrDefault();
@@ -92,7 +92,7 @@ namespace IFCConverter.Importers
                     AVEVA_Pset? avevaPset = propertySets.OfType<AVEVA_Pset>().FirstOrDefault();
                     if (avevaPset == null)
                         throw new Exception("Bend does not have AVEVA_Pset property set.");
-
+                    
                     IfcRevolvedAreaSolid revolvedAreaSolid = bendElement
                         .GetRepresentationItems()
                         .OfType<IfcRevolvedAreaSolid>()
@@ -100,57 +100,49 @@ namespace IFCConverter.Importers
                     BendProperties bendProperties = revolvedAreaSolid.GetBendProperties();
                     XbimVector3D[] boundPoints = bendProperties.BoundPoints
                         .Select(point => point * _LengthUnit.Power)
-                        .ToArray();
-                    IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
+                        .ToArray(); 
+                    List<IfcAbstractSegmentEntity> connectedSegments = abstractSegmentEntities
                         .GetConnectedSegments(boundPoints)
-                        .ToArray();
+                        .ToList();
                     
                     XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
                     double bendRadius = bendProperties.Radius * _LengthUnit.Power;
                     double angle = bendProperties.Angle;
                     double length = bendRadius * angle;
                     double pipeDiameter = bendProperties.PipeDiameter * _LengthUnit.Power;
-                    double pipeLength = bendRadius * Math.Tan(angle / 2);
+                    double clipLength = bendRadius * Math.Tan(angle / 2);
 
-                    if (connectedSegments.Length is 0)
+                    if (connectedSegments.Count is 0)
                         throw new NullReferenceException("Cannot find connected segments for bend.");
-                    if (connectedSegments.Length is 1)
+                    if (connectedSegments.Count is 1)
                     {
                         IfcLabel pipeName = new IfcLabel($"{name}_AutoPipe");
                         IfcIdentifier pipeTag = new IfcIdentifier($"{tag}_AutoPipe");
                         
                         XbimVector3D newPipePoint = boundPoints.First(point => !connectedSegments[0].IsContainPoint(point));
-                        XbimVector3D direction = (coordinates - newPipePoint).Normalized();
-                        XbimMatrix3D pipeMatrix3D = MatrixExtensions.CreateWorld(newPipePoint, direction);
+                        XbimVector3D direction = (newPipePoint - coordinates).Normalized();
+                        XbimMatrix3D pipeMatrix3D = MatrixExtensions.CreateWorld(coordinates, direction);
+                        IfcNodeEntity[] pipeNodeEntities = new IfcNodeEntity[]
+                        {
+                            new IfcNodeEntity(pipeMatrix3D),
+                            new IfcNodeEntity(pipeMatrix3D.Translate(pipeMatrix3D.Forward * clipLength))
+                        };
                         IfcPipeSegmentEntity newPipeSegmentEntity = new IfcPipeSegmentEntity(
-                            pipeName, pipeTag, pipeMatrix3D, pipeLength, pipeDiameter
+                            pipeName, pipeTag, pipeMatrix3D, 0, pipeDiameter, pipeNodeEntities
                         );
+                        
+                        abstractSegmentEntities.Add(newPipeSegmentEntity);
+                        connectedSegments.Add(newPipeSegmentEntity);
                     }
 
-                    XbimMatrix3D objectMatrix3D;
-                    double pipeRadius;
-
-                    if (connectedSegments.Length is 2)
-                    {
-                        objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out _);
-                        pipeRadius = Math.Max(connectedSegments[0].Diameter, connectedSegments[1].Diameter);
-                    }
-                    else if (connectedSegments.Length is 1)
-                    {
-                        objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(coordinates);
-                        pipeRadius = connectedSegments[0].Diameter;
-                    }
-                    else
-                    {
-                        throw new NullReferenceException($"Cannot find connected segments to {nameof(bendElement)}");
-                    }
+                    XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out _);
+                    double pipeRadius = Math.Max(connectedSegments[0].Diameter, connectedSegments[1].Diameter);
 
                     IfcCadBendEntity bendEntity = new IfcCadBendEntity(name, tag, objectMatrix3D, length, angle, bendRadius, pipeRadius);
                     bendEntity.PropertySets.AddRange(propertySets);
                     bendEntity.ConnectedEntities.AddRange(connectedSegments);
                     bendEntities.Add(bendEntity);
-
-                    double clipLength = bendRadius * Math.Tan(angle / 2);
+                    
                     foreach (IfcAbstractSegmentEntity connectedSegment in connectedSegments)
                     {
                         IfcNodeEntity bendNodeEntity = bendEntity.NodeEntity;
@@ -171,7 +163,7 @@ namespace IFCConverter.Importers
             return bendEntities.ToArray();
         }
 
-        public override IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        public override IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
 
@@ -253,11 +245,11 @@ namespace IFCConverter.Importers
             return weldedTeeEntities.ToArray();
         }
 
-        public override IfcVertexReducerEccentricEntity[] CreateReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        public override IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
 
-            List<IfcVertexReducerEccentricEntity> eccentricReducerEntities = new List<IfcVertexReducerEccentricEntity>(capacity: reducers.Length);
+            List<IfcAbstractReducerEntity> reducerEntities = new List<IfcAbstractReducerEntity>(capacity: reducers.Length);
             foreach (IfcElement reducerElement in reducers)
             {
                 try
@@ -274,7 +266,7 @@ namespace IFCConverter.Importers
                     AVEVA_Pset? avevaPset = propertySets.OfType<AVEVA_Pset>().FirstOrDefault();
                     if (avevaPset == null)
                         throw new Exception("Bend does not have AVEVA_Pset property set.");
-
+                    
                     IfcTriangulatedFaceSet? faceSet = reducerElement
                         .GetRepresentationItems()
                         .OfType<IfcTriangulatedFaceSet>()
@@ -290,23 +282,34 @@ namespace IFCConverter.Importers
                         .Select(radius => radius * _LengthUnit.Power * 2)
                         .ToArray();
                     double length = reducerProperties.Length * _LengthUnit.Power;
-
+                    XbimVector3D axisDisplacement = reducerProperties.AxisDisplacement * _LengthUnit.Power;
+                    
                     IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
                         .GetConnectedSegments(boundPoints)
                         .ToArray();
                     
-                    XbimVector3D coordinates = reducerProperties.Center * _LengthUnit.Power;
+                    XbimVector3D coordinates = boundPoints[0];
                     XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out double angle);
 
-                    IfcVertexReducerEccentricEntity eccentricReducerEntity = new IfcVertexReducerEccentricEntity(
-                        name, tag, objectMatrix3D, length, 0, diameters, 16
-                    );
+                    IfcAbstractReducerEntity reducerEntity;
+                    if (axisDisplacement.IsEqualFixed(XbimVector3D.Zero, 1e-5D))
+                    {
+                        reducerEntity = new IfcVertexReducerConcentricEntity(
+                            name, tag, objectMatrix3D, length, diameters, 16
+                        );
+                    }
+                    else
+                    {
+                        reducerEntity = new IfcVertexReducerEccentricEntity(
+                            name, tag, objectMatrix3D, length, 0, diameters, 16
+                        );
+                    }
                     
-                    eccentricReducerEntity.PropertySets.AddRange(propertySets);
-                    eccentricReducerEntity.ConnectedEntities.AddRange(connectedSegments);
-                    eccentricReducerEntities.Add(eccentricReducerEntity);
+                    reducerEntity.PropertySets.AddRange(propertySets);
+                    reducerEntity.ConnectedEntities.AddRange(connectedSegments);
+                    reducerEntities.Add(reducerEntity);
                     
-                    IfcNodeEntity reducerNode = eccentricReducerEntity.NodeEntity;
+                    IfcNodeEntity reducerNode = reducerEntity.NodeEntity;
                     foreach (IfcAbstractSegmentEntity connectedSegment in connectedSegments)
                     {
                         connectedSegment.Clip(reducerNode, -length / 2);
@@ -314,7 +317,7 @@ namespace IFCConverter.Importers
                         connectedSegment.NodeEntities[connectedNodeResult.Index] = reducerNode;
                     }
                     
-                    logger.Info($"Created {eccentricReducerEntity}, ID: {reducerElement.GlobalId}");
+                    logger.Info($"Created {reducerEntity}, ID: {reducerElement.GlobalId}");
                 }
                 catch (Exception ex)
                 {
@@ -323,7 +326,7 @@ namespace IFCConverter.Importers
                 }
             }
 
-            return eccentricReducerEntities.ToArray();
+            return reducerEntities.ToArray();
         }
 
         private static IfcElement[] GetElementByType(IEnumerable<IfcProduct> products, IfcText type)

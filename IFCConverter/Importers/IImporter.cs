@@ -1,4 +1,6 @@
-﻿using IFC.Entities.Abstract.Segments;
+﻿using System.Collections.Generic;
+using IFC.Entities.Abstract.Fittings;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
@@ -50,7 +52,7 @@ namespace IFCConverter.Importers
         /// <param name="bends">An array of IfcElement objects representing bends.</param>
         /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the bends.</param>
         /// <returns>An array of IfcCadBendEntity objects.</returns>
-        public IfcCadBendEntity[] CreateBends(IfcElement[] bends, IfcAbstractSegmentEntity[] abstractSegmentEntities);
+        public IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities);
         
         /// <summary>
         /// Creates an array of IfcWeldedTeeEntity objects from the provided tees and abstract segment entities.
@@ -58,7 +60,7 @@ namespace IFCConverter.Importers
         /// <param name="tees">An array of IfcElement objects representing tees.</param>
         /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the tees.</param>
         /// <returns>An array of IfcWeldedTeeEntity objects.</returns>
-        public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, IfcAbstractSegmentEntity[] abstractSegmentEntities);
+        public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities);
 
         /// <summary>
         /// Creates an array of IfcWeldedTeeEntity objects from the provided tees and abstract segment entities.
@@ -66,6 +68,6 @@ namespace IFCConverter.Importers
         /// <param name="reducers">An array of IfcElement objects representing reducers.</param>
         /// <param name="abstractSegmentEntities">An array of IfcAbstractSegmentEntity objects to associate with the reducers.</param>
         /// <returns>An array of IfcVertexReducerEccentricEntity objects.</returns>
-        public IfcVertexReducerEccentricEntity[] CreateReducers(IfcElement[] reducers, IfcAbstractSegmentEntity[] abstractSegmentEntities);
+        public IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities);
     }
 }

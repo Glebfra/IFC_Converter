@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IFC.Entities;
+using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Extensions;
@@ -31,7 +32,7 @@ namespace IFCConverter.Extensions.Entities.Fittings
             double length = reducer.LengthOfConicalPart.SIProperty;
             double[] diameters = segmentEntities.Select(segment => segment.Diameter.Value).ToArray();
 
-            IfcVertexReducerEccentricEntity reducerEccentricEntity = new IfcVertexReducerEccentricEntity(
+            IfcVertexReducerEccentricEntity reducerEntity = new IfcVertexReducerEccentricEntity(
                 reducer.Name,
                 reducer.Type.ToString(),
                 objectMatrix3D,
@@ -41,29 +42,37 @@ namespace IFCConverter.Extensions.Entities.Fittings
                 numSegments
             );
 
-            reducerEccentricEntity.ConnectedEntities.AddRange(segmentEntities);
-            reducerEccentricEntity.PropertySets.Add(Pset_Start.CreateFromStart(reducer));
-            reducerEccentricEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(reducer));
+            reducerEntity.ConnectedEntities.AddRange(segmentEntities);
+            reducerEntity.PropertySets.Add(Pset_Start.CreateFromStart(reducer));
+            reducerEntity.PropertySets.Add(Qto_PipeFittingBaseQuantities.CreateFromStart(reducer));
 
-            return reducerEccentricEntity;
+            return reducerEntity;
         }
 
-        public static StartReducerEntity ToStartReducerEntity(this IfcVertexReducerEccentricEntity reducerEccentricEntity)
+        public static StartReducerEntity ToStartReducerEntity(this IfcAbstractReducerEntity reducerEntity)
         {
             StartReducerEntity startReducerEntity = new StartReducerEntity();
-            startReducerEntity.Name = reducerEccentricEntity.Name.Value;
-            bool hasStartType = Enum.TryParse(reducerEccentricEntity.Tag.Value, out StartElementType elementType);
-            startReducerEntity.Type = hasStartType ? elementType : StartElementType.REDUCER_ECCENTRIC;
+            startReducerEntity.Name = reducerEntity.Name.Value;
+
+            StartElementType defaultType = reducerEntity switch 
+            {
+                IfcVertexReducerConcentricEntity => StartElementType.REDUCER_CONCENTRIC,
+                IfcVertexReducerEccentricEntity => StartElementType.REDUCER_ECCENTRIC,
+                _ => StartElementType.REDUCER_CONCENTRIC
+            };
+
+            bool hasStartType = Enum.TryParse(reducerEntity.Tag.Value, out StartElementType elementType);
+            startReducerEntity.Type = hasStartType ? elementType : defaultType;
             
-            startReducerEntity.LengthOfConicalPart = LengthProperty.CreateFromSi(reducerEccentricEntity.Length);
+            startReducerEntity.LengthOfConicalPart = LengthProperty.CreateFromSi(reducerEntity.Length);
             
-            double[] diameters = reducerEccentricEntity.Diameters
+            double[] diameters = reducerEntity.Diameters
                 .Select(diameter => diameter.Value)
                 .ToArray();
             startReducerEntity.MinDiameter = LengthProperty.CreateFromSi(diameters.Min());
             startReducerEntity.MaxDiameter = LengthProperty.CreateFromSi(diameters.Max());
 
-            Pset_Start? psetStart = reducerEccentricEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
+            Pset_Start? psetStart = reducerEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
             if (psetStart != null)
                 startReducerEntity.UpdateFromStartPset(psetStart);
 

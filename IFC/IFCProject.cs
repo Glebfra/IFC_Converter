@@ -20,15 +20,19 @@ namespace IFC
     public class IFCProject : IDisposable
     {
         public IModel Model => _model;
+        public IfcSIUnit LengthUnit => _lengthUnit;
         
         private ITransaction? _transaction;
         private readonly IfcStore _model;
         private readonly IfcBuilding _building;
         private readonly List<IfcProduct> _ifcObjects;
 
+        private readonly IfcSIUnit _lengthUnit;
+
         public IFCProject(IfcStore model)
         {
             _model = model;
+            _lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
             _building = _model.Instances.FirstOrDefault<IfcBuilding>();
             _transaction = _model.BeginTransaction("Objects adding");
 
