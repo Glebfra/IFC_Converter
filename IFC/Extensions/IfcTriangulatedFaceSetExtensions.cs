@@ -9,14 +9,12 @@ namespace IFC.Extensions
 {
     public static class IfcTriangulatedFaceSetExtensions
     {
-        private const double TOLERANCE = 1e-6;
-        
         public static BendProperties GetBendProperties(this IfcTriangulatedFaceSet faceSet, AVEVA_Pset avevaPset)
         {
             XbimMatrix3D objectMatrix3D = avevaPset.GetObjectMatrix();
             XbimVector3D coordinates = objectMatrix3D.Translation;
             XbimVector3D[] vertices = faceSet.Coordinates.GetCoordinates().ToArray();
-
+            
             XbimVector3D minPoint = new XbimVector3D(
                 vertices.Min(vertex => vertex.X),
                 vertices.Min(vertex => vertex.Y),
@@ -52,30 +50,28 @@ namespace IFC.Extensions
             };
         }
 
-        public static ReducerProperties GetReducerProperties(this IfcTriangulatedFaceSet faceSet, AVEVA_Pset avevaPset)
+        public static ReducerProperties GetReducerProperties(this IfcTriangulatedFaceSet faceSet, AVEVA_Pset avevaPset, double tolerance = 1e-6)
         {
             XbimMatrix3D objectToWorldMatrix3D = avevaPset.GetObjectMatrix();
-            XbimVector3D globalCoordinates = objectToWorldMatrix3D.Translation;
-            XbimVector3D[] globalVertices = faceSet.Coordinates.GetCoordinates().ToArray();
-
-            XbimVector3D globalMinPoint = new XbimVector3D(
-                globalVertices.Min(vertex => vertex.X),
-                globalVertices.Min(vertex => vertex.Y),
-                globalVertices.Min(vertex => vertex.Z)
-            );
-            XbimVector3D globalMaxPoint = new XbimVector3D(
-                globalVertices.Max(vertex => vertex.X),
-                globalVertices.Max(vertex => vertex.Y),
-                globalVertices.Max(vertex => vertex.Z)
-            );
-
             XbimMatrix3D worldToObjectMatrix3D = objectToWorldMatrix3D.Inverted();
-            XbimVector3D localMinPoint = worldToObjectMatrix3D.Transform(globalMinPoint);
-            XbimVector3D localMaxPoint = worldToObjectMatrix3D.Transform(globalMaxPoint);
-            XbimVector3D[] localVertices = globalVertices.Select(vertex => worldToObjectMatrix3D.Transform(vertex)).ToArray();
+            XbimVector3D globalCoordinates = objectToWorldMatrix3D.Translation;
+            
+            XbimVector3D[] globalVertices = faceSet.Coordinates.GetCoordinates().ToArray();
+            XbimVector3D[] localVertices = globalVertices.Select(globalVertex => worldToObjectMatrix3D.Transform(globalVertex)).ToArray();
 
-            XbimVector3D[] firstCircleLocalPoints = localVertices.Where(vertex => Math.Abs(vertex.X - localMinPoint.X) < TOLERANCE).ToArray();
-            XbimVector3D[] secondCircleLocalPoints = localVertices.Where(vertex => Math.Abs(vertex.X - localMaxPoint.X) < TOLERANCE).ToArray();
+            XbimVector3D localMinPoint = new XbimVector3D(
+                localVertices.Min(vertex => vertex.X),
+                localVertices.Min(vertex => vertex.Y),
+                localVertices.Min(vertex => vertex.Z)
+            );
+            XbimVector3D localMaxPoint = new XbimVector3D(
+                localVertices.Max(vertex => vertex.X),
+                localVertices.Max(vertex => vertex.Y),
+                localVertices.Max(vertex => vertex.Z)
+            );
+
+            XbimVector3D[] firstCircleLocalPoints = localVertices.Where(vertex => Math.Abs(vertex.X - localMinPoint.X) < tolerance).ToArray();
+            XbimVector3D[] secondCircleLocalPoints = localVertices.Where(vertex => Math.Abs(vertex.X - localMaxPoint.X) < tolerance).ToArray();
 
             XbimVector3D firstCircleLocalCenterPoint = firstCircleLocalPoints.Average();
             XbimVector3D secondCircleLocalCenterPoint = secondCircleLocalPoints.Average();
@@ -91,8 +87,8 @@ namespace IFC.Extensions
 
             double[] radiuses = new double[]
             {
-                (boundPoints[0] - firstCircleLocalPoints[0]).Length,
-                (boundPoints[1] - secondCircleLocalPoints[0]).Length,
+                (firstCircleLocalCenterPoint - firstCircleLocalPoints[0]).Length,
+                (secondCircleLocalCenterPoint - secondCircleLocalPoints[0]).Length,
             };
             double length = (boundPoints[1] - boundPoints[0]).Length;
 
@@ -101,6 +97,7 @@ namespace IFC.Extensions
                 BoundPoints = boundPoints,
                 Center = globalCoordinates,
                 AxisDisplacement = axisDisplacement,
+                ObjectMatrix3D = objectToWorldMatrix3D,
                 Radiuses = radiuses,
                 Length = length
             };

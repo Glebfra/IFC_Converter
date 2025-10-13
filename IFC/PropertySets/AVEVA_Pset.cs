@@ -64,7 +64,7 @@ namespace IFC.PropertySets
         {
             return new XbimMatrix3D(
                 ORI[0], ORI[1], ORI[2], 0,
-                ORI[3], ORI[4], ORI[5], 0,
+                -ORI[3], -ORI[4], -ORI[5], 0,
                 ORI[6], ORI[7], ORI[8], 0,
                 POS[0], POS[1], POS[2], 1
             );

@@ -275,22 +275,50 @@ namespace IFCConverter.Importers
                         throw new NullReferenceException("Reducer does not have IfcTriangulatedFaceSet representation.");
                     
                     ReducerProperties reducerProperties = faceSet.GetReducerProperties(avevaPset);
-                    XbimVector3D[] boundPoints = reducerProperties.BoundPoints
-                        .Select(point => point * _LengthUnit.Power)
-                        .ToArray();
                     double[] diameters = reducerProperties.Radiuses
                         .Select(radius => radius * _LengthUnit.Power * 2)
                         .ToArray();
-                    double length = reducerProperties.Length * _LengthUnit.Power;
-                    XbimVector3D axisDisplacement = reducerProperties.AxisDisplacement * _LengthUnit.Power;
-                    
-                    IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
-                        .GetConnectedSegments(boundPoints)
+                    XbimVector3D[] boundPoints = reducerProperties.BoundPoints
+                        .Select(point => point * _LengthUnit.Power)
                         .ToArray();
-                    
-                    XbimVector3D coordinates = boundPoints[0];
-                    XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out double angle);
+                    double length = reducerProperties.Length * _LengthUnit.Power;
+                    XbimVector3D coordinates = boundPoints[1];
 
+                    XbimVector3D axisDisplacement = reducerProperties.AxisDisplacement * _LengthUnit.Power;
+                    XbimMatrix3D reducerMatrix = reducerProperties.ObjectMatrix3D;
+                    XbimVector3D reducerForward = reducerMatrix.Forward;
+                    
+                    List<IfcAbstractSegmentEntity> connectedSegments = abstractSegmentEntities
+                        .GetConnectedSegments(boundPoints)
+                        .ToList();
+
+                    if (connectedSegments.Count is 0)
+                        throw new NullReferenceException("Cannot find connected segments for bend.");
+                    if (connectedSegments.Count is 1)
+                    {
+                        IfcLabel pipeName = new IfcLabel($"{name}_AutoPipe");
+                        IfcIdentifier pipeTag = new IfcIdentifier($"{tag}_AutoPipe");
+
+                        IndexedResult<XbimVector3D> indexedNewPipePoint = boundPoints
+                            .Select((point, index) => new IndexedResult<XbimVector3D>(point, index))
+                            .First(result => !connectedSegments[0].IsContainPoint(result.Object));
+                        
+                        XbimVector3D direction = (indexedNewPipePoint.Object - coordinates).Normalized();
+                        direction = (direction.DotProduct(reducerForward) * reducerForward).Normalized();
+                        XbimMatrix3D pipeMatrix3D = MatrixExtensions.CreateWorld(coordinates, direction);
+
+                        double pipeDiameter = diameters[indexedNewPipePoint.Index];
+                        double pipeLength = coordinates.IsEqualFixed(reducerProperties.Center) ? 0.0 : length;
+                        IfcPipeSegmentEntity newPipeSegmentEntity = new IfcPipeSegmentEntity(
+                            pipeName, pipeTag, pipeMatrix3D, pipeLength, pipeDiameter
+                        );
+                        
+                        abstractSegmentEntities.Add(newPipeSegmentEntity);
+                        connectedSegments.Add(newPipeSegmentEntity);
+                    }
+                    
+                    XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out double angle);
+                    
                     IfcAbstractReducerEntity reducerEntity;
                     if (axisDisplacement.IsEqualFixed(XbimVector3D.Zero, 1e-5D))
                     {
@@ -312,7 +340,8 @@ namespace IFCConverter.Importers
                     IfcNodeEntity reducerNode = reducerEntity.NodeEntity;
                     foreach (IfcAbstractSegmentEntity connectedSegment in connectedSegments)
                     {
-                        connectedSegment.Clip(reducerNode, -length / 2);
+                        double clipLength = connectedSegment.IsContainPoint(boundPoints[0]) ? -length : 0.0;
+                        connectedSegment.Clip(reducerNode, clipLength);
                         IndexedResult<IfcNodeEntity> connectedNodeResult = connectedSegment.NodeEntities.GetNearestNode(reducerNode);
                         connectedSegment.NodeEntities[connectedNodeResult.Index] = reducerNode;
                     }
