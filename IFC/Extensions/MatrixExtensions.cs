@@ -5,6 +5,38 @@ namespace IFC.Extensions
 {
     public static class MatrixExtensions
     {
+        public static XbimMatrix3D Ma(XbimVector3D axis, double angle)
+        {
+            double x = axis.X;
+            double y = axis.Y;
+            double z = axis.Z;
+            double xy = x * y;
+            double xz = x * z;
+            double yz = y * z;
+            double xx = x * x;
+            double yy = y * y;
+            double zz = z * z;
+            double angleCos = Math.Cos(angle);
+            double angleSin = Math.Sin(angle);
+
+            return new XbimMatrix3D(
+                angleCos + (1 - angleCos) * xx, (1 - angleCos) * xy - angleSin * z, (1 - angleCos) * xz + angleSin * y, 0,
+                (1 - angleCos) * xy + angleSin * z, angleCos + (1 - angleCos) * yy, (1 - angleCos) * yz - angleSin * x, 0,
+                (1 - angleCos) * xz - angleSin * y, (1 - angleCos) * yz + angleSin * x, angleCos + (1 - angleCos) * zz, 0, 
+                0, 0, 0, 1
+            );
+        }
+
+        public static XbimMatrix3D Transponse(this XbimMatrix3D matrix3D)
+        {
+            return new XbimMatrix3D(
+                matrix3D.M11, matrix3D.M21, matrix3D.M31, matrix3D.OffsetX,
+                matrix3D.M12, matrix3D.M22, matrix3D.M32, matrix3D.OffsetY,
+                matrix3D.M13, matrix3D.M23, matrix3D.M33, matrix3D.OffsetZ,
+                matrix3D.M14, matrix3D.M24, matrix3D.M34, matrix3D.M44
+            );
+        }
+        
         public static XbimMatrix3D Mx(double angle)
         {
             double angleCos = Math.Cos(angle);
@@ -39,8 +71,18 @@ namespace IFC.Extensions
             return new XbimMatrix3D(
                 angleCos, -angleSin, 0, 0,
                 angleSin, angleCos, 0, 0,
-                -0, 0, 1, 0,
+                0, 0, 1, 0,
                 0, 0, 0, 1
+            );
+        }
+
+        public static XbimMatrix3D RescaleTranslation(this XbimMatrix3D matrix3D, double scaleFactor)
+        {
+            return new XbimMatrix3D(
+                matrix3D.M11, matrix3D.M12, matrix3D.M13, matrix3D.M14,
+                matrix3D.M21, matrix3D.M22, matrix3D.M23, matrix3D.M24,
+                matrix3D.M31, matrix3D.M32, matrix3D.M33, matrix3D.M34,
+                matrix3D.OffsetX * scaleFactor, matrix3D.OffsetY * scaleFactor, matrix3D.OffsetZ * scaleFactor, matrix3D.M44
             );
         }
 

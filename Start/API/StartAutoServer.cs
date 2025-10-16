@@ -22,6 +22,11 @@ namespace Start.API
                 throw new Exception($"Cannot find the prog_id: {PROG_ID}");
             }
         }
+        
+        public StartAutoServer(object autoServer)
+        {
+            _autoServer = autoServer ?? throw new ArgumentNullException(nameof(autoServer));
+        }
 
         public StartDocument LoadStartDocument(int mode, string filepath)
         {

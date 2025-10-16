@@ -5,24 +5,24 @@ namespace IFC.Extensions
 {
     public static class IfcNodeEntityExtensions
     {
-        public static double GetDistanceToAnotherNode(this IfcNodeEntity obj, IfcNodeEntity other)
+        public static double GetDistanceToPoint(this IfcNodeEntity obj, XbimVector3D point)
         {
-            return GetDistanceBetweenTwoNodes(obj, other);
+            return GetDisplacementToPoint(obj, point).Length;
+        }
+        
+        public static XbimVector3D GetDisplacementToPoint(this IfcNodeEntity obj, XbimVector3D point)
+        {
+            return point - obj.ObjectMatrix3D.Translation;
         }
 
-        public static double GetDistanceBetweenTwoNodes(IfcNodeEntity first, IfcNodeEntity second)
+        public static double GetDistanceToNode(this IfcNodeEntity obj, IfcNodeEntity other)
         {
-            return GetDisplacementBetweenTwoNodes(first, second).Modulus;
+            return GetDisplacementToNode(obj, other).Length;
         }
 
-        public static XbimVector3D GetDisplacementToAnotherNode(this IfcNodeEntity obj, IfcNodeEntity other)
+        public static XbimVector3D GetDisplacementToNode(this IfcNodeEntity obj, IfcNodeEntity other)
         {
-            return GetDisplacementBetweenTwoNodes(obj, other);
-        }
-
-        public static XbimVector3D GetDisplacementBetweenTwoNodes(IfcNodeEntity first, IfcNodeEntity second)
-        {
-            return second.ObjectMatrix3D.Translation - first.ObjectMatrix3D.Translation;
+            return obj.ObjectMatrix3D.Translation - other.ObjectMatrix3D.Translation;
         }
     }
 }

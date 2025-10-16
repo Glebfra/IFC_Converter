@@ -16,7 +16,6 @@ namespace IFC.Entities.Abstract.Fittings
     public abstract class IfcAbstractVertexReducerEccentricEntity : IfcAbstractReducerEntity
     {
         public abstract double DisplacementLength { get; }
-        public abstract ActionProperty<double>[] Diameters { get; }
         public abstract ActionProperty<int> NumSegments { get; }
 
         protected IfcAbstractVertexReducerEccentricEntity(XbimMatrix3D objectMatrix3D) : base(objectMatrix3D) { }

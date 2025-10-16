@@ -24,7 +24,12 @@ namespace IFC.Tools
         {
             _value = value;
         }
-        
+
+        public override string ToString()
+        {
+            return Value?.ToString() ?? string.Empty;
+        }
+
         public static implicit operator T(ActionProperty<T> actionProperty) => actionProperty.Value;
         public static implicit operator ActionProperty<T>(T value) => new ActionProperty<T>(value);
     }

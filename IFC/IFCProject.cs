@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using IFC.Entities.Interfaces;
-using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
-using Xbim.Ifc4.GeometricModelResource;
-using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.IO;
 
@@ -24,15 +20,19 @@ namespace IFC
     public class IFCProject : IDisposable
     {
         public IModel Model => _model;
+        public IfcSIUnit LengthUnit => _lengthUnit;
         
-        private ITransaction _transaction;
+        private ITransaction? _transaction;
         private readonly IfcStore _model;
         private readonly IfcBuilding _building;
         private readonly List<IfcProduct> _ifcObjects;
 
+        private readonly IfcSIUnit _lengthUnit;
+
         public IFCProject(IfcStore model)
         {
             _model = model;
+            _lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
             _building = _model.Instances.FirstOrDefault<IfcBuilding>();
             _transaction = _model.BeginTransaction("Objects adding");
 
@@ -53,42 +53,44 @@ namespace IFC
             model.Header.FileDescription.Description.Add("Version 2.0");
             model.Header.FileName.Name = name;
 
-            ITransaction transaction = model.BeginTransaction("Model creation");
-            IfcProject project = model.Instances.New<IfcProject>(p => p.Name = name);
-            GenerateUnits(model, project);
-
-            XbimVector3D coordinates = XbimVector3D.Zero;
-            XbimVector3D forward = new XbimVector3D(0, 0, 1);
-            XbimVector3D up = new XbimVector3D(0, 1, 0);
-            XbimMatrix3D worldMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
-            IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, worldMatrix3D);
-
-            IfcGeometricRepresentationContext context = model.Instances.New<IfcGeometricRepresentationContext>(representationContext =>
+            using (ITransaction transaction = model.BeginTransaction("Model creation"))
             {
-                representationContext.ContextIdentifier = "Start context";
-                representationContext.Precision = 1e-5;
-                representationContext.ContextType = "Model";
-                representationContext.CoordinateSpaceDimension = 3;
-                representationContext.WorldCoordinateSystem = objectPlacement.Axis2Placement3D;
-            });
+                IfcProject project = model.Instances.New<IfcProject>(p => p.Name = name);
+                GenerateUnits(model, project);
+
+                XbimVector3D coordinates = XbimVector3D.Zero;
+                XbimVector3D forward = new XbimVector3D(0, 0, 1);
+                XbimVector3D up = new XbimVector3D(0, 1, 0);
+                XbimMatrix3D worldMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
+                IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, worldMatrix3D);
+
+                IfcGeometricRepresentationContext context = model.Instances.New<IfcGeometricRepresentationContext>(representationContext =>
+                {
+                    representationContext.ContextIdentifier = "Start context";
+                    representationContext.Precision = 1e-5;
+                    representationContext.ContextType = "Model";
+                    representationContext.CoordinateSpaceDimension = 3;
+                    representationContext.WorldCoordinateSystem = objectPlacement.Axis2Placement3D;
+                });
         
-            IfcSite site = model.Instances.New<IfcSite>(ifcSite =>
-            {
-                ifcSite.Name = "Site";
-                ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                ifcSite.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            project.AddSite(site);
+                IfcSite site = model.Instances.New<IfcSite>(ifcSite =>
+                {
+                    ifcSite.Name = "Site";
+                    ifcSite.CompositionType = IfcElementCompositionEnum.ELEMENT;
+                    ifcSite.ObjectPlacement = objectPlacement.LocalPlacement;
+                });
+                project.AddSite(site);
 
-            IfcBuilding building = model.Instances.New<IfcBuilding>(ifcBuilding =>
-            {
-                ifcBuilding.Name = "Building";
-                ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                ifcBuilding.ObjectPlacement = objectPlacement.LocalPlacement;
-            });
-            site.AddBuilding(building);
-            transaction.Commit();
-
+                IfcBuilding building = model.Instances.New<IfcBuilding>(ifcBuilding =>
+                {
+                    ifcBuilding.Name = "Building";
+                    ifcBuilding.CompositionType = IfcElementCompositionEnum.ELEMENT;
+                    ifcBuilding.ObjectPlacement = objectPlacement.LocalPlacement;
+                });
+                site.AddBuilding(building);
+                transaction.Commit();
+            }
+            
             return new IFCProject(model);
         }
 
@@ -100,50 +102,18 @@ namespace IFC
                 model = IfcStore.Open(stream, StorageType.Ifc, XbimSchemaVersion.Ifc4, XbimModelType.MemoryModel);
             }
 
-            using (ITransaction transaction = model.BeginTransaction("Change to SI units"))
-            {
-                IfcSIUnit lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
-                IEnumerable<IfcPropertySet> propertySets = model.Instances.OfType<IfcPropertySet>();
-                foreach (IfcPropertySet propertySet in propertySets)
-                {
-                    foreach (IfcProperty property in propertySet.HasProperties)
-                    {
-                        if (property is not IfcPropertySingleValue singleValue) 
-                            continue;
-                    
-                        if (singleValue.NominalValue is IfcLengthMeasure lengthMeasure)
-                        {
-                            singleValue.NominalValue = new IfcLengthMeasure(lengthMeasure * lengthUnit.Power);
-                        }
-
-                        if (singleValue.NominalValue is IfcPositiveLengthMeasure positiveLengthMeasure)
-                        {
-                            singleValue.NominalValue = new IfcPositiveLengthMeasure(positiveLengthMeasure * lengthUnit.Power);
-                        }
-                    
-                        if (singleValue.NominalValue is IfcNonNegativeLengthMeasure nonNegativeLengthMeasure)
-                        {
-                            singleValue.NominalValue = new IfcPositiveLengthMeasure(nonNegativeLengthMeasure * lengthUnit.Power);
-                        }
-                    }
-                }
-
-                IEnumerable<IfcCartesianPoint> cartesianPoints = model.Instances.OfType<IfcCartesianPoint>();
-                foreach (IfcCartesianPoint cartesianPoint in cartesianPoints)
-                {
-                    XbimVector3D newCoordinates = cartesianPoint.ToXbimVector3D() * lengthUnit.Power;
-                    cartesianPoint.SetVector(newCoordinates);
-                }
-
-                IEnumerable<IfcExtrudedAreaSolid> extrudedAreaSolids = model.Instances.OfType<IfcExtrudedAreaSolid>();
-                foreach (IfcExtrudedAreaSolid extrudedAreaSolid in extrudedAreaSolids)
-                {
-                    extrudedAreaSolid.Depth *= lengthUnit.Power;
-                }
-                transaction.Commit();
-            }
-
             return new IFCProject(model);
+        }
+
+        public void BeginTransaction(string name)
+        {
+            _transaction = _model.BeginTransaction(name);
+        }
+
+        public void EndTransaction()
+        {
+            _transaction?.Commit();
+            _transaction?.Dispose();
         }
 
         public IEnumerable<IfcProduct> GetProducts()
@@ -185,13 +155,13 @@ namespace IFC
 
         public void SaveAs(string filepath)
         {
-            _transaction.Commit();
+            _transaction?.Commit();
             _model.SaveAs(filepath, StorageType.Ifc);
         }
 
         public void Dispose()
         {
-            _transaction.Dispose();
+            _transaction?.Dispose();
             _model.Dispose();
         }
 
