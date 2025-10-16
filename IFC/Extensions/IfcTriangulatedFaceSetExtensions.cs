@@ -1,52 +1,97 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IFC.PropertySets;
 using IFC.Tools;
+using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.MeasureResource;
 
 namespace IFC.Extensions
 {
     public static class IfcTriangulatedFaceSetExtensions
     {
+        public static int[][] GetIndices(this IfcTriangulatedFaceSet faceSet)
+        {
+            int len1 = faceSet.CoordIndex.Count;
+            int[][] indices = new int[len1][];
+            for (int i = 0; i < len1; i++)
+            {
+                IItemSet<IfcPositiveInteger> coordIndex = faceSet.CoordIndex[i];
+                int len2 = coordIndex.Count;
+                indices[i] = new int[len2];
+                for (int j = 0; j < len2; j++)
+                {
+                    indices[i][j] = (int)coordIndex[j];
+                }
+            }
+
+            return indices;
+        }
+        
         public static BendProperties GetBendProperties(this IfcTriangulatedFaceSet faceSet, AVEVA_Pset avevaPset)
         {
-            XbimMatrix3D objectMatrix3D = avevaPset.GetObjectMatrix();
-            XbimVector3D coordinates = objectMatrix3D.Translation;
-            XbimVector3D[] vertices = faceSet.Coordinates.GetCoordinates().ToArray();
+            XbimMatrix3D objectToWorldMatrix3D = avevaPset.GetObjectMatrix();
+            XbimMatrix3D worldToObjectMatrix3D = objectToWorldMatrix3D.Inverted();
+            XbimVector3D globalCoordinates = objectToWorldMatrix3D.Translation;
+            XbimVector3D localCoordinates = worldToObjectMatrix3D.Transform(globalCoordinates);
+
+            int[][] indices = GetIndices(faceSet);
             
-            XbimVector3D minPoint = new XbimVector3D(
-                vertices.Min(vertex => vertex.X),
-                vertices.Min(vertex => vertex.Y),
-                vertices.Min(vertex => vertex.Z)
+            XbimVector3D[] globalVertices = faceSet.Coordinates.GetCoordinates().ToArray();
+            XbimVector3D[] localVertices = globalVertices.Select(globalVertex => worldToObjectMatrix3D.Transform(globalVertex)).ToArray();
+
+            XbimVector3D minLocalPoint = new XbimVector3D(
+                localVertices.Min(vertex => vertex.X),
+                localVertices.Min(vertex => vertex.Y),
+                localVertices.Min(vertex => vertex.Z)
             );
-            
-            XbimVector3D maxPoint = new XbimVector3D(
-                vertices.Max(vertex => vertex.X),
-                vertices.Max(vertex => vertex.Y),
-                vertices.Max(vertex => vertex.Z)
-            );
+
+            XbimVector3D[] firstPlaneLocalPoints = new XbimVector3D[3];
+            XbimVector3D[] secondPlaneLocalPoints = new XbimVector3D[3];
+            for (int i = 0; i < 3; i++)
+            {
+                firstPlaneLocalPoints[i] = localVertices[indices[indices.Length - 1][i] - 1];
+                secondPlaneLocalPoints[i] = localVertices[indices[0][i] - 1];
+            }
+
+            XbimVector3D[] firstPlaneLocalVectors = new XbimVector3D[]
+            {
+                firstPlaneLocalPoints[0] - firstPlaneLocalPoints[1],
+                firstPlaneLocalPoints[2] - firstPlaneLocalPoints[1]
+            };
+            XbimVector3D[] secondPlaneLocalVectors = new XbimVector3D[]
+            {
+                secondPlaneLocalPoints[0] - secondPlaneLocalPoints[1],
+                secondPlaneLocalPoints[2] - secondPlaneLocalPoints[1]
+            };
+
+            XbimVector3D firstPlaneNorm = XbimVector3D.CrossProduct(firstPlaneLocalVectors[0], firstPlaneLocalVectors[1]).Normalized();
+            XbimVector3D secondPlaneNorm = XbimVector3D.CrossProduct(secondPlaneLocalVectors[0], secondPlaneLocalVectors[1]).Normalized();
+
+            double halfBendLength = minLocalPoint.X - localCoordinates.X;
+            XbimVector3D firstPlaneCenter = localCoordinates + firstPlaneNorm * halfBendLength;
+            XbimVector3D secondPlaneCenter = localCoordinates + secondPlaneNorm * halfBendLength;
 
             XbimVector3D[] boundPoints = new XbimVector3D[]
             {
-                coordinates - objectMatrix3D.Right.DotProduct(coordinates - minPoint) * objectMatrix3D.Right,
-                coordinates + objectMatrix3D.Up.DotProduct(maxPoint - coordinates) * objectMatrix3D.Up,
+                objectToWorldMatrix3D.Transform(firstPlaneCenter), 
+                objectToWorldMatrix3D.Transform(secondPlaneCenter)
             };
 
-            XbimVector3D center = coordinates -
-                                  objectMatrix3D.Right.DotProduct(coordinates - minPoint) * objectMatrix3D.Right +
-                                  objectMatrix3D.Up.DotProduct(maxPoint - coordinates) * objectMatrix3D.Up;
+            double firstPipeRadius = (firstPlaneCenter - firstPlaneLocalPoints[0]).Length * 2;
+            double secondPipeRadius = (secondPlaneCenter - secondPlaneLocalPoints[0]).Length * 2;
+            double pipeDiameter = Math.Max(firstPipeRadius, secondPipeRadius);
 
-            XbimVector3D[] displacementVectors = boundPoints.Select(boundPoint => boundPoint - center).ToArray();
-            double radius = displacementVectors[0].Length;
-            double angle = displacementVectors[0].Angle(displacementVectors[1]);
-            
+            double angle = firstPlaneNorm.Angle(secondPlaneNorm);
+
             return new BendProperties()
             {
                 BoundPoints = boundPoints,
-                Center = center,
-                Radius = radius,
-                Angle = angle
+                Center = globalCoordinates,
+                Angle = angle,
+                PipeDiameter = pipeDiameter
             };
         }
 
