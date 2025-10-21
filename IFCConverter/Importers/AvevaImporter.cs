@@ -17,6 +17,7 @@ using IFCConverter.Extensions.Tools;
 using IFCConverter.Tools;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
@@ -43,19 +44,25 @@ namespace IFCConverter.Importers
                 {
                     IfcLabel name = pipeElement.Name ?? new IfcLabel("");
                     IfcIdentifier tag = pipeElement.Tag ?? new IfcIdentifier("");
-                
-                    IfcExtrudedAreaSolid extrudedAreaSolid = pipeElement
-                        .GetRepresentationItems()
-                        .OfType<IfcExtrudedAreaSolid>()
-                        .First();
+                    
+                    IIfcRepresentationItem? representationItem = pipeElement.GetRepresentationItems().FirstOrDefault();
+                    if (representationItem == null)
+                        throw new Exception($"Cannot find representation item for {nameof(pipeElement)} with ID: {pipeElement.GlobalId}");
 
-                    XbimMatrix3D shapeMatrix3D = extrudedAreaSolid.Position.ToObjectMatrix3D().RescaleTranslation(_LengthUnit.Power);
-                    double length = extrudedAreaSolid.GetLength() * _LengthUnit.Power;
-                    double diameter = extrudedAreaSolid.GetCircleRadius() * 2 * _LengthUnit.Power;
-                
-                    IPropertySet[] propertySets = pipeElement.GetPropertySets().ToArray();
+                    PipeProperties pipeProperties = representationItem switch
+                    {
+                        IfcExtrudedAreaSolid extrudedAreaSolid => extrudedAreaSolid.GetPipeProperties(),
+                        IfcTriangulatedFaceSet triangulatedFaceSet => triangulatedFaceSet.GetPipeProperties(),
+                        _ => throw new Exception($"Representation item can be only: {nameof(IfcTriangulatedFaceSet)}, {nameof(IfcExtrudedAreaSolid)}")
+                    };
 
+                    XbimVector3D coordinates = pipeProperties.Coordinates * _LengthUnit.Power;
+                    XbimMatrix3D shapeMatrix3D = MatrixExtensions.CreateWorld(coordinates, pipeProperties.Direction);
+                    double length = pipeProperties.Length * _LengthUnit.Power;
+                    double diameter = pipeProperties.Radius * 2 * _LengthUnit.Power;
+                    
                     IfcPipeSegmentEntity pipeSegmentEntity = new IfcPipeSegmentEntity(name, tag, shapeMatrix3D, length, diameter);
+                    IPropertySet[] propertySets = pipeElement.GetPropertySets().ToArray();
                     pipeSegmentEntity.PropertySets.AddRange(propertySets);
                     pipeSegmentEntities.Add(pipeSegmentEntity);
                     

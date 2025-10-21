@@ -2,6 +2,15 @@
 
 namespace IFC.Tools
 {
+    public struct PipeProperties
+    {
+        public XbimVector3D[] BoundPoints;
+        public XbimVector3D Coordinates;
+        public XbimVector3D Direction;
+        public double Length;
+        public double Radius;
+    }
+    
     public struct BendProperties
     {
         public XbimVector3D[] BoundPoints;
