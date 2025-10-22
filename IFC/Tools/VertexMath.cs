@@ -68,6 +68,7 @@ namespace IFC.Tools
         {
             if (Points.Count <= 4)
                 return false;
+            XbimVector3D center = Center;
             double radius = (Points[0] - Center).Length;
             double tolerance = radius * 0.1;
             foreach (XbimVector3D point in Points)

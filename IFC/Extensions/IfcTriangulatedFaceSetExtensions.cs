@@ -121,13 +121,15 @@ namespace IFC.Extensions
             double pipeDiameter = Math.Max(firstPipeRadius, secondPipeRadius);
 
             double angle = firstPlaneNorm.Angle(secondPlaneNorm);
+            double radius = (firstPlaneCenter - secondPlaneCenter).Length / (2 * Math.Sin(angle / 2));
 
             return new BendProperties()
             {
                 BoundPoints = boundPoints,
                 Center = globalCoordinates,
                 Angle = angle,
-                PipeDiameter = pipeDiameter
+                PipeDiameter = pipeDiameter,
+                Radius = radius
             };
         }
 

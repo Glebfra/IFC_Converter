@@ -100,14 +100,20 @@ namespace IFCConverter.Importers
                     if (avevaPset == null)
                         throw new Exception("Bend does not have AVEVA_Pset property set.");
                     
-                    IfcRevolvedAreaSolid revolvedAreaSolid = bendElement
-                        .GetRepresentationItems()
-                        .OfType<IfcRevolvedAreaSolid>()
-                        .First();
-                    BendProperties bendProperties = revolvedAreaSolid.GetBendProperties();
+                    IIfcRepresentationItem? representationItem = bendElement.GetRepresentationItems().FirstOrDefault();
+                    if (representationItem == null)
+                        throw new Exception($"Cannot find representation item for {nameof(bendElement)} with ID: {bendElement.GlobalId}");
+                    
+                    BendProperties bendProperties = representationItem switch
+                    {
+                        IfcRevolvedAreaSolid revolvedAreaSolid => revolvedAreaSolid.GetBendProperties(),
+                        IfcTriangulatedFaceSet triangulatedFaceSet => triangulatedFaceSet.GetBendProperties(avevaPset),
+                        _ => throw new Exception($"Representation item can be only: {nameof(IfcTriangulatedFaceSet)}, {nameof(IfcRevolvedAreaSolid)}")
+                    };
+                    
                     XbimVector3D[] boundPoints = bendProperties.BoundPoints
                         .Select(point => point * _LengthUnit.Power)
-                        .ToArray(); 
+                        .ToArray();
                     List<IfcAbstractSegmentEntity> connectedSegments = abstractSegmentEntities
                         .GetConnectedSegments(boundPoints)
                         .ToList();
@@ -118,7 +124,7 @@ namespace IFCConverter.Importers
                     double length = bendRadius * angle;
                     double pipeDiameter = bendProperties.PipeDiameter * _LengthUnit.Power;
                     double clipLength = bendRadius * Math.Tan(angle / 2);
-
+                    
                     if (connectedSegments.Count is 0)
                         throw new NullReferenceException("Cannot find connected segments for bend.");
                     if (connectedSegments.Count is 1)
@@ -144,7 +150,7 @@ namespace IFCConverter.Importers
 
                     XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, connectedSegments, out _);
                     double pipeRadius = Math.Max(connectedSegments[0].Diameter, connectedSegments[1].Diameter);
-
+                    
                     IfcCadBendEntity bendEntity = new IfcCadBendEntity(name, tag, objectMatrix3D, length, angle, bendRadius, pipeRadius);
                     bendEntity.PropertySets.AddRange(propertySets);
                     bendEntity.ConnectedEntities.AddRange(connectedSegments);
@@ -191,7 +197,7 @@ namespace IFCConverter.Importers
                     AVEVA_Pset? avevaPset = propertySets.OfType<AVEVA_Pset>().FirstOrDefault();
                     if (avevaPset == null)
                         throw new Exception("Bend does not have AVEVA_Pset property set.");
-
+                    
                     IfcExtrudedAreaSolid[] extrudedAreaSolids = teeElement
                         .GetRepresentationItems()
                         .OfType<IfcExtrudedAreaSolid>()

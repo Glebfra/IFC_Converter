@@ -20,6 +20,12 @@ namespace IFC.Tools
         public double PipeDiameter;
     }
 
+    public struct TeeProperties
+    {
+        public XbimVector3D[] BoundPoints;
+        public XbimVector3D Center;
+    }
+
     public struct ReducerProperties
     {
         public XbimVector3D[] BoundPoints;
