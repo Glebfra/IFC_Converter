@@ -302,11 +302,11 @@ namespace IFCConverter.Importers
                     XbimVector3D reducerForward = reducerMatrix.Forward;
                     
                     List<IfcAbstractSegmentEntity> connectedSegments = abstractSegmentEntities
-                        .GetConnectedSegments(boundPoints)
+                        .GetConnectedSegments(boundPoints, 1e-2)
                         .ToList();
 
                     if (connectedSegments.Count is 0)
-                        throw new NullReferenceException("Cannot find connected segments for bend.");
+                        throw new NullReferenceException("Cannot find connected segments for reducer.");
                     if (connectedSegments.Count is 1)
                     {
                         IfcLabel pipeName = new IfcLabel($"{name}_AutoPipe");

@@ -127,7 +127,7 @@ namespace IFCConverter
                     #else
                     if (logger.HasErrors())
                     {
-                        logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
+                        logger.SaveAs(importDataContainer.InputFilePath + ".log");
                     }
                     else
                     {
