@@ -311,6 +311,7 @@
     <Compile Include="Tools\IfcVertexGeometry.ShapeTools.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\VertexMath.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -29,7 +29,43 @@ namespace IFC.Extensions
 
             return indices;
         }
-        
+
+        public static Triangle[] GetTriangles(this IfcTriangulatedFaceSet faceSet)
+        {
+            XbimVector3D[] vertices = faceSet.Coordinates.GetCoordinates().ToArray();
+            int[][] indices = faceSet.GetIndices();
+
+            return Triangle.CreateFromVerticesAndIndices(vertices, indices);
+        }
+
+        public static PipeProperties GetPipeProperties(this IfcTriangulatedFaceSet faceSet)
+        {
+            XbimVector3D[] vertices = faceSet.Coordinates.GetCoordinates().ToArray();
+            Triangle[] triangles = faceSet.GetTriangles();
+
+            Plane[] trianglePlanes = triangles.Select(Plane.CreateFromTriangle).ToArray();
+            Plane[] planes = UpdatePlanesByVertices(trianglePlanes, vertices);
+            Plane[] circlePlanes = GetCirclePlanes(planes);
+            Plane[] pipePlanes = GetPipePlanes(circlePlanes);
+
+            double radius = pipePlanes[0].GetCircleRadius();
+            XbimVector3D[] boundPoints = pipePlanes.Select(pipePlane => pipePlane.Center).ToArray();
+            XbimVector3D direction = boundPoints[1] - boundPoints[0];
+            XbimVector3D coordinates = boundPoints[0];
+            double length = direction.Length;
+            direction = direction.Normalized();
+
+            return new PipeProperties()
+            {
+                Coordinates = coordinates,
+                Radius = radius,
+                Length = length,
+                Direction = direction,
+                BoundPoints = boundPoints
+            };
+        }
+
+        // TODO change to the new version of creation
         public static BendProperties GetBendProperties(this IfcTriangulatedFaceSet faceSet, AVEVA_Pset avevaPset)
         {
             XbimMatrix3D objectToWorldMatrix3D = avevaPset.GetObjectMatrix();
@@ -84,14 +120,16 @@ namespace IFC.Extensions
             double secondPipeRadius = (secondPlaneCenter - secondPlaneLocalPoints[0]).Length * 2;
             double pipeDiameter = Math.Max(firstPipeRadius, secondPipeRadius);
 
-            double angle = firstPlaneNorm.Angle(secondPlaneNorm);
+            double angle = firstPlaneNorm.Angle(secondPlaneNorm.Negated());
+            double radius = (firstPlaneCenter - secondPlaneCenter).Length / (2 * Math.Sin(angle / 2));
 
             return new BendProperties()
             {
                 BoundPoints = boundPoints,
                 Center = globalCoordinates,
                 Angle = angle,
-                PipeDiameter = pipeDiameter
+                PipeDiameter = pipeDiameter,
+                Radius = radius
             };
         }
 
@@ -146,6 +184,42 @@ namespace IFC.Extensions
                 Radiuses = radiuses,
                 Length = length
             };
+        }
+
+        private static Plane[] UpdatePlanesByVertices(Plane[] planes, XbimVector3D[] vertices, double tolerance=1e-6)
+        {
+            for (int i = 0; i < planes.Length; i++)
+            {
+                foreach (XbimVector3D vertex in vertices)
+                {
+                    if (!planes[i].IsContainPoint(vertex, tolerance)) 
+                        continue;
+                    
+                    List<XbimVector3D> planePoints = planes[i].Points;
+                    if (!planePoints.Contains(vertex))
+                        planePoints.Add(vertex);
+                }
+            }
+
+            return planes;
+        }
+
+        private static Plane[] GetCirclePlanes(Plane[] planes)
+        {
+            return planes.Where(plane => plane.IsCircle()).ToArray();
+        }
+
+        private static Plane[] GetPipePlanes(Plane[] planes)
+        {
+            List<Plane> pipePlanes = new List<Plane>();
+            foreach (Plane plane in planes)
+            {
+                bool isAdded = pipePlanes.Any(pipePlane => pipePlane.IsEqual(plane));
+                if (!isAdded)
+                    pipePlanes.Add(plane);
+            }
+
+            return pipePlanes.ToArray();
         }
     }
 }
