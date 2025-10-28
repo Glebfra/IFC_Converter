@@ -9,7 +9,10 @@ namespace Start.Entities.Fittings
     {
         [JsonIgnore]
         [StartIgnore]
-        public override StartElementType Type { get; set; } = StartElementType.PIPE_BEND;
+        public override StartElementType Type { get; set; } = StartElementType.ELBOW;
+        
+        [JsonProperty(StartPropertyName.MaterialName)]
+        public string MaterialName { get; set; } = string.Empty;
         
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
@@ -38,7 +41,7 @@ namespace Start.Entities.Fittings
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty MillToleranceOutside { get; set; } = LengthProperty.Zero;
 
-        [JsonProperty(StartPropertyName.PipeName)]
+        [JsonProperty(StartPropertyName.Name)]
         public string Name { get; set; } = string.Empty;
     }
 }

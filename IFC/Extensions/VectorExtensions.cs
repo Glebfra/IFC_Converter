@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IFC.Tools;
 using Xbim.Common;
@@ -25,6 +26,22 @@ namespace IFC.Extensions
                 .First();
         }
         
+        public static XbimVector3D Sum(this IEnumerable<XbimVector3D> vectors)
+        {
+            XbimVector3D[] xbimVector3Ds = vectors as XbimVector3D[] ?? vectors.ToArray();
+            IEnumerable<double> xs = xbimVector3Ds.Select(v => v.X);
+            IEnumerable<double> ys = xbimVector3Ds.Select(v => v.Y);
+            IEnumerable<double> zs = xbimVector3Ds.Select(v => v.Z);
+            
+            return new XbimVector3D(xs.Sum(), ys.Sum(), zs.Sum());
+        }
+
+        public static XbimVector3D Average(this IEnumerable<XbimVector3D> vectors)
+        {
+            XbimVector3D[] xbimVector3Ds = vectors as XbimVector3D[] ?? vectors.ToArray();
+            return 1.0 / xbimVector3Ds.Count() * xbimVector3Ds.Sum();
+        }
+        
         public static double GetDistance(this XbimVector3D first, XbimVector3D second)
         {
             return (second - first).Length;
@@ -49,7 +66,27 @@ namespace IFC.Extensions
         {
             return Math.Abs(1 / (v1.Length * v2.Length) * Math.Abs(XbimVector3D.DotProduct(v1, v2)) - 1) < tolerance;
         }
-        
+
+        public static bool IsEqualFixed(this XbimVector3D vector3D, XbimVector3D other, double precision = 1e-9)
+        {
+            return Math.Abs(vector3D.GetDistance(other)) <= precision;
+        }
+
+        public static bool IsEqualFixed(this XbimVector3D vector3D, IEnumerable<XbimVector3D> others, double precision = 1e-9)
+        {
+            return others.Any(vector => vector3D.IsEqualFixed(vector, precision));
+        }
+
+        public static bool IsEqualFixed(this IEnumerable<XbimVector3D> vector3Ds, IEnumerable<XbimVector3D> others, double precision = 1e-9)
+        {
+            return vector3Ds.Any(vector => vector.IsEqualFixed(others, precision));
+        }
+
+        public static bool IsEqual(this XbimVector3D vector3D, IEnumerable<XbimVector3D> vector3Ds, double precision = 1e-9)
+        {
+            return vector3Ds.Any(vector => vector.IsEqual(vector3D, precision));
+        }
+
         public static IfcDirection ToIfcDirection(this XbimVector3D vector, IModel model)
         {
             return IfcAxis.CreateDirection(model, vector);
@@ -58,6 +95,12 @@ namespace IFC.Extensions
         public static IfcCartesianPoint ToCartesianPoint(this XbimVector3D vector, IModel model)
         {
             return IfcAxis.CreatePoint(model, vector);
+        }
+
+        public static XbimVector3D RotateAroundAxis(this XbimVector3D vector3D, XbimVector3D axis, double angle)
+        {
+            XbimMatrix3D Ma = MatrixExtensions.Ma(axis, angle);
+            return XbimVector3D.Multiply(vector3D, Ma);
         }
 
         public static XbimVector3D RotateAroundXAxis(this XbimVector3D vector3D, double angle)

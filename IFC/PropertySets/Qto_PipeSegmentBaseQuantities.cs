@@ -1,4 +1,8 @@
-﻿using Xbim.Common;
+﻿using IFC.Tools;
+using Start.Entities.Abstract;
+using Xbim.Common;
+using Xbim.Common.Geometry;
+using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
@@ -8,12 +12,12 @@ namespace IFC.PropertySets
 {
     public class Qto_PipeSegmentBaseQuantities : IPropertySet
     {
-        public IfcLengthMeasure Length;
-        public IfcAreaMeasure GrossCrossSectionArea;
-        public IfcAreaMeasure NetCrossSectionArea;
-        public IfcAreaMeasure OuterSurfaceArea;
-        public IfcMassMeasure GrossWeight;
-        public IfcMassMeasure NetWeight;
+        public ActionProperty<IfcLengthMeasure> Length = new ActionProperty<IfcLengthMeasure>(0.0);
+        public ActionProperty<IfcAreaMeasure> GrossCrossSectionArea = new ActionProperty<IfcAreaMeasure>(0.0);
+        public ActionProperty<IfcAreaMeasure> NetCrossSectionArea = new ActionProperty<IfcAreaMeasure>(0.0);
+        public ActionProperty<IfcAreaMeasure> OuterSurfaceArea = new ActionProperty<IfcAreaMeasure>(0.0);
+        public ActionProperty<IfcMassMeasure> GrossWeight = new ActionProperty<IfcMassMeasure>(0.0);
+        public ActionProperty<IfcMassMeasure> NetWeight = new ActionProperty<IfcMassMeasure>(0.0);
 
         public IfcPropertySetDefinitionSelect CreatePropertySet(IModel model)
         {
@@ -23,29 +27,84 @@ namespace IFC.PropertySets
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityLength>(length =>
                 {
                     length.Name = nameof(Length);
-                    length.LengthValue = Length;
+                    length.LengthValue = Length.Value;
+                    
+                    Length.OnValueChange += () => length.LengthValue = Length.Value;
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityArea>(area =>
                 {
                     area.Name = nameof(GrossCrossSectionArea);
-                    area.AreaValue = GrossCrossSectionArea;
+                    area.AreaValue = GrossCrossSectionArea.Value;
+                    
+                    GrossCrossSectionArea.OnValueChange += () => area.AreaValue = GrossCrossSectionArea.Value;
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityArea>(area =>
                 {
                     area.Name = nameof(NetCrossSectionArea);
-                    area.AreaValue = NetCrossSectionArea;
+                    area.AreaValue = NetCrossSectionArea.Value;
+                    
+                    NetCrossSectionArea.OnValueChange += () => area.AreaValue = NetCrossSectionArea.Value;
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(area =>
                 {
                     area.Name = nameof(GrossWeight);
-                    area.WeightValue = GrossWeight;
+                    area.WeightValue = GrossWeight.Value;
+                    
+                    GrossWeight.OnValueChange += () => area.WeightValue = GrossWeight.Value;
                 }));
                 quantity.Quantities.Add(model.Instances.New<IfcQuantityWeight>(area =>
                 {
                     area.Name = nameof(NetWeight);
-                    area.WeightValue = NetWeight;
+                    area.WeightValue = NetWeight.Value;
+                    
+                    NetWeight.OnValueChange += () => area.WeightValue = NetWeight.Value;
                 }));
             });
+        }
+        
+        public static Qto_PipeSegmentBaseQuantities CreateFromStart(StartAbstractSegmentEntity abstractSegmentEntity)
+        {
+            Qto_PipeSegmentBaseQuantities qto = new Qto_PipeSegmentBaseQuantities();
+            qto.NetWeight = new ActionProperty<IfcMassMeasure>(abstractSegmentEntity.PipeUnitWeight.SIProperty);
+            
+            XbimVector3D projection = new XbimVector3D(
+                abstractSegmentEntity.ProjectionAlongOXAxis.SIProperty,
+                abstractSegmentEntity.ProjectionAlongOYAxis.SIProperty,
+                abstractSegmentEntity.ProjectionAlongOZAxis.SIProperty
+            );
+            qto.Length = new ActionProperty<IfcLengthMeasure>(projection.Length);
+            return qto;
+        }
+        
+        public static Qto_PipeSegmentBaseQuantities CreateFromQuantitySet(IIfcElementQuantity elementQuantity)
+        {
+            Qto_PipeSegmentBaseQuantities qto = new Qto_PipeSegmentBaseQuantities();
+            foreach (IIfcPhysicalQuantity quantity in elementQuantity.Quantities)
+            {
+                switch (quantity.Name)
+                {
+                    case nameof(qto.Length):
+                        qto.Length = ((IfcQuantityLength)quantity).LengthValue;
+                        break;
+                    case nameof(qto.GrossCrossSectionArea):
+                        qto.GrossCrossSectionArea = ((IfcQuantityArea)quantity).AreaValue;
+                        break;
+                    case nameof(qto.NetCrossSectionArea):
+                        qto.NetCrossSectionArea = ((IfcQuantityArea)quantity).AreaValue;
+                        break;
+                    case nameof(qto.OuterSurfaceArea):
+                        qto.OuterSurfaceArea = ((IfcQuantityArea)quantity).AreaValue;
+                        break;
+                    case nameof(qto.GrossWeight):
+                        qto.GrossWeight = ((IfcQuantityWeight)quantity).WeightValue;
+                        break;
+                    case nameof(qto.NetWeight):
+                        qto.NetWeight = ((IfcQuantityWeight)quantity).WeightValue;
+                        break;
+                }
+            }
+
+            return qto;
         }
     }
 }

@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <LangVersion>default</LangVersion>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -104,6 +105,7 @@
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
     </Reference>
@@ -115,6 +117,9 @@
     </Reference>
     <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -152,8 +157,15 @@
     <Compile Include="Entities\Anchors\IfcSpringHangerEntity.cs" />
     <Compile Include="Entities\Anchors\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
+    <Compile Include="Extensions\Ifc2AxisPlacement3DExtensions.cs" />
+    <Compile Include="Extensions\IfcCartesianPointList3DExtensions.cs" />
     <Compile Include="Extensions\IfcDirectionExtensions.cs" />
+    <Compile Include="Extensions\IfcExtrudedAreaSolidExtensions.cs" />
+    <Compile Include="Extensions\IfcRevolvedAreaSolidExtensions.cs" />
+    <Compile Include="Extensions\IfcTriangulatedFaceSetExtensions.cs" />
     <Compile Include="Extensions\IIfcObjectPlacementExtensions.cs" />
+    <Compile Include="PropertySets\AVEVA_EntityParameters.cs" />
+    <Compile Include="PropertySets\AVEVA_Pset.cs" />
     <Compile Include="PropertySets\Pset_Debug.cs" />
     <Compile Include="PropertySets\IPropertySet.cs" />
     <Compile Include="PropertySets\Pset_PipeFittingTypeBend.cs" />
@@ -265,6 +277,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ActionProperty.cs" />
     <Compile Include="Tools\Colour.cs" />
+    <Compile Include="Tools\EntityProperties.cs" />
     <Compile Include="Tools\IfcAxis.cs" />
     <Compile Include="Tools\IfcAxis.Direction.cs">
       <DependentUpon>IfcAxis.cs</DependentUpon>
@@ -298,6 +311,7 @@
     <Compile Include="Tools\IfcVertexGeometry.ShapeTools.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\VertexMath.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

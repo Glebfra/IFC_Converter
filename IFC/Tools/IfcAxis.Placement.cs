@@ -1,5 +1,4 @@
-﻿using IFC.Extensions;
-using Xbim.Common;
+﻿using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometryResource;

@@ -9,14 +9,12 @@ namespace IFC.Entities.Segments
     {
         public override ActionProperty<IfcLabel> Name { get; }
         public override ActionProperty<IfcIdentifier> Tag { get; }
-        public override ActionProperty<double> Diameter { get; }
 
         public IfcRigidElementEntity(IfcLabel name, IfcIdentifier tag, XbimMatrix3D objectMatrix3D, double length, double diameter)
-            : base(objectMatrix3D, length)
+            : base(objectMatrix3D, length, diameter)
         {
             Name = new ActionProperty<IfcLabel>(name);
             Tag = new ActionProperty<IfcIdentifier>(tag);
-            Diameter = new ActionProperty<double>(diameter);
         }
     }
 }

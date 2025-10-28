@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Interfaces;
 using IFC.Extensions;
 using IFC.Tools;
