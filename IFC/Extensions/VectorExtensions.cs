@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using IFC.Tools;
@@ -26,7 +25,7 @@ namespace IFC.Extensions
                 .OrderBy(vector => vector.Length)
                 .First();
         }
-
+        
         public static XbimVector3D Sum(this IEnumerable<XbimVector3D> vectors)
         {
             XbimVector3D[] xbimVector3Ds = vectors as XbimVector3D[] ?? vectors.ToArray();
