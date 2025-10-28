@@ -26,6 +26,8 @@ namespace IFCConverter.Importers
 {
     internal class AvevaImporter : StandardImporter
     {
+        private double _tolerance => 1e-3 / _LengthUnit.Power;
+        
         public AvevaImporter(IFCProject ifcProject) : base(ifcProject) { }
         
         public override IfcElement[] GetPipeSegments(IfcProduct[] products) => GetElementByType(products, "TUBING");
@@ -42,6 +44,7 @@ namespace IFCConverter.Importers
             {
                 try
                 {
+                    Console.WriteLine($"Creating pipe segment: {pipeElement.GlobalId}");
                     IfcLabel name = pipeElement.Name ?? new IfcLabel("");
                     IfcIdentifier tag = pipeElement.Tag ?? new IfcIdentifier("");
                     
@@ -87,6 +90,7 @@ namespace IFCConverter.Importers
             {
                 try
                 {
+                    Console.WriteLine($"Creating bend: {bendElement.GlobalId}");
                     IfcLabel name = bendElement.Name ?? new IfcLabel("");
                     IfcIdentifier tag = bendElement.Tag ?? new IfcIdentifier("");
                     
