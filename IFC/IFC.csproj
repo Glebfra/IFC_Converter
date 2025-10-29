@@ -301,6 +301,8 @@
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\IfcObjectPlacement.cs" />
+    <Compile Include="Tools\IfcRepresentationIdentifier.cs" />
+    <Compile Include="Tools\IfcRepresentationType.cs" />
     <Compile Include="Tools\IfcVertexGeometry.cs" />
     <Compile Include="Tools\IfcVertexGeometry.Points.cs">
       <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
