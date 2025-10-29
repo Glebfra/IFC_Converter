@@ -52,9 +52,8 @@ namespace IFC.Entities.Abstract.Fittings
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
             IfcFacetedBrep lowerBrep = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
             IfcFacetedBrep upperBrep = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
-            IfcBooleanResult result = IfcGeometry.CreateBooleanResult(model, lowerBrep, upperBrep, IfcBooleanOperator.UNION);
 
-            return new IfcRepresentationItem[] { result };
+            return new IfcRepresentationItem[] { lowerBrep, upperBrep };
         }
 
         private void ClipPipes()
