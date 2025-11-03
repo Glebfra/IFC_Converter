@@ -4,7 +4,7 @@ using Start.StartProperties;
 
 namespace Start.Entities
 {
-    public class StartNonStandardRestraintModule
+    public class StartNonStandardRestraintModule : IStartExpansionModule
     {
         [JsonProperty(StartPropertyName.RestraintType)]
         public StartRestraintTypeEnum Type { get; set; }

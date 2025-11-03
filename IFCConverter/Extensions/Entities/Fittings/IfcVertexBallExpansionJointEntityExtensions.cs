@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
 
             double length = ballExpansionJoint.Length.SIProperty;
             double diameter = length * 2;
+            
+            string name = ballExpansionJoint.Name;
+            string type = ballExpansionJoint.Type.ToString();
 
             IfcVertexBallExpansionJointEntity ballExpansionJointEntity = new IfcVertexBallExpansionJointEntity(
-                ballExpansionJoint.Name,
-                ballExpansionJoint.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter,

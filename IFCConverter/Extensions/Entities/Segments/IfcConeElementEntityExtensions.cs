@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Segments
 
             double diameter = coneElement.Diameter.SIProperty;
             double secondDiameter = coneElement.SecondDiameter.SIProperty;
+                
+            string name = coneElement.Name;
+            string type = coneElement.Type.ToString();
 
             IfcConeElementEntity coneElementEntity = new IfcConeElementEntity(
-                coneElement.Name,
-                coneElement.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntities),
+                type,
                 objectMatrix3D,
                 length,
                 diameter,

@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             double length = angularExpansion.Length.SIProperty;
             double diameter = length;
+            
+            string name = angularExpansion.Name;
+            string type = angularExpansion.Type.ToString();
 
             IfcVertexAngularExpansionJointEntity angularExpansionJointEntity = new IfcVertexAngularExpansionJointEntity(
-                angularExpansion.Name,
-                angularExpansion.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 angle,

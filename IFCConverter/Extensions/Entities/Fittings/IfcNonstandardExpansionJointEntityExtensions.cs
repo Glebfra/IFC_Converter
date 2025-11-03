@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             double length = nonstandardExpansion.Length.SIProperty;
             double radius = segmentEntities[0].Diameter / 2;
+            
+            string name = nonstandardExpansion.Name;
+            string type = nonstandardExpansion.Type.ToString();
 
             IfcNonstandardExpansionJointEntity nonstandardExpansionJointEntity = new IfcNonstandardExpansionJointEntity(
-                nonstandardExpansion.Name,
-                nonstandardExpansion.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 radius

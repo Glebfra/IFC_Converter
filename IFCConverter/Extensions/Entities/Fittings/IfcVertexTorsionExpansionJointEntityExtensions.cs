@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             double diameter = segmentEntities[0].Diameter;
             double length = torsionExpansionJoint.Length.SIProperty;
+            
+            string name = torsionExpansionJoint.Name;
+            string type = torsionExpansionJoint.Type.ToString();
 
             IfcVertexTorsionExpansionJointEntity vertexTorsionExpansionJointEntity = new IfcVertexTorsionExpansionJointEntity(
-                torsionExpansionJoint.Name,
-                torsionExpansionJoint.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter,

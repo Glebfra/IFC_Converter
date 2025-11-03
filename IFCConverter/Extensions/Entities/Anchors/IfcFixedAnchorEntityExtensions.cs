@@ -14,9 +14,12 @@ namespace IFCConverter.Extensions.Entities.Anchors
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFixedAnchorObjectMatrix(nodeEntity, abstractSegmentEntities);
             
+            string name = anchorEntity.Name;
+            string type = anchorEntity.Type.ToString();
+            
             IfcFixedAnchorEntity fixedAnchorEntity = new IfcFixedAnchorEntity(
-                anchorEntity.Name,
-                anchorEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 abstractSegmentEntities[0].Diameter * 2,
                 abstractSegmentEntities[0].Diameter * 2

@@ -17,9 +17,12 @@ namespace IFCConverter.Extensions.Entities.Fittings
             double diameter = segmentEntities[0].Diameter;
             double length = diameter / 2;
             
+            string name = capEntity.Name;
+            string type = capEntity.Type.ToString();
+            
             IfcCapEntity ifcCapEntity = new IfcCapEntity(
-                capEntity.Name,
-                capEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter

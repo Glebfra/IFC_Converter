@@ -17,10 +17,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             double diameter = segmentEntities[0].Diameter;
             double length = 2 * Math.Min(segmentEntities[0].Length.Value, segmentEntities[1].Length.Value) * 0.1;
+            
+            string name = bendEntity.Name;
+            string type = bendEntity.Type.ToString();
 
             IfcMilterJointEntity milterJointEntity = new IfcMilterJointEntity(
-                bendEntity.Name,
-                bendEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter

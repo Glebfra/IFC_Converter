@@ -193,6 +193,7 @@
     <Compile Include="Entities\Fittings\StartTeeEntity.cs" />
     <Compile Include="Entities\Fittings\StartTorsionExpansionJointEntity.cs" />
     <Compile Include="Entities\Fittings\StartUniversalExpansionJointEntity.cs" />
+    <Compile Include="Entities\IStartExpansionModule.cs" />
     <Compile Include="Entities\Segments\StartConeElementEntity.cs" />
     <Compile Include="Entities\Segments\StartFlexibleElementEntity.cs" />
     <Compile Include="Entities\Segments\StartPipeEntity.cs" />

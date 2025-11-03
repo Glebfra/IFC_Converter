@@ -43,8 +43,8 @@ namespace Start.Entities.Abstract
                     case IStartProperty<int> startProperty:
                         dictionary.Add(newPropertyName, $"{startProperty.SIProperty} {startProperty.SIUnit}");
                         break;
-                    case StartNonStandardRestraintModule restraintModule:
-                        AddToDictionary(dictionary, restraintModule.GetType(), restraintModule, newPropertyName);
+                    case IStartExpansionModule expansionModule:
+                        AddToDictionary(dictionary, expansionModule.GetType(), expansionModule, newPropertyName);
                         break;
                     default:
                         dictionary.Add(newPropertyName, value.ToString());

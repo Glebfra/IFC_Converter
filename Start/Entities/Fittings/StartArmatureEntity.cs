@@ -7,9 +7,6 @@ namespace Start.Entities.Fittings
 {
     public class StartArmatureEntity : StartAbstractFittingEntity
     {
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; } = string.Empty;
-
         [JsonProperty(StartPropertyName.Diameter)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty OutsideDiameter { get; set; } = LengthProperty.Zero;

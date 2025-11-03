@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
 
             double length = expansionJoint.Length.SIProperty;
             double diameter = segmentEntities[0].Diameter;
+            
+            string name = expansionJoint.Name;
+            string type = expansionJoint.Type.ToString();
 
             IfcVertexAxialExpansionJointEntity axialExpansionJointEntity = new IfcVertexAxialExpansionJointEntity(
-                expansionJoint.Name,
-                expansionJoint.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter,

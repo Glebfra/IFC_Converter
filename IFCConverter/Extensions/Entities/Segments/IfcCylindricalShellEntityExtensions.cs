@@ -13,10 +13,13 @@ namespace IFCConverter.Extensions.Entities.Segments
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(pipeEntity, nodeEntities, out double length);
             double diameter = pipeEntity.Diameter.SIProperty;
+            
+            string name = pipeEntity.Name;
+            string type = pipeEntity.Type.ToString();
 
             IfcCylindricalShellEntity cylindricalShellEntity = new IfcCylindricalShellEntity(
-                pipeEntity.Name,
-                pipeEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntities),
+                type,
                 objectMatrix3D,
                 length,
                 diameter

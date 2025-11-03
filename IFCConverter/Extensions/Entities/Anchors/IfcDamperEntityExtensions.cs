@@ -17,9 +17,12 @@ namespace IFCConverter.Extensions.Entities.Anchors
             double diameter = segmentEntities[0].Diameter;
             double height = diameter * 2;
             
+            string name = damperEntity.Name;
+            string type = damperEntity.Type.ToString();
+            
             IfcDamperEntity ifcDamperEntity = new IfcDamperEntity(
-                damperEntity.Name,
-                damperEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 damperEntity,
                 diameter,

@@ -17,9 +17,12 @@ namespace IFCConverter.Extensions.Entities.Fittings
             double length = headPipe.Diameter;
             double height = branchPipes[0].Diameter / 2;
             
+            string name = teeEntity.Name;
+            string type = teeEntity.Type.ToString();
+            
             IfcSweepoletEntity sweepoletEntity = new IfcSweepoletEntity(
-                teeEntity.Name,
-                teeEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 branchPipes[0].Diameter,

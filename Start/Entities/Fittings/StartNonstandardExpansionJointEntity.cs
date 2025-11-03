@@ -15,10 +15,7 @@ namespace Start.Entities.Fittings
         [JsonProperty(StartPropertyName.Length)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty Length { get; set; } = LengthProperty.Zero;
-        
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; } = string.Empty;
-        
+
         [JsonProperty(StartPropertyName.Restraint1)] 
         public StartNonStandardRestraintModule? Restraint1 { get; set; }
         

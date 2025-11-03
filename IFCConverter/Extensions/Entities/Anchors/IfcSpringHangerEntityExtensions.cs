@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Anchors
             
             double diameter = segmentEntities[0].Diameter;
             double height = diameter * 2;
+            
+            string name = springSupport.Name;
+            string type = springSupport.Type.ToString();
 
             IfcSpringHangerEntity springHangerEntity = new IfcSpringHangerEntity(
-                springSupport.Name,
-                springSupport.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 diameter,
                 height,

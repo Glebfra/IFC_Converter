@@ -21,10 +21,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
 
             double length = angle * bendRadius;
             double branchHeight = length / 2;
+            
+            string name = bendEntity.Name;
+            string type = bendEntity.Type.ToString();
 
             IfcVertexSaddleBendEntity saddleBendEntity = new IfcVertexSaddleBendEntity(
-                bendEntity.Name,
-                bendEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 angle,
