@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             double diameter = segmentEntities[0].Diameter;
             double length = diameter / 4;
+            
+            string name = connectorEntity.Name;
+            string type = connectorEntity.Type.ToString();
 
             IfcConnectorEntity ifcConnectorEntity = new IfcConnectorEntity(
-                connectorEntity.Name,
-                connectorEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter

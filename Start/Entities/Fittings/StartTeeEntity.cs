@@ -64,8 +64,5 @@ namespace Start.Entities.Fittings
         [JsonProperty(StartPropertyName.CrotchRadius)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty CrotchRadius { get; set; } = LengthProperty.Zero;
-
-        [JsonProperty(StartPropertyName.PipeName)]
-        public string Name { get; set; } = string.Empty;
     }
 }

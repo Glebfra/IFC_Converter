@@ -17,9 +17,12 @@ namespace IFCConverter.Extensions.Entities.Anchors
             double diameter = segmentEntities[0].Diameter;
             double height = diameter * 2;
             
+            string name = nonStandardRestraint.Name;
+            string type = nonStandardRestraint.Type.ToString();
+            
             IfcNonStandardRestraintEntity restraintEntity = new IfcNonStandardRestraintEntity(
-                nonStandardRestraint.Name,
-                nonStandardRestraint.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 nonStandardRestraint,
                 diameter,

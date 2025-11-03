@@ -9,9 +9,6 @@ namespace Start.Entities.Fittings
     {
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; } = string.Empty;
-        
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; } = string.Empty;
 
         [JsonProperty(StartPropertyName.ConnectionType)]
         public StartConnectionTypeEnum ConnectionType { get; set; }

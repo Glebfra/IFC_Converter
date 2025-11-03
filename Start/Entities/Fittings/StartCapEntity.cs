@@ -6,7 +6,5 @@ namespace Start.Entities.Fittings
 {
     public class StartCapEntity : StartAbstractFittingEntity
     {
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name = string.Empty;
     }
 }

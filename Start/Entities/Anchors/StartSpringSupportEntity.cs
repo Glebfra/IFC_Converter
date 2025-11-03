@@ -5,7 +5,7 @@ using Start.StartProperties;
 
 namespace Start.Entities.Anchors
 {
-    public class StartSpringSupportEntity : StartAbstractEntity
+    public class StartSpringSupportEntity : StartAbstractAnchorEntity
     {
         [JsonProperty(StartPropertyName.FrictionMoment)]
         [JsonConverter(typeof(StartPropertyJsonConverter<MomentProperty, double>))]

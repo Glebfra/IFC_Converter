@@ -23,9 +23,6 @@ namespace Start.Entities.Fittings
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty Length { get; set; } = LengthProperty.Zero;
         
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; } = string.Empty;
-        
         //TODO get measurements
         [JsonProperty(StartPropertyName.ShearCompliance)]
         public double ShearCompliance { get; set; }

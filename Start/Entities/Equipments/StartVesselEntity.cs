@@ -36,9 +36,6 @@ namespace Start.Entities.Equipments
         [JsonProperty(StartPropertyName.ProjectionAlongOZAxis)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty ProjectionAlongOZAxis { get; set; } = LengthProperty.Zero;
-        
-        [JsonProperty(StartPropertyName.Name)]
-        public string Name { get; set; } = string.Empty;
 
         [JsonProperty(StartPropertyName.DeviceInternalDiameter)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
