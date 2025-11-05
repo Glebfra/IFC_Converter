@@ -35,18 +35,5 @@ namespace IFC.Entities.Abstract.Fittings
         {
             NodeEntity = new IfcNodeEntity(objectMatrix3D);
         }
-
-        /// <summary>
-        /// Creates an IFC entity of type <typeparamref name="T"/> and adds it to the specified model.
-        /// </summary>
-        /// <typeparam name="T">The type of the IFC entity to create. Must be a subclass of <see cref="IfcPipeFitting"/>.</typeparam>
-        /// <param name="model">The IFC model to which the entity will be added.</param>
-        /// <returns>The created IFC entity of type <typeparamref name="T"/>.</returns>
-        protected new T CreateIfcEntity<T>(IModel model)
-            where T : IfcPipeFitting, IInstantiableEntity
-        {
-            T pipeFitting = base.CreateIfcEntity<T>(model);
-            return pipeFitting;
-        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using IFC.Entities.Interfaces;
+using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
@@ -59,8 +60,8 @@ namespace IFC
                 GenerateUnits(model, project);
 
                 XbimVector3D coordinates = XbimVector3D.Zero;
-                XbimVector3D forward = new XbimVector3D(0, 0, 1);
-                XbimVector3D up = new XbimVector3D(0, 1, 0);
+                XbimVector3D forward = VectorExtensions.Z;
+                XbimVector3D up = VectorExtensions.Y;
                 XbimMatrix3D worldMatrix3D = XbimMatrix3D.CreateWorld(coordinates, forward, up);
                 IfcObjectPlacement objectPlacement = IfcAxis.CreatePointAndDirectionsObjectPlacement(model, worldMatrix3D);
 
