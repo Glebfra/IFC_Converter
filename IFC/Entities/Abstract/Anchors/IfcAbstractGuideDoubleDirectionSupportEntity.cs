@@ -64,9 +64,9 @@ namespace IFC.Entities.Abstract.Anchors
                 XbimVector3D coneCoordinates = stickCoordinates + stickHeight * zDirections[i];
                 XbimVector3D coneTopCoordinates = displacement - Diameter / 2 * zDirections[i];
                 double coneRadius = Diameter / 4;
-                IfcCartesianPoint[] circle = IfcVertexGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments, xDirections[i], yDirections[i]);
+                IfcCartesianPoint[] circle = IfcGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments, xDirections[i], yDirections[i]);
                 IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, coneTopCoordinates);
-                representationItems[i*3 + 2] = IfcVertexGeometry.CreateCone(model, circle, topPoint);
+                representationItems[i*3 + 2] = IfcGeometry.CreateCone(model, circle, topPoint);
             }
             
             return representationItems;

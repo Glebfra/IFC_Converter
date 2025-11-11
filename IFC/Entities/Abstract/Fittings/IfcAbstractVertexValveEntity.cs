@@ -45,14 +45,14 @@ namespace IFC.Entities.Abstract.Fittings
         {
             XbimVector3D displacement = Length / 2 * VectorExtensions.Forward;
 
-            IfcCartesianPoint[] firstCircle = IfcVertexGeometry.CreateCircle(model, Diameter * 0.75, displacement.Negated(), NumSegments);
-            IfcCartesianPoint[] secondCircle = IfcVertexGeometry.CreateCircle(model, Diameter * 0.75, displacement, NumSegments);
+            IfcCartesianPoint[] firstCircle = IfcGeometry.CreateCircle(model, Diameter * 0.75, displacement.Negated(), NumSegments);
+            IfcCartesianPoint[] secondCircle = IfcGeometry.CreateCircle(model, Diameter * 0.75, displacement, NumSegments);
             foreach (IfcCartesianPoint secondCirclePoint in secondCircle)
                 secondCirclePoint.RotateAroundYAxis(Angle);
 
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
-            IfcFacetedBrep lowerBrep = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
-            IfcFacetedBrep upperBrep = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
+            IfcFacetedBrep lowerBrep = IfcGeometry.CreateCone(model, firstCircle, topPoint);
+            IfcFacetedBrep upperBrep = IfcGeometry.CreateCone(model, secondCircle, topPoint);
 
             return new IfcRepresentationItem[] { lowerBrep, upperBrep };
         }

@@ -41,7 +41,7 @@ namespace IFC.Entities.Abstract.Fittings
         {
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
             IfcAxisSettings axisSettings = new IfcAxisSettings(XbimVector3D.Zero, VectorExtensions.X, VectorExtensions.Y);
-            representationItems.Add(IfcVertexGeometry.CreateTorus(model, BendRadius, PipeRadius, Angle, NumSegments, axisSettings));
+            representationItems.Add(IfcGeometry.CreateTorus(model, BendRadius, PipeRadius, Angle, NumSegments, axisSettings));
             
             XbimVector3D branchDisplacement = BendRadius * Math.Tan(Angle / 2) * (VectorExtensions.Forward + VectorExtensions.Right);
             representationItems.Add(IfcGeometry.CreateCylinder(

@@ -78,17 +78,17 @@ namespace IFC.Entities.Abstract.Fittings
             double[] radiuses = new double[] { Diameter / 2 * 1.1, Diameter / 2 * 0.9 };
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {
-                IfcVertexGeometry.CreateCircle(model, radiuses[0], displacements[0].Negated(), NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[0], displacements[1], NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[1], displacements[1], NumSegments),
-                IfcVertexGeometry.CreateCircle(model, radiuses[1], displacements[0], NumSegments),
+                IfcGeometry.CreateCircle(model, radiuses[0], displacements[0].Negated(), NumSegments),
+                IfcGeometry.CreateCircle(model, radiuses[0], displacements[1], NumSegments),
+                IfcGeometry.CreateCircle(model, radiuses[1], displacements[1], NumSegments),
+                IfcGeometry.CreateCircle(model, radiuses[1], displacements[0], NumSegments),
             };
 
             IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[]
             {
-                IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]),
-                IfcVertexGeometry.CreateClippedCone(model, circles[1], circles[2]),
-                IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]),
+                IfcGeometry.CreateClippedCone(model, circles[0], circles[1]),
+                IfcGeometry.CreateClippedCone(model, circles[1], circles[2]),
+                IfcGeometry.CreateClippedCone(model, circles[2], circles[3]),
             };
 
             return facetedBreps;

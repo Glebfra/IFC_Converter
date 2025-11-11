@@ -41,7 +41,7 @@ namespace IFC.Entities.Abstract.Fittings
         private IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
         {
             IfcAxisSettings axisSettings = new IfcAxisSettings(XbimVector3D.Zero, VectorExtensions.X, VectorExtensions.Y);
-            IfcFacetedBrep facetedBrep = IfcVertexGeometry.CreateClippedCone(
+            IfcFacetedBrep facetedBrep = IfcGeometry.CreateClippedCone(
                 model, Diameters[0] / 2, Diameters[1] / 2, Length, 
                 NumSegments, axisSettings, XbimVector3D.Zero
             );

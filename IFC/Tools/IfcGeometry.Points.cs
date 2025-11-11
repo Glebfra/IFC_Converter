@@ -6,7 +6,7 @@ using Xbim.Ifc4.GeometryResource;
 
 namespace IFC.Tools
 {
-    public static partial class IfcVertexGeometry
+    public static partial class IfcGeometry
     {
         public static IfcCartesianPoint[,] CreateSpherePoints(IModel model, double radius, XbimVector3D coordinates, int numSegments, XbimVector3D xAxis, XbimVector3D yAxis)
         {

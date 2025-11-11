@@ -284,7 +284,10 @@
     <Compile Include="Tools\IfcAxisSettings.cs" />
     <Compile Include="Tools\IfcColours.cs" />
     <Compile Include="Tools\IfcGeometry.cs" />
-    <Compile Include="Tools\IfcGeometry.Extensions.cs">
+    <Compile Include="Tools\IfcGeometry.Boolean.cs">
+      <DependentUpon>IfcGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\IfcGeometry.Points.cs">
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\IfcGeometry.Primitives.cs">
@@ -296,23 +299,9 @@
     <Compile Include="Tools\IfcGeometry.ShapeTools.cs">
       <DependentUpon>IfcGeometry.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\IfcGeometry.TriangulatedFaceSet.cs">
-      <DependentUpon>IfcGeometry.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tools\IfcObjectPlacement.cs" />
     <Compile Include="Tools\IfcRepresentationIdentifier.cs" />
     <Compile Include="Tools\IfcRepresentationType.cs" />
-    <Compile Include="Tools\IfcTriangulatedFaceSetProperties.cs" />
-    <Compile Include="Tools\IfcVertexGeometry.cs" />
-    <Compile Include="Tools\IfcVertexGeometry.Points.cs">
-      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\IfcVertexGeometry.Primitives.cs">
-      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\IfcVertexGeometry.ShapeTools.cs">
-      <DependentUpon>IfcVertexGeometry.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tools\VertexMath.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -43,16 +43,16 @@ namespace IFC.Entities.Abstract.Equipments
             
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {
-                IfcVertexGeometry.CreateCircle(model, Diameter * 0.66, firstCircleDisplacement, NumSegments),
-                IfcVertexGeometry.CreateCircle(model, Diameter * 0.66, XbimVector3D.Zero, NumSegments),
-                IfcVertexGeometry.CreateCircle(model, Diameter * 0.55, XbimVector3D.Zero, NumSegments),
-                IfcVertexGeometry.CreateCircle(model, Diameter * 0.5, firstCircleDisplacement.Negated(), NumSegments)
+                IfcGeometry.CreateCircle(model, Diameter * 0.66, firstCircleDisplacement, NumSegments),
+                IfcGeometry.CreateCircle(model, Diameter * 0.66, XbimVector3D.Zero, NumSegments),
+                IfcGeometry.CreateCircle(model, Diameter * 0.55, XbimVector3D.Zero, NumSegments),
+                IfcGeometry.CreateCircle(model, Diameter * 0.5, firstCircleDisplacement.Negated(), NumSegments)
             };
 
             return new IfcRepresentationItem[]
             {
-                IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]),
-                IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3])
+                IfcGeometry.CreateClippedCone(model, circles[0], circles[1]),
+                IfcGeometry.CreateClippedCone(model, circles[2], circles[3])
             };
         }
     }

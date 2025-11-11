@@ -145,8 +145,8 @@ namespace IFC.Entities.Abstract.Anchors
                 double springRadius = stickRadius * 2;
                 double springWireRadius = stickRadius / 2;
                 const int springNumTurns = 5;
-                IfcCartesianPoint[] spiralPoints = IfcVertexGeometry.CreateSpiral(model, springRadius, stickHeight, NumSegments, springNumTurns, stickCoordinates, refDirection, upDirection);
-                IfcPolyline spiralPolyline = IfcVertexGeometry.CreatePolyline(model, spiralPoints);
+                IfcCartesianPoint[] spiralPoints = IfcGeometry.CreateSpiral(model, springRadius, stickHeight, NumSegments, springNumTurns, stickCoordinates, refDirection, upDirection);
+                IfcPolyline spiralPolyline = IfcGeometry.CreatePolyline(model, spiralPoints);
                 representationItems.Add(IfcGeometry.CreateSweptDiskSolid(model, spiralPolyline, springWireRadius));
             }
             
@@ -154,7 +154,7 @@ namespace IFC.Entities.Abstract.Anchors
             XbimVector3D coneTopCoordinates = -Diameter / 2 * direction;
             double coneRadius = Diameter / 4;
             double coneHeight = Math.Sqrt((coneTopCoordinates - coneCoordinates).Modulus);
-            representationItems.Add(IfcVertexGeometry.CreateCone(model, coneRadius, coneHeight, coneCoordinates, NumSegments, refDirection, upDirection));
+            representationItems.Add(IfcGeometry.CreateCone(model, coneRadius, coneHeight, coneCoordinates, NumSegments, refDirection, upDirection));
 
             return representationItems;
         }

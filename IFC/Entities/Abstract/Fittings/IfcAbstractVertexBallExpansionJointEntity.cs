@@ -54,7 +54,7 @@ namespace IFC.Entities.Abstract.Fittings
             T pipeFitting = base.CreateIfcEntity<T>(model);
             pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
 
-            IfcFacetedBrep brep = IfcVertexGeometry.CreateSphere(model, Diameter / 2, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y);
+            IfcFacetedBrep brep = IfcGeometry.CreateSphere(model, Diameter / 2, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y);
             AddShapeRepresentation(model, pipeFitting, brep);
 
             return pipeFitting;
