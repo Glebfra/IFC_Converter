@@ -23,9 +23,12 @@ namespace IFCConverter.Extensions.Entities.Fittings
                 length = headPipe.Diameter;
             double height = teeEntity.CrotchHeight.SIProperty + branchPipes[0].Diameter / 2;
             
+            string name = teeEntity.Name;
+            string type = teeEntity.Type.ToString();
+            
             IfcWeldedTeeEntity weldedTeeEntity = new IfcWeldedTeeEntity(
-                teeEntity.Name,
-                teeEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 branchPipes[0].Diameter,

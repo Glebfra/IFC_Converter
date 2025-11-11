@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
 
             double length = teeEntity.HeaderLength.SIProperty;
             double height = teeEntity.BranchHeight.SIProperty + branchPipes[0].Diameter / 2;
+            
+            string name = teeEntity.Name;
+            string type = teeEntity.Type.ToString();
 
             IfcFabricatedTeeEntity fabricatedTeeEntity = new IfcFabricatedTeeEntity(
-                teeEntity.Name,
-                teeEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 branchPipes[0].Diameter,

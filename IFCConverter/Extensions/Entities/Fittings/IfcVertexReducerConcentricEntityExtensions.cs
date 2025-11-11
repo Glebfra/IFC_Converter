@@ -19,10 +19,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
 
             double length = reducer.LengthOfConicalPart.SIProperty;
             double[] diameters = segmentEntities.Select(segment => segment.Diameter.Value).ToArray();
+            
+            string name = reducer.Name;
+            string type = reducer.Type.ToString();
 
             IfcVertexReducerConcentricEntity reducerConcentricEntity = new IfcVertexReducerConcentricEntity(
-                reducer.Name,
-                reducer.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameters,

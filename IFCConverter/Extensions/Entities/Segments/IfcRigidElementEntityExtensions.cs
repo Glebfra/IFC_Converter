@@ -21,10 +21,13 @@ namespace IFCConverter.Extensions.Entities.Segments
                 2 => Math.Min(segmentEntities[0].Diameter, segmentEntities[1].Diameter),
                 _ => 0.05
             };
+            
+            string name = rigidElement.Name;
+            string type = rigidElement.Type.ToString();
 
             IfcRigidElementEntity ifcRigidElementEntity = new IfcRigidElementEntity(
-                rigidElement.Name,
-                rigidElement.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntities),
+                type,
                 objectMatrix3D,
                 length,
                 diameter

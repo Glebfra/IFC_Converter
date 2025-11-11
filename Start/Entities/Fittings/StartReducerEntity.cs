@@ -34,9 +34,6 @@ namespace Start.Entities.Fittings
         [JsonConverter(typeof(StartPropertyJsonConverter<AngleProperty, double>))]
         public AngleProperty AngleBetweenEccentricityVectorAndZmAxis { get; set; } = AngleProperty.Zero;
 
-        [JsonProperty(StartPropertyName.PipeName)]
-        public string Name { get; set; } = string.Empty;
-
         [JsonProperty(StartPropertyName.MillToleranceAtDMin)]
         [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
         public LengthProperty MillToleranceAtDMin { get; set; } = LengthProperty.Zero;

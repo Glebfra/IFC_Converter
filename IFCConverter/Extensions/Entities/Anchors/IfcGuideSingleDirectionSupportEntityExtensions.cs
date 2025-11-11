@@ -14,9 +14,12 @@ namespace IFCConverter.Extensions.Entities.Anchors
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
+            string name = guideSingleDirectionSupportEntity.Name;
+            string type = guideSingleDirectionSupportEntity.Type.ToString();
+            
             IfcGuideSingleDirectionSupportEntity guideSingleDirectionSupportEntityIfc = new IfcGuideSingleDirectionSupportEntity(
-                guideSingleDirectionSupportEntity.Name,
-                guideSingleDirectionSupportEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 segmentEntities[0].Diameter,
                 segmentEntities[0].Diameter * 2,

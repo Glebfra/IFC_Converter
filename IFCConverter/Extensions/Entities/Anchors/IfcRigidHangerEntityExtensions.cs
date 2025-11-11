@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Anchors
             
             double diameter = segmentEntities[0].Diameter;
             double height = diameter * 2;
+            
+            string name = rigidHanger.Name;
+            string type = rigidHanger.Type.ToString();
 
             IfcRigidHangerEntity rigidHangerEntity = new IfcRigidHangerEntity(
-                rigidHanger.Name,
-                rigidHanger.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 diameter,
                 height,

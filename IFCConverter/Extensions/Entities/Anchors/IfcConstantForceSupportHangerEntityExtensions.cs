@@ -13,10 +13,13 @@ namespace IFCConverter.Extensions.Entities.Anchors
         public static IfcConstantForceSupportHangerEntity CreateFromStart(StartConstantForceSupportHangerEntity constantForceSupport, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
+            
+            string name = constantForceSupport.Name;
+            string type = constantForceSupport.Type.ToString();
 
             IfcConstantForceSupportHangerEntity constantForceSupportHangerEntity = new IfcConstantForceSupportHangerEntity(
-                constantForceSupport.Name,
-                constantForceSupport.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 segmentEntities[0].Diameter,
                 segmentEntities[0].Diameter * 2,

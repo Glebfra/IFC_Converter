@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Anchors
             
             double diameter = segmentEntities[0].Diameter;
             double height = diameter * 2;
+            
+            string name = slidingSupport.Name;
+            string type = slidingSupport.Type.ToString();
 
             IfcSlidingSupportEntity slidingSupportEntity = new IfcSlidingSupportEntity(
-                slidingSupport.Name,
-                slidingSupport.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 diameter,
                 height,

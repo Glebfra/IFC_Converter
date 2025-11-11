@@ -22,10 +22,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             double pipeRadius = Math.Min(segmentEntities[0].Diameter / 2, segmentEntities[1].Diameter / 2);
             
             double length = angle * bendRadius;
+            
+            string name = bendEntity.Name;
+            string type = bendEntity.Type.ToString();
 
             IfcCadBendEntity cadBendEntity = new IfcCadBendEntity(
-                bendEntity.Name,
-                bendEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length, 
                 angle,

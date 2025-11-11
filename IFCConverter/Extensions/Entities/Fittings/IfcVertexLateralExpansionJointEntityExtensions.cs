@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             double length = lateralExpansion.Length.SIProperty;
             double diameter = length * 2;
+            
+            string name = lateralExpansion.Name;
+            string type = lateralExpansion.Type.ToString();
 
             IfcVertexLateralExpansionJointEntity lateralExpansionJointEntity = new IfcVertexLateralExpansionJointEntity(
-                lateralExpansion.Name,
-                lateralExpansion.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter,

@@ -13,18 +13,21 @@ namespace IFC.Tools
 {
     public static partial class IfcGeometry
     {
-        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IfcRepresentationItem representationItem)
-        {
-            return CreateShapeRepresentation(model, new[] { representationItem });
-        }
+        public static IfcShapeRepresentation CreateShapeRepresentation(
+            IModel model, IfcRepresentationItem representationItem, 
+            string representationType = IfcRepresentationType.SweptSolid, string representationIdentifier = IfcRepresentationIdentifier.Body
+        ) => CreateShapeRepresentation(model, new[] { representationItem }, representationType, representationIdentifier);
 
-        public static IfcShapeRepresentation CreateShapeRepresentation(IModel model, IEnumerable<IfcRepresentationItem> representationItems)
+        public static IfcShapeRepresentation CreateShapeRepresentation(
+            IModel model, IEnumerable<IfcRepresentationItem> representationItems, 
+            string representationType = IfcRepresentationType.SweptSolid, string representationIdentifier = IfcRepresentationIdentifier.Body
+        )
         {
             return model.Instances.New<IfcShapeRepresentation>(representation =>
             {
                 representation.ContextOfItems = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-                representation.RepresentationIdentifier = "Body";
-                representation.RepresentationType = "SweptSolid";
+                representation.RepresentationIdentifier = representationIdentifier;
+                representation.RepresentationType = representationType;
                 representation.Items.AddRange(representationItems);
             });
         }

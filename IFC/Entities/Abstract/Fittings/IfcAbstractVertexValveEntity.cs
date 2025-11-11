@@ -10,6 +10,7 @@ using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.ProductExtension;
 
 namespace IFC.Entities.Abstract.Fittings
 {
@@ -23,16 +24,16 @@ namespace IFC.Entities.Abstract.Fittings
         
         public override IfcProduct CreateAndAdd(IModel model)
         {
-            IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            IfcValve pipeFitting = CreateIfcEntity<IfcValve>(model);
             ClipPipes();
             return pipeFitting;
         }
         
         protected new T CreateIfcEntity<T>(IModel model)
-            where T : IfcPipeFitting, IInstantiableEntity
+            where T : IfcValve, IInstantiableEntity
         {
             T pipeFitting = base.CreateIfcEntity<T>(model);
-            pipeFitting.PredefinedType = IfcPipeFittingTypeEnum.CONNECTOR;
+            pipeFitting.PredefinedType = IfcValveTypeEnum.NOTDEFINED;
 
             IEnumerable<IfcRepresentationItem> representationItems = CreateShape(model);
             AddShapeRepresentation(model, pipeFitting, representationItems);
@@ -52,9 +53,8 @@ namespace IFC.Entities.Abstract.Fittings
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, XbimVector3D.Zero);
             IfcFacetedBrep lowerBrep = IfcVertexGeometry.CreateCone(model, firstCircle, topPoint);
             IfcFacetedBrep upperBrep = IfcVertexGeometry.CreateCone(model, secondCircle, topPoint);
-            IfcBooleanResult result = IfcGeometry.CreateBooleanResult(model, lowerBrep, upperBrep, IfcBooleanOperator.UNION);
 
-            return new IfcRepresentationItem[] { result };
+            return new IfcRepresentationItem[] { lowerBrep, upperBrep };
         }
 
         private void ClipPipes()

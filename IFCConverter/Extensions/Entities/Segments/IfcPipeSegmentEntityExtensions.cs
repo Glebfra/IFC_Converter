@@ -16,10 +16,13 @@ namespace IFCConverter.Extensions.Entities.Segments
         public static IfcPipeSegmentEntity CreateFromStart(StartPipeEntity pipeEntity, IfcNodeEntity[] nodeEntities)
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(pipeEntity, nodeEntities, out double length);
-
+            
+            string name = pipeEntity.Name;
+            string type = pipeEntity.Type.ToString();
+            
             IfcPipeSegmentEntity pipeSegment = new IfcPipeSegmentEntity(
-                pipeEntity.Name,
-                pipeEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntities),
+                type,
                 objectMatrix3D,
                 length,
                 pipeEntity.Diameter.SIProperty,

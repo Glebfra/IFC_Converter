@@ -17,10 +17,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
 
             double diameter = Math.Max(segmentEntities[0].Diameter, segmentEntities[1].Diameter);
             double length = armatureEntity.Length.SIProperty;
+            
+            string name = armatureEntity.Name;
+            string type = armatureEntity.Type.ToString();
 
             IfcVertexValveEntity valveEntity = new IfcVertexValveEntity(
-                armatureEntity.Name,
-                armatureEntity.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameter,

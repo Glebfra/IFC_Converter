@@ -17,10 +17,13 @@ namespace IFCConverter.Extensions.Entities.Fittings
             
             double length = armature.Length.SIProperty;
             double[] diameters = segmentEntities.Select(segment => segment.Diameter.Value).ToArray();
+            
+            string name = armature.Name;
+            string type = armature.Type.ToString();
 
             IfcVertexFlangeEntity flangeEntity = new IfcVertexFlangeEntity(
-                armature.Name,
-                armature.Type.ToString(),
+                StartToIfcNaming.GenerateName(name, type, nodeEntity),
+                type,
                 objectMatrix3D,
                 length,
                 diameters,
