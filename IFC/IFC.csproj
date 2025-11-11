@@ -135,6 +135,9 @@
     <Reference Include="Xbim.Ifc2x3, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.Ifc2x3.5.1.341\lib\net46\Xbim.Ifc2x3.dll</HintPath>
     </Reference>
+    <Reference Include="Xbim.Ifc4">
+      <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
+    </Reference>
     <Reference Include="Xbim.Ifc4, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
     </Reference>
@@ -157,13 +160,8 @@
     <Compile Include="Entities\Anchors\IfcSpringHangerEntity.cs" />
     <Compile Include="Entities\Anchors\IfcSpringSupportEntity.cs" />
     <Compile Include="Entities\Interfaces\IIfcEntity.cs" />
-    <Compile Include="Extensions\Ifc2AxisPlacement3DExtensions.cs" />
-    <Compile Include="Extensions\IfcCartesianPointList3DExtensions.cs" />
-    <Compile Include="Extensions\IfcDirectionExtensions.cs" />
-    <Compile Include="Extensions\IfcExtrudedAreaSolidExtensions.cs" />
-    <Compile Include="Extensions\IfcRevolvedAreaSolidExtensions.cs" />
-    <Compile Include="Extensions\IfcTriangulatedFaceSetExtensions.cs" />
-    <Compile Include="Extensions\IIfcObjectPlacementExtensions.cs" />
+    <Compile Include="Extensions\IfcAxisExtensions.cs" />
+    <Compile Include="Extensions\IfcRepresentationExtensions.cs" />
     <Compile Include="PropertySets\AVEVA_EntityParameters.cs" />
     <Compile Include="PropertySets\AVEVA_Pset.cs" />
     <Compile Include="PropertySets\Pset_Debug.cs" />
@@ -269,8 +267,6 @@
     <Compile Include="Entities\Segments\IfcFlexibleSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcPipeSegmentEntity.cs" />
     <Compile Include="Entities\Segments\IfcRigidElementEntity.cs" />
-    <Compile Include="Extensions\IfcCartesianPointExtensions.cs" />
-    <Compile Include="Extensions\IfcNodeEntityExtensions.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="IFCProject.cs" />

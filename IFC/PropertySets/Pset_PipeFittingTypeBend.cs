@@ -1,4 +1,5 @@
-﻿using IFC.Tools;
+﻿using IFC.Extensions;
+using IFC.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
