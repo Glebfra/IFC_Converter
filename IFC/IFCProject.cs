@@ -35,7 +35,7 @@ namespace IFC
             _model = model;
             _lengthUnit = model.Instances.FirstOrDefault<IfcSIUnit>(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
             _building = _model.Instances.FirstOrDefault<IfcBuilding>();
-            _transaction = _model.BeginTransaction("Objects adding");
+            BeginTransaction("Objects adding");
 
             _ifcObjects = new List<IfcProduct>();
         }
