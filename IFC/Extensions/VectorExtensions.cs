@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using IFC.Tools;
 using Xbim.Common;
@@ -119,6 +120,12 @@ namespace IFC.Extensions
         {
             XbimMatrix3D Mz = MatrixExtensions.Mz(angle);
             return XbimVector3D.Multiply(vector3D, Mz);
+        }
+        
+        public static XbimVector3D Lerp(XbimVector3D first, XbimVector3D second, double t)
+        {
+            XbimVector3D delta = second - first;
+            return first + delta * t;
         }
     }
 }

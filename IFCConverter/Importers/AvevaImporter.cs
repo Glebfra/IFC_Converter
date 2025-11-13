@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using IFC;
 using IFC.Entities;
+using IFC.Entities.Abstract.Anchors;
 using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Abstract.Segments;
+using IFC.Entities.Anchors;
 using IFC.Entities.Fittings.CAD;
 using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
@@ -12,7 +14,6 @@ using IFC.Extensions;
 using IFC.PropertySets;
 using IFC.Tools;
 using IFCConverter.Extensions.Entities;
-using IFCConverter.Extensions.Entities.Segments;
 using IFCConverter.Extensions.Tools;
 using IFCConverter.Tools;
 using Xbim.Common.Geometry;
@@ -24,18 +25,25 @@ using Xbim.Ifc4.ProductExtension;
 
 namespace IFCConverter.Importers
 {
-    internal class AvevaImporter : StandardImporter
+    internal class AvevaImporter : IImporter
     {
+        private IFCProject _ifcProject;
+        private IfcSIUnit _LengthUnit;
         private double _tolerance => 1e-3 / _LengthUnit.Power;
-        
-        public AvevaImporter(IFCProject ifcProject) : base(ifcProject) { }
-        
-        public override IfcElement[] GetPipeSegments(IfcProduct[] products) => GetElementByType(products, "TUBING");
-        public override IfcElement[] GetBends(IfcProduct[] products) => GetElementByType(products, "ELBOW");
-        public override IfcElement[] GetTees(IfcProduct[] products) => GetElementByType(products, "TEE");
-        public override IfcElement[] GetReducers(IfcProduct[] products) => GetElementByType(products, "REDUCER");
 
-        public override IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
+        public AvevaImporter(IFCProject ifcProject)
+        {
+            _ifcProject = ifcProject;
+            _LengthUnit = ifcProject.LengthUnit;
+        }
+        
+        public IfcElement[] GetPipeSegments(IfcProduct[] products) => GetElementByType(products, "TUBING");
+        public IfcElement[] GetBends(IfcProduct[] products) => GetElementByType(products, "ELBOW");
+        public IfcElement[] GetTees(IfcProduct[] products) => GetElementByType(products, "TEE");
+        public IfcElement[] GetReducers(IfcProduct[] products) => GetElementByType(products, "REDUCER");
+        public IfcElement[] GetAnchors(IfcProduct[] products) => GetElementByType(products, "ATTACHMENT");
+
+        public IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
         {
             Logger logger = Logger.GetInstance();
             
@@ -44,7 +52,6 @@ namespace IFCConverter.Importers
             {
                 try
                 {
-                    Console.WriteLine($"Creating pipe segment: {pipeElement.GlobalId}");
                     IfcLabel name = pipeElement.Name ?? new IfcLabel("");
                     IfcIdentifier tag = pipeElement.Tag ?? new IfcIdentifier("");
                     
@@ -81,7 +88,7 @@ namespace IFCConverter.Importers
             return pipeSegmentEntities.ToArray();
         }
 
-        public override IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        public IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
             
@@ -90,7 +97,6 @@ namespace IFCConverter.Importers
             {
                 try
                 {
-                    Console.WriteLine($"Creating bend: {bendElement.GlobalId}");
                     IfcLabel name = bendElement.Name ?? new IfcLabel("");
                     IfcIdentifier tag = bendElement.Tag ?? new IfcIdentifier("");
                     
@@ -180,7 +186,7 @@ namespace IFCConverter.Importers
             return bendEntities.ToArray();
         }
 
-        public override IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
 
@@ -262,7 +268,7 @@ namespace IFCConverter.Importers
             return weldedTeeEntities.ToArray();
         }
 
-        public override IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        public IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
 
@@ -373,6 +379,57 @@ namespace IFCConverter.Importers
             }
 
             return reducerEntities.ToArray();
+        }
+        
+        public IfcAbstractAnchorEntity[] CreateAnchors(IfcElement[] anchors, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        {
+            Logger logger = Logger.GetInstance();
+            List<IfcAbstractAnchorEntity> abstractAnchorEntities = new List<IfcAbstractAnchorEntity>(capacity: anchors.Length);
+
+            foreach (IfcElement anchorElement in anchors)
+            {
+                try
+                {
+                    IfcLabel name = anchorElement.Name ?? new IfcLabel("");
+                    IfcIdentifier tag = anchorElement.Tag ?? new IfcIdentifier("");
+                    
+                    IPropertySet[] propertySets = anchorElement.GetPropertySets().ToArray();
+                    
+                    AVEVA_EntityParameters? avevaEntityParameters = propertySets.OfType<AVEVA_EntityParameters>().FirstOrDefault();
+                    if (avevaEntityParameters == null)
+                        throw new Exception("Bend does not have AVEVA_EntityParameters property set.");
+                    
+                    AVEVA_Pset? avevaPset = propertySets.OfType<AVEVA_Pset>().FirstOrDefault();
+                    if (avevaPset == null)
+                        throw new Exception("Bend does not have AVEVA_Pset property set.");
+                    
+                    XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
+                    IfcAbstractSegmentEntity? nearestSegment = abstractSegmentEntities.GetNearestSegments(coordinates, 1).FirstOrDefault();
+                    if (nearestSegment == null)
+                        throw new Exception("Cannot find anchor's connected segment");
+                    
+                    double divisionRate = (coordinates - nearestSegment.StartPoint).Length / nearestSegment.Length;
+                    IfcPipeSegmentEntity newDividedSegment = nearestSegment.DividePipe(divisionRate);
+                    abstractSegmentEntities.Add(newDividedSegment);
+
+                    double diameter = nearestSegment.Diameter;
+                    XbimMatrix3D supportObjectMatrix = StartToIfcPlacement.CreateStandardObjectMatrix(coordinates);
+                    IfcHingedAnchorEntity anchorEntity = new IfcHingedAnchorEntity(name, tag, supportObjectMatrix, diameter, diameter * 2, 16);
+                    nearestSegment.EndNode = anchorEntity.NodeEntity;
+                    newDividedSegment.StartNode = anchorEntity.NodeEntity;
+
+                    abstractAnchorEntities.Add(anchorEntity);
+                    
+                    logger.Info($"Created {anchorEntity}, ID: {anchorElement.GlobalId}");
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.Message);
+                    logger.Error($"Failed to create anchor entity with ID: {anchorElement.GlobalId}");
+                }
+            }
+
+            return abstractAnchorEntities.ToArray();
         }
 
         private static IfcElement[] GetElementByType(IEnumerable<IfcProduct> products, IfcText type)

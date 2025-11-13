@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IFC.Entities.Interfaces;
 using IFC.PropertySets;
 using IFC.Tools;
 using Xbim.Common;
@@ -11,7 +12,7 @@ using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Entities.Abstract
 {
-    public abstract class IfcAbstractEntity : Interfaces.IIfcEntity
+    public abstract class IfcAbstractEntity : IIfcEntity
     {
         /// <summary>
         /// Gets the name of the IFC entity.

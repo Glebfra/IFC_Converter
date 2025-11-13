@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IFC;
 using IFC.Entities;
+using IFC.Entities.Abstract.Anchors;
 using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
@@ -12,7 +13,6 @@ using IFC.Extensions;
 using IFC.PropertySets;
 using IFC.Tools;
 using IFCConverter.Extensions.Entities;
-using IFCConverter.Extensions.Entities.Segments;
 using IFCConverter.Tools;
 using Start.Entities.Fittings;
 using Xbim.Common.Geometry;
@@ -21,6 +21,7 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.SharedComponentElements;
 
 namespace IFCConverter.Importers
 {
@@ -36,7 +37,7 @@ namespace IFCConverter.Importers
         }
         
         // ReSharper disable once CoVariantArrayConversion
-        public virtual IfcElement[] GetPipeSegments(IfcProduct[] products)
+        public IfcElement[] GetPipeSegments(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeSegment>()
@@ -44,7 +45,7 @@ namespace IFCConverter.Importers
         }
 
         // ReSharper disable once CoVariantArrayConversion
-        public virtual IfcElement[] GetBends(IfcProduct[] products)
+        public IfcElement[] GetBends(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
@@ -53,7 +54,7 @@ namespace IFCConverter.Importers
         }
 
         // ReSharper disable once CoVariantArrayConversion
-        public virtual IfcElement[] GetTees(IfcProduct[] products)
+        public IfcElement[] GetTees(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
@@ -62,15 +63,23 @@ namespace IFCConverter.Importers
         }
 
         // ReSharper disable once CoVariantArrayConversion
-        public virtual IfcElement[] GetReducers(IfcProduct[] products)
+        public IfcElement[] GetReducers(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
                 .Where(fitting => fitting.PredefinedType == IfcPipeFittingTypeEnum.CONNECTOR)
                 .ToArray();
         }
+        
+        // ReSharper disable once CoVariantArrayConversion
+        public IfcElement[] GetAnchors(IfcProduct[] products)
+        {
+            return products
+                .OfType<IfcDiscreteAccessory>()
+                .ToArray();
+        }
 
-        public virtual IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
+        public IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
         {
             IfcPipeSegmentEntity[] pipeSegmentEntities = new IfcPipeSegmentEntity[pipes.Length];
 
@@ -93,7 +102,7 @@ namespace IFCConverter.Importers
             return pipeSegmentEntities;
         }
 
-        public virtual IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        public IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             IfcCadBendEntity[] bendEntities = new IfcCadBendEntity[bends.Length];
             for (int i = 0; i < bends.Length; i++)
@@ -139,7 +148,7 @@ namespace IFCConverter.Importers
             return bendEntities;
         }
 
-        public virtual IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             IfcWeldedTeeEntity[] weldedTeeEntities = new IfcWeldedTeeEntity[tees.Length];
             for (int i = 0; i < tees.Length; i++)
@@ -194,7 +203,7 @@ namespace IFCConverter.Importers
             return weldedTeeEntities;
         }
 
-        public virtual IfcVertexReducerConcentricEntity[] CreateConcentricReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        public IfcVertexReducerConcentricEntity[] CreateConcentricReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             IfcVertexReducerConcentricEntity[] reducerConcentricEntities = new IfcVertexReducerConcentricEntity[reducers.Length];
             for (int i = 0; i < reducers.Length; i++)
@@ -240,12 +249,19 @@ namespace IFCConverter.Importers
             return reducerConcentricEntities;
         }
 
-        public virtual IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        //TODO create reducers creation
+        public IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             throw new NotImplementedException();
         }
 
-        protected static void FilterTeeSegments(IfcAbstractSegmentEntity[] segmentEntities, XbimVector3D coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle)
+        //TODO create anchors creation
+        public IfcAbstractAnchorEntity[] CreateAnchors(IfcElement[] anchors, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void FilterTeeSegments(IfcAbstractSegmentEntity[] segmentEntities, XbimVector3D coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle)
         {
             branchPipes = new IfcAbstractSegmentEntity[2];
             headPipe = null;
@@ -274,37 +290,37 @@ namespace IFCConverter.Importers
             angle = branchDirection.Angle(headDirection);
         }
 
-        protected static double GetTeeLength(IEnumerable<IPropertySet> propertySets)
+        private static double GetTeeLength(IEnumerable<IPropertySet> propertySets)
         {
             Pset_Start psetStart = propertySets.OfType<Pset_Start>().First();
             return Pset_Start.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.HeaderLength)]);
         }
 
-        protected static double GetTeeHeight(IEnumerable<IPropertySet> propertySets)
+        private static double GetTeeHeight(IEnumerable<IPropertySet> propertySets)
         {
             Pset_Start psetStart = propertySets.OfType<Pset_Start>().First();
             return Pset_Start.GetDoublePropertyValue(psetStart.Data[nameof(StartTeeEntity.CrotchHeight)]);
         }
-        
-        protected static double GetBendAngle(IEnumerable<IPropertySet> propertySets)
+
+        private static double GetBendAngle(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeFittingTypeBend psetPipeFittingTypeBend = propertySets.OfType<Pset_PipeFittingTypeBend>().First();
             return psetPipeFittingTypeBend.BendAngle.Value;
         }
 
-        protected static double GetBendRadius(IEnumerable<IPropertySet> propertySets)
+        private static double GetBendRadius(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeFittingTypeBend psetPipeFittingTypeBend = propertySets.OfType<Pset_PipeFittingTypeBend>().First();
             return psetPipeFittingTypeBend.BendRadius.Value;
         }
 
-        protected static double GetPipeLength(IEnumerable<IPropertySet> propertySets)
+        private static double GetPipeLength(IEnumerable<IPropertySet> propertySets)
         {
             Qto_PipeSegmentBaseQuantities qtoPipeSegmentBaseQuantities = propertySets.OfType<Qto_PipeSegmentBaseQuantities>().First();
             return qtoPipeSegmentBaseQuantities.Length.Value;
         }
 
-        protected static double GetPipeDiameter(IEnumerable<IPropertySet> propertySets)
+        private static double GetPipeDiameter(IEnumerable<IPropertySet> propertySets)
         {
             Pset_PipeSegmentTypeCommon psetPipeSegmentTypeCommon = propertySets.OfType<Pset_PipeSegmentTypeCommon>().First();
             return psetPipeSegmentTypeCommon.OuterDiameter.Value;
