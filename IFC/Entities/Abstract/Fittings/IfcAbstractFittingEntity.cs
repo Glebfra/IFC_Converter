@@ -1,8 +1,6 @@
 ﻿using IFC.Entities.Interfaces;
 using IFC.Tools;
-using Xbim.Common;
 using Xbim.Common.Geometry;
-using Xbim.Ifc4.HvacDomain;
 
 namespace IFC.Entities.Abstract.Fittings
 {

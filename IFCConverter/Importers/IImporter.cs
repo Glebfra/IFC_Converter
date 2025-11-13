@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFC.Entities.Abstract.Anchors;
 using IFC.Entities.Abstract.Fittings;
-using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Fittings.CAD;
-using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProductExtension;
