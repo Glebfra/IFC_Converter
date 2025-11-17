@@ -14,7 +14,7 @@ namespace IFCConverter.Extensions.Entities
             Dictionary<string, string> data = psetStart.Data;
 
             if (data.TryGetValue(nameof(startPipeEntity.ManufacturingTechnologyEnum), out string manufacturingTechnology))
-                startPipeEntity.ManufacturingTechnologyEnum = ManufacturingTechnologyExtensions.GetManufacturingTechnology(manufacturingTechnology);
+                startPipeEntity.ManufacturingTechnologyEnum = StartEnumExtensions.GetManufacturingTechnology(manufacturingTechnology);
             if (data.TryGetValue(nameof(startPipeEntity.MaterialName), out string materialName))
                 startPipeEntity.MaterialName = materialName;
             if (data.TryGetValue(nameof(startPipeEntity.MillTolerance), out string millTolerance))
@@ -46,7 +46,7 @@ namespace IFCConverter.Extensions.Entities
             Dictionary<string, string>? data = psetStart.Data;
             
             if (data.TryGetValue(nameof(startBendEntity.ManufacturingTechnologyEnum), out string manufacturingTechnology))
-                startBendEntity.ManufacturingTechnologyEnum = ManufacturingTechnologyExtensions.GetManufacturingTechnology(manufacturingTechnology);
+                startBendEntity.ManufacturingTechnologyEnum = StartEnumExtensions.GetManufacturingTechnology(manufacturingTechnology);
             if (data.TryGetValue(nameof(startBendEntity.MaterialName), out string materialName))
                 startBendEntity.MaterialName = materialName;
             if (data.TryGetValue(nameof(startBendEntity.MillTolerance), out string millTolerance))
@@ -74,7 +74,7 @@ namespace IFCConverter.Extensions.Entities
             if (data.TryGetValue(nameof(startReducerEntity.MinDiameter), out string minDiameter))
                 startReducerEntity.MinDiameter = LengthProperty.CreateFromSi(GetPropertyValue(minDiameter));
             if (data.TryGetValue(nameof(startReducerEntity.ManufacturingTechnologyEnum), out string manufacturingTechnology))
-                startReducerEntity.ManufacturingTechnologyEnum = ManufacturingTechnologyExtensions.GetManufacturingTechnology(manufacturingTechnology);
+                startReducerEntity.ManufacturingTechnologyEnum = StartEnumExtensions.GetManufacturingTechnology(manufacturingTechnology);
             if (data.TryGetValue(nameof(startReducerEntity.LengthOfConicalPart), out string lengthOfConicalPart))
                 startReducerEntity.LengthOfConicalPart = LengthProperty.CreateFromSi(GetPropertyValue(lengthOfConicalPart));
             if (data.TryGetValue(nameof(startReducerEntity.MillToleranceAtDMax), out string millToleranceAtDMax))
@@ -94,7 +94,7 @@ namespace IFCConverter.Extensions.Entities
             Dictionary<string, string>? data = psetStart.Data;
             
             if (data.TryGetValue(nameof(startTeeEntity.ManufacturingTechnologyEnum), out string manufacturingTechnology))
-                startTeeEntity.ManufacturingTechnologyEnum = ManufacturingTechnologyExtensions.GetManufacturingTechnology(manufacturingTechnology);
+                startTeeEntity.ManufacturingTechnologyEnum = StartEnumExtensions.GetManufacturingTechnology(manufacturingTechnology);
             if (data.TryGetValue(nameof(startTeeEntity.MaterialName), out string materialName))
                 startTeeEntity.MaterialName = materialName;
             if (data.TryGetValue(nameof(startTeeEntity.HeaderLength), out string headerLength))
@@ -141,6 +141,26 @@ namespace IFCConverter.Extensions.Entities
                 startAnchorEntity.CheckAllowableLoads = NumberProperty.CreateFromSi(GetIntPropertyValue(checkAllowableLoads));
             if (data.TryGetValue(nameof(startAnchorEntity.AllowableLoadsInLocalAxes), out string allowableLoadsInLocalAxes))
                 startAnchorEntity.AllowableLoadsInLocalAxes = NumberProperty.CreateFromSi(GetIntPropertyValue(allowableLoadsInLocalAxes));
+        }
+
+        public static void UpdateFromStartPset(this StartArmatureEntity startArmatureEntity, Pset_Start psetStart)
+        {
+            Dictionary<string, string> data = psetStart.Data;
+            
+            if(data.TryGetValue(nameof(startArmatureEntity.Weight), out string weight))
+                startArmatureEntity.Weight = MassProperty.CreateFromSi(GetPropertyValue(weight));
+            if(data.TryGetValue(nameof(startArmatureEntity.Length), out string length))
+                startArmatureEntity.Length = LengthProperty.CreateFromSi(GetPropertyValue(length));
+            if (data.TryGetValue(nameof(startArmatureEntity.GasketCrossection), out string gasketCrossection))
+                startArmatureEntity.GasketCrossection = GetPropertyValue(gasketCrossection);
+            if (data.TryGetValue(nameof(startArmatureEntity.NominalPressure), out string nominalPressure))
+                startArmatureEntity.NominalPressure = PressureProperty.CreateFromSi(GetPropertyValue(nominalPressure));
+            if (data.TryGetValue(nameof(startArmatureEntity.OutsideDiameter), out string outsideDiameter))
+                startArmatureEntity.OutsideDiameter = LengthProperty.CreateFromSi(GetPropertyValue(outsideDiameter));
+            if (data.TryGetValue(nameof(startArmatureEntity.GasketEffectiveDiameter), out string gasketEffectiveDiameter))
+                startArmatureEntity.GasketEffectiveDiameter = LengthProperty.CreateFromSi(GetPropertyValue(gasketEffectiveDiameter));
+            if (data.TryGetValue(nameof(startArmatureEntity.LeakageCheckEnum), out string leakageCheck))
+                startArmatureEntity.LeakageCheckEnum = StartEnumExtensions.GetLeakageCheck(leakageCheck);
         }
         
         private static double GetPropertyValue(string rawValue) => Pset_Start.GetDoublePropertyValue(rawValue);

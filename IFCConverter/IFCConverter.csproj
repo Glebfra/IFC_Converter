@@ -160,7 +160,7 @@
     <Compile Include="Extensions\Entities\IfcProductExtensions.cs" />
     <Compile Include="Extensions\Entities\StartEntitiesExtensions.cs" />
     <Compile Include="Extensions\IfcEntityFactory.cs" />
-    <Compile Include="Extensions\ManufacturingTechnologyExtensions.cs" />
+    <Compile Include="Extensions\StartEnumExtensions.cs" />
     <Compile Include="Extensions\Tools\StartToIfcNaming.cs" />
     <Compile Include="Extensions\Tools\StartToIfcPlacement.cs" />
     <Compile Include="GUI\ExportWindowForm.cs">

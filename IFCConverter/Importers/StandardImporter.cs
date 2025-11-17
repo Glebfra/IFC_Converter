@@ -79,6 +79,14 @@ namespace IFCConverter.Importers
                 .ToArray();
         }
 
+        // ReSharper disable once CoVariantArrayConversion
+        public IfcElement[] GetValves(IfcProduct[] products)
+        {
+            return products
+                .OfType<IfcValve>()
+                .ToArray();
+        }
+
         public IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
         {
             IfcPipeSegmentEntity[] pipeSegmentEntities = new IfcPipeSegmentEntity[pipes.Length];
@@ -257,6 +265,12 @@ namespace IFCConverter.Importers
 
         //TODO create anchors creation
         public IfcAbstractAnchorEntity[] CreateAnchors(IfcElement[] anchors, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO create valves creation
+        public IfcVertexValveEntity[] CreateValves(IfcElement[] valves, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             throw new NotImplementedException();
         }

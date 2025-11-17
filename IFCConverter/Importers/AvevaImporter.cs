@@ -42,6 +42,7 @@ namespace IFCConverter.Importers
         public IfcElement[] GetTees(IfcProduct[] products) => GetElementByType(products, "TEE");
         public IfcElement[] GetReducers(IfcProduct[] products) => GetElementByType(products, "REDUCER");
         public IfcElement[] GetAnchors(IfcProduct[] products) => GetElementByType(products, "ATTACHMENT");
+        public IfcElement[] GetValves(IfcProduct[] products) => GetElementByType(products, "VALVE");
 
         public IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
         {
@@ -430,6 +431,62 @@ namespace IFCConverter.Importers
             }
 
             return abstractAnchorEntities.ToArray();
+        }
+
+        public IfcVertexValveEntity[] CreateValves(IfcElement[] valves, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        {
+            Logger logger = Logger.GetInstance();
+            List<IfcVertexValveEntity> valveEntities = new List<IfcVertexValveEntity>(capacity: valves.Length);
+            
+            foreach (IfcElement valveElement in valves)
+            {
+                try
+                {
+                    IfcLabel name = valveElement.Name ?? new IfcLabel("");
+                    IfcIdentifier tag = valveElement.Tag ?? new IfcIdentifier("");
+                    
+                    IPropertySet[] propertySets = valveElement.GetPropertySets().ToArray();
+                    
+                    AVEVA_EntityParameters? avevaEntityParameters = propertySets.OfType<AVEVA_EntityParameters>().FirstOrDefault();
+                    if (avevaEntityParameters == null)
+                        throw new Exception("Bend does not have AVEVA_EntityParameters property set.");
+                    
+                    AVEVA_Pset? avevaPset = propertySets.OfType<AVEVA_Pset>().FirstOrDefault();
+                    if (avevaPset == null)
+                        throw new Exception("Bend does not have AVEVA_Pset property set.");
+                    
+                    XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
+                    IfcAbstractSegmentEntity[] nearestSegmentEntities = abstractSegmentEntities.GetNearestSegments(coordinates, 2).ToArray();
+                    if (nearestSegmentEntities.Length < 2)
+                        throw new Exception("Cannot find valve connected segments");
+                    
+                    XbimVector3D[] valvePoints = nearestSegmentEntities.Select(segment => segment.NodeEntities.GetNearestNode(coordinates).Object.ObjectMatrix3D.Translation).ToArray();
+                    double length = (valvePoints[1] - valvePoints[0]).Length;
+                    
+                    double diameter = Math.Max(nearestSegmentEntities[0].Diameter, nearestSegmentEntities[1].Diameter);
+                    XbimMatrix3D valveObjectMatrix = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, nearestSegmentEntities, out double angle);
+                    IfcVertexValveEntity valveEntity = new IfcVertexValveEntity(name, tag, valveObjectMatrix, length, diameter, angle, 16);
+                    IfcNodeEntity valveNode = valveEntity.NodeEntity;
+                    
+                    foreach (IfcAbstractSegmentEntity nearestSegment in nearestSegmentEntities)
+                    {
+                        nearestSegment.Clip(valveNode, -length / 2);
+                        IndexedResult<IfcNodeEntity> branchNodeResult = nearestSegment.NodeEntities.GetNearestNode(valveNode);
+                        nearestSegment.NodeEntities[branchNodeResult.Index] = valveNode;
+                    }
+                    
+                    valveEntities.Add(valveEntity);
+                    
+                    logger.Info($"Created {valveEntity}, ID: {valveElement.GlobalId}");
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.Message);
+                    logger.Error($"Failed to create valve entity with ID: {valveElement.GlobalId}");
+                }
+            }
+
+            return valveEntities.ToArray();
         }
 
         private static IfcElement[] GetElementByType(IEnumerable<IfcProduct> products, IfcText type)

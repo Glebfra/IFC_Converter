@@ -7,6 +7,7 @@ using IFC.Entities;
 using IFC.Entities.Abstract.Anchors;
 using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Fittings.CAD;
+using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using IFCConverter.Extensions.Entities;
 using IFCConverter.Importers;
@@ -78,6 +79,10 @@ namespace IFCConverter
                     IfcElement[] ifcAnchors = importer.GetAnchors(products);
                     logger.Info($"Found anchors {ifcAnchors.Length}");
                     IfcAbstractAnchorEntity[] anchorEntities = importer.CreateAnchors(ifcAnchors, segmentEntities);
+
+                    IfcElement[] ifcValves = importer.GetValves(products);
+                    logger.Info($"Found valves {ifcValves.Length}");
+                    IfcVertexValveEntity[] valveEntities = importer.CreateValves(ifcValves, segmentEntities);
                     
                     using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
                     {
@@ -86,6 +91,7 @@ namespace IFCConverter
                         GenerateBendEntities(startProject, bendEntities);
                         GenerateReducerEntities(startProject, reducerEntities);
                         GenerateAnchorEntities(startProject, anchorEntities);
+                        GenerateValveEntities(startProject, valveEntities);
                     }
                 }
             }
@@ -202,6 +208,25 @@ namespace IFCConverter
                 StartObject startNodeObject = GetOrCreateNode(startProject, ifcAnchorEntity.NodeEntity);
                 ConnectNodes(startAnchorObject, startNodeObject);
                 ConnectObjects(startAnchorObject, startPipeObjects);
+            }
+        }
+
+        private void GenerateValveEntities(StartProject startProject, IEnumerable<IfcVertexValveEntity> valveEntities)
+        {
+            foreach (IfcVertexValveEntity ifcValveEntity in valveEntities)
+            {
+                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcValveEntity.ConnectedEntities
+                    .OfType<IfcPipeSegmentEntity>()
+                    .ToArray();
+                StartObject[] startPipeObject = pipeSegmentEntities
+                    .Select(segment => _startPipeObjects[segment])
+                    .ToArray();
+
+                StartArmatureEntity startArmatureEntity = ifcValveEntity.ToStartArmatureEntity();
+                StartObject startArmatureObject = GenerateStartEntity(startProject, startArmatureEntity);
+                StartObject startNodeObject = GetOrCreateNode(startProject, ifcValveEntity.NodeEntity);
+                ConnectNodes(startArmatureObject, startNodeObject);
+                ConnectObjects(startArmatureObject, startPipeObject);
             }
         }
 
