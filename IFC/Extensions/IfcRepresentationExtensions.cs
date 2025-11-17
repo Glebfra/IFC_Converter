@@ -14,6 +14,33 @@ namespace IFC.Extensions
 {
     public static class IfcRepresentationExtensions
     {
+        public static IfcTriangulatedFaceSet CreateTriangulatedFaceSet(IModel model, IfcCartesianPointList3D cartesianPointList3D, int[][] indices, XbimVector3D[]? normals=null)
+        {
+            return model.Instances.New<IfcTriangulatedFaceSet>(set =>
+            {
+                set.Coordinates = cartesianPointList3D;
+
+                for (int i = 0; i < indices.Length; i++)
+                {
+                    set.CoordIndex.GetAt(i).AddRange(indices[i].Select(index => new IfcPositiveInteger(index)));
+                }
+
+                if (normals != null)
+                {
+                    for (int i = 0; i < normals.Length; i++)
+                    {
+                        set.Normals.GetAt(i).AddRange(new IfcParameterValue[] { normals[i].X, normals[i].Y, normals[i].Z });
+                    }
+                }
+            });
+        }
+
+        public static IfcTriangulatedFaceSet CreateTriangulatedFaceSet(IModel model, XbimVector3D[] vertices, int[][] indices, XbimVector3D[]? normals = null)
+        {
+            IfcCartesianPointList3D cartesianPointList3D = IfcAxisExtensions.CreateCartesianPointList3D(model, vertices);
+            return CreateTriangulatedFaceSet(model, cartesianPointList3D, indices, normals);
+        }
+        
         [Obsolete("Use GetPipeProperties Instead")]
         public static XbimVector3D[] GetBoundPoints(this IfcExtrudedAreaSolid extrudedAreaSolid)
         {
