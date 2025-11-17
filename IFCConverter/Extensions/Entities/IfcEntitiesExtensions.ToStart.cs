@@ -108,13 +108,31 @@ namespace IFCConverter.Extensions.Entities
             startAnchorEntity.Name = anchorEntity.Name.Value;
 
             bool hasStartType = Enum.TryParse(anchorEntity.Tag.Value, out StartElementType type);
-            startAnchorEntity.Type = hasStartType ? type : StartElementType.HINGED_ANCHOR;
+            startAnchorEntity.Type = hasStartType ? type : StartElementType.SLIDING_SUPPORT;
             
             Pset_Start? psetStart = anchorEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
             if (psetStart != null)
                 startAnchorEntity.UpdateFromStartPset(psetStart);
 
             return startAnchorEntity;
+        }
+
+        public static StartArmatureEntity ToStartArmatureEntity(this IfcVertexValveEntity valveEntity)
+        {
+            StartArmatureEntity startArmatureEntity = new StartArmatureEntity();
+            startArmatureEntity.Name = valveEntity.Name.Value;
+
+            bool hasStartType = Enum.TryParse(valveEntity.Tag.Value, out StartElementType type);
+            startArmatureEntity.Type = hasStartType ? type : StartElementType.VALVE;
+            
+            startArmatureEntity.Length = LengthProperty.CreateFromSi(valveEntity.Length);
+            startArmatureEntity.OutsideDiameter = LengthProperty.CreateFromSi(valveEntity.Diameter);
+
+            Pset_Start? psetStart = valveEntity.PropertySets.OfType<Pset_Start>().FirstOrDefault();
+            if (psetStart != null)
+                startArmatureEntity.UpdateFromStartPset(psetStart);
+
+            return startArmatureEntity;
         }
     }
 }
