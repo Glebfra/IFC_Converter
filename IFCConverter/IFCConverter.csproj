@@ -149,56 +149,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\Entities\Anchors\IfcDamperEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcHingedAnchorEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcConstantForceSupportHangerEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcFixedAnchorEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcGuideDoubleDirectionSupportEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcGuideSingleDirectionSupportEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcNonStandardRestraintEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcRigidHangerEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcSlidingSupportEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcSpringHangerEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Anchors\IfcSpringSupportEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcAxialExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcCadBendEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcCapEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcConnectorEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcFabricatedTeeEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcMilterJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcNonstandardExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcNonStandardTeeEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcStandTeeEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcStubInEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcSweepoletEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcUniversalExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexAngularExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexAxialExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexBallExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexBendEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexFlangeEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexLateralExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexReducerConcentricEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexReducerEccentricEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexSaddleBendEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexSingleFlangeEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexTorsionExpansionJointEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcVertexValveEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcWeldedTeeEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\IfcWeldoletEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\StartBendEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\StartReducerEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Fittings\StartTeeEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\IfcEntitiesExtensions.cs" />
+    <Compile Include="Extensions\Entities\IfcEntitiesExtensions.Tools.cs">
+      <DependentUpon>IfcEntitiesExtensions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\Entities\IfcEntitiesExtensions.ToStart.cs">
+      <DependentUpon>IfcEntitiesExtensions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\Entities\IfcNodeEntityExtensions.cs" />
     <Compile Include="Extensions\Entities\IfcProductExtensions.cs" />
-    <Compile Include="Extensions\Entities\Segments\IfcAbstractSegmentEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Segments\IfcConeElementEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Segments\IfcCylindricalShellEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Segments\IfcFlexibleSegmentEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Segments\IfcPipeSegmentEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Segments\IfcRigidElementEntityExtensions.cs" />
-    <Compile Include="Extensions\Entities\Segments\StartPipeEntityExtensions.cs" />
+    <Compile Include="Extensions\Entities\StartEntitiesExtensions.cs" />
     <Compile Include="Extensions\IfcEntityFactory.cs" />
     <Compile Include="Extensions\ManufacturingTechnologyExtensions.cs" />
     <Compile Include="Extensions\Tools\StartToIfcNaming.cs" />

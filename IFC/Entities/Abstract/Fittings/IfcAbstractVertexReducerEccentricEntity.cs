@@ -43,7 +43,7 @@ namespace IFC.Entities.Abstract.Fittings
         {
             IfcAxisSettings axisSettings = new IfcAxisSettings(VectorExtensions.X, VectorExtensions.Y);
             XbimVector3D displacement = VectorExtensions.Y.Negated() * DisplacementLength;
-            IfcFacetedBrep facetedBrep = IfcVertexGeometry.CreateClippedCone(model, Diameters[0] / 2, Diameters[1] / 2, Length, NumSegments, axisSettings, displacement);
+            IfcFacetedBrep facetedBrep = IfcGeometry.CreateClippedCone(model, Diameters[0] / 2, Diameters[1] / 2, Length, NumSegments, axisSettings, displacement);
             return new IfcRepresentationItem[] { facetedBrep };
         }
 

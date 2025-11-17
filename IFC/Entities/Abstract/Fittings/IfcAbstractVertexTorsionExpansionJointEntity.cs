@@ -49,19 +49,19 @@ namespace IFC.Entities.Abstract.Fittings
 
             IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[]
             {
-                IfcVertexGeometry.CreateClippedCone(
+                IfcGeometry.CreateClippedCone(
                     model, radiuses[1], radiuses[0], displacementStep, 
                     NumSegments, new IfcAxisSettings(displacements[0], VectorExtensions.X, VectorExtensions.Y)
                 ),
-                IfcVertexGeometry.CreateClippedCone(
+                IfcGeometry.CreateClippedCone(
                     model, radiuses[2], radiuses[2], displacementStep, 
                     NumSegments, new IfcAxisSettings(displacements[1], VectorExtensions.X, VectorExtensions.Y)
                 ),
-                IfcVertexGeometry.CreateClippedCone(
+                IfcGeometry.CreateClippedCone(
                     model, radiuses[2], radiuses[2], displacementStep, 
                     NumSegments, new IfcAxisSettings(displacements[1].Negated(), VectorExtensions.X, VectorExtensions.Y)
                 ),
-                IfcVertexGeometry.CreateClippedCone(
+                IfcGeometry.CreateClippedCone(
                     model, radiuses[0], radiuses[1], displacementStep, 
                     NumSegments, new IfcAxisSettings(displacements[0].Negated(), VectorExtensions.X, VectorExtensions.Y)
                 ),

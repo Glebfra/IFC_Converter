@@ -5,13 +5,130 @@ using IFC.PropertySets;
 using IFC.Tools;
 using Xbim.Common;
 using Xbim.Common.Geometry;
+using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProfileResource;
 
 namespace IFC.Extensions
 {
-    public static class IfcTriangulatedFaceSetExtensions
+    public static class IfcRepresentationExtensions
     {
+        public static IfcTriangulatedFaceSet CreateTriangulatedFaceSet(IModel model, IfcCartesianPointList3D cartesianPointList3D, int[][] indices, XbimVector3D[]? normals=null)
+        {
+            return model.Instances.New<IfcTriangulatedFaceSet>(set =>
+            {
+                set.Coordinates = cartesianPointList3D;
+
+                for (int i = 0; i < indices.Length; i++)
+                {
+                    set.CoordIndex.GetAt(i).AddRange(indices[i].Select(index => new IfcPositiveInteger(index)));
+                }
+
+                if (normals != null)
+                {
+                    for (int i = 0; i < normals.Length; i++)
+                    {
+                        set.Normals.GetAt(i).AddRange(new IfcParameterValue[] { normals[i].X, normals[i].Y, normals[i].Z });
+                    }
+                }
+            });
+        }
+
+        public static IfcTriangulatedFaceSet CreateTriangulatedFaceSet(IModel model, XbimVector3D[] vertices, int[][] indices, XbimVector3D[]? normals = null)
+        {
+            IfcCartesianPointList3D cartesianPointList3D = IfcAxisExtensions.CreateCartesianPointList3D(model, vertices);
+            return CreateTriangulatedFaceSet(model, cartesianPointList3D, indices, normals);
+        }
+        
+        [Obsolete("Use GetPipeProperties Instead")]
+        public static XbimVector3D[] GetBoundPoints(this IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            XbimVector3D[] points = new XbimVector3D[2];
+            
+            XbimMatrix3D areaSolidMatrix3D = extrudedAreaSolid.Position.ToMatrix3D();
+            XbimVector3D forward = extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
+            double length = GetLength(extrudedAreaSolid);
+            
+            XbimVector3D internalSecondPoint = forward * length;
+
+            XbimVector3D globalFirstPoint = areaSolidMatrix3D.Translation;
+            XbimVector3D globalSecondPoint = globalFirstPoint + areaSolidMatrix3D.Transform(internalSecondPoint);
+
+            return new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
+        }
+
+        [Obsolete("Use GetPipeProperties Instead")]
+        public static double GetLength(this IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            return extrudedAreaSolid.Depth;
+        }
+
+        public static PipeProperties GetPipeProperties(this IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            XbimMatrix3D areaSolidMatrix3D = extrudedAreaSolid.Position.ToMatrix3D();
+            XbimVector3D forward = areaSolidMatrix3D.Transform(extrudedAreaSolid.ExtrudedDirection.XbimVector3D());
+            double length = extrudedAreaSolid.Depth;
+            double radius = GetCircleRadius(extrudedAreaSolid);
+            
+            XbimVector3D internalSecondPoint = forward * length;
+
+            XbimVector3D globalFirstPoint = areaSolidMatrix3D.Translation;
+            XbimVector3D globalSecondPoint = globalFirstPoint + areaSolidMatrix3D.Transform(internalSecondPoint);
+
+            XbimVector3D[] boundPoints = new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
+
+            return new PipeProperties()
+            {
+                Radius = radius,
+                BoundPoints = boundPoints,
+                Direction = forward,
+                Length = length,
+                Coordinates = globalFirstPoint
+            };
+        }
+        
+        private static double GetCircleRadius(this IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            if (extrudedAreaSolid.SweptArea is IfcCircleProfileDef circleProfileDef)
+            {
+                return circleProfileDef.Radius;
+            }
+
+            throw new ArgumentException($"{nameof(extrudedAreaSolid)} does not contain {nameof(IfcCircleProfileDef)}");
+        }
+        
+        public static BendProperties GetBendProperties(this IfcRevolvedAreaSolid revolvedAreaSolid)
+        {
+            XbimVector3D internalAxisLocation = revolvedAreaSolid.Axis.Location.ToXbimVector3D();
+            XbimVector3D internalAxisDirection = revolvedAreaSolid.Axis.Axis.XbimVector3D();
+
+            double angle = revolvedAreaSolid.Angle;
+            XbimVector3D internalFirstPoint = internalAxisLocation.Negated();
+            // In XbimVector3D, rotation occurs along the left trio of vectors for some reason. Therefore, for correct calculations, we use the minus angle.
+            XbimVector3D internalSecondPoint = internalFirstPoint.RotateAroundAxis(internalAxisDirection, -angle);
+
+            XbimMatrix3D areaSolidMatrix3D = revolvedAreaSolid.Position.ToMatrix3D();
+            XbimVector3D areaSolidDisplacement = areaSolidMatrix3D.Translation + areaSolidMatrix3D.Transform(internalAxisLocation);
+
+            XbimVector3D globalFirstPoint = areaSolidMatrix3D.Transform(internalFirstPoint) + areaSolidDisplacement;
+            XbimVector3D globalSecondPoint = areaSolidMatrix3D.Transform(internalSecondPoint) + areaSolidDisplacement;
+            XbimVector3D globalAxisLocation = areaSolidMatrix3D.Translation + internalAxisLocation;
+            
+            XbimVector3D[] boundPoints = new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
+
+            double pipeDiameter = revolvedAreaSolid.SweptArea is IfcCircleProfileDef circleProfileDef ? circleProfileDef.Radius * 2 : 0;
+
+            return new BendProperties()
+            {
+                Angle = angle,
+                BoundPoints = boundPoints,
+                Center = globalAxisLocation,
+                Radius = internalAxisLocation.Length,
+                PipeDiameter = pipeDiameter
+            };
+        }
+        
         public static int[][] GetIndices(this IfcTriangulatedFaceSet faceSet)
         {
             int len1 = faceSet.CoordIndex.Count;

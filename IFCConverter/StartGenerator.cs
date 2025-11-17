@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using IFC;
 using IFC.Entities;
+using IFC.Entities.Abstract.Anchors;
 using IFC.Entities.Abstract.Fittings;
 using IFC.Entities.Fittings.CAD;
-using IFC.Entities.Fittings.Vertex;
 using IFC.Entities.Segments;
 using IFCConverter.Extensions.Entities;
-using IFCConverter.Extensions.Entities.Fittings;
-using IFCConverter.Extensions.Entities.Segments;
 using IFCConverter.Importers;
 using IFCConverter.Tools;
 using Newtonsoft.Json;
@@ -17,6 +16,7 @@ using Start;
 using Start.API;
 using Start.Entities;
 using Start.Entities.Abstract;
+using Start.Entities.Anchors;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
 using Xbim.Ifc4.Kernel;
@@ -44,7 +44,7 @@ namespace IFCConverter
         public void Convert(StartDocument startDocument)
         {
             Logger logger = Logger.GetInstance();
-            logger.Info("IFCtoSTART importer v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            logger.Info("IFCtoSTART importer v." + Assembly.GetExecutingAssembly().GetName().Version);
 
             try
             {
@@ -74,6 +74,10 @@ namespace IFCConverter
                     IfcElement[] ifcReducerFittings = importer.GetReducers(products);
                     logger.Info($"Found reducers: {ifcReducerFittings.Length}");
                     IfcAbstractReducerEntity[] reducerEntities = importer.CreateReducers(ifcReducerFittings, segmentEntities);
+
+                    IfcElement[] ifcAnchors = importer.GetAnchors(products);
+                    logger.Info($"Found anchors {ifcAnchors.Length}");
+                    IfcAbstractAnchorEntity[] anchorEntities = importer.CreateAnchors(ifcAnchors, segmentEntities);
                     
                     using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
                     {
@@ -81,6 +85,7 @@ namespace IFCConverter
                         GenerateTeeEntities(startProject, teeEntities);
                         GenerateBendEntities(startProject, bendEntities);
                         GenerateReducerEntities(startProject, reducerEntities);
+                        GenerateAnchorEntities(startProject, anchorEntities);
                     }
                 }
             }
@@ -178,6 +183,25 @@ namespace IFCConverter
                 StartObject startNodeObject = GetOrCreateNode(startProject, ifcReducerEntity.NodeEntity);
                 ConnectNodes(startReducerObject, startNodeObject);
                 ConnectObjects(startReducerObject, startPipeObjects);
+            }
+        }
+
+        private void GenerateAnchorEntities(StartProject startProject, IEnumerable<IfcAbstractAnchorEntity> anchorEntities)
+        {
+            foreach (IfcAbstractAnchorEntity ifcAnchorEntity in anchorEntities)
+            {
+                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcAnchorEntity.ConnectedEntities
+                    .OfType<IfcPipeSegmentEntity>()
+                    .ToArray();
+                StartObject[] startPipeObjects = pipeSegmentEntities
+                    .Select(segment => _startPipeObjects[segment])
+                    .ToArray();
+
+                StartAnchorEntity startAnchorEntity = ifcAnchorEntity.ToStartAnchorEntity();
+                StartObject startAnchorObject = GenerateStartEntity(startProject, startAnchorEntity);
+                StartObject startNodeObject = GetOrCreateNode(startProject, ifcAnchorEntity.NodeEntity);
+                ConnectNodes(startAnchorObject, startNodeObject);
+                ConnectObjects(startAnchorObject, startPipeObjects);
             }
         }
 

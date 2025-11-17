@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities;
-using IFC.Extensions;
 using IFCConverter.Tools;
 using Start.API;
 using Start.Entities;

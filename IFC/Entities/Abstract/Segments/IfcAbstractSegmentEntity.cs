@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using IFC.Entities.Interfaces;
+using IFC.Entities.Segments;
+using IFC.Extensions;
 using IFC.PropertySets;
 using IFC.Tools;
 using Xbim.Common;
@@ -17,28 +19,46 @@ namespace IFC.Entities.Abstract.Segments
         /// <summary>
         /// Gets the diameter of the segment.
         /// </summary>
-        public ActionProperty<double> Diameter { get; }
+        public ActionProperty<double> Diameter { get; private set; }
         
         /// <summary>
         /// Gets the length of the segment.
         /// </summary>
-        public ActionProperty<double> Length { get; }
+        public ActionProperty<double> Length { get; private set; }
         
         /// <summary>
         /// Gets the node entities associated with the segment.
         /// </summary>
-        public IfcNodeEntity[] NodeEntities { get; }
+        public IfcNodeEntity[] NodeEntities { get; private set; }
+
+        /// <summary>
+        /// Gets the start point of the segment.
+        /// </summary>
+        public XbimVector3D StartPoint => StartNode.ObjectMatrix3D.Translation;
+        
+        /// <summary>
+        /// Gets the end point of the segment.
+        /// </summary>
+        public XbimVector3D EndPoint => EndNode.ObjectMatrix3D.Translation;
 
         /// <summary>
         /// Gets the start node of the segment.
         /// </summary>
-        public IfcNodeEntity StartNode => NodeEntities[0];
-        
+        public IfcNodeEntity StartNode
+        {
+            get => NodeEntities[0];
+            set => NodeEntities[0] = value;
+        }
+
         /// <summary>
         /// Gets the end node of the segment.
         /// </summary>
-        public IfcNodeEntity EndNode => NodeEntities[1];
-        
+        public IfcNodeEntity EndNode
+        {
+            get => NodeEntities[1];
+            set => NodeEntities[1] = value;
+        }
+
         /// <summary>
         /// Gets the direction vector of the segment.
         /// </summary>
@@ -86,6 +106,28 @@ namespace IFC.Entities.Abstract.Segments
 
             _pipeDirection = matrix3D.Forward * Length;
             _fakeDirection = EndNode.ObjectMatrix3D.Translation - StartNode.ObjectMatrix3D.Translation;
+        }
+        
+        /// <summary>
+        /// Divides the segment to the 2 separate pipe segments <see cref="IfcPipeSegmentEntity"/>. 
+        /// </summary>
+        /// <param name="divisionRate">The division rate from 0 to 1, where 0 - <see cref="StartPoint"/>, 1 - <see cref="EndPoint"/></param>
+        public IfcPipeSegmentEntity DividePipe(double divisionRate)
+        {
+            XbimVector3D dividePoint = VectorExtensions.Lerp(StartPoint, EndPoint, divisionRate);
+            XbimMatrix3D divideMatrix = MatrixExtensions.CreateWorld(dividePoint, EndPoint - StartPoint);
+            
+            IfcNodeEntity divideNode = new IfcNodeEntity(divideMatrix);
+            IfcNodeEntity endNode = EndNode;
+
+            double firstLength = Length * divisionRate;
+            double secondLength = Length - firstLength;
+
+            Length = firstLength;
+            NodeEntities[1] = divideNode;
+            IfcPipeSegmentEntity secondSegment = new IfcPipeSegmentEntity(Name + "_Auto_Divide", Tag, divideMatrix, secondLength, Diameter, new IfcNodeEntity[] { divideNode, endNode });
+
+            return secondSegment;
         }
 
         /// <summary>
