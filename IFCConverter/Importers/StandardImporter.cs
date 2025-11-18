@@ -27,15 +27,32 @@ namespace IFCConverter.Importers
 {
     internal class StandardImporter : IImporter
     {
-        protected IFCProject _ifcProject;
-        protected IfcSIUnit _LengthUnit;
+        public IEnumerable<IfcProduct> Products => _products;
+        
+        private readonly IfcSIUnit _LengthUnit;
+        private readonly IfcProduct[] _products;
         
         public StandardImporter(IFCProject ifcProject)
         {
-            _ifcProject = ifcProject;
+            _products = ifcProject.GetProducts().ToArray();
             _LengthUnit = ifcProject.LengthUnit;
         }
-        
+
+        public IEnumerable<IfcPipeSegmentEntity> CreateSegments()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IfcAbstractFittingEntity> CreateFittings(List<IfcPipeSegmentEntity> pipeSegmentEntities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IfcAbstractAnchorEntity> CreateAnchors(List<IfcPipeSegmentEntity> pipeSegmentEntities)
+        {
+            throw new NotImplementedException();
+        }
+
         // ReSharper disable once CoVariantArrayConversion
         public IfcElement[] GetPipeSegments(IfcProduct[] products)
         {
