@@ -10,7 +10,7 @@ using Start.Entities.Abstract;
 
 namespace IFCConverter.Extensions
 {
-    public static class StartEntityFactory
+    internal static class StartEntityFactory
     {
         public static StartAbstractEntity CreateEntity(IfcAbstractEntity ifcAbstractEntity)
         {

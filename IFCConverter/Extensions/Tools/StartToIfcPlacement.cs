@@ -10,7 +10,7 @@ using Xbim.Common.Geometry;
 
 namespace IFCConverter.Extensions.Tools
 {
-    public static class StartToIfcPlacement
+    internal static class StartToIfcPlacement
     {
         public static XbimMatrix3D CreateStandardObjectMatrix(XbimVector3D coordinates)
         {
