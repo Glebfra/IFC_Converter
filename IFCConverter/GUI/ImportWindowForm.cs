@@ -9,6 +9,11 @@ namespace IFCConverter.GUI
 {
     internal partial class ImportWindowForm : Form
     {
+        private static readonly ArrayList _importTypes = new ArrayList
+        {
+            new ImportType(ImportTypeEnum.AVEVA, LocalizationResource.ImportWindowForm_ImportType_Aveva)
+        };
+        
         private readonly ImportDataContainer _dataContainer;
         
         public ImportWindowForm(ImportDataContainer dataContainer)
@@ -27,17 +32,10 @@ namespace IFCConverter.GUI
             inputFilePathLabel.Text = LocalizationResource.ImportWindowForm_InputFilePath_Label_Text;
 
             importTypeLabel.Text = LocalizationResource.ImportWindowForm_ImportType_Label_Text;
-            ArrayList types = new ArrayList
-            {
-                new ImportType(ImportTypeEnum.AUTO, LocalizationResource.ImportWindowForm_ImportType_Auto),
-                new ImportType(ImportTypeEnum.STANDARD, LocalizationResource.ImportWindowForm_ImportType_Standard),
-                new ImportType(ImportTypeEnum.START, LocalizationResource.ImportWindowForm_ImportType_Start),
-                new ImportType(ImportTypeEnum.AVEVA, LocalizationResource.ImportWindowForm_ImportType_Aveva)
-            };
-            importTypeCombobox.DataSource = types;
+            importTypeCombobox.DataSource = _importTypes;
             importTypeCombobox.DisplayMember = "TypeName";
             importTypeCombobox.ValueMember = "Type";
-            importTypeCombobox.SelectedItem = types[0];
+            importTypeCombobox.SelectedItem = _importTypes[0];
         }
         
         private void ImportButton_Click(object sender, EventArgs e)
