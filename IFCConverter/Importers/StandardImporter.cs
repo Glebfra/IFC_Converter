@@ -243,8 +243,8 @@ namespace IFCConverter.Importers
 
         private static void FilterTeeSegments(IfcAbstractSegmentEntity[] segmentEntities, XbimVector3D coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle)
         {
+            headPipe = null!;
             branchPipes = new IfcAbstractSegmentEntity[2];
-            headPipe = null;
             for (int i = 0; i < segmentEntities.Length; i++)
             {
                 for (int j = i + 1; j < segmentEntities.Length; j++)

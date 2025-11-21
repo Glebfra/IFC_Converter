@@ -13,24 +13,18 @@ namespace Converter
             ConvertArguments convertArguments = GetConvertArguments(args);
             
             using StartAutoServer autoServer = new StartAutoServer();
-            object? startDocument = autoServer.LoadStartDocumentRaw(0x4, convertArguments.CtpFilePath);
+            object? startDocument = autoServer.LoadStartDocumentRaw(0x4, convertArguments.CtpFilePath!);
             if (startDocument == null) throw new NullReferenceException("Object ref is null");
             
-            int result = 0;
             IfcConverter converter = new IfcConverter();
-            if (convertArguments.ConvertType == ConvertTypeEnum.STARTtoIFC)
+            int result = convertArguments.ConvertType switch
             {
-                result = converter.Export(startDocument, 1049);
-            }
-            else if (convertArguments.ConvertType == ConvertTypeEnum.IFCtoSTART)
-            {
-                result = converter.ImportFromFileOpen(startDocument, 1049);
-            }
-            else
-            {
-                throw new ArgumentException("Convert type is not set. Use -T 'export' or 'import'");
-            }
-            
+                ConvertTypeEnum.STARTtoIFC => converter.Export(startDocument, 1049),
+                ConvertTypeEnum.IFCtoSTART => converter.ImportFromFileOpen(startDocument, 1049),
+                _ => throw new ArgumentException("Convert type is not set. Use -T 'export' or 'import'")
+            };
+
+            // ReSharper disable once LocalizableElement
             Console.WriteLine($"Output code: {result}");
         }
 
@@ -52,18 +46,17 @@ namespace Converter
                 }
             }
             
-            if (convertArguments.ConvertType == null)
-                convertArguments.ConvertType = GetConvertType();
-            if (convertArguments.CtpFilePath == null)
-                convertArguments.CtpFilePath = GetCtpFilePath();
+            convertArguments.ConvertType ??= GetConvertType();
+            convertArguments.CtpFilePath ??= GetCtpFilePath();
 
             return convertArguments;
         }
         
         private static ConvertTypeEnum GetConvertType()
         {
+            // ReSharper disable once LocalizableElement
             Console.WriteLine("Please specify the conversion type (export/import): ");
-            string arg = Console.ReadLine();
+            string? arg = Console.ReadLine();
             if (arg == null)
                 throw new ArgumentException("Convert type is not set. Use 'export' or 'import'");
             return GetConvertType(arg);
@@ -81,27 +74,31 @@ namespace Converter
 
         private static string GetCtpFilePath()
         {
-            string ctpFilePath;
+            string? ctpFilePath;
             while (true)
             {
+                // ReSharper disable once LocalizableElement
                 Console.WriteLine("Write the path to .ctp file");
                 ctpFilePath = Console.ReadLine();
-                ctpFilePath = ctpFilePath.Replace("\"", "");
-                
+                ctpFilePath = ctpFilePath?.Replace("\"", "");
+
                 if (string.IsNullOrEmpty(ctpFilePath))
                 {
+                    // ReSharper disable once LocalizableElement
                     Console.WriteLine("FilePath cannot be empty");
                     continue;
                 }
 
-                if (!ctpFilePath.EndsWith(".ctp"))
+                if (!ctpFilePath!.EndsWith(".ctp"))
                 {
+                    // ReSharper disable once LocalizableElement
                     Console.WriteLine("Input file should be .ctp formatted");
                     continue;
                 }
                 
                 if (!File.Exists(ctpFilePath))
                 {
+                    // ReSharper disable once LocalizableElement
                     Console.WriteLine("File does not exist");
                     continue;
                 }

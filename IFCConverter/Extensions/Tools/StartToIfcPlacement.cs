@@ -89,7 +89,7 @@ namespace IFCConverter.Extensions.Tools
 
         public static XbimMatrix3D CreateSaddleBendObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double angle, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe)
         {
-            headPipe = null;
+            headPipe = null!;
             branchPipes = new IfcAbstractSegmentEntity[2];
             for (int i = 0; i < segmentEntities.Length; i++)
             {
@@ -163,7 +163,7 @@ namespace IFCConverter.Extensions.Tools
 
         public static XbimMatrix3D CreateTeeObjectMatrix(XbimVector3D coordinates, IfcAbstractSegmentEntity[] segmentEntities, out double angle, out IfcAbstractSegmentEntity headPipe, out IfcAbstractSegmentEntity[] branchPipes)
         {
-            headPipe = null;
+            headPipe = null!;
             branchPipes = new IfcAbstractSegmentEntity[2];
             for (int i = 0; i < segmentEntities.Length; i++)
             {
