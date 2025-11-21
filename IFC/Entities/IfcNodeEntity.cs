@@ -19,7 +19,7 @@ namespace IFC.Entities
             ID = id;
         }
 
-        public bool Equals(IfcNodeEntity other)
+        public bool Equal(IfcNodeEntity other)
         {
             return ObjectMatrix3D.Translation == other.ObjectMatrix3D.Translation;
         }

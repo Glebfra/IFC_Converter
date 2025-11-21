@@ -93,7 +93,7 @@ namespace IFCConverter.Importers
                     IIfcRepresentationItem? representationItem = pipeElement.GetRepresentationItems().FirstOrDefault();
                     if (representationItem == null)
                         throw new Exception($"Cannot find representation item for {nameof(pipeElement)} with ID: {pipeElement.GlobalId}");
-
+                    
                     PipeProperties pipeProperties = representationItem switch
                     {
                         IfcExtrudedAreaSolid extrudedAreaSolid => extrudedAreaSolid.GetPipeProperties(),

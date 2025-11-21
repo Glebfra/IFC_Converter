@@ -42,5 +42,19 @@ namespace IFCConverter.Extensions.Entities
                 .OrderBy(result => result.Object.GetDistanceToPoint(point))
                 .First();
         }
+
+        public static IndexedResult<IfcNodeEntity>? GetConnectedNode(this IEnumerable<IfcNodeEntity> nodeEntities, IfcNodeEntity other)
+        {
+            return nodeEntities
+                .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
+                .FirstOrDefault(result => result.Object.Equal(other));
+        }
+
+        public static IEnumerable<IndexedResult<IfcNodeEntity>> GetConnectedNode(this IEnumerable<IfcNodeEntity> nodeEntities, IEnumerable<IfcNodeEntity> otherNodes)
+        {
+            return nodeEntities
+                .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
+                .SelectMany(result => otherNodes.Where(other => result.Object.Equal(other)).Select(_ => result));
+        }
     }
 }

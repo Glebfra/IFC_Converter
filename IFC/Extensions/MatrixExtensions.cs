@@ -125,5 +125,13 @@ namespace IFC.Extensions
             matrix3D.OffsetZ += translationVector.Z;
             return matrix3D;
         }
+        
+        public static XbimMatrix3D SetTranslation(this XbimMatrix3D matrix3D, XbimVector3D translation)
+        {
+            matrix3D.OffsetX = translation.X;
+            matrix3D.OffsetY = translation.Y;
+            matrix3D.OffsetZ = translation.Z;
+            return matrix3D;
+        }
     }
 }
