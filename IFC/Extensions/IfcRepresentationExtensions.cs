@@ -7,8 +7,11 @@ using Xbim.Common;
 using Xbim.Common.Geometry;
 using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.GeometricModelResource;
+using Xbim.Ifc4.GeometryResource;
+using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
+using Xbim.Ifc4.RepresentationResource;
 
 namespace IFC.Extensions
 {
@@ -39,6 +42,27 @@ namespace IFC.Extensions
         {
             IfcCartesianPointList3D cartesianPointList3D = IfcAxisExtensions.CreateCartesianPointList3D(model, vertices);
             return CreateTriangulatedFaceSet(model, cartesianPointList3D, indices, normals);
+        }
+
+        public static FlangeProperties GetFlangeProperties(this IfcRepresentation ifcRepresentation, AVEVA_Pset avevaPset)
+        {
+            XbimVector3D center = avevaPset.GetPosition();
+            
+            IfcExtrudedAreaSolid? extrudedAreaSolid = ifcRepresentation.Items.OfType<IfcExtrudedAreaSolid>().FirstOrDefault();
+            if (extrudedAreaSolid == null)
+                throw new Exception($"Cannot find {nameof(IfcExtrudedAreaSolid)} in {nameof(IfcRepresentationItem)}");
+            PipeProperties pipeProperties = extrudedAreaSolid.GetPipeProperties();
+
+            IfcTriangulatedFaceSet? triangulatedFaceSet = ifcRepresentation.Items.OfType<IfcTriangulatedFaceSet>().FirstOrDefault();
+            if (triangulatedFaceSet == null)
+                throw new Exception($"Cannot find {nameof(IfcTriangulatedFaceSet)} in {nameof(IfcRepresentationItem)}");
+            ReducerProperties reducerProperties = triangulatedFaceSet.GetReducerProperties(avevaPset);
+
+            return new FlangeProperties()
+            {
+                Center = center,
+                BoundPoints = new XbimVector3D[] { pipeProperties.BoundPoints[0], reducerProperties.BoundPoints[1] }
+            };
         }
         
         [Obsolete("Use GetPipeProperties Instead")]
@@ -160,10 +184,10 @@ namespace IFC.Extensions
             XbimVector3D[] vertices = faceSet.Coordinates.GetCoordinates().ToArray();
             Triangle[] triangles = faceSet.GetTriangles();
 
-            Plane[] trianglePlanes = triangles.Select(Plane.CreateFromTriangle).ToArray();
-            Plane[] planes = UpdatePlanesByVertices(trianglePlanes, vertices);
-            Plane[] circlePlanes = GetCirclePlanes(planes);
-            Plane[] pipePlanes = GetPipePlanes(circlePlanes);
+            IEnumerable<Plane> trianglePlanes = triangles.Select(Plane.CreateFromTriangle);
+            IEnumerable<Plane> planes = Plane.UpdatePlanesByVertices(trianglePlanes, vertices);
+            IEnumerable<Plane> circlePlanes = Plane.GetCirclePlanes(planes);
+            Plane[] pipePlanes = Plane.GetPipePlanes(circlePlanes).ToArray();
 
             double radius = pipePlanes[0].GetCircleRadius();
             XbimVector3D[] boundPoints = pipePlanes.Select(pipePlane => pipePlane.Center).ToArray();
@@ -301,42 +325,6 @@ namespace IFC.Extensions
                 Radiuses = radiuses,
                 Length = length
             };
-        }
-
-        private static Plane[] UpdatePlanesByVertices(Plane[] planes, XbimVector3D[] vertices, double tolerance=1e-6)
-        {
-            for (int i = 0; i < planes.Length; i++)
-            {
-                foreach (XbimVector3D vertex in vertices)
-                {
-                    if (!planes[i].IsContainPoint(vertex, tolerance)) 
-                        continue;
-                    
-                    List<XbimVector3D> planePoints = planes[i].Points;
-                    if (!planePoints.Contains(vertex))
-                        planePoints.Add(vertex);
-                }
-            }
-
-            return planes;
-        }
-
-        private static Plane[] GetCirclePlanes(Plane[] planes)
-        {
-            return planes.Where(plane => plane.IsCircle()).ToArray();
-        }
-
-        private static Plane[] GetPipePlanes(Plane[] planes)
-        {
-            List<Plane> pipePlanes = new List<Plane>();
-            foreach (Plane plane in planes)
-            {
-                bool isAdded = pipePlanes.Any(pipePlane => pipePlane.IsEqual(plane));
-                if (!isAdded)
-                    pipePlanes.Add(plane);
-            }
-
-            return pipePlanes.ToArray();
         }
     }
 }

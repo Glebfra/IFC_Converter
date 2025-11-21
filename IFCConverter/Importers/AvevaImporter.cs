@@ -27,28 +27,62 @@ namespace IFCConverter.Importers
 {
     internal class AvevaImporter : IImporter
     {
-        private IFCProject _ifcProject;
-        private IfcSIUnit _LengthUnit;
-        private double _tolerance => 1e-3 / _LengthUnit.Power;
+        public IEnumerable<IfcProduct> Products => _products;
+        
+        private readonly IfcSIUnit _lengthUnit;
+        private readonly IfcProduct[] _products;
 
         public AvevaImporter(IFCProject ifcProject)
         {
-            _ifcProject = ifcProject;
-            _LengthUnit = ifcProject.LengthUnit;
+            _products = ifcProject.GetProducts().ToArray();
+            _lengthUnit = ifcProject.LengthUnit;
         }
-        
-        public IfcElement[] GetPipeSegments(IfcProduct[] products) => GetElementByType(products, "TUBING");
-        public IfcElement[] GetBends(IfcProduct[] products) => GetElementByType(products, "ELBOW");
-        public IfcElement[] GetTees(IfcProduct[] products) => GetElementByType(products, "TEE");
-        public IfcElement[] GetReducers(IfcProduct[] products) => GetElementByType(products, "REDUCER");
-        public IfcElement[] GetAnchors(IfcProduct[] products) => GetElementByType(products, "ATTACHMENT");
-        public IfcElement[] GetValves(IfcProduct[] products) => GetElementByType(products, "VALVE");
 
-        public IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
+        public IEnumerable<IfcPipeSegmentEntity> CreateSegments()
+        {
+            List<IfcPipeSegmentEntity> abstractSegmentEntities = new List<IfcPipeSegmentEntity>();
+            
+            IEnumerable<IfcElement> pipes = GetElementByType(_products, "TUBING");
+            abstractSegmentEntities.AddRange(CreatePipeSegments(pipes.ToArray()));
+            
+            return abstractSegmentEntities;
+        }
+
+        public IEnumerable<IfcAbstractFittingEntity> CreateFittings(List<IfcPipeSegmentEntity> pipeSegmentEntities)
+        {
+            List<IfcAbstractFittingEntity> abstractFittingEntities = new List<IfcAbstractFittingEntity>();
+            
+            IEnumerable<IfcElement> bends = GetElementByType(_products, "ELBOW");
+            abstractFittingEntities.AddRange(CreateBends(bends.ToArray(), pipeSegmentEntities));
+
+            IEnumerable<IfcElement> tees = GetElementByType(_products, "TEE");
+            abstractFittingEntities.AddRange(CreateWeldedTees(tees.ToArray(), pipeSegmentEntities));
+
+            IEnumerable<IfcElement> reducers = GetElementByType(_products, "REDUCER");
+            abstractFittingEntities.AddRange(CreateReducers(reducers.ToArray(), pipeSegmentEntities));
+
+            IEnumerable<IfcElement> valves = GetElementByType(_products, "VALVE");
+            abstractFittingEntities.AddRange(CreateValves(valves.ToArray(), pipeSegmentEntities));
+
+            return abstractFittingEntities;
+        }
+
+        public IEnumerable<IfcAbstractAnchorEntity> CreateAnchors(List<IfcPipeSegmentEntity> pipeSegmentEntities)
+        {
+            List<IfcAbstractAnchorEntity> abstractAnchorEntities = new List<IfcAbstractAnchorEntity>();
+
+            IEnumerable<IfcElement> anchors = GetElementByType(_products, "ATTACHMENT");
+            abstractAnchorEntities.AddRange(CreateAnchors(anchors.ToArray(), pipeSegmentEntities));
+
+            return abstractAnchorEntities;
+        }
+
+        private IEnumerable<IfcPipeSegmentEntity> CreatePipeSegments(IReadOnlyCollection<IfcElement> pipes)
         {
             Logger logger = Logger.GetInstance();
             
-            List<IfcPipeSegmentEntity> pipeSegmentEntities = new List<IfcPipeSegmentEntity>(capacity: pipes.Length);
+            logger.Info($"Searching {nameof(IfcPipeSegmentEntity)} objects");
+            List<IfcPipeSegmentEntity> pipeSegmentEntities = new List<IfcPipeSegmentEntity>(capacity: pipes.Count);
             foreach (IfcElement pipeElement in pipes)
             {
                 try
@@ -67,10 +101,10 @@ namespace IFCConverter.Importers
                         _ => throw new Exception($"Representation item can be only: {nameof(IfcTriangulatedFaceSet)}, {nameof(IfcExtrudedAreaSolid)}")
                     };
 
-                    XbimVector3D coordinates = pipeProperties.Coordinates * _LengthUnit.Power;
+                    XbimVector3D coordinates = pipeProperties.Coordinates * _lengthUnit.Power;
                     XbimMatrix3D shapeMatrix3D = MatrixExtensions.CreateWorld(coordinates, pipeProperties.Direction);
-                    double length = pipeProperties.Length * _LengthUnit.Power;
-                    double diameter = pipeProperties.Radius * 2 * _LengthUnit.Power;
+                    double length = pipeProperties.Length * _lengthUnit.Power;
+                    double diameter = pipeProperties.Radius * 2 * _lengthUnit.Power;
                     
                     IfcPipeSegmentEntity pipeSegmentEntity = new IfcPipeSegmentEntity(name, tag, shapeMatrix3D, length, diameter);
                     IPropertySet[] propertySets = pipeElement.GetPropertySets().ToArray();
@@ -85,15 +119,17 @@ namespace IFCConverter.Importers
                     logger.Error($"Failed to create pipe segment entity with ID: {pipeElement.GlobalId}");
                 }
             }
+            logger.Info($"Found {pipeSegmentEntities.Count} {nameof(IfcPipeSegmentEntity)} objects");
 
-            return pipeSegmentEntities.ToArray();
+            return pipeSegmentEntities;
         }
 
-        public IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IEnumerable<IfcCadBendEntity> CreateBends(IReadOnlyCollection<IfcElement> bends, ICollection<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
             
-            List<IfcCadBendEntity> bendEntities = new List<IfcCadBendEntity>(capacity: bends.Length);
+            logger.Info($"Searching {nameof(IfcCadBendEntity)} objects");
+            List<IfcCadBendEntity> bendEntities = new List<IfcCadBendEntity>(capacity: bends.Count);
             foreach (IfcElement bendElement in bends)
             {
                 try
@@ -123,17 +159,17 @@ namespace IFCConverter.Importers
                     };
                     
                     XbimVector3D[] boundPoints = bendProperties.BoundPoints
-                        .Select(point => point * _LengthUnit.Power)
+                        .Select(point => point * _lengthUnit.Power)
                         .ToArray();
                     List<IfcAbstractSegmentEntity> connectedSegments = abstractSegmentEntities
                         .GetConnectedSegments(boundPoints)
                         .ToList();
                     
-                    XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
-                    double bendRadius = bendProperties.Radius * _LengthUnit.Power;
+                    XbimVector3D coordinates = avevaPset.GetPosition() * _lengthUnit.Power;
+                    double bendRadius = bendProperties.Radius * _lengthUnit.Power;
                     double angle = bendProperties.Angle;
                     double length = bendRadius * angle;
-                    double pipeDiameter = bendProperties.PipeDiameter * _LengthUnit.Power;
+                    double pipeDiameter = bendProperties.PipeDiameter * _lengthUnit.Power;
                     double clipLength = bendRadius * Math.Tan(angle / 2);
                     
                     if (connectedSegments.Count is 0)
@@ -183,15 +219,17 @@ namespace IFCConverter.Importers
                     logger.Error($"Failed to create bend entity with ID: {bendElement.GlobalId}");
                 }
             }
+            logger.Info($"Found {bendEntities.Count} {nameof(IfcCadBendEntity)} objects");
 
-            return bendEntities.ToArray();
+            return bendEntities;
         }
 
-        public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IEnumerable<IfcWeldedTeeEntity> CreateWeldedTees(IReadOnlyCollection<IfcElement> tees, ICollection<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
 
-            List<IfcWeldedTeeEntity> weldedTeeEntities = new List<IfcWeldedTeeEntity>(capacity: tees.Length);
+            logger.Info($"Searching {nameof(IfcWeldedTeeEntity)} objects");
+            List<IfcWeldedTeeEntity> weldedTeeEntities = new List<IfcWeldedTeeEntity>(capacity: tees.Count);
             foreach (IfcElement teeElement in tees)
             {
                 try
@@ -217,14 +255,14 @@ namespace IFCConverter.Importers
                         .SelectMany(solid => solid.GetBoundPoints())
                         .ToArray();
                     boundPoints = boundPoints
-                        .Select(point => point * _LengthUnit.Power)
+                        .Select(point => point * _lengthUnit.Power)
                         .ToArray();
                     
                     IfcAbstractSegmentEntity[] connectedSegments = abstractSegmentEntities
                         .GetConnectedSegments(boundPoints)
                         .ToArray();
 
-                    XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
+                    XbimVector3D coordinates = avevaPset.GetPosition() * _lengthUnit.Power;
                     XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateTeeObjectMatrix(coordinates, connectedSegments,
                         out double angle, out IfcAbstractSegmentEntity headPipe, out IfcAbstractSegmentEntity[] branchPipes
                     );
@@ -237,8 +275,8 @@ namespace IFCConverter.Importers
                     IfcExtrudedAreaSolid branchExtrudedAreaSolid = extrudedAreaSolids
                         .First(solid => solid.Position.ToObjectMatrix3D().Forward.IsNormal(headPipe.ObjectMatrix3D.Value.Forward, 1e-2));
 
-                    double length = branchExtrudedAreaSolid.GetLength() * _LengthUnit.Power;
-                    double height = headExtrudedAreaSolid.GetLength() * _LengthUnit.Power;
+                    double length = branchExtrudedAreaSolid.GetLength() * _lengthUnit.Power;
+                    double height = headExtrudedAreaSolid.GetLength() * _lengthUnit.Power;
                     
                     IfcWeldedTeeEntity weldedTeeEntity = new IfcWeldedTeeEntity(name, tag, objectMatrix3D, length, branchDiameter, headDiameter, height, angle);
                     weldedTeeEntity.PropertySets.AddRange(propertySets);
@@ -266,14 +304,17 @@ namespace IFCConverter.Importers
                 }
             }
             
+            logger.Info($"Found {weldedTeeEntities.Count} {nameof(IfcWeldedTeeEntity)} objects");
+            
             return weldedTeeEntities.ToArray();
         }
 
-        public IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IEnumerable<IfcAbstractReducerEntity> CreateReducers(IReadOnlyCollection<IfcElement> reducers, ICollection<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
 
-            List<IfcAbstractReducerEntity> reducerEntities = new List<IfcAbstractReducerEntity>(capacity: reducers.Length);
+            logger.Info($"Searching {nameof(IfcAbstractReducerEntity)} objects");
+            List<IfcAbstractReducerEntity> reducerEntities = new List<IfcAbstractReducerEntity>(capacity: reducers.Count);
             foreach (IfcElement reducerElement in reducers)
             {
                 try
@@ -300,15 +341,15 @@ namespace IFCConverter.Importers
                     
                     ReducerProperties reducerProperties = faceSet.GetReducerProperties(avevaPset);
                     double[] diameters = reducerProperties.Radiuses
-                        .Select(radius => radius * _LengthUnit.Power * 2)
+                        .Select(radius => radius * _lengthUnit.Power * 2)
                         .ToArray();
                     XbimVector3D[] boundPoints = reducerProperties.BoundPoints
-                        .Select(point => point * _LengthUnit.Power)
+                        .Select(point => point * _lengthUnit.Power)
                         .ToArray();
-                    double length = reducerProperties.Length * _LengthUnit.Power;
+                    double length = reducerProperties.Length * _lengthUnit.Power;
                     XbimVector3D coordinates = boundPoints[1];
 
-                    XbimVector3D axisDisplacement = reducerProperties.AxisDisplacement * _LengthUnit.Power;
+                    XbimVector3D axisDisplacement = reducerProperties.AxisDisplacement * _lengthUnit.Power;
                     XbimMatrix3D reducerMatrix = reducerProperties.ObjectMatrix3D;
                     XbimVector3D reducerForward = reducerMatrix.Forward;
                     
@@ -378,15 +419,18 @@ namespace IFCConverter.Importers
                     logger.Error($"Failed to create reducer entity with ID: {reducerElement.GlobalId}");
                 }
             }
+            
+            logger.Info($"Found {reducerEntities.Count} {nameof(IfcAbstractReducerEntity)} objects");
 
-            return reducerEntities.ToArray();
+            return reducerEntities;
         }
         
-        public IfcAbstractAnchorEntity[] CreateAnchors(IfcElement[] anchors, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IEnumerable<IfcAbstractAnchorEntity> CreateAnchors(IReadOnlyCollection<IfcElement> anchors, ICollection<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
-            List<IfcAbstractAnchorEntity> abstractAnchorEntities = new List<IfcAbstractAnchorEntity>(capacity: anchors.Length);
-
+            
+            logger.Info($"Searching {nameof(IfcAbstractAnchorEntity)} objects");
+            List<IfcAbstractAnchorEntity> abstractAnchorEntities = new List<IfcAbstractAnchorEntity>(capacity: anchors.Count);
             foreach (IfcElement anchorElement in anchors)
             {
                 try
@@ -404,7 +448,7 @@ namespace IFCConverter.Importers
                     if (avevaPset == null)
                         throw new Exception("Bend does not have AVEVA_Pset property set.");
                     
-                    XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
+                    XbimVector3D coordinates = avevaPset.GetPosition() * _lengthUnit.Power;
                     IfcAbstractSegmentEntity? nearestSegment = abstractSegmentEntities.GetNearestSegments(coordinates, 1).FirstOrDefault();
                     if (nearestSegment == null)
                         throw new Exception("Cannot find anchor's connected segment");
@@ -429,15 +473,18 @@ namespace IFCConverter.Importers
                     logger.Error($"Failed to create anchor entity with ID: {anchorElement.GlobalId}");
                 }
             }
+            
+            logger.Info($"Found {abstractAnchorEntities.Count} {nameof(IfcAbstractAnchorEntity)} objects");
 
-            return abstractAnchorEntities.ToArray();
+            return abstractAnchorEntities;
         }
 
-        public IfcVertexValveEntity[] CreateValves(IfcElement[] valves, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IEnumerable<IfcVertexValveEntity> CreateValves(IReadOnlyCollection<IfcElement> valves, ICollection<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             Logger logger = Logger.GetInstance();
-            List<IfcVertexValveEntity> valveEntities = new List<IfcVertexValveEntity>(capacity: valves.Length);
             
+            logger.Info($"Searching {nameof(IfcVertexValveEntity)} objects");
+            List<IfcVertexValveEntity> valveEntities = new List<IfcVertexValveEntity>(capacity: valves.Count);
             foreach (IfcElement valveElement in valves)
             {
                 try
@@ -455,7 +502,7 @@ namespace IFCConverter.Importers
                     if (avevaPset == null)
                         throw new Exception("Bend does not have AVEVA_Pset property set.");
                     
-                    XbimVector3D coordinates = avevaPset.GetPosition() * _LengthUnit.Power;
+                    XbimVector3D coordinates = avevaPset.GetPosition() * _lengthUnit.Power;
                     IfcAbstractSegmentEntity[] nearestSegmentEntities = abstractSegmentEntities.GetNearestSegments(coordinates, 2).ToArray();
                     if (nearestSegmentEntities.Length < 2)
                         throw new Exception("Cannot find valve connected segments");
@@ -485,11 +532,13 @@ namespace IFCConverter.Importers
                     logger.Error($"Failed to create valve entity with ID: {valveElement.GlobalId}");
                 }
             }
+            
+            logger.Info($"Found {valveEntities.Count} {nameof(IfcVertexValveEntity)} objects");
 
-            return valveEntities.ToArray();
+            return valveEntities;
         }
 
-        private static IfcElement[] GetElementByType(IEnumerable<IfcProduct> products, IfcText type)
+        private static IEnumerable<IfcElement> GetElementByType(IEnumerable<IfcProduct> products, IfcText type)
         {
             return products
                 .Select(product => new { Product = product, PropertySets = product.GetPropertySets() })

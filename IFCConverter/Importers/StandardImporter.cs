@@ -27,25 +27,34 @@ namespace IFCConverter.Importers
 {
     internal class StandardImporter : IImporter
     {
-        protected IFCProject _ifcProject;
-        protected IfcSIUnit _LengthUnit;
+        public IEnumerable<IfcProduct> Products => _products;
+        
+        private readonly IfcSIUnit _LengthUnit;
+        private readonly IfcProduct[] _products;
         
         public StandardImporter(IFCProject ifcProject)
         {
-            _ifcProject = ifcProject;
+            _products = ifcProject.GetProducts().ToArray();
             _LengthUnit = ifcProject.LengthUnit;
         }
-        
-        // ReSharper disable once CoVariantArrayConversion
-        public IfcElement[] GetPipeSegments(IfcProduct[] products)
+
+        public IEnumerable<IfcPipeSegmentEntity> CreateSegments()
         {
-            return products
-                .OfType<IfcPipeSegment>()
-                .ToArray();
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IfcAbstractFittingEntity> CreateFittings(List<IfcPipeSegmentEntity> pipeSegmentEntities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IfcAbstractAnchorEntity> CreateAnchors(List<IfcPipeSegmentEntity> pipeSegmentEntities)
+        {
+            throw new NotImplementedException();
         }
 
         // ReSharper disable once CoVariantArrayConversion
-        public IfcElement[] GetBends(IfcProduct[] products)
+        private IfcElement[] GetBends(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
@@ -54,7 +63,7 @@ namespace IFCConverter.Importers
         }
 
         // ReSharper disable once CoVariantArrayConversion
-        public IfcElement[] GetTees(IfcProduct[] products)
+        private IfcElement[] GetTees(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
@@ -63,7 +72,7 @@ namespace IFCConverter.Importers
         }
 
         // ReSharper disable once CoVariantArrayConversion
-        public IfcElement[] GetReducers(IfcProduct[] products)
+        private IfcElement[] GetReducers(IfcProduct[] products)
         {
             return products
                 .OfType<IfcPipeFitting>()
@@ -72,7 +81,7 @@ namespace IFCConverter.Importers
         }
         
         // ReSharper disable once CoVariantArrayConversion
-        public IfcElement[] GetAnchors(IfcProduct[] products)
+        private IfcElement[] GetAnchors(IfcProduct[] products)
         {
             return products
                 .OfType<IfcDiscreteAccessory>()
@@ -80,18 +89,18 @@ namespace IFCConverter.Importers
         }
 
         // ReSharper disable once CoVariantArrayConversion
-        public IfcElement[] GetValves(IfcProduct[] products)
+        private IfcElement[] GetValves(IfcProduct[] products)
         {
             return products
                 .OfType<IfcValve>()
                 .ToArray();
         }
 
-        public IfcPipeSegmentEntity[] CreatePipeSegments(IfcElement[] pipes)
+        private IEnumerable<IfcPipeSegmentEntity> CreatePipeSegments(IReadOnlyList<IfcElement> pipes)
         {
-            IfcPipeSegmentEntity[] pipeSegmentEntities = new IfcPipeSegmentEntity[pipes.Length];
+            IfcPipeSegmentEntity[] pipeSegmentEntities = new IfcPipeSegmentEntity[pipes.Count];
 
-            for (int i = 0; i < pipes.Length; i++)
+            for (int i = 0; i < pipes.Count; i++)
             {
                 IfcElement pipeSegment = pipes[i];
                 IfcLabel name = pipeSegment.Name ?? new IfcLabel("");
@@ -110,10 +119,10 @@ namespace IFCConverter.Importers
             return pipeSegmentEntities;
         }
 
-        public IfcCadBendEntity[] CreateBends(IfcElement[] bends, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IfcCadBendEntity[] CreateBends(IReadOnlyList<IfcElement> bends, ICollection<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
-            IfcCadBendEntity[] bendEntities = new IfcCadBendEntity[bends.Length];
-            for (int i = 0; i < bends.Length; i++)
+            IfcCadBendEntity[] bendEntities = new IfcCadBendEntity[bends.Count];
+            for (int i = 0; i < bends.Count; i++)
             {
                 IfcElement bend = bends[i];
                 IfcLabel name = bend.Name ?? new IfcLabel("");
@@ -130,15 +139,7 @@ namespace IFCConverter.Importers
                 double length = angle * bendRadius;
                 double pipeDiameter = nearestSegments.Max(segment => segment.Diameter.Value);
 
-                IfcCadBendEntity cadBendEntity = new IfcCadBendEntity(
-                    name,
-                    tag,
-                    objectMatrix3D,
-                    length,
-                    angle,
-                    bendRadius,
-                    pipeDiameter / 2
-                );
+                IfcCadBendEntity cadBendEntity = new IfcCadBendEntity(name, tag, objectMatrix3D, length, angle, bendRadius, pipeDiameter / 2);
                 cadBendEntity.ConnectedEntities.AddRange(nearestSegments);
                 cadBendEntity.PropertySets.AddRange(propertySets);
                 
@@ -156,7 +157,7 @@ namespace IFCConverter.Importers
             return bendEntities;
         }
 
-        public IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IfcWeldedTeeEntity[] CreateWeldedTees(IfcElement[] tees, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             IfcWeldedTeeEntity[] weldedTeeEntities = new IfcWeldedTeeEntity[tees.Length];
             for (int i = 0; i < tees.Length; i++)
@@ -177,17 +178,7 @@ namespace IFCConverter.Importers
                 double branchDiameter = Math.Max(branchPipes[0].Diameter, branchPipes[1].Diameter);
                 double headDiameter = headPipe.Diameter;
                 
-                IfcWeldedTeeEntity weldedTeeEntity = new IfcWeldedTeeEntity(
-                    name,
-                    tag,
-                    objectMatrix3D,
-                    length,
-                    branchDiameter,
-                    headDiameter,
-                    height,
-                    angle
-                );
-                
+                IfcWeldedTeeEntity weldedTeeEntity = new IfcWeldedTeeEntity(name, tag, objectMatrix3D, length, branchDiameter, headDiameter, height, angle);
                 weldedTeeEntity.ConnectedEntities.AddRange(nearestSegments);
                 weldedTeeEntity.PropertySets.AddRange(propertySets);
                 
@@ -211,7 +202,7 @@ namespace IFCConverter.Importers
             return weldedTeeEntities;
         }
 
-        public IfcVertexReducerConcentricEntity[] CreateConcentricReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
+        private IfcVertexReducerConcentricEntity[] CreateConcentricReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
         {
             IfcVertexReducerConcentricEntity[] reducerConcentricEntities = new IfcVertexReducerConcentricEntity[reducers.Length];
             for (int i = 0; i < reducers.Length; i++)
@@ -234,14 +225,7 @@ namespace IFCConverter.Importers
                     .OrderBy(diameter => diameter)
                     .ToArray();
                 
-                IfcVertexReducerConcentricEntity reducerConcentricEntity = new IfcVertexReducerConcentricEntity(
-                    name,
-                    tag,
-                    objectMatrix3D,
-                    length,
-                    diameters,
-                    16
-                );
+                IfcVertexReducerConcentricEntity reducerConcentricEntity = new IfcVertexReducerConcentricEntity(name, tag, objectMatrix3D, length, diameters, 16);
                 reducerConcentricEntity.ConnectedEntities.AddRange(nearestSegments);
                 reducerConcentricEntity.PropertySets.AddRange(propertySets);
                 
@@ -255,24 +239,6 @@ namespace IFCConverter.Importers
             }
 
             return reducerConcentricEntities;
-        }
-
-        //TODO create reducers creation
-        public IfcAbstractReducerEntity[] CreateReducers(IfcElement[] reducers, List<IfcPipeSegmentEntity> abstractSegmentEntities)
-        {
-            throw new NotImplementedException();
-        }
-
-        //TODO create anchors creation
-        public IfcAbstractAnchorEntity[] CreateAnchors(IfcElement[] anchors, List<IfcPipeSegmentEntity> abstractSegmentEntities)
-        {
-            throw new NotImplementedException();
-        }
-
-        //TODO create valves creation
-        public IfcVertexValveEntity[] CreateValves(IfcElement[] valves, List<IfcPipeSegmentEntity> abstractSegmentEntities)
-        {
-            throw new NotImplementedException();
         }
 
         private static void FilterTeeSegments(IfcAbstractSegmentEntity[] segmentEntities, XbimVector3D coordinates, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe, out double angle)

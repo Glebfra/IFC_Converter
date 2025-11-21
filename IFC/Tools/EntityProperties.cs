@@ -35,4 +35,10 @@ namespace IFC.Tools
         public double[] Radiuses;
         public double Length;
     }
+    
+    public struct FlangeProperties
+    {
+        public XbimVector3D[] BoundPoints;
+        public XbimVector3D Center;
+    }
 }
