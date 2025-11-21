@@ -64,43 +64,15 @@ namespace IFC.Extensions
                 BoundPoints = new XbimVector3D[] { pipeProperties.BoundPoints[0], reducerProperties.BoundPoints[1] }
             };
         }
-        
-        [Obsolete("Use GetPipeProperties Instead")]
-        public static XbimVector3D[] GetBoundPoints(this IfcExtrudedAreaSolid extrudedAreaSolid)
-        {
-            XbimVector3D[] points = new XbimVector3D[2];
-            
-            XbimMatrix3D areaSolidMatrix3D = extrudedAreaSolid.Position.ToMatrix3D();
-            XbimVector3D forward = extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
-            double length = GetLength(extrudedAreaSolid);
-            
-            XbimVector3D internalSecondPoint = forward * length;
-
-            XbimVector3D globalFirstPoint = areaSolidMatrix3D.Translation;
-            XbimVector3D globalSecondPoint = globalFirstPoint + areaSolidMatrix3D.Transform(internalSecondPoint);
-
-            return new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
-        }
-
-        [Obsolete("Use GetPipeProperties Instead")]
-        public static double GetLength(this IfcExtrudedAreaSolid extrudedAreaSolid)
-        {
-            return extrudedAreaSolid.Depth;
-        }
 
         public static PipeProperties GetPipeProperties(this IfcExtrudedAreaSolid extrudedAreaSolid)
         {
+            XbimVector3D[] boundPoints = GetBoundPoints(extrudedAreaSolid);
             XbimMatrix3D areaSolidMatrix3D = extrudedAreaSolid.Position.ToMatrix3D();
             XbimVector3D forward = areaSolidMatrix3D.Transform(extrudedAreaSolid.ExtrudedDirection.XbimVector3D());
-            double length = extrudedAreaSolid.Depth;
-            double radius = GetCircleRadius(extrudedAreaSolid);
-            
-            XbimVector3D internalSecondPoint = forward * length;
-
             XbimVector3D globalFirstPoint = areaSolidMatrix3D.Translation;
-            XbimVector3D globalSecondPoint = globalFirstPoint + areaSolidMatrix3D.Transform(internalSecondPoint);
-
-            XbimVector3D[] boundPoints = new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
+            double radius = GetCircleRadius(extrudedAreaSolid);
+            double length = extrudedAreaSolid.Depth;
 
             return new PipeProperties()
             {
@@ -110,6 +82,20 @@ namespace IFC.Extensions
                 Length = length,
                 Coordinates = globalFirstPoint
             };
+        }
+        
+        private static XbimVector3D[] GetBoundPoints(this IfcExtrudedAreaSolid extrudedAreaSolid)
+        {
+            XbimMatrix3D areaSolidMatrix3D = extrudedAreaSolid.Position.ToMatrix3D();
+            XbimVector3D forward = extrudedAreaSolid.ExtrudedDirection.XbimVector3D();
+            double length = extrudedAreaSolid.Depth;
+            
+            XbimVector3D internalSecondPoint = forward * length;
+
+            XbimVector3D globalFirstPoint = areaSolidMatrix3D.Translation;
+            XbimVector3D globalSecondPoint = globalFirstPoint + areaSolidMatrix3D.Transform(internalSecondPoint);
+
+            return new XbimVector3D[] { globalFirstPoint, globalSecondPoint };
         }
         
         private static double GetCircleRadius(this IfcExtrudedAreaSolid extrudedAreaSolid)
