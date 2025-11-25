@@ -26,13 +26,13 @@ namespace IFC.Entities.Abstract.Anchors
             T discreteAccessory = base.CreateIfcEntity<T>(model);
             discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
 
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, XbimVector3D.Zero);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, -Diameter / 2 * VectorExtensions.Forward);
             AddShapeRepresentation(model, discreteAccessory, representationItems);
             
             return discreteAccessory;
         }
         
-        protected IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
+        protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[4];
 

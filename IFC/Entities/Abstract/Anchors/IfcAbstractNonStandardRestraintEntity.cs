@@ -55,17 +55,19 @@ namespace IFC.Entities.Abstract.Anchors
                 bool hasSpring = restraintModule.Type == StartRestraintTypeEnum.ELASTIC;
                 bool isDoubleSided = restraintModule.Type != StartRestraintTypeEnum.RIGID_ONE_SIDED;
 
-                XbimVector3D direction = CreateAnchorDirection(restraintModule);
-                IEnumerable<XbimVector3D> segmentDirections = _abstractSegmentEntities.Select(entity => entity.ObjectMatrix3D.Value.Forward);
+                XbimVector3D direction = CreateAnchorDirection(restraintModule).Normalized();
+                XbimVector3D[] segmentDirections = _abstractSegmentEntities.Select(entity => entity.ObjectMatrix3D.Value.Forward).ToArray();
                 bool isParallel = segmentDirections.Any(segmentDirection => segmentDirection.IsParallel(direction));
+                bool isWorldUp = segmentDirections.Any(segmentDirection => segmentDirection.IsParallel(VectorExtensions.Z));
 
                 XbimVector3D[] displacements;
                 if (isParallel)
                 {
+                    XbimVector3D axis = isWorldUp ? VectorExtensions.X : VectorExtensions.Z;
                     displacements = new XbimVector3D[]
                     {
-                        displacement - Height * direction + Diameter * VectorExtensions.Z,
-                        displacement + Height * direction + Diameter * VectorExtensions.Z
+                        displacement - Height * direction + Diameter * axis,
+                        displacement + Height * direction + Diameter * axis
                     };
                 }
                 else
@@ -153,7 +155,7 @@ namespace IFC.Entities.Abstract.Anchors
             XbimVector3D coneCoordinates = stickCoordinates + stickHeight * direction;
             XbimVector3D coneTopCoordinates = -Diameter / 2 * direction;
             double coneRadius = Diameter / 4;
-            double coneHeight = Math.Sqrt((coneTopCoordinates - coneCoordinates).Modulus);
+            double coneHeight = (coneTopCoordinates - coneCoordinates).Length;
             representationItems.Add(IfcGeometry.CreateCone(model, coneRadius, coneHeight, coneCoordinates, NumSegments, refDirection, upDirection));
 
             return representationItems;

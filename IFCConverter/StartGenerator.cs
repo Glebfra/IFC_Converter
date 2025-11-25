@@ -154,6 +154,9 @@ namespace IFCConverter
         /// <returns>StartObject</returns>
         private StartObject GetOrCreateNode(StartProject startProject, IfcNodeEntity nodeEntity)
         {
+            IfcNodeEntity? nodeEntityKey = _startNodeObjects.Keys.FirstOrDefault(key => key.Equal(nodeEntity));
+            if (nodeEntityKey != null)
+                nodeEntity = nodeEntityKey;
             bool isCreated = _startNodeObjects.TryGetValue(nodeEntity, out StartObject nodeStartObject);
             if (isCreated) 
                 return nodeStartObject;

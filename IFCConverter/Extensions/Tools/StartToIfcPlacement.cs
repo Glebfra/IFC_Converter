@@ -89,7 +89,7 @@ namespace IFCConverter.Extensions.Tools
 
         public static XbimMatrix3D CreateSaddleBendObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, out double angle, out IfcAbstractSegmentEntity[] branchPipes, out IfcAbstractSegmentEntity headPipe)
         {
-            headPipe = null;
+            headPipe = null!;
             branchPipes = new IfcAbstractSegmentEntity[2];
             for (int i = 0; i < segmentEntities.Length; i++)
             {
@@ -163,7 +163,7 @@ namespace IFCConverter.Extensions.Tools
 
         public static XbimMatrix3D CreateTeeObjectMatrix(XbimVector3D coordinates, IfcAbstractSegmentEntity[] segmentEntities, out double angle, out IfcAbstractSegmentEntity headPipe, out IfcAbstractSegmentEntity[] branchPipes)
         {
-            headPipe = null;
+            headPipe = null!;
             branchPipes = new IfcAbstractSegmentEntity[2];
             for (int i = 0; i < segmentEntities.Length; i++)
             {
@@ -197,6 +197,16 @@ namespace IFCConverter.Extensions.Tools
         {
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             return CreateTeeObjectMatrix(coordinates, segmentEntities, out angle, out headPipe, out branchPipes);
+        }
+
+        public static XbimMatrix3D CreateDirectionSupportObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
+        {
+            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D forward = segmentEntities[0].ObjectMatrix3D.Value.Forward;
+            XbimVector3D worldUp = VectorExtensions.Z;
+            XbimVector3D up = forward.IsParallel(worldUp) ? VectorExtensions.Y : worldUp;
+
+            return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }
     }
 }

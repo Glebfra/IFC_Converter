@@ -93,7 +93,7 @@ namespace IFCConverter.Importers
                     IIfcRepresentationItem? representationItem = pipeElement.GetRepresentationItems().FirstOrDefault();
                     if (representationItem == null)
                         throw new Exception($"Cannot find representation item for {nameof(pipeElement)} with ID: {pipeElement.GlobalId}");
-
+                    
                     PipeProperties pipeProperties = representationItem switch
                     {
                         IfcExtrudedAreaSolid extrudedAreaSolid => extrudedAreaSolid.GetPipeProperties(),
@@ -251,9 +251,8 @@ namespace IFCConverter.Importers
                         .GetRepresentationItems()
                         .OfType<IfcExtrudedAreaSolid>()
                         .ToArray();
-                    XbimVector3D[] boundPoints = extrudedAreaSolids
-                        .SelectMany(solid => solid.GetBoundPoints())
-                        .ToArray();
+                    PipeProperties[] pipePropertiesArray = extrudedAreaSolids.Select(solid => solid.GetPipeProperties()).ToArray();
+                    XbimVector3D[] boundPoints = pipePropertiesArray.SelectMany(properties => properties.BoundPoints).ToArray();
                     boundPoints = boundPoints
                         .Select(point => point * _lengthUnit.Power)
                         .ToArray();
@@ -270,14 +269,14 @@ namespace IFCConverter.Importers
                     double branchDiameter = Math.Max(branchPipes[0].Diameter, branchPipes[1].Diameter);
                     double headDiameter = headPipe.Diameter;
                     
-                    IfcExtrudedAreaSolid headExtrudedAreaSolid = extrudedAreaSolids
-                        .First(solid => solid.Position.ToObjectMatrix3D().Forward.IsParallel(headPipe.ObjectMatrix3D.Value.Forward));
-                    IfcExtrudedAreaSolid branchExtrudedAreaSolid = extrudedAreaSolids
-                        .First(solid => solid.Position.ToObjectMatrix3D().Forward.IsNormal(headPipe.ObjectMatrix3D.Value.Forward, 1e-2));
+                    PipeProperties headPipeProperties = pipePropertiesArray
+                        .First(properties => properties.Direction.IsParallel(headPipe.ObjectMatrix3D.Value.Forward));
+                    PipeProperties branchPipeProperties = pipePropertiesArray
+                        .First(properties => properties.Direction.IsNormal(headPipe.ObjectMatrix3D.Value.Forward, 1e-2));
 
-                    double length = branchExtrudedAreaSolid.GetLength() * _lengthUnit.Power;
-                    double height = headExtrudedAreaSolid.GetLength() * _lengthUnit.Power;
-                    
+                    double length = branchPipeProperties.Length * _lengthUnit.Power;
+                    double height = headPipeProperties.Length * _lengthUnit.Power;
+
                     IfcWeldedTeeEntity weldedTeeEntity = new IfcWeldedTeeEntity(name, tag, objectMatrix3D, length, branchDiameter, headDiameter, height, angle);
                     weldedTeeEntity.PropertySets.AddRange(propertySets);
                     weldedTeeEntity.ConnectedEntities.AddRange(connectedSegments);
