@@ -198,5 +198,15 @@ namespace IFCConverter.Extensions.Tools
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
             return CreateTeeObjectMatrix(coordinates, segmentEntities, out angle, out headPipe, out branchPipes);
         }
+
+        public static XbimMatrix3D CreateDirectionSupportObjectMatrix(IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
+        {
+            XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
+            XbimVector3D forward = segmentEntities[0].ObjectMatrix3D.Value.Forward;
+            XbimVector3D worldUp = VectorExtensions.Z;
+            XbimVector3D up = forward.IsParallel(worldUp) ? VectorExtensions.Y : worldUp;
+
+            return XbimMatrix3D.CreateWorld(coordinates, forward, up);
+        }
     }
 }

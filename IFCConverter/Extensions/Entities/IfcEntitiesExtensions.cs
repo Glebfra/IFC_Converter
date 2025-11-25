@@ -243,7 +243,7 @@ namespace IFCConverter.Extensions.Entities
         
         public static IfcGuideDoubleDirectionSupportEntity CreateGuideDoubleDirectionFromStart(StartGuideDoubleDirectionSupportEntity doubleDirectionSupportEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateDirectionSupportObjectMatrix(nodeEntity, segmentEntities);
             
             string name = doubleDirectionSupportEntity.Name;
             string type = doubleDirectionSupportEntity.Type.ToString();
@@ -265,7 +265,7 @@ namespace IFCConverter.Extensions.Entities
         
         public static IfcGuideSingleDirectionSupportEntity CreateGuideSingleDirectionFromStart(StartGuideSingleDirectionSupportEntity guideSingleDirectionSupportEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities, int numSegments)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateDirectionSupportObjectMatrix(nodeEntity, segmentEntities);
             
             string name = guideSingleDirectionSupportEntity.Name;
             string type = guideSingleDirectionSupportEntity.Type.ToString();

@@ -29,7 +29,7 @@ namespace IFC.Entities.Abstract.Anchors
             T discreteAccessory = base.CreateIfcEntity<T>(model);
             discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
             
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, Diameter / 2 * VectorExtensions.Forward);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, Diameter / 2 * VectorExtensions.Forward);
             AddShapeRepresentation(model, discreteAccessory, representationItems);
             
             return discreteAccessory;

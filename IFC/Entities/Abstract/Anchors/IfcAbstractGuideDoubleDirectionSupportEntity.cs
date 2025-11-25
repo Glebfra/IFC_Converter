@@ -38,7 +38,7 @@ namespace IFC.Entities.Abstract.Anchors
         protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
             XbimVector3D[] zDirections = new[] { VectorExtensions.Up, VectorExtensions.Up.Negated(), VectorExtensions.Right, VectorExtensions.Right.Negated() };
-            XbimVector3D[] xDirections = new[] { VectorExtensions.Right, VectorExtensions.Right, VectorExtensions.Up, VectorExtensions.Up };
+            XbimVector3D[] xDirections = new[] { VectorExtensions.Forward.Negated(), VectorExtensions.Forward, VectorExtensions.Forward, VectorExtensions.Forward.Negated() };
             XbimVector3D[] yDirections = new XbimVector3D[4];
 
             for (int i = 0; i < 4; i++)
