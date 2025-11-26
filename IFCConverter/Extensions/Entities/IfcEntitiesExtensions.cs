@@ -154,6 +154,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
 
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             string name = constantForceSupport.Name;
             string type = constantForceSupport.Type.ToString();
 
@@ -161,8 +162,8 @@ namespace IFCConverter.Extensions.Entities
                 StartToIfcNaming.GenerateName(name, type, nodeEntity),
                 type,
                 objectMatrix3D,
-                segmentEntities[0].Diameter,
-                segmentEntities[0].Diameter * 2,
+                diameter,
+                diameter * 2,
                 numSegments
             );
 
@@ -176,6 +177,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             string name = constantForceSupport.Name;
             string type = constantForceSupport.Type.ToString();
 
@@ -183,8 +185,8 @@ namespace IFCConverter.Extensions.Entities
                 StartToIfcNaming.GenerateName(name, type, nodeEntity),
                 type,
                 objectMatrix3D,
-                segmentEntities[0].Diameter,
-                segmentEntities[0].Diameter * 2,
+                diameter,
+                diameter * 2,
                 numSegments
             );
             
@@ -198,7 +200,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             double height = diameter * 2;
             
             string name = damperEntity.Name;
@@ -220,22 +222,23 @@ namespace IFCConverter.Extensions.Entities
             return ifcDamperEntity;
         }
         
-        public static IfcFixedAnchorEntity CreateFixedAnchorFromStart(StartAnchorEntity anchorEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] abstractSegmentEntities)
+        public static IfcFixedAnchorEntity CreateFixedAnchorFromStart(StartAnchorEntity anchorEntity, IfcNodeEntity nodeEntity, IfcAbstractSegmentEntity[] segmentEntities)
         {
-            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFixedAnchorObjectMatrix(nodeEntity, abstractSegmentEntities);
+            XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFixedAnchorObjectMatrix(nodeEntity, segmentEntities);
             
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             string name = anchorEntity.Name;
             string type = anchorEntity.Type.ToString();
-            
+
             IfcFixedAnchorEntity fixedAnchorEntity = new IfcFixedAnchorEntity(
                 StartToIfcNaming.GenerateName(name, type, nodeEntity),
                 type,
                 objectMatrix3D,
-                abstractSegmentEntities[0].Diameter * 2,
-                abstractSegmentEntities[0].Diameter * 2
+                diameter * 2,
+                diameter * 2
             );
             
-            fixedAnchorEntity.ConnectedEntities.AddRange(abstractSegmentEntities);
+            fixedAnchorEntity.ConnectedEntities.AddRange(segmentEntities);
             fixedAnchorEntity.PropertySets.Add(Pset_Start.CreateFromStart(anchorEntity));
             
             return fixedAnchorEntity;
@@ -245,6 +248,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateDirectionSupportObjectMatrix(nodeEntity, segmentEntities);
             
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             string name = doubleDirectionSupportEntity.Name;
             string type = doubleDirectionSupportEntity.Type.ToString();
             
@@ -252,8 +256,8 @@ namespace IFCConverter.Extensions.Entities
                 StartToIfcNaming.GenerateName(name, type, nodeEntity),
                 type,
                 objectMatrix3D,
-                segmentEntities[0].Diameter,
-                segmentEntities[0].Diameter * 2,
+                diameter,
+                diameter * 2,
                 numSegments
             );
             
@@ -267,6 +271,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateDirectionSupportObjectMatrix(nodeEntity, segmentEntities);
             
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             string name = guideSingleDirectionSupportEntity.Name;
             string type = guideSingleDirectionSupportEntity.Type.ToString();
             
@@ -274,8 +279,8 @@ namespace IFCConverter.Extensions.Entities
                 StartToIfcNaming.GenerateName(name, type, nodeEntity),
                 type,
                 objectMatrix3D,
-                segmentEntities[0].Diameter,
-                segmentEntities[0].Diameter * 2,
+                diameter,
+                diameter * 2,
                 numSegments
             );
             
@@ -289,7 +294,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             double height = diameter * 2;
             
             string name = hingedAnchor.Name;
@@ -314,7 +319,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             double height = diameter * 2;
             
             string name = nonStandardRestraint.Name;
@@ -340,7 +345,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             double height = diameter * 2;
             
             string name = rigidHanger.Name;
@@ -365,7 +370,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             double height = diameter * 2;
             
             string name = slidingSupport.Name;
@@ -390,7 +395,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             double height = diameter * 2;
             
             string name = springSupport.Name;
@@ -415,7 +420,7 @@ namespace IFCConverter.Extensions.Entities
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateStandardObjectMatrix(nodeEntity);
             
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             double height = diameter * 2;
             
             string name = springSupport.Name;
@@ -441,7 +446,7 @@ namespace IFCConverter.Extensions.Entities
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreateFittingObjectMatrix(nodeEntity, segmentEntities, out double angle);
             
             double length = axialExpansionJoint.Length.SIProperty;
-            double diameter = segmentEntities[0].Diameter;
+            double diameter = segmentEntities.Max(segment => segment.Diameter.Value);
             
             string name = axialExpansionJoint.Name;
             string type = axialExpansionJoint.Type.ToString();
