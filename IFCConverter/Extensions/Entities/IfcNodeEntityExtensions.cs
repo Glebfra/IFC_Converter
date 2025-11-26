@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IFC.Entities;
-using IFC.Extensions;
 using IFCConverter.Tools;
 using Start.API;
 using Start.Entities;
@@ -42,6 +41,20 @@ namespace IFCConverter.Extensions.Entities
                 .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
                 .OrderBy(result => result.Object.GetDistanceToPoint(point))
                 .First();
+        }
+
+        public static IndexedResult<IfcNodeEntity>? GetConnectedNode(this IEnumerable<IfcNodeEntity> nodeEntities, IfcNodeEntity other)
+        {
+            return nodeEntities
+                .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
+                .FirstOrDefault(result => result.Object.Equal(other));
+        }
+
+        public static IEnumerable<IndexedResult<IfcNodeEntity>> GetConnectedNode(this IEnumerable<IfcNodeEntity> nodeEntities, IEnumerable<IfcNodeEntity> otherNodes)
+        {
+            return nodeEntities
+                .Select((node, index) => new IndexedResult<IfcNodeEntity>(node, index))
+                .SelectMany(result => otherNodes.Where(other => result.Object.Equal(other)).Select(_ => result));
         }
     }
 }

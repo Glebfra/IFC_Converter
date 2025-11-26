@@ -73,7 +73,7 @@ namespace IFC.Entities.Abstract.Segments
         /// <returns>The created representation item for the pipe shape.</returns>
         private IfcRepresentationItem CreatePipeShape(IModel model)
         {
-            IfcFacetedBrep facetedBrep = IfcVertexGeometry.CreateClippedCone(
+            IfcFacetedBrep facetedBrep = IfcGeometry.CreateClippedCone(
                 model, Diameter / 2, SecondDiameter / 2, Length, 
                 XbimVector3D.Zero, NumSegments, VectorExtensions.Right, VectorExtensions.Up
             );

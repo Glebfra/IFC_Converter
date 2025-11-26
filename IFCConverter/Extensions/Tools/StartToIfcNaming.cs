@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Extensions.Tools
 {
-    public static class StartToIfcNaming
+    internal static class StartToIfcNaming
     {
         public static string GenerateName(string name, string type, IfcNodeEntity[] nodeEntities)
         {

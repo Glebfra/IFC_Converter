@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
@@ -37,8 +39,12 @@ namespace IFC.Entities.Abstract.Anchors
 
         protected override IEnumerable<IfcRepresentationItem> CreateAnchorModel(IModel model, XbimVector3D displacement)
         {
-            XbimVector3D[] zDirections = new[] { VectorExtensions.Up, VectorExtensions.Right, VectorExtensions.Right.Negated() };
-            XbimVector3D[] xDirections = new[] { VectorExtensions.Right, VectorExtensions.Up, VectorExtensions.Up };
+            IfcAbstractSegmentEntity connectedSegment = ConnectedEntities.OfType<IfcAbstractSegmentEntity>().First();
+            XbimMatrix3D segmentMatrix = connectedSegment.ObjectMatrix3D.Value;
+
+            XbimVector3D[] zDirections = new[] { VectorExtensions.Up.Negated(), VectorExtensions.Right, VectorExtensions.Right.Negated() };
+            XbimVector3D[] xDirections = new[] { VectorExtensions.Forward, VectorExtensions.Forward, VectorExtensions.Forward.Negated() };
+            
             XbimVector3D[] yDirections = new XbimVector3D[3];
             for (int i = 0; i < 3; i++)
             {
@@ -62,9 +68,9 @@ namespace IFC.Entities.Abstract.Anchors
                 XbimVector3D coneCoordinates = stickCoordinates + stickHeight * zDirections[i];
                 XbimVector3D coneTopCoordinates = displacement - Diameter / 2 * zDirections[i];
                 double coneRadius = Diameter / 4;
-                IfcCartesianPoint[] circle = IfcVertexGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments, xDirections[i], yDirections[i]);
+                IfcCartesianPoint[] circle = IfcGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments, xDirections[i], yDirections[i]);
                 IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, coneTopCoordinates);
-                representationItems[i*3 + 2] = IfcVertexGeometry.CreateCone(model, circle, topPoint);
+                representationItems[i*3 + 2] = IfcGeometry.CreateCone(model, circle, topPoint);
             }
             
             return representationItems;

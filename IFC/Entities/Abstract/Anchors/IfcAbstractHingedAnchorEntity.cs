@@ -29,7 +29,7 @@ namespace IFC.Entities.Abstract.Anchors
             T discreteAccessory = base.CreateIfcEntity<T>(model);
             discreteAccessory.PredefinedType = IfcDiscreteAccessoryTypeEnum.ANCHORPLATE;
 
-            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchorModel(model, Diameter / 2 * VectorExtensions.Forward);
+            IEnumerable<IfcRepresentationItem> representationItems = CreateAnchor(model, Diameter / 2 * VectorExtensions.Forward);
             AddShapeRepresentation(model, discreteAccessory, representationItems);
             
             return discreteAccessory;
@@ -48,9 +48,9 @@ namespace IFC.Entities.Abstract.Anchors
             XbimVector3D coneCoordinates = rectangleCoordinates + rectangleHeight * VectorExtensions.Forward;
             XbimVector3D coneTopCoordinates = displacement - Diameter / 2 * VectorExtensions.Forward;
             double coneRadius = Diameter / 2;
-            IfcCartesianPoint[] circle = IfcVertexGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments);
+            IfcCartesianPoint[] circle = IfcGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments);
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, coneTopCoordinates);
-            representationItems[1] = IfcVertexGeometry.CreateCone(model, circle, topPoint);
+            representationItems[1] = IfcGeometry.CreateCone(model, circle, topPoint);
             
             return representationItems;
         }

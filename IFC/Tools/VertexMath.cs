@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Authentication.ExtendedProtection;
 using IFC.Extensions;
 using Xbim.Common.Geometry;
 
@@ -131,6 +130,44 @@ namespace IFC.Tools
         public bool IsEqual(Plane other, double precision=1e-3)
         {
             return Center.IsEqualFixed(other.Center, precision) && NormalVector.IsParallel(other.NormalVector);
+        }
+        
+        public static IEnumerable<Plane> GetPipePlanes(IEnumerable<Plane> planes)
+        {
+            List<Plane> pipePlanes = new List<Plane>();
+            foreach (Plane plane in planes)
+            {
+                bool isAdded = pipePlanes.Any(pipePlane => pipePlane.IsEqual(plane));
+                if (!isAdded)
+                    pipePlanes.Add(plane);
+            }
+
+            return pipePlanes;
+        }
+        
+        public static IEnumerable<Plane> GetCirclePlanes(IEnumerable<Plane> planes)
+        {
+            return planes.Where(plane => plane.IsCircle());
+        }
+        
+        public static IEnumerable<Plane> UpdatePlanesByVertices(IEnumerable<Plane> planes, XbimVector3D[] vertices, double tolerance=1e-6)
+        {
+            Plane[] planesArr = planes as Plane[] ?? planes.ToArray();
+            
+            for (int i = 0; i < planesArr.Length; i++)
+            {
+                foreach (XbimVector3D vertex in vertices)
+                {
+                    if (!planesArr[i].IsContainPoint(vertex, tolerance)) 
+                        continue;
+                    
+                    List<XbimVector3D> planePoints = planesArr[i].Points;
+                    if (!planePoints.Contains(vertex))
+                        planePoints.Add(vertex);
+                }
+            }
+
+            return planesArr;
         }
         
         private XbimVector3D GetCenter()

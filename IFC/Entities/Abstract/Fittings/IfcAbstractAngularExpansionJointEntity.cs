@@ -85,7 +85,7 @@ namespace IFC.Entities.Abstract.Fittings
 
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[]
             {
-                IfcVertexGeometry.CreateSphere(model, Diameter * 0.75, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y)
+                IfcGeometry.CreateSphere(model, Diameter * 0.75, XbimVector3D.Zero, NumSegments, VectorExtensions.X, VectorExtensions.Y)
             };
 
             return representationItems;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using IFC;
 using IFC.Entities;
 using IFC.Entities.Abstract;
@@ -32,7 +33,7 @@ namespace IFCConverter
         public void Convert(StartDocument startDocument)
         {
             Logger logger = Logger.GetInstance();
-            logger.Info("STARTtoIFC exporter v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            logger.Info("STARTtoIFC exporter v." + Assembly.GetExecutingAssembly().GetName().Version);
 
             using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
             {

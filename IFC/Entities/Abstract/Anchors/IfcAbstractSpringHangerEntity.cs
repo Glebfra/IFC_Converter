@@ -55,16 +55,16 @@ namespace IFC.Entities.Abstract.Anchors
             double springHeight = stickHeight;
             double springWireRadius = stickRadius / 2;
             const int springNumTurns = 5;
-            IfcCartesianPoint[] spiralPoints = IfcVertexGeometry.CreateSpiral(model, springRadius, springHeight, NumSegments, springNumTurns, springCoordinates);
-            IfcPolyline spiralPolyline = IfcVertexGeometry.CreatePolyline(model, spiralPoints);
+            IfcCartesianPoint[] spiralPoints = IfcGeometry.CreateSpiral(model, springRadius, springHeight, NumSegments, springNumTurns, springCoordinates);
+            IfcPolyline spiralPolyline = IfcGeometry.CreatePolyline(model, spiralPoints);
             representationItems[2] = IfcGeometry.CreateSweptDiskSolid(model, spiralPolyline, springWireRadius);
 
             XbimVector3D coneCoordinates = stickCoordinates;
             XbimVector3D coneTopCoordinates = displacement + Diameter / 2 * VectorExtensions.Forward;
             double coneRadius = Diameter / 4;
-            IfcCartesianPoint[] circle = IfcVertexGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments);
+            IfcCartesianPoint[] circle = IfcGeometry.CreateCircle(model, coneRadius, coneCoordinates, NumSegments);
             IfcCartesianPoint topPoint = IfcAxis.CreatePoint(model, coneTopCoordinates);
-            representationItems[3] = IfcVertexGeometry.CreateCone(model, circle, topPoint);
+            representationItems[3] = IfcGeometry.CreateCone(model, circle, topPoint);
 
             return representationItems;
         }

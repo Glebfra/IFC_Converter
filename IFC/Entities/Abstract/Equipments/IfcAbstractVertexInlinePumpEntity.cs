@@ -32,8 +32,8 @@ namespace IFC.Entities.Abstract.Equipments
             pump.PredefinedType = IfcPumpTypeEnum.SUMPPUMP;
             
             XbimVector3D displacement = Length / 2 * VectorExtensions.Forward;
-            IfcCartesianPoint[] firstCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement.Negated(), NumSegments);
-            IfcCartesianPoint[] secondCircle = IfcVertexGeometry.CreateCircle(model, Diameter / 2, displacement, NumSegments);
+            IfcCartesianPoint[] firstCircle = IfcGeometry.CreateCircle(model, Diameter / 2, displacement.Negated(), NumSegments);
+            IfcCartesianPoint[] secondCircle = IfcGeometry.CreateCircle(model, Diameter / 2, displacement, NumSegments);
             foreach (IfcCartesianPoint secondCirclePoint in secondCircle)
                 secondCirclePoint.RotateAroundYAxis(Angle);
             
@@ -41,8 +41,8 @@ namespace IFC.Entities.Abstract.Equipments
 
             IfcRepresentationItem[] representationItems = new IfcRepresentationItem[]
             {
-                IfcVertexGeometry.CreateCone(model, firstCircle, topPoint),
-                IfcVertexGeometry.CreateCone(model, secondCircle, topPoint)
+                IfcGeometry.CreateCone(model, firstCircle, topPoint),
+                IfcGeometry.CreateCone(model, secondCircle, topPoint)
             };
             AddShapeRepresentation(model, pump, representationItems);
             

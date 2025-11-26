@@ -44,7 +44,7 @@ namespace IFC.Entities.Abstract.Fittings
             XbimVector3D displacement = CalculateDisplacement();
             IfcAxisSettings axisSettings = new IfcAxisSettings(displacement, VectorExtensions.X, VectorExtensions.Z);
 
-            IfcFacetedBrep torus = IfcVertexGeometry.CreateTorus(
+            IfcFacetedBrep torus = IfcGeometry.CreateTorus(
                 model,
                 BendRadius,
                 PipeRadius,

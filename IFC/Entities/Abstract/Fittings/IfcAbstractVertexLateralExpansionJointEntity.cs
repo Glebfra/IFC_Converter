@@ -45,8 +45,8 @@ namespace IFC.Entities.Abstract.Fittings
 
             IfcFacetedBrep[] brep = new IfcFacetedBrep[]
             {
-                IfcVertexGeometry.CreateSphere(model, Diameter / 2, firstDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y),
-                IfcVertexGeometry.CreateSphere(model, Diameter / 2, secondDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y)
+                IfcGeometry.CreateSphere(model, Diameter / 2, firstDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y),
+                IfcGeometry.CreateSphere(model, Diameter / 2, secondDisplacement, NumSegments, VectorExtensions.X, VectorExtensions.Y)
             };
 
             return brep;

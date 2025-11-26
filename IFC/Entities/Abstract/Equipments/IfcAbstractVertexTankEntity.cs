@@ -96,15 +96,15 @@ namespace IFC.Entities.Abstract.Equipments
             
             IfcCartesianPoint[][] circles = new IfcCartesianPoint[][]
             {
-                IfcVertexGeometry.CreateCircle(model, FlangeRadius, displacements[0], NumSegments, xAxis, yAxis),
-                IfcVertexGeometry.CreateCircle(model, FlangeRadius, displacements[1], NumSegments, xAxis, yAxis),
-                IfcVertexGeometry.CreateCircle(model, PipeDiameter * 0.66, displacements[1], NumSegments, xAxis, yAxis),
-                IfcVertexGeometry.CreateCircle(model, PipeDiameter * 0.5, displacements[2], NumSegments, xAxis, yAxis)
+                IfcGeometry.CreateCircle(model, FlangeRadius, displacements[0], NumSegments, xAxis, yAxis),
+                IfcGeometry.CreateCircle(model, FlangeRadius, displacements[1], NumSegments, xAxis, yAxis),
+                IfcGeometry.CreateCircle(model, PipeDiameter * 0.66, displacements[1], NumSegments, xAxis, yAxis),
+                IfcGeometry.CreateCircle(model, PipeDiameter * 0.5, displacements[2], NumSegments, xAxis, yAxis)
             };
 
             IfcFacetedBrep[] facetedBreps = new IfcFacetedBrep[2];
-            facetedBreps[0] = IfcVertexGeometry.CreateClippedCone(model, circles[0], circles[1]);
-            facetedBreps[1] = IfcVertexGeometry.CreateClippedCone(model, circles[2], circles[3]);
+            facetedBreps[0] = IfcGeometry.CreateClippedCone(model, circles[0], circles[1]);
+            facetedBreps[1] = IfcGeometry.CreateClippedCone(model, circles[2], circles[3]);
 
             return facetedBreps;
         }

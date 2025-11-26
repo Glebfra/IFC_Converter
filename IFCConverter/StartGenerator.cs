@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using IFC;
 using IFC.Entities;
+using IFC.Entities.Abstract.Anchors;
 using IFC.Entities.Abstract.Fittings;
-using IFC.Entities.Fittings.CAD;
-using IFC.Entities.Fittings.Vertex;
+using IFC.Entities.Abstract.Segments;
 using IFC.Entities.Segments;
 using IFCConverter.Extensions.Entities;
-using IFCConverter.Extensions.Entities.Fittings;
-using IFCConverter.Extensions.Entities.Segments;
 using IFCConverter.Importers;
 using IFCConverter.Tools;
 using Newtonsoft.Json;
@@ -17,10 +16,8 @@ using Start;
 using Start.API;
 using Start.Entities;
 using Start.Entities.Abstract;
-using Start.Entities.Fittings;
 using Start.Entities.Segments;
-using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProductExtension;
+using StartEntityFactory = IFCConverter.Extensions.StartEntityFactory;
 
 namespace IFCConverter
 {
@@ -44,7 +41,7 @@ namespace IFCConverter
         public void Convert(StartDocument startDocument)
         {
             Logger logger = Logger.GetInstance();
-            logger.Info("IFCtoSTART importer v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            logger.Info("IFCtoSTART importer v." + Assembly.GetExecutingAssembly().GetName().Version);
 
             try
             {
@@ -55,32 +52,24 @@ namespace IFCConverter
                     
                     IImporter importer = ImporterFactory.CreateImporter(ifcProject, _dataContainer.ImportTypeEnum);
                     logger.Info($"Using importer: {importer.GetType().Name}");
+
+                    logger.Info($"Searching {nameof(IfcAbstractSegmentEntity)} objects");
+                    List<IfcPipeSegmentEntity> pipeSegmentEntities = importer.CreateSegments().ToList();
+                    logger.Info($"Found {pipeSegmentEntities.Count} {nameof(IfcAbstractSegmentEntity)} objects");
+
+                    logger.Info($"Searching {nameof(IfcAbstractFittingEntity)} objects");
+                    List<IfcAbstractFittingEntity> abstractFittingEntities = importer.CreateFittings(pipeSegmentEntities).ToList();
+                    logger.Info($"Found {abstractFittingEntities.Count} {nameof(IfcAbstractFittingEntity)} objects");
                     
-                    IfcProduct[] products = ifcProject.GetProducts().ToArray();
-                    logger.Info($"Found products: {products.Length}");
-                    
-                    IfcElement[] ifcPipeSegments = importer.GetPipeSegments(products);
-                    logger.Info($"Found pipe segments: {ifcPipeSegments.Length}");
-                    List<IfcPipeSegmentEntity> segmentEntities = importer.CreatePipeSegments(ifcPipeSegments).ToList();
-                    
-                    IfcElement[] ifcBendPipeFittings = importer.GetBends(products);
-                    logger.Info($"Found bends: {ifcBendPipeFittings.Length}");
-                    IfcCadBendEntity[] bendEntities = importer.CreateBends(ifcBendPipeFittings, segmentEntities);
-                    
-                    IfcElement[] ifcTeeFittings = importer.GetTees(products);
-                    logger.Info($"Found tees: {ifcTeeFittings.Length}");
-                    IfcWeldedTeeEntity[] teeEntities = importer.CreateWeldedTees(ifcTeeFittings, segmentEntities);
-                    
-                    IfcElement[] ifcReducerFittings = importer.GetReducers(products);
-                    logger.Info($"Found reducers: {ifcReducerFittings.Length}");
-                    IfcAbstractReducerEntity[] reducerEntities = importer.CreateReducers(ifcReducerFittings, segmentEntities);
-                    
+                    logger.Info($"Searching {nameof(IfcAbstractAnchorEntity)} objects");
+                    List<IfcAbstractAnchorEntity> abstractAnchorEntities = importer.CreateAnchors(pipeSegmentEntities).ToList();
+                    logger.Info($"Found {abstractAnchorEntities.Count} {nameof(IfcAbstractAnchorEntity)} objects");
+
                     using (StartProject startProject = StartProject.OpenFromDocument(startDocument))
                     {
-                        GeneratePipeEntities(startProject, segmentEntities);
-                        GenerateTeeEntities(startProject, teeEntities);
-                        GenerateBendEntities(startProject, bendEntities);
-                        GenerateReducerEntities(startProject, reducerEntities);
+                        GenerateSegments(startProject, pipeSegmentEntities);
+                        GenerateFittings(startProject, abstractFittingEntities);
+                        GenerateAnchors(startProject, abstractAnchorEntities);
                     }
                 }
             }
@@ -91,59 +80,11 @@ namespace IFCConverter
         }
 
         /// <summary>
-        /// Generates tee entities and connects them to the corresponding pipe segments and nodes.
-        /// </summary>
-        /// <param name="startProject">Start project</param>
-        /// <param name="ifcWeldedTeeEntities">IfcWeldedTeeEntities</param>
-        private void GenerateTeeEntities(StartProject startProject, IEnumerable<IfcWeldedTeeEntity> ifcWeldedTeeEntities)
-        {
-            foreach (IfcWeldedTeeEntity ifcWeldedTeeEntity in ifcWeldedTeeEntities)
-            {
-                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcWeldedTeeEntity.ConnectedEntities
-                    .OfType<IfcPipeSegmentEntity>()
-                    .ToArray();
-                StartObject[] startPipeObjects = pipeSegmentEntities
-                    .Select(segment => _startPipeObjects[segment])
-                    .ToArray();
-                
-                StartTeeEntity startTeeEntity = ifcWeldedTeeEntity.ToStartTeeEntity();
-                StartObject startTeeObject = GenerateStartEntity(startProject, startTeeEntity);
-                StartObject startNodeObject = GetOrCreateNode(startProject, ifcWeldedTeeEntity.NodeEntity);
-                ConnectNodes(startTeeObject, startNodeObject);
-                ConnectObjects(startTeeObject, startPipeObjects);
-            }
-        }
-
-        /// <summary>
-        /// Generates bend entities and connects them to the corresponding pipe segments and nodes.
-        /// </summary>
-        /// <param name="startProject">Start project</param>
-        /// <param name="ifcCadBendEntities">IfcBendEntities</param>
-        private void GenerateBendEntities(StartProject startProject, IEnumerable<IfcCadBendEntity> ifcCadBendEntities)
-        {
-            foreach (IfcCadBendEntity ifcCadBendEntity in ifcCadBendEntities)
-            {
-                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcCadBendEntity.ConnectedEntities
-                    .OfType<IfcPipeSegmentEntity>()
-                    .ToArray();
-                StartObject[] startPipeObjects = pipeSegmentEntities
-                    .Select(segment => _startPipeObjects[segment])
-                    .ToArray();
-                
-                StartBendEntity startBendEntity = ifcCadBendEntity.ToStartBendEntity();
-                StartObject startBendObject = GenerateStartEntity(startProject, startBendEntity);
-                StartObject startNodeObject = GetOrCreateNode(startProject, ifcCadBendEntity.NodeEntity);
-                ConnectNodes(startBendObject, startNodeObject);
-                ConnectObjects(startBendObject, startPipeObjects);
-            }
-        }
-
-        /// <summary>
         /// Generates pipe entities and connects them to their nodes.
         /// </summary>
         /// <param name="startProject">Start project</param>
         /// <param name="ifcPipeSegmentEntities">IfcPipeSegmentEntities</param>
-        private void GeneratePipeEntities(StartProject startProject, IEnumerable<IfcPipeSegmentEntity> ifcPipeSegmentEntities)
+        private void GenerateSegments(StartProject startProject, IEnumerable<IfcPipeSegmentEntity> ifcPipeSegmentEntities)
         {
             foreach (IfcPipeSegmentEntity ifcPipeSegmentEntity in ifcPipeSegmentEntities)
             {
@@ -158,26 +99,50 @@ namespace IFCConverter
         }
 
         /// <summary>
-        /// Generates reducer entities and connects them to the corresponding pipe segments and nodes.
+        /// Generates all types of fitting entities and connects them to the corresponding pipe segments and nodes.
         /// </summary>
         /// <param name="startProject">Start project</param>
-        /// <param name="reducerEntities">IfcVertexReducerEccentricEntities</param>
-        private void GenerateReducerEntities(StartProject startProject, IEnumerable<IfcAbstractReducerEntity> reducerEntities)
+        /// <param name="abstractFittingEntities">Abstract fitting entities</param>
+        private void GenerateFittings(StartProject startProject, IEnumerable<IfcAbstractFittingEntity> abstractFittingEntities)
         {
-            foreach (IfcAbstractReducerEntity ifcReducerEntity in reducerEntities)
+            foreach (IfcAbstractFittingEntity ifcAbstractFittingEntity in abstractFittingEntities)
             {
-                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcReducerEntity.ConnectedEntities
+                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcAbstractFittingEntity.ConnectedEntities
                     .OfType<IfcPipeSegmentEntity>()
                     .ToArray();
                 StartObject[] startPipeObjects = pipeSegmentEntities
                     .Select(segment => _startPipeObjects[segment])
                     .ToArray();
-                
-                StartReducerEntity startReducerEntity = ifcReducerEntity.ToStartReducerEntity();
-                StartObject startReducerObject = GenerateStartEntity(startProject, startReducerEntity);
-                StartObject startNodeObject = GetOrCreateNode(startProject, ifcReducerEntity.NodeEntity);
-                ConnectNodes(startReducerObject, startNodeObject);
-                ConnectObjects(startReducerObject, startPipeObjects);
+
+                StartAbstractEntity startAbstractEntity = StartEntityFactory.CreateEntity(ifcAbstractFittingEntity);
+                StartObject startTeeObject = GenerateStartEntity(startProject, startAbstractEntity);
+                StartObject startNodeObject = GetOrCreateNode(startProject, ifcAbstractFittingEntity.NodeEntity);
+                ConnectNodes(startTeeObject, startNodeObject);
+                ConnectObjects(startTeeObject, startPipeObjects);
+            }
+        }
+        
+        /// <summary>
+        /// Generates all types of anchor entities and connects them to the corresponding pipe segments and nodes.
+        /// </summary>
+        /// <param name="startProject">Start project</param>
+        /// <param name="abstractAnchorEntities">Abstract anchor entities</param>
+        private void GenerateAnchors(StartProject startProject, IEnumerable<IfcAbstractAnchorEntity> abstractAnchorEntities)
+        {
+            foreach (IfcAbstractAnchorEntity ifcAbstractAnchorEntity in abstractAnchorEntities)
+            {
+                IfcPipeSegmentEntity[] pipeSegmentEntities = ifcAbstractAnchorEntity.ConnectedEntities
+                    .OfType<IfcPipeSegmentEntity>()
+                    .ToArray();
+                StartObject[] startPipeObjects = pipeSegmentEntities
+                    .Select(segment => _startPipeObjects[segment])
+                    .ToArray();
+
+                StartAbstractEntity startAbstractEntity = StartEntityFactory.CreateEntity(ifcAbstractAnchorEntity);
+                StartObject startTeeObject = GenerateStartEntity(startProject, startAbstractEntity);
+                StartObject startNodeObject = GetOrCreateNode(startProject, ifcAbstractAnchorEntity.NodeEntity);
+                ConnectNodes(startTeeObject, startNodeObject);
+                ConnectObjects(startTeeObject, startPipeObjects);
             }
         }
 
@@ -189,6 +154,9 @@ namespace IFCConverter
         /// <returns>StartObject</returns>
         private StartObject GetOrCreateNode(StartProject startProject, IfcNodeEntity nodeEntity)
         {
+            IfcNodeEntity? nodeEntityKey = _startNodeObjects.Keys.FirstOrDefault(key => key.Equal(nodeEntity));
+            if (nodeEntityKey != null)
+                nodeEntity = nodeEntityKey;
             bool isCreated = _startNodeObjects.TryGetValue(nodeEntity, out StartObject nodeStartObject);
             if (isCreated) 
                 return nodeStartObject;
