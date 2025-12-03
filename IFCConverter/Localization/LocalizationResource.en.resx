@@ -66,7 +66,7 @@
         <value>Unknown import type</value>
     </data>
     <data name="ImportWindowForm_ImportType_Label_Text" xml:space="preserve">
-        <value>Import type</value>
+        <value>Import profile</value>
     </data>
     <data name="ImportWindowForm_ImportType_Standard" xml:space="preserve">
         <value>Standard</value>
@@ -87,6 +87,6 @@
         <value>Import from IFC</value>
     </data>
     <data name="ImportWindowForm_ImportType_Aveva" xml:space="preserve">
-        <value>Aveva</value>
+        <value>AVEVA</value>
     </data>
 </root>
