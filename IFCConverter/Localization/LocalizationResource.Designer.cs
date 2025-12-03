@@ -195,7 +195,7 @@ namespace IFCConverter.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aveva.
+        ///   Looks up a localized string similar to AVEVA.
         /// </summary>
         internal static string ImportWindowForm_ImportType_Aveva {
             get {
@@ -213,7 +213,7 @@ namespace IFCConverter.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import type.
+        ///   Looks up a localized string similar to Import profile.
         /// </summary>
         internal static string ImportWindowForm_ImportType_Label_Text {
             get {

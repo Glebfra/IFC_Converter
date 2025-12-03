@@ -62,4 +62,7 @@
     <data name="ImportWindowForm_selectInputFilePathButton_Text" xml:space="preserve">
         <value>浏览</value>
     </data>
+    <data name="ImportWindowForm_ImportType_Aveva" xml:space="preserve">
+        <value>AVEVA</value>
+    </data>
 </root>

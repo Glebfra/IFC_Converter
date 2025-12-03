@@ -63,7 +63,7 @@
         <value>Неизвестный тип импорта</value>
     </data>
     <data name="ImportWindowForm_ImportType_Label_Text" xml:space="preserve">
-        <value>Тип импорта</value>
+        <value>Профиль импорта</value>
     </data>
     <data name="ImportWindowForm_InputFilePath_Empty_Error" xml:space="preserve">
         <value>Путь к файлу .ifc не может быть пустым.</value>
@@ -76,5 +76,8 @@
     </data>
     <data name="ImportWindowForm_Text" xml:space="preserve">
         <value>Импорт из IFC</value>
+    </data>
+    <data name="ImportWindowForm_ImportType_Aveva" xml:space="preserve">
+        <value>AVEVA</value>
     </data>
 </root>
