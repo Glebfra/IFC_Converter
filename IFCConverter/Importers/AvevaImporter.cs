@@ -505,11 +505,26 @@ namespace IFCConverter.Importers
                     IfcAbstractSegmentEntity[] nearestSegmentEntities = abstractSegmentEntities.GetNearestSegments(coordinates, 2).ToArray();
                     if (nearestSegmentEntities.Length < 2)
                         throw new Exception("Cannot find valve connected segments");
+
+                    double searchDistance = nearestSegmentEntities.SelectMany(segment => segment.NodeEntities)
+                        .Select(entity => entity.GetDistanceToPoint(coordinates))
+                        .Min() * 1.5;
+                    nearestSegmentEntities = abstractSegmentEntities
+                        .GetNearestSegments(coordinates, searchDistance)
+                        .Take(2)
+                        .ToArray();
+
+                    double length;
+                    if (nearestSegmentEntities.Length < 2)
+                        length = searchDistance / 0.75;
+                    else
+                    {
+                        XbimVector3D[] valvePoints = nearestSegmentEntities.Select(segment => segment.NodeEntities.GetNearestNode(coordinates).Object.ObjectMatrix3D.Translation).ToArray();
+                        length = (valvePoints[1] - valvePoints[0]).Length;
+                    }
+
+                    double diameter = nearestSegmentEntities.Max(segment => segment.Diameter.Value);
                     
-                    XbimVector3D[] valvePoints = nearestSegmentEntities.Select(segment => segment.NodeEntities.GetNearestNode(coordinates).Object.ObjectMatrix3D.Translation).ToArray();
-                    double length = (valvePoints[1] - valvePoints[0]).Length;
-                    
-                    double diameter = Math.Max(nearestSegmentEntities[0].Diameter, nearestSegmentEntities[1].Diameter);
                     XbimMatrix3D valveObjectMatrix = StartToIfcPlacement.CreateFittingObjectMatrix(coordinates, nearestSegmentEntities, out double angle);
                     IfcVertexValveEntity valveEntity = new IfcVertexValveEntity(name, tag, valveObjectMatrix, length, diameter, angle, 16);
                     IfcNodeEntity valveNode = valveEntity.NodeEntity;
