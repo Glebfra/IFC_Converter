@@ -30,17 +30,17 @@ namespace Start.API
 
         public StartDocument LoadStartDocument(int mode, string filepath)
         {
-            object? document = _autoServer.GetType().InvokeMember(
-                "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, _autoServer, new object[] { mode, filepath, 0 }
-            );
+            object document = LoadStartDocumentRaw(mode, filepath);
             return new StartDocument(document);
         }
         
-        public object? LoadStartDocumentRaw(int mode, string filepath)
+        public object LoadStartDocumentRaw(int mode, string filepath)
         {
             object? document = _autoServer.GetType().InvokeMember(
                 "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, _autoServer, new object[] { mode, filepath, 0 }
             );
+            if (document == null)
+                throw new Exception("Failed to load Start document.");
             return document;
         }
 

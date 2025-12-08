@@ -85,10 +85,13 @@ namespace IFCConverter
         }
 
         [STAThread]
-        public int ImportFromFileImport(object startAutoServerObject, int languageId)
+        public int ImportFromFileImport(object startAutoServerObject, int languageId, string tempFileName)
         {
-            MessageBox.Show("It's not realized yet!");
-            return 1;
+            using (StartAutoServer startAutoServer = new StartAutoServer(startAutoServerObject))
+            {
+                object startDocumentRaw = startAutoServer.LoadStartDocumentRaw(0x4, tempFileName);
+                return ImportFromFileOpen(startDocumentRaw, languageId);
+            }
         }
 
         [STAThread]
