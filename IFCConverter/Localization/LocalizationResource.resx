@@ -76,7 +76,7 @@
         <value>Enter a full path of IFC file to be imported</value>
     </data>
     <data name="ImportWindowForm_ImportType_Label_Text" xml:space="preserve">
-        <value>Import type</value>
+        <value>Import profile</value>
     </data>
     <data name="ImportWindowForm_ImportType_Auto" xml:space="preserve">
         <value>Auto</value>
@@ -94,6 +94,6 @@
         <value>The path to .ifc file cannot be empty</value>
     </data>
     <data name="ImportWindowForm_ImportType_Aveva" xml:space="preserve">
-        <value>Aveva</value>
+        <value>AVEVA</value>
     </data>
 </root>
