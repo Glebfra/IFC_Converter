@@ -117,9 +117,9 @@ namespace IFCConverter.GUI
             this.importTypeLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.importTypeLabel.Location = new System.Drawing.Point(26, 84);
             this.importTypeLabel.Name = "importTypeLabel";
-            this.importTypeLabel.Size = new System.Drawing.Size(63, 13);
+            this.importTypeLabel.Size = new System.Drawing.Size(67, 13);
             this.importTypeLabel.TabIndex = 7;
-            this.importTypeLabel.Text = "Import Type";
+            this.importTypeLabel.Text = "Import profile";
             this.importTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ImportWindowForm

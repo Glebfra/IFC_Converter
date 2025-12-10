@@ -59,20 +59,11 @@
     <data name="ImportWindowForm_ImportButton_Text" xml:space="preserve">
         <value>Import</value>
     </data>
-    <data name="ImportWindowForm_ImportType_Auto" xml:space="preserve">
-        <value>Auto</value>
-    </data>
     <data name="ImportWindowForm_ImportType_Error" xml:space="preserve">
         <value>Unknown import type</value>
     </data>
     <data name="ImportWindowForm_ImportType_Label_Text" xml:space="preserve">
         <value>Import profile</value>
-    </data>
-    <data name="ImportWindowForm_ImportType_Standard" xml:space="preserve">
-        <value>Standard</value>
-    </data>
-    <data name="ImportWindowForm_ImportType_Start" xml:space="preserve">
-        <value>Start</value>
     </data>
     <data name="ImportWindowForm_InputFilePath_Empty_Error" xml:space="preserve">
         <value>The path to .ifc file cannot be empty</value>
