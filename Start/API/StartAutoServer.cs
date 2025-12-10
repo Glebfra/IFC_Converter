@@ -6,6 +6,8 @@ namespace Start.API
 {
     public class StartAutoServer : IDisposable
     {
+        public object AutoServer => _autoServer;
+        
         private const string PROG_ID = "CTAPT.AutoServer";
 
         private readonly object _autoServer;
