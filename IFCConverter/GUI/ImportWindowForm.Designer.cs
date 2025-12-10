@@ -78,9 +78,9 @@ namespace IFCConverter.GUI
             this.inputFilePathLabel.AutoSize = true;
             this.inputFilePathLabel.Location = new System.Drawing.Point(21, 18);
             this.inputFilePathLabel.Name = "inputFilePathLabel";
-            this.inputFilePathLabel.Size = new System.Drawing.Size(187, 13);
+            this.inputFilePathLabel.Size = new System.Drawing.Size(198, 13);
             this.inputFilePathLabel.TabIndex = 4;
-            this.inputFilePathLabel.Text = "Enter a full path of IFC file to be saved";
+            this.inputFilePathLabel.Text = "Enter a full path of IFC file to be imported";
             this.inputFilePathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // importButton
