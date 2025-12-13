@@ -36,6 +36,8 @@ namespace IFCConverter.GUI
             importTypeCombobox.DisplayMember = "TypeName";
             importTypeCombobox.ValueMember = "Type";
             importTypeCombobox.SelectedItem = _importTypes[0];
+
+            inputFilePathTextbox.Text = _dataContainer.InputFilePath;
         }
         
         private void ImportButton_Click(object sender, EventArgs e)

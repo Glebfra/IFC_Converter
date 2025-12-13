@@ -87,12 +87,6 @@ namespace IFCConverter
         [STAThread]
         public int ImportFromFileImport(object startAutoServerObject, int languageId, string startTempFileName)
         {
-            return ImportFromFileOpen(startAutoServerObject, languageId, startTempFileName);
-        }
-
-        [STAThread]
-        public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName="")
-        {
             Logger logger = Logger.GetInstance();
             Localize(languageId);
 
@@ -100,14 +94,34 @@ namespace IFCConverter
             {
                 try
                 {
+                    autoServer.SaveToFile(startTempFileName);
+                    
                     StartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName);
-                    ImportDataContainer importDataContainer = new ImportDataContainer() { InputFilePath = ifcFileName };
+                    ImportDataContainer importDataContainer = new ImportDataContainer();
                     return Import(startDocument, importDataContainer);
                 }
                 catch (Exception e)
                 {
                     return (int)ConversionResult.Fail;
                 }
+            }
+        }
+
+        [STAThread]
+        public int ImportFromFileOpen(object startDocumentObject, int languageId, string startTempFileName, string ifcFileName="")
+        {
+            Logger logger = Logger.GetInstance();
+            Localize(languageId);
+
+            try 
+            {
+                StartDocument startDocument = new StartDocument(startDocumentObject);
+                ImportDataContainer importDataContainer = new ImportDataContainer() { InputFilePath = ifcFileName };
+                return Import(startDocument, importDataContainer);
+            }
+            catch (Exception e)
+            {
+                return (int)ConversionResult.Fail;
             }
         }
 

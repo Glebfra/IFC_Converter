@@ -46,6 +46,12 @@ namespace Start.API
             return document;
         }
 
+        public void SaveToFile(string filepath)
+        {
+            object[] args = new object[] { filepath };
+            _autoServer.GetType().InvokeMember("SaveToFile", BindingFlags.InvokeMethod, null, _autoServer, args);
+        }
+
         public string? GetFullName()
         {
             object? fullName = _autoServer.GetType().InvokeMember(
