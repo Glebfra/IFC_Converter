@@ -139,8 +139,7 @@ namespace IFCConverter
             
             using (ImportWindowForm importWindowForm = new ImportWindowForm(importDataContainer))
             {
-                DialogResult dialogResult = importWindowForm.ShowDialog();
-                return dialogResult;
+                return importWindowForm.ShowDialog();
             }
         }
         

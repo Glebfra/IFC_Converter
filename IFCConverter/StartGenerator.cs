@@ -70,6 +70,11 @@ namespace IFCConverter
                         GenerateSegments(startProject, pipeSegmentEntities);
                         GenerateFittings(startProject, abstractFittingEntities);
                         GenerateAnchors(startProject, abstractAnchorEntities);
+                        
+                        startProject.Document.SetViewOfModel(new int[] { 1, 3 });
+                        startProject.Document.DrawViewAll();
+                        startProject.Document.DrawFitAll();
+                        startProject.DataArray.DeleteElement(0);
                     }
                 }
             }
