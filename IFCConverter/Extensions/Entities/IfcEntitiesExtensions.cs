@@ -21,14 +21,14 @@ namespace IFCConverter.Extensions.Entities
         public static IfcRigidElementEntity CreateRigidElementFromStart(StartRigidElementEntity rigidElement, IfcNodeEntity[] nodeEntities, IfcAbstractSegmentEntity[] segmentEntities)
         {
             XbimMatrix3D objectMatrix3D = StartToIfcPlacement.CreatePipeObjectMatrix(rigidElement, nodeEntities, out double length);
-            
-            double diameter = segmentEntities.Length switch
-            {
-                1 => segmentEntities[0].Diameter,
-                2 => Math.Min(segmentEntities[0].Diameter, segmentEntities[1].Diameter),
-                _ => 0.05
-            };
-            
+
+            double diameter = 0.05;
+            IfcCylindricalShellEntity? cylindricalShellEntity = segmentEntities.OfType<IfcCylindricalShellEntity>().FirstOrDefault();
+            if (cylindricalShellEntity != null)
+                diameter = cylindricalShellEntity.Diameter / 10;
+            else
+                diameter = segmentEntities.Min(segment => segment.Diameter.Value);
+
             string name = rigidElement.Name;
             string type = rigidElement.Type.ToString();
 
