@@ -87,12 +87,17 @@ namespace IFCConverter
         [STAThread]
         public int ImportFromFileImport(object startAutoServerObject, int languageId, string startTempFileName)
         {
+            return ImportFromFileOpen(startAutoServerObject, languageId, startTempFileName);
+        }
+
+        [STAThread]
+        public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName="")
+        {
             try
             {
-                Logger logger = Logger.GetInstance();
                 Localize(languageId);
 
-                ImportDataContainer importDataContainer = new ImportDataContainer();
+                ImportDataContainer importDataContainer = new ImportDataContainer() { InputFilePath = ifcFileName };
                 DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
                 if (dialogResult == DialogResult.Cancel)
                     return (int)ConversionResult.Canceled;
@@ -104,27 +109,6 @@ namespace IFCConverter
                     StartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName);
                     return Import(startDocument, importDataContainer);
                 }
-            }
-            catch
-            {
-                return (int)ConversionResult.Fail;
-            }
-        }
-
-        [STAThread]
-        public int ImportFromFileOpen(object startDocumentObject, int languageId, string startTempFileName, string ifcFileName="")
-        {
-            try
-            {
-                Localize(languageId);
-            
-                ImportDataContainer importDataContainer = new ImportDataContainer() { InputFilePath = ifcFileName };
-                DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
-                if (dialogResult == DialogResult.Cancel)
-                    return (int)ConversionResult.Canceled;
-                
-                StartDocument startDocument = new StartDocument(startDocumentObject);
-                return Import(startDocument, importDataContainer);
             }
             catch
             {
