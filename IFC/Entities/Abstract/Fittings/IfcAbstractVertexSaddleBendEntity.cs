@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using IFC.Entities.Abstract.Segments;
 using IFC.Extensions;
 using IFC.Tools;
 using Xbim.Common;
@@ -22,6 +24,7 @@ namespace IFC.Entities.Abstract.Fittings
         public override IfcProduct CreateAndAdd(IModel model)
         {
             IfcPipeFitting pipeFitting = CreateIfcEntity<IfcPipeFitting>(model);
+            ClipPipes();
             return pipeFitting;
         }
         
@@ -40,15 +43,38 @@ namespace IFC.Entities.Abstract.Fittings
         protected override IEnumerable<IfcRepresentationItem> CreateShape(IModel model)
         {
             List<IfcRepresentationItem> representationItems = new List<IfcRepresentationItem>();
-            IfcAxisSettings axisSettings = new IfcAxisSettings(XbimVector3D.Zero, VectorExtensions.X, VectorExtensions.Y);
+            XbimVector3D displacement = CalculateDisplacement();
+            IfcAxisSettings axisSettings = new IfcAxisSettings(displacement, VectorExtensions.Forward, VectorExtensions.Up);
             representationItems.Add(IfcGeometry.CreateTorus(model, BendRadius, PipeRadius, Angle, NumSegments, axisSettings));
             
-            XbimVector3D branchDisplacement = BendRadius * Math.Tan(Angle / 2) * (VectorExtensions.Forward + VectorExtensions.Right);
             representationItems.Add(IfcGeometry.CreateCylinder(
-                model, BranchPipeRadius, BranchHeight, branchDisplacement, VectorExtensions.Forward.Negated(), VectorExtensions.Right
+                model, BranchPipeRadius, BranchHeight, XbimVector3D.Zero, VectorExtensions.Forward.Negated(), VectorExtensions.Right
             ));
 
             return representationItems;
+        }
+
+        protected new XbimVector3D CalculateDisplacement()
+        {
+            return BendRadius * Math.Tan(Angle / 2) * (VectorExtensions.Forward.Negated() + VectorExtensions.Up.Negated());
+        }
+
+        protected XbimVector3D CalculateBranchDisplacement()
+        {
+            return BendRadius * Math.Tan(Angle / 2) * (VectorExtensions.Forward);
+        }
+
+        protected new void ClipPipes()
+        {
+            IEnumerable<IfcAbstractSegmentEntity> abstractSegmentEntities = ConnectedEntities.OfType<IfcAbstractSegmentEntity>();
+            
+            double clipLength = BendRadius * Math.Tan(Angle / 2);
+            foreach (IfcAbstractSegmentEntity ifcPipeEntity in abstractSegmentEntities)
+            {
+                if (IfcAxis.GetPipeDirectionFromNode(ifcPipeEntity, NodeEntity).IsEqualFixed(VectorExtensions.Forward.Negated()))
+                    continue;
+                ifcPipeEntity.Clip(NodeEntity, clipLength);
+            }
         }
     }
 }
