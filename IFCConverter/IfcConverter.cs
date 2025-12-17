@@ -87,11 +87,34 @@ namespace IFCConverter
         [STAThread]
         public int ImportFromFileImport(object startAutoServerObject, int languageId, string startTempFileName)
         {
-            return ImportFromFileOpen(startAutoServerObject, languageId, startTempFileName);
+            try
+            {
+                Localize(languageId);
+
+                ImportDataContainer importDataContainer = new ImportDataContainer();
+                DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
+                if (dialogResult == DialogResult.Cancel)
+                    return (int)ConversionResult.Canceled;
+                    
+                using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
+                {
+                    autoServer.SaveToFile(startTempFileName);
+                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName))
+                    {
+                        int result = Import(startDocument, importDataContainer);
+
+                        return result;
+                    }
+                }
+            }
+            catch
+            {
+                return (int)ConversionResult.Fail;
+            }
         }
 
         [STAThread]
-        public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName="")
+        public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName)
         {
             try
             {
@@ -104,10 +127,13 @@ namespace IFCConverter
                     
                 using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
                 {
-                    autoServer.SaveToFile(startTempFileName);
-                    
-                    StartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName);
-                    return Import(startDocument, importDataContainer);
+                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x2, null))
+                    {
+                        int result = Import(autoServer, importDataContainer);
+                        autoServer.SaveToFile(startTempFileName);
+
+                        return result;
+                    }
                 }
             }
             catch
@@ -124,6 +150,40 @@ namespace IFCConverter
             using (ImportWindowForm importWindowForm = new ImportWindowForm(importDataContainer))
             {
                 return importWindowForm.ShowDialog();
+            }
+        }
+
+        private int Import(StartAutoServer autoServer, ImportDataContainer importDataContainer)
+        {
+            Logger logger = Logger.GetInstance();
+            
+            try
+            {
+                logger.Info($"Converting start at {DateTime.Now}");
+                StartGenerator startGenerator = new StartGenerator(importDataContainer);
+                startGenerator.Convert(autoServer);
+                logger.Info($"Convert is successfully ended at {DateTime.Now}");
+                
+                #if DEBUG
+                logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                #else
+                if (logger.HasErrors())
+                {
+                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                }
+                else
+                {
+                    logger.Flush();
+                }
+                #endif
+                    
+                return (int)ConversionResult.Success;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.ToString());
+                logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                return (int)ConversionResult.Fail;
             }
         }
         

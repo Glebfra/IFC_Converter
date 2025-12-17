@@ -46,6 +46,17 @@ namespace Start.API
             return document;
         }
 
+        public string GetMaterialJson(int nNorma, string material, StartManufacturingTechnologyEnum manufacturingTechnologyEnum, double thickness, int nElem, double temp)
+        {
+            object[] args = new object[] { nNorma, material, (int)manufacturingTechnologyEnum, thickness, nElem, temp };
+            object? materialJson = _autoServer.GetType().InvokeMember(
+                "GetMaterialJson", BindingFlags.InvokeMethod, null, _autoServer, args
+            );
+            if (materialJson == null)
+                throw new Exception("Cannot find start material");
+            return (string)materialJson;
+        }
+
         public void SaveToFile(string filepath)
         {
             object[] args = new object[] { filepath };
