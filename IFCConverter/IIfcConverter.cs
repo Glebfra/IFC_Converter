@@ -7,7 +7,7 @@ namespace IFCConverter
     {
         int Export(object startDocumentObject, int languageId);
         int ImportFromFileImport(object startAutoServerObject, int languageId, string startTempFileName);
-        int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName="");
+        int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName);
 
         int Test();
     }

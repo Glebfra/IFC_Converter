@@ -38,7 +38,9 @@ namespace IFCConverter
         /// Main function to convert IFC data to START project.
         /// </summary>
         /// <param name="autoServer">StartAutoServer</param>
-        public void Convert(StartAutoServer autoServer)
+        /// <param name="startDocument">StartDocument</param>
+        /// <param name="saveAsStartTempFileName">Start temp file name</param>
+        public void Convert(StartAutoServer autoServer, StartDocument startDocument, string saveAsStartTempFileName)
         {
             Logger logger = Logger.GetInstance();
             logger.Info("IFCtoSTART importer v." + Assembly.GetExecutingAssembly().GetName().Version);
@@ -65,13 +67,13 @@ namespace IFCConverter
                     List<IfcAbstractAnchorEntity> abstractAnchorEntities = importer.CreateAnchors(pipeSegmentEntities).ToList();
                     logger.Info($"Found {abstractAnchorEntities.Count} {nameof(IfcAbstractAnchorEntity)} objects");
 
-                    using (StartProject startProject = StartProject.OpenFromAutoServer(autoServer))
+                    using (StartProject startProject = StartProject.OpenFromAutoServer(autoServer, startDocument))
                     {
                         GenerateSegments(startProject, pipeSegmentEntities);
                         GenerateFittings(startProject, abstractFittingEntities);
                         GenerateAnchors(startProject, abstractAnchorEntities);
                         
-                        startProject.OnImportFinish();
+                        autoServer.SaveToFile(saveAsStartTempFileName);
                     }
                 }
             }

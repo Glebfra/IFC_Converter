@@ -124,15 +124,12 @@ namespace IFCConverter
                 DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
                 if (dialogResult == DialogResult.Cancel)
                     return (int)ConversionResult.Canceled;
-                    
+                
                 using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
                 {
-                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x2, null))
+                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x4, startTempFileName))
                     {
-                        int result = Import(autoServer, importDataContainer);
-                        autoServer.SaveToFile(startTempFileName);
-
-                        return result;
+                        return Import(autoServer, startDocument, importDataContainer, startTempFileName);
                     }
                 }
             }
@@ -153,7 +150,7 @@ namespace IFCConverter
             }
         }
 
-        private int Import(StartAutoServer autoServer, ImportDataContainer importDataContainer)
+        private int Import(StartAutoServer autoServer, StartDocument startDocument, ImportDataContainer importDataContainer, string saveAsStartTempFileName)
         {
             Logger logger = Logger.GetInstance();
             
@@ -161,7 +158,7 @@ namespace IFCConverter
             {
                 logger.Info($"Converting start at {DateTime.Now}");
                 StartGenerator startGenerator = new StartGenerator(importDataContainer);
-                startGenerator.Convert(autoServer);
+                startGenerator.Convert(autoServer, startDocument, saveAsStartTempFileName);
                 logger.Info($"Convert is successfully ended at {DateTime.Now}");
                 
                 #if DEBUG
@@ -176,7 +173,7 @@ namespace IFCConverter
                     logger.Flush();
                 }
                 #endif
-                    
+                
                 return (int)ConversionResult.Success;
             }
             catch (Exception e)

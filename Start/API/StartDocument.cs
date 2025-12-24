@@ -56,7 +56,8 @@ namespace Start.API
 
         public void Dispose()
         {
-            Marshal.ReleaseComObject(_document);
+            if (_document != null)
+                Marshal.ReleaseComObject(_document);
         }
     }
 }

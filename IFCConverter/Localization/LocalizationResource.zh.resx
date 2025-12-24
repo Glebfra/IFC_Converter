@@ -66,18 +66,19 @@
         <value>AVEVA</value>
     </data>
     <data name="ImportWindowForm_ImportType_Label_Text" xml:space="preserve">
-        <value>导入配置文件</value>
+        <value>导入简介</value>
     </data>
     <data name="ImportWindowForm_ImportType_Error" xml:space="preserve">
-        <value>未知导入类型</value>
+        <value>未知的导入类型</value>
     </data>
     <data name="ImportWindowForm_Text" xml:space="preserve">
         <value>输入格式为 IFC</value>
     </data>
     <data name="ImportWindowForm_InputFilePath_Label_Text" xml:space="preserve">
-        <value>请输入要导入的IFC文件的完整路径</value>
+        <value>输入要导入的IFC文件完整路径
+</value>
     </data>
     <data name="ImportWindowForm_ImportButton_Text" xml:space="preserve">
-        <value>输入</value>
+        <value>导入</value>
     </data>
 </root>

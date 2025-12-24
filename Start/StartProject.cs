@@ -26,10 +26,10 @@ namespace Start
             return new StartProject(null, document, baseRootDataArray);
         }
 
-        public static StartProject OpenFromAutoServer(StartAutoServer autoServer)
+        public static StartProject OpenFromAutoServer(StartAutoServer autoServer, StartDocument startDocument)
         {
             StartBaseRootDataArray baseRootDataArray = autoServer.GetDataArrayDispatch();
-            return new StartProject(autoServer, null, baseRootDataArray);
+            return new StartProject(autoServer, startDocument, baseRootDataArray);
         }
 
         public static StartProject OpenProject(string filepath, int mode = 0x4)

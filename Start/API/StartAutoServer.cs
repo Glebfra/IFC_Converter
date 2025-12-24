@@ -15,14 +15,7 @@ namespace Start.API
         public StartAutoServer()
         {
             Type? type = Type.GetTypeFromProgID(PROG_ID);
-            if (type != null)
-            {
-                _autoServer = Activator.CreateInstance(type);
-            }
-            else
-            {
-                throw new Exception($"Cannot find the prog_id: {PROG_ID}");
-            }
+            _autoServer = type != null ? Activator.CreateInstance(type) : throw new Exception($"Cannot find the prog_id: {PROG_ID}");
         }
         
         public StartAutoServer(object autoServer)
@@ -41,8 +34,6 @@ namespace Start.API
             object? document = _autoServer.GetType().InvokeMember(
                 "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, _autoServer, new object[] { mode, filepath, 0 }
             );
-            if (document == null)
-                throw new Exception("Failed to load Start document.");
             return document;
         }
 
