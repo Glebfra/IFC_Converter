@@ -111,11 +111,11 @@ namespace IFCConverter.Extensions.Tools
                 throw new NullReferenceException("Cannot find branch pipes");
 
             XbimVector3D coordinates = nodeEntity.ObjectMatrix3D.Translation;
-            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(branchPipes[1], coordinates).Normalized();
-            XbimVector3D right = IfcAxis.GetPipeDirectionFromNode(headPipe, coordinates).Normalized();
-            XbimVector3D up = XbimVector3D.CrossProduct(forward, right);
+            XbimVector3D forward = IfcAxis.GetPipeDirectionFromNode(branchPipes[0], coordinates).Negated().Normalized();
+            XbimVector3D up = IfcAxis.GetPipeDirectionFromNode(headPipe, coordinates);
+            XbimVector3D right = XbimVector3D.CrossProduct(up, forward);
 
-            angle = forward.Angle(right);
+            angle = forward.Angle(up);
             
             return XbimMatrix3D.CreateWorld(coordinates, forward, up);
         }

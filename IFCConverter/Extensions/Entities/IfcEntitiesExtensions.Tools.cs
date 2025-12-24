@@ -16,6 +16,14 @@ namespace IFCConverter.Extensions.Entities
                 .Select(item => item.Segment);
         }
         
+        public static IEnumerable<IfcAbstractSegmentEntity> GetNearestSegments(this IEnumerable<IfcAbstractSegmentEntity> abstractSegmentEntities, XbimVector3D point, double maxDistance)
+        {
+            return abstractSegmentEntities
+                .Select(segment => new { Segment = segment, NearestNode = segment.NodeEntities.GetNearestNode(point) })
+                .Where(entity => entity.NearestNode.Object.GetDistanceToPoint(point) <= maxDistance)
+                .Select(item => item.Segment);
+        }
+
         public static bool IsContainPoint(this IfcAbstractSegmentEntity abstractSegmentEntity, XbimVector3D point, double precision = 1e-3)
         {
             return abstractSegmentEntity.NodeEntities.Any(nodeEntity => nodeEntity.GetDistanceToPoint(point) < precision);

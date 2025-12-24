@@ -186,16 +186,7 @@ namespace IFCConverter.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto.
-        /// </summary>
-        internal static string ImportWindowForm_ImportType_Auto {
-            get {
-                return ResourceManager.GetString("ImportWindowForm_ImportType_Auto", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Aveva.
+        ///   Looks up a localized string similar to AVEVA.
         /// </summary>
         internal static string ImportWindowForm_ImportType_Aveva {
             get {
@@ -213,29 +204,11 @@ namespace IFCConverter.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import type.
+        ///   Looks up a localized string similar to Import profile.
         /// </summary>
         internal static string ImportWindowForm_ImportType_Label_Text {
             get {
                 return ResourceManager.GetString("ImportWindowForm_ImportType_Label_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Standard.
-        /// </summary>
-        internal static string ImportWindowForm_ImportType_Standard {
-            get {
-                return ResourceManager.GetString("ImportWindowForm_ImportType_Standard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Start.
-        /// </summary>
-        internal static string ImportWindowForm_ImportType_Start {
-            get {
-                return ResourceManager.GetString("ImportWindowForm_ImportType_Start", resourceCulture);
             }
         }
         
