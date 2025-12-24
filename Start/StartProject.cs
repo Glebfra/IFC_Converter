@@ -10,10 +10,10 @@ namespace Start
     public class StartProject : IDisposable
     {
         private readonly StartAutoServer? _autoServer;
-        private readonly StartDocument _document;
+        private readonly StartDocument? _document;
         private readonly StartBaseRootDataArray _dataArray;
 
-        public StartProject(StartAutoServer? autoServer, StartDocument document, StartBaseRootDataArray dataArray)
+        public StartProject(StartAutoServer? autoServer, StartDocument? document, StartBaseRootDataArray dataArray)
         {
             _autoServer = autoServer;
             _document = document;
@@ -26,6 +26,12 @@ namespace Start
             return new StartProject(null, document, baseRootDataArray);
         }
 
+        public static StartProject OpenFromAutoServer(StartAutoServer autoServer, StartDocument startDocument)
+        {
+            StartBaseRootDataArray baseRootDataArray = autoServer.GetDataArrayDispatch();
+            return new StartProject(autoServer, startDocument, baseRootDataArray);
+        }
+
         public static StartProject OpenProject(string filepath, int mode = 0x4)
         {
             StartAutoServer autoServer = new StartAutoServer();
@@ -33,6 +39,14 @@ namespace Start
             StartBaseRootDataArray baseRootDataArray = document.GetDataArrayDispatch();
 
             return new StartProject(autoServer, document, baseRootDataArray);
+        }
+
+        public void OnImportFinish()
+        {
+            _document?.SetViewOfModel(new int[] { 1, 3 });
+            _document?.DrawViewAll();
+            _document?.DrawFitAll();
+            _dataArray.DeleteElement(0);
         }
 
         public StartBaseRoot[] GetConnEntities(StartBaseRoot entity, StartElementType type)
@@ -121,7 +135,7 @@ namespace Start
         public void Dispose()
         {
             _dataArray.Dispose();
-            _document.Dispose();
+            _document?.Dispose();
             _autoServer?.Dispose();
         }
     }

@@ -6,8 +6,8 @@ namespace IFCConverter
     public interface IIfcConverter
     {
         int Export(object startDocumentObject, int languageId);
-        int ImportFromFileImport(object startAutoServerObject, int languageId, string tempFileName);
-        int ImportFromFileOpen(object startDocumentObject, int languageId);
+        int ImportFromFileImport(object startAutoServerObject, int languageId, string startTempFileName);
+        int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName);
 
         int Test();
     }

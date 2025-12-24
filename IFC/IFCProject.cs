@@ -42,13 +42,12 @@ namespace IFC
         
         public static IFCProject CreateProject(string name)
         {
-            // TODO update application version
             XbimEditorCredentials editor = new()
             {
                 ApplicationFullName = "PASS/Start-Prof",
-                ApplicationVersion = $"04.87 R2 (STARTtoIFC: {Assembly.GetExecutingAssembly().GetName().Version.ToString()})",
+                ApplicationVersion = $"04.88 (STARTtoIFC: {Assembly.GetExecutingAssembly().GetName().Version.ToString()})",
             };
-        
+
             IfcStore model = IfcStore.Create(editor, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
             model.Header.FileDescription.Description.Add("ViewDefinition [DesignTransferView]");
             model.Header.FileDescription.Description.Add("Version 2.0");

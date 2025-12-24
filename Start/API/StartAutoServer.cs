@@ -6,6 +6,8 @@ namespace Start.API
 {
     public class StartAutoServer : IDisposable
     {
+        public object AutoServer => _autoServer;
+        
         private const string PROG_ID = "CTAPT.AutoServer";
 
         private readonly object _autoServer;
@@ -13,14 +15,7 @@ namespace Start.API
         public StartAutoServer()
         {
             Type? type = Type.GetTypeFromProgID(PROG_ID);
-            if (type != null)
-            {
-                _autoServer = Activator.CreateInstance(type);
-            }
-            else
-            {
-                throw new Exception($"Cannot find the prog_id: {PROG_ID}");
-            }
+            _autoServer = type != null ? Activator.CreateInstance(type) : throw new Exception($"Cannot find the prog_id: {PROG_ID}");
         }
         
         public StartAutoServer(object autoServer)
@@ -39,9 +34,24 @@ namespace Start.API
             object? document = _autoServer.GetType().InvokeMember(
                 "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, _autoServer, new object[] { mode, filepath, 0 }
             );
-            if (document == null)
-                throw new Exception("Failed to load Start document.");
             return document;
+        }
+
+        public string GetMaterialJson(int nNorma, string material, StartManufacturingTechnologyEnum manufacturingTechnologyEnum, double thickness, int nElem, double temp)
+        {
+            object[] args = new object[] { nNorma, material, (int)manufacturingTechnologyEnum, thickness, nElem, temp };
+            object? materialJson = _autoServer.GetType().InvokeMember(
+                "GetMaterialJson", BindingFlags.InvokeMethod, null, _autoServer, args
+            );
+            if (materialJson == null)
+                throw new Exception("Cannot find start material");
+            return (string)materialJson;
+        }
+
+        public void SaveToFile(string filepath)
+        {
+            object[] args = new object[] { filepath };
+            _autoServer.GetType().InvokeMember("SaveToFile", BindingFlags.InvokeMethod, null, _autoServer, args);
         }
 
         public string? GetFullName()

@@ -58,6 +58,12 @@ namespace Start.API
             return args[2];
         }
 
+        public void DeleteElement(int id)
+        {
+            object[] args = new object[] { id };
+            _startBaseRootDataArray.GetType().InvokeMember("DeleteElement", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args);
+        }
+
         public void SetDataBlockJson(int mode, string json)
         {
             object[] args = new object[] { mode, json };

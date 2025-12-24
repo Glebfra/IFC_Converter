@@ -37,6 +37,55 @@ namespace IFCConverter
         /// <summary>
         /// Main function to convert IFC data to START project.
         /// </summary>
+        /// <param name="autoServer">StartAutoServer</param>
+        /// <param name="startDocument">StartDocument</param>
+        /// <param name="saveAsStartTempFileName">Start temp file name</param>
+        public void Convert(StartAutoServer autoServer, StartDocument startDocument, string saveAsStartTempFileName)
+        {
+            Logger logger = Logger.GetInstance();
+            logger.Info("IFCtoSTART importer v." + Assembly.GetExecutingAssembly().GetName().Version);
+
+            try
+            {
+                using (IFCProject ifcProject = IFCProject.OpenProject(_dataContainer.InputFilePath))
+                {
+                    logger.Info($"Opened IFC file: {_dataContainer.InputFilePath}");
+                    logger.Info($"IFC schema: {ifcProject.Model.SchemaVersion}");
+                    
+                    IImporter importer = ImporterFactory.CreateImporter(ifcProject, _dataContainer.ImportTypeEnum);
+                    logger.Info($"Using importer: {importer.GetType().Name}");
+
+                    logger.Info($"Searching {nameof(IfcAbstractSegmentEntity)} objects");
+                    List<IfcPipeSegmentEntity> pipeSegmentEntities = importer.CreateSegments().ToList();
+                    logger.Info($"Found {pipeSegmentEntities.Count} {nameof(IfcAbstractSegmentEntity)} objects");
+
+                    logger.Info($"Searching {nameof(IfcAbstractFittingEntity)} objects");
+                    List<IfcAbstractFittingEntity> abstractFittingEntities = importer.CreateFittings(pipeSegmentEntities).ToList();
+                    logger.Info($"Found {abstractFittingEntities.Count} {nameof(IfcAbstractFittingEntity)} objects");
+                    
+                    logger.Info($"Searching {nameof(IfcAbstractAnchorEntity)} objects");
+                    List<IfcAbstractAnchorEntity> abstractAnchorEntities = importer.CreateAnchors(pipeSegmentEntities).ToList();
+                    logger.Info($"Found {abstractAnchorEntities.Count} {nameof(IfcAbstractAnchorEntity)} objects");
+
+                    using (StartProject startProject = StartProject.OpenFromAutoServer(autoServer, startDocument))
+                    {
+                        GenerateSegments(startProject, pipeSegmentEntities);
+                        GenerateFittings(startProject, abstractFittingEntities);
+                        GenerateAnchors(startProject, abstractAnchorEntities);
+                        
+                        autoServer.SaveToFile(saveAsStartTempFileName);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Main function to convert IFC data to START project.
+        /// </summary>
         /// <param name="startDocument">StartDocument</param>
         public void Convert(StartDocument startDocument)
         {
@@ -70,6 +119,8 @@ namespace IFCConverter
                         GenerateSegments(startProject, pipeSegmentEntities);
                         GenerateFittings(startProject, abstractFittingEntities);
                         GenerateAnchors(startProject, abstractAnchorEntities);
+                        
+                        startProject.OnImportFinish();
                     }
                 }
             }

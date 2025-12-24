@@ -11,21 +11,35 @@ namespace Converter
         public static void Main(string[] args)
         {
             ConvertArguments convertArguments = GetConvertArguments(args);
-            
-            using StartAutoServer autoServer = new StartAutoServer();
-            object? startDocument = autoServer.LoadStartDocumentRaw(0x4, convertArguments.CtpFilePath!);
-            if (startDocument == null) throw new NullReferenceException("Object ref is null");
-            
-            IfcConverter converter = new IfcConverter();
-            int result = convertArguments.ConvertType switch
-            {
-                ConvertTypeEnum.STARTtoIFC => converter.Export(startDocument, 1049),
-                ConvertTypeEnum.IFCtoSTART => converter.ImportFromFileOpen(startDocument, 1049),
-                _ => throw new ArgumentException("Convert type is not set. Use -T 'export' or 'import'")
-            };
 
-            // ReSharper disable once LocalizableElement
-            Console.WriteLine($"Output code: {result}");
+            string ctpFilePath = convertArguments.CtpFilePath ?? string.Empty;
+            string ifcFilePath = convertArguments.IfcFilePath ?? string.Empty;
+
+            using (StartAutoServer autoServer = new StartAutoServer())
+            {
+                IfcConverter converter = new IfcConverter();
+
+                int result = default;
+                switch (convertArguments.ConvertType)
+                {
+                    case ConvertTypeEnum.STARTtoIFC:
+                    {
+                        object? startDocument = autoServer.LoadStartDocumentRaw(0x4, convertArguments.CtpFilePath!);
+                        if (startDocument == null) 
+                            throw new NullReferenceException("Object ref is null");
+                        result = converter.Export(startDocument, 1049);
+                        break;
+                    }
+                    case ConvertTypeEnum.IFCtoSTART:
+                        result = converter.ImportFromFileOpen(autoServer.AutoServer, 1049, ctpFilePath, ifcFilePath);
+                        break;
+                    default:
+                        throw new ArgumentException("Convert type is not set. Use -T 'export' or 'import'");
+                }
+
+                // ReSharper disable once LocalizableElement
+                Console.WriteLine($"Output code: {result}");
+            }
         }
 
         private static ConvertArguments GetConvertArguments(string[] args)

@@ -71,85 +71,149 @@ namespace IFCConverter
                     
                     return (int)ConversionResult.Success;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    logger.Error(e.ToString());
+                    logger.Error(ex.ToString());
                     logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
                     return (int)ConversionResult.Fail;
                 }
             } 
-            catch (Exception)
+            catch (Exception ex)
             {
                 return (int)ConversionResult.Fail;
             }
         }
 
         [STAThread]
-        public int ImportFromFileImport(object startAutoServerObject, int languageId, string tempFileName)
+        public int ImportFromFileImport(object startAutoServerObject, int languageId, string startTempFileName)
         {
-            using (StartAutoServer startAutoServer = new StartAutoServer(startAutoServerObject))
+            try
             {
-                object startDocumentRaw = startAutoServer.LoadStartDocumentRaw(0x4, tempFileName);
-                return ImportFromFileOpen(startDocumentRaw, languageId);
+                Localize(languageId);
+
+                ImportDataContainer importDataContainer = new ImportDataContainer();
+                DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
+                if (dialogResult == DialogResult.Cancel)
+                    return (int)ConversionResult.Canceled;
+                    
+                using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
+                {
+                    autoServer.SaveToFile(startTempFileName);
+                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName))
+                    {
+                        int result = Import(startDocument, importDataContainer);
+
+                        return result;
+                    }
+                }
+            }
+            catch
+            {
+                return (int)ConversionResult.Fail;
             }
         }
 
         [STAThread]
-        public int ImportFromFileOpen(object startDocumentObject, int languageId)
+        public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName)
         {
             try
             {
-                Application.EnableVisualStyles();
-                Logger logger = Logger.GetInstance();
-                
                 Localize(languageId);
-                
-                StartDocument startDocument = new StartDocument(startDocumentObject);
-                ImportDataContainer importDataContainer = new ImportDataContainer();
 
-                DialogResult dialogResult;
-                using (ImportWindowForm importWindowForm = new ImportWindowForm(importDataContainer))
-                {
-                    dialogResult = importWindowForm.ShowDialog();
-                }
-                
+                ImportDataContainer importDataContainer = new ImportDataContainer() { InputFilePath = ifcFileName };
+                DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
                 if (dialogResult == DialogResult.Cancel)
-                {
                     return (int)ConversionResult.Canceled;
+                
+                using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
+                {
+                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x4, startTempFileName))
+                    {
+                        return Import(autoServer, startDocument, importDataContainer, startTempFileName);
+                    }
                 }
+            }
+            catch
+            {
+                return (int)ConversionResult.Fail;
+            }
+        }
 
-                try
+        [STAThread]
+        private DialogResult ShowImportWindow(ref ImportDataContainer importDataContainer)
+        {
+            Application.EnableVisualStyles();
+            
+            using (ImportWindowForm importWindowForm = new ImportWindowForm(importDataContainer))
+            {
+                return importWindowForm.ShowDialog();
+            }
+        }
+
+        private int Import(StartAutoServer autoServer, StartDocument startDocument, ImportDataContainer importDataContainer, string saveAsStartTempFileName)
+        {
+            Logger logger = Logger.GetInstance();
+            
+            try
+            {
+                logger.Info($"Converting start at {DateTime.Now}");
+                StartGenerator startGenerator = new StartGenerator(importDataContainer);
+                startGenerator.Convert(autoServer, startDocument, saveAsStartTempFileName);
+                logger.Info($"Convert is successfully ended at {DateTime.Now}");
+                
+                #if DEBUG
+                logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                #else
+                if (logger.HasErrors())
                 {
-                    logger.Info($"Converting start at {DateTime.Now}");
-                    StartGenerator startGenerator = new StartGenerator(importDataContainer);
-                    startGenerator.Convert(startDocument);
-                    logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                    
-                    #if DEBUG
                     logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                    #else
-                    if (logger.HasErrors())
-                    {
-                        logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                    }
-                    else
-                    {
-                        logger.Flush();
-                    }
-                    #endif
-                    
-                    return (int)ConversionResult.Success;
                 }
-                catch (Exception e)
+                else
                 {
-                    logger.Error(e.ToString());
-                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                    return (int)ConversionResult.Fail;
+                    logger.Flush();
                 }
+                #endif
+                
+                return (int)ConversionResult.Success;
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+                logger.Error(e.ToString());
+                logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                return (int)ConversionResult.Fail;
+            }
+        }
+        
+        private int Import(StartDocument startDocument, ImportDataContainer importDataContainer)
+        {
+            Logger logger = Logger.GetInstance();
+            
+            try
+            {
+                logger.Info($"Converting start at {DateTime.Now}");
+                StartGenerator startGenerator = new StartGenerator(importDataContainer);
+                startGenerator.Convert(startDocument);
+                logger.Info($"Convert is successfully ended at {DateTime.Now}");
+                
+                #if DEBUG
+                logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                #else
+                if (logger.HasErrors())
+                {
+                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                }
+                else
+                {
+                    logger.Flush();
+                }
+                #endif
+                    
+                return (int)ConversionResult.Success;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.ToString());
+                logger.SaveAs(importDataContainer.InputFilePath + ".log");
                 return (int)ConversionResult.Fail;
             }
         }

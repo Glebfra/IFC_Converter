@@ -78,9 +78,9 @@ namespace IFCConverter.GUI
             this.inputFilePathLabel.AutoSize = true;
             this.inputFilePathLabel.Location = new System.Drawing.Point(21, 18);
             this.inputFilePathLabel.Name = "inputFilePathLabel";
-            this.inputFilePathLabel.Size = new System.Drawing.Size(187, 13);
+            this.inputFilePathLabel.Size = new System.Drawing.Size(198, 13);
             this.inputFilePathLabel.TabIndex = 4;
-            this.inputFilePathLabel.Text = "Enter a full path of IFC file to be saved";
+            this.inputFilePathLabel.Text = "Enter a full path of IFC file to be imported";
             this.inputFilePathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // importButton
@@ -117,9 +117,9 @@ namespace IFCConverter.GUI
             this.importTypeLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.importTypeLabel.Location = new System.Drawing.Point(26, 84);
             this.importTypeLabel.Name = "importTypeLabel";
-            this.importTypeLabel.Size = new System.Drawing.Size(63, 13);
+            this.importTypeLabel.Size = new System.Drawing.Size(67, 13);
             this.importTypeLabel.TabIndex = 7;
-            this.importTypeLabel.Text = "Import Type";
+            this.importTypeLabel.Text = "Import profile";
             this.importTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ImportWindowForm
