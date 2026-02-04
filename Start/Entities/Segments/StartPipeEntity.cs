@@ -29,8 +29,9 @@ namespace Start.Entities.Segments
         [JsonProperty(StartPropertyName.ProductWeight)]
         [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
         public MassUnitProperty ProductUnitWeight { get; set; } = MassUnitProperty.Zero;
-    
+
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartManufacturingTechnologyEnum>))]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
 
         [JsonProperty(StartPropertyName.LongitudinalWeldJointFactor)]

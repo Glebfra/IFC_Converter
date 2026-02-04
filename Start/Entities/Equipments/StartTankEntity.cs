@@ -31,7 +31,8 @@ namespace Start.Entities.Equipments
         public TemperatureProperty Temperature { get; set; } = TemperatureProperty.Zero;
         
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
-        public StartManufacturingTechnologyEnum ManufacturingTechnology { get; set; }
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartManufacturingTechnologyEnum>))]
+        public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
 
         [JsonProperty(StartPropertyName.Name)] 
         public string Name { get; set; } = string.Empty;
