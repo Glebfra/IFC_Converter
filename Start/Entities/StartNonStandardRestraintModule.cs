@@ -7,9 +7,11 @@ namespace Start.Entities
     public class StartNonStandardRestraintModule : IStartExpansionModule
     {
         [JsonProperty(StartPropertyName.RestraintType)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartRestraintTypeEnum>))]
         public StartRestraintTypeEnum Type { get; set; }
 
         [JsonProperty(StartPropertyName.RestraintAxesType)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartRestraintAxesTypeEnum>))]
         public StartRestraintAxesTypeEnum Local { get; set; }
         
         [JsonProperty(StartPropertyName.SectionStartNode)]

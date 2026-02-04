@@ -11,6 +11,7 @@ namespace Start.Entities.Equipments
         public LengthProperty Length { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.PermissibleLoads)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartPermissibleLoadsEnum>))]
         public StartPermissibleLoadsEnum PermissibleLoads { get; set; }
         
         [JsonProperty(StartPropertyName.VesselFrad)]

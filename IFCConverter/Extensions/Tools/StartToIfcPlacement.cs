@@ -135,7 +135,7 @@ namespace IFCConverter.Extensions.Tools
             {
                 angle = forward.Angle(directionToPipes[2]);
             }
-            if (angle != 0)
+            if (Math.Abs(angle) > 1e-10)
             {
                 up = XbimVector3D.CrossProduct(forward, directionToPipes[1]).Normalized();
             }
