@@ -130,6 +130,7 @@
     <Compile Include="StartProperties\NumberProperty.cs" />
     <Compile Include="StartProperties\PressureProperty.cs" />
     <Compile Include="StartProperties\StartAbstractProperty.cs" />
+    <Compile Include="StartProperties\StartEnumPropertyJsonConverter.cs" />
     <Compile Include="StartProperties\StartIgnoreAttribute.cs" />
     <Compile Include="StartProperties\StartPropertyJsonConverter.cs" />
     <Compile Include="StartProperties\TemperatureProperty.cs" />

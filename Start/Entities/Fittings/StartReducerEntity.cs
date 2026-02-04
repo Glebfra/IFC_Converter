@@ -28,6 +28,7 @@ namespace Start.Entities.Fittings
         public LengthProperty MillToleranceAtDMax { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartManufacturingTechnologyEnum>))]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
 
         [JsonProperty(StartPropertyName.AngleBetweenEccentricityVectorAndZmAxis)]

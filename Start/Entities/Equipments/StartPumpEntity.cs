@@ -14,6 +14,7 @@ namespace Start.Entities.Equipments
         public string MaterialName { get; set; } = string.Empty;
         
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartManufacturingTechnologyEnum>))]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
         
         [JsonProperty(StartPropertyName.ProjectionAlongOXAxis)]

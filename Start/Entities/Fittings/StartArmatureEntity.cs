@@ -16,6 +16,7 @@ namespace Start.Entities.Fittings
         public LengthProperty Length { get; set; } = LengthProperty.Zero;
     
         [JsonProperty(StartPropertyName.LeakageCheck)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartLeakageCheckEnum>))]
         public StartLeakageCheckEnum LeakageCheckEnum { get; set; }
 
         [JsonProperty(StartPropertyName.GasketEffectiveDiameter)]

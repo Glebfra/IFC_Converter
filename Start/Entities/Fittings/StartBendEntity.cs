@@ -23,6 +23,7 @@ namespace Start.Entities.Fittings
         public LengthProperty MillTolerance { get; set; } = LengthProperty.Zero;
 
         [JsonProperty(StartPropertyName.ManufacturingTechnology)]
+        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartManufacturingTechnologyEnum>))]
         public StartManufacturingTechnologyEnum ManufacturingTechnologyEnum { get; set; }
 
         [JsonProperty(StartPropertyName.Radius)]
