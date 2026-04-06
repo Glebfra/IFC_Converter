@@ -21,10 +21,10 @@
         <value>Export</value>
     </data>
     <data name="ExportWindowForm_Text" xml:space="preserve">
-        <value>Export to IFC</value>
+        <value>Export to Ifc</value>
     </data>
     <data name="ExportWindowForm_OutputFilePath_Label_Text" xml:space="preserve">
-        <value>Enter a full path of IFC file to be saved</value>
+        <value>Enter a full path of Ifc file to be saved</value>
     </data>
     <data name="DirectoryDoesNotExists_Error" xml:space="preserve">
         <value>Selected directory does not exist</value>
@@ -69,13 +69,13 @@
         <value>The path to .ifc file cannot be empty</value>
     </data>
     <data name="ImportWindowForm_InputFilePath_Label_Text" xml:space="preserve">
-        <value>Enter a full path of IFC file to be imported</value>
+        <value>Enter a full path of Ifc file to be imported</value>
     </data>
     <data name="ImportWindowForm_selectInputFilePathButton_Text" xml:space="preserve">
         <value>Browse...</value>
     </data>
     <data name="ImportWindowForm_Text" xml:space="preserve">
-        <value>Import from IFC</value>
+        <value>Import from Ifc</value>
     </data>
     <data name="ImportWindowForm_ImportType_Aveva" xml:space="preserve">
         <value>AVEVA</value>

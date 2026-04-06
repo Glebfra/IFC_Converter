@@ -145,9 +145,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IFC\IFC.csproj">
+    <ProjectReference Include="..\Ifc\Ifc.csproj">
       <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
-      <Name>IFC</Name>
+      <Name>Ifc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Start\Start.csproj">
       <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>

@@ -94,7 +94,7 @@ namespace IFCConverter.GUI
             this.outputFilePathLabel.Name = "outputFilePathLabel";
             this.outputFilePathLabel.Size = new System.Drawing.Size(187, 13);
             this.outputFilePathLabel.TabIndex = 3;
-            this.outputFilePathLabel.Text = "Enter a full path of IFC file to be saved";
+            this.outputFilePathLabel.Text = "Enter a full path of Ifc file to be saved";
             this.outputFilePathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // exportTypePanel
@@ -177,7 +177,7 @@ namespace IFCConverter.GUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ExportWindowForm";
-            this.Text = "Export to IFC";
+            this.Text = "Export to Ifc";
             this.outputFilePathPanel.ResumeLayout(false);
             this.outputFilePathPanel.PerformLayout();
             this.exportTypePanel.ResumeLayout(false);

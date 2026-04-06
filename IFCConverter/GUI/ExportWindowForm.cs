@@ -113,7 +113,7 @@ namespace IFCConverter.GUI
             {
                 //saveFileDialog.FileName = Имя файла старт;
                 saveFileDialog.Title = LocalizationResource.ExportWindowForm_SaveDialogFile_Title;
-                saveFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
+                saveFileDialog.Filter = @"Ifc files (*.ifc)|*.ifc";
                 saveFileDialog.DefaultExt = ".ifc";
                 saveFileDialog.RestoreDirectory = true;
 

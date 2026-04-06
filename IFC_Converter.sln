@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Start", "Start\Start.csproj", "{856BFB4A-A305-446C-A540-1962BB035D5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFC", "IFC\IFC.csproj", "{C509E8A8-34E8-407D-B022-377288F59C5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ifc", "Ifc\Ifc.csproj", "{C509E8A8-34E8-407D-B022-377288F59C5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter", "Converter\Converter.csproj", "{9529D2E2-B093-445F-916E-7091F3FC2017}"
 EndProject
