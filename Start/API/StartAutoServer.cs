@@ -11,7 +11,7 @@ namespace Start.API
     public class StartAutoServer : IStartAutoServer, IDisposable
     {
         private const string PROG_ID = "CTAPT.AutoServer";
-        private readonly object _autoServer;
+        public readonly object AutoServer;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="StartAutoServer" /> class by creating the AutoServer COM object.
@@ -20,7 +20,7 @@ namespace Start.API
         public StartAutoServer()
         {
             Type? type = Type.GetTypeFromProgID(PROG_ID);
-            _autoServer = type != null
+            AutoServer = type != null
                 ? Activator.CreateInstance(type)
                 : throw new Exception($"Cannot find the prog_id: {PROG_ID}");
         }
@@ -32,7 +32,7 @@ namespace Start.API
         /// <exception cref="ArgumentNullException">Thrown when the provided AutoServer object is null.</exception>
         public StartAutoServer(object autoServer)
         {
-            _autoServer = autoServer ?? throw new ArgumentNullException(nameof(autoServer));
+            AutoServer = autoServer ?? throw new ArgumentNullException(nameof(autoServer));
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace Start.API
         /// <returns>The raw document object.</returns>
         public object LoadStartDocumentRaw(int mode, string filepath)
         {
-            object? document = _autoServer.GetType().InvokeMember(
-                "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, _autoServer, new object[] { mode, filepath, 0 }
+            object? document = AutoServer.GetType().InvokeMember(
+                "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, AutoServer, new object[] { mode, filepath, 0 }
             );
             return document;
         }
@@ -76,8 +76,8 @@ namespace Start.API
             StartManufacturingTechnologyEnum manufacturingTechnologyEnum, double thickness, int nElem, double temp)
         {
             object[] args = { nNorma, material, (int)manufacturingTechnologyEnum, thickness, nElem, temp };
-            object? materialJson = _autoServer.GetType().InvokeMember(
-                "GetMaterialJson", BindingFlags.InvokeMethod, null, _autoServer, args
+            object? materialJson = AutoServer.GetType().InvokeMember(
+                "GetMaterialJson", BindingFlags.InvokeMethod, null, AutoServer, args
             );
             if (materialJson == null)
                 throw new Exception("Cannot find start material");
@@ -91,7 +91,7 @@ namespace Start.API
         public void SaveToFile(string filepath)
         {
             object[] args = { filepath };
-            _autoServer.GetType().InvokeMember("SaveToFile", BindingFlags.InvokeMethod, null, _autoServer, args);
+            AutoServer.GetType().InvokeMember("SaveToFile", BindingFlags.InvokeMethod, null, AutoServer, args);
         }
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace Start.API
         /// <returns>The full name of the AutoServer, or null if not available.</returns>
         public string? GetFullName()
         {
-            object? fullName = _autoServer.GetType().InvokeMember(
-                "FullName", BindingFlags.InvokeMethod, null, _autoServer, null
+            object? fullName = AutoServer.GetType().InvokeMember(
+                "FullName", BindingFlags.InvokeMethod, null, AutoServer, null
             );
             return (string?)fullName;
         }
@@ -112,8 +112,8 @@ namespace Start.API
         /// <returns>A <see cref="StartBaseRootDataArray" /> representing the data array dispatch.</returns>
         public IStartBaseRootDataArray GetDataArrayDispatch()
         {
-            object? dataArray = _autoServer.GetType().InvokeMember(
-                "GetDataArrayDispatch", BindingFlags.InvokeMethod, null, _autoServer, null
+            object? dataArray = AutoServer.GetType().InvokeMember(
+                "GetDataArrayDispatch", BindingFlags.InvokeMethod, null, AutoServer, null
             );
             return new StartBaseRootDataArray(dataArray);
         }
@@ -123,7 +123,7 @@ namespace Start.API
         /// </summary>
         public void Dispose()
         {
-            Marshal.ReleaseComObject(_autoServer);
+            Marshal.ReleaseComObject(AutoServer);
         }
     }
 }
