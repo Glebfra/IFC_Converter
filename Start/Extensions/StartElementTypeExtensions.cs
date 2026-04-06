@@ -4,13 +4,13 @@ namespace Start.Extensions
 {
     public static class StartElementTypeExtensions
     {
-        public static StartElementType[] TwoNodeElementTypes = 
+        public static StartElementTypeEnum[] TwoNodeElementTypes =
         {
-            StartElementType.PIPE_ELEMENT,
-            StartElementType.RIGID_ELEMENT,
-            StartElementType.CYLINDRICAL_SHELL,
-            StartElementType.FLEXIBLE_ELEMENT,
-            StartElementType.CONE_ELEMENT
+            StartElementTypeEnum.PIPE_ELEMENT,
+            StartElementTypeEnum.RIGID_ELEMENT,
+            StartElementTypeEnum.CYLINDRICAL_SHELL,
+            StartElementTypeEnum.FLEXIBLE_ELEMENT,
+            StartElementTypeEnum.CONE_ELEMENT
         };
     }
 }

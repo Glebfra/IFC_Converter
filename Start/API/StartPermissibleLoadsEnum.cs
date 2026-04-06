@@ -1,5 +1,8 @@
 ﻿namespace Start.API
 {
+    /// <summary>
+    ///     Represents the enumeration for permissible load checking options in the Start system.
+    /// </summary>
     public enum StartPermissibleLoadsEnum
     {
         DO_NOT_CHECK = 0,

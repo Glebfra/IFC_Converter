@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Start.API;
+using Start.Converters;
+using Start.Interfaces;
 using Start.StartProperties;
 
 namespace Start.Entities
@@ -7,49 +9,45 @@ namespace Start.Entities
     public class StartNonStandardRestraintModule : IStartExpansionModule
     {
         [JsonProperty(StartPropertyName.RestraintType)]
-        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartRestraintTypeEnum>))]
-        public StartRestraintTypeEnum Type { get; set; }
+        [JsonConverter(typeof(JsonStartConverter<EnumProperty<StartRestraintTypeEnum>>))]
+        public IStartEnumProperty<StartRestraintTypeEnum> Type { get; set; } =
+            new EnumProperty<StartRestraintTypeEnum>();
 
         [JsonProperty(StartPropertyName.RestraintAxesType)]
-        [JsonConverter(typeof(StartEnumPropertyJsonConverter<StartRestraintAxesTypeEnum>))]
-        public StartRestraintAxesTypeEnum Local { get; set; }
-        
-        [JsonProperty(StartPropertyName.SectionStartNode)]
-        public int SectionStartNode { get; set; }
-        
-        [JsonProperty(StartPropertyName.SectionEndNode)]
-        public int SectionEndNode { get; set; }
-        
+        [JsonConverter(typeof(JsonStartConverter<EnumProperty<StartRestraintAxesTypeEnum>>))]
+        public IStartEnumProperty<StartRestraintAxesTypeEnum> Local { get; set; } =
+            new EnumProperty<StartRestraintAxesTypeEnum>();
+
         [JsonProperty(StartPropertyName.RestraintAngleX)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<AngleProperty, double>))]
-        public AngleProperty AngleX { get; set; } = AngleProperty.Zero;
+        [JsonConverter(typeof(JsonStartConverter<AngleValueProperty<double>>))]
+        public IStartValueProperty<double> AngleX { get; set; } = new AngleValueProperty<double>();
 
         [JsonProperty(StartPropertyName.RestraintAngleY)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<AngleProperty, double>))]
-        public AngleProperty AngleY { get; set; } = AngleProperty.Zero;
+        [JsonConverter(typeof(JsonStartConverter<AngleValueProperty<double>>))]
+        public IStartValueProperty<double> AngleY { get; set; } = new AngleValueProperty<double>();
 
         [JsonProperty(StartPropertyName.RestraintAngleZ)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<AngleProperty, double>))]
-        public AngleProperty AngleZ { get; set; } = AngleProperty.Zero;
+        [JsonConverter(typeof(JsonStartConverter<AngleValueProperty<double>>))]
+        public IStartValueProperty<double> AngleZ { get; set; } = new AngleValueProperty<double>();
 
         [JsonProperty(StartPropertyName.RestraintFlexibility)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<FlexibilityProperty, double>))]
-        public FlexibilityProperty Flexibility { get; set; } = FlexibilityProperty.Zero;
-        
+        [JsonConverter(typeof(JsonStartConverter<FlexibilityValueProperty<double>>))]
+        public IStartValueProperty<double> Flexibility { get; set; } = new FlexibilityValueProperty<double>();
+
         [JsonProperty(StartPropertyName.RestraintLength)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty Length { get; set; } = LengthProperty.Zero;
-        
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> Length { get; set; } = new LengthValueProperty<double>();
+
         [JsonProperty(StartPropertyName.RestraintFrictionCoefficient)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<FactorProperty, double>))]
-        public FactorProperty FrictionCoefficient { get; set; } = FactorProperty.Zero;
-        
+        [JsonConverter(typeof(JsonStartConverter<FactorValueProperty<double>>))]
+        public IStartValueProperty<double> FrictionCoefficient { get; set; } = new FactorValueProperty<double>();
+
         [JsonProperty(StartPropertyName.RestraintGapPlus)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty RestraintGapPlus { get; set; } = LengthProperty.Zero;
-        
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> RestraintGapPlus { get; set; } = new LengthValueProperty<double>();
+
         [JsonProperty(StartPropertyName.RestraintGapMinus)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty RestraintGapMinus { get; set; } = LengthProperty.Zero;
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> RestraintGapMinus { get; set; } = new LengthValueProperty<double>();
     }
 }

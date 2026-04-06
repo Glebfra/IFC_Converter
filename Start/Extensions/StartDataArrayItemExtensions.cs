@@ -4,14 +4,16 @@ using Start.API;
 
 namespace Start.Extensions
 {
-    public static class StartDataArrayItemExtensions
+    internal static class StartDataArrayItemExtensions
     {
-        public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems, StartElementType type)
+        public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems,
+            StartElementTypeEnum type)
         {
             return GetElementsByType(arrayItems, new[] { type });
         }
-        
-        public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems, IEnumerable<StartElementType> types)
+
+        public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems,
+            IEnumerable<StartElementTypeEnum> types)
         {
             return arrayItems.Where(item => types.Contains(item.Type));
         }
@@ -20,9 +22,18 @@ namespace Start.Extensions
         {
             StartDataArrayItem baseElement = arrayItems.Single(item => item.DataArrayIndex == ID);
             int[] baseElementNodeIds = baseElement.NodeIds;
-            return baseElementNodeIds.Length == 1 
-                ? arrayItems.Where(item => item.NodeIds.Contains(baseElementNodeIds[0])) 
-                : arrayItems.Where(item => item.NodeIds.Contains(baseElementNodeIds[0]) || item.NodeIds.Contains(baseElementNodeIds[1]));
+
+            List<StartDataArrayItem> dataArrayItems = new();
+            foreach (int baseElementNodeId in baseElementNodeIds)
+                dataArrayItems.AddRange(arrayItems.Where(item => item.NodeIds.Contains(baseElementNodeId)
+                                                                 && item.DataArrayIndex != ID));
+            return dataArrayItems;
+        }
+
+        public static IEnumerable<StartDataArrayItem> GetConnElements(this StartDataArrayItem[] arrayItems,
+            StartDataArrayItem baseElement)
+        {
+            return GetConnElements(arrayItems, baseElement.DataArrayIndex);
         }
     }
 }

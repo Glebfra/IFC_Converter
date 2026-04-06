@@ -1,5 +1,8 @@
 ﻿namespace Start.API
 {
+    /// <summary>
+    ///     Provides a collection of constant property names used in the Start system.
+    /// </summary>
     public static class StartPropertyName
     {
         public const string Restraint1 = "restraint1";
@@ -18,7 +21,7 @@
         public const string RestraintGapPlus = "gapp";
         public const string RestraintGapMinus = "gapm";
         public const string RestraintFlexibility = "flex";
-        
+
         public const string AllowableAxialExpansion = "2";
         public const string FlexibleElementLength = "2";
         public const string AirCoolerLength = "2";
@@ -73,6 +76,7 @@
         public const string NumberOfMilters = "177";
         public const string MillToleranceOutside = "216";
         public const string PipeName = "225";
+        public const string NodeName = "225";
         public const string Description = "227";
         public const string StrengthFactorOfTheTransverseTension = "253";
         public const string CheckAllowableLoads = "264";
@@ -112,7 +116,7 @@
         public const string BranchFlexibilityFactor_ko = "483";
         public const string BranchFlexibilityFactor_kt = "484";
         public const string BranchFlexibilityFactor_ka = "485";
-        public const string SeamDeltaParameter = "521"; 
+        public const string SeamDeltaParameter = "521";
         public const string ShearCompliance = "693";
         public const string PermissibleLateralMovement = "694";
         public const string GasketEffectiveDiameter = "720";
@@ -137,9 +141,9 @@
         public const string DeviceInternalDiameter = "864";
         public const string TankRadius = "889";
         public const string FrictionMoment1 = "1094";
-        public const string Pressure1 = "1095";        
+        public const string Pressure1 = "1095";
         public const string FrictionMoment2 = "1096";
-        public const string Pressure2 = "1097";        
+        public const string Pressure2 = "1097";
         public const string FrictionMoment3 = "1098";
         public const string Pressure3 = "1099";
         public const string AnchorSupportWeight = "1282";
@@ -152,5 +156,6 @@
         public const string AngleAllowableCorrFactor = "1417";
         public const string StiffnessShearFactor = "1418";
         public const string ShearAllowableCorrFactor = "1419";
+        public const string FrictionForce = "1435";
     }
 }

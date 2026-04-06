@@ -1,41 +1,17 @@
-﻿using Newtonsoft.Json;
-using Start.API;
-using Start.Entities.Abstract;
-using Start.StartProperties;
+﻿using Start.API;
+using Start.Attributes;
+using Start.Interfaces;
 
 namespace Start.Entities.Segments
 {
-    public class StartFlexibleElementEntity : StartAbstractSegmentEntity
+    /// <summary>
+    ///     Represents a flexible element entity in the Start framework.
+    ///     Inherits from <see cref="StartAbstractSegmentUndefinedEntity" /> and implements the
+    ///     <see cref="IStartSegmentDiameterUndefinedEntity" /> interface.
+    /// </summary>
+    [StartElement(StartElementTypeEnum.FLEXIBLE_ELEMENT)]
+    public sealed class StartFlexibleElementEntity : StartAbstractSegmentUndefinedEntity,
+        IStartSegmentDiameterUndefinedEntity
     {
-        [JsonProperty(StartPropertyName.FlexibleElementLength)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty Length { get; set; } = LengthProperty.Zero;
-
-        [JsonProperty(StartPropertyName.MaterialName)]
-        public string MaterialName { get; set; } = string.Empty;
-
-        [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
-        public MassUnitProperty AdditionalWeightLoad { get; set; } = MassUnitProperty.Zero;
-
-        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheXAxis)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
-        public MassUnitProperty AdditionalWeightLoadAlongTheXAxis { get; set; } = MassUnitProperty.Zero;
-
-        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheYAxis)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
-        public MassUnitProperty AdditionalWeightLoadAlongTheYAxis { get; set; } = MassUnitProperty.Zero;
-
-        [JsonProperty(StartPropertyName.AdditionalWeightLoadAlongTheZAxis)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassUnitProperty, double>))]
-        public MassUnitProperty AdditionalWeightLoadAlongTheZAxis { get; set; } = MassUnitProperty.Zero;
-
-        [JsonProperty(StartPropertyName.UniformWeight)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassProperty, double>))]
-        public MassProperty UniformWeight { get; set; } = MassProperty.Zero;
-        
-        //TODO get measurements
-        [JsonProperty(StartPropertyName.ShearStiffness)]
-        public double ShearStiffness { get; set; }
     }
 }
