@@ -109,7 +109,7 @@ namespace IFCConverter.Converters.Elements
                     IfcText propertyValue = new(pair.Value);
                     string propertyDescription = "";
                     return new IfcPropertySingleValueBuilder<IfcPropertySingleValue>(propertyName, propertyDescription,
-                        propertyValue, null);
+                        propertyValue, null!);
                 });
             IIfcPropertySetBuilder propertySetBuilder = new IfcPropertySetBuilder("Pset_Start", propertyBuilders);
             return propertySetBuilder.CreatePropertySet(_Model);

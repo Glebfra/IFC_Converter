@@ -80,7 +80,7 @@ namespace IFCConverter
                     return (int)ConversionResult.Fail;
                 }
             } 
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (int)ConversionResult.Fail;
             }
