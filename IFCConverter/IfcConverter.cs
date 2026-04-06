@@ -3,9 +3,11 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using IFCConverter.Converters;
 using IFCConverter.GUI;
-using IFCConverter.Tools;
+using IFCConverter.Utils;
 using Start.API;
+using Utils;
 
 namespace IFCConverter
 {
@@ -51,10 +53,10 @@ namespace IFCConverter
                 
                 try
                 {
-                    logger.Info($"Converting start at {DateTime.Now}");
-                    IfcGenerator ifcGenerator = new IfcGenerator(exportDataContainer);
-                    ifcGenerator.Convert(startDocument);
-                    logger.Info($"Convert is successfully ended at {DateTime.Now}");
+                    logger.System($"Converting started at {DateTime.Now}");
+                    StartToIfcConverter converter = new(exportDataContainer);
+                    converter.Convert(startDocument);
+                    logger.System($"Converting ended at {DateTime.Now}");
                     
                     #if DEBUG
                     logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
@@ -87,135 +89,13 @@ namespace IFCConverter
         [STAThread]
         public int ImportFromFileImport(object startAutoServerObject, int languageId, string startTempFileName)
         {
-            try
-            {
-                Localize(languageId);
-
-                ImportDataContainer importDataContainer = new ImportDataContainer();
-                DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
-                if (dialogResult == DialogResult.Cancel)
-                    return (int)ConversionResult.Canceled;
-                    
-                using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
-                {
-                    autoServer.SaveToFile(startTempFileName);
-                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName))
-                    {
-                        int result = Import(startDocument, importDataContainer);
-
-                        return result;
-                    }
-                }
-            }
-            catch
-            {
-                return (int)ConversionResult.Fail;
-            }
+            throw new NotImplementedException();
         }
 
         [STAThread]
         public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName)
         {
-            try
-            {
-                Localize(languageId);
-
-                ImportDataContainer importDataContainer = new ImportDataContainer() { InputFilePath = ifcFileName };
-                DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
-                if (dialogResult == DialogResult.Cancel)
-                    return (int)ConversionResult.Canceled;
-                
-                using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
-                {
-                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x4, startTempFileName))
-                    {
-                        return Import(autoServer, startDocument, importDataContainer, startTempFileName);
-                    }
-                }
-            }
-            catch
-            {
-                return (int)ConversionResult.Fail;
-            }
-        }
-
-        [STAThread]
-        private DialogResult ShowImportWindow(ref ImportDataContainer importDataContainer)
-        {
-            Application.EnableVisualStyles();
-            
-            using (ImportWindowForm importWindowForm = new ImportWindowForm(importDataContainer))
-            {
-                return importWindowForm.ShowDialog();
-            }
-        }
-
-        private int Import(StartAutoServer autoServer, StartDocument startDocument, ImportDataContainer importDataContainer, string saveAsStartTempFileName)
-        {
-            Logger logger = Logger.GetInstance();
-            
-            try
-            {
-                logger.Info($"Converting start at {DateTime.Now}");
-                StartGenerator startGenerator = new StartGenerator(importDataContainer);
-                startGenerator.Convert(autoServer, startDocument, saveAsStartTempFileName);
-                logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                
-                #if DEBUG
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                #else
-                if (logger.HasErrors())
-                {
-                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                }
-                else
-                {
-                    logger.Flush();
-                }
-                #endif
-                
-                return (int)ConversionResult.Success;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.ToString());
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                return (int)ConversionResult.Fail;
-            }
-        }
-        
-        private int Import(StartDocument startDocument, ImportDataContainer importDataContainer)
-        {
-            Logger logger = Logger.GetInstance();
-            
-            try
-            {
-                logger.Info($"Converting start at {DateTime.Now}");
-                StartGenerator startGenerator = new StartGenerator(importDataContainer);
-                startGenerator.Convert(startDocument);
-                logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                
-                #if DEBUG
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                #else
-                if (logger.HasErrors())
-                {
-                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                }
-                else
-                {
-                    logger.Flush();
-                }
-                #endif
-                    
-                return (int)ConversionResult.Success;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.ToString());
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                return (int)ConversionResult.Fail;
-            }
+            throw new NotImplementedException();
         }
 
         private void Localize(int languageId)

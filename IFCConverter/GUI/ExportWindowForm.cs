@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 using IFCConverter.Localization;
-using IFCConverter.Tools;
+using IFCConverter.Utils;
 
 namespace IFCConverter.GUI
 {
@@ -25,14 +25,7 @@ namespace IFCConverter.GUI
 
         private void LocalizeComponents()
         {
-            Text = LocalizationResource.ExportWindowForm_Text;
-            exportButton.Text = LocalizationResource.ExportWindowForm_ExportButton_Text;
-            selectOutputFilePathButton.Text = LocalizationResource.ExportWindowForm_selectOutputFilePathButton_Text;
-            outputFilePathLabel.Text = LocalizationResource.ExportWindowForm_OutputFilePath_Label_Text;
-            exportTypeLabel.Text = LocalizationResource.ExportWindowForm_ExportType_Label_Text;
-            vertexSegmentsLabel.Text = LocalizationResource.ExportWindowForm_VertexSegments_Textbox;
-
-            ArrayList types = new ArrayList
+            ArrayList types = new()
             {
                 new IfcExportType(IfcExportTypeEnum.VERTEX, LocalizationResource.ExportWindowForm_ExportType_Vertex),
                 new IfcExportType(IfcExportTypeEnum.CAD, LocalizationResource.ExportWindowForm_ExportType_Topological)
@@ -54,17 +47,18 @@ namespace IFCConverter.GUI
 
             int vertexNum = Convert.ToInt32(vertexSegmentsTextbox.Text);
             if (!IsValidVertexNum(vertexNum)) return;
-            
+
             if (exportTypeCombobox.SelectedItem is not IfcExportType exportType)
             {
-                MessageBox.Show(LocalizationResource.ExportWindowForm_ExportType_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.ExportWindowForm_ExportType_Error,
+                    LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             _exportDataContainer.OutputFilePath = outputFilePath;
             _exportDataContainer.ExportType = exportType.Type;
             _exportDataContainer.NumSegments = vertexNum;
-            
+
             DialogResult = DialogResult.OK;
         }
 
@@ -72,9 +66,8 @@ namespace IFCConverter.GUI
         {
             bool result = vertexNum > 4;
             if (!result)
-            {
-                MessageBox.Show(LocalizationResource.ExportWindowForm_VertexSegmentsNum_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                MessageBox.Show(LocalizationResource.ExportWindowForm_VertexSegmentsNum_Error,
+                    LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             return result;
         }
@@ -83,9 +76,8 @@ namespace IFCConverter.GUI
         {
             bool result = !string.IsNullOrEmpty(filePath);
             if (!result)
-            {
-                MessageBox.Show(LocalizationResource.ExportWindowForm_OutputFilePath_Empty_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                MessageBox.Show(LocalizationResource.ExportWindowForm_OutputFilePath_Empty_Error,
+                    LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             return result;
         }
@@ -94,9 +86,8 @@ namespace IFCConverter.GUI
         {
             bool result = Directory.Exists(directoryPath);
             if (!result)
-            {
-                MessageBox.Show(LocalizationResource.DirectoryDoesNotExists_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                MessageBox.Show(LocalizationResource.DirectoryDoesNotExists_Error,
+                    LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             return result;
         }
@@ -110,14 +101,15 @@ namespace IFCConverter.GUI
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show(LocalizationResource.UnauthorizedAccess_Error, LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(LocalizationResource.UnauthorizedAccess_Error,
+                    LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
 
         private void selectOutputFilePathButton_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            using (SaveFileDialog saveFileDialog = new())
             {
                 //saveFileDialog.FileName = Имя файла старт;
                 saveFileDialog.Title = LocalizationResource.ExportWindowForm_SaveDialogFile_Title;
@@ -126,9 +118,7 @@ namespace IFCConverter.GUI
                 saveFileDialog.RestoreDirectory = true;
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
                     outputFilePathTextbox.Text = saveFileDialog.FileName;
-                }
             }
         }
 
