@@ -75,6 +75,9 @@ namespace Start.Entities
                     case IStartValueProperty<int> startProperty:
                         dictionary.Add(newPropertyName, $"{startProperty.SIProperty} {startProperty.SIUnit}");
                         break;
+                    case IStartEnumProperty<Enum> enumProperty:
+                        dictionary.Add(newPropertyName, enumProperty.EnumValue.ToString());
+                        break;
                     case IStartExpansionModule expansionModule:
                         AddToDictionary(dictionary, expansionModule.GetType(), expansionModule, newPropertyName);
                         break;

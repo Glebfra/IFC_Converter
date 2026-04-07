@@ -1,5 +1,6 @@
 ﻿using System;
 using Start.Interfaces;
+using Utils;
 
 namespace Start.StartProperties
 {
@@ -7,7 +8,7 @@ namespace Start.StartProperties
         where T : struct, IComparable<T>
     {
         public override string StartUnit => "tf";
-        public override string SIUnit => "tf";
-        public override double StartToSIFactor => 1;
+        public override string SIUnit => "kg";
+        public override double StartToSIFactor => MathExtensions.TfToKg;
     }
 }

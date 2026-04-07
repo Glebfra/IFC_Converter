@@ -152,10 +152,9 @@ namespace Start.Entities.Segments
         public IStartNodeEntity EndNode => ConnectedEntities.OfType<IStartNodeEntity>().ElementAt(1);
 
         /// <summary>
-        ///     Gets the start transformation matrix of the segment.
+        ///     Gets the start transformation 4x4 matrix of the segment.
         /// </summary>
         [JsonIgnore]
-        [StartIgnore]
         public virtual Matrix<double> TransformationMatrix =>
             MatrixExtensions.CreateTransitionWithWorldUp(StartPosition, Projection);
 

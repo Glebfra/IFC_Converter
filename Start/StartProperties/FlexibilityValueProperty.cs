@@ -8,6 +8,6 @@ namespace Start.StartProperties
         public override double StartToSIFactor => 1.0;
 
         public override string StartUnit => "m/t";
-        public override string SIUnit => "m/t";
+        public override string SIUnit => "m/N";
     }
 }

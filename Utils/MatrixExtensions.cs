@@ -113,8 +113,7 @@ namespace Utils
         {
             return matrix.Row(0).SubVector(0, 3);
         }
-
-
+        
         /// <summary>
         ///     Returns the Y axis of the transformation matrix, which represents the up direction in a 3D coordinate system.
         /// </summary>
@@ -125,8 +124,7 @@ namespace Utils
         {
             return matrix.Row(1).SubVector(0, 3);
         }
-
-
+        
         /// <summary>
         ///     Returns the Z axis of the transformation matrix, which represents the forward direction in a 3D coordinate system.
         /// </summary>
@@ -137,8 +135,7 @@ namespace Utils
         {
             return matrix.Row(2).SubVector(0, 3);
         }
-
-
+        
         /// <summary>
         ///     Returns the offset (translation) component of the transformation matrix, which represents the position of the
         ///     object in 3D space.
@@ -180,8 +177,7 @@ namespace Utils
         {
             matrix.SetRow(2, 0, 3, vector);
         }
-
-
+        
         /// <summary>
         ///     Sets the offset of the transformation matrix, which represents the offset in a 3D coordinate system.
         /// </summary>
