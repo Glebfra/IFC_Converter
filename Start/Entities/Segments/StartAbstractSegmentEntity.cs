@@ -103,18 +103,21 @@ namespace Start.Entities.Segments
         ///     Gets the length of the segment, calculated as the 2-norm of the projection vector.
         /// </summary>
         [JsonIgnore]
+        [StartIgnore]
         public virtual double Length => Projection.Norm(2);
 
         /// <summary>
         ///     Gets or sets the start position of the segment as a vector.
         /// </summary>
         [JsonIgnore]
+        [StartIgnore]
         public Vector<double> StartPosition { get; set; } = default!;
 
         /// <summary>
         ///     Gets or sets the projection vector of the segment.
         /// </summary>
         [JsonIgnore]
+        [StartIgnore]
         public virtual Vector<double> Projection
         {
             get => new DenseVector(new[]
@@ -135,6 +138,7 @@ namespace Start.Entities.Segments
         ///     Gets the end position of the segment, calculated as the sum of the start position and projection vector.
         /// </summary>
         [JsonIgnore]
+        [StartIgnore]
         public Vector<double> EndPosition => StartPosition + Projection;
 
         /// <summary>

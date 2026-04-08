@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Start.Interfaces;
 
 namespace Start.StartProperties
 {
+    [DebuggerDisplay("StartProperty: {StartProperty} {StartUnit}, SIProperty: {SIProperty} {SIUnit}")]
     public abstract class StartValueAbstractProperty<T> :
         IStartValueProperty<T>, IComparable<StartValueAbstractProperty<T>>
         where T : struct, IComparable<T>
@@ -23,6 +25,14 @@ namespace Start.StartProperties
         public abstract string SIUnit { get; }
 
         public abstract double StartToSIFactor { get; }
+
+        public object GetStartProperty() => StartProperty;
+
+        public object GetSIProperty() => SIProperty;
+
+        public string GetStartUnit() => StartUnit;
+
+        public string GetSIUnit() => SIUnit;
 
         public IStartValueProperty<T> CreateFromStart(T startProperty)
         {

@@ -26,8 +26,17 @@ namespace Start.Entities.Joints
         [JsonConverter(typeof(JsonStartConverter<FactorValueProperty<double>>))]
         public IStartValueProperty<double> AllowableCorrFactor { get; set; } = new FactorValueProperty<double>();
 
-        //TODO get measurements
         [JsonProperty(StartPropertyName.AxialStiffness)]
-        public double AxialStiffness { get; set; }
+        [JsonConverter(typeof(JsonStartConverter<StiffnessValueProperty<double>>))]
+        public IStartValueProperty<double> AxialStiffness { get; set; } = new StiffnessValueProperty<double>();
+
+        [JsonProperty(StartPropertyName.Weight)]
+        [JsonConverter(typeof(JsonStartConverter<MassValueProperty<double>>))]
+        public IStartValueProperty<double> Weight { get; set; } = new MassValueProperty<double>();
+
+        [JsonProperty(StartPropertyName.ExpansionJointType)]
+        [JsonConverter(typeof(JsonStartConverter<EnumProperty<ExpansionJointTypeEnum>>))]
+        public IStartEnumProperty<ExpansionJointTypeEnum> ExpansionJointType { get; set; } =
+            new EnumProperty<ExpansionJointTypeEnum>();
     }
 }

@@ -63,20 +63,24 @@ namespace Start.Entities
                     continue;
 
                 object? value = propertyInfo.GetValue(obj);
-                string newPropertyName =
-                    propertyName != null ? $"{propertyName}_{propertyInfo.Name}" : propertyInfo.Name;
+                string newPropertyName = propertyName != null 
+                    ? $"{propertyName}_{propertyInfo.Name}" 
+                    : propertyInfo.Name;
                 switch (value)
                 {
                     case null:
                         continue;
-                    case IStartValueProperty<double> startProperty:
-                        dictionary.Add(newPropertyName, $"{startProperty.SIProperty} {startProperty.SIUnit}");
+                    case IStartValueProperty startValueProperty:
+                        dictionary.Add(
+                            newPropertyName,
+                            $"{startValueProperty.GetSIProperty()} {startValueProperty.GetSIUnit()}"
+                        );
                         break;
-                    case IStartValueProperty<int> startProperty:
-                        dictionary.Add(newPropertyName, $"{startProperty.SIProperty} {startProperty.SIUnit}");
-                        break;
-                    case IStartEnumProperty<Enum> enumProperty:
-                        dictionary.Add(newPropertyName, enumProperty.EnumValue.ToString());
+                    case IStartEnumProperty enumProperty:
+                        dictionary.Add(
+                            newPropertyName,
+                            enumProperty.GetEnumValue().ToString()
+                        );
                         break;
                     case IStartExpansionModule expansionModule:
                         AddToDictionary(dictionary, expansionModule.GetType(), expansionModule, newPropertyName);

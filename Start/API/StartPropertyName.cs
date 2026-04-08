@@ -63,6 +63,7 @@
         public const string EffectiveArea = "76";
         public const string LeakageCheck = "82";
         public const string ChainRigidity = "112";
+        public const string ExpansionJointType = "117";
         public const string ProjectionAlongOXAxis = "128";
         public const string ProjectionAlongOYAxis = "129";
         public const string ProjectionAlongOZAxis = "130";

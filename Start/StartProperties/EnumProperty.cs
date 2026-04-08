@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using Start.Interfaces;
 
 namespace Start.StartProperties
 {
+    [DebuggerDisplay("Value: {EnumValue}")]
     public class EnumProperty<T> : IStartEnumProperty<T>
         where T : Enum
     {
@@ -26,5 +28,7 @@ namespace Start.StartProperties
 
             return EnumValue;
         }
+
+        public object GetEnumValue() => EnumValue;
     }
 }

@@ -2,11 +2,19 @@
 
 namespace Start.Interfaces
 {
+    public interface IStartValueProperty : IStartProperty
+    {
+        public object GetStartProperty();
+        public object GetSIProperty();
+        public string GetStartUnit();
+        public string GetSIUnit();
+    }
+    
     /// <summary>
     ///     Represents a property in the Start system with associated units and type information.
     /// </summary>
     /// <typeparam name="T">The type of the property value.</typeparam>
-    public interface IStartValueProperty<T> : IStartProperty, IComparable
+    public interface IStartValueProperty<T> : IStartValueProperty, IComparable
         where T : struct, IComparable<T>
     {
         /// <summary>

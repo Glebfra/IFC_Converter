@@ -60,6 +60,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ExpansionJointTypeEnum.cs" />
     <Compile Include="API\StartAutoServer.cs" />
     <Compile Include="API\StartBaseRoot.cs" />
     <Compile Include="API\StartBaseRootDataArray.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="StartProperties\MomentValueProperty.cs" />
     <Compile Include="StartProperties\PressureValueProperty.cs" />
     <Compile Include="StartProperties\StartValueAbstractProperty.cs" />
+    <Compile Include="StartProperties\StiffnessValueProperty.cs" />
     <Compile Include="StartProperties\TemperatureValueProperty.cs" />
   </ItemGroup>
   <ItemGroup>
