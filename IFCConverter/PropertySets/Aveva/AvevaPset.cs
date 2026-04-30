@@ -4,11 +4,13 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.PropertySets.Aveva
 {
+#pragma warning disable CS0414
     [PropertySet(name: "AVEVA_Pset", PropertyMatchMode.StartsWith)]
     internal class AvevaPset : AbstractPropertySet
     {
         [Property(name: "AEXCES")] public string Aexces = string.Empty;
         [Property(name: "ARRI")] public string Arri = string.Empty;
+
         [Property(name: "ASFBR")] public bool Asfbr = default;
         [Property(name: "BRANCH")] public string Branch = string.Empty;
         [Property(name: "BUIL")] public bool Buil = default;
@@ -44,4 +46,5 @@ namespace IFCConverter.PropertySets.Aveva
         [Property(name: "WORLD")] public string World = string.Empty;
         [Property(name: "ZONE")] public string Zone = string.Empty;
     }
+#pragma warning restore CS0414
 }
