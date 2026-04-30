@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AbstractPropertyItemAttribute.cs" />
+    <Compile Include="Attributes\IfcImporterAttribute.cs" />
     <Compile Include="Attributes\PropertyAttribute.cs">
       <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
     </Compile>
@@ -103,6 +104,9 @@
     <Compile Include="Converters\Elements\TeeConverter.cs" />
     <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs" />
     <Compile Include="Converters\Elements\ValveConverter.cs" />
+    <Compile Include="Converters\Importers\AvevaImporter.cs" />
+    <Compile Include="Converters\Importers\Filters\AvevaImporterFilter.cs" />
+    <Compile Include="Converters\Importers\ImporterRegistry.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />
     <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
     <Compile Include="Extensions\IfcRootExtensions.cs" />
@@ -115,7 +119,9 @@
     </Compile>
     <Compile Include="IfcConverter.cs" />
     <Compile Include="IIfcConverter.cs" />
+    <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\IIfcElementConverter.cs" />
+    <Compile Include="Interfaces\IImporter.cs" />
     <Compile Include="Interfaces\IPropertyConverter.cs" />
     <Compile Include="Interfaces\IPropertySet.cs" />
     <Compile Include="Localization\LocalizationResource.Designer.cs">

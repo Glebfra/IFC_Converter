@@ -10,10 +10,11 @@ using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.IO;
+using IIfcProject = Ifc.Interfaces.IIfcProject;
 
 namespace Ifc.API
 {
-    public class IfcProject : IDisposable
+    public class IfcProject : IIfcProject, IDisposable
     {
         private readonly IfcBuilding _building;
 
