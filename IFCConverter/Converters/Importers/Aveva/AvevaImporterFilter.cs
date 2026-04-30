@@ -2,7 +2,7 @@
 using Ifc.Interfaces;
 using IFCConverter.Interfaces;
 
-namespace IFCConverter.Converters.Importers
+namespace IFCConverter.Converters.Importers.Aveva
 {
     internal class AvevaImporterFilter : IFilter
     {

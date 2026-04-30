@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using IFCConverter.Converters.Importers;
 using IFCConverter.Interfaces;
@@ -27,15 +28,17 @@ namespace IFCConverter.Converters
 
             using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
-                IEnumerable<IStartEntity> startEntities;
+                IEnumerable<IEntityProxy> proxies;
                 using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
                 {
                     ImporterRegistry registry = ImporterRegistry.GetInstance();
                     IImporter importer = registry.CreateImporter(ifcProject);
 
                     IEnumerable<IfcProduct> products = ifcProject.Model.Instances.OfType<IfcProduct>();
-                    startEntities = importer.ImportEntities(products);
+                    proxies = importer.ImportEntities(products);
                 }
+
+                IEnumerable<IStartEntity> startEntities = proxies.Select(proxy => proxy.ToStartEntity());
             }
         }
     }

@@ -8,6 +8,6 @@ namespace IFCConverter.Interfaces
     internal interface IImporter
     {
         [Pure]
-        public IEnumerable<IStartEntity> ImportEntities(IEnumerable<IfcProduct> products);
+        public IEnumerable<IEntityProxy> ImportEntities(IEnumerable<IfcProduct> products);
     }
 }

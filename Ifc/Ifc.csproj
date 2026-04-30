@@ -113,6 +113,7 @@
     <Compile Include="Builders\Properties\IfcSimplePropertyBuilder.cs" />
     <Compile Include="Exceptions\IfcEntityCreatedException.cs" />
     <Compile Include="Extensions\IfcMatrixExtensions.cs" />
+    <Compile Include="Extensions\IfcRootExtensions.cs" />
     <Compile Include="Extensions\IfcVectorExtensions.cs" />
     <Compile Include="Geometries\AxialCouplingJointGeometry.cs" />
     <Compile Include="Geometries\AxialExpansionJointGeometry.cs" />
