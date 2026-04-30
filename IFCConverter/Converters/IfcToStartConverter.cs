@@ -4,7 +4,6 @@ using System.Reflection;
 using IFCConverter.Converters.Importers;
 using IFCConverter.Interfaces;
 using IFCConverter.Utils;
-using Start.API;
 using Start.Interfaces;
 using Utils;
 using Xbim.Ifc4.Kernel;
@@ -25,21 +24,19 @@ namespace IFCConverter.Converters
         public void Convert(IStartDocument startDocument)
         {
             _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
-
-            using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
+            
+            IEnumerable<IEntityProxy> proxies;
+            
+            using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
             {
-                IEnumerable<IEntityProxy> proxies;
-                using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
-                {
-                    ImporterRegistry registry = ImporterRegistry.GetInstance();
-                    IImporter importer = registry.CreateImporter(ifcProject);
+                ImporterRegistry registry = ImporterRegistry.GetInstance();
+                IImporter importer = registry.CreateImporter(ifcProject);
 
-                    IEnumerable<IfcProduct> products = ifcProject.Model.Instances.OfType<IfcProduct>();
-                    proxies = importer.ImportEntities(products);
-                }
-
-                IEnumerable<IStartEntity> startEntities = proxies.Select(proxy => proxy.ToStartEntity());
+                IEnumerable<IfcProduct> products = ifcProject.Model.Instances.OfType<IfcProduct>();
+                proxies = importer.ImportEntities(products);
             }
+
+            IEnumerable<IStartEntity> startEntities = proxies.Select(proxy => proxy.ToStartEntity());
         }
     }
 }
