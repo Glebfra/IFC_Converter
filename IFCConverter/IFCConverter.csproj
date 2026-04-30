@@ -74,6 +74,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AbstractPropertyItemAttribute.cs" />
+    <Compile Include="Attributes\PropertyAttribute.cs">
+      <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Attributes\PropertySetAttribute.cs">
+      <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
+    </Compile>
     <Compile Include="Converters\ConverterFactory.cs" />
     <Compile Include="Converters\Elements\AxialCouplingJointConverter.cs" />
     <Compile Include="Converters\Elements\AxialExpansionJointConverter.cs" />
@@ -98,6 +105,7 @@
     <Compile Include="Converters\Elements\ValveConverter.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />
     <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
+    <Compile Include="Extensions\IfcRootExtensions.cs" />
     <Compile Include="Extensions\StartEntityExtensions.cs" />
     <Compile Include="GUI\ExportWindowForm.cs">
       <SubType>Form</SubType>
@@ -108,12 +116,21 @@
     <Compile Include="IfcConverter.cs" />
     <Compile Include="IIfcConverter.cs" />
     <Compile Include="Interfaces\IIfcElementConverter.cs" />
+    <Compile Include="Interfaces\IPropertyConverter.cs" />
+    <Compile Include="Interfaces\IPropertySet.cs" />
     <Compile Include="Localization\LocalizationResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>LocalizationResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertySets\AbstractPropertySet.cs" />
+    <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs" />
+    <Compile Include="PropertySets\Aveva\AvevaPset.cs" />
+    <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs" />
+    <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
+    <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
+    <Compile Include="PropertySets\PropertySetRegistry.cs" />
     <Compile Include="Utils\ConversionResult.cs" />
     <Compile Include="Utils\ExportDataContainer.cs" />
     <Compile Include="Utils\IfcExportType.cs" />

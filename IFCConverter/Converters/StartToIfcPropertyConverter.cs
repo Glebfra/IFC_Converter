@@ -5,7 +5,7 @@ using Xbim.Ifc4.MeasureResource;
 
 namespace IFCConverter.Converters
 {
-    public static class StartToIfcPropertyConverter
+    internal static class StartToIfcPropertyConverter
     {
         public static IfcValue ConvertToIfcValue(object property)
         {
