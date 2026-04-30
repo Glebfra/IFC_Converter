@@ -1,9 +1,10 @@
-﻿using Xbim.Common;
+﻿using System;
+using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 
 namespace Ifc.Interfaces
 {
-    public interface IIfcProject
+    public interface IIfcProject : IDisposable
     {
         public IModel Model { get; }
         

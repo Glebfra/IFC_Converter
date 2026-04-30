@@ -28,7 +28,7 @@ namespace Start.Interfaces
         /// <param name="type">Element type filter.</param>
         /// <returns>Connected entity.</returns>
         [Pure]
-        public IStartBaseRoot GetConnEntity(StartBaseRoot entity, StartElementTypeEnum type);
+        public IStartBaseRoot GetConnEntity(IStartBaseRoot entity, StartElementTypeEnum type);
 
         /// <summary>
         ///     Returns all entities within specified type range.

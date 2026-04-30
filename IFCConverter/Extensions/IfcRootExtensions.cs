@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
+using IFCConverter.Interfaces;
+using IFCConverter.PropertySets;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.Kernel;
 
 namespace IFCConverter.Extensions
 {
@@ -19,6 +23,13 @@ namespace IFCConverter.Extensions
             }
 
             return properties;
+        }
+        
+        [Pure]
+        public static IEnumerable<IPropertySet> GetPropertySets(this IfcProduct product)
+        {
+            PropertySetRegistry registry = PropertySetRegistry.GetInstance();
+            return product.PropertySets.Select(set => registry.Read<AbstractPropertySet>(set));
         }
     }
 }

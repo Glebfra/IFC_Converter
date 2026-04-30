@@ -100,7 +100,7 @@ namespace Start.API
         /// <param name="type">Element type filter.</param>
         /// <returns>Connected entity.</returns>
         [Pure]
-        public IStartBaseRoot GetConnEntity(StartBaseRoot entity, StartElementTypeEnum type)
+        public IStartBaseRoot GetConnEntity(IStartBaseRoot entity, StartElementTypeEnum type)
         {
             return entity.GetConnElemOnType(type, 0);
         }
@@ -193,7 +193,7 @@ namespace Start.API
         /// <param name="document">Loaded START document.</param>
         /// <returns>Initialized <see cref="StartProject" /> instance.</returns>
         [Pure]
-        public static IStartProject OpenFromDocument(StartDocument document)
+        public static IStartProject OpenFromDocument(IStartDocument document)
         {
             IStartBaseRootDataArray baseRootDataArray = document.GetDataArrayDispatch();
             return new StartProject(null, document, baseRootDataArray);
@@ -206,7 +206,7 @@ namespace Start.API
         /// <param name="startDocument">Associated START document.</param>
         /// <returns>Initialized <see cref="StartProject" /> instance.</returns>
         [Pure]
-        public static IStartProject OpenFromAutoServer(StartAutoServer autoServer, StartDocument startDocument)
+        public static IStartProject OpenFromAutoServer(IStartAutoServer autoServer, IStartDocument startDocument)
         {
             IStartBaseRootDataArray baseRootDataArray = autoServer.GetDataArrayDispatch();
             return new StartProject(autoServer, startDocument, baseRootDataArray);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
-using Ifc.API;
 using Ifc.Interfaces;
 using IFCConverter.Attributes;
 using IFCConverter.Interfaces;
@@ -25,7 +24,7 @@ namespace IFCConverter.Converters.Importers
         }
 
         [Pure]
-        public IImporter CreateImporter(IfcProject ifcProject)
+        public IImporter CreateImporter(IIfcProject ifcProject)
         {
             foreach (KeyValuePair<Type,Func<IIfcProject,bool>> keyValuePair in _importers)
             {

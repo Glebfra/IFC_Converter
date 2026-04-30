@@ -55,7 +55,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Xbim.Common">
       <HintPath>..\packages\Xbim.Common.5.1.341\lib\net46\Xbim.Common.dll</HintPath>
@@ -104,6 +103,7 @@
     <Compile Include="Converters\Elements\TeeConverter.cs" />
     <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs" />
     <Compile Include="Converters\Elements\ValveConverter.cs" />
+    <Compile Include="Converters\IfcToStartConverter.cs" />
     <Compile Include="Converters\Importers\AvevaImporter.cs" />
     <Compile Include="Converters\Importers\AvevaImporterFilter.cs">
       <DependentUpon>AvevaImporter.cs</DependentUpon>
@@ -118,6 +118,12 @@
     </Compile>
     <Compile Include="GUI\ExportWindowForm.Designer.cs">
       <DependentUpon>ExportWindowForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ImportWindowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ImportWindowForm.Designer.cs">
+      <DependentUpon>ImportWindowForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IfcConverter.cs" />
     <Compile Include="IIfcConverter.cs" />
@@ -143,6 +149,7 @@
     <Compile Include="Utils\ExportDataContainer.cs" />
     <Compile Include="Utils\IfcExportType.cs" />
     <Compile Include="Utils\IfcExportTypeEnum.cs" />
+    <Compile Include="Utils\ImportDataContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\ExportWindowForm.resx">
@@ -150,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ExportWindowForm.zh.resx">
       <DependentUpon>ExportWindowForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ImportWindowForm.resx">
+      <DependentUpon>ImportWindowForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\LocalizationResource.en.resx">
       <DependentUpon>LocalizationResource.resx</DependentUpon>
