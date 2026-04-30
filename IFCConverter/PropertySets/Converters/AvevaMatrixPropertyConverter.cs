@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
@@ -11,6 +12,7 @@ namespace IFCConverter.PropertySets.Converters
     internal class AvevaMatrixPropertyConverter : 
         AbstractPropertyConverter<ProxyItemSet<IfcValue, IIfcValue>, Matrix<double>>
     {
+        [Pure]
         public override Matrix<double> ReadTyped(ProxyItemSet<IfcValue, IIfcValue> source)
         {
             double[] values = source

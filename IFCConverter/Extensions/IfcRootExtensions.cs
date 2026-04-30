@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Extensions
 {
     internal static class IfcRootExtensions
     {
+        [Pure]
         public static Dictionary<string, object> ToDictionary(this IIfcPropertySet ifcPropertySet)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();

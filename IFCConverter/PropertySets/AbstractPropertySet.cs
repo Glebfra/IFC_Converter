@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Attributes;
@@ -9,6 +10,7 @@ namespace IFCConverter.PropertySets
 {
     internal class AbstractPropertySet : IPropertySet
     {
+        [Pure]
         public Dictionary<string, object> GetDictionary()
         {
             return GetType().GetFields().ToDictionary(
@@ -27,6 +29,7 @@ namespace IFCConverter.PropertySets
             }
         }
 
+        [Pure]
         private string GetFieldName(FieldInfo fieldInfo)
         {
             return fieldInfo.GetCustomAttribute<PropertyAttribute>()?.Name ?? fieldInfo.Name;

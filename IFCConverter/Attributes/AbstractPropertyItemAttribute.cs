@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 
 namespace IFCConverter.Attributes
@@ -23,6 +24,7 @@ namespace IFCConverter.Attributes
             PropertyMatchMode = propertyMatchMode;
         }
         
+        [Pure]
         public bool IsMatch(string name)
         {
             return PropertyMatchMode switch

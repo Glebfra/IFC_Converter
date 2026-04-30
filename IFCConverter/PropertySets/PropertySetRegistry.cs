@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Attributes;
@@ -22,6 +23,7 @@ namespace IFCConverter.PropertySets
             RegisterAll();
         }
 
+        [Pure]
         public T Read<T>(IIfcPropertySet ifcPropertySet)
             where T : AbstractPropertySet
         {

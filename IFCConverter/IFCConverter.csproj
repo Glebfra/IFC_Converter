@@ -105,7 +105,9 @@
     <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs" />
     <Compile Include="Converters\Elements\ValveConverter.cs" />
     <Compile Include="Converters\Importers\AvevaImporter.cs" />
-    <Compile Include="Converters\Importers\Filters\AvevaImporterFilter.cs" />
+    <Compile Include="Converters\Importers\AvevaImporterFilter.cs">
+      <DependentUpon>AvevaImporter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Converters\Importers\ImporterRegistry.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />
     <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
