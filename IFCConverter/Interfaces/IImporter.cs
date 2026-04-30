@@ -5,7 +5,7 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFCConverter.Interfaces
 {
-    public interface IImporter
+    internal interface IImporter
     {
         [Pure]
         public IEnumerable<IStartEntity> ImportEntities(IEnumerable<IfcProduct> products);
