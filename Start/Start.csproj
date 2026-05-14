@@ -67,6 +67,7 @@
     <Compile Include="API\StartConnectionTypeEnum.cs" />
     <Compile Include="API\StartDataArrayItem.cs" />
     <Compile Include="API\StartDocument.cs" />
+    <Compile Include="API\StartEntityProxy.cs" />
     <Compile Include="API\StartElementType.cs" />
     <Compile Include="API\StartElementTypeEnum.cs" />
     <Compile Include="API\StartLeakageCheckEnum.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Entities\StartAbstractEntity.cs" />
     <Compile Include="Entities\StartNodeEntity.cs" />
     <Compile Include="Entities\StartNonStandardRestraintModule.cs" />
+    <Compile Include="Extensions\StartApiExtensions.cs" />
     <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
     <Compile Include="Extensions\StartElementTypeExtensions.cs" />
     <Compile Include="Extensions\StartEntitiesExtensions.cs" />

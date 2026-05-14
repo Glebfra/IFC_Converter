@@ -92,6 +92,45 @@ namespace Utils
             });
         }
 
+        [Pure]
+        public static Matrix<double> CreateRotationAroundVector(Vector<double> vector, double angle)
+        {
+            double cos = Math.Cos(angle);
+            double sin = Math.Sin(angle);
+
+            double x = vector[0];
+            double y = vector[1];
+            double z = vector[2];
+
+            return DenseMatrix.OfArray(new[,]
+            {
+                {
+                    cos + (1 - cos) * x * x, 
+                    (1 - cos) * x * y - sin * z,
+                    (1 - cos) * x * z + sin * y,
+                    0
+                },
+                {
+                    (1 - cos) * y * x + sin * z,
+                    cos + (1 - cos) * y * y,
+                    (1 - cos) * y * z - sin * x,
+                    0
+                },
+                {
+                    (1 - cos) * z * x - sin * y,
+                    (1 - cos) * z * y + sin * x,
+                    cos + (1 - cos) * z * z,
+                    0
+                },
+                {
+                    0, 
+                    0, 
+                    0, 
+                    1
+                }
+            });
+        }
+
         /// <summary>
         ///     Create a 4x4 identity matrix, which is commonly used as the default transformation matrix in 3D graphics and
         ///     geometry processing.
@@ -375,7 +414,10 @@ namespace Utils
         public static string ToRowString(this Matrix<double> matrix)
         {
             return
-                $"({matrix.GetX().ToRowString()}); ({matrix.GetY().ToRowString()}); ({matrix.GetZ().ToRowString()}); ({matrix.GetOffset().ToRowString()})";
+                $"({matrix.GetX().ToRowString()}); " +
+                $"({matrix.GetY().ToRowString()}); " +
+                $"({matrix.GetZ().ToRowString()}); " +
+                $"({matrix.GetOffset().ToRowString()})";
         }
     }
 }

@@ -11,12 +11,13 @@ using Xbim.Ifc4.SharedBldgElements;
 
 namespace IFCConverter.Converters.Importers.Aveva
 {
-    [IfcImporter(typeof(AvevaImporterFilter))]
+    [IfcImporter(filter: typeof(AvevaImporterFilter), priority: 0)]
     internal class AvevaImporter : IImporter
     {
         private enum AvevaEntityType
         {
             PipeSegment,
+            Bend
         }
         
         [Pure]
@@ -45,6 +46,7 @@ namespace IFCConverter.Converters.Importers.Aveva
             return parameters.E3DType switch
             {
                 "TUBING" => AvevaEntityType.PipeSegment,
+                "ELBOW" => AvevaEntityType.Bend,
                 _ => null
             };
         }
@@ -54,6 +56,8 @@ namespace IFCConverter.Converters.Importers.Aveva
             return entityType switch
             {
                 AvevaEntityType.PipeSegment => new AvevaPipeSegmentImporter()
+                    .ReadTyped((IfcBuildingElementProxy)product),
+                AvevaEntityType.Bend => new AvevaBendImporter()
                     .ReadTyped((IfcBuildingElementProxy)product),
                 _ => throw new Exception("Unsupported entity type.")
             };

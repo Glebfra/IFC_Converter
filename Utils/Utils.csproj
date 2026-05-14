@@ -49,6 +49,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AttributeFinder.cs" />
+        <Compile Include="DictionaryExtensions.cs" />
         <Compile Include="Logger.cs" />
         <Compile Include="MathExtensions.cs" />
         <Compile Include="MatrixExtensions.cs" />

@@ -15,11 +15,7 @@ namespace IFCConverter.Converters.Importers.Aveva
     {
         public override PipeSegmentProxy ReadTyped(IfcBuildingElementProxy source)
         {
-            IIfcProductRepresentation representation = source.Representation;
-            IEnumerable<IIfcRepresentation> representations = representation.Representations;
-            IIfcRepresentationItem[] representationItems = representations
-                .SelectMany(ifcRepresentation => ifcRepresentation.Items)
-                .ToArray();
+            IIfcRepresentationItem[] representationItems = GetRepresentationItems(source).ToArray();
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
 
@@ -29,9 +25,8 @@ namespace IFCConverter.Converters.Importers.Aveva
 
             Matrix<double> position = extrudedAreaSolid.Position.ToMatrix();
             Matrix<double> rotation = position.GetRotation();
-            Matrix<double> invRotation = rotation.Inverse();
             Vector<double> extrudedDirection = extrudedAreaSolid.ExtrudedDirection.ToVector();
-            Vector<double> pipeDirection = invRotation.LeftMultiply(extrudedDirection);
+            Vector<double> pipeDirection = rotation.LeftMultiply(extrudedDirection);
 
             IIfcCircleProfileDef? profileDef = extrudedAreaSolid.SweptArea as IIfcCircleProfileDef;
             if (profileDef == null)
@@ -42,12 +37,13 @@ namespace IFCConverter.Converters.Importers.Aveva
 
             PipeSegmentProxy pipeSegmentProperties = new PipeSegmentProxy
             (
-                name: source.Name ?? string.Empty,
-                diameter: diameter,
-                length: length,
-                position: position.GetOffset(),
+                diameter: diameter * GetLengthPower(source),
+                length: length * GetLengthPower(source),
+                position: position.GetOffset() * GetLengthPower(source),
                 direction: pipeDirection
             );
+
+            pipeSegmentProperties.Name = source.Name;
 
             return pipeSegmentProperties;
         }

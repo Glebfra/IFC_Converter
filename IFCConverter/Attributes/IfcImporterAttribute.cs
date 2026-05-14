@@ -6,10 +6,12 @@ namespace IFCConverter.Attributes
     internal class IfcImporterAttribute : Attribute
     {
         public readonly Type Filter;
+        public readonly int Priority;
         
-        public IfcImporterAttribute(Type filter)
+        public IfcImporterAttribute(Type filter, int priority = 0)
         {
             Filter = filter;
+            Priority = priority;
         }
     }
 }

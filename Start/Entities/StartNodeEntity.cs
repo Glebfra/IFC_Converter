@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using Newtonsoft.Json;
 using Start.API;
 using Start.Attributes;
@@ -48,10 +49,23 @@ namespace Start.Entities
         public IStartValueProperty<double> ZCoord { get; set; } = new LengthValueProperty<double>();
 
         /// <summary>
-        ///     Gets the position of the node as a 3D vector.
+        ///     Gets and sets the position of the node as a 3D vector.
         /// </summary>
         [JsonIgnore]
-        public Vector<double> Position =>
-            Vector<double>.Build.Dense(new[] { XCoord.SIProperty, YCoord.SIProperty, ZCoord.SIProperty });
+        public Vector<double> Position
+        {
+            get => new DenseVector(new double[]
+            {
+                XCoord.SIProperty,
+                YCoord.SIProperty,
+                ZCoord.SIProperty
+            });
+            set
+            {
+                XCoord.CreateFromSI(value[0]);
+                YCoord.CreateFromSI(value[1]);
+                ZCoord.CreateFromSI(value[2]);
+            }
+        }
     }
 }

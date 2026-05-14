@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Reflection;
 using Ifc.Interfaces;
 using IFCConverter.Attributes;
@@ -14,9 +15,8 @@ namespace IFCConverter.Converters.Importers
         public static ImporterRegistry GetInstance() => _instance.Value;
         private static readonly Lazy<ImporterRegistry> _instance =
             new Lazy<ImporterRegistry>(() => new ImporterRegistry());
-        
-        private readonly Dictionary<Type, Func<IIfcProject, bool>> _importers =
-            new Dictionary<Type, Func<IIfcProject, bool>>();
+
+        private readonly List<ImporterRegistration> _registrations = new List<ImporterRegistration>();
 
         private ImporterRegistry()
         {
@@ -26,13 +26,14 @@ namespace IFCConverter.Converters.Importers
         [Pure]
         public IImporter CreateImporter(IIfcProject ifcProject)
         {
-            foreach (KeyValuePair<Type,Func<IIfcProject,bool>> keyValuePair in _importers)
-            {
-                if (keyValuePair.Value(ifcProject))
-                    return (IImporter)Activator.CreateInstance(keyValuePair.Key);
-            }
+            ImporterRegistration? match = _registrations
+                .Where(r => r.Filter.IsMatch(ifcProject))
+                .OrderByDescending(r => r.Priority)
+                .FirstOrDefault();
+            if (match == null)
+                throw new InvalidOperationException("No matching importer found.");
             
-            throw new Exception("No matching importer found for the given IFC project.");
+            return (IImporter)Activator.CreateInstance(match.ImporterType)!;
         }
 
         private void RegisterAll()
@@ -41,13 +42,11 @@ namespace IFCConverter.Converters.Importers
             foreach (Type runtimeType in runtimeTypes)
             {
                 IfcImporterAttribute attribute = runtimeType.GetCustomAttribute<IfcImporterAttribute>();
-                Type filterType = attribute.Filter;
-
-                IFilter? filter = Activator.CreateInstance(filterType, new object[] {}) as IFilter;
-                if (filter == null)
+                if (!typeof(IFilter).IsAssignableFrom(attribute.Filter))
                     continue;
-
-                _importers[runtimeType] = filter.IsMatch;
+  
+                IFilter filter = (IFilter)Activator.CreateInstance(attribute.Filter, new object[] {});
+                _registrations.Add(new ImporterRegistration(runtimeType, filter, attribute.Priority));
             }
         }
     }

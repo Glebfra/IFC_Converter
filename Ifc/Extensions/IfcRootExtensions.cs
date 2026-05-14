@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
@@ -11,11 +12,13 @@ namespace Ifc.Extensions
 {
     public static class IfcRootExtensions
     {
+        [Pure]
         public static Vector<double> ToVector(this IIfcCartesianPoint cartesianPoint)
         {
             return ToVector(cartesianPoint.Coordinates.Cast<IIfcValue>());
         }
 
+        [Pure]
         public static Vector<double> ToVector(this IIfcDirection direction)
         {
             return new DenseVector(new double[]
@@ -26,12 +29,14 @@ namespace Ifc.Extensions
             });
         }
 
+        [Pure]
         public static Vector<double> ToVector(this IEnumerable<IIfcValue> values)
         {
             double[] doubles = values.Select(value => Convert.ToDouble(value.Value)).ToArray();
             return new DenseVector(doubles);
         }
 
+        [Pure]
         public static Matrix<double> ToMatrix(this IIfcAxis2Placement3D axis2Placement3D)
         {
             Vector<double> axis = ToVector(axis2Placement3D.Axis);
@@ -42,6 +47,7 @@ namespace Ifc.Extensions
             return MatrixExtensions.CreateTransition(position, refDirection, upDirection, axis);
         }
 
+        [Pure]
         public static Dictionary<string, object> ToDictionary(this IIfcPropertySet ifcPropertySet)
         {
             Dictionary<string, object> properties = new Dictionary<string, object>();
