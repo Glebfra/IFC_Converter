@@ -1,9 +1,11 @@
-﻿using Start.Interfaces;
+﻿using System.Diagnostics.Contracts;
+using Start.Interfaces;
 
 namespace IFCConverter.Interfaces
 {
-    public interface IEntityProxy
+    internal interface IEntityProxy
     {
+        [Pure]
         public IStartEntity ToStartEntity();
     }
 }

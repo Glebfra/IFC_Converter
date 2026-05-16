@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Ifc.Extensions;
-using IFCConverter.Converters.Importers.Proxies;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
+using PipeSegmentProxy = IFCConverter.Converters.Importers.Proxies.PipeSegmentProxy;
 
 namespace IFCConverter.Converters.Importers.Aveva
 {

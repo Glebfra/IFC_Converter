@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using IFCConverter.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities;
 using Start.Entities.Fittings;
 using Start.Interfaces;
 using Utils;
@@ -10,13 +10,14 @@ using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Converters.Importers.Proxies
 {
-    internal class BendProxy : IBoundaryEntityProxy
+    internal sealed class BendProxy : IFittingProxy
     {
         public readonly double Radius;
         public readonly double Angle;
-        public readonly Vector<double> Position;
         public readonly Vector<double> AxisPosition;
         public readonly Vector<double> RefDirection;
+        
+        public Vector<double> Position { get; }
 
         public string? Name { get; set; }
 
@@ -30,17 +31,15 @@ namespace IFCConverter.Converters.Importers.Proxies
             RefDirection = refDirection;
         }
 
+        [Pure]
         public IStartEntity ToStartEntity()
         {
             StartElbowEntity elbowEntity = new StartElbowEntity();
             elbowEntity.Radius.CreateFromSI(Radius);
-            elbowEntity.ConnectedEntities.Add(new StartNodeEntity { Position = Position });
             elbowEntity.Position = Position;
 
             if (Name != null) 
                 elbowEntity.Name = Name;
-            
-            elbowEntity.ConnectedEntities.Add(new StartNodeEntity() { Position = Position });
 
             return elbowEntity;
         }
@@ -50,17 +49,14 @@ namespace IFCConverter.Converters.Importers.Proxies
         {
             Vector<double> axis = (Position - AxisPosition).Normalize(2);
             Vector<double> upDirection = axis.CrossProduct(RefDirection).Normalize(2);
-            
-            Vector<double> pointOnCircle = axis * Radius;
-            Matrix<double> rotationMatrix = MatrixExtensions
-                .CreateRotationAroundVector(upDirection, Angle)
-                .GetRotation();
 
-            return new Vector<double>[]
+            Matrix<double>[] rotationMatrices = new Matrix<double>[]
             {
-                AxisPosition + rotationMatrix.Multiply(pointOnCircle),
-                AxisPosition + (-1 * rotationMatrix).Multiply(pointOnCircle)
+                MatrixExtensions.CreateRotationAroundVector(upDirection, Angle / 2).GetRotation(),
+                MatrixExtensions.CreateRotationAroundVector(upDirection, -Angle / 2).GetRotation(),
             };
+
+            return rotationMatrices.Select(matrix => matrix.Multiply(axis * Radius) + AxisPosition);
         }
     }
 }

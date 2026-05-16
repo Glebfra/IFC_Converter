@@ -113,6 +113,7 @@
     <Compile Include="Converters\Importers\Aveva\AvevaPipeSegmentImporter.cs" />
     <Compile Include="Converters\Importers\ImporterRegistration.cs" />
     <Compile Include="Converters\Importers\ImporterRegistry.cs" />
+    <Compile Include="Converters\Importers\NodeKey.cs" />
     <Compile Include="Converters\Importers\Proxies\BendProxy.cs" />
     <Compile Include="Converters\Importers\Proxies\PipeSegmentProxy.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />
@@ -133,14 +134,16 @@
     </Compile>
     <Compile Include="IfcConverter.cs" />
     <Compile Include="IIfcConverter.cs" />
-    <Compile Include="Interfaces\IBoundaryEntityProxy.cs" />
     <Compile Include="Interfaces\IEntityImporter.cs" />
     <Compile Include="Interfaces\IEntityProxy.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
+    <Compile Include="Interfaces\IFittingProxy.cs" />
     <Compile Include="Interfaces\IIfcElementConverter.cs" />
     <Compile Include="Interfaces\IImporter.cs" />
     <Compile Include="Interfaces\IPropertyConverter.cs" />
     <Compile Include="Interfaces\IPropertySet.cs" />
+    <Compile Include="Interfaces\ISegmentProxy.cs" />
+    <Compile Include="Interfaces\ITopologyProxy.cs" />
     <Compile Include="Localization\LocalizationResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

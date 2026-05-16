@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using IFCConverter.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities;
 using Start.Entities.Segments;
 using Start.Interfaces;
 
 namespace IFCConverter.Converters.Importers.Proxies
 {
-    internal class PipeSegmentProxy : IBoundaryEntityProxy
+    internal sealed class PipeSegmentProxy : ISegmentProxy
     {
         public readonly double Diameter;
-        public readonly double Length;
-        public readonly Vector<double> Position;
-        public readonly Vector<double> Direction;
-
+        public double Length { get; }
+        public Vector<double> Position { get; }
+        public Vector<double> Direction { get; }
+        
         public string? Name { get; set; }
         
+        private Vector<double> EndPosition => Position + Direction * Length;
+
         public PipeSegmentProxy(double diameter, double length, Vector<double> position, Vector<double> direction)
         {
             Diameter = diameter;
@@ -24,6 +26,7 @@ namespace IFCConverter.Converters.Importers.Proxies
             Direction = direction;
         }
 
+        [Pure]
         public IStartEntity ToStartEntity()
         {
             Vector<double> pipeProjection = Direction * Length;
@@ -35,16 +38,14 @@ namespace IFCConverter.Converters.Importers.Proxies
 
             if (Name != null)
                 startPipeEntity.Name = Name;
-            
-            startPipeEntity.ConnectedEntities.Add(new StartNodeEntity { Position = Position });
-            startPipeEntity.ConnectedEntities.Add(new StartNodeEntity { Position = Position + pipeProjection });
 
             return startPipeEntity;
         }
 
+        [Pure]
         public IEnumerable<Vector<double>> GetBoundaryPoints()
         {
-            return new Vector<double>[] { Position, Position + Direction * Length };
+            return new Vector<double>[] { Position, EndPosition };
         }
     }
 }

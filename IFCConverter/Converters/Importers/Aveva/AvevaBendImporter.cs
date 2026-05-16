@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ifc.Extensions;
-using IFCConverter.Converters.Importers.Proxies;
 using IFCConverter.Extensions;
 using IFCConverter.Interfaces;
 using IFCConverter.PropertySets.Aveva;
@@ -10,6 +9,7 @@ using MathNet.Numerics.LinearAlgebra;
 using Utils;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
+using BendProxy = IFCConverter.Converters.Importers.Proxies.BendProxy;
 
 namespace IFCConverter.Converters.Importers.Aveva
 {
@@ -25,8 +25,10 @@ namespace IFCConverter.Converters.Importers.Aveva
                 throw new Exception("The representation item is not a revolved area solid.");
 
             Matrix<double> areaMatrix = revolvedAreaSolid.Position.ToMatrix();
-            Vector<double> axisPosition = revolvedAreaSolid.Axis.Location.ToVector();
-            double radius = axisPosition.L2Norm();
+            Vector<double> axisLocalPosition = revolvedAreaSolid.Axis.Location.ToVector();
+            Vector<double> axisGlobalPosition = areaMatrix.GetRotation().LeftMultiply(axisLocalPosition) + 
+                                                areaMatrix.GetOffset();
+            double radius = axisLocalPosition.L2Norm();
 
             IEnumerable<IPropertySet> propertySets = source.GetPropertySets();
             AvevaPset? avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
@@ -43,8 +45,8 @@ namespace IFCConverter.Converters.Importers.Aveva
                 position: bendPosition * lengthPower,
                 angle: revolvedAreaSolid.Angle,
                 radius: radius * lengthPower,
-                axisPosition: (areaMatrix.GetOffset() + axisPosition) * lengthPower,
-                refDirection: areaMatrix.GetRotation().Multiply(axisPosition).Normalize(2)
+                axisPosition: axisGlobalPosition * lengthPower,
+                refDirection: areaMatrix.GetY()
             )
             {
                 Name = source.Name

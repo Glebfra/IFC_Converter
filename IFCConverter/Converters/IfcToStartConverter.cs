@@ -5,6 +5,7 @@ using System.Reflection;
 using IFCConverter.Converters.Importers;
 using IFCConverter.Interfaces;
 using IFCConverter.Utils;
+using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Start.API;
 using Start.Entities;
@@ -13,6 +14,7 @@ using Start.Interfaces;
 using Utils;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MeasureResource;
+using IEntityProxy = IFCConverter.Interfaces.IEntityProxy;
 using IfcProject = Ifc.API.IfcProject;
 
 namespace IFCConverter.Converters
@@ -22,11 +24,11 @@ namespace IFCConverter.Converters
         private readonly ImportDataContainer _importDataContainer;
         private readonly Logger _logger = Logger.GetInstance();
 
-        private readonly Dictionary<Type, StartElementTypeEnum> _startElementTypesCache =
-            new Dictionary<Type, StartElementTypeEnum>();
-
         private readonly Dictionary<Vector<double>, StartEntityProxy> _nodeEntitiesCache =
             new Dictionary<Vector<double>, StartEntityProxy>();
+
+        private readonly Dictionary<NodeKey, StartEntityProxy> _nodesCache =
+            new Dictionary<NodeKey, StartEntityProxy>();
 
         private int _nodeIndexCounter = 1;
 
@@ -50,35 +52,71 @@ namespace IFCConverter.Converters
                 proxies = importer.ImportEntities(products);
             }
 
-            IEnumerable<IBoundaryEntityProxy> boundaryEntityProxies = proxies.OfType<IBoundaryEntityProxy>();
-            foreach (IBoundaryEntityProxy boundaryEntityProxy in boundaryEntityProxies)
-            {
-                IEnumerable<Vector<double>> boundPoints = boundaryEntityProxy.GetBoundaryPoints();
-            }
-
-            IStartEntity[] startEntities = proxies.Select(proxy => proxy.ToStartEntity()).ToArray();
-            ConnectStartEntities(startEntities);
-            
+            ITopologyProxy[] topologyProxies = proxies.OfType<ITopologyProxy>().ToArray();
             using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
-                foreach (IStartEntity startEntity in startEntities)
+                foreach (IEntityProxy entityProxy in proxies)
                 {
+                    IStartEntity startEntity = entityProxy.ToStartEntity();
+                    
+                    IEnumerable<ITopologyProxy> connectedProxies = 
+                        GetConnectedEntities((ITopologyProxy)entityProxy, topologyProxies);
+                    foreach (ITopologyProxy connectedProxy in connectedProxies)
+                    {
+                        if (startEntity is not IStartClippableEntity clippableEntity ||
+                            connectedProxy is not IFittingProxy fittingProxy) 
+                            continue;
+                        
+                        IEnumerable<Vector<double>> points = connectedProxy.GetBoundaryPoints();
+                        Vector<double> fittingPoint = fittingProxy.Position;
+                        double length = points
+                            .Select(point => (fittingPoint - point).L2Norm())
+                            .OrderBy(l => l)
+                            .First();
+                            
+                        clippableEntity.Clip(fittingPoint, -length);
+                    }
+
                     StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                    StartEntityProxy[] nodeEntities = GetOrCreateNodeEntities(startProject, startEntity).ToArray();
-                    ConnectNodes(startEntityProxy, nodeEntities);
+                    StartEntityProxy[] nodeProxies = startEntity.GetPositions()
+                        .Select(pos => _nodesCache.GetOrAdd(new NodeKey(pos), key =>
+                            {
+                                StartNodeEntity nodeEntity = new StartNodeEntity() { Position = key.Coordinates };
+                                StartEntityProxy proxy = startProject.AddEntity(nodeEntity);
+                                proxy.StartBaseRoot.SetName((_nodeIndexCounter++).ToString());
+                                return proxy;
+                            })
+                        ).ToArray();
+                    foreach (StartEntityProxy nodeProxy in nodeProxies)
+                    {
+                        nodeProxy.StartBaseRoot.SetName((_nodeIndexCounter++).ToString());
+                    }
+                    ConnectNodes(startEntityProxy, nodeProxies);
                 }
-                startProject.OnImportFinish();
             }
         }
 
-        private static void ConnectStartEntities(IStartEntity[] startEntities)
+        private static IEnumerable<ITopologyProxy> GetConnectedEntities(
+            ITopologyProxy proxy,
+            IEnumerable<ITopologyProxy> entityProxies)
         {
-            foreach (IStartEntity startEntity in startEntities)
+            List<ITopologyProxy> result = new List<ITopologyProxy>();
+
+            IEnumerable<Vector<double>> boundaryPoints = proxy.GetBoundaryPoints();
+            
+            foreach (ITopologyProxy otherProxy in entityProxies)
             {
-                IEnumerable<IStartEntity> connectedEntities = startEntities
-                    .Where(entity => entity.IsConnectedTo(startEntity) && entity != startEntity);
-                startEntity.ConnectedEntities.AddRange(connectedEntities);
+                IEnumerable<Vector<double>> otherBoundaryPoints = otherProxy.GetBoundaryPoints();
+                bool isConnected = boundaryPoints.Any(
+                    p1 => otherBoundaryPoints.Any(
+                        p2 => p1.AlmostEqual(p2, 1e-3)
+                    )
+                );
+                if (isConnected)
+                    result.Add(otherProxy);
             }
+            
+            return result;
         }
 
         private static void ConnectNodes(StartEntityProxy entity, params StartEntityProxy[] nodes)
@@ -103,7 +141,7 @@ namespace IFCConverter.Converters
                 entity.StartBaseRoot.SetConnElem(@object.Index);
             }
         }
-
+        
         private IEnumerable<StartEntityProxy> GetOrCreateNodeEntities(IStartProject startProject, IStartEntity entity)
         {
             Vector<double>[]? positions = entity.GetPositions()?.ToArray();

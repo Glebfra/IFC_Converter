@@ -84,6 +84,6 @@ namespace Start.Interfaces
         ///         </item>
         ///     </list>
         /// </remarks>
-        public Vector<double> Position { get; }
+        public Vector<double> Position { get; set; }
     }
 }

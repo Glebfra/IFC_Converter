@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Interfaces
 {
-    public interface IBoundaryEntityProxy : IEntityProxy
+    internal interface ITopologyProxy
     {
         [Pure]
         public IEnumerable<Vector<double>> GetBoundaryPoints();

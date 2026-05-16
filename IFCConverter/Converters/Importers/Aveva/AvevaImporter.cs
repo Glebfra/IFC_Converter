@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Attributes;
@@ -8,9 +9,11 @@ using IFCConverter.Interfaces;
 using IFCConverter.PropertySets.Aveva;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.SharedBldgElements;
+using IEntityProxy = IFCConverter.Interfaces.IEntityProxy;
 
 namespace IFCConverter.Converters.Importers.Aveva
 {
+    [SuppressMessage("ReSharper", "UnusedType.Global")]
     [IfcImporter(filter: typeof(AvevaImporterFilter), priority: 0)]
     internal class AvevaImporter : IImporter
     {

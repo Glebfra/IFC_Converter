@@ -8,6 +8,7 @@ using MathNet.Numerics.LinearAlgebra;
 using Start.API;
 using Start.Attributes;
 using Start.Interfaces;
+using Utils;
 
 namespace Start.Extensions
 {
@@ -15,14 +16,15 @@ namespace Start.Extensions
     {
         private const double EQUALS_TOLERANCE = 1e-6;
 
+        private static Dictionary<Type, StartElementTypeEnum> _elementTypesCache =
+            new Dictionary<Type, StartElementTypeEnum>();
+
         [Pure]
         public static bool IsConnectedTo(this IStartEntity startEntity, IStartEntity otherEntity)
         {
-            IEnumerable<Vector<double>>? startEntityPositions = startEntity.GetPositions();
-            IEnumerable<Vector<double>>? otherEntityPositions = otherEntity.GetPositions();
-            if (startEntityPositions == null || otherEntityPositions == null)
-                return false;
-            
+            IEnumerable<Vector<double>> startEntityPositions = startEntity.GetPositions();
+            IEnumerable<Vector<double>> otherEntityPositions = otherEntity.GetPositions();
+
             return (
                 from startEntityPosition in startEntityPositions
                 from otherEntityPosition in otherEntityPositions
@@ -32,13 +34,13 @@ namespace Start.Extensions
         }
 
         [Pure]
-        public static IEnumerable<Vector<double>>? GetPositions(this IStartEntity startEntity)
+        public static IEnumerable<Vector<double>> GetPositions(this IStartEntity startEntity)
         {
             return startEntity switch
             {
                 IStartOneNodeEntity oneNodeEntity => new[] { oneNodeEntity.Position },
                 IStartTwoNodeEntity twoNodeEntity => new[] { twoNodeEntity.StartPosition, twoNodeEntity.EndPosition },
-                _ => null
+                _ => throw new Exception("Unsupported type")
             };
         }
 
@@ -81,7 +83,10 @@ namespace Start.Extensions
         [Pure]
         public static StartElementTypeEnum GetElementType(this IStartEntity entity)
         {
-            return entity.GetType().GetCustomAttribute<StartElementAttribute>().Type;
+            return _elementTypesCache.GetOrAdd(
+                entity.GetType(),
+                type => type.GetCustomAttribute<StartElementAttribute>().Type
+            );
         }
     }
 }

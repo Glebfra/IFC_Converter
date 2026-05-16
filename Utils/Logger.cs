@@ -28,7 +28,7 @@ namespace Utils
         {
         }
 
-        private void Flush()
+        public void Flush()
         {
             Logs = "";
         }
@@ -57,7 +57,7 @@ namespace Utils
         }
 
         [Pure]
-        private bool HasErrors()
+        public bool HasErrors()
         {
             return _countErrors != 0;
         }
