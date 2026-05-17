@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Converters.Importers;
@@ -8,7 +7,6 @@ using IFCConverter.Utils;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Start.API;
-using Start.Entities;
 using Start.Extensions;
 using Start.Interfaces;
 using Utils;
@@ -23,14 +21,8 @@ namespace IFCConverter.Converters
     {
         private readonly ImportDataContainer _importDataContainer;
         private readonly Logger _logger = Logger.GetInstance();
-
-        private readonly Dictionary<Vector<double>, StartEntityProxy> _nodeEntitiesCache =
-            new Dictionary<Vector<double>, StartEntityProxy>();
-
-        private readonly Dictionary<NodeKey, StartEntityProxy> _nodesCache =
-            new Dictionary<NodeKey, StartEntityProxy>();
-
-        private int _nodeIndexCounter = 1;
+        
+        private readonly StartNodeRegistry _nodeRegistry = new StartNodeRegistry();
 
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
@@ -78,19 +70,7 @@ namespace IFCConverter.Converters
                     }
 
                     StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                    StartEntityProxy[] nodeProxies = startEntity.GetPositions()
-                        .Select(pos => _nodesCache.GetOrAdd(new NodeKey(pos), key =>
-                            {
-                                StartNodeEntity nodeEntity = new StartNodeEntity() { Position = key.Coordinates };
-                                StartEntityProxy proxy = startProject.AddEntity(nodeEntity);
-                                proxy.StartBaseRoot.SetName((_nodeIndexCounter++).ToString());
-                                return proxy;
-                            })
-                        ).ToArray();
-                    foreach (StartEntityProxy nodeProxy in nodeProxies)
-                    {
-                        nodeProxy.StartBaseRoot.SetName((_nodeIndexCounter++).ToString());
-                    }
+                    StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, startEntity);
                     ConnectNodes(startEntityProxy, nodeProxies);
                 }
             }
@@ -140,24 +120,6 @@ namespace IFCConverter.Converters
             {
                 entity.StartBaseRoot.SetConnElem(@object.Index);
             }
-        }
-        
-        private IEnumerable<StartEntityProxy> GetOrCreateNodeEntities(IStartProject startProject, IStartEntity entity)
-        {
-            Vector<double>[]? positions = entity.GetPositions()?.ToArray();
-            if (positions == null)
-                throw new Exception(
-                    $"Unsupported entity type. Only entities {nameof(IStartOneNodeEntity)}, {nameof(IStartTwoNodeEntity)} are supported."
-                );
-
-            return positions
-                .Select(position => _nodeEntitiesCache.GetOrAdd(position, vector =>
-                {
-                    IStartEntity nodeEntity = new StartNodeEntity { Position = vector };
-                    StartEntityProxy proxy = startProject.AddEntity(nodeEntity);
-                    proxy.StartBaseRoot.SetName((_nodeIndexCounter++).ToString());
-                    return proxy;
-                }));
         }
     }
 }

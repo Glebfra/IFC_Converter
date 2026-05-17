@@ -113,7 +113,6 @@
     <Compile Include="Converters\Importers\Aveva\AvevaPipeSegmentImporter.cs" />
     <Compile Include="Converters\Importers\ImporterRegistration.cs" />
     <Compile Include="Converters\Importers\ImporterRegistry.cs" />
-    <Compile Include="Converters\Importers\NodeKey.cs" />
     <Compile Include="Converters\Importers\Proxies\BendProxy.cs" />
     <Compile Include="Converters\Importers\Proxies\PipeSegmentProxy.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />

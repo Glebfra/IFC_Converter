@@ -72,6 +72,7 @@
     <Compile Include="API\StartElementTypeEnum.cs" />
     <Compile Include="API\StartLeakageCheckEnum.cs" />
     <Compile Include="API\StartManufacturingTechnologyEnum.cs" />
+    <Compile Include="API\StartNodeRegistry.cs" />
     <Compile Include="API\StartProject.cs" />
     <Compile Include="API\StartRestraintAxesTypeEnum.cs" />
     <Compile Include="API\StartRestraintTypeEnum.cs" />

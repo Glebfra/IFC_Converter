@@ -2,9 +2,9 @@
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
-namespace IFCConverter.Converters.Importers
+namespace Utils
 {
-    public readonly struct NodeKey : IEquatable<NodeKey>
+    public readonly struct VectorKey : IEquatable<VectorKey>
     {
         public Vector<double> Coordinates => new DenseVector(new double[]
         {
@@ -19,7 +19,7 @@ namespace IFCConverter.Converters.Importers
         private readonly long _y;
         private readonly long _z;
         
-        public NodeKey(Vector<double> point)
+        public VectorKey(Vector<double> point)
         {
             _x = Quantize(point[0]);
             _y = Quantize(point[1]);
@@ -31,7 +31,7 @@ namespace IFCConverter.Converters.Importers
             return (long)Math.Round(value / TOLERANCE);
         }
 
-        public bool Equals(NodeKey other)
+        public bool Equals(VectorKey other)
         {
             return _x == other._x &&
                    _y == other._y &&
@@ -40,7 +40,7 @@ namespace IFCConverter.Converters.Importers
 
         public override bool Equals(object? obj)
         {
-            return obj is NodeKey other && Equals(other);
+            return obj is VectorKey other && Equals(other);
         }
 
         public override int GetHashCode()
