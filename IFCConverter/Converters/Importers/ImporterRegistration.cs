@@ -8,13 +8,13 @@ namespace IFCConverter.Converters.Importers
     internal class ImporterRegistration
     {
         public readonly Type ImporterType;
-        public readonly IFilter Filter;
+        public readonly IImporterFilter ImporterFilter;
         public readonly int Priority;
 
-        public ImporterRegistration(Type importerType, IFilter filter, int priority)
+        public ImporterRegistration(Type importerType, IImporterFilter importerFilter, int priority)
         {
             ImporterType = importerType;
-            Filter = filter;
+            ImporterFilter = importerFilter;
             Priority = priority;
         }
 

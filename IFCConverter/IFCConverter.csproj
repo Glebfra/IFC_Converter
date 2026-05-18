@@ -107,14 +107,19 @@
     <Compile Include="Converters\Importers\AbstractEntityImporter.cs" />
     <Compile Include="Converters\Importers\Aveva\AvevaBendImporter.cs" />
     <Compile Include="Converters\Importers\Aveva\AvevaImporter.cs" />
-    <Compile Include="Converters\Importers\Aveva\AvevaImporterFilter.cs">
+    <Compile Include="Converters\Importers\Aveva\AvevaImporterImporterFilter.cs">
       <DependentUpon>AvevaImporter.cs</DependentUpon>
     </Compile>
     <Compile Include="Converters\Importers\Aveva\AvevaPipeSegmentImporter.cs" />
+    <Compile Include="Converters\Importers\Aveva\AvevaTeeImporter.cs" />
     <Compile Include="Converters\Importers\ImporterRegistration.cs" />
     <Compile Include="Converters\Importers\ImporterRegistry.cs" />
     <Compile Include="Converters\Importers\Proxies\BendProxy.cs" />
     <Compile Include="Converters\Importers\Proxies\PipeSegmentProxy.cs" />
+    <Compile Include="Converters\Importers\Proxies\TeeProxy.cs" />
+    <Compile Include="Converters\Importers\Topology\ElementTopologyInfo.cs" />
+    <Compile Include="Converters\Importers\Topology\TopologyBuilder.cs" />
+    <Compile Include="Converters\Importers\Topology\TopologyNode.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />
     <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
     <Compile Include="Extensions\IfcRootExtensions.cs" />
@@ -135,7 +140,7 @@
     <Compile Include="IIfcConverter.cs" />
     <Compile Include="Interfaces\IEntityImporter.cs" />
     <Compile Include="Interfaces\IEntityProxy.cs" />
-    <Compile Include="Interfaces\IFilter.cs" />
+    <Compile Include="Interfaces\IImporterFilter.cs" />
     <Compile Include="Interfaces\IFittingProxy.cs" />
     <Compile Include="Interfaces\IIfcElementConverter.cs" />
     <Compile Include="Interfaces\IImporter.cs" />

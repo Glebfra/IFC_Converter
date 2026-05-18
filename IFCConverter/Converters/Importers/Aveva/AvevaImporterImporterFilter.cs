@@ -4,7 +4,7 @@ using IFCConverter.Interfaces;
 
 namespace IFCConverter.Converters.Importers.Aveva
 {
-    internal class AvevaImporterFilter : IFilter
+    internal class AvevaImporterImporterFilter : IImporterFilter
     {
         [Pure]
         public bool IsMatch(IIfcProject ifcProject)

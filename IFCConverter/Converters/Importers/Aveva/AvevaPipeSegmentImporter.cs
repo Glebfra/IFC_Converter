@@ -18,8 +18,7 @@ namespace IFCConverter.Converters.Importers.Aveva
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
 
-            IIfcExtrudedAreaSolid? extrudedAreaSolid = representationItems[0] as IfcExtrudedAreaSolid;
-            if (extrudedAreaSolid == null)
+            if (representationItems[0] is not IIfcExtrudedAreaSolid extrudedAreaSolid)
                 throw new Exception("The representation item is not an extruded area solid.");
 
             Matrix<double> position = extrudedAreaSolid.Position.ToMatrix();

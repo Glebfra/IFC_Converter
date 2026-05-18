@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MathNet.Numerics.LinearAlgebra;
 using Start.Entities;
 using Start.Extensions;
 using Start.Interfaces;
@@ -9,17 +10,20 @@ namespace Start.API
 {
     public sealed class StartNodeRegistry
     {
-        private readonly Dictionary<VectorKey, StartEntityProxy> _nodes =
-            new Dictionary<VectorKey, StartEntityProxy>();
-
+        private readonly Dictionary<Vector<double>, StartEntityProxy> _nodes;
         private int _counter = 1;
+
+        public StartNodeRegistry(double tolerance)
+        {
+            _nodes = new Dictionary<Vector<double>, StartEntityProxy>(new VectorComparer(tolerance));
+        }
 
         public StartEntityProxy[] GetOrCreateNodes(IStartProject startProject, IStartEntity startEntity)
         {
             return startEntity.GetPositions()
-                .Select(pos => _nodes.GetOrAdd(new VectorKey(pos), key =>
+                .Select(pos => _nodes.GetOrAdd(pos, key =>
                     {
-                        StartNodeEntity nodeEntity = new StartNodeEntity() { Position = key.Coordinates };
+                        StartNodeEntity nodeEntity = new StartNodeEntity() { Position = pos };
                         StartEntityProxy proxy = startProject.AddEntity(nodeEntity);
                         proxy.StartBaseRoot.SetName((_counter++).ToString());
                         return proxy;

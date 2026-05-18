@@ -14,13 +14,14 @@ using IEntityProxy = IFCConverter.Interfaces.IEntityProxy;
 namespace IFCConverter.Converters.Importers.Aveva
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    [IfcImporter(filter: typeof(AvevaImporterFilter), priority: 0)]
+    [IfcImporter(filter: typeof(AvevaImporterImporterFilter), priority: 0)]
     internal class AvevaImporter : IImporter
     {
         private enum AvevaEntityType
         {
             PipeSegment,
-            Bend
+            Bend,
+            Tee
         }
         
         [Pure]
@@ -50,18 +51,20 @@ namespace IFCConverter.Converters.Importers.Aveva
             {
                 "TUBING" => AvevaEntityType.PipeSegment,
                 "ELBOW" => AvevaEntityType.Bend,
+                "TEE" => AvevaEntityType.Tee,
                 _ => null
             };
         }
 
         private static IEntityProxy CreateEntityProxy(IfcProduct product, AvevaEntityType entityType)
         {
+            IfcBuildingElementProxy buildingElementProxy = (IfcBuildingElementProxy)product;
+            
             return entityType switch
             {
-                AvevaEntityType.PipeSegment => new AvevaPipeSegmentImporter()
-                    .ReadTyped((IfcBuildingElementProxy)product),
-                AvevaEntityType.Bend => new AvevaBendImporter()
-                    .ReadTyped((IfcBuildingElementProxy)product),
+                AvevaEntityType.PipeSegment => new AvevaPipeSegmentImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.Bend => new AvevaBendImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.Tee => new AvevaTeeImporter().ReadTyped(buildingElementProxy),
                 _ => throw new Exception("Unsupported entity type.")
             };
         }

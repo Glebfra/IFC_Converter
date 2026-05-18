@@ -27,7 +27,7 @@ namespace IFCConverter.Converters.Importers
         public IImporter CreateImporter(IIfcProject ifcProject)
         {
             ImporterRegistration? match = _registrations
-                .Where(r => r.Filter.IsMatch(ifcProject))
+                .Where(r => r.ImporterFilter.IsMatch(ifcProject))
                 .OrderByDescending(r => r.Priority)
                 .FirstOrDefault();
             if (match == null)
@@ -42,11 +42,11 @@ namespace IFCConverter.Converters.Importers
             foreach (Type runtimeType in runtimeTypes)
             {
                 IfcImporterAttribute attribute = runtimeType.GetCustomAttribute<IfcImporterAttribute>();
-                if (!typeof(IFilter).IsAssignableFrom(attribute.Filter))
+                if (!typeof(IImporterFilter).IsAssignableFrom(attribute.Filter))
                     continue;
   
-                IFilter filter = (IFilter)Activator.CreateInstance(attribute.Filter, new object[] {});
-                _registrations.Add(new ImporterRegistration(runtimeType, filter, attribute.Priority));
+                IImporterFilter importerFilter = (IImporterFilter)Activator.CreateInstance(attribute.Filter, new object[] {});
+                _registrations.Add(new ImporterRegistration(runtimeType, importerFilter, attribute.Priority));
             }
         }
     }
