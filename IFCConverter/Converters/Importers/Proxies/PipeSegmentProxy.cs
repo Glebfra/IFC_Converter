@@ -16,6 +16,9 @@ namespace IFCConverter.Converters.Importers.Proxies
         
         public string? Name { get; set; }
         
+        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
+        private IEnumerable<Vector<double>>? _boundary;
+        
         private Vector<double> EndPosition => Position + Direction * Length;
 
         public PipeSegmentProxy(double diameter, double length, Vector<double> position, Vector<double> direction)
@@ -43,7 +46,7 @@ namespace IFCConverter.Converters.Importers.Proxies
         }
 
         [Pure]
-        public IEnumerable<Vector<double>> GetBoundaryPoints()
+        private IEnumerable<Vector<double>> GetBoundaryPoints()
         {
             return new Vector<double>[] { Position, EndPosition };
         }

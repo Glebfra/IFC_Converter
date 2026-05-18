@@ -77,7 +77,10 @@ namespace IFCConverter.Converters.Importers.Aveva
                 headProjection: headProjection * lengthPower,
                 headDiameter: headDiameter * lengthPower,
                 mainDiameter: mainDiameter * lengthPower
-            );
+            )
+            {
+                Name = source.Name
+            };
         }
     }
 }

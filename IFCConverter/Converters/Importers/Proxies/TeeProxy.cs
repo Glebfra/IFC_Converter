@@ -6,7 +6,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Converters.Importers.Proxies
 {
-    public class TeeProxy : IFittingProxy
+    internal sealed class TeeProxy : IFittingProxy
     {
         public readonly double MainDiameter;
         public readonly double HeadDiameter;
@@ -15,6 +15,9 @@ namespace IFCConverter.Converters.Importers.Proxies
         public Vector<double> HeadProjection { get; }
 
         public string? Name { get; set; }
+        
+        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
+        private IEnumerable<Vector<double>>? _boundary;
 
         public TeeProxy(
             Vector<double> position, 
@@ -46,7 +49,7 @@ namespace IFCConverter.Converters.Importers.Proxies
             return teeEntity;
         }
 
-        public IEnumerable<Vector<double>> GetBoundaryPoints()
+        private IEnumerable<Vector<double>> GetBoundaryPoints()
         {
             return new Vector<double>[]
             {

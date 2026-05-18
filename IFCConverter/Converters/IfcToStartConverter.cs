@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ifc.Interfaces;
 using IFCConverter.Converters.Importers;
-using IFCConverter.Converters.Importers.Topology;
 using IFCConverter.Interfaces;
 using IFCConverter.Utils;
 using MathNet.Numerics;
@@ -67,14 +65,13 @@ namespace IFCConverter.Converters
             IReadOnlyCollection<IEntityProxy> proxies = ImportProxies(ifcProject);
             
             using IStartProject startProject = StartProject.OpenFromDocument(startDocument);
-            ITopologyProxy[] topologyProxies = proxies.OfType<ITopologyProxy>().ToArray();
             foreach (IEntityProxy entityProxy in proxies)
             {
                 IStartEntity startEntity = entityProxy.ToStartEntity();
                     
-                IEnumerable<ITopologyProxy> connectedProxies = 
-                    GetConnectedEntities((ITopologyProxy)entityProxy, topologyProxies);
-                foreach (ITopologyProxy connectedProxy in connectedProxies)
+                IEnumerable<IEntityProxy> connectedProxies = 
+                    GetConnectedEntities(entityProxy, proxies);
+                foreach (IEntityProxy connectedProxy in connectedProxies)
                 {
                     if (startEntity is not IStartClippableEntity clippableEntity ||
                         connectedProxy is not IFittingProxy fittingProxy) 
@@ -109,17 +106,17 @@ namespace IFCConverter.Converters
         }
 
         [Pure]
-        private static IEnumerable<ITopologyProxy> GetConnectedEntities(
-            ITopologyProxy proxy,
-            IEnumerable<ITopologyProxy> entityProxies)
+        private static IEnumerable<IEntityProxy> GetConnectedEntities(
+            IEntityProxy proxy,
+            IEnumerable<IEntityProxy> entityProxies)
         {
-            List<ITopologyProxy> result = new List<ITopologyProxy>();
+            List<IEntityProxy> result = new List<IEntityProxy>();
 
-            IEnumerable<Vector<double>> boundaryPoints = proxy.GetBoundaryPoints();
+            IEnumerable<Vector<double>> boundaryPoints = proxy.Boundary;
             
-            foreach (ITopologyProxy otherProxy in entityProxies)
+            foreach (IEntityProxy otherProxy in entityProxies)
             {
-                IEnumerable<Vector<double>> otherBoundaryPoints = otherProxy.GetBoundaryPoints();
+                IEnumerable<Vector<double>> otherBoundaryPoints = otherProxy.Boundary;
                 bool isConnected = boundaryPoints.Any(
                     p1 => otherBoundaryPoints.Any(
                         p2 => p1.AlmostEqual(p2, 1e-3)

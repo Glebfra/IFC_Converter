@@ -3,7 +3,6 @@ using System.Linq;
 using Ifc.Extensions;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
-using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
 using PipeSegmentProxy = IFCConverter.Converters.Importers.Proxies.PipeSegmentProxy;
@@ -33,17 +32,16 @@ namespace IFCConverter.Converters.Importers.Aveva
             double length = extrudedAreaSolid.Depth;
             double diameter = profileDef.Radius * 2;
 
-            PipeSegmentProxy pipeSegmentProperties = new PipeSegmentProxy
+            return new PipeSegmentProxy
             (
                 diameter: diameter * GetLengthPower(source),
                 length: length * GetLengthPower(source),
                 position: position.GetOffset() * GetLengthPower(source),
                 direction: pipeDirection
-            );
-
-            pipeSegmentProperties.Name = source.Name;
-
-            return pipeSegmentProperties;
+            )
+            {
+                Name = source.Name
+            };
         }
     }
 }

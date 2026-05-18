@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Interfaces;
@@ -20,6 +21,9 @@ namespace IFCConverter.Converters.Importers.Proxies
         public Vector<double> Position { get; }
 
         public string? Name { get; set; }
+        
+        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
+        private IEnumerable<Vector<double>>? _boundary;
 
         public BendProxy(Vector<double> position, double angle, double radius, 
             Vector<double> axisPosition, Vector<double> refDirection)
@@ -45,7 +49,7 @@ namespace IFCConverter.Converters.Importers.Proxies
         }
         
         [Pure]
-        public IEnumerable<Vector<double>> GetBoundaryPoints()
+        private IEnumerable<Vector<double>> GetBoundaryPoints()
         {
             Vector<double> axis = (Position - AxisPosition).Normalize(2);
             Vector<double> upDirection = axis.CrossProduct(RefDirection).Normalize(2);

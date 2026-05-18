@@ -8,19 +8,35 @@ namespace IFCConverter.Converters.Importers.Topology
 {
     internal sealed class TopologyBuilder
     {
+        private readonly double _tolerance;
+        private readonly VectorComparer _comparer;
+        
         private readonly Dictionary<Vector<double>, TopologyNode> _nodes;
-        private readonly Dictionary<TopologyNode, TopologyNode> _nodesMap =
-            new Dictionary<TopologyNode, TopologyNode>();
+        private readonly Dictionary<Vector<double>, TopologyNode> _fittingNodes;
 
         public List<ElementTopologyInfo> Elements { get; } = new List<ElementTopologyInfo>();
-        public IReadOnlyCollection<TopologyNode> Nodes => _nodesMap.Values.Distinct().ToArray();
+        public IReadOnlyCollection<TopologyNode> Nodes => _nodes.Values.Distinct().ToArray();
 
         public TopologyBuilder(IEnumerable<IEntityProxy> proxies, double tolerance)
         {
+            _tolerance = tolerance;
+            _comparer = new VectorComparer(tolerance);
+            
             _nodes = new Dictionary<Vector<double>, TopologyNode>(new VectorComparer(tolerance));
-            AddElements(proxies, tolerance);
+            _fittingNodes = new Dictionary<Vector<double>, TopologyNode>(new VectorComparer(tolerance));
+            
+            AddElements(proxies);
         }
 
+        #if true
+        private void AddElements(IEnumerable<IEntityProxy> proxies)
+        {
+            foreach (IEntityProxy proxy in proxies)
+            {
+                IEnumerable<Vector<double>> boundary = proxy.Boundary;
+            }
+        }
+        #else
         private void AddElements(IEnumerable<IEntityProxy> proxies, double tolerance)
         {
             IEnumerable<IFittingProxy> fittingProxies = proxies.OfType<IFittingProxy>();
@@ -65,22 +81,22 @@ namespace IFCConverter.Converters.Importers.Topology
                 IEnumerable<Vector<double>> boundary = topologyProxy.GetBoundaryPoints();
             }
         }
+        #endif
 
         private static IEnumerable<IEntityProxy> GetConnectedEntities(
-            ITopologyProxy topologyProxy, 
+            IEntityProxy entityProxy, 
             IEnumerable<IEntityProxy> proxies,
             double tolerance)
         {
             VectorComparer comparer = new VectorComparer(tolerance);
             List<IEntityProxy> result = new List<IEntityProxy>();
-
-            IEnumerable<ITopologyProxy> topologyProxies = proxies.OfType<ITopologyProxy>();
-            IEnumerable<Vector<double>> firstBoundaryPoints = topologyProxy.GetBoundaryPoints();
             
-            foreach (ITopologyProxy otherTopologyProxy in topologyProxies)
+            IEnumerable<Vector<double>> firstBoundaryPoints = entityProxy.Boundary;
+            
+            foreach (IEntityProxy proxy in proxies)
             {
-                IEnumerable<Vector<double>> secondBoundaryPoints = otherTopologyProxy.GetBoundaryPoints();
-                
+                IEnumerable<Vector<double>> secondBoundaryPoints = proxy.Boundary;
+
                 bool isConnected = firstBoundaryPoints.Any(p1 =>
                     secondBoundaryPoints.Any(p2 =>
                         comparer.Equals(p1, p2)
@@ -88,35 +104,10 @@ namespace IFCConverter.Converters.Importers.Topology
                 );
                 
                 if (isConnected)
-                    result.Add((IEntityProxy)otherTopologyProxy);
+                    result.Add(proxy);
             }
 
             return result;
-        }
-
-        private void AddElement(IEntityProxy proxy)
-        {
-            if (proxy is not ITopologyProxy topologyProxy)
-                return;
-
-            List<TopologyNode> nodes = new List<TopologyNode>();
-            foreach (Vector<double> point in topologyProxy.GetBoundaryPoints())
-            {
-                TopologyNode node = GetOrCreateNode(point);
-                node.ConnectedElements.Add(proxy);
-                nodes.Add(node);
-            }
-            Elements.Add(new ElementTopologyInfo(proxy, nodes));
-        }
-
-        private TopologyNode GetOrCreateNode(Vector<double> point)
-        {
-            if (_nodes.TryGetValue(point, out TopologyNode? node))
-                return node;
-
-            node = new TopologyNode(point);
-            _nodes.Add(point, node);
-            return node;
         }
     }
 }

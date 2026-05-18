@@ -21,7 +21,8 @@ namespace IFCConverter.Converters.Importers.Aveva
         {
             PipeSegment,
             Bend,
-            Tee
+            Tee,
+            Reducer
         }
         
         [Pure]
@@ -52,6 +53,7 @@ namespace IFCConverter.Converters.Importers.Aveva
                 "TUBING" => AvevaEntityType.PipeSegment,
                 "ELBOW" => AvevaEntityType.Bend,
                 "TEE" => AvevaEntityType.Tee,
+                //"REDUCER" => AvevaEntityType.Reducer,
                 _ => null
             };
         }
@@ -65,6 +67,7 @@ namespace IFCConverter.Converters.Importers.Aveva
                 AvevaEntityType.PipeSegment => new AvevaPipeSegmentImporter().ReadTyped(buildingElementProxy),
                 AvevaEntityType.Bend => new AvevaBendImporter().ReadTyped(buildingElementProxy),
                 AvevaEntityType.Tee => new AvevaTeeImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.Reducer => new AvevaReducerImporter().ReadTyped(buildingElementProxy),
                 _ => throw new Exception("Unsupported entity type.")
             };
         }
