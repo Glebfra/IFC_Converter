@@ -5,7 +5,9 @@ using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using Utils;
+using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.MeasureResource;
 using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace Ifc.Extensions
@@ -60,6 +62,24 @@ namespace Ifc.Extensions
             }
 
             return properties;
+        }
+
+        [Pure]
+        public static IEnumerable<Vector<double>> GetCoordinates(this IIfcCartesianPointList3D pointList)
+        {
+            List<Vector<double>> result = new List<Vector<double>>();
+            
+            foreach (IItemSet<IfcLengthMeasure> ifcLengthMeasures in pointList.CoordList)
+            {
+                result.Add(new DenseVector(new double[]
+                {
+                    ifcLengthMeasures[0],
+                    ifcLengthMeasures[1],
+                    ifcLengthMeasures[2],
+                }));
+            }
+
+            return result;
         }
     }
 }

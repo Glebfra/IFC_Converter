@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -267,6 +268,20 @@ namespace Utils
         public static string ToRowString(this Vector<double> vector)
         {
             return string.Join(";", vector);
+        }
+
+        [Pure]
+        public static Vector<double> Sum(this IEnumerable<Vector<double>> vectors)
+        {
+            Vector<double> result = VectorExtensions.Zero;
+            result = vectors.Aggregate(result, (current, vector) => current + vector);
+            return result;
+        }
+
+        [Pure]
+        public static Vector<double> Average(this IEnumerable<Vector<double>> vectors)
+        {
+            return 1.0 / vectors.Count() * vectors.Sum();
         }
     }
 }

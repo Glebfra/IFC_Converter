@@ -87,9 +87,10 @@ namespace Start.Entities.Segments
         /// <param name="length">The length to clip.</param>
         public void Clip(Vector<double> position, double length)
         {
+            Vector<double> displacement = Projection.Normalize(2) * length;
             if (IsStartPosition(position))
-                StartPosition += Projection.Normalize(2) * length;
-            Projection -= Projection.Normalize(2) * length;
+                StartPosition += displacement;
+            Projection -= displacement;
         }
 
         /// <summary>

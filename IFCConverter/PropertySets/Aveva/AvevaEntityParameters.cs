@@ -2,7 +2,7 @@
 
 namespace IFCConverter.PropertySets.Aveva
 {
-#pragma warning disable CS0414
+    #pragma warning disable CS0414
     [PropertySet(name: "AVEVA_EntityParameters")]
     internal class AvevaEntityParameters : AbstractPropertySet
     {
@@ -11,5 +11,5 @@ namespace IFCConverter.PropertySets.Aveva
         [Property("ObjectType")] public string ObjectType = string.Empty;
         [Property("Tag")] public string Tag = string.Empty;
     }
-#pragma warning restore CS0414
+    #pragma warning restore CS0414
 }

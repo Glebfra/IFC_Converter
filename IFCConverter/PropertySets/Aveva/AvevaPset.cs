@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.PropertySets.Aveva
 {
-#pragma warning disable CS0414
+    #pragma warning disable CS0414
     [PropertySet(name: "AVEVA_Pset", PropertyMatchMode.StartsWith)]
     internal class AvevaPset : AbstractPropertySet
     {
@@ -46,5 +46,5 @@ namespace IFCConverter.PropertySets.Aveva
         [Property(name: "WORLD")] public string World = string.Empty;
         [Property(name: "ZONE")] public string Zone = string.Empty;
     }
-#pragma warning restore CS0414
+    #pragma warning restore CS0414
 }

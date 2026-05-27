@@ -53,7 +53,7 @@ namespace IFCConverter.Converters.Importers.Aveva
                 "TUBING" => AvevaEntityType.PipeSegment,
                 "ELBOW" => AvevaEntityType.Bend,
                 "TEE" => AvevaEntityType.Tee,
-                //"REDUCER" => AvevaEntityType.Reducer,
+                "REDUCER" => AvevaEntityType.Reducer,
                 _ => null
             };
         }

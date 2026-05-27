@@ -27,6 +27,7 @@
         public const string AirCoolerLength = "2";
         public const string ConicalPartLength = "2";
         public const string TankDistanceToNozzleAxis = "2";
+        public const string ReducerFullLength = "3";
         public const string Diameter = "4";
         public const string MinDiameter = "6";
         public const string MaterialName = "7";

@@ -18,6 +18,10 @@ namespace Start.Entities.Fittings
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> LengthOfConicalPart { get; set; } = new LengthValueProperty<double>();
 
+        [JsonProperty(StartPropertyName.ReducerFullLength)]
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> FullLength { get; set; } = new LengthValueProperty<double>();
+
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> ThicknessAtMaxDiameterPoint { get; set; } =
