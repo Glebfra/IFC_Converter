@@ -4,7 +4,7 @@ using Utils;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    public sealed class SegmentResolver
+    internal sealed class SegmentResolver
     {
         private readonly VectorComparer _comparer;
         

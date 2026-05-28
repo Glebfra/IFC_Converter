@@ -1,6 +1,6 @@
 ﻿namespace IFCConverter.Importer.Interfaces
 {
-    public interface IFittingProxy : IEntityProxy
+    internal interface IFittingProxy : IEntityProxy
     {
     }
 }

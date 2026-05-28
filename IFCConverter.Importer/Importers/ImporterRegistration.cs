@@ -5,7 +5,7 @@ using IFCConverter.Importer.Interfaces;
 
 namespace IFCConverter.Importer.Importers
 {
-    public class ImporterRegistration
+    internal class ImporterRegistration
     {
         public readonly Type ImporterType;
         public readonly IImporterFilter ImporterFilter;

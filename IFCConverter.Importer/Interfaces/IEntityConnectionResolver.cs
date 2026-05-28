@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface IEntityConnectionResolver
+    internal interface IEntityConnectionResolver
     {
         IEnumerable<IEntityProxy> GetConnectedEntities(
             IEntityProxy proxy,

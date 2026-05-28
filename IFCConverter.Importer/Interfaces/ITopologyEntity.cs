@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface ITopologyEntity
+    internal interface ITopologyEntity
     {
         public IEntityProxy Proxy { get; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }

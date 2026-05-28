@@ -73,37 +73,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\ConverterFactory.cs" />
-    <Compile Include="Converters\Elements\AxialCouplingJointConverter.cs" />
-    <Compile Include="Converters\Elements\AxialExpansionJointConverter.cs" />
-    <Compile Include="Converters\Elements\BendConverter.cs" />
-    <Compile Include="Converters\Elements\ConeElementConverter.cs" />
-    <Compile Include="Converters\Elements\ConstantSpringAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\DirectionalGuideAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\FixedAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\IfcElementConverter.cs" />
-    <Compile Include="Converters\Elements\LateralExpansionJointConverter.cs" />
-    <Compile Include="Converters\Elements\MomentFreeAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\NonstandardAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\PipeConverter.cs" />
-    <Compile Include="Converters\Elements\ReducerConverter.cs" />
-    <Compile Include="Converters\Elements\RestingSupportAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\RigidHangerAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\SegmentedExpansionJointConverter.cs" />
-    <Compile Include="Converters\Elements\SphericalPipesJointConverter.cs" />
-    <Compile Include="Converters\Elements\SpringAnchorConverter.cs" />
-    <Compile Include="Converters\Elements\TeeConverter.cs" />
-    <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs" />
-    <Compile Include="Converters\Elements\ValveConverter.cs" />
-    <Compile Include="Converters\IfcToStartConverter.cs" />
-    <Compile Include="Converters\StartToIfcConverter.cs" />
-    <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
-    <Compile Include="Extensions\StartEntityExtensions.cs" />
     <Compile Include="IfcConverter.cs" />
     <Compile Include="IIfcConverter.cs" />
-    <Compile Include="Interfaces\IIfcElementConverter.cs" />
-    <Compile Include="Interfaces\IPropertyConverter.cs" />
-    <Compile Include="Interfaces\IPropertySet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +82,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IFCConverter.Exporter\IFCConverter.Exporter.csproj">
+      <Project>{ad860eed-1bac-4b03-8327-5d9a3452c794}</Project>
+      <Name>IFCConverter.Exporter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IFCConverter.GUI\IFCConverter.GUI.csproj">
       <Project>{1e4d34b3-2c04-4816-a9b3-9c78e2d29d85}</Project>
       <Name>IFCConverter.GUI</Name>

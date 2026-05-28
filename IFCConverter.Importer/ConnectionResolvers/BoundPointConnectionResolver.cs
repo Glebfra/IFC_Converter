@@ -6,7 +6,7 @@ using Utils;
 
 namespace IFCConverter.Importer.ConnectionResolvers
 {
-    public sealed class BoundPointConnectionResolver : IEntityConnectionResolver
+    internal sealed class BoundPointConnectionResolver : IEntityConnectionResolver
     {
         private readonly VectorComparer _comparer;
 

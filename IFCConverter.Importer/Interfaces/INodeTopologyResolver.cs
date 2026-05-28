@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface INodeTopologyResolver
+    internal interface INodeTopologyResolver
     {
         public IReadOnlyCollection<ITopologyNodeEntity> ResolveTopology(
             IEntityProxy proxy, 

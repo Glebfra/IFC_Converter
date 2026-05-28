@@ -3,7 +3,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface IResolvedSegmentProxy
+    internal interface IResolvedSegmentProxy
     {
         public ISegmentProxy Source { get; }
         

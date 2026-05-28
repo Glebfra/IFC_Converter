@@ -2,12 +2,12 @@
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface IEntityImporter
+    internal interface IEntityImporter
     {
         public object Read(IInstantiableEntity entity);
     }
     
-    public interface IEntityImporter<in TSource, out TResult> : IEntityImporter
+    internal interface IEntityImporter<in TSource, out TResult> : IEntityImporter
     {
         public TResult ReadTyped(TSource source);
     }

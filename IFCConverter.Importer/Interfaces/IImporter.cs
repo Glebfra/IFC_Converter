@@ -4,7 +4,7 @@ using Xbim.Ifc4.Kernel;
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface IImporter
+    internal interface IImporter
     {
         [Pure]
         public IReadOnlyCollection<ITopologyEntity> ImportEntities(IEnumerable<IfcProduct> products);

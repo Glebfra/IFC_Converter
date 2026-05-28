@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface ISegmentProxy : IEntityProxy
+    internal interface ISegmentProxy : IEntityProxy
     {
         public double Length { get; }
         public Vector<double> Direction { get; }

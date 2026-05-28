@@ -10,7 +10,7 @@ using Utils;
 
 namespace IFCConverter.Importer.Importers
 {
-    public class ImporterRegistry
+    internal class ImporterRegistry
     {
         public static ImporterRegistry GetInstance() => _instance.Value;
         private static readonly Lazy<ImporterRegistry> _instance =

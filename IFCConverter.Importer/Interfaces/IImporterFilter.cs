@@ -3,7 +3,7 @@ using Ifc.Interfaces;
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface IImporterFilter
+    internal interface IImporterFilter
     {
         [Pure]
         public bool IsMatch(IIfcProject ifcProject);

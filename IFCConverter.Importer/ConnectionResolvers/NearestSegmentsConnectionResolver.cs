@@ -4,7 +4,7 @@ using IFCConverter.Importer.Interfaces;
 
 namespace IFCConverter.Importer.ConnectionResolvers
 {
-    public sealed class NearestSegmentsConnectionResolver : IEntityConnectionResolver
+    internal sealed class NearestSegmentsConnectionResolver : IEntityConnectionResolver
     {
         public IEnumerable<IEntityProxy> GetConnectedEntities(
             IEntityProxy proxy, 

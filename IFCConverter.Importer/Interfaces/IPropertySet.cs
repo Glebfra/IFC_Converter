@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 
 namespace IFCConverter.Importer.Interfaces
 {
-    public interface IPropertySet
+    internal interface IPropertySet
     {
         [Pure]
         public Dictionary<string, object> GetDictionary();
