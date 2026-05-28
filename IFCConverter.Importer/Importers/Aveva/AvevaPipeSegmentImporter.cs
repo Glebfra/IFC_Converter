@@ -1,0 +1,47 @@
+﻿using System;
+using System.Linq;
+using Ifc.Extensions;
+using MathNet.Numerics.LinearAlgebra;
+using Utils;
+using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.SharedBldgElements;
+using PipeSegmentProxy = IFCConverter.Importer.Entities.Proxies.PipeSegmentProxy;
+
+namespace IFCConverter.Importer.Importers.Aveva
+{
+    internal class AvevaPipeSegmentImporter : AbstractEntityImporter<IfcBuildingElementProxy, PipeSegmentProxy>
+    {
+        public override PipeSegmentProxy ReadTyped(IfcBuildingElementProxy source)
+        {
+            IIfcRepresentationItem[] representationItems = GetRepresentationItems(source).ToArray();
+            if (representationItems.Length != 1)
+                throw new Exception("Expected exactly one representation item for the given source.");
+
+            if (representationItems[0] is not IIfcExtrudedAreaSolid extrudedAreaSolid)
+                throw new Exception("The representation item is not an extruded area solid.");
+
+            Matrix<double> position = extrudedAreaSolid.Position.ToMatrix();
+            Matrix<double> rotation = position.GetRotation();
+            Vector<double> extrudedDirection = extrudedAreaSolid.ExtrudedDirection.ToVector();
+            Vector<double> pipeDirection = rotation.LeftMultiply(extrudedDirection);
+
+            IIfcCircleProfileDef? profileDef = extrudedAreaSolid.SweptArea as IIfcCircleProfileDef;
+            if (profileDef == null)
+                throw new Exception("The swept area is not a circle profile definition.");
+
+            double length = extrudedAreaSolid.Depth;
+            double diameter = profileDef.Radius * 2;
+
+            return new PipeSegmentProxy
+            (
+                diameter: diameter * GetLengthPower(source),
+                length: length * GetLengthPower(source),
+                position: position.GetOffset() * GetLengthPower(source),
+                direction: pipeDirection
+            )
+            {
+                Name = source.Name
+            };
+        }
+    }
+}

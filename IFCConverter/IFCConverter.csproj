@@ -73,16 +73,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\AbstractPropertyItemAttribute.cs" />
-    <Compile Include="Attributes\IfcImporterAttribute.cs" />
-    <Compile Include="Attributes\PropertyAttribute.cs">
-      <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Attributes\PropertySetAttribute.cs">
-      <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs" />
-    <Compile Include="ConnectionResolvers\NearestSegmentsConnectionResolver.cs" />
     <Compile Include="Converters\ConverterFactory.cs" />
     <Compile Include="Converters\Elements\AxialCouplingJointConverter.cs" />
     <Compile Include="Converters\Elements\AxialExpansionJointConverter.cs" />
@@ -106,111 +96,33 @@
     <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs" />
     <Compile Include="Converters\Elements\ValveConverter.cs" />
     <Compile Include="Converters\IfcToStartConverter.cs" />
-    <Compile Include="Converters\Importers\AbstractEntityImporter.cs" />
-    <Compile Include="Converters\Importers\Aveva\AvevaBendImporter.cs" />
-    <Compile Include="Converters\Importers\Aveva\AvevaImporter.cs" />
-    <Compile Include="Converters\Importers\Aveva\AvevaImporterImporterFilter.cs">
-      <DependentUpon>AvevaImporter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\Importers\Aveva\AvevaPipeSegmentImporter.cs" />
-    <Compile Include="Converters\Importers\Aveva\AvevaReducerImporter.cs" />
-    <Compile Include="Converters\Importers\Aveva\AvevaTeeImporter.cs" />
-    <Compile Include="Converters\Importers\ImporterRegistration.cs" />
-    <Compile Include="Converters\Importers\ImporterRegistry.cs" />
-    <Compile Include="Converters\Importers\Proxies\BendProxy.cs" />
-    <Compile Include="Converters\Importers\Proxies\PipeSegmentProxy.cs" />
-    <Compile Include="Converters\Importers\Proxies\ReducerProxy.cs" />
-    <Compile Include="Converters\Importers\Proxies\ResolvedSegmentProxy.cs" />
-    <Compile Include="Converters\Importers\Proxies\SegmentResolver.cs" />
-    <Compile Include="Converters\Importers\Proxies\TeeProxy.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />
     <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
-    <Compile Include="Extensions\IfcRootExtensions.cs" />
     <Compile Include="Extensions\StartEntityExtensions.cs" />
-    <Compile Include="Graph\ConnectionNode.cs" />
-    <Compile Include="Graph\TopologyGraph.cs" />
-    <Compile Include="Graph\TopologyGraphBuilder.cs" />
-    <Compile Include="GUI\ExportWindowForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\ExportWindowForm.Designer.cs">
-      <DependentUpon>ExportWindowForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\ImportWindowForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\ImportWindowForm.Designer.cs">
-      <DependentUpon>ImportWindowForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="IfcConverter.cs" />
     <Compile Include="IIfcConverter.cs" />
-    <Compile Include="Interfaces\Converters\IIfcElementConverter.cs" />
-    <Compile Include="Interfaces\Converters\IPropertyConverter.cs" />
-    <Compile Include="Interfaces\Converters\IPropertySet.cs" />
-    <Compile Include="Interfaces\Entities\IEntityConnectionResolver.cs" />
-    <Compile Include="Interfaces\Entities\IEntityImporter.cs" />
-    <Compile Include="Interfaces\Entities\IEntityProxy.cs" />
-    <Compile Include="Interfaces\Entities\IResolvedSegmentProxy.cs" />
-    <Compile Include="Interfaces\Importers\IImporter.cs" />
-    <Compile Include="Interfaces\Importers\IImporterFilter.cs" />
-    <Compile Include="Interfaces\Proxies\IFittingProxy.cs" />
-    <Compile Include="Interfaces\Proxies\ISegmentProxy.cs" />
-    <Compile Include="Interfaces\Topology\IEntityTopologyResolver.cs" />
-    <Compile Include="Interfaces\Topology\INodeTopologyResolver.cs" />
-    <Compile Include="Interfaces\Topology\ITopologyEntity.cs" />
-    <Compile Include="Interfaces\Topology\ITopologyNodeEntity.cs" />
-    <Compile Include="Localization\LocalizationResource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LocalizationResource.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Interfaces\IIfcElementConverter.cs" />
+    <Compile Include="Interfaces\IPropertyConverter.cs" />
+    <Compile Include="Interfaces\IPropertySet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertySets\AbstractPropertySet.cs" />
-    <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs" />
-    <Compile Include="PropertySets\Aveva\AvevaPset.cs" />
-    <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs" />
-    <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
-    <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
-    <Compile Include="PropertySets\PropertySetRegistry.cs" />
-    <Compile Include="TopologyEntities\TopologyEntity.cs" />
-    <Compile Include="TopologyEntities\TopologyNode.cs" />
-    <Compile Include="TopologyResolvers\EntityTopologyResolver.cs" />
-    <Compile Include="TopologyResolvers\NodeTopologyResolver.cs" />
-    <Compile Include="Utils\ConversionResult.cs" />
-    <Compile Include="Utils\ExportDataContainer.cs" />
-    <Compile Include="Utils\IfcExportType.cs" />
-    <Compile Include="Utils\IfcExportTypeEnum.cs" />
-    <Compile Include="Utils\ImportDataContainer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUI\ExportWindowForm.resx">
-      <DependentUpon>ExportWindowForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ExportWindowForm.zh.resx">
-      <DependentUpon>ExportWindowForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ImportWindowForm.resx">
-      <DependentUpon>ImportWindowForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\LocalizationResource.en.resx">
-      <DependentUpon>LocalizationResource.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\LocalizationResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\LocalizationResource.ru.resx">
-      <DependentUpon>LocalizationResource.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\LocalizationResource.zh.resx">
-      <DependentUpon>LocalizationResource.resx</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IFCConverter.GUI\IFCConverter.GUI.csproj">
+      <Project>{1e4d34b3-2c04-4816-a9b3-9c78e2d29d85}</Project>
+      <Name>IFCConverter.GUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IFCConverter.Importer\IFCConverter.Importer.csproj">
+      <Project>{e14e0ebb-9d95-4d9b-a6bc-36b7e192be77}</Project>
+      <Name>IFCConverter.Importer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
+      <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
+      <Name>IFCConverter.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ifc\Ifc.csproj">
       <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
       <Name>Ifc</Name>

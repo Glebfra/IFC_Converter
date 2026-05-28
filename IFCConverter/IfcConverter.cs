@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using IFCConverter.Converters;
-using IFCConverter.GUI;
+using IFCConverter.GUI.GUI;
 using IFCConverter.Utils;
 using Start.API;
 using Start.Interfaces;

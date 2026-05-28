@@ -7,7 +7,6 @@ using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
-using IFCConverter.Interfaces;
 using IFCConverter.Utils;
 using Start.API;
 using Start.Extensions;
@@ -16,9 +15,9 @@ using Utils;
 using Xbim.Ifc4.Kernel;
 using IfcProject = Ifc.API.IfcProject;
 
-namespace IFCConverter.Converters
+namespace IFCConverter.Importer
 {
-    internal class IfcToStartConverter
+    public class IfcToStartConverter
     {
         private const double _vectorTolerance = 1e-3;
         
