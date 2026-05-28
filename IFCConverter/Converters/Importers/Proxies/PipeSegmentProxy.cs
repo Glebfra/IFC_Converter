@@ -7,19 +7,18 @@ using Start.Interfaces;
 
 namespace IFCConverter.Converters.Importers.Proxies
 {
-    internal sealed class PipeSegmentProxy : ISegmentProxy
+    internal class PipeSegmentProxy : ISegmentProxy
     {
         public readonly double Diameter;
         public double Length { get; }
         public Vector<double> Position { get; }
         public Vector<double> Direction { get; }
+        public Vector<double> EndPosition => Position + Direction * Length;
         
         public string? Name { get; set; }
         
         public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
         private IEnumerable<Vector<double>>? _boundary;
-        
-        private Vector<double> EndPosition => Position + Direction * Length;
 
         public PipeSegmentProxy(double diameter, double length, Vector<double> position, Vector<double> direction)
         {

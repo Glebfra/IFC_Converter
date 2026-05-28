@@ -7,6 +7,7 @@ namespace IFCConverter.Interfaces
 {
     internal interface IEntityProxy
     {
+        public Vector<double> Position { get; }
         public IEnumerable<Vector<double>> Boundary { get; }
         
         [Pure]

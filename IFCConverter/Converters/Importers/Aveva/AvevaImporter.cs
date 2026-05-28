@@ -7,6 +7,8 @@ using IFCConverter.Attributes;
 using IFCConverter.Extensions;
 using IFCConverter.Interfaces;
 using IFCConverter.PropertySets.Aveva;
+using IFCConverter.TopologyResolvers;
+using Utils;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.SharedBldgElements;
 using IEntityProxy = IFCConverter.Interfaces.IEntityProxy;
@@ -17,6 +19,14 @@ namespace IFCConverter.Converters.Importers.Aveva
     [IfcImporter(filter: typeof(AvevaImporterImporterFilter), priority: 0)]
     internal class AvevaImporter : IImporter
     {
+        private const double _vectorTolerance = 1e-3;
+        private readonly IEntityTopologyResolver _entityTopologyResolver;
+
+        public AvevaImporter()
+        {
+            _entityTopologyResolver = new EntityTopologyResolver(new VectorComparer(_vectorTolerance));
+        }
+        
         private enum AvevaEntityType
         {
             PipeSegment,
@@ -24,12 +34,14 @@ namespace IFCConverter.Converters.Importers.Aveva
             Tee,
             Reducer
         }
-        
+
         [Pure]
-        public IEnumerable<IEntityProxy> ImportEntities(IEnumerable<IfcProduct> products)
+        public IReadOnlyCollection<ITopologyEntity> ImportEntities(IEnumerable<IfcProduct> products)
         {
+            IReadOnlyCollection<IfcProduct> ifcProductsCollection = products.ToArray();
+
             List<IEntityProxy> proxies = new List<IEntityProxy>();
-            foreach (IfcProduct ifcProduct in products)
+            foreach (IfcProduct ifcProduct in ifcProductsCollection)
             {
                 IPropertySet[] propertySets = ifcProduct.GetPropertySets().ToArray();
                 AvevaEntityParameters? parameters = propertySets.OfType<AvevaEntityParameters>().FirstOrDefault();
@@ -39,13 +51,15 @@ namespace IFCConverter.Converters.Importers.Aveva
                 AvevaEntityType? entityType = GetAvevaEntityType(parameters);
                 if (entityType == null)
                     continue;
-                IEntityProxy entityProxy = CreateEntityProxy(ifcProduct, (AvevaEntityType)entityType);
+                
+                IEntityProxy entityProxy =
+                    CreateEntityProxy(ifcProduct, (AvevaEntityType)entityType, ifcProductsCollection);
                 proxies.Add(entityProxy);
             }
-
-            return proxies;
+            
+            return proxies.Select(proxy => _entityTopologyResolver.ResolveTopology(proxy, proxies)).ToArray();
         }
-        
+
         private static AvevaEntityType? GetAvevaEntityType(AvevaEntityParameters parameters)
         {
             return parameters.E3DType switch
@@ -58,7 +72,10 @@ namespace IFCConverter.Converters.Importers.Aveva
             };
         }
 
-        private static IEntityProxy CreateEntityProxy(IfcProduct product, AvevaEntityType entityType)
+        private static IEntityProxy CreateEntityProxy(
+            IfcProduct product, 
+            AvevaEntityType entityType, 
+            IReadOnlyCollection<IfcProduct> otherProducts)
         {
             IfcBuildingElementProxy buildingElementProxy = (IfcBuildingElementProxy)product;
             

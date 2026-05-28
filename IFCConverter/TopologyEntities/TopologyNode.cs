@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics;
 using IFCConverter.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace IFCConverter.Converters.Importers.Topology
+namespace IFCConverter.TopologyEntities
 {
-    internal sealed class TopologyNode
+    [DebuggerDisplay("Node: ({Position[0]}, {Position[1]}, {Position[2]})")]
+    internal readonly struct TopologyNode : ITopologyNodeEntity
     {
         public Vector<double> Position { get; }
-        public List<IEntityProxy> ConnectedElements { get; } = new List<IEntityProxy>();
-        
+
         public TopologyNode(Vector<double> position)
         {
             Position = position;

@@ -7,6 +7,6 @@ namespace IFCConverter.Interfaces
     internal interface IImporter
     {
         [Pure]
-        public IEnumerable<IEntityProxy> ImportEntities(IEnumerable<IfcProduct> products);
+        public IReadOnlyCollection<ITopologyEntity> ImportEntities(IEnumerable<IfcProduct> products);
     }
 }

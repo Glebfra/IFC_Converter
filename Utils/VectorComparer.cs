@@ -46,6 +46,22 @@ namespace Utils
             return x.L2Norm() > y.L2Norm();
         }
 
+        public bool NearerThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
+        {
+            if (x == null || y == null)
+                return false;
+            
+            return (x - origin).L2Norm() <= (y - origin).L2Norm();
+        }
+
+        public bool FartherThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
+        {
+            if (x == null || y == null)
+                return false;
+            
+            return (x - origin).L2Norm() >= (y - origin).L2Norm();
+        }
+
         public int GetHashCode(Vector<double> obj)
         {
             long x = Quantize(obj[0]);

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCConverter", "IFCConverte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{C0F6C033-13C4-4697-B94C-7AAF585EFF57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{DA0F044F-85A1-4389-9B8A-3D750D74A8EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C0F6C033-13C4-4697-B94C-7AAF585EFF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F6C033-13C4-4697-B94C-7AAF585EFF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0F6C033-13C4-4697-B94C-7AAF585EFF57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA0F044F-85A1-4389-9B8A-3D750D74A8EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA0F044F-85A1-4389-9B8A-3D750D74A8EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA0F044F-85A1-4389-9B8A-3D750D74A8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA0F044F-85A1-4389-9B8A-3D750D74A8EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

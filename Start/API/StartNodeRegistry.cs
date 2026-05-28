@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities;
@@ -18,17 +19,23 @@ namespace Start.API
             _nodes = new Dictionary<Vector<double>, StartEntityProxy>(new VectorComparer(tolerance));
         }
 
-        public StartEntityProxy[] GetOrCreateNodes(IStartProject startProject, IStartEntity startEntity)
+        public StartEntityProxy[] GetOrCreateNodes(IStartProject startProject, params Vector<double>[] positions)
         {
-            return startEntity.GetPositions()
-                .Select(pos => _nodes.GetOrAdd(pos, key =>
+            return positions
+                .Select(position => _nodes.GetOrAdd(position, vector =>
                     {
-                        StartNodeEntity nodeEntity = new StartNodeEntity() { Position = pos };
+                        StartNodeEntity nodeEntity = new StartNodeEntity() { Position = vector };
                         StartEntityProxy proxy = startProject.AddEntity(nodeEntity);
                         proxy.StartBaseRoot.SetName((_counter++).ToString());
                         return proxy;
                     })
                 ).ToArray();
+        }
+
+        public StartEntityProxy[] GetOrCreateNodes(IStartProject startProject, IStartEntity startEntity)
+        {
+            Vector<double>[] positions = startEntity.GetPositions().ToArray();
+            return GetOrCreateNodes(startProject, positions);
         }
     }
 }

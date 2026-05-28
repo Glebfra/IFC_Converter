@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Interfaces
 {
-    internal interface IFittingProxy : IEntityProxy
+    internal interface ITopologyNodeEntity
     {
         public Vector<double> Position { get; }
     }

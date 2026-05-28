@@ -81,6 +81,8 @@
     <Compile Include="Attributes\PropertySetAttribute.cs">
       <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs" />
+    <Compile Include="ConnectionResolvers\NearestSegmentsConnectionResolver.cs" />
     <Compile Include="Converters\ConverterFactory.cs" />
     <Compile Include="Converters\Elements\AxialCouplingJointConverter.cs" />
     <Compile Include="Converters\Elements\AxialExpansionJointConverter.cs" />
@@ -118,14 +120,16 @@
     <Compile Include="Converters\Importers\Proxies\BendProxy.cs" />
     <Compile Include="Converters\Importers\Proxies\PipeSegmentProxy.cs" />
     <Compile Include="Converters\Importers\Proxies\ReducerProxy.cs" />
+    <Compile Include="Converters\Importers\Proxies\ResolvedSegmentProxy.cs" />
+    <Compile Include="Converters\Importers\Proxies\SegmentResolver.cs" />
     <Compile Include="Converters\Importers\Proxies\TeeProxy.cs" />
-    <Compile Include="Converters\Importers\Topology\ElementTopologyInfo.cs" />
-    <Compile Include="Converters\Importers\Topology\TopologyBuilder.cs" />
-    <Compile Include="Converters\Importers\Topology\TopologyNode.cs" />
     <Compile Include="Converters\StartToIfcConverter.cs" />
     <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
     <Compile Include="Extensions\IfcRootExtensions.cs" />
     <Compile Include="Extensions\StartEntityExtensions.cs" />
+    <Compile Include="Graph\ConnectionNode.cs" />
+    <Compile Include="Graph\TopologyGraph.cs" />
+    <Compile Include="Graph\TopologyGraphBuilder.cs" />
     <Compile Include="GUI\ExportWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,15 +144,21 @@
     </Compile>
     <Compile Include="IfcConverter.cs" />
     <Compile Include="IIfcConverter.cs" />
-    <Compile Include="Interfaces\IEntityImporter.cs" />
-    <Compile Include="Interfaces\IEntityProxy.cs" />
-    <Compile Include="Interfaces\IImporterFilter.cs" />
-    <Compile Include="Interfaces\IFittingProxy.cs" />
-    <Compile Include="Interfaces\IIfcElementConverter.cs" />
-    <Compile Include="Interfaces\IImporter.cs" />
-    <Compile Include="Interfaces\IPropertyConverter.cs" />
-    <Compile Include="Interfaces\IPropertySet.cs" />
-    <Compile Include="Interfaces\ISegmentProxy.cs" />
+    <Compile Include="Interfaces\Converters\IIfcElementConverter.cs" />
+    <Compile Include="Interfaces\Converters\IPropertyConverter.cs" />
+    <Compile Include="Interfaces\Converters\IPropertySet.cs" />
+    <Compile Include="Interfaces\Entities\IEntityConnectionResolver.cs" />
+    <Compile Include="Interfaces\Entities\IEntityImporter.cs" />
+    <Compile Include="Interfaces\Entities\IEntityProxy.cs" />
+    <Compile Include="Interfaces\Entities\IResolvedSegmentProxy.cs" />
+    <Compile Include="Interfaces\Importers\IImporter.cs" />
+    <Compile Include="Interfaces\Importers\IImporterFilter.cs" />
+    <Compile Include="Interfaces\Proxies\IFittingProxy.cs" />
+    <Compile Include="Interfaces\Proxies\ISegmentProxy.cs" />
+    <Compile Include="Interfaces\Topology\IEntityTopologyResolver.cs" />
+    <Compile Include="Interfaces\Topology\INodeTopologyResolver.cs" />
+    <Compile Include="Interfaces\Topology\ITopologyEntity.cs" />
+    <Compile Include="Interfaces\Topology\ITopologyNodeEntity.cs" />
     <Compile Include="Localization\LocalizationResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -162,6 +172,10 @@
     <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
     <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
     <Compile Include="PropertySets\PropertySetRegistry.cs" />
+    <Compile Include="TopologyEntities\TopologyEntity.cs" />
+    <Compile Include="TopologyEntities\TopologyNode.cs" />
+    <Compile Include="TopologyResolvers\EntityTopologyResolver.cs" />
+    <Compile Include="TopologyResolvers\NodeTopologyResolver.cs" />
     <Compile Include="Utils\ConversionResult.cs" />
     <Compile Include="Utils\ExportDataContainer.cs" />
     <Compile Include="Utils\IfcExportType.cs" />
