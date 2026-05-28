@@ -33,7 +33,7 @@ namespace IFCConverter.Importer
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
             _importDataContainer = importDataContainer;
-            _connectionResolver = new BoundPointConnectionResolver(_comparer);
+            _connectionResolver = new BoundPointConnectionResolver();
         }
 
         public void Convert(IStartDocument startDocument)

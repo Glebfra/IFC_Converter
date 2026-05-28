@@ -37,8 +37,6 @@ namespace IFCConverter.Importer.Entities.Topologies
             Vector<double> segmentPoint,
             IReadOnlyCollection<IEntityProxy> connectedProxies)
         {
-            #if true
-
             foreach (IEntityProxy connectedProxy in connectedProxies)
             {
                 bool isConnectedToPoint = connectedProxy.Boundary
@@ -50,15 +48,6 @@ namespace IFCConverter.Importer.Entities.Topologies
             }
 
             return new TopologyNode(segmentPoint);
-
-            #else
-            IFittingProxy? fitting = connectedProxies
-                .OfType<IFittingProxy>()
-                .OrderBy(proxy => (proxy.Position - segmentPoint).L2Norm())
-                .FirstOrDefault();
-            return new TopologyNode(fitting?.Position ?? segmentPoint);
-
-            #endif
         }
     }
 }

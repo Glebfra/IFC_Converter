@@ -8,12 +8,8 @@ namespace IFCConverter.Importer.ConnectionResolvers
 {
     internal sealed class BoundPointConnectionResolver : IEntityConnectionResolver
     {
-        private readonly VectorComparer _comparer;
-
-        public BoundPointConnectionResolver(VectorComparer comparer)
-        {
-            _comparer = comparer;
-        }
+        private const double _tolerance = 1e-3;
+        private readonly VectorComparer _comparer = new VectorComparer(_tolerance);
 
         public IEnumerable<IEntityProxy> GetConnectedEntities(
             IEntityProxy proxy,

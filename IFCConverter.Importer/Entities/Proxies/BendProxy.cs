@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
@@ -10,6 +12,7 @@ using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
+    [ProxyEntity(typeof(BoundPointConnectionResolver), 2)]
     internal sealed class BendProxy : IFittingProxy
     {
         public readonly double Angle;
