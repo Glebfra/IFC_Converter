@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Ifc.Extensions;
+using IFCConverter.Importer.Entities.Proxies;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
-using PipeSegmentProxy = IFCConverter.Importer.Entities.Proxies.PipeSegmentProxy;
 
 namespace IFCConverter.Importer.Importers.Aveva
 {
@@ -34,10 +34,10 @@ namespace IFCConverter.Importer.Importers.Aveva
 
             return new PipeSegmentProxy
             (
-                diameter: diameter * GetLengthPower(source),
-                length: length * GetLengthPower(source),
-                position: position.GetOffset() * GetLengthPower(source),
-                direction: pipeDirection
+                diameter * GetLengthPower(source),
+                length * GetLengthPower(source),
+                position.GetOffset() * GetLengthPower(source),
+                pipeDirection
             )
             {
                 Name = source.Name

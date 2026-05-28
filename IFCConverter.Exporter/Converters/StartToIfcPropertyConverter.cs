@@ -20,12 +20,12 @@ namespace IFCConverter.Exporter.Converters
                 _ => new IfcText(property?.ToString() ?? "")
             };
         }
-        
-        public static IfcValue ConvertToIfcValue<T>(IStartValueProperty<T> property) 
+
+        public static IfcValue ConvertToIfcValue<T>(IStartValueProperty<T> property)
             where T : struct, IComparable<T>
         {
             double doubleProperty = Convert.ToDouble(property.SIProperty);
-            
+
             return property switch
             {
                 AngleValueProperty<T> => new IfcPositivePlaneAngleMeasure(doubleProperty),
@@ -36,11 +36,11 @@ namespace IFCConverter.Exporter.Converters
                 MomentValueProperty<T> => new IfcLinearMomentMeasure(doubleProperty),
                 PressureValueProperty<T> => new IfcPressureMeasure(doubleProperty),
                 TemperatureValueProperty<T> => new IfcThermodynamicTemperatureMeasure(doubleProperty),
-                _ => new IfcReal(doubleProperty),
+                _ => new IfcReal(doubleProperty)
             };
         }
 
-        public static IfcValue ConvertToIfcValue<T>(IStartEnumProperty<T> property) 
+        public static IfcValue ConvertToIfcValue<T>(IStartEnumProperty<T> property)
             where T : Enum
         {
             return new IfcText(property.EnumValue.ToString());

@@ -16,8 +16,7 @@ namespace Start.Extensions
     {
         private const double EQUALS_TOLERANCE = 1e-6;
 
-        private static Dictionary<Type, StartElementTypeEnum> _elementTypesCache =
-            new Dictionary<Type, StartElementTypeEnum>();
+        private static readonly Dictionary<Type, StartElementTypeEnum> _elementTypesCache = new();
 
         [Pure]
         public static bool IsConnectedTo(this IStartEntity startEntity, IStartEntity otherEntity)

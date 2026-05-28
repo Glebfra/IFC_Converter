@@ -12,15 +12,18 @@ namespace IFCConverter.Importer.PropertySets
 {
     internal class PropertySetRegistry
     {
-        public static PropertySetRegistry GetInstance() => _instance.Value;
-        private static readonly Lazy<PropertySetRegistry> _instance =
-            new Lazy<PropertySetRegistry>(() => new PropertySetRegistry());
+        private static readonly Lazy<PropertySetRegistry> _instance = new(() => new PropertySetRegistry());
 
-        private readonly List<Type> _propertySetsList = new List<Type>();
+        private readonly List<Type> _propertySetsList = new();
 
         private PropertySetRegistry()
         {
             RegisterAll();
+        }
+
+        public static PropertySetRegistry GetInstance()
+        {
+            return _instance.Value;
         }
 
         [Pure]

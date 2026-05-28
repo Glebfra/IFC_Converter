@@ -6,10 +6,6 @@ namespace IFCConverter.Importer.Graph
 {
     internal sealed class ConnectionNode
     {
-        public Vector<double> Position { get; }
-        public HashSet<IFittingProxy> Fittings { get; }
-        public HashSet<IResolvedSegmentProxy> Segments { get; }
-
         public ConnectionNode(Vector<double> position, IEqualityComparer<IResolvedSegmentProxy>? segmentComparer = null)
         {
             Position = position;
@@ -18,5 +14,9 @@ namespace IFCConverter.Importer.Graph
                 ? new HashSet<IResolvedSegmentProxy>(segmentComparer)
                 : new HashSet<IResolvedSegmentProxy>();
         }
+
+        public Vector<double> Position { get; }
+        public HashSet<IFittingProxy> Fittings { get; }
+        public HashSet<IResolvedSegmentProxy> Segments { get; }
     }
 }

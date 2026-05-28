@@ -8,22 +8,15 @@ namespace IFCConverter.Importer.Entities.Proxies
 {
     internal sealed class TeeProxy : IFittingProxy
     {
-        public readonly double MainDiameter;
         public readonly double HeadDiameter;
-        public Vector<double> Position { get; }
-        public Vector<double> MainProjection { get; }
-        public Vector<double> HeadProjection { get; }
-
-        public string? Name { get; set; }
-        
-        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
+        public readonly double MainDiameter;
         private IEnumerable<Vector<double>>? _boundary;
 
         public TeeProxy(
-            Vector<double> position, 
-            Vector<double> mainProjection, 
-            Vector<double> headProjection, 
-            double mainDiameter, 
+            Vector<double> position,
+            Vector<double> mainProjection,
+            Vector<double> headProjection,
+            double mainDiameter,
             double headDiameter)
         {
             Position = position;
@@ -33,9 +26,17 @@ namespace IFCConverter.Importer.Entities.Proxies
             HeadDiameter = headDiameter;
         }
 
+        public Vector<double> MainProjection { get; }
+        public Vector<double> HeadProjection { get; }
+
+        public string? Name { get; set; }
+        public Vector<double> Position { get; }
+
+        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
+
         public IStartEntity ToStartEntity()
         {
-            StartWeldedTeeEntity teeEntity = new StartWeldedTeeEntity();
+            StartWeldedTeeEntity teeEntity = new();
             teeEntity.Position = Position;
 
             double headLength = HeadProjection.L2Norm();
@@ -45,17 +46,17 @@ namespace IFCConverter.Importer.Entities.Proxies
 
             if (Name != null)
                 teeEntity.Name = Name;
-            
+
             return teeEntity;
         }
 
         private IEnumerable<Vector<double>> GetBoundaryPoints()
         {
-            return new Vector<double>[]
+            return new[]
             {
                 Position + HeadProjection,
                 Position + MainProjection / 2,
-                Position - MainProjection / 2,
+                Position - MainProjection / 2
             };
         }
     }

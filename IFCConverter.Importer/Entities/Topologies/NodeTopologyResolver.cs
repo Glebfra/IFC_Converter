@@ -16,12 +16,14 @@ namespace IFCConverter.Importer.Entities.Topologies
         }
 
         public IReadOnlyCollection<ITopologyNodeEntity> ResolveTopology(
-            IEntityProxy proxy, 
+            IEntityProxy proxy,
             IReadOnlyCollection<IEntityProxy> connectedProxies)
         {
-            List<ITopologyNodeEntity> nodes = new List<ITopologyNodeEntity>();
+            List<ITopologyNodeEntity> nodes = new();
             if (proxy is IFittingProxy fittingProxy)
+            {
                 nodes.Add(new TopologyNode(fittingProxy.Position));
+            }
             else if (proxy is ISegmentProxy segmentProxy)
             {
                 nodes.Add(ResolveSegmentNode(segmentProxy.Position, connectedProxies));
@@ -36,7 +38,7 @@ namespace IFCConverter.Importer.Entities.Topologies
             IReadOnlyCollection<IEntityProxy> connectedProxies)
         {
             #if true
-            
+
             foreach (IEntityProxy connectedProxy in connectedProxies)
             {
                 bool isConnectedToPoint = connectedProxy.Boundary
@@ -48,15 +50,14 @@ namespace IFCConverter.Importer.Entities.Topologies
             }
 
             return new TopologyNode(segmentPoint);
-            
+
             #else
-            
             IFittingProxy? fitting = connectedProxies
                 .OfType<IFittingProxy>()
                 .OrderBy(proxy => (proxy.Position - segmentPoint).L2Norm())
                 .FirstOrDefault();
             return new TopologyNode(fitting?.Position ?? segmentPoint);
-            
+
             #endif
         }
     }

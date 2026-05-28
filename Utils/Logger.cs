@@ -14,18 +14,21 @@ namespace Utils
 
     public class Logger
     {
-        public static Logger GetInstance() => _instance.Value;
-        private static readonly Lazy<Logger> _instance =
-            new Lazy<Logger>(() => new Logger());
-        
         public const LoggerLevel LoggerLevel = Utils.LoggerLevel.INFO;
-        
-        private int _countErrors;
 
-        private string Logs { get; set; } = "";
+        private static readonly Lazy<Logger> _instance = new(() => new Logger());
+
+        private int _countErrors;
 
         private Logger()
         {
+        }
+
+        private string Logs { get; set; } = "";
+
+        public static Logger GetInstance()
+        {
+            return _instance.Value;
         }
 
         public void Flush()

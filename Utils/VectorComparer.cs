@@ -26,42 +26,6 @@ namespace Utils
                 Math.Abs(x[2] - y[2]) <= _tolerance;
         }
 
-        public bool LessThan(
-            Vector<double>? x,
-            Vector<double>? y)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return x.L2Norm() < y.L2Norm();
-        }
-
-        public bool GreaterThan(
-            Vector<double>? x,
-            Vector<double>? y)
-        {
-            if (x == null || y == null)
-                return false;
-            
-            return x.L2Norm() > y.L2Norm();
-        }
-
-        public bool NearerThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
-        {
-            if (x == null || y == null)
-                return false;
-            
-            return (x - origin).L2Norm() <= (y - origin).L2Norm();
-        }
-
-        public bool FartherThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
-        {
-            if (x == null || y == null)
-                return false;
-            
-            return (x - origin).L2Norm() >= (y - origin).L2Norm();
-        }
-
         public int GetHashCode(Vector<double> obj)
         {
             long x = Quantize(obj[0]);
@@ -79,7 +43,43 @@ namespace Utils
                 return hash;
             }
         }
-        
+
+        public bool LessThan(
+            Vector<double>? x,
+            Vector<double>? y)
+        {
+            if (x == null || y == null)
+                return false;
+
+            return x.L2Norm() < y.L2Norm();
+        }
+
+        public bool GreaterThan(
+            Vector<double>? x,
+            Vector<double>? y)
+        {
+            if (x == null || y == null)
+                return false;
+
+            return x.L2Norm() > y.L2Norm();
+        }
+
+        public bool NearerThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
+        {
+            if (x == null || y == null)
+                return false;
+
+            return (x - origin).L2Norm() <= (y - origin).L2Norm();
+        }
+
+        public bool FartherThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
+        {
+            if (x == null || y == null)
+                return false;
+
+            return (x - origin).L2Norm() >= (y - origin).L2Norm();
+        }
+
         private long Quantize(double value)
         {
             return (long)Math.Round(value / _tolerance);

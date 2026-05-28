@@ -3,7 +3,7 @@
 namespace IFCConverter.Importer.PropertySets.Aveva
 {
     #pragma warning disable CS0414
-    [PropertySet(name: "AVEVA_EntityParameters")]
+    [PropertySet("AVEVA_EntityParameters")]
     internal class AvevaEntityParameters : AbstractPropertySet
     {
         [Property("E3DType")] public string E3DType = string.Empty;

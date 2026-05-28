@@ -11,21 +11,23 @@ namespace IFCConverter.Importer.Entities.Proxies
     {
         private readonly bool _isEccentric;
         private readonly IReadOnlyList<Vector<double>> BoundPoints;
-        public Vector<double> Position { get; }
-        public double Length { get; }
-
-        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
         private IEnumerable<Vector<double>>? _boundary;
-        
-        public string? Name { get; set; }
-        
-        public ReducerProxy(Vector<double> position, IReadOnlyList<Vector<double>> boundPoints, bool isEccentric, double length)
+
+        public ReducerProxy(Vector<double> position, IReadOnlyList<Vector<double>> boundPoints, bool isEccentric,
+            double length)
         {
             Position = position;
             BoundPoints = boundPoints;
             _isEccentric = isEccentric;
             Length = length;
         }
+
+        public double Length { get; }
+
+        public string? Name { get; set; }
+        public Vector<double> Position { get; }
+
+        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
 
         public IStartEntity ToStartEntity()
         {
@@ -37,7 +39,7 @@ namespace IFCConverter.Importer.Entities.Proxies
 
             if (Name != null)
                 abstractReducerEntity.Name = Name;
-            
+
             return abstractReducerEntity;
         }
 

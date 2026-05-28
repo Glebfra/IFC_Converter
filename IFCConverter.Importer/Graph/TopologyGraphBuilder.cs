@@ -15,14 +15,14 @@ namespace IFCConverter.Importer.Graph
 
         public TopologyGraph Build(IEnumerable<IFittingProxy> fittings, IEnumerable<IResolvedSegmentProxy> segments)
         {
-            TopologyGraph graph = new TopologyGraph(_comparer);
+            TopologyGraph graph = new(_comparer);
 
             foreach (IFittingProxy fitting in fittings)
             {
                 ConnectionNode node = graph.GetOrCreateNode(fitting.Position);
                 node.Fittings.Add(fitting);
             }
-            
+
             foreach (IResolvedSegmentProxy segment in segments)
             {
                 ConnectionNode startNode = graph.GetOrCreateNode(segment.ResolvedStartPosition);

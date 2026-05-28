@@ -13,7 +13,7 @@ namespace IFCConverter.Importer.Extensions
         [Pure]
         public static Dictionary<string, object> ToDictionary(this IIfcPropertySet ifcPropertySet)
         {
-            Dictionary<string, object> properties = new Dictionary<string, object>();
+            Dictionary<string, object> properties = new();
             foreach (IIfcProperty hasProperty in ifcPropertySet.HasProperties)
             {
                 if (hasProperty is IIfcPropertySingleValue singleValue)
@@ -24,7 +24,7 @@ namespace IFCConverter.Importer.Extensions
 
             return properties;
         }
-        
+
         [Pure]
         public static IEnumerable<IPropertySet> GetPropertySets(this IfcProduct product)
         {

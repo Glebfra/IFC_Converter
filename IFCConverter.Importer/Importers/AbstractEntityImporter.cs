@@ -12,10 +12,13 @@ namespace IFCConverter.Importer.Importers
         where TSource : IIfcElement
         where TResult : class
     {
+        private double? _lengthPowerCache;
         public abstract TResult ReadTyped(TSource source);
-        public object Read(IInstantiableEntity entity) => ReadTyped((TSource)entity);
 
-        private double? _lengthPowerCache = null;
+        public object Read(IInstantiableEntity entity)
+        {
+            return ReadTyped((TSource)entity);
+        }
 
         [Pure]
         protected double GetLengthPower(TSource source)
@@ -27,7 +30,7 @@ namespace IFCConverter.Importer.Importers
                 .OfType<IfcSIUnit>()
                 .FirstOrDefault(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
             _lengthPowerCache = siUnit?.Power ?? 1.0;
-            
+
             return (double)_lengthPowerCache;
         }
 

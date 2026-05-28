@@ -7,8 +7,8 @@ namespace IFCConverter.Importer.Importers
 {
     internal class ImporterRegistration
     {
-        public readonly Type ImporterType;
         public readonly IImporterFilter ImporterFilter;
+        public readonly Type ImporterType;
         public readonly int Priority;
 
         public ImporterRegistration(Type importerType, IImporterFilter importerFilter, int priority)

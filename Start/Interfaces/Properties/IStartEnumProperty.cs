@@ -6,7 +6,7 @@ namespace Start.Interfaces
     {
         public object GetEnumValue();
     }
-    
+
     public interface IStartEnumProperty<T> : IStartEnumProperty
         where T : Enum
     {

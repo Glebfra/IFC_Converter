@@ -7,12 +7,12 @@ namespace IFCConverter.Importer.Entities.Proxies
     internal sealed class SegmentResolver
     {
         private readonly VectorComparer _comparer;
-        
+
         public SegmentResolver(VectorComparer comparer)
         {
             _comparer = comparer;
         }
-        
+
         public IResolvedSegmentProxy Resolve(ITopologyEntity topologyEntity)
         {
             ISegmentProxy segmentProxy = (ISegmentProxy)topologyEntity.Proxy;

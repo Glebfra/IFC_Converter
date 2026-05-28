@@ -26,7 +26,7 @@ namespace IFCConverter.Importer.Importers.Aveva
 
             Matrix<double> areaMatrix = revolvedAreaSolid.Position.ToMatrix();
             Vector<double> axisLocalPosition = revolvedAreaSolid.Axis.Location.ToVector();
-            Vector<double> axisGlobalPosition = areaMatrix.GetRotation().LeftMultiply(axisLocalPosition) + 
+            Vector<double> axisGlobalPosition = areaMatrix.GetRotation().LeftMultiply(axisLocalPosition) +
                                                 areaMatrix.GetOffset();
             double radius = axisLocalPosition.L2Norm();
 
@@ -42,11 +42,11 @@ namespace IFCConverter.Importer.Importers.Aveva
 
             return new BendProxy
             (
-                position: bendPosition * lengthPower,
-                angle: revolvedAreaSolid.Angle,
-                radius: radius * lengthPower,
-                axisPosition: axisGlobalPosition * lengthPower,
-                refDirection: areaMatrix.GetY()
+                bendPosition * lengthPower,
+                revolvedAreaSolid.Angle,
+                radius * lengthPower,
+                axisGlobalPosition * lengthPower,
+                areaMatrix.GetY()
             )
             {
                 Name = source.Name

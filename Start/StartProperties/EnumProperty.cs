@@ -29,6 +29,9 @@ namespace Start.StartProperties
             return EnumValue;
         }
 
-        public object GetEnumValue() => EnumValue;
+        public object GetEnumValue()
+        {
+            return EnumValue;
+        }
     }
 }

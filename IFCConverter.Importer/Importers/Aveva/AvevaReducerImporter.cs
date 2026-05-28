@@ -18,14 +18,14 @@ namespace IFCConverter.Importer.Importers.Aveva
     internal class AvevaReducerImporter : AbstractEntityImporter<IfcBuildingElementProxy, ReducerProxy>
     {
         private const double _tolerance = 1e-6;
-        private readonly VectorComparer _comparer = new VectorComparer(_tolerance);
-        
+        private readonly VectorComparer _comparer = new(_tolerance);
+
         public override ReducerProxy ReadTyped(IfcBuildingElementProxy source)
         {
             IIfcRepresentationItem[] representationItems = GetRepresentationItems(source).ToArray();
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
-            
+
             if (representationItems[0] is not IIfcTriangulatedFaceSet faceSet)
                 throw new Exception("The representation item is not a triangulated face set.");
 
@@ -37,7 +37,7 @@ namespace IFCConverter.Importer.Importers.Aveva
             Matrix<double> objToWorldMat = avevaPset.Ori;
             Matrix<double> worldToObjMat = objToWorldMat.Inverse();
             Vector<double> position = avevaPset.Pos;
-            
+
             Vector<double>[] globalVertices = faceSet.Coordinates.GetCoordinates().ToArray();
             Vector<double>[] localVertices = globalVertices
                 .Select(vertex => objToWorldMat.LeftMultiply(vertex))
@@ -60,7 +60,7 @@ namespace IFCConverter.Importer.Importers.Aveva
             Vector<double> axisDisplacement = centerDisplacement
                 .DotProduct(objToWorldMat.GetZ()) * objToWorldMat.GetZ();
 
-            IReadOnlyList<Vector<double>> boundPoints = new Vector<double>[]
+            IReadOnlyList<Vector<double>> boundPoints = new[]
             {
                 worldToObjMat.LeftMultiply(firstCircleLocalCenterPoint),
                 worldToObjMat.LeftMultiply(secondCircleLocalCenterPoint)
@@ -71,33 +71,33 @@ namespace IFCConverter.Importer.Importers.Aveva
             double lengthPower = GetLengthPower(source);
 
             return new ReducerProxy(
-                position: boundPoints[1] * lengthPower,
-                boundPoints: boundPoints.Select(point => point * lengthPower).ToArray(),
-                isEccentric: isEccentric,
-                length: length * lengthPower
+                boundPoints[1] * lengthPower,
+                boundPoints.Select(point => point * lengthPower).ToArray(),
+                isEccentric,
+                length * lengthPower
             )
             {
                 Name = source.Name
             };
         }
-        
+
         private static Vector<double> GetLocalMinPoint(IReadOnlyList<Vector<double>> localVertices)
         {
-            return new DenseVector(new double[]
+            return new DenseVector(new[]
             {
                 localVertices.Min(vertex => vertex[0]),
                 localVertices.Min(vertex => vertex[1]),
-                localVertices.Min(vertex => vertex[2]),
+                localVertices.Min(vertex => vertex[2])
             });
         }
-        
+
         private static Vector<double> GetLocalMaxPoint(IReadOnlyList<Vector<double>> localVertices)
         {
-            return new DenseVector(new double[]
+            return new DenseVector(new[]
             {
                 localVertices.Max(vertex => vertex[0]),
                 localVertices.Max(vertex => vertex[1]),
-                localVertices.Max(vertex => vertex[2]),
+                localVertices.Max(vertex => vertex[2])
             });
         }
     }

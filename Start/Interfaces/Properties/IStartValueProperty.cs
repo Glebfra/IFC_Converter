@@ -9,7 +9,7 @@ namespace Start.Interfaces
         public string GetStartUnit();
         public string GetSIUnit();
     }
-    
+
     /// <summary>
     ///     Represents a property in the Start system with associated units and type information.
     /// </summary>

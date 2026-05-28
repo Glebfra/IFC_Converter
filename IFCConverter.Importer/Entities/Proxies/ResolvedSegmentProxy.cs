@@ -6,11 +6,6 @@ namespace IFCConverter.Importer.Entities.Proxies
 {
     internal sealed class ResolvedSegmentProxy : IResolvedSegmentProxy
     {
-        public ISegmentProxy Source { get; }
-        public Vector<double> ResolvedStartPosition { get; }
-        public Vector<double> ResolvedEndPosition { get; }
-        public Vector<double> ResolvedProjection { get; }
-
         private ResolvedSegmentProxy(
             ISegmentProxy source,
             Vector<double> resolvedStartPosition,
@@ -21,6 +16,20 @@ namespace IFCConverter.Importer.Entities.Proxies
             ResolvedStartPosition = resolvedStartPosition;
             ResolvedEndPosition = resolvedEndPosition;
             ResolvedProjection = projection;
+        }
+
+        public ISegmentProxy Source { get; }
+        public Vector<double> ResolvedStartPosition { get; }
+        public Vector<double> ResolvedEndPosition { get; }
+        public Vector<double> ResolvedProjection { get; }
+
+        public IStartSegmentEntity ToStartEntity()
+        {
+            IStartSegmentEntity startEntity = (IStartSegmentEntity)Source.ToStartEntity();
+            startEntity.StartPosition = ResolvedStartPosition;
+            startEntity.Projection = ResolvedProjection;
+
+            return startEntity;
         }
 
         public static ResolvedSegmentProxy CreateFromSegmentProxy(
@@ -34,15 +43,6 @@ namespace IFCConverter.Importer.Entities.Proxies
             Vector<double> realProjection = segmentProjection.Normalize(2) * resolvedProjection.L2Norm();
 
             return new ResolvedSegmentProxy(segmentProxy, resolvedStartPosition, resolvedEndPosition, realProjection);
-        }
-
-        public IStartSegmentEntity ToStartEntity()
-        {
-            IStartSegmentEntity startEntity = (IStartSegmentEntity)Source.ToStartEntity();
-            startEntity.StartPosition = ResolvedStartPosition;
-            startEntity.Projection = ResolvedProjection;
-
-            return startEntity;
         }
     }
 }

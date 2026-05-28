@@ -8,6 +8,7 @@ using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Utils;
+using MathNet.Numerics.LinearAlgebra;
 using Start.API;
 using Start.Extensions;
 using Start.Interfaces;
@@ -20,20 +21,21 @@ namespace IFCConverter.Importer
     public class IfcToStartConverter
     {
         private const double _vectorTolerance = 1e-3;
-        
+        private readonly VectorComparer _comparer = new(_vectorTolerance);
+
+        private readonly IEntityConnectionResolver _connectionResolver;
+
         private readonly ImportDataContainer _importDataContainer;
 
         private readonly Logger _logger = Logger.GetInstance();
-        private readonly VectorComparer _comparer = new VectorComparer(_vectorTolerance);
-        private readonly StartNodeRegistry _nodeRegistry = new StartNodeRegistry(_vectorTolerance);
+        private readonly StartNodeRegistry _nodeRegistry = new(_vectorTolerance);
 
-        private readonly IEntityConnectionResolver _connectionResolver;
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
             _importDataContainer = importDataContainer;
             _connectionResolver = new BoundPointConnectionResolver(_comparer);
         }
-        
+
         public void Convert(IStartDocument startDocument)
         {
             _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
@@ -42,8 +44,8 @@ namespace IFCConverter.Importer
             IReadOnlyCollection<ITopologyEntity> topologyEntities = ImportTopologyProxies(ifcProject);
 
             using IStartProject startProject = StartProject.OpenFromDocument(startDocument);
-            
-            SegmentResolver segmentResolver = new SegmentResolver(_comparer);
+
+            SegmentResolver segmentResolver = new(_comparer);
             IEnumerable<ITopologyEntity> segmentTopologyEntities = topologyEntities
                 .Where(topology => topology.Proxy is ISegmentProxy);
             IEnumerable<IResolvedSegmentProxy> resolvedSegmentProxies = segmentTopologyEntities
@@ -56,18 +58,23 @@ namespace IFCConverter.Importer
             foreach (IResolvedSegmentProxy segment in resolvedSegmentProxies)
             {
                 IStartEntity startEntity = segment.ToStartEntity();
+                Vector<double>[] nodePositions =
+                {
+                    segment.ResolvedStartPosition, segment.ResolvedEndPosition
+                };
 
                 StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, startEntity);
+                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
                 ConnectNodes(startEntityProxy, nodeProxies);
             }
-            
+
             foreach (IFittingProxy fitting in fittingProxies)
             {
                 IStartEntity startEntity = fitting.ToStartEntity();
-               
+                Vector<double> nodePosition = fitting.Position;
+
                 StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, startEntity);
+                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePosition);
                 ConnectNodes(startEntityProxy, nodeProxies);
             }
 
@@ -95,15 +102,13 @@ namespace IFCConverter.Importer
                     entity.StartBaseRoot.SetENode(nodes[1].Index);
                     break;
             }
+
             ConnectObjects(entity, nodes);
         }
 
         private static void ConnectObjects(StartEntityProxy entity, params StartEntityProxy[] objects)
         {
-            foreach (StartEntityProxy @object in objects)
-            {
-                entity.StartBaseRoot.SetConnElem(@object.Index);
-            }
+            foreach (StartEntityProxy @object in objects) entity.StartBaseRoot.SetConnElem(@object.Index);
         }
     }
 }

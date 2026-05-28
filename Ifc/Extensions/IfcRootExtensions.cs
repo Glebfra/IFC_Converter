@@ -23,7 +23,7 @@ namespace Ifc.Extensions
         [Pure]
         public static Vector<double> ToVector(this IIfcDirection direction)
         {
-            return new DenseVector(new double[]
+            return new DenseVector(new[]
             {
                 direction.X,
                 direction.Y,
@@ -52,7 +52,7 @@ namespace Ifc.Extensions
         [Pure]
         public static Dictionary<string, object> ToDictionary(this IIfcPropertySet ifcPropertySet)
         {
-            Dictionary<string, object> properties = new Dictionary<string, object>();
+            Dictionary<string, object> properties = new();
             foreach (IIfcProperty hasProperty in ifcPropertySet.HasProperties)
             {
                 if (hasProperty is IIfcPropertySingleValue singleValue)
@@ -67,17 +67,15 @@ namespace Ifc.Extensions
         [Pure]
         public static IEnumerable<Vector<double>> GetCoordinates(this IIfcCartesianPointList3D pointList)
         {
-            List<Vector<double>> result = new List<Vector<double>>();
-            
+            List<Vector<double>> result = new();
+
             foreach (IItemSet<IfcLengthMeasure> ifcLengthMeasures in pointList.CoordList)
-            {
                 result.Add(new DenseVector(new double[]
                 {
                     ifcLengthMeasures[0],
                     ifcLengthMeasures[1],
-                    ifcLengthMeasures[2],
+                    ifcLengthMeasures[2]
                 }));
-            }
 
             return result;
         }

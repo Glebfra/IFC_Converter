@@ -12,15 +12,18 @@ namespace IFCConverter.Importer.Importers
 {
     internal class ImporterRegistry
     {
-        public static ImporterRegistry GetInstance() => _instance.Value;
-        private static readonly Lazy<ImporterRegistry> _instance =
-            new Lazy<ImporterRegistry>(() => new ImporterRegistry());
+        private static readonly Lazy<ImporterRegistry> _instance = new(() => new ImporterRegistry());
 
-        private readonly List<ImporterRegistration> _registrations = new List<ImporterRegistration>();
+        private readonly List<ImporterRegistration> _registrations = new();
 
         private ImporterRegistry()
         {
             RegisterAll();
+        }
+
+        public static ImporterRegistry GetInstance()
+        {
+            return _instance.Value;
         }
 
         [Pure]
@@ -32,7 +35,7 @@ namespace IFCConverter.Importer.Importers
                 .FirstOrDefault();
             if (match == null)
                 throw new InvalidOperationException("No matching importer found.");
-            
+
             return (IImporter)Activator.CreateInstance(match.ImporterType)!;
         }
 
@@ -44,8 +47,9 @@ namespace IFCConverter.Importer.Importers
                 IfcImporterAttribute attribute = runtimeType.GetCustomAttribute<IfcImporterAttribute>();
                 if (!typeof(IImporterFilter).IsAssignableFrom(attribute.Filter))
                     continue;
-  
-                IImporterFilter importerFilter = (IImporterFilter)Activator.CreateInstance(attribute.Filter, new object[] {});
+
+                IImporterFilter importerFilter =
+                    (IImporterFilter)Activator.CreateInstance(attribute.Filter, new object[] { });
                 _registrations.Add(new ImporterRegistration(runtimeType, importerFilter, attribute.Priority));
             }
         }

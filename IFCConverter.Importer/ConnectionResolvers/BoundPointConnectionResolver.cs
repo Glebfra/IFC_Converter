@@ -16,18 +16,18 @@ namespace IFCConverter.Importer.ConnectionResolvers
         }
 
         public IEnumerable<IEntityProxy> GetConnectedEntities(
-            IEntityProxy proxy, 
+            IEntityProxy proxy,
             IReadOnlyCollection<IEntityProxy> allProxies,
             int? count = null)
         {
-            HashSet<IEntityProxy> result = new HashSet<IEntityProxy>();
+            HashSet<IEntityProxy> result = new();
             IReadOnlyCollection<Vector<double>> entityPoints = proxy.Boundary.ToArray();
-            
+
             foreach (IEntityProxy candidate in allProxies)
             {
                 if (ReferenceEquals(proxy, candidate))
                     continue;
-                
+
                 IReadOnlyCollection<Vector<double>> candidatePoints = candidate.Boundary.ToArray();
                 bool isConnected = entityPoints.Any(p1 =>
                     candidatePoints.Any(p2 => _comparer.Equals(p1, p2))

@@ -6,24 +6,24 @@ namespace IFCConverter.Importer.Attributes
 {
     internal enum PropertyMatchMode
     {
-        Exact, 
+        Exact,
         StartsWith,
         Contains,
         Regex
     }
-    
+
     internal abstract class AbstractPropertyItemAttribute : Attribute
     {
         public readonly string Name;
         public readonly PropertyMatchMode PropertyMatchMode;
-        
+
         protected AbstractPropertyItemAttribute(string name,
             PropertyMatchMode propertyMatchMode = PropertyMatchMode.Exact)
         {
             Name = name;
             PropertyMatchMode = propertyMatchMode;
         }
-        
+
         [Pure]
         public bool IsMatch(string name)
         {

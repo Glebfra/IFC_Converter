@@ -16,8 +16,8 @@ namespace IFCConverter.Importer.Importers.Aveva
     internal class AvevaTeeImporter : AbstractEntityImporter<IfcBuildingElementProxy, TeeProxy>
     {
         private const double _vectorTolerance = 1e-3;
-        private VectorComparer _vectorComparer = new VectorComparer(_vectorTolerance);
-        
+        private readonly VectorComparer _vectorComparer = new(_vectorTolerance);
+
         public override TeeProxy ReadTyped(IfcBuildingElementProxy source)
         {
             IIfcRepresentationItem[] representationItems = GetRepresentationItems(source).ToArray();
@@ -72,9 +72,9 @@ namespace IFCConverter.Importer.Importers.Aveva
             double lengthPower = GetLengthPower(source);
 
             return new TeeProxy(
-                position: teePosition * lengthPower,
-                mainProjection: mainProjection * lengthPower,
-                headProjection: headProjection * lengthPower,
+                teePosition * lengthPower,
+                mainProjection * lengthPower,
+                headProjection * lengthPower,
                 headDiameter: headDiameter * lengthPower,
                 mainDiameter: mainDiameter * lengthPower
             )

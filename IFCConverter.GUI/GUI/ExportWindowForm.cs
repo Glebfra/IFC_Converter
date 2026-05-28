@@ -25,7 +25,7 @@ namespace IFCConverter.GUI.GUI
 
         private void LocalizeComponents()
         {
-            ArrayList types = new ArrayList()
+            ArrayList types = new()
             {
                 new IfcExportType(IfcExportTypeEnum.VERTEX, LocalizationResource.ExportWindowForm_ExportType_Vertex),
                 new IfcExportType(IfcExportTypeEnum.CAD, LocalizationResource.ExportWindowForm_ExportType_Topological)

@@ -11,7 +11,6 @@ using Utils;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using VectorExtensions = Utils.VectorExtensions;
 using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements

@@ -9,6 +9,9 @@ namespace IFCConverter.Importer.PropertySets.Converters
         public abstract TResult ReadTyped(TSource source);
 
         [Pure]
-        public object Read(object value) => ReadTyped((TSource)value)!;
+        public object Read(object value)
+        {
+            return ReadTyped((TSource)value)!;
+        }
     }
 }

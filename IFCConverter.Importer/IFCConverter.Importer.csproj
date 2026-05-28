@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -35,191 +35,191 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
+            <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Extensions.Logging, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Extensions.Logging.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Extensions.Logging.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
         </Reference>
-        <Reference Include="mscorlib" />
-        <Reference Include="System" />
+        <Reference Include="mscorlib"/>
+        <Reference Include="System"/>
         <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+            <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
         </Reference>
         <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+            <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
         </Reference>
-        <Reference Include="System.ComponentModel.Composition" />
+        <Reference Include="System.ComponentModel.Composition"/>
         <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+            <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
         </Reference>
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
         <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+            <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
         </Reference>
         <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+            <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
         </Reference>
         <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+            <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
         </Reference>
-        <Reference Include="System.IO.Compression.FileSystem" />
+        <Reference Include="System.IO.Compression.FileSystem"/>
         <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+            <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
         </Reference>
         <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+            <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
         </Reference>
         <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+            <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
         </Reference>
         <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+            <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
         </Reference>
         <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
+            <HintPath>..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
         </Reference>
         <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+            <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
         </Reference>
-        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics"/>
         <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+            <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
         </Reference>
         <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+            <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
         </Reference>
         <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+            <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
         </Reference>
         <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+            <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
         </Reference>
-        <Reference Include="System.Xml" />
-        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Xml"/>
+        <Reference Include="System.Xml.Linq"/>
         <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+            <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Common, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Common.5.1.341\lib\net46\Xbim.Common.dll</HintPath>
+            <HintPath>..\packages\Xbim.Common.5.1.341\lib\net46\Xbim.Common.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Ifc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Ifc.5.1.341\lib\net46\Xbim.Ifc.dll</HintPath>
+            <HintPath>..\packages\Xbim.Ifc.5.1.341\lib\net46\Xbim.Ifc.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Ifc2x3, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Ifc2x3.5.1.341\lib\net46\Xbim.Ifc2x3.dll</HintPath>
+            <HintPath>..\packages\Xbim.Ifc2x3.5.1.341\lib\net46\Xbim.Ifc2x3.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Ifc4, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
+            <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.IO.MemoryModel, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.IO.MemoryModel.5.1.341\lib\net46\Xbim.IO.MemoryModel.dll</HintPath>
+            <HintPath>..\packages\Xbim.IO.MemoryModel.5.1.341\lib\net46\Xbim.IO.MemoryModel.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Attributes\AbstractPropertyItemAttribute.cs" />
-        <Compile Include="Attributes\IfcImporterAttribute.cs" />
+        <Compile Include="Attributes\AbstractPropertyItemAttribute.cs"/>
+        <Compile Include="Attributes\IfcImporterAttribute.cs"/>
         <Compile Include="Attributes\PropertyAttribute.cs">
-          <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
+            <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
         <Compile Include="Attributes\PropertySetAttribute.cs">
-          <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
+            <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
-        <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs" />
-        <Compile Include="ConnectionResolvers\NearestSegmentsConnectionResolver.cs" />
-        <Compile Include="Entities\Proxies\BendProxy.cs" />
-        <Compile Include="Entities\Proxies\PipeSegmentProxy.cs" />
-        <Compile Include="Entities\Proxies\ReducerProxy.cs" />
-        <Compile Include="Entities\Proxies\ResolvedSegmentProxy.cs" />
-        <Compile Include="Entities\Proxies\SegmentResolver.cs" />
-        <Compile Include="Entities\Proxies\TeeProxy.cs" />
-        <Compile Include="Entities\Topologies\EntityTopologyResolver.cs" />
-        <Compile Include="Entities\Topologies\NodeTopologyResolver.cs" />
-        <Compile Include="Entities\Topologies\TopologyEntity.cs" />
-        <Compile Include="Entities\Topologies\TopologyNode.cs" />
-        <Compile Include="Extensions\IfcRootExtensions.cs" />
-        <Compile Include="Graph\ConnectionNode.cs" />
-        <Compile Include="Graph\TopologyGraph.cs" />
-        <Compile Include="Graph\TopologyGraphBuilder.cs" />
-        <Compile Include="IfcToStartConverter.cs" />
-        <Compile Include="Importers\AbstractEntityImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaBendImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaImporter.cs" />
+        <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs"/>
+        <Compile Include="ConnectionResolvers\NearestSegmentsConnectionResolver.cs"/>
+        <Compile Include="Entities\Proxies\BendProxy.cs"/>
+        <Compile Include="Entities\Proxies\PipeSegmentProxy.cs"/>
+        <Compile Include="Entities\Proxies\ReducerProxy.cs"/>
+        <Compile Include="Entities\Proxies\ResolvedSegmentProxy.cs"/>
+        <Compile Include="Entities\Proxies\SegmentResolver.cs"/>
+        <Compile Include="Entities\Proxies\TeeProxy.cs"/>
+        <Compile Include="Entities\Topologies\EntityTopologyResolver.cs"/>
+        <Compile Include="Entities\Topologies\NodeTopologyResolver.cs"/>
+        <Compile Include="Entities\Topologies\TopologyEntity.cs"/>
+        <Compile Include="Entities\Topologies\TopologyNode.cs"/>
+        <Compile Include="Extensions\IfcRootExtensions.cs"/>
+        <Compile Include="Graph\ConnectionNode.cs"/>
+        <Compile Include="Graph\TopologyGraph.cs"/>
+        <Compile Include="Graph\TopologyGraphBuilder.cs"/>
+        <Compile Include="IfcToStartConverter.cs"/>
+        <Compile Include="Importers\AbstractEntityImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaBendImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaImporter.cs"/>
         <Compile Include="Importers\Aveva\AvevaImporterImporterFilter.cs">
-          <DependentUpon>AvevaImporter.cs</DependentUpon>
+            <DependentUpon>AvevaImporter.cs</DependentUpon>
         </Compile>
-        <Compile Include="Importers\Aveva\AvevaPipeSegmentImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaReducerImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaTeeImporter.cs" />
-        <Compile Include="Importers\ImporterRegistration.cs" />
-        <Compile Include="Importers\ImporterRegistry.cs" />
-        <Compile Include="Interfaces\IEntityConnectionResolver.cs" />
-        <Compile Include="Interfaces\IEntityImporter.cs" />
-        <Compile Include="Interfaces\IEntityProxy.cs" />
-        <Compile Include="Interfaces\IEntityTopologyResolver.cs" />
-        <Compile Include="Interfaces\IFittingProxy.cs" />
-        <Compile Include="Interfaces\IImporter.cs" />
-        <Compile Include="Interfaces\IImporterFilter.cs" />
-        <Compile Include="Interfaces\INodeTopologyResolver.cs" />
-        <Compile Include="Interfaces\IPropertyConverter.cs" />
-        <Compile Include="Interfaces\IPropertySet.cs" />
-        <Compile Include="Interfaces\IResolvedSegmentProxy.cs" />
-        <Compile Include="Interfaces\ISegmentProxy.cs" />
-        <Compile Include="Interfaces\ITopologyEntity.cs" />
-        <Compile Include="Interfaces\ITopologyNodeEntity.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="PropertySets\AbstractPropertySet.cs" />
-        <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs" />
-        <Compile Include="PropertySets\Aveva\AvevaPset.cs" />
-        <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
-        <Compile Include="PropertySets\PropertySetRegistry.cs" />
+        <Compile Include="Importers\Aveva\AvevaPipeSegmentImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaReducerImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaTeeImporter.cs"/>
+        <Compile Include="Importers\ImporterRegistration.cs"/>
+        <Compile Include="Importers\ImporterRegistry.cs"/>
+        <Compile Include="Interfaces\IEntityConnectionResolver.cs"/>
+        <Compile Include="Interfaces\IEntityImporter.cs"/>
+        <Compile Include="Interfaces\IEntityProxy.cs"/>
+        <Compile Include="Interfaces\IEntityTopologyResolver.cs"/>
+        <Compile Include="Interfaces\IFittingProxy.cs"/>
+        <Compile Include="Interfaces\IImporter.cs"/>
+        <Compile Include="Interfaces\IImporterFilter.cs"/>
+        <Compile Include="Interfaces\INodeTopologyResolver.cs"/>
+        <Compile Include="Interfaces\IPropertyConverter.cs"/>
+        <Compile Include="Interfaces\IPropertySet.cs"/>
+        <Compile Include="Interfaces\IResolvedSegmentProxy.cs"/>
+        <Compile Include="Interfaces\ISegmentProxy.cs"/>
+        <Compile Include="Interfaces\ITopologyEntity.cs"/>
+        <Compile Include="Interfaces\ITopologyNodeEntity.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="PropertySets\AbstractPropertySet.cs"/>
+        <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs"/>
+        <Compile Include="PropertySets\Aveva\AvevaPset.cs"/>
+        <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs"/>
+        <Compile Include="PropertySets\PropertySetRegistry.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
-        <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
-        <Name>IFCConverter.Utils</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\Ifc\Ifc.csproj">
-        <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
-        <Name>Ifc</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\Start\Start.csproj">
-        <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
-        <Name>Start</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\Utils\Utils.csproj">
-        <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
-        <Name>Utils</Name>
-      </ProjectReference>
+        <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
+            <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
+            <Name>IFCConverter.Utils</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\Ifc\Ifc.csproj">
+            <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
+            <Name>Ifc</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\Start\Start.csproj">
+            <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
+            <Name>Start</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\Utils\Utils.csproj">
+            <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
+            <Name>Utils</Name>
+        </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <None Include="App.config" />
-      <None Include="packages.config" />
+        <None Include="App.config"/>
+        <None Include="packages.config"/>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

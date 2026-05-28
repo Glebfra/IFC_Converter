@@ -14,7 +14,7 @@ namespace IFCConverter.Importer.PropertySets
         public Dictionary<string, object> GetDictionary()
         {
             return GetType().GetFields().ToDictionary(
-                GetFieldName, 
+                GetFieldName,
                 info => info.GetValue(this)
             );
         }
@@ -41,7 +41,7 @@ namespace IFCConverter.Importer.PropertySets
             {
                 PropertyAttribute? propertyAttribute = fieldInfo.GetCustomAttribute<PropertyAttribute>();
                 Type? typeConverterType = propertyAttribute?.TypeConverter;
-                
+
                 object convertedValue;
                 if (typeConverterType != null)
                 {
@@ -52,13 +52,12 @@ namespace IFCConverter.Importer.PropertySets
                 {
                     convertedValue = Convert.ChangeType(value.ToString(), fieldInfo.FieldType);
                 }
-                
+
                 fieldInfo.SetValue(this, convertedValue);
             }
-            
+
             catch (InvalidCastException)
             {
-                return;
             }
         }
     }

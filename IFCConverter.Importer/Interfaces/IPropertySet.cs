@@ -7,6 +7,7 @@ namespace IFCConverter.Importer.Interfaces
     {
         [Pure]
         public Dictionary<string, object> GetDictionary();
+
         public void SetDictionary(Dictionary<string, object> dictionary);
     }
 }

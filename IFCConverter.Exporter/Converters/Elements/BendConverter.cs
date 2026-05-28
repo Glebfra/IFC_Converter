@@ -12,7 +12,6 @@ using Utils;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using VectorExtensions = Utils.VectorExtensions;
 using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements

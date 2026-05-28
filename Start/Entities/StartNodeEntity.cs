@@ -54,7 +54,7 @@ namespace Start.Entities
         [JsonIgnore]
         public Vector<double> Position
         {
-            get => new DenseVector(new double[]
+            get => new DenseVector(new[]
             {
                 XCoord.SIProperty,
                 YCoord.SIProperty,

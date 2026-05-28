@@ -10,14 +10,6 @@ namespace IFCConverter.Importer.Entities.Proxies
     internal class PipeSegmentProxy : ISegmentProxy
     {
         public readonly double Diameter;
-        public double Length { get; }
-        public Vector<double> Position { get; }
-        public Vector<double> Direction { get; }
-        public Vector<double> EndPosition => Position + Direction * Length;
-        
-        public string? Name { get; set; }
-        
-        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
         private IEnumerable<Vector<double>>? _boundary;
 
         public PipeSegmentProxy(double diameter, double length, Vector<double> position, Vector<double> direction)
@@ -28,12 +20,20 @@ namespace IFCConverter.Importer.Entities.Proxies
             Direction = direction;
         }
 
+        public string? Name { get; set; }
+        public double Length { get; }
+        public Vector<double> Position { get; }
+        public Vector<double> Direction { get; }
+        public Vector<double> EndPosition => Position + Direction * Length;
+
+        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
+
         [Pure]
         public IStartEntity ToStartEntity()
         {
             Vector<double> pipeProjection = Direction * Length;
 
-            StartPipeEntity startPipeEntity = new StartPipeEntity();
+            StartPipeEntity startPipeEntity = new();
             startPipeEntity.Diameter.CreateFromSI(Diameter);
             startPipeEntity.StartPosition = Position;
             startPipeEntity.Projection = pipeProjection;
@@ -47,7 +47,7 @@ namespace IFCConverter.Importer.Entities.Proxies
         [Pure]
         private IEnumerable<Vector<double>> GetBoundaryPoints()
         {
-            return new Vector<double>[] { Position, EndPosition };
+            return new[] { Position, EndPosition };
         }
     }
 }

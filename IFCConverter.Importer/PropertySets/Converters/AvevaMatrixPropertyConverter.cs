@@ -9,7 +9,7 @@ using Xbim.Ifc4.MeasureResource;
 
 namespace IFCConverter.Importer.PropertySets.Converters
 {
-    internal class AvevaMatrixPropertyConverter : 
+    internal class AvevaMatrixPropertyConverter :
         AbstractPropertyConverter<ProxyItemSet<IfcValue, IIfcValue>, Matrix<double>>
     {
         [Pure]

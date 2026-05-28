@@ -273,7 +273,7 @@ namespace Utils
         [Pure]
         public static Vector<double> Sum(this IEnumerable<Vector<double>> vectors)
         {
-            Vector<double> result = VectorExtensions.Zero;
+            Vector<double> result = Zero;
             result = vectors.Aggregate(result, (current, vector) => current + vector);
             return result;
         }
