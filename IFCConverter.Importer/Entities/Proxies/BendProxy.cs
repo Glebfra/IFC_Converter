@@ -21,8 +21,7 @@ namespace IFCConverter.Importer.Entities.Proxies
         public readonly Vector<double> RefDirection;
         private IEnumerable<Vector<double>>? _boundary;
 
-        public BendProxy(Vector<double> position, double angle, double radius,
-            Vector<double> axisPosition, Vector<double> refDirection)
+        public BendProxy(Vector<double> position, double angle, double radius, Vector<double> axisPosition, Vector<double> refDirection)
         {
             Position = position;
             Angle = angle;

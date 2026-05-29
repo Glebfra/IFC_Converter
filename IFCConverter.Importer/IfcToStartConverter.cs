@@ -3,7 +3,6 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ifc.Interfaces;
-using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
@@ -23,8 +22,6 @@ namespace IFCConverter.Importer
         private const double _vectorTolerance = 1e-3;
         private readonly VectorComparer _comparer = new(_vectorTolerance);
 
-        private readonly IEntityConnectionResolver _connectionResolver;
-
         private readonly ImportDataContainer _importDataContainer;
 
         private readonly Logger _logger = Logger.GetInstance();
@@ -33,7 +30,6 @@ namespace IFCConverter.Importer
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
             _importDataContainer = importDataContainer;
-            _connectionResolver = new BoundPointConnectionResolver();
         }
 
         public void Convert(IStartDocument startDocument)

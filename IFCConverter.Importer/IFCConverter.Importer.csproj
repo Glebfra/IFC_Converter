@@ -148,7 +148,7 @@
         </Compile>
         <Compile Include="Attributes\ProxyEntityAttribute.cs" />
         <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs" />
-        <Compile Include="ConnectionResolvers\ConnectionResolversRegistry.cs" />
+        <Compile Include="ConnectionResolvers\ConnectionResolver.cs" />
         <Compile Include="ConnectionResolvers\NearestSegmentsConnectionResolver.cs" />
         <Compile Include="Entities\Proxies\BendProxy.cs" />
         <Compile Include="Entities\Proxies\PipeSegmentProxy.cs" />

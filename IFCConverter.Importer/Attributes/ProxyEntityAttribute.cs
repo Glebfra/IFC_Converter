@@ -1,4 +1,5 @@
 ﻿using System;
+using IFCConverter.Importer.Interfaces;
 
 namespace IFCConverter.Importer.Attributes
 {
@@ -12,6 +13,11 @@ namespace IFCConverter.Importer.Attributes
         {
             ConnectionResolverType = connectionResolverType;
             ConnectionsCount = connectionsCount;
+        }
+        
+        public IEntityConnectionResolver GetConnectionResolver()
+        {
+            return (IEntityConnectionResolver)Activator.CreateInstance(ConnectionResolverType);
         }
     }
 }
