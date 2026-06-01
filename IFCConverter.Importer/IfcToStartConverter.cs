@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ifc.Interfaces;
+using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Entities.Topologies;
 using IFCConverter.Importer.Importers;
@@ -39,8 +40,13 @@ namespace IFCConverter.Importer
 
             using IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath);
             IReadOnlyCollection<ITopologyEntity> topologyEntities = ImportTopologyProxies(ifcProject);
-            ITopologyAugmenter topologyAugmenter = new MissingPipeAugmenter(_comparer, 0.1);
-            topologyEntities = topologyAugmenter.Augment(topologyEntities);
+            
+            List<ISegmentProxy> generatedSegments = new List<ISegmentProxy>();
+            ConnectionAugmenter connectionAugmenter = new ConnectionAugmenter();
+            foreach (ITopologyEntity topologyEntity in topologyEntities)
+            {
+                generatedSegments.AddRange(connectionAugmenter.Augment(topologyEntity, topologyEntities));
+            }
 
             using IStartProject startProject = StartProject.OpenFromDocument(startDocument);
 
@@ -74,6 +80,19 @@ namespace IFCConverter.Importer
 
                 StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
                 StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePosition);
+                ConnectNodes(startEntityProxy, nodeProxies);
+            }
+            
+            foreach (ISegmentProxy generatedSegment in generatedSegments)
+            {
+                IStartEntity startEntity = generatedSegment.ToStartEntity();
+                Vector<double>[] nodePositions =
+                {
+                    generatedSegment.Position, generatedSegment.EndPosition
+                };
+
+                StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
+                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
                 ConnectNodes(startEntityProxy, nodeProxies);
             }
 

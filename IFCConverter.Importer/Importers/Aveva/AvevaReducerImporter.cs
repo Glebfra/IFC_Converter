@@ -66,6 +66,12 @@ namespace IFCConverter.Importer.Importers.Aveva
                 worldToObjMat.LeftMultiply(secondCircleLocalCenterPoint)
             };
 
+            IReadOnlyList<double> diameters = new double[]
+            {
+                (firstCircleLocalPoints[0] - firstCircleLocalCenterPoint).L2Norm() * 2,
+                (secondCircleLocalPoints[0] - secondCircleLocalCenterPoint).L2Norm() * 2
+            };
+
             bool isEccentric = !_comparer.Equals(axisDisplacement, VectorExtensions.Zero);
             double length = (boundPoints[1] - axisDisplacement - boundPoints[0]).L2Norm();
             double lengthPower = GetLengthPower(source);
@@ -74,7 +80,9 @@ namespace IFCConverter.Importer.Importers.Aveva
                 boundPoints[1] * lengthPower,
                 boundPoints.Select(point => point * lengthPower).ToArray(),
                 isEccentric,
-                length * lengthPower
+                length * lengthPower,
+                diameters.Min() * lengthPower,
+                diameters.Max() * lengthPower
             )
             {
                 Name = source.Name

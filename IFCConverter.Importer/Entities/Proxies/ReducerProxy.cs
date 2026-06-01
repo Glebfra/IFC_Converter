@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
@@ -9,20 +10,25 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2)]
+    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(ReducerConnectionAugmenter))]
     internal sealed class ReducerProxy : IFittingProxy
     {
+        public double MinDiameter { get; }
+        public double MaxDiameter { get; }
+        
         private readonly bool _isEccentric;
-        private readonly IReadOnlyList<Vector<double>> BoundPoints;
+        private readonly IReadOnlyList<Vector<double>> _boundPoints;
         private IEnumerable<Vector<double>>? _boundary;
 
         public ReducerProxy(Vector<double> position, IReadOnlyList<Vector<double>> boundPoints, bool isEccentric,
-            double length)
+            double length, double minDiameter, double maxDiameter)
         {
             Position = position;
-            BoundPoints = boundPoints;
+            _boundPoints = boundPoints;
             _isEccentric = isEccentric;
             Length = length;
+            MinDiameter = minDiameter;
+            MaxDiameter = maxDiameter;
         }
 
         public double Length { get; }
@@ -49,7 +55,7 @@ namespace IFCConverter.Importer.Entities.Proxies
         [Pure]
         private IEnumerable<Vector<double>> GetBoundaryPoints()
         {
-            return BoundPoints;
+            return _boundPoints;
         }
     }
 }

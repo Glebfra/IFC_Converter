@@ -9,6 +9,7 @@ namespace IFCConverter.Importer.Interfaces
     {
         public Vector<double> Position { get; }
         public IEnumerable<Vector<double>> Boundary { get; }
+        public string? Name { get; set; }
 
         [Pure]
         public IStartEntity ToStartEntity();
