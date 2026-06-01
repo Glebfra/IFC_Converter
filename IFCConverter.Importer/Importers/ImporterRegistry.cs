@@ -12,9 +12,9 @@ namespace IFCConverter.Importer.Importers
 {
     internal class ImporterRegistry
     {
-        private static readonly Lazy<ImporterRegistry> _instance = new(() => new ImporterRegistry());
+        private static readonly Lazy<ImporterRegistry> _instance = new Lazy<ImporterRegistry>(() => new ImporterRegistry());
 
-        private readonly List<ImporterRegistration> _registrations = new();
+        private readonly List<ImporterRegistration> _registrations = new List<ImporterRegistration>();
 
         private ImporterRegistry()
         {

@@ -156,7 +156,9 @@
         <Compile Include="Entities\Proxies\ResolvedSegmentProxy.cs" />
         <Compile Include="Entities\Proxies\SegmentResolver.cs" />
         <Compile Include="Entities\Proxies\TeeProxy.cs" />
+        <Compile Include="Entities\Proxies\VirtualPipeSegmentProxy.cs" />
         <Compile Include="Entities\Topologies\EntityTopologyResolver.cs" />
+        <Compile Include="Entities\Topologies\MissingPipeAugmenter.cs" />
         <Compile Include="Entities\Topologies\NodeTopologyResolver.cs" />
         <Compile Include="Entities\Topologies\TopologyEntity.cs" />
         <Compile Include="Entities\Topologies\TopologyNode.cs" />
@@ -186,8 +188,11 @@
         <Compile Include="Interfaces\INodeTopologyResolver.cs" />
         <Compile Include="Interfaces\IPropertyConverter.cs" />
         <Compile Include="Interfaces\IPropertySet.cs" />
+        <Compile Include="Interfaces\IResolvedFittingProxy.cs" />
+        <Compile Include="Interfaces\IResolvedProxy.cs" />
         <Compile Include="Interfaces\IResolvedSegmentProxy.cs" />
         <Compile Include="Interfaces\ISegmentProxy.cs" />
+        <Compile Include="Interfaces\ITopologyAugmenter.cs" />
         <Compile Include="Interfaces\ITopologyEntity.cs" />
         <Compile Include="Interfaces\ITopologyNodeEntity.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

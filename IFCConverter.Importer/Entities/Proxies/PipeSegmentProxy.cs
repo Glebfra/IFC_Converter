@@ -12,7 +12,7 @@ namespace IFCConverter.Importer.Entities.Proxies
     [ProxyEntity(typeof(BoundPointConnectionResolver), 2)]
     internal class PipeSegmentProxy : ISegmentProxy
     {
-        public readonly double Diameter;
+        public double Diameter { get; }
         private IEnumerable<Vector<double>>? _boundary;
 
         public PipeSegmentProxy(double diameter, double length, Vector<double> position, Vector<double> direction)

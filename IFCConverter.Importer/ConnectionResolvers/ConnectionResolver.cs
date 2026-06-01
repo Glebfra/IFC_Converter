@@ -21,20 +21,9 @@ namespace IFCConverter.Importer.ConnectionResolvers
         {
             ProxyEntityAttribute attribute = proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
             IEntityConnectionResolver connectionResolver = attribute.GetConnectionResolver();
-            int connectionResolverCount = allProxies.Count;
+            int connectionResolverCount = attribute.ConnectionsCount;
             
             return connectionResolver.GetConnectedEntities(proxy, allProxies, connectionResolverCount);
-        }
-
-        public bool IsConnected(IEntityProxy first, IEntityProxy second)
-        {
-            Type firstType = first.GetType();
-            Type secondType = second.GetType();
-
-            ProxyEntityAttribute firstProxyAttribute = firstType.GetCustomAttribute<ProxyEntityAttribute>();
-            ProxyEntityAttribute secondProxyAttribute = secondType.GetCustomAttribute<ProxyEntityAttribute>();
-
-            throw new NotImplementedException();
         }
     }
 }

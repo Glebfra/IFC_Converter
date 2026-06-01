@@ -4,6 +4,7 @@ namespace IFCConverter.Importer.Interfaces
 {
     internal interface ISegmentProxy : IEntityProxy
     {
+        public double Diameter { get; }
         public double Length { get; }
         public Vector<double> Direction { get; }
         public Vector<double> EndPosition { get; }

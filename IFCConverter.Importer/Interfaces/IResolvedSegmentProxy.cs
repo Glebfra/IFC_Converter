@@ -3,10 +3,8 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Interfaces
 {
-    internal interface IResolvedSegmentProxy
+    internal interface IResolvedSegmentProxy : IResolvedProxy
     {
-        public ISegmentProxy Source { get; }
-
         public Vector<double> ResolvedStartPosition { get; }
         public Vector<double> ResolvedEndPosition { get; }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Ifc.Interfaces;
 using IFCConverter.Importer.Entities.Proxies;
+using IFCConverter.Importer.Entities.Topologies;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Utils;
@@ -38,6 +39,8 @@ namespace IFCConverter.Importer
 
             using IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath);
             IReadOnlyCollection<ITopologyEntity> topologyEntities = ImportTopologyProxies(ifcProject);
+            ITopologyAugmenter topologyAugmenter = new MissingPipeAugmenter(_comparer, 0.1);
+            topologyEntities = topologyAugmenter.Augment(topologyEntities);
 
             using IStartProject startProject = StartProject.OpenFromDocument(startDocument);
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
@@ -11,6 +12,7 @@ namespace IFCConverter.Importer.ConnectionResolvers
         private const double _tolerance = 1e-3;
         private readonly VectorComparer _comparer = new VectorComparer(_tolerance);
 
+        [Pure]
         public IEnumerable<IEntityProxy> GetConnectedEntities(
             IEntityProxy proxy,
             IReadOnlyCollection<IEntityProxy> allProxies,
