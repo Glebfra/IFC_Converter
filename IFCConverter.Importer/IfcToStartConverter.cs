@@ -5,7 +5,6 @@ using System.Reflection;
 using Ifc.Interfaces;
 using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Entities.Proxies;
-using IFCConverter.Importer.Entities.Topologies;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Utils;
@@ -38,65 +37,68 @@ namespace IFCConverter.Importer
         {
             _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
 
-            using IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath);
-            IReadOnlyCollection<ITopologyEntity> topologyEntities = ImportTopologyProxies(ifcProject);
+            IReadOnlyCollection<ITopologyEntity> topologyEntities;
+            using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
+            {
+                topologyEntities = ImportTopologyProxies(ifcProject);
+            }
             
-            List<ISegmentProxy> generatedSegments = new List<ISegmentProxy>();
             ConnectionAugmenter connectionAugmenter = new ConnectionAugmenter();
-            foreach (ITopologyEntity topologyEntity in topologyEntities)
-            {
-                generatedSegments.AddRange(connectionAugmenter.Augment(topologyEntity));
-            }
-
-            using IStartProject startProject = StartProject.OpenFromDocument(startDocument);
-
-            SegmentResolver segmentResolver = new(_comparer);
-            IEnumerable<ITopologyEntity> segmentTopologyEntities = topologyEntities
-                .Where(topology => topology.Proxy is ISegmentProxy);
-            IEnumerable<IResolvedSegmentProxy> resolvedSegmentProxies = segmentTopologyEntities
-                .Select(segment => segmentResolver.Resolve(segment));
-
-            IEnumerable<IFittingProxy> fittingProxies = topologyEntities
-                .Select(topology => topology.Proxy)
-                .OfType<IFittingProxy>();
-
-            foreach (IResolvedSegmentProxy segment in resolvedSegmentProxies)
-            {
-                IStartEntity startEntity = segment.ToStartEntity();
-                Vector<double>[] nodePositions =
-                {
-                    segment.ResolvedStartPosition, segment.ResolvedEndPosition
-                };
-
-                StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
-                ConnectNodes(startEntityProxy, nodeProxies);
-            }
-
-            foreach (IFittingProxy fitting in fittingProxies)
-            {
-                IStartEntity startEntity = fitting.ToStartEntity();
-                Vector<double> nodePosition = fitting.Position;
-
-                StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePosition);
-                ConnectNodes(startEntityProxy, nodeProxies);
-            }
+            ISegmentProxy[] generatedSegments = topologyEntities
+                .SelectMany(connectionAugmenter.Augment)
+                .ToArray();
             
-            foreach (ISegmentProxy generatedSegment in generatedSegments)
+            SegmentResolver segmentResolver = new(_comparer);
+            IResolvedSegmentProxy[] resolvedSegmentProxies = topologyEntities
+                .Where(topology => topology.Proxy is ISegmentProxy)
+                .Select(segmentResolver.Resolve)
+                .ToArray();
+
+            IFittingProxy[] fittingProxies = topologyEntities
+                .Select(topology => topology.Proxy)
+                .OfType<IFittingProxy>()
+                .ToArray();
+
+            using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
-                IStartEntity startEntity = generatedSegment.ToStartEntity();
-                Vector<double>[] nodePositions =
+                foreach (IResolvedSegmentProxy segment in resolvedSegmentProxies)
                 {
-                    generatedSegment.Position, generatedSegment.EndPosition
-                };
+                    IStartEntity startEntity = segment.ToStartEntity();
+                    Vector<double>[] nodePositions =
+                    {
+                        segment.ResolvedStartPosition, segment.ResolvedEndPosition
+                    };
 
-                StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
-                ConnectNodes(startEntityProxy, nodeProxies);
+                    StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
+                    StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
+                    ConnectNodes(startEntityProxy, nodeProxies);
+                }
+
+                foreach (IFittingProxy fitting in fittingProxies)
+                {
+                    IStartEntity startEntity = fitting.ToStartEntity();
+                    Vector<double> nodePosition = fitting.Position;
+
+                    StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
+                    StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePosition);
+                    ConnectNodes(startEntityProxy, nodeProxies);
+                }
+
+                foreach (ISegmentProxy generatedSegment in generatedSegments)
+                {
+                    IStartEntity startEntity = generatedSegment.ToStartEntity();
+                    Vector<double>[] nodePositions =
+                    {
+                        generatedSegment.Position, generatedSegment.EndPosition
+                    };
+
+                    StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
+                    StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
+                    ConnectNodes(startEntityProxy, nodeProxies);
+                }
+
+                startProject.OnImportFinish();
             }
-
-            startProject.OnImportFinish();
         }
 
         [Pure]

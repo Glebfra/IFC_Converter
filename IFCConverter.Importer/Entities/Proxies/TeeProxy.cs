@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
@@ -8,11 +9,12 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 3)]
+    [ProxyEntity(typeof(BoundPointConnectionResolver), 3, typeof(TeeConnectionAugmenter))]
     internal sealed class TeeProxy : IFittingProxy
     {
-        public readonly double HeadDiameter;
-        public readonly double MainDiameter;
+        public double HeadDiameter { get; }
+        public double MainDiameter { get; }
+        
         private IEnumerable<Vector<double>>? _boundary;
 
         public TeeProxy(
