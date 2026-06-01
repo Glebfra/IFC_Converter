@@ -45,7 +45,7 @@ namespace IFCConverter.Importer
             ConnectionAugmenter connectionAugmenter = new ConnectionAugmenter();
             foreach (ITopologyEntity topologyEntity in topologyEntities)
             {
-                generatedSegments.AddRange(connectionAugmenter.Augment(topologyEntity, topologyEntities));
+                generatedSegments.AddRange(connectionAugmenter.Augment(topologyEntity));
             }
 
             using IStartProject startProject = StartProject.OpenFromDocument(startDocument);

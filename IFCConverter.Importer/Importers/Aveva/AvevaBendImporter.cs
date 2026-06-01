@@ -23,6 +23,11 @@ namespace IFCConverter.Importer.Importers.Aveva
 
             if (representationItems[0] is not IIfcRevolvedAreaSolid revolvedAreaSolid)
                 throw new Exception("The representation item is not a revolved area solid.");
+            
+            if (revolvedAreaSolid.SweptArea is not IIfcCircleProfileDef circleProfileDef)
+                throw new Exception("The representation item is not a circle profile def.");
+
+            double diameter = circleProfileDef.Radius * 2;
 
             Matrix<double> areaMatrix = revolvedAreaSolid.Position.ToMatrix();
             Vector<double> axisLocalPosition = revolvedAreaSolid.Axis.Location.ToVector();
@@ -46,7 +51,8 @@ namespace IFCConverter.Importer.Importers.Aveva
                 revolvedAreaSolid.Angle,
                 radius * lengthPower,
                 axisGlobalPosition * lengthPower,
-                areaMatrix.GetY()
+                areaMatrix.GetY(),
+                diameter * lengthPower
             )
             {
                 Name = source.Name

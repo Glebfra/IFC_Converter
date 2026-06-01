@@ -147,6 +147,7 @@
             <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
         <Compile Include="Attributes\ProxyEntityAttribute.cs" />
+        <Compile Include="ConnectionAugmenters\BendConnectionAugmenter.cs" />
         <Compile Include="ConnectionAugmenters\ConnectionAugmenter.cs" />
         <Compile Include="ConnectionAugmenters\ReducerConnectionAugmenter.cs" />
         <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs" />
@@ -158,7 +159,6 @@
         <Compile Include="Entities\Proxies\ResolvedSegmentProxy.cs" />
         <Compile Include="Entities\Proxies\SegmentResolver.cs" />
         <Compile Include="Entities\Proxies\TeeProxy.cs" />
-        <Compile Include="Entities\Proxies\VirtualPipeSegmentProxy.cs" />
         <Compile Include="Entities\Topologies\EntityTopologyResolver.cs" />
         <Compile Include="Entities\Topologies\NodeTopologyResolver.cs" />
         <Compile Include="Entities\Topologies\TopologyEntity.cs" />

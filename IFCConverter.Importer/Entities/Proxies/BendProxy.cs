@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
@@ -12,22 +13,24 @@ using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2)]
+    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(BendConnectionAugmenter))]
     internal sealed class BendProxy : IFittingProxy
     {
+        public double Diameter { get; }
         public readonly double Angle;
         public readonly Vector<double> AxisPosition;
         public readonly double Radius;
         public readonly Vector<double> RefDirection;
         private IEnumerable<Vector<double>>? _boundary;
 
-        public BendProxy(Vector<double> position, double angle, double radius, Vector<double> axisPosition, Vector<double> refDirection)
+        public BendProxy(Vector<double> position, double angle, double radius, Vector<double> axisPosition, Vector<double> refDirection, double diameter)
         {
             Position = position;
             Angle = angle;
             Radius = radius;
             AxisPosition = axisPosition;
             RefDirection = refDirection;
+            Diameter = diameter;
         }
 
         public string? Name { get; set; }

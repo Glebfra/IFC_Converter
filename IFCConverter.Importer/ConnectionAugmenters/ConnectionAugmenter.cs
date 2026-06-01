@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
 {
     internal sealed class ConnectionAugmenter
     {
-        public IEnumerable<ISegmentProxy> Augment(ITopologyEntity topology, IReadOnlyCollection<ITopologyEntity> allTopologies)
+        public IEnumerable<ISegmentProxy> Augment(ITopologyEntity topology)
         {
             ProxyEntityAttribute attribute = topology.Proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
             IEntityConnectionAugmenter? augmenter = attribute.GetConnectionAugmenter();
@@ -16,7 +16,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
             if (augmenter == null)
                 return Enumerable.Empty<ISegmentProxy>();
 
-            return augmenter.Augment(topology, allTopologies, attribute.ConnectionsCount);
+            return augmenter.Augment(topology);
         }
     }
 }
