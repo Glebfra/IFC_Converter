@@ -201,7 +201,7 @@
         <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs" />
         <Compile Include="PropertySets\Aveva\AvevaPset.cs" />
         <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaDoublePropertyConverter.cs" />
+        <Compile Include="PropertySets\Converters\AvevaBoolPropertyConverter.cs" />
         <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
         <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
         <Compile Include="PropertySets\PropertySetRegistry.cs" />

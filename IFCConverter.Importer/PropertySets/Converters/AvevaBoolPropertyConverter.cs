@@ -3,11 +3,11 @@ using Xbim.Ifc4.MeasureResource;
 
 namespace IFCConverter.Importer.PropertySets.Converters
 {
-    internal sealed class AvevaDoublePropertyConverter : AbstractPropertyConverter<IfcValue, bool>
+    internal sealed class AvevaBoolPropertyConverter : AbstractPropertyConverter<IfcValue, bool>
     {
         private static readonly Dictionary<string, bool> BoolMap = new Dictionary<string, bool>();
 
-        public AvevaDoublePropertyConverter()
+        public AvevaBoolPropertyConverter()
         {
             BoolMap["f"] = false;
             BoolMap["fals"] = false;
