@@ -9,8 +9,7 @@ using Xbim.Ifc4.MeasureResource;
 
 namespace IFCConverter.Importer.PropertySets.Converters
 {
-    internal class AvevaVectorPropertyConverter :
-        AbstractPropertyConverter<ProxyItemSet<IfcValue, IIfcValue>, Vector<double>>
+    internal sealed class AvevaVectorPropertyConverter : AbstractPropertyConverter<ProxyItemSet<IfcValue, IIfcValue>, Vector<double>>
     {
         [Pure]
         public override Vector<double> ReadTyped(ProxyItemSet<IfcValue, IIfcValue> source)
