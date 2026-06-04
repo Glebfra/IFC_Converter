@@ -5,7 +5,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Interfaces
 {
-    internal interface IEntityProxy
+    public interface IEntityProxy
     {
         public Vector<double> Position { get; }
         public IEnumerable<Vector<double>> Boundary { get; }

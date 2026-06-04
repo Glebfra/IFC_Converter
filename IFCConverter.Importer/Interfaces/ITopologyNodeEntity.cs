@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Importer.Interfaces
 {
-    internal interface ITopologyNodeEntity
+    public interface ITopologyNodeEntity
     {
         public Vector<double> Position { get; }
     }

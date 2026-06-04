@@ -44,7 +44,17 @@ namespace IFCConverter.Importer.Entities.Topologies
                 if (!isConnectedToPoint)
                     continue;
 
-                return new TopologyNode(connectedProxy.Position);
+                if (connectedProxy is ISegmentProxy segmentProxy)
+                {
+                    if (_comparer.Equals(segmentProxy.Position, segmentPoint))
+                        return new TopologyNode(segmentProxy.Position);
+                    if (_comparer.Equals(segmentProxy.EndPosition, segmentPoint))
+                        return new TopologyNode(segmentProxy.EndPosition);
+                }
+                if (connectedProxy is IFittingProxy fittingProxy)
+                {
+                    return new TopologyNode(fittingProxy.Position);
+                }
             }
 
             return new TopologyNode(segmentPoint);

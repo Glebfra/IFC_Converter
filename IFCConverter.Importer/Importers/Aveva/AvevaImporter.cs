@@ -16,8 +16,9 @@ namespace IFCConverter.Importer.Importers.Aveva
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [IfcImporter(typeof(AvevaImporterImporterFilter), 0)]
-    internal class AvevaImporter : IImporter
+    public class AvevaImporter : IImporter
     {
+        private readonly Logger _logger = Logger.GetInstance();
         private const double _vectorTolerance = 1e-3;
         private readonly IEntityTopologyResolver _entityTopologyResolver;
 
@@ -43,9 +44,15 @@ namespace IFCConverter.Importer.Importers.Aveva
                 if (entityType == null)
                     continue;
 
-                IEntityProxy entityProxy =
-                    CreateEntityProxy(ifcProduct, (AvevaEntityType)entityType, ifcProductsCollection);
-                proxies.Add(entityProxy);
+                try
+                {
+                    IEntityProxy entityProxy = CreateEntityProxy(ifcProduct, (AvevaEntityType)entityType, ifcProductsCollection);
+                    proxies.Add(entityProxy);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error($"{e.Message} [{ifcProduct}]");
+                }
             }
 
             return proxies.Select(proxy => _entityTopologyResolver.ResolveTopology(proxy, proxies)).ToArray();
@@ -56,7 +63,7 @@ namespace IFCConverter.Importer.Importers.Aveva
             return parameters.E3DType switch
             {
                 "TUBING" => AvevaEntityType.PipeSegment,
-                "ELBOW" => AvevaEntityType.Bend,
+                "ELBOW" or "BEND" => AvevaEntityType.Bend,
                 "TEE" => AvevaEntityType.Tee,
                 "REDUCER" => AvevaEntityType.Reducer,
                 _ => null

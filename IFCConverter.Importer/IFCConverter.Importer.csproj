@@ -193,9 +193,11 @@
         <Compile Include="Interfaces\IPropertySet.cs" />
         <Compile Include="Interfaces\IResolvedProxy.cs" />
         <Compile Include="Interfaces\IResolvedSegmentProxy.cs" />
+        <Compile Include="Interfaces\ISegmentNormalizer.cs" />
         <Compile Include="Interfaces\ISegmentProxy.cs" />
         <Compile Include="Interfaces\ITopologyEntity.cs" />
         <Compile Include="Interfaces\ITopologyNodeEntity.cs" />
+        <Compile Include="Normalizers\SegmentNormalizer.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="PropertySets\AbstractPropertySet.cs" />
         <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs" />
