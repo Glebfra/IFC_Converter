@@ -18,7 +18,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
             List<ISegmentProxy> generatedSegments = new List<ISegmentProxy>();
             
             if (topology.Proxy is not TeeProxy teeProxy)
-                throw new Exception($"{nameof(topology.Proxy)} should be {nameof(BendProxy)}");
+                throw new Exception($"{nameof(topology.Proxy)} should be {nameof(TeeProxy)}");
             
             foreach (Vector<double> boundaryPoint in teeProxy.Boundary)
             {
@@ -46,6 +46,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
                 {
                     Name = $"Generated segment for {teeProxy.Name}"
                 };
+                generatedSegments.Add(generatedSegment);
             }
 
             return generatedSegments;

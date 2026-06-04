@@ -82,6 +82,10 @@
         <None Include="packages.config"/>
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\IFCConverter.Debug\IFCConverter.Debug.csproj">
+          <Project>{3a6681ff-0f01-4542-b1a2-661c19d5cefd}</Project>
+          <Name>IFCConverter.Debug</Name>
+        </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Exporter\IFCConverter.Exporter.csproj">
             <Project>{ad860eed-1bac-4b03-8327-5d9a3452c794}</Project>
             <Name>IFCConverter.Exporter</Name>

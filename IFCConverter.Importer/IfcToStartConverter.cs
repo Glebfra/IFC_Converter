@@ -3,6 +3,8 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ifc.Interfaces;
+using IFCConverter.Debug;
+using IFCConverter.Debug.Interfaces;
 using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Importers;
