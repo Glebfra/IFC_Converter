@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCConverter.Utils", "IFCCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCConverter.Exporter", "IFCConverter.Exporter\IFCConverter.Exporter.csproj", "{AD860EED-1BAC-4B03-8327-5D9A3452C794}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCConverter.Debug", "IFCConverter.Debug\IFCConverter.Debug.csproj", "{3A6681FF-0F01-4542-B1A2-661C19D5CEFD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,10 +63,6 @@ Global
 		{AD860EED-1BAC-4B03-8327-5D9A3452C794}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD860EED-1BAC-4B03-8327-5D9A3452C794}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD860EED-1BAC-4B03-8327-5D9A3452C794}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A6681FF-0F01-4542-B1A2-661C19D5CEFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A6681FF-0F01-4542-B1A2-661C19D5CEFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A6681FF-0F01-4542-B1A2-661C19D5CEFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A6681FF-0F01-4542-B1A2-661C19D5CEFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

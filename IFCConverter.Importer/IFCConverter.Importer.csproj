@@ -209,10 +209,6 @@
         <Compile Include="PropertySets\PropertySetRegistry.cs" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\IFCConverter.Debug\IFCConverter.Debug.csproj">
-          <Project>{3a6681ff-0f01-4542-b1a2-661c19d5cefd}</Project>
-          <Name>IFCConverter.Debug</Name>
-        </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
             <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
             <Name>IFCConverter.Utils</Name>

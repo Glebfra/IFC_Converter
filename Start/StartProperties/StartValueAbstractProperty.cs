@@ -50,7 +50,7 @@ namespace Start.StartProperties
         {
             dynamic property = startProperty;
             StartProperty = startProperty;
-            SIProperty = property * StartToSIFactor;
+            SIProperty = Convert.ChangeType(property * StartToSIFactor, typeof(T));
             return this;
         }
 
@@ -58,7 +58,7 @@ namespace Start.StartProperties
         {
             dynamic property = siProperty;
             SIProperty = siProperty;
-            StartProperty = property / StartToSIFactor;
+            StartProperty = Convert.ChangeType(property / StartToSIFactor, typeof(T));
             return this;
         }
 

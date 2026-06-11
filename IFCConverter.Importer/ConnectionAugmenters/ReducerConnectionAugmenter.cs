@@ -12,6 +12,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
 {
     internal sealed class ReducerConnectionAugmenter : IEntityConnectionAugmenter
     {
+        private const double MinLength = 1e-2;
         private const double DoubleEpsilon = 1e-3;
         private readonly VectorComparer _comparer = new VectorComparer(DoubleEpsilon);
         
@@ -36,8 +37,12 @@ namespace IFCConverter.Importer.ConnectionAugmenters
                     ? reducerProxy.MinDiameter
                     : reducerProxy.MaxDiameter;
                 Vector<double> projection = boundaryPoint - reducerProxy.Position;
+                if (_comparer.Equals(projection, VectorExtensions.Zero))
+                {
+                    projection = reducerProxy.Direction.Negate() * MinLength;
+                }
                 double length = projection.L2Norm();
-                Vector<double> direction = length.AlmostEqual(0, DoubleEpsilon) ? VectorExtensions.Zero : projection / length;
+                Vector<double> direction = projection.Normalize(2);
 
                 PipeSegmentProxy virtualSegment = new PipeSegmentProxy(
                     diameter,

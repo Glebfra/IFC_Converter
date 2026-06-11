@@ -10,6 +10,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
 {
     internal sealed class TeeConnectionAugmenter : IEntityConnectionAugmenter
     {
+        private const double MinLength = 1e-2;
         private const double DoubleEpsilon = 1e-3;
         private readonly VectorComparer _comparer = new VectorComparer(DoubleEpsilon);
         
@@ -32,6 +33,8 @@ namespace IFCConverter.Importer.ConnectionAugmenters
 
                 Vector<double> projection = boundaryPoint - teeProxy.Position;
                 double length = projection.L2Norm();
+                if (length < MinLength)
+                    length = MinLength;
                 Vector<double> direction = projection / length;
                 double diameter = direction.IsParallel(teeProxy.MainProjection)
                     ? teeProxy.MainDiameter

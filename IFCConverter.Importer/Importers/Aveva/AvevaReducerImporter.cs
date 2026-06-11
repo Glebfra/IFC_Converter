@@ -82,7 +82,8 @@ namespace IFCConverter.Importer.Importers.Aveva
                 isEccentric,
                 length * lengthPower,
                 diameters.Min() * lengthPower,
-                diameters.Max() * lengthPower
+                diameters.Max() * lengthPower,
+                (boundPoints[0] - boundPoints[1]).Normalize(2)
             )
             {
                 Name = source.Name

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace Utils
@@ -13,6 +14,7 @@ namespace Utils
             _tolerance = tolerance;
         }
 
+        [Pure]
         public bool Equals(
             Vector<double>? x,
             Vector<double>? y)
@@ -26,6 +28,7 @@ namespace Utils
                 Math.Abs(x[2] - y[2]) <= _tolerance;
         }
 
+        [Pure]
         public int GetHashCode(Vector<double> obj)
         {
             long x = Quantize(obj[0]);
@@ -44,6 +47,7 @@ namespace Utils
             }
         }
 
+        [Pure]
         public bool LessThan(
             Vector<double>? x,
             Vector<double>? y)
@@ -54,6 +58,7 @@ namespace Utils
             return x.L2Norm() < y.L2Norm();
         }
 
+        [Pure]
         public bool GreaterThan(
             Vector<double>? x,
             Vector<double>? y)
@@ -64,6 +69,7 @@ namespace Utils
             return x.L2Norm() > y.L2Norm();
         }
 
+        [Pure]
         public bool NearerThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
         {
             if (x == null || y == null)
@@ -72,6 +78,7 @@ namespace Utils
             return (x - origin).L2Norm() <= (y - origin).L2Norm();
         }
 
+        [Pure]
         public bool FartherThan(Vector<double>? x, Vector<double>? y, Vector<double> origin)
         {
             if (x == null || y == null)
@@ -79,7 +86,14 @@ namespace Utils
 
             return (x - origin).L2Norm() >= (y - origin).L2Norm();
         }
+        
+        [Pure]
+        public bool IsParallel(Vector<double> first, Vector<double> second)
+        {
+            return first.Normalize(2).CrossProduct(second.Normalize(2)).L2Norm() < _tolerance;
+        }
 
+        [Pure]
         private long Quantize(double value)
         {
             return (long)Math.Round(value / _tolerance);

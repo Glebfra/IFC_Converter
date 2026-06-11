@@ -3,12 +3,11 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ifc.Interfaces;
-using IFCConverter.Debug;
-using IFCConverter.Debug.Interfaces;
 using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Normalizers;
 using IFCConverter.Utils;
 using MathNet.Numerics.LinearAlgebra;
 using Start.API;
@@ -50,6 +49,9 @@ namespace IFCConverter.Importer
                 .SelectMany(connectionAugmenter.Augment)
                 .ToArray();
             
+            ISegmentNormalizer segmentNormalizer = new SegmentNormalizer();
+            ISegmentProxy[] normalizedSegments = segmentNormalizer.Normalize(generatedSegments).ToArray();
+            
             SegmentResolver segmentResolver = new(_comparer);
             IResolvedSegmentProxy[] resolvedSegmentProxies = topologyEntities
                 .Where(topology => topology.Proxy is ISegmentProxy)
@@ -86,12 +88,12 @@ namespace IFCConverter.Importer
                     ConnectNodes(startEntityProxy, nodeProxies);
                 }
 
-                foreach (ISegmentProxy generatedSegment in generatedSegments)
+                foreach (ISegmentProxy normalizedSegment in normalizedSegments)
                 {
-                    IStartEntity startEntity = generatedSegment.ToStartEntity();
+                    IStartEntity startEntity = normalizedSegment.ToStartEntity();
                     Vector<double>[] nodePositions =
                     {
-                        generatedSegment.Position, generatedSegment.EndPosition
+                        normalizedSegment.Position, normalizedSegment.EndPosition
                     };
 
                     StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);

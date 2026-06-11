@@ -15,13 +15,14 @@ namespace IFCConverter.Importer.Entities.Proxies
     {
         public double MinDiameter { get; }
         public double MaxDiameter { get; }
+        public Vector<double> Direction { get; }
         
         private readonly bool _isEccentric;
         private readonly IReadOnlyList<Vector<double>> _boundPoints;
         private IEnumerable<Vector<double>>? _boundary;
 
         public ReducerProxy(Vector<double> position, IReadOnlyList<Vector<double>> boundPoints, bool isEccentric,
-            double length, double minDiameter, double maxDiameter)
+            double length, double minDiameter, double maxDiameter, Vector<double> direction)
         {
             Position = position;
             _boundPoints = boundPoints;
@@ -29,6 +30,7 @@ namespace IFCConverter.Importer.Entities.Proxies
             Length = length;
             MinDiameter = minDiameter;
             MaxDiameter = maxDiameter;
+            Direction = direction;
         }
 
         public double Length { get; }
