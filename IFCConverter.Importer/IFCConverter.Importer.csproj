@@ -147,6 +147,12 @@
             <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
         <Compile Include="Attributes\ProxyEntityAttribute.cs" />
+        <Compile Include="BoundaryResolvers\BendBoundaryResolver.cs" />
+        <Compile Include="BoundaryResolvers\BoundaryResolver.cs" />
+        <Compile Include="BoundaryResolvers\NearestSegmentBoundaryResolver.cs" />
+        <Compile Include="BoundaryResolvers\PipeSegmentBoundaryResolver.cs" />
+        <Compile Include="BoundaryResolvers\ReducerBoundaryResolver.cs" />
+        <Compile Include="BoundaryResolvers\TeeBoundaryResolver.cs" />
         <Compile Include="ConnectionAugmenters\BendConnectionAugmenter.cs" />
         <Compile Include="ConnectionAugmenters\ConnectionAugmenter.cs" />
         <Compile Include="ConnectionAugmenters\ReducerConnectionAugmenter.cs" />
@@ -180,6 +186,8 @@
         <Compile Include="Importers\Aveva\AvevaTeeImporter.cs" />
         <Compile Include="Importers\ImporterRegistration.cs" />
         <Compile Include="Importers\ImporterRegistry.cs" />
+        <Compile Include="Interfaces\IBoundaryProxy.cs" />
+        <Compile Include="Interfaces\IBoundaryResolver.cs" />
         <Compile Include="Interfaces\IEntityConnectionAugmenter.cs" />
         <Compile Include="Interfaces\IEntityConnectionResolver.cs" />
         <Compile Include="Interfaces\IEntityImporter.cs" />

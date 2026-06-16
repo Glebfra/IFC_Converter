@@ -8,12 +8,14 @@ namespace IFCConverter.Importer.Attributes
     {
         public readonly Type ConnectionResolverType;
         public readonly Type? ConnectionAugmenterType;
+        public readonly Type? BoundaryResolverType;
         public readonly int ConnectionsCount;
 
-        public ProxyEntityAttribute(Type connectionResolverType, int connectionsCount, Type? connectionAugmenterType = null)
+        public ProxyEntityAttribute(Type connectionResolverType, int connectionsCount, Type? boundaryResolverType = null, Type? connectionAugmenterType = null)
         {
             ConnectionResolverType = connectionResolverType;
             ConnectionsCount = connectionsCount;
+            BoundaryResolverType = boundaryResolverType;
             ConnectionAugmenterType = connectionAugmenterType;
         }
         
@@ -27,6 +29,13 @@ namespace IFCConverter.Importer.Attributes
             if (ConnectionAugmenterType == null)
                 return null;
             return (IEntityConnectionAugmenter)Activator.CreateInstance(ConnectionAugmenterType);
+        }
+
+        public IBoundaryResolver? GetBoundaryResolver()
+        {
+            if (BoundaryResolverType == null)
+                return null;
+            return (IBoundaryResolver)Activator.CreateInstance(BoundaryResolverType);
         }
     }
 }
