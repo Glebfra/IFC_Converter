@@ -17,7 +17,7 @@ namespace Ifc.Extensions
         [Pure]
         public static Vector<double> ToVector(this IIfcCartesianPoint cartesianPoint)
         {
-            return ToVector(cartesianPoint.Coordinates.Cast<IIfcValue>());
+            return cartesianPoint.Coordinates.Cast<IIfcValue>().ToVector();
         }
 
         [Pure]
@@ -25,9 +25,7 @@ namespace Ifc.Extensions
         {
             return new DenseVector(new[]
             {
-                direction.X,
-                direction.Y,
-                direction.Z
+                direction.X, direction.Y, direction.Z
             });
         }
 
@@ -41,10 +39,10 @@ namespace Ifc.Extensions
         [Pure]
         public static Matrix<double> ToMatrix(this IIfcAxis2Placement3D axis2Placement3D)
         {
-            Vector<double> axis = ToVector(axis2Placement3D.Axis);
-            Vector<double> refDirection = ToVector(axis2Placement3D.RefDirection);
+            Vector<double> axis = axis2Placement3D.Axis.ToVector();
+            Vector<double> refDirection = axis2Placement3D.RefDirection.ToVector();
             Vector<double> upDirection = axis.CrossProduct(refDirection);
-            Vector<double> position = ToVector(axis2Placement3D.Location);
+            Vector<double> position = axis2Placement3D.Location.ToVector();
 
             return MatrixExtensions.CreateTransition(position, refDirection, upDirection, axis);
         }
@@ -72,9 +70,7 @@ namespace Ifc.Extensions
             foreach (IItemSet<IfcLengthMeasure> ifcLengthMeasures in pointList.CoordList)
                 result.Add(new DenseVector(new double[]
                 {
-                    ifcLengthMeasures[0],
-                    ifcLengthMeasures[1],
-                    ifcLengthMeasures[2]
+                    ifcLengthMeasures[0], ifcLengthMeasures[1], ifcLengthMeasures[2]
                 }));
 
             return result;

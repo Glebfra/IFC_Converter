@@ -71,8 +71,7 @@ namespace Ifc.Geometries
 
             Vector<double>[] sphereCenters =
             {
-                properties.Position + direction * length / 4,
-                properties.Position - direction * length / 4
+                properties.Position + direction * length / 4, properties.Position - direction * length / 4
             };
             foreach (Vector<double> sphereCenter in sphereCenters)
             {

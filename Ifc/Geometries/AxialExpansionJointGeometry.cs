@@ -52,8 +52,7 @@ namespace Ifc.Geometries
                 .ToArray();
             double[] diameters =
             {
-                properties.Diameter * DiameterToFirstDiameterFactor,
-                properties.Diameter * DiameterToSecondDiameterFactor
+                properties.Diameter * DiameterToFirstDiameterFactor, properties.Diameter * DiameterToSecondDiameterFactor
             };
 
             for (int i = 0; i < directions.Length; i++)

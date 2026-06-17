@@ -49,17 +49,25 @@ namespace Ifc.Geometries
         [Pure]
         public static TeeGeometry CreateGeometry(IModel model, TeeGeometryProperties properties)
         {
-            double[] diameters = { properties.MainDiameter, properties.HeadDiameter };
-            double[] lengths = { properties.MainLength, properties.HeadLength };
+            double[] diameters =
+            {
+                properties.MainDiameter, properties.HeadDiameter
+            };
+            double[] lengths =
+            {
+                properties.MainLength, properties.HeadLength
+            };
 
-            Vector<double>[] zs = { properties.MainDirection, properties.HeadDirection };
+            Vector<double>[] zs =
+            {
+                properties.MainDirection, properties.HeadDirection
+            };
             Vector<double>[] xs = zs.Select(z => z.CreateNormalVector()).ToArray();
             Vector<double>[] ys = zs.Select((z, index) => z.CrossProduct(xs[index]).Normalize(2)).ToArray();
 
             Vector<double>[] positions =
             {
-                properties.Position - properties.MainDirection * properties.MainLength / 2,
-                properties.Position
+                properties.Position - properties.MainDirection * properties.MainLength / 2, properties.Position
             };
 
             Matrix<double>[] extrudedAreaSolidMatrices = positions

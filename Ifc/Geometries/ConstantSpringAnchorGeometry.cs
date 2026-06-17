@@ -67,10 +67,12 @@ namespace Ifc.Geometries
             Vector<double>[] topConeTopPoints = properties.IsDoubleSided
                 ? new[]
                 {
-                    properties.Position + properties.DoubleSidedDisplacement,
-                    properties.Position - properties.DoubleSidedDisplacement
+                    properties.Position + properties.DoubleSidedDisplacement, properties.Position - properties.DoubleSidedDisplacement
                 }
-                : new[] { properties.Position };
+                : new[]
+                {
+                    properties.Position
+                };
 
             Vector<double>[] topConeBotPoints = topConeTopPoints
                 .Select(topConePoint => topConePoint - properties.Direction * coneLength)
