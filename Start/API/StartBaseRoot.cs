@@ -62,7 +62,10 @@ namespace Start.API
         /// <param name="name">The name to set.</param>
         public void SetName(string name)
         {
-            object[] args = { name };
+            object[] args =
+            {
+                name
+            };
             _startBaseRoot.GetType().InvokeMember(
                 "SetName", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -89,10 +92,19 @@ namespace Start.API
         public IStartBaseRoot GetConnElemOnType(StartElementTypeEnum type, int nNumber)
         {
             object element = new();
-            object[] args = { type, nNumber, element };
+            object[] args =
+            {
+                type, nNumber, element
+            };
 
-            ParameterModifier parameterModifier = new(3) { [2] = true };
-            ParameterModifier[] modifiers = { parameterModifier };
+            ParameterModifier parameterModifier = new(3)
+            {
+                [2] = true
+            };
+            ParameterModifier[] modifiers =
+            {
+                parameterModifier
+            };
 
             _startBaseRoot.GetType().InvokeMember(
                 "GetConnElemOnType", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
@@ -109,10 +121,19 @@ namespace Start.API
         public IStartBaseRoot GetConnElemOnIndex(int nNumber)
         {
             object element = new();
-            object[] args = { nNumber, element };
+            object[] args =
+            {
+                nNumber, element
+            };
 
-            ParameterModifier parameterModifier = new(2) { [1] = true };
-            ParameterModifier[] modifiers = { parameterModifier };
+            ParameterModifier parameterModifier = new(2)
+            {
+                [1] = true
+            };
+            ParameterModifier[] modifiers =
+            {
+                parameterModifier
+            };
 
             _startBaseRoot.GetType().InvokeMember(
                 "GetConnElemOnIndex", BindingFlags.InvokeMethod, null, _startBaseRoot, args, modifiers, null, null
@@ -127,7 +148,10 @@ namespace Start.API
         /// <param name="index">The index of the element to set.</param>
         public void SetConnElem(int index)
         {
-            object[] args = { index };
+            object[] args =
+            {
+                index
+            };
             _startBaseRoot.GetType().InvokeMember(
                 "SetConnElem", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -163,7 +187,10 @@ namespace Start.API
         /// <param name="index">The index of the starting node.</param>
         public void SetSNode(int index)
         {
-            object[] args = { index };
+            object[] args =
+            {
+                index
+            };
             _startBaseRoot.GetType().InvokeMember(
                 "SetSNode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -175,7 +202,10 @@ namespace Start.API
         /// <param name="index">The index of the ending node.</param>
         public void SetENode(int index)
         {
-            object[] args = { index };
+            object[] args =
+            {
+                index
+            };
             _startBaseRoot.GetType().InvokeMember(
                 "SetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -187,7 +217,10 @@ namespace Start.API
         /// <param name="node">The starting node to set.</param>
         public void SetSNode(StartBaseRoot node)
         {
-            object[] args = { node._startBaseRoot };
+            object[] args =
+            {
+                node._startBaseRoot
+            };
             _startBaseRoot.GetType().InvokeMember(
                 "SetSNode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -199,7 +232,10 @@ namespace Start.API
         /// <param name="node">The ending node to set.</param>
         public void SetENode(StartBaseRoot node)
         {
-            object[] args = { node._startBaseRoot };
+            object[] args =
+            {
+                node._startBaseRoot
+            };
             _startBaseRoot.GetType().InvokeMember(
                 "SetENode", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -212,7 +248,10 @@ namespace Start.API
         /// <returns>The character data value.</returns>
         public string GetDataChar(int key)
         {
-            object[] args = { key };
+            object[] args =
+            {
+                key
+            };
             object data = _startBaseRoot.GetType().InvokeMember(
                 "GetDataChar", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -226,7 +265,10 @@ namespace Start.API
         /// <returns>The integer data value.</returns>
         public int GetDataInt(int key)
         {
-            object[] args = { key };
+            object[] args =
+            {
+                key
+            };
             object data = _startBaseRoot.GetType().InvokeMember(
                 "GetDataInt", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -240,7 +282,10 @@ namespace Start.API
         /// <returns>The real data value.</returns>
         public double GetDataReal(int key)
         {
-            object[] args = { key };
+            object[] args =
+            {
+                key
+            };
             object data = _startBaseRoot.GetType().InvokeMember(
                 "GetDataReal", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );
@@ -266,7 +311,10 @@ namespace Start.API
         /// <returns>The X-coordinate.</returns>
         public double GetXCoord(int mode = 0)
         {
-            object[] args = { mode };
+            object[] args =
+            {
+                mode
+            };
             object value = _startBaseRoot.GetType().InvokeMember(
                 "GetCoordX", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             )!;
@@ -280,7 +328,10 @@ namespace Start.API
         /// <returns>The Y-coordinate.</returns>
         public double GetYCoord(int mode = 0)
         {
-            object[] args = { mode };
+            object[] args =
+            {
+                mode
+            };
             object value = _startBaseRoot.GetType().InvokeMember(
                 "GetCoordY", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             )!;
@@ -294,7 +345,10 @@ namespace Start.API
         /// <returns>The Z-coordinate.</returns>
         public double GetZCoord(int mode = 0)
         {
-            object[] args = { mode };
+            object[] args =
+            {
+                mode
+            };
             object value = _startBaseRoot.GetType().InvokeMember(
                 "GetCoordZ", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             )!;
@@ -309,7 +363,10 @@ namespace Start.API
         /// <returns>The JSON data as a string.</returns>
         public string GetDataJson(int mode = 0, int key = 0)
         {
-            object[] args = { mode, key };
+            object[] args =
+            {
+                mode, key
+            };
             object value = _startBaseRoot.GetType().InvokeMember(
                 "GetDataJson", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             )!;
@@ -323,7 +380,10 @@ namespace Start.API
         /// <param name="data">The JSON data to set.</param>
         public void SetDataJson(int key, string data)
         {
-            object[] args = { key, data };
+            object[] args =
+            {
+                key, data
+            };
             _startBaseRoot.GetType().InvokeMember(
                 "SetDataJson", BindingFlags.InvokeMethod, null, _startBaseRoot, args
             );

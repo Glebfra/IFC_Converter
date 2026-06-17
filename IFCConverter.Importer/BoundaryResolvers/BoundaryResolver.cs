@@ -9,11 +9,15 @@ namespace IFCConverter.Importer.BoundaryResolvers
 {
     internal sealed class BoundaryResolver
     {
-        private static readonly Lazy<BoundaryResolver> Instance = new Lazy<BoundaryResolver>(() => new BoundaryResolver());
-        public static BoundaryResolver GetInstance() => Instance.Value;
+        private static readonly Lazy<BoundaryResolver> Instance = new(() => new BoundaryResolver());
 
         private BoundaryResolver()
         {
+        }
+
+        public static BoundaryResolver GetInstance()
+        {
+            return Instance.Value;
         }
 
         public IReadOnlyCollection<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
@@ -22,7 +26,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
             IBoundaryResolver? resolver = attribute.GetBoundaryResolver();
             if (resolver == null)
                 throw new InvalidOperationException($"Boundary resolver not configured for {proxy.GetType().Name}");
-            
+
             return resolver.ResolveBoundary(proxy, allProxies, attribute.ConnectionsCount);
         }
     }

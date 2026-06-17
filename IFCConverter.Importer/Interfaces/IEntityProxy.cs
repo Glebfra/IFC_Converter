@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Interfaces;
 

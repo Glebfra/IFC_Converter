@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
@@ -10,13 +9,13 @@ namespace IFCConverter.Importer.ConnectionResolvers
     internal sealed class BoundPointConnectionResolver : IEntityConnectionResolver
     {
         private const double Tolerance = 1e-3;
-        private readonly VectorComparer _comparer = new VectorComparer(Tolerance);
-        
+        private readonly VectorComparer _comparer = new(Tolerance);
+
         public IEnumerable<IBoundaryProxy> GetConnectedEntities(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> allProxies)
         {
-            HashSet<IBoundaryProxy> result = new HashSet<IBoundaryProxy>();
+            HashSet<IBoundaryProxy> result = new();
             IReadOnlyCollection<Vector<double>> entityPoints = proxy.Boundary;
-            
+
             foreach (IBoundaryProxy candidate in allProxies)
             {
                 if (ReferenceEquals(proxy, candidate))

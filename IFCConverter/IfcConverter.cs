@@ -120,7 +120,10 @@ namespace IFCConverter
             {
                 Localize(languageId);
 
-                ImportDataContainer importDataContainer = new() { InputFilePath = ifcFileName };
+                ImportDataContainer importDataContainer = new()
+                {
+                    InputFilePath = ifcFileName
+                };
                 DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
                 if (dialogResult == DialogResult.Cancel)
                     return (int)ConversionResult.Canceled;

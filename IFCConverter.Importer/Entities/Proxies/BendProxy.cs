@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
+﻿using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionAugmenters;
@@ -9,20 +7,16 @@ using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
 using Start.Interfaces;
-using Utils;
-using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
     [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(BendConnectionAugmenter), typeof(BendBoundaryResolver))]
     internal sealed class BendProxy : IFittingProxy
     {
-        public double Diameter { get; }
         public readonly double Angle;
         public readonly Vector<double> AxisPosition;
         public readonly double Radius;
         public readonly Vector<double> RefDirection;
-        private IEnumerable<Vector<double>>? _boundary;
 
         public BendProxy(Vector<double> position, double angle, double radius, Vector<double> axisPosition, Vector<double> refDirection, double diameter)
         {
@@ -33,6 +27,8 @@ namespace IFCConverter.Importer.Entities.Proxies
             RefDirection = refDirection;
             Diameter = diameter;
         }
+
+        public double Diameter { get; }
 
         public string? Name { get; set; }
 
@@ -49,21 +45,6 @@ namespace IFCConverter.Importer.Entities.Proxies
                 elbowEntity.Name = Name;
 
             return elbowEntity;
-        }
-
-        [Pure]
-        private IEnumerable<Vector<double>> GetBoundaryPoints()
-        {
-            Vector<double> axis = (Position - AxisPosition).Normalize(2);
-            Vector<double> upDirection = axis.CrossProduct(RefDirection).Normalize(2);
-
-            Matrix<double>[] rotationMatrices =
-            {
-                MatrixExtensions.CreateRotationAroundVector(upDirection, Angle / 2).GetRotation(),
-                MatrixExtensions.CreateRotationAroundVector(upDirection, -Angle / 2).GetRotation()
-            };
-
-            return rotationMatrices.Select(matrix => matrix.Multiply(axis * Radius) + AxisPosition);
         }
     }
 }

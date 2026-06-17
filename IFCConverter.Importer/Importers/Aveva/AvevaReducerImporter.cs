@@ -62,11 +62,10 @@ namespace IFCConverter.Importer.Importers.Aveva
 
             IReadOnlyList<Vector<double>> boundPoints = new[]
             {
-                worldToObjMat.LeftMultiply(firstCircleLocalCenterPoint),
-                worldToObjMat.LeftMultiply(secondCircleLocalCenterPoint)
+                worldToObjMat.LeftMultiply(firstCircleLocalCenterPoint), worldToObjMat.LeftMultiply(secondCircleLocalCenterPoint)
             };
 
-            IReadOnlyList<double> diameters = new double[]
+            IReadOnlyList<double> diameters = new[]
             {
                 (firstCircleLocalPoints[0] - firstCircleLocalCenterPoint).L2Norm() * 2,
                 (secondCircleLocalPoints[0] - secondCircleLocalCenterPoint).L2Norm() * 2
@@ -94,9 +93,7 @@ namespace IFCConverter.Importer.Importers.Aveva
         {
             return new DenseVector(new[]
             {
-                localVertices.Min(vertex => vertex[0]),
-                localVertices.Min(vertex => vertex[1]),
-                localVertices.Min(vertex => vertex[2])
+                localVertices.Min(vertex => vertex[0]), localVertices.Min(vertex => vertex[1]), localVertices.Min(vertex => vertex[2])
             });
         }
 
@@ -104,9 +101,7 @@ namespace IFCConverter.Importer.Importers.Aveva
         {
             return new DenseVector(new[]
             {
-                localVertices.Max(vertex => vertex[0]),
-                localVertices.Max(vertex => vertex[1]),
-                localVertices.Max(vertex => vertex[2])
+                localVertices.Max(vertex => vertex[0]), localVertices.Max(vertex => vertex[1]), localVertices.Max(vertex => vertex[2])
             });
         }
     }

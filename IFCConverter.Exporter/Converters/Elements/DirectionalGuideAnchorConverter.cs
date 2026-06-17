@@ -72,16 +72,11 @@ namespace IFCConverter.Exporter.Converters.Elements
             {
                 StartSingleDirectionalGuideAnchorEntity => new[]
                 {
-                    segmentMatrix.GetX(),
-                    -segmentMatrix.GetX(),
-                    segmentMatrix.GetY()
+                    segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY()
                 },
                 StartDoubleDirectionalGuideAnchorEntity => new[]
                 {
-                    segmentMatrix.GetX(),
-                    -segmentMatrix.GetX(),
-                    segmentMatrix.GetY(),
-                    -segmentMatrix.GetY()
+                    segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY(), -segmentMatrix.GetY()
                 },
                 _ => Array.Empty<Vector<double>>()
             };

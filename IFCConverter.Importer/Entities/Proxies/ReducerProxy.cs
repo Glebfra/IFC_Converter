@@ -14,12 +14,9 @@ namespace IFCConverter.Importer.Entities.Proxies
     [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(ReducerConnectionAugmenter), typeof(ReducerBoundaryResolver))]
     internal sealed class ReducerProxy : IFittingProxy
     {
-        public double MinDiameter { get; }
-        public double MaxDiameter { get; }
-        public Vector<double> Direction { get; }
-        
-        private readonly bool _isEccentric;
         private readonly IReadOnlyList<Vector<double>> _boundPoints;
+
+        private readonly bool _isEccentric;
         private IEnumerable<Vector<double>>? _boundary;
 
         public ReducerProxy(Vector<double> position, IReadOnlyList<Vector<double>> boundPoints, bool isEccentric,
@@ -34,12 +31,16 @@ namespace IFCConverter.Importer.Entities.Proxies
             Direction = direction;
         }
 
+        public double MinDiameter { get; }
+        public double MaxDiameter { get; }
+        public Vector<double> Direction { get; }
+
         public double Length { get; }
+
+        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
 
         public string? Name { get; set; }
         public Vector<double> Position { get; }
-        
-        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
 
         public IStartEntity ToStartEntity()
         {

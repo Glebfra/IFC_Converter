@@ -23,7 +23,7 @@ namespace IFCConverter.Importer.Importers.Aveva
 
             if (representationItems[0] is not IIfcRevolvedAreaSolid revolvedAreaSolid)
                 throw new Exception("The representation item is not a revolved area solid.");
-            
+
             if (revolvedAreaSolid.SweptArea is not IIfcCircleProfileDef circleProfileDef)
                 throw new Exception("The representation item is not a circle profile def.");
 

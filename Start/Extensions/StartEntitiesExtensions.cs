@@ -37,8 +37,14 @@ namespace Start.Extensions
         {
             return startEntity switch
             {
-                IStartOneNodeEntity oneNodeEntity => new[] { oneNodeEntity.Position },
-                IStartTwoNodeEntity twoNodeEntity => new[] { twoNodeEntity.StartPosition, twoNodeEntity.EndPosition },
+                IStartOneNodeEntity oneNodeEntity => new[]
+                {
+                    oneNodeEntity.Position
+                },
+                IStartTwoNodeEntity twoNodeEntity => new[]
+                {
+                    twoNodeEntity.StartPosition, twoNodeEntity.EndPosition
+                },
                 _ => throw new Exception("Unsupported type")
             };
         }
@@ -54,7 +60,7 @@ namespace Start.Extensions
         [Pure]
         public static Vector<double> GetDirectionToEntity(this IStartEntity startEntity, Vector<double> position)
         {
-            return GetNearestPosition(startEntity, position) - position;
+            return startEntity.GetNearestPosition(position) - position;
         }
 
         [Pure]

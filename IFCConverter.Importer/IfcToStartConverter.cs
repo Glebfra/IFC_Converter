@@ -43,15 +43,15 @@ namespace IFCConverter.Importer
             {
                 topologyEntities = ImportTopologyProxies(ifcProject);
             }
-            
-            ConnectionAugmenter connectionAugmenter = new ConnectionAugmenter();
+
+            ConnectionAugmenter connectionAugmenter = new();
             ISegmentProxy[] generatedSegments = topologyEntities
                 .SelectMany(connectionAugmenter.Augment)
                 .ToArray();
-            
+
             ISegmentNormalizer segmentNormalizer = new SegmentNormalizer();
             ISegmentProxy[] normalizedSegments = segmentNormalizer.Normalize(generatedSegments).ToArray();
-            
+
             SegmentResolver segmentResolver = new(_comparer);
             IResolvedSegmentProxy[] resolvedSegmentProxies = topologyEntities
                 .Where(topology => topology.Proxy.Proxy is ISegmentProxy)

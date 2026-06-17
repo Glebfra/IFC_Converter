@@ -15,12 +15,12 @@ using Xbim.Ifc4.SharedBldgElements;
 namespace IFCConverter.Importer.Importers.Aveva
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    [IfcImporter(typeof(AvevaImporterImporterFilter), 0)]
+    [IfcImporter(typeof(AvevaImporterImporterFilter))]
     internal class AvevaImporter : IImporter
     {
-        private readonly Logger _logger = Logger.GetInstance();
         private const double _vectorTolerance = 1e-3;
         private readonly IEntityTopologyResolver _entityTopologyResolver;
+        private readonly Logger _logger = Logger.GetInstance();
 
         public AvevaImporter()
         {
@@ -54,7 +54,7 @@ namespace IFCConverter.Importer.Importers.Aveva
                     _logger.Error($"{e.Message} [{ifcProduct}]");
                 }
             }
-            
+
             return _entityTopologyResolver.ResolveTopologies(proxies);
         }
 

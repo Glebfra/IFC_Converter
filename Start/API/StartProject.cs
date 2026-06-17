@@ -45,7 +45,11 @@ namespace Start.API
         private static readonly Dictionary<StartElementTypeEnum, Type> _startEntityTypesByElementType =
             AttributeFinder.GetClassesWithAttribute<StartElementAttribute>().SelectMany(type =>
                 type.GetCustomAttributes<StartElementAttribute>()
-                    .Select(attr => new { TypeEnum = attr.Type, Type = type })
+                    .Select(attr => new
+                    {
+                        TypeEnum = attr.Type,
+                        Type = type
+                    })
             ).ToDictionary(x => x.TypeEnum, x => x.Type);
 
         private readonly IStartAutoServer? _autoServer;
@@ -71,7 +75,10 @@ namespace Start.API
         /// </summary>
         public void OnImportFinish()
         {
-            _document?.SetViewOfModel(new[] { 1, 3 });
+            _document?.SetViewOfModel(new[]
+            {
+                1, 3
+            });
             _document?.DrawViewAll();
             _document?.DrawFitAll();
             _dataArray.DeleteElement(0);

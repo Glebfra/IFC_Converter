@@ -9,16 +9,15 @@ namespace IFCConverter.Importer.Entities.Topologies
             IBoundaryProxy proxy,
             IReadOnlyCollection<ITopologyNodeEntity> nodes,
             IReadOnlyCollection<IBoundaryProxy> connectedProxies
-            )
+        )
         {
             Proxy = proxy;
             Nodes = nodes;
             ConnectedProxies = connectedProxies;
         }
-        
+
         public IBoundaryProxy Proxy { get; }
         public IReadOnlyCollection<IBoundaryProxy> ConnectedProxies { get; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
-        
     }
 }

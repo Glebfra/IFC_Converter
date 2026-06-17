@@ -86,7 +86,7 @@ namespace Utils
 
             return (x - origin).L2Norm() >= (y - origin).L2Norm();
         }
-        
+
         [Pure]
         public bool IsParallel(Vector<double> first, Vector<double> second)
         {

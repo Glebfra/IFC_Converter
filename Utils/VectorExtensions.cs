@@ -19,43 +19,64 @@ namespace Utils
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> X => new DenseVector(new double[] { 1, 0, 0 });
+        public static Vector<double> X => new DenseVector(new double[]
+        {
+            1, 0, 0
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> Y => new DenseVector(new double[] { 0, 1, 0 });
+        public static Vector<double> Y => new DenseVector(new double[]
+        {
+            0, 1, 0
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> Z => new DenseVector(new double[] { 0, 0, 1 });
+        public static Vector<double> Z => new DenseVector(new double[]
+        {
+            0, 0, 1
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> XY => new DenseVector(new double[] { 1, 1, 0 });
+        public static Vector<double> XY => new DenseVector(new double[]
+        {
+            1, 1, 0
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> YZ => new DenseVector(new double[] { 0, 1, 1 });
+        public static Vector<double> YZ => new DenseVector(new double[]
+        {
+            0, 1, 1
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> XZ => new DenseVector(new double[] { 1, 0, 1 });
+        public static Vector<double> XZ => new DenseVector(new double[]
+        {
+            1, 0, 1
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> XYZ => new DenseVector(new double[] { 1, 1, 1 });
+        public static Vector<double> XYZ => new DenseVector(new double[]
+        {
+            1, 1, 1
+        });
 
         /// <summary>
         ///     Represents the right, up, and forward directions in a 3D coordinate system. These vectors can be used to
@@ -87,7 +108,10 @@ namespace Utils
         [Pure]
         public static Vector<double> ToHomogenous(this Vector<double> vector)
         {
-            return new DenseVector(new[] { vector[0], vector[1], vector[2], 1 });
+            return new DenseVector(new[]
+            {
+                vector[0], vector[1], vector[2], 1
+            });
         }
 
         /// <summary>

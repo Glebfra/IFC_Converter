@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -49,20 +49,20 @@
         <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
         </Reference>
-        <Reference Include="mscorlib" />
-        <Reference Include="System" />
+        <Reference Include="mscorlib"/>
+        <Reference Include="System"/>
         <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
         </Reference>
         <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
         </Reference>
-        <Reference Include="System.ComponentModel.Composition" />
+        <Reference Include="System.ComponentModel.Composition"/>
         <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
         </Reference>
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
         <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
         </Reference>
@@ -72,7 +72,7 @@
         <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
             <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
         </Reference>
-        <Reference Include="System.IO.Compression.FileSystem" />
+        <Reference Include="System.IO.Compression.FileSystem"/>
         <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
             <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
         </Reference>
@@ -91,7 +91,7 @@
         <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
         </Reference>
-        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics"/>
         <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
         </Reference>
@@ -116,8 +116,8 @@
         <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
             <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
         </Reference>
-        <Reference Include="System.Xml" />
-        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Xml"/>
+        <Reference Include="System.Xml.Linq"/>
         <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
         </Reference>
@@ -138,83 +138,83 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Attributes\AbstractPropertyItemAttribute.cs" />
-        <Compile Include="Attributes\IfcImporterAttribute.cs" />
+        <Compile Include="Attributes\AbstractPropertyItemAttribute.cs"/>
+        <Compile Include="Attributes\IfcImporterAttribute.cs"/>
         <Compile Include="Attributes\PropertyAttribute.cs">
             <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
         <Compile Include="Attributes\PropertySetAttribute.cs">
             <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
-        <Compile Include="Attributes\ProxyEntityAttribute.cs" />
-        <Compile Include="BoundaryResolvers\BendBoundaryResolver.cs" />
-        <Compile Include="BoundaryResolvers\BoundaryResolver.cs" />
-        <Compile Include="BoundaryResolvers\NearestSegmentBoundaryResolver.cs" />
-        <Compile Include="BoundaryResolvers\PipeSegmentBoundaryResolver.cs" />
-        <Compile Include="BoundaryResolvers\ReducerBoundaryResolver.cs" />
-        <Compile Include="BoundaryResolvers\TeeBoundaryResolver.cs" />
-        <Compile Include="ConnectionAugmenters\BendConnectionAugmenter.cs" />
-        <Compile Include="ConnectionAugmenters\ConnectionAugmenter.cs" />
-        <Compile Include="ConnectionAugmenters\ReducerConnectionAugmenter.cs" />
-        <Compile Include="ConnectionAugmenters\TeeConnectionAugmenter.cs" />
-        <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs" />
-        <Compile Include="ConnectionResolvers\ConnectionResolver.cs" />
-        <Compile Include="Entities\Proxies\BendProxy.cs" />
-        <Compile Include="Entities\Proxies\BoundaryProxy.cs" />
-        <Compile Include="Entities\Proxies\PipeSegmentProxy.cs" />
-        <Compile Include="Entities\Proxies\ReducerProxy.cs" />
-        <Compile Include="Entities\Proxies\ResolvedSegmentProxy.cs" />
-        <Compile Include="Entities\Proxies\SegmentResolver.cs" />
-        <Compile Include="Entities\Proxies\TeeProxy.cs" />
-        <Compile Include="Entities\Topologies\EntityTopologyResolver.cs" />
-        <Compile Include="Entities\Topologies\NodeTopologyResolver.cs" />
-        <Compile Include="Entities\Topologies\TopologyEntity.cs" />
-        <Compile Include="Entities\Topologies\TopologyNode.cs" />
-        <Compile Include="Extensions\IfcRootExtensions.cs" />
-        <Compile Include="Graph\ConnectionNode.cs" />
-        <Compile Include="Graph\TopologyGraph.cs" />
-        <Compile Include="Graph\TopologyGraphBuilder.cs" />
-        <Compile Include="IfcToStartConverter.cs" />
-        <Compile Include="Importers\AbstractEntityImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaBendImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaImporter.cs" />
+        <Compile Include="Attributes\ProxyEntityAttribute.cs"/>
+        <Compile Include="BoundaryResolvers\BendBoundaryResolver.cs"/>
+        <Compile Include="BoundaryResolvers\BoundaryResolver.cs"/>
+        <Compile Include="BoundaryResolvers\NearestSegmentBoundaryResolver.cs"/>
+        <Compile Include="BoundaryResolvers\PipeSegmentBoundaryResolver.cs"/>
+        <Compile Include="BoundaryResolvers\ReducerBoundaryResolver.cs"/>
+        <Compile Include="BoundaryResolvers\TeeBoundaryResolver.cs"/>
+        <Compile Include="ConnectionAugmenters\BendConnectionAugmenter.cs"/>
+        <Compile Include="ConnectionAugmenters\ConnectionAugmenter.cs"/>
+        <Compile Include="ConnectionAugmenters\ReducerConnectionAugmenter.cs"/>
+        <Compile Include="ConnectionAugmenters\TeeConnectionAugmenter.cs"/>
+        <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs"/>
+        <Compile Include="ConnectionResolvers\ConnectionResolver.cs"/>
+        <Compile Include="Entities\Proxies\BendProxy.cs"/>
+        <Compile Include="Entities\Proxies\BoundaryProxy.cs"/>
+        <Compile Include="Entities\Proxies\PipeSegmentProxy.cs"/>
+        <Compile Include="Entities\Proxies\ReducerProxy.cs"/>
+        <Compile Include="Entities\Proxies\ResolvedSegmentProxy.cs"/>
+        <Compile Include="Entities\Proxies\SegmentResolver.cs"/>
+        <Compile Include="Entities\Proxies\TeeProxy.cs"/>
+        <Compile Include="Entities\Topologies\EntityTopologyResolver.cs"/>
+        <Compile Include="Entities\Topologies\NodeTopologyResolver.cs"/>
+        <Compile Include="Entities\Topologies\TopologyEntity.cs"/>
+        <Compile Include="Entities\Topologies\TopologyNode.cs"/>
+        <Compile Include="Extensions\IfcRootExtensions.cs"/>
+        <Compile Include="Graph\ConnectionNode.cs"/>
+        <Compile Include="Graph\TopologyGraph.cs"/>
+        <Compile Include="Graph\TopologyGraphBuilder.cs"/>
+        <Compile Include="IfcToStartConverter.cs"/>
+        <Compile Include="Importers\AbstractEntityImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaBendImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaImporter.cs"/>
         <Compile Include="Importers\Aveva\AvevaImporterImporterFilter.cs">
             <DependentUpon>AvevaImporter.cs</DependentUpon>
         </Compile>
-        <Compile Include="Importers\Aveva\AvevaPipeSegmentImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaReducerImporter.cs" />
-        <Compile Include="Importers\Aveva\AvevaTeeImporter.cs" />
-        <Compile Include="Importers\ImporterRegistration.cs" />
-        <Compile Include="Importers\ImporterRegistry.cs" />
-        <Compile Include="Interfaces\IBoundaryProxy.cs" />
-        <Compile Include="Interfaces\IBoundaryResolver.cs" />
-        <Compile Include="Interfaces\IEntityConnectionAugmenter.cs" />
-        <Compile Include="Interfaces\IEntityConnectionResolver.cs" />
-        <Compile Include="Interfaces\IEntityImporter.cs" />
-        <Compile Include="Interfaces\IEntityProxy.cs" />
-        <Compile Include="Interfaces\IEntityTopologyResolver.cs" />
-        <Compile Include="Interfaces\IFittingProxy.cs" />
-        <Compile Include="Interfaces\IImporter.cs" />
-        <Compile Include="Interfaces\IImporterFilter.cs" />
-        <Compile Include="Interfaces\INodeTopologyResolver.cs" />
-        <Compile Include="Interfaces\IPropertyConverter.cs" />
-        <Compile Include="Interfaces\IPropertySet.cs" />
-        <Compile Include="Interfaces\IResolvedProxy.cs" />
-        <Compile Include="Interfaces\IResolvedSegmentProxy.cs" />
-        <Compile Include="Interfaces\ISegmentNormalizer.cs" />
-        <Compile Include="Interfaces\ISegmentProxy.cs" />
-        <Compile Include="Interfaces\ITopologyEntity.cs" />
-        <Compile Include="Interfaces\ITopologyNodeEntity.cs" />
-        <Compile Include="Normalizers\SegmentNormalizer.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="PropertySets\AbstractPropertySet.cs" />
-        <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs" />
-        <Compile Include="PropertySets\Aveva\AvevaPset.cs" />
-        <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaBoolPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
-        <Compile Include="PropertySets\PropertySetRegistry.cs" />
+        <Compile Include="Importers\Aveva\AvevaPipeSegmentImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaReducerImporter.cs"/>
+        <Compile Include="Importers\Aveva\AvevaTeeImporter.cs"/>
+        <Compile Include="Importers\ImporterRegistration.cs"/>
+        <Compile Include="Importers\ImporterRegistry.cs"/>
+        <Compile Include="Interfaces\IBoundaryProxy.cs"/>
+        <Compile Include="Interfaces\IBoundaryResolver.cs"/>
+        <Compile Include="Interfaces\IEntityConnectionAugmenter.cs"/>
+        <Compile Include="Interfaces\IEntityConnectionResolver.cs"/>
+        <Compile Include="Interfaces\IEntityImporter.cs"/>
+        <Compile Include="Interfaces\IEntityProxy.cs"/>
+        <Compile Include="Interfaces\IEntityTopologyResolver.cs"/>
+        <Compile Include="Interfaces\IFittingProxy.cs"/>
+        <Compile Include="Interfaces\IImporter.cs"/>
+        <Compile Include="Interfaces\IImporterFilter.cs"/>
+        <Compile Include="Interfaces\INodeTopologyResolver.cs"/>
+        <Compile Include="Interfaces\IPropertyConverter.cs"/>
+        <Compile Include="Interfaces\IPropertySet.cs"/>
+        <Compile Include="Interfaces\IResolvedProxy.cs"/>
+        <Compile Include="Interfaces\IResolvedSegmentProxy.cs"/>
+        <Compile Include="Interfaces\ISegmentNormalizer.cs"/>
+        <Compile Include="Interfaces\ISegmentProxy.cs"/>
+        <Compile Include="Interfaces\ITopologyEntity.cs"/>
+        <Compile Include="Interfaces\ITopologyNodeEntity.cs"/>
+        <Compile Include="Normalizers\SegmentNormalizer.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="PropertySets\AbstractPropertySet.cs"/>
+        <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs"/>
+        <Compile Include="PropertySets\Aveva\AvevaPset.cs"/>
+        <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaBoolPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs"/>
+        <Compile Include="PropertySets\PropertySetRegistry.cs"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
@@ -235,10 +235,10 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config" />
-        <None Include="packages.config" />
+        <None Include="App.config"/>
+        <None Include="packages.config"/>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

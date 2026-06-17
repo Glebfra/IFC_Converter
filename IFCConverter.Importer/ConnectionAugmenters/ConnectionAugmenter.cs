@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
-using System.Linq;
 
 namespace IFCConverter.Importer.ConnectionAugmenters
 {

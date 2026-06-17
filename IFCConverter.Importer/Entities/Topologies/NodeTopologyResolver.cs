@@ -19,12 +19,12 @@ namespace IFCConverter.Importer.Entities.Topologies
         {
             _comparer = comparer;
         }
-        
+
         public IEnumerable<ITopologyNodeEntity> ResolveTopology(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> connected)
         {
             IEnumerable<IBoundaryProxy> connectedProxies = connected as IBoundaryProxy[] ?? connected.ToArray();
-            
-            List<ITopologyNodeEntity> nodes = new List<ITopologyNodeEntity>();
+
+            List<ITopologyNodeEntity> nodes = new();
             if (proxy.Proxy is IFittingProxy fittingProxy)
             {
                 nodes.Add(new TopologyNode(fittingProxy.Position));
@@ -58,7 +58,7 @@ namespace IFCConverter.Importer.Entities.Topologies
                 if (connectedProxy.Proxy is IFittingProxy fittingProxy)
                     return new TopologyNode(fittingProxy.Position);
             }
-            
+
             return new TopologyNode(segmentPoint);
         }
     }

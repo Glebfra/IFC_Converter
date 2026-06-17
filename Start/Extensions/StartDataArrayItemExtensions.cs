@@ -9,7 +9,10 @@ namespace Start.Extensions
         public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems,
             StartElementTypeEnum type)
         {
-            return GetElementsByType(arrayItems, new[] { type });
+            return arrayItems.GetElementsByType(new[]
+            {
+                type
+            });
         }
 
         public static IEnumerable<StartDataArrayItem> GetElementsByType(this IEnumerable<StartDataArrayItem> arrayItems,
@@ -33,7 +36,7 @@ namespace Start.Extensions
         public static IEnumerable<StartDataArrayItem> GetConnElements(this StartDataArrayItem[] arrayItems,
             StartDataArrayItem baseElement)
         {
-            return GetConnElements(arrayItems, baseElement.DataArrayIndex);
+            return arrayItems.GetConnElements(baseElement.DataArrayIndex);
         }
     }
 }

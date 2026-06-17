@@ -99,7 +99,10 @@ namespace IFCConverter.Exporter.Converters.Elements
             double restraintZ = restraintModule.AngleZ.SIProperty < 0
                 ? -Math.Cos(restraintModule.AngleZ.SIProperty)
                 : Math.Cos(restraintModule.AngleZ.SIProperty);
-            return new DenseVector(new[] { restraintX, restraintY, restraintZ });
+            return new DenseVector(new[]
+            {
+                restraintX, restraintY, restraintZ
+            });
         }
 
         [Pure]

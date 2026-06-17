@@ -12,9 +12,9 @@ namespace IFCConverter.Importer.Importers
 {
     internal class ImporterRegistry
     {
-        private static readonly Lazy<ImporterRegistry> _instance = new Lazy<ImporterRegistry>(() => new ImporterRegistry());
+        private static readonly Lazy<ImporterRegistry> _instance = new(() => new ImporterRegistry());
 
-        private readonly List<ImporterRegistration> _registrations = new List<ImporterRegistration>();
+        private readonly List<ImporterRegistration> _registrations = new();
 
         private ImporterRegistry()
         {
@@ -49,7 +49,9 @@ namespace IFCConverter.Importer.Importers
                     continue;
 
                 IImporterFilter importerFilter =
-                    (IImporterFilter)Activator.CreateInstance(attribute.Filter, new object[] { });
+                    (IImporterFilter)Activator.CreateInstance(attribute.Filter, new object[]
+                    {
+                    });
                 _registrations.Add(new ImporterRegistration(runtimeType, importerFilter, attribute.Priority));
             }
         }

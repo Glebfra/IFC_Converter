@@ -23,7 +23,10 @@ namespace Start.API
             return positions
                 .Select(position => _nodes.GetOrAdd(position, vector =>
                     {
-                        StartNodeEntity nodeEntity = new() { Position = vector };
+                        StartNodeEntity nodeEntity = new()
+                        {
+                            Position = vector
+                        };
                         StartEntityProxy proxy = startProject.AddEntity(nodeEntity);
                         proxy.StartBaseRoot.SetName((_counter++).ToString());
                         return proxy;

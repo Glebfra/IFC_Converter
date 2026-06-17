@@ -56,9 +56,7 @@ namespace Start.Entities
         {
             get => new DenseVector(new[]
             {
-                XCoord.SIProperty,
-                YCoord.SIProperty,
-                ZCoord.SIProperty
+                XCoord.SIProperty, YCoord.SIProperty, ZCoord.SIProperty
             });
             set
             {

@@ -17,8 +17,7 @@ namespace IFCConverter.Exporter.Extensions
                 .ToArray();
             return new[]
             {
-                startSegmentEntities[0].GetNearestPosition(valveEntity.Position),
-                startSegmentEntities[1].GetNearestPosition(valveEntity.Position)
+                startSegmentEntities[0].GetNearestPosition(valveEntity.Position), startSegmentEntities[1].GetNearestPosition(valveEntity.Position)
             };
         }
     }

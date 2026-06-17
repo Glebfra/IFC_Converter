@@ -123,9 +123,7 @@ namespace Start.Entities.Segments
         {
             get => new DenseVector(new[]
             {
-                ProjectionAlongOXAxis.StartProperty,
-                ProjectionAlongOYAxis.StartProperty,
-                ProjectionAlongOZAxis.StartProperty
+                ProjectionAlongOXAxis.StartProperty, ProjectionAlongOYAxis.StartProperty, ProjectionAlongOZAxis.StartProperty
             });
             set
             {

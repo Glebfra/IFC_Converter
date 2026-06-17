@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
-using VectorExtensions = Utils.VectorExtensions;
 
 namespace IFCConverter.Importer.Normalizers
 {
     internal sealed class SegmentNormalizer : ISegmentNormalizer
     {
         private const double DoubleTolerance = 1e-3;
-        private readonly VectorComparer _comparer = new VectorComparer(DoubleTolerance);
+        private readonly VectorComparer _comparer = new(DoubleTolerance);
 
         [Pure]
         public IReadOnlyCollection<ISegmentProxy> Normalize(IReadOnlyCollection<ISegmentProxy> segments)
         {
-            List<ISegmentProxy> result = new List<ISegmentProxy>();
-            HashSet<ISegmentProxy> absorbed = new HashSet<ISegmentProxy>();
-            
+            List<ISegmentProxy> result = new();
+            HashSet<ISegmentProxy> absorbed = new();
+
             foreach (ISegmentProxy segment in segments)
             {
                 if (absorbed.Contains(segment))
                     continue;
-                
+
                 ISegmentProxy newSegment = segment;
                 foreach (ISegmentProxy candidate in segments)
                 {
@@ -41,11 +39,11 @@ namespace IFCConverter.Importer.Normalizers
 
                     if (!TryMerge(newSegment, candidate, out ISegmentProxy merged))
                         continue;
-                    
+
                     newSegment = merged;
                     absorbed.Add(candidate);
                 }
-                
+
                 result.Add(newSegment);
             }
 
@@ -62,12 +60,12 @@ namespace IFCConverter.Importer.Normalizers
             double firstProjectionLengthSq = firstProjection.DotProduct(firstProjection);
             if (firstProjectionLengthSq.AlmostEqual(0, DoubleTolerance))
                 return false;
-            
+
             double t1 = 0.0;
             double t2 = 1.0;
             double t3 = (second.Position - first.Position).DotProduct(firstProjection) / firstProjectionLengthSq;
             double t4 = (second.EndPosition - first.Position).DotProduct(firstProjection) / firstProjectionLengthSq;
-            
+
             double left = Math.Min(Math.Min(t1, t2), Math.Min(t3, t4));
             double right = Math.Max(Math.Max(t1, t2), Math.Max(t3, t4));
 
@@ -76,7 +74,7 @@ namespace IFCConverter.Importer.Normalizers
 
             Vector<double> mergedStart = first.Position + firstProjection * left;
             Vector<double> mergedEnd = first.Position + firstProjection * right;
-            Vector<double> mergedProjection =  mergedEnd - mergedStart;
+            Vector<double> mergedProjection = mergedEnd - mergedStart;
             double length = mergedProjection.L2Norm();
             if (length.AlmostEqual(0, DoubleTolerance))
                 return false;

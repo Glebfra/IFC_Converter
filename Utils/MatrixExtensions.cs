@@ -29,10 +29,18 @@ namespace Utils
 
             return DenseMatrix.OfArray(new[,]
             {
-                { 1, 0, 0, 0 },
-                { 0, cos, -sin, 0 },
-                { 0, sin, cos, 0 },
-                { 0, 0, 0, 1 }
+                {
+                    1, 0, 0, 0
+                },
+                {
+                    0, cos, -sin, 0
+                },
+                {
+                    0, sin, cos, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
             });
         }
 
@@ -57,10 +65,18 @@ namespace Utils
 
             return DenseMatrix.OfArray(new[,]
             {
-                { cos, 0, sin, 0 },
-                { 0, 1, 0, 0 },
-                { -sin, 0, cos, 0 },
-                { 0, 0, 0, 1 }
+                {
+                    cos, 0, sin, 0
+                },
+                {
+                    0, 1, 0, 0
+                },
+                {
+                    -sin, 0, cos, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
             });
         }
 
@@ -85,10 +101,18 @@ namespace Utils
 
             return DenseMatrix.OfArray(new[,]
             {
-                { cos, -sin, 0, 0 },
-                { sin, cos, 0, 0 },
-                { 0, 0, 1, 0 },
-                { 0, 0, 0, 1 }
+                {
+                    cos, -sin, 0, 0
+                },
+                {
+                    sin, cos, 0, 0
+                },
+                {
+                    0, 0, 1, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
             });
         }
 
@@ -105,28 +129,16 @@ namespace Utils
             return DenseMatrix.OfArray(new[,]
             {
                 {
-                    cos + (1 - cos) * x * x,
-                    (1 - cos) * x * y - sin * z,
-                    (1 - cos) * x * z + sin * y,
-                    0
+                    cos + (1 - cos) * x * x, (1 - cos) * x * y - sin * z, (1 - cos) * x * z + sin * y, 0
                 },
                 {
-                    (1 - cos) * y * x + sin * z,
-                    cos + (1 - cos) * y * y,
-                    (1 - cos) * y * z - sin * x,
-                    0
+                    (1 - cos) * y * x + sin * z, cos + (1 - cos) * y * y, (1 - cos) * y * z - sin * x, 0
                 },
                 {
-                    (1 - cos) * z * x - sin * y,
-                    (1 - cos) * z * y + sin * x,
-                    cos + (1 - cos) * z * z,
-                    0
+                    (1 - cos) * z * x - sin * y, (1 - cos) * z * y + sin * x, cos + (1 - cos) * z * z, 0
                 },
                 {
-                    0,
-                    0,
-                    0,
-                    1
+                    0, 0, 0, 1
                 }
             });
         }

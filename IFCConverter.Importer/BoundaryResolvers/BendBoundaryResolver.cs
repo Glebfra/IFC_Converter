@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
         {
             if (proxy is not BendProxy bendProxy)
                 throw new InvalidCastException();
-            
+
             Vector<double> axis = (bendProxy.Position - bendProxy.AxisPosition).Normalize(2);
             Vector<double> upDirection = axis.CrossProduct(bendProxy.RefDirection).Normalize(2);
 

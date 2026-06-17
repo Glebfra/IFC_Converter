@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Entities.Proxies;
@@ -13,8 +10,8 @@ namespace IFCConverter.Importer.Entities.Topologies
 {
     internal sealed class EntityTopologyResolver : IEntityTopologyResolver
     {
-        private readonly ConnectionResolver _connectionResolver = ConnectionResolver.GetInstance();
         private readonly BoundaryResolver _boundaryResolver = BoundaryResolver.GetInstance();
+        private readonly ConnectionResolver _connectionResolver = ConnectionResolver.GetInstance();
         private readonly NodeTopologyResolver _nodeTopologyResolver;
 
         public EntityTopologyResolver(VectorComparer comparer)
@@ -28,7 +25,7 @@ namespace IFCConverter.Importer.Entities.Topologies
                 .Select(proxy => new BoundaryProxy(proxy, _boundaryResolver.ResolveBoundary(proxy, allProxies)))
                 .ToArray();
 
-            List<ITopologyEntity> result = new List<ITopologyEntity>();
+            List<ITopologyEntity> result = new();
             foreach (IBoundaryProxy boundaryProxy in boundaryProxies)
             {
                 IReadOnlyCollection<IBoundaryProxy> connected = _connectionResolver.GetConnectedEntities(boundaryProxy, boundaryProxies).ToArray();

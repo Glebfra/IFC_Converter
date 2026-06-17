@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionResolvers;
@@ -13,8 +12,6 @@ namespace IFCConverter.Importer.Entities.Proxies
     [ProxyEntity(typeof(BoundPointConnectionResolver), 2, boundaryResolverType: typeof(PipeSegmentBoundaryResolver))]
     internal class PipeSegmentProxy : ISegmentProxy
     {
-        public double Diameter { get; }
-        private IEnumerable<Vector<double>>? _boundary;
 
         public PipeSegmentProxy(double diameter, double length, Vector<double> position, Vector<double> direction)
         {
@@ -23,6 +20,8 @@ namespace IFCConverter.Importer.Entities.Proxies
             Position = position;
             Direction = direction;
         }
+
+        public double Diameter { get; }
 
         public string? Name { get; set; }
         public double Length { get; }
@@ -44,12 +43,6 @@ namespace IFCConverter.Importer.Entities.Proxies
                 startPipeEntity.Name = Name;
 
             return startPipeEntity;
-        }
-
-        [Pure]
-        private IEnumerable<Vector<double>> GetBoundaryPoints()
-        {
-            return new[] { Position, EndPosition };
         }
     }
 }

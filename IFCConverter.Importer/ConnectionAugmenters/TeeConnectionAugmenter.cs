@@ -12,15 +12,15 @@ namespace IFCConverter.Importer.ConnectionAugmenters
     {
         private const double MinLength = 1e-2;
         private const double DoubleEpsilon = 1e-3;
-        private readonly VectorComparer _comparer = new VectorComparer(DoubleEpsilon);
-        
+        private readonly VectorComparer _comparer = new(DoubleEpsilon);
+
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity topology)
         {
-            List<ISegmentProxy> generatedSegments = new List<ISegmentProxy>();
-            
+            List<ISegmentProxy> generatedSegments = new();
+
             if (topology.Proxy.Proxy is not TeeProxy teeProxy)
                 throw new Exception($"{nameof(topology.Proxy)} should be {nameof(TeeProxy)}");
-            
+
             foreach (Vector<double> boundaryPoint in topology.Proxy.Boundary)
             {
                 bool isConnected = topology.ConnectedProxies
@@ -28,7 +28,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
                     .OfType<ISegmentProxy>()
                     .Any(segment => _comparer.Equals(segment.Position, boundaryPoint) ||
                                     _comparer.Equals(segment.EndPosition, boundaryPoint));
-                
+
                 if (isConnected)
                     continue;
 
@@ -41,7 +41,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
                     ? teeProxy.MainDiameter
                     : teeProxy.HeadDiameter;
 
-                PipeSegmentProxy generatedSegment = new PipeSegmentProxy(
+                PipeSegmentProxy generatedSegment = new(
                     diameter,
                     length,
                     teeProxy.Position,

@@ -12,7 +12,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
             Vector<double> position = proxy.Position;
             IEnumerable<ISegmentProxy> segmentProxies = allProxies.OfType<ISegmentProxy>();
             return segmentProxies
-                .SelectMany(segment => new Vector<double>[]
+                .SelectMany(segment => new[]
                 {
                     segment.Position, segment.EndPosition
                 })
