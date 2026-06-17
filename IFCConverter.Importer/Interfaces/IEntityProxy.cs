@@ -8,7 +8,6 @@ namespace IFCConverter.Importer.Interfaces
     public interface IEntityProxy
     {
         public Vector<double> Position { get; }
-        public IEnumerable<Vector<double>> Boundary { get; }
         public string? Name { get; set; }
 
         [Pure]

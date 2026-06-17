@@ -6,17 +6,19 @@ namespace IFCConverter.Importer.Entities.Topologies
     internal sealed class TopologyEntity : ITopologyEntity
     {
         public TopologyEntity(
-            IEntityProxy proxy,
+            IBoundaryProxy proxy,
             IReadOnlyCollection<ITopologyNodeEntity> nodes,
-            IReadOnlyCollection<IEntityProxy> connectedProxies)
+            IReadOnlyCollection<IBoundaryProxy> connectedProxies
+            )
         {
             Proxy = proxy;
             Nodes = nodes;
             ConnectedProxies = connectedProxies;
         }
-
-        public IEntityProxy Proxy { get; }
+        
+        public IBoundaryProxy Proxy { get; }
+        public IReadOnlyCollection<IBoundaryProxy> ConnectedProxies { get; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
-        public IReadOnlyCollection<IEntityProxy> ConnectedProxies { get; }
+        
     }
 }

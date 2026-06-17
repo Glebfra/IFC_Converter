@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
@@ -10,7 +11,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(ReducerConnectionAugmenter))]
+    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(ReducerConnectionAugmenter), typeof(ReducerBoundaryResolver))]
     internal sealed class ReducerProxy : IFittingProxy
     {
         public double MinDiameter { get; }
@@ -37,7 +38,7 @@ namespace IFCConverter.Importer.Entities.Proxies
 
         public string? Name { get; set; }
         public Vector<double> Position { get; }
-
+        
         public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
 
         public IStartEntity ToStartEntity()

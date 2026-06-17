@@ -18,12 +18,13 @@ namespace IFCConverter.Importer.ConnectionAugmenters
         {
             List<ISegmentProxy> generatedSegments = new List<ISegmentProxy>();
             
-            if (topology.Proxy is not BendProxy bendProxy)
+            if (topology.Proxy.Proxy is not BendProxy bendProxy)
                 throw new Exception($"{nameof(topology.Proxy)} should be {nameof(BendProxy)}");
             
-            foreach (Vector<double> boundaryPoint in bendProxy.Boundary)
+            foreach (Vector<double> boundaryPoint in topology.Proxy.Boundary)
             {
                 bool isConnected = topology.ConnectedProxies
+                    .Select(proxy => proxy.Proxy)
                     .OfType<ISegmentProxy>()
                     .Any(segment => _comparer.Equals(segment.Position, boundaryPoint) ||
                                     _comparer.Equals(segment.EndPosition, boundaryPoint));

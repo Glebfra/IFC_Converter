@@ -11,7 +11,7 @@ namespace IFCConverter.Importer.Attributes
         public readonly Type? BoundaryResolverType;
         public readonly int ConnectionsCount;
 
-        public ProxyEntityAttribute(Type connectionResolverType, int connectionsCount, Type? boundaryResolverType = null, Type? connectionAugmenterType = null)
+        public ProxyEntityAttribute(Type connectionResolverType, int connectionsCount, Type? connectionAugmenterType = null, Type? boundaryResolverType = null)
         {
             ConnectionResolverType = connectionResolverType;
             ConnectionsCount = connectionsCount;

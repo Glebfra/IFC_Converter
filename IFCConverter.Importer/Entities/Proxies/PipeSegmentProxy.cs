@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
@@ -9,7 +10,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2)]
+    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, boundaryResolverType: typeof(PipeSegmentBoundaryResolver))]
     internal class PipeSegmentProxy : ISegmentProxy
     {
         public double Diameter { get; }
@@ -28,8 +29,6 @@ namespace IFCConverter.Importer.Entities.Proxies
         public Vector<double> Position { get; }
         public Vector<double> Direction { get; }
         public Vector<double> EndPosition => Position + Direction * Length;
-
-        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
 
         [Pure]
         public IStartEntity ToStartEntity()

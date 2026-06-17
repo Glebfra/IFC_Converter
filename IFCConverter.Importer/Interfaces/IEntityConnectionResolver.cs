@@ -6,9 +6,6 @@ namespace IFCConverter.Importer.Interfaces
     internal interface IEntityConnectionResolver
     {
         [Pure]
-        public IEnumerable<IEntityProxy> GetConnectedEntities(
-            IEntityProxy proxy,
-            IReadOnlyCollection<IEntityProxy> allProxies,
-            int? count = null);
+        public IEnumerable<IBoundaryProxy> GetConnectedEntities(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> allProxies);
     }
 }

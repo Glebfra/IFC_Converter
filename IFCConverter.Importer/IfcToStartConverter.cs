@@ -54,12 +54,12 @@ namespace IFCConverter.Importer
             
             SegmentResolver segmentResolver = new(_comparer);
             IResolvedSegmentProxy[] resolvedSegmentProxies = topologyEntities
-                .Where(topology => topology.Proxy is ISegmentProxy)
+                .Where(topology => topology.Proxy.Proxy is ISegmentProxy)
                 .Select(segmentResolver.Resolve)
                 .ToArray();
 
             IFittingProxy[] fittingProxies = topologyEntities
-                .Select(topology => topology.Proxy)
+                .Select(topology => topology.Proxy.Proxy)
                 .OfType<IFittingProxy>()
                 .ToArray();
 

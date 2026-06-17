@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
@@ -13,7 +14,7 @@ using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(BendConnectionAugmenter))]
+    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(BendConnectionAugmenter), typeof(BendBoundaryResolver))]
     internal sealed class BendProxy : IFittingProxy
     {
         public double Diameter { get; }
@@ -36,8 +37,6 @@ namespace IFCConverter.Importer.Entities.Proxies
         public string? Name { get; set; }
 
         public Vector<double> Position { get; }
-
-        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
 
         [Pure]
         public IStartEntity ToStartEntity()

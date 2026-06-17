@@ -20,7 +20,7 @@
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
         <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DefineConstants>DEBUG;TRACE;</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
@@ -159,8 +159,8 @@
         <Compile Include="ConnectionAugmenters\TeeConnectionAugmenter.cs" />
         <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs" />
         <Compile Include="ConnectionResolvers\ConnectionResolver.cs" />
-        <Compile Include="ConnectionResolvers\NearestSegmentsConnectionResolver.cs" />
         <Compile Include="Entities\Proxies\BendProxy.cs" />
+        <Compile Include="Entities\Proxies\BoundaryProxy.cs" />
         <Compile Include="Entities\Proxies\PipeSegmentProxy.cs" />
         <Compile Include="Entities\Proxies\ReducerProxy.cs" />
         <Compile Include="Entities\Proxies\ResolvedSegmentProxy.cs" />

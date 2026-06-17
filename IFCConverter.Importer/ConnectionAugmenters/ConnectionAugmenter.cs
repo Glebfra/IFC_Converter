@@ -10,7 +10,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
     {
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity topology)
         {
-            ProxyEntityAttribute attribute = topology.Proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
+            ProxyEntityAttribute attribute = topology.Proxy.Proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
             IEntityConnectionAugmenter? augmenter = attribute.GetConnectionAugmenter();
 
             if (augmenter == null)

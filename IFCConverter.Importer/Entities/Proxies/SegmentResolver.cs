@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.Entities.Proxies
 
         public IResolvedSegmentProxy Resolve(ITopologyEntity topologyEntity)
         {
-            ISegmentProxy segmentProxy = (ISegmentProxy)topologyEntity.Proxy;
+            ISegmentProxy segmentProxy = (ISegmentProxy)topologyEntity.Proxy.Proxy;
             ITopologyNodeEntity[] nodes = topologyEntity.Nodes.ToArray();
 
             return ResolvedSegmentProxy.CreateFromSegmentProxy(segmentProxy, nodes[0].Position, nodes[1].Position);

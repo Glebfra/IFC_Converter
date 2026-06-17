@@ -16,7 +16,7 @@ namespace IFCConverter.Importer.Importers.Aveva
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     [IfcImporter(typeof(AvevaImporterImporterFilter), 0)]
-    public class AvevaImporter : IImporter
+    internal class AvevaImporter : IImporter
     {
         private readonly Logger _logger = Logger.GetInstance();
         private const double _vectorTolerance = 1e-3;
@@ -54,18 +54,18 @@ namespace IFCConverter.Importer.Importers.Aveva
                     _logger.Error($"{e.Message} [{ifcProduct}]");
                 }
             }
-
-            return proxies.Select(proxy => _entityTopologyResolver.ResolveTopology(proxy, proxies)).ToArray();
+            
+            return _entityTopologyResolver.ResolveTopologies(proxies);
         }
 
         private static AvevaEntityType? GetAvevaEntityType(AvevaEntityParameters parameters)
         {
             return parameters.E3DType switch
             {
-                "TUBING" => AvevaEntityType.PipeSegment,
-                "ELBOW" or "BEND" => AvevaEntityType.Bend,
-                "TEE" => AvevaEntityType.Tee,
-                "REDUCER" => AvevaEntityType.Reducer,
+                "TUBING" => AvevaEntityType.PIPE_SEGMENT,
+                "ELBOW" or "BEND" => AvevaEntityType.BEND,
+                "TEE" => AvevaEntityType.TEE,
+                "REDUCER" => AvevaEntityType.REDUCER,
                 _ => null
             };
         }
@@ -79,20 +79,20 @@ namespace IFCConverter.Importer.Importers.Aveva
 
             return entityType switch
             {
-                AvevaEntityType.PipeSegment => new AvevaPipeSegmentImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.Bend => new AvevaBendImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.Tee => new AvevaTeeImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.Reducer => new AvevaReducerImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.PIPE_SEGMENT => new AvevaPipeSegmentImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.BEND => new AvevaBendImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.TEE => new AvevaTeeImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.REDUCER => new AvevaReducerImporter().ReadTyped(buildingElementProxy),
                 _ => throw new Exception("Unsupported entity type.")
             };
         }
 
         private enum AvevaEntityType
         {
-            PipeSegment,
-            Bend,
-            Tee,
-            Reducer
+            PIPE_SEGMENT,
+            BEND,
+            TEE,
+            REDUCER
         }
     }
 }

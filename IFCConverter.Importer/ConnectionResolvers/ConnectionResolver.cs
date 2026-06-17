@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
@@ -14,16 +15,12 @@ namespace IFCConverter.Importer.ConnectionResolvers
         {
             return _instance.Value;
         }
-
-        public IEnumerable<IEntityProxy> GetConnectedEntities(
-            IEntityProxy proxy,
-            IReadOnlyCollection<IEntityProxy> allProxies)
+        
+        [Pure]
+        public IEnumerable<IBoundaryProxy> GetConnectedEntities(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> allProxies)
         {
-            ProxyEntityAttribute attribute = proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
-            IEntityConnectionResolver connectionResolver = attribute.GetConnectionResolver();
-            int connectionResolverCount = attribute.ConnectionsCount;
-            
-            return connectionResolver.GetConnectedEntities(proxy, allProxies, connectionResolverCount);
+            BoundPointConnectionResolver connectionResolver = new BoundPointConnectionResolver();
+            return connectionResolver.GetConnectedEntities(proxy, allProxies);
         }
     }
 }

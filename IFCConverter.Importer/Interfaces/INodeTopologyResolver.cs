@@ -4,8 +4,6 @@ namespace IFCConverter.Importer.Interfaces
 {
     internal interface INodeTopologyResolver
     {
-        public IReadOnlyCollection<ITopologyNodeEntity> ResolveTopology(
-            IEntityProxy proxy,
-            IReadOnlyCollection<IEntityProxy> connectedProxies);
+        public IEnumerable<ITopologyNodeEntity> ResolveTopology(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> connected);
     }
 }
