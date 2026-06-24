@@ -1,0 +1,22 @@
+﻿using System.Collections.Generic;
+using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Proxies;
+
+namespace IFCConverter.Importer.Topology
+{
+    internal static class TopologyEntityFactory
+    {
+        public static ITopologyEntity CreateTopologyEntity(
+            IBoundaryProxy proxy,
+            IReadOnlyCollection<ITopologyNodeEntity> nodes,
+            IReadOnlyCollection<IBoundaryProxy> connected)
+        {
+            return proxy.Proxy switch
+            {
+                ValveProxy => new ValveTopologyEntity(proxy, nodes, connected),
+                PipeSegmentProxy => new SegmentTopologyEntity(proxy, nodes, connected),
+                _ => new TopologyEntity(proxy, nodes, connected)
+            };
+        }
+    }
+}

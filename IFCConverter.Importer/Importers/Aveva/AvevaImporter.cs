@@ -6,7 +6,6 @@ using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets.Aveva;
-using IFCConverter.Importer.Topology;
 using Utils;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.SharedBldgElements;
@@ -18,13 +17,7 @@ namespace IFCConverter.Importer.Importers.Aveva
     internal class AvevaImporter : IImporter
     {
         private const double VectorTolerance = 1e-3;
-        private readonly IEntityTopologyResolver _entityTopologyResolver;
         private readonly Logger _logger = Logger.GetInstance();
-
-        public AvevaImporter()
-        {
-            _entityTopologyResolver = new EntityTopologyResolver(new VectorComparer(VectorTolerance));
-        }
 
         public IReadOnlyCollection<IEntityProxy> ImportProxies(IEnumerable<IfcProduct> products)
         {
