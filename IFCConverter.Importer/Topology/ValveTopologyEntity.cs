@@ -8,11 +8,12 @@ namespace IFCConverter.Importer.Topology
 {
     internal sealed class ValveTopologyEntity : TopologyEntity
     {
-        public ValveTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes, IReadOnlyCollection<IBoundaryProxy> connectedProxies) 
+        public ValveTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes,
+            IReadOnlyCollection<IBoundaryProxy> connectedProxies)
             : base(proxy, nodes, connectedProxies)
         {
         }
-        
+
         public double Length => GetLength();
 
         public override IStartEntity ToStartEntity()

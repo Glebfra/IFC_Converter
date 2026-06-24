@@ -12,8 +12,8 @@ namespace IFCConverter.Importer.Topology
     {
         private readonly BoundaryResolver _boundaryResolver = BoundaryResolver.GetInstance();
         private readonly ConnectionResolver _connectionResolver = ConnectionResolver.GetInstance();
-        private readonly SegmentResolver _segmentResolver;
         private readonly INodeTopologyResolver _nodeTopologyResolver;
+        private readonly SegmentResolver _segmentResolver;
 
         public TopologyModelBuilder(VectorComparer comparer)
         {
@@ -26,17 +26,18 @@ namespace IFCConverter.Importer.Topology
             IReadOnlyCollection<IBoundaryProxy> boundaryProxies = proxies
                 .Select(proxy => new BoundaryProxy(proxy, _boundaryResolver.ResolveBoundary(proxy, proxies)))
                 .ToArray();
-            
+
             List<ITopologyEntity> result = new();
-            List<ITopologyNodeEntity> resultNodes = new List<ITopologyNodeEntity>();
+            List<ITopologyNodeEntity> resultNodes = new();
             foreach (IBoundaryProxy boundaryProxy in boundaryProxies)
             {
                 IReadOnlyCollection<IBoundaryProxy> connected = _connectionResolver.GetConnectedEntities(boundaryProxy, boundaryProxies).ToArray();
                 IReadOnlyCollection<ITopologyNodeEntity> nodes = _nodeTopologyResolver.ResolveTopology(boundaryProxy, connected).ToArray();
-                
+
                 result.Add(CreateTopologyEntity(boundaryProxy, nodes, connected));
                 resultNodes.AddRange(nodes);
             }
+
             ResolveSegments(ref result);
 
             return new TopologyModel(result, resultNodes);
@@ -53,9 +54,9 @@ namespace IFCConverter.Importer.Topology
                 entities[i] = _segmentResolver.Resolve(topologyEntity);
             }
         }
-        
+
         private static ITopologyEntity CreateTopologyEntity(
-            IBoundaryProxy proxy, 
+            IBoundaryProxy proxy,
             IReadOnlyCollection<ITopologyNodeEntity> nodes,
             IReadOnlyCollection<IBoundaryProxy> connectedProxies)
         {

@@ -43,7 +43,7 @@ namespace IFCConverter.Importer.Topology
         {
             if (proxy.Proxy is ValveProxy valveProxy)
                 return new ValveTopologyEntity(proxy, nodes, connected);
-            
+
             return new TopologyEntity(proxy, nodes, connected);
         }
     }

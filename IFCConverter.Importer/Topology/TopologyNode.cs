@@ -7,11 +7,12 @@ namespace IFCConverter.Importer.Topology
     [DebuggerDisplay("Node: ({Position[0]}, {Position[1]}, {Position[2]})")]
     internal class TopologyNode : ITopologyNodeEntity
     {
-        public Vector<double> Position { get; }
 
         public TopologyNode(Vector<double> position)
         {
             Position = position;
         }
+
+        public Vector<double> Position { get; }
     }
 }

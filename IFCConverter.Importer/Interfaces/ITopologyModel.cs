@@ -6,7 +6,5 @@ namespace IFCConverter.Importer.Interfaces
     {
         public IReadOnlyCollection<ITopologyEntity> Entities { get; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
-
-        public IEnumerable<ITopologyEntity> GetConnectedEntities(ITopologyEntity entity);
     }
 }

@@ -13,11 +13,11 @@ namespace IFCConverter.Importer.ConnectionAugmenters
     {
         private const double DoubleEpsilon = 1e-3;
         private readonly VectorComparer _comparer = new(DoubleEpsilon);
-        
+
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity topology)
         {
-            List<ISegmentProxy> generatedSegments = new List<ISegmentProxy>();
-            
+            List<ISegmentProxy> generatedSegments = new();
+
             if (topology is not ValveTopologyEntity valveTopologyEntity)
                 throw new Exception($"{nameof(topology)} should be {nameof(ValveTopologyEntity)}");
 
@@ -27,25 +27,25 @@ namespace IFCConverter.Importer.ConnectionAugmenters
                 .OfType<ISegmentProxy>()
                 .ToArray();
             double diameter = connectedSegments.Max(segment => segment.Diameter);
-            
+
             foreach (Vector<double> boundary in topology.Proxy.Boundary)
             {
                 bool isConnected = connectedSegments
                     .Any(segment => _comparer.Equals(segment.Position, boundary) ||
                                     _comparer.Equals(segment.EndPosition, boundary));
-                
+
                 if (isConnected)
                     continue;
-                
+
                 Vector<double> projection = boundary - position;
                 double length = projection.L2Norm();
                 Vector<double> direction = projection / length;
-                
+
                 PipeSegmentProxy generatedSegment = new(
                     diameter,
                     length,
                     position,
-                    direction 
+                    direction
                 )
                 {
                     Name = $"Generated segment for {topology.Proxy.Proxy.Name}"

@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.Proxies
 
         public IEntityProxy Proxy { get; set; }
         public IReadOnlyCollection<Vector<double>> Boundary { get; set; }
-        
+
         public virtual IStartEntity ToStartEntity()
         {
             return Proxy.ToStartEntity();

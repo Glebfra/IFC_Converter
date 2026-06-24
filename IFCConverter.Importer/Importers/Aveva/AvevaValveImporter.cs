@@ -20,9 +20,9 @@ namespace IFCConverter.Importer.Importers.Aveva
                 throw new Exception("The required Aveva property set is missing.");
 
             Vector<double> position = avevaPset.Pos;
-            
+
             double lengthPower = GetLengthPower(source);
-            
+
             return new ValveProxy
             (
                 position * lengthPower

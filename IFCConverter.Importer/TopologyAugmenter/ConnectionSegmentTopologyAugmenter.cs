@@ -9,14 +9,14 @@ namespace IFCConverter.Importer.TopologyAugmenter
 {
     internal sealed class ConnectionSegmentTopologyAugmenter : ITopologyAugmenter
     {
-        private readonly ConnectionAugmenter _connectionAugmenter = new ConnectionAugmenter();
-        private readonly TopologyModelBuilder  _modelBuilder;
+        private readonly ConnectionAugmenter _connectionAugmenter = new();
+        private readonly TopologyModelBuilder _modelBuilder;
 
         public ConnectionSegmentTopologyAugmenter(VectorComparer comparer)
         {
             _modelBuilder = new TopologyModelBuilder(comparer);
         }
-        
+
         public ITopologyModel Augment(ITopologyModel model)
         {
             IReadOnlyCollection<ISegmentProxy> generatedSegments = model.Entities
@@ -30,7 +30,7 @@ namespace IFCConverter.Importer.TopologyAugmenter
                 .Select(entity => entity.Proxy.Proxy)
                 .ToList();
             proxies.AddRange(generatedSegments);
-            
+
             return _modelBuilder.Build(proxies);
         }
     }

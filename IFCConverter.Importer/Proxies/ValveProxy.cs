@@ -19,11 +19,11 @@ namespace IFCConverter.Importer.Proxies
 
         public Vector<double> Position { get; set; }
         public string? Name { get; set; }
-        
+
         [Pure]
         public IStartEntity ToStartEntity()
         {
-            StartValveEntity valveEntity = new StartValveEntity
+            StartValveEntity valveEntity = new()
             {
                 Position = Position,
                 Name = Name ?? string.Empty

@@ -21,7 +21,7 @@ namespace IFCConverter.Importer.Topology
         public IBoundaryProxy Proxy { get; }
         public IReadOnlyCollection<IBoundaryProxy> ConnectedProxies { get; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
-        
+
         [Pure]
         public virtual IStartEntity ToStartEntity()
         {

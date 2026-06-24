@@ -9,7 +9,7 @@ namespace IFCConverter.Importer.TopologyAugmenter
         {
             foreach (ITopologyEntity topologyEntity in model.Entities)
             {
-                
+
             }
 
             throw new NotImplementedException();

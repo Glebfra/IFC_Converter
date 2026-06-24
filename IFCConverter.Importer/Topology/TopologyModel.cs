@@ -5,10 +5,8 @@ namespace IFCConverter.Importer.Topology
 {
     internal sealed class TopologyModel : ITopologyModel
     {
-        private readonly IReadOnlyDictionary<ITopologyEntity, IEnumerable<ITopologyEntity>> _connectedEntitiesMap;
-        
         public TopologyModel(
-            IReadOnlyCollection<ITopologyEntity> entities, 
+            IReadOnlyCollection<ITopologyEntity> entities,
             IReadOnlyCollection<ITopologyNodeEntity> nodes)
         {
             Entities = entities;
@@ -17,10 +15,5 @@ namespace IFCConverter.Importer.Topology
 
         public IReadOnlyCollection<ITopologyEntity> Entities { get; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
-        
-        public IEnumerable<ITopologyEntity> GetConnectedEntities(ITopologyEntity entity)
-        {
-            return _connectedEntitiesMap[entity];
-        }
     }
 }

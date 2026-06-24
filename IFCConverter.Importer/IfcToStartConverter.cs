@@ -28,7 +28,7 @@ namespace IFCConverter.Importer
         private readonly Logger _logger = Logger.GetInstance();
         private readonly StartNodeRegistry _nodeRegistry = new(VectorTolerance);
 
-        private readonly List<ITopologyAugmenter> _topologyAugmenters = new List<ITopologyAugmenter>();
+        private readonly List<ITopologyAugmenter> _topologyAugmenters = new();
 
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
@@ -40,14 +40,14 @@ namespace IFCConverter.Importer
         public void Convert(IStartDocument startDocument)
         {
             _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
-            
+
             IReadOnlyCollection<IEntityProxy> proxies;
             using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
             {
                 proxies = ImportProxies(ifcProject);
             }
 
-            TopologyModelBuilder modelBuilder = new TopologyModelBuilder(_comparer);
+            TopologyModelBuilder modelBuilder = new(_comparer);
             ITopologyModel model = modelBuilder.Build(proxies);
             model = _topologyAugmenters.Aggregate(model, (current, topologyAugmenter) => topologyAugmenter.Augment(current));
 
@@ -62,18 +62,9 @@ namespace IFCConverter.Importer
                     StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
                     ConnectNodes(startEntityProxy, nodeProxies);
                 }
-                
+
                 startProject.OnImportFinish();
             }
-        }
-
-        [Pure]
-        private static IReadOnlyCollection<ITopologyEntity> ImportTopologyProxies(IIfcProject project)
-        {
-            ImporterRegistry registry = ImporterRegistry.GetInstance();
-            IImporter importer = registry.CreateImporter(project);
-            IReadOnlyCollection<IfcProduct> products = project.Model.Instances.OfType<IfcProduct>().ToArray();
-            return importer.ImportEntities(products);
         }
 
         [Pure]

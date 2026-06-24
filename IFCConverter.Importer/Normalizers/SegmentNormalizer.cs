@@ -12,10 +12,9 @@ namespace IFCConverter.Importer.Normalizers
     internal sealed class SegmentNormalizer : ISegmentNormalizer
     {
         private const double DoubleTolerance = 1e-3;
-        private readonly VectorComparer _comparer = new(DoubleTolerance);
 
-        private static readonly Lazy<SegmentNormalizer> Instance = new Lazy<SegmentNormalizer>(() => new SegmentNormalizer());
-        public static SegmentNormalizer GetInstance() => Instance.Value;
+        private static readonly Lazy<SegmentNormalizer> Instance = new(() => new SegmentNormalizer());
+        private readonly VectorComparer _comparer = new(DoubleTolerance);
 
         private SegmentNormalizer()
         {
@@ -57,6 +56,11 @@ namespace IFCConverter.Importer.Normalizers
             return result;
         }
 
+        public static SegmentNormalizer GetInstance()
+        {
+            return Instance.Value;
+        }
+
         private static bool TryMerge(ISegmentProxy first, ISegmentProxy second, out ISegmentProxy merged)
         {
             merged = null!;
@@ -82,7 +86,7 @@ namespace IFCConverter.Importer.Normalizers
             Vector<double> mergedStart = first.Position + firstProjection * left;
             Vector<double> mergedEnd = first.Position + firstProjection * right;
             Vector<double> mergedProjection = mergedEnd - mergedStart;
-                                                                  double length = mergedProjection.L2Norm();
+            double length = mergedProjection.L2Norm();
             if (length.AlmostEqual(0, DoubleTolerance))
                 return false;
 

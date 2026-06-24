@@ -9,14 +9,14 @@ namespace IFCConverter.Importer.TopologyAugmenter
 {
     internal sealed class NormalizeTopologyAugmenter : ITopologyAugmenter
     {
-        private readonly ISegmentNormalizer _segmentNormalizer = SegmentNormalizer.GetInstance();
         private readonly TopologyModelBuilder _modelBuilder;
+        private readonly ISegmentNormalizer _segmentNormalizer = SegmentNormalizer.GetInstance();
 
         public NormalizeTopologyAugmenter(VectorComparer comparer)
         {
             _modelBuilder = new TopologyModelBuilder(comparer);
         }
-        
+
         public ITopologyModel Augment(ITopologyModel model)
         {
             IReadOnlyCollection<ISegmentProxy> segments = model.Entities

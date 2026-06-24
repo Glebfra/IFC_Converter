@@ -6,9 +6,9 @@ namespace IFCConverter.Importer.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
     internal sealed class ProxyEntityAttribute : Attribute
     {
-        public readonly int ConnectionsCount;
         public readonly Type? BoundaryResolverType;
         public readonly Type? ConnectionAugmenterType;
+        public readonly int ConnectionsCount;
 
         public ProxyEntityAttribute(int connectionsCount, Type? connectionAugmenterType = null,
             Type? boundaryResolverType = null)

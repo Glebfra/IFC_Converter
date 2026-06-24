@@ -8,8 +8,5 @@ namespace IFCConverter.Importer.Interfaces
     {
         [Pure]
         public IReadOnlyCollection<IEntityProxy> ImportProxies(IEnumerable<IfcProduct> products);
-        
-        [Pure]
-        public IReadOnlyCollection<ITopologyEntity> ImportEntities(IEnumerable<IfcProduct> products);
     }
 }

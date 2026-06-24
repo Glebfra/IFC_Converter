@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Extensions;
@@ -55,35 +54,6 @@ namespace IFCConverter.Importer.Importers.Aveva
             }
 
             return proxies;
-        }
-
-        [Pure]
-        public IReadOnlyCollection<ITopologyEntity> ImportEntities(IEnumerable<IfcProduct> products)
-        {
-            List<IEntityProxy> proxies = new();
-            foreach (IfcProduct ifcProduct in products)
-            {
-                IPropertySet[] propertySets = ifcProduct.GetPropertySets().ToArray();
-                AvevaEntityParameters? parameters = propertySets.OfType<AvevaEntityParameters>().FirstOrDefault();
-                if (parameters == null)
-                    continue;
-
-                AvevaEntityType? entityType = GetAvevaEntityType(parameters);
-                if (entityType == null)
-                    continue;
-
-                try
-                {
-                    IEntityProxy entityProxy = CreateEntityProxy(ifcProduct, (AvevaEntityType)entityType);
-                    proxies.Add(entityProxy);
-                }
-                catch (Exception e)
-                {
-                    _logger.Error($"{e.Message} [{ifcProduct}]");
-                }
-            }
-
-            return _entityTopologyResolver.ResolveTopologies(proxies);
         }
 
         private static AvevaEntityType? GetAvevaEntityType(AvevaEntityParameters parameters)
