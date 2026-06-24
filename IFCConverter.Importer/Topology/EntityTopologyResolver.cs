@@ -6,7 +6,7 @@ using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Interfaces;
 using Utils;
 
-namespace IFCConverter.Importer.Entities.Topologies
+namespace IFCConverter.Importer.Topology
 {
     internal sealed class EntityTopologyResolver : IEntityTopologyResolver
     {
@@ -30,10 +30,21 @@ namespace IFCConverter.Importer.Entities.Topologies
             {
                 IReadOnlyCollection<IBoundaryProxy> connected = _connectionResolver.GetConnectedEntities(boundaryProxy, boundaryProxies).ToArray();
                 IReadOnlyCollection<ITopologyNodeEntity> nodes = _nodeTopologyResolver.ResolveTopology(boundaryProxy, connected).ToArray();
-                result.Add(new TopologyEntity(boundaryProxy, nodes, connected));
+                result.Add(CreateTopologyEntity(boundaryProxy, nodes, connected));
             }
 
             return result;
+        }
+
+        private ITopologyEntity CreateTopologyEntity(
+            IBoundaryProxy proxy,
+            IReadOnlyCollection<ITopologyNodeEntity> nodes,
+            IReadOnlyCollection<IBoundaryProxy> connected)
+        {
+            if (proxy.Proxy is ValveProxy valveProxy)
+                return new ValveTopologyEntity(proxy, nodes, connected);
+            
+            return new TopologyEntity(proxy, nodes, connected);
         }
     }
 }

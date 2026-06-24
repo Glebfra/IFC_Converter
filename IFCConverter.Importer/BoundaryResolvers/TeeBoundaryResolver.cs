@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
 {
     internal sealed class TeeBoundaryResolver : IBoundaryResolver
     {
-        public IReadOnlyCollection<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies, int boundaryCount)
+        public IEnumerable<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
             if (proxy is not TeeProxy teeProxy)
                 throw new InvalidCastException();

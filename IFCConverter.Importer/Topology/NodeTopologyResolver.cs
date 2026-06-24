@@ -4,7 +4,7 @@ using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 
-namespace IFCConverter.Importer.Entities.Topologies
+namespace IFCConverter.Importer.Topology
 {
     internal sealed class NodeTopologyResolver : INodeTopologyResolver
     {
@@ -36,6 +36,11 @@ namespace IFCConverter.Importer.Entities.Topologies
             }
 
             return nodes;
+        }
+
+        public IEnumerable<ITopologyNodeEntity> ResolveTopology(IBoundaryProxy proxy)
+        {
+            return proxy.Boundary.Select(boundary => new TopologyNode(boundary));
         }
 
         private TopologyNode ResolveSegmentNode(Vector<double> segmentPoint, IEnumerable<IBoundaryProxy> connectedProxies)

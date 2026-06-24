@@ -2,7 +2,6 @@
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionAugmenters;
-using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
@@ -10,7 +9,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(BendConnectionAugmenter), typeof(BendBoundaryResolver))]
+    [ProxyEntity(2, typeof(BendConnectionAugmenter), typeof(BendBoundaryResolver))]
     internal sealed class BendProxy : IFittingProxy
     {
         public readonly double Angle;
@@ -32,7 +31,7 @@ namespace IFCConverter.Importer.Entities.Proxies
 
         public string? Name { get; set; }
 
-        public Vector<double> Position { get; }
+        public Vector<double> Position { get; set; }
 
         [Pure]
         public IStartEntity ToStartEntity()

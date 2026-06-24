@@ -9,7 +9,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 3, typeof(TeeConnectionAugmenter), typeof(TeeBoundaryResolver))]
+    [ProxyEntity(3, typeof(TeeConnectionAugmenter), typeof(TeeBoundaryResolver))]
     internal sealed class TeeProxy : IFittingProxy
     {
 
@@ -34,7 +34,7 @@ namespace IFCConverter.Importer.Entities.Proxies
         public Vector<double> HeadProjection { get; }
 
         public string? Name { get; set; }
-        public Vector<double> Position { get; }
+        public Vector<double> Position { get; set; }
 
         public IStartEntity ToStartEntity()
         {

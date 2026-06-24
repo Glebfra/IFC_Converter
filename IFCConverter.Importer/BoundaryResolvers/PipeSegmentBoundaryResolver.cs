@@ -8,8 +8,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
 {
     internal sealed class PipeSegmentBoundaryResolver : IBoundaryResolver
     {
-
-        public IReadOnlyCollection<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies, int boundaryCount)
+        public IEnumerable<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
             return ResolveBoundary(proxy);
         }

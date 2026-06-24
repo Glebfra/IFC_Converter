@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Interfaces;
+using Start.Interfaces;
 
-namespace IFCConverter.Importer.Entities.Topologies
+namespace IFCConverter.Importer.Topology
 {
-    internal sealed class TopologyEntity : ITopologyEntity
+    internal class TopologyEntity : ITopologyEntity
     {
         public TopologyEntity(
             IBoundaryProxy proxy,
@@ -19,5 +21,11 @@ namespace IFCConverter.Importer.Entities.Topologies
         public IBoundaryProxy Proxy { get; }
         public IReadOnlyCollection<IBoundaryProxy> ConnectedProxies { get; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
+        
+        [Pure]
+        public virtual IStartEntity ToStartEntity()
+        {
+            return Proxy.ToStartEntity();
+        }
     }
 }

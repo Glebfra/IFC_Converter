@@ -11,7 +11,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, typeof(ReducerConnectionAugmenter), typeof(ReducerBoundaryResolver))]
+    [ProxyEntity(2, typeof(ReducerConnectionAugmenter), typeof(ReducerBoundaryResolver))]
     internal sealed class ReducerProxy : IFittingProxy
     {
         private readonly IReadOnlyList<Vector<double>> _boundPoints;
@@ -40,7 +40,7 @@ namespace IFCConverter.Importer.Entities.Proxies
         public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
 
         public string? Name { get; set; }
-        public Vector<double> Position { get; }
+        public Vector<double> Position { get; set; }
 
         public IStartEntity ToStartEntity()
         {

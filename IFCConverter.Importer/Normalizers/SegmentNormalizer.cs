@@ -14,6 +14,13 @@ namespace IFCConverter.Importer.Normalizers
         private const double DoubleTolerance = 1e-3;
         private readonly VectorComparer _comparer = new(DoubleTolerance);
 
+        private static readonly Lazy<SegmentNormalizer> Instance = new Lazy<SegmentNormalizer>(() => new SegmentNormalizer());
+        public static SegmentNormalizer GetInstance() => Instance.Value;
+
+        private SegmentNormalizer()
+        {
+        }
+
         [Pure]
         public IReadOnlyCollection<ISegmentProxy> Normalize(IReadOnlyCollection<ISegmentProxy> segments)
         {
@@ -75,7 +82,7 @@ namespace IFCConverter.Importer.Normalizers
             Vector<double> mergedStart = first.Position + firstProjection * left;
             Vector<double> mergedEnd = first.Position + firstProjection * right;
             Vector<double> mergedProjection = mergedEnd - mergedStart;
-            double length = mergedProjection.L2Norm();
+                                                                  double length = mergedProjection.L2Norm();
             if (length.AlmostEqual(0, DoubleTolerance))
                 return false;
 

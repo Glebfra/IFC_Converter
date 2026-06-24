@@ -11,7 +11,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
 {
     internal sealed class BendBoundaryResolver : IBoundaryResolver
     {
-        public IReadOnlyCollection<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies, int boundaryCount)
+        public IEnumerable<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
             if (proxy is not BendProxy bendProxy)
                 throw new InvalidCastException();

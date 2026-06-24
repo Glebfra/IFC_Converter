@@ -9,7 +9,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Entities.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 2, boundaryResolverType: typeof(PipeSegmentBoundaryResolver))]
+    [ProxyEntity(2, boundaryResolverType: typeof(PipeSegmentBoundaryResolver))]
     internal class PipeSegmentProxy : ISegmentProxy
     {
 
