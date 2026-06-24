@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Proxies;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Importer.BoundaryResolvers

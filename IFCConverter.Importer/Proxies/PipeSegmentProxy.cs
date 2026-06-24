@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
-using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Segments;
 using Start.Interfaces;
 
-namespace IFCConverter.Importer.Entities.Proxies
+namespace IFCConverter.Importer.Proxies
 {
     [ProxyEntity(2, boundaryResolverType: typeof(PipeSegmentBoundaryResolver))]
     internal class PipeSegmentProxy : ISegmentProxy

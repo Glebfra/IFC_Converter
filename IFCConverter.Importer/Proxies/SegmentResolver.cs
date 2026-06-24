@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Topology;
 using Utils;
 
-namespace IFCConverter.Importer.Entities.Proxies
+namespace IFCConverter.Importer.Proxies
 {
     internal sealed class SegmentResolver
     {
@@ -13,12 +14,12 @@ namespace IFCConverter.Importer.Entities.Proxies
             _comparer = comparer;
         }
 
-        public IResolvedSegmentProxy Resolve(ITopologyEntity topologyEntity)
+        public SegmentTopologyEntity Resolve(ITopologyEntity topologyEntity)
         {
             ISegmentProxy segmentProxy = (ISegmentProxy)topologyEntity.Proxy.Proxy;
             ITopologyNodeEntity[] nodes = topologyEntity.Nodes.ToArray();
 
-            return ResolvedSegmentProxy.CreateFromSegmentProxy(segmentProxy, nodes[0].Position, nodes[1].Position);
+            return new SegmentTopologyEntity(topologyEntity.Proxy, nodes, topologyEntity.ConnectedProxies);
         }
     }
 }

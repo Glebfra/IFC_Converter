@@ -2,8 +2,8 @@
 using System.Linq;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionResolvers;
-using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Proxies;
 using Utils;
 
 namespace IFCConverter.Importer.Topology
@@ -12,11 +12,13 @@ namespace IFCConverter.Importer.Topology
     {
         private readonly BoundaryResolver _boundaryResolver = BoundaryResolver.GetInstance();
         private readonly ConnectionResolver _connectionResolver = ConnectionResolver.GetInstance();
+        private readonly SegmentResolver _segmentResolver;
         private readonly INodeTopologyResolver _nodeTopologyResolver;
 
         public TopologyModelBuilder(VectorComparer comparer)
         {
             _nodeTopologyResolver = new NodeTopologyResolver(comparer);
+            _segmentResolver = new SegmentResolver(comparer);
         }
 
         public ITopologyModel Build(IReadOnlyCollection<IEntityProxy> proxies)
@@ -35,8 +37,21 @@ namespace IFCConverter.Importer.Topology
                 result.Add(CreateTopologyEntity(boundaryProxy, nodes, connected));
                 resultNodes.AddRange(nodes);
             }
+            ResolveSegments(ref result);
 
             return new TopologyModel(result, resultNodes);
+        }
+
+        private void ResolveSegments(ref List<ITopologyEntity> entities)
+        {
+            for (int i = 0; i < entities.Count; i++)
+            {
+                ITopologyEntity topologyEntity = entities[i];
+                if (topologyEntity.Proxy.Proxy is not ISegmentProxy)
+                    continue;
+
+                entities[i] = _segmentResolver.Resolve(topologyEntity);
+            }
         }
         
         private static ITopologyEntity CreateTopologyEntity(

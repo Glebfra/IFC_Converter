@@ -2,7 +2,7 @@
 using MathNet.Numerics.LinearAlgebra;
 using Start.Interfaces;
 
-namespace IFCConverter.Importer.Entities.Proxies
+namespace IFCConverter.Importer.Proxies
 {
     internal sealed class ResolvedSegmentProxy : IResolvedSegmentProxy
     {

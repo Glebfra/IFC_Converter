@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Proxies;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;

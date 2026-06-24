@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets.Aveva;
+using IFCConverter.Importer.Proxies;
 using MathNet.Numerics.LinearAlgebra;
 using Xbim.Ifc4.SharedBldgElements;
 

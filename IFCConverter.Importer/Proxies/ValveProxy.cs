@@ -7,7 +7,7 @@ using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
 using Start.Interfaces;
 
-namespace IFCConverter.Importer.Entities.Proxies
+namespace IFCConverter.Importer.Proxies
 {
     [ProxyEntity(2, typeof(ValveConnectionAugmenter), typeof(NearestSegmentBoundaryResolver))]
     internal sealed class ValveProxy : IFittingProxy

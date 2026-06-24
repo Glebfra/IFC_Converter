@@ -2,8 +2,8 @@
 using System.Linq;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionResolvers;
-using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Proxies;
 using Utils;
 
 namespace IFCConverter.Importer.Topology

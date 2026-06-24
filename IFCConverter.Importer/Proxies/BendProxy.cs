@@ -7,7 +7,7 @@ using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
 using Start.Interfaces;
 
-namespace IFCConverter.Importer.Entities.Proxies
+namespace IFCConverter.Importer.Proxies
 {
     [ProxyEntity(2, typeof(BendConnectionAugmenter), typeof(BendBoundaryResolver))]
     internal sealed class BendProxy : IFittingProxy
