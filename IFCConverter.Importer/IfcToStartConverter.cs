@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Ifc.Interfaces;
-using IFCConverter.Importer.ConnectionAugmenters;
-using IFCConverter.Importer.Entities.Proxies;
+using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.BoundaryResolvers;
+using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
-using IFCConverter.Importer.Normalizers;
+using IFCConverter.Importer.Proxies;
+using IFCConverter.Importer.Topology;
 using IFCConverter.Utils;
 using MathNet.Numerics.LinearAlgebra;
 using Start.API;
@@ -21,97 +22,115 @@ namespace IFCConverter.Importer
 {
     public class IfcToStartConverter
     {
-        private const double _vectorTolerance = 1e-3;
-        private readonly VectorComparer _comparer = new(_vectorTolerance);
+        private readonly BoundaryResolver _boundaryResolver = BoundaryResolver.GetInstance();
+        private readonly ConnectionResolver _connectionResolver = ConnectionResolver.GetInstance();
+        private readonly INodeTopologyResolver _nodeTopologyResolver;
+        
+        private const double VectorTolerance = 1e-3;
+        private readonly VectorComparer _comparer = new(VectorTolerance);
 
         private readonly ImportDataContainer _importDataContainer;
 
         private readonly Logger _logger = Logger.GetInstance();
-        private readonly StartNodeRegistry _nodeRegistry = new(_vectorTolerance);
+        private readonly StartNodeRegistry _nodeRegistry;
+        //
+        // private readonly List<ITopologyAugmenter> _topologyAugmenters = new();
 
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
             _importDataContainer = importDataContainer;
+            _nodeTopologyResolver = new NodeTopologyResolver(_comparer);
+            _nodeRegistry = new StartNodeRegistry(_comparer);
+            // _topologyAugmenters.Add(new ConnectionSegmentTopologyAugmenter(_comparer));
+            // _topologyAugmenters.Add(new NormalizeTopologyAugmenter(_comparer));
         }
 
         public void Convert(IStartDocument startDocument)
         {
             _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
+            
+            IReadOnlyCollection<IEntityProxy> proxies = ImportProxies();
+            IReadOnlyCollection<IBoundaryProxy> boundaryProxies = CreateBoundaryProxies(proxies);
+            IReadOnlyCollection<ITopologyEntity> topologyEntities = CreateTopologyEntities(boundaryProxies);
 
-            IReadOnlyCollection<ITopologyEntity> topologyEntities;
-            using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
+            IReadOnlyCollection<ISegmentAugmentableTopologyEntity> segmentAugmentableTopologyEntities = topologyEntities
+                .OfType<ISegmentAugmentableTopologyEntity>()
+                .ToArray();
+            
+            foreach (ISegmentAugmentableTopologyEntity segmentAugmentableTopologyEntity in segmentAugmentableTopologyEntities)
             {
-                topologyEntities = ImportTopologyProxies(ifcProject);
+                segmentAugmentableTopologyEntity.Augment();
             }
-
-            ConnectionAugmenter connectionAugmenter = new();
-            ISegmentProxy[] generatedSegments = topologyEntities
-                .SelectMany(connectionAugmenter.Augment)
-                .ToArray();
-
-            ISegmentNormalizer segmentNormalizer = new SegmentNormalizer();
-            ISegmentProxy[] normalizedSegments = segmentNormalizer.Normalize(generatedSegments).ToArray();
-
-            SegmentResolver segmentResolver = new(_comparer);
-            IResolvedSegmentProxy[] resolvedSegmentProxies = topologyEntities
-                .Where(topology => topology.Proxy.Proxy is ISegmentProxy)
-                .Select(segmentResolver.Resolve)
-                .ToArray();
-
-            IFittingProxy[] fittingProxies = topologyEntities
-                .Select(topology => topology.Proxy.Proxy)
-                .OfType<IFittingProxy>()
-                .ToArray();
-
+            
+            List<ISegmentProxy> generatedSegments = new List<ISegmentProxy>();
+            foreach (ITopologyEntity topologyEntity in topologyEntities)
+            {
+                TopologyEntityAttribute? attribute = topologyEntity.GetType().GetCustomAttribute<TopologyEntityAttribute>();
+                if (attribute == null)
+                    continue;
+                IEntityConnectionAugmenter connectionAugmenter = attribute.GetConnectionAugmenter();
+                generatedSegments.AddRange(connectionAugmenter.Augment(topologyEntity));
+            }
+            
             using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
-                foreach (IResolvedSegmentProxy segment in resolvedSegmentProxies)
+                foreach (ITopologyEntity topologyEntity in topologyEntities)
                 {
-                    IStartEntity startEntity = segment.ToStartEntity();
-                    Vector<double>[] nodePositions =
-                    {
-                        segment.ResolvedStartPosition, segment.ResolvedEndPosition
-                    };
+                    IStartEntity startEntity = topologyEntity.ToStartEntity();
+                    Vector<double>[] nodePositions = topologyEntity.Nodes.Select(node => node.Position).ToArray();
 
                     StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
                     StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
                     ConnectNodes(startEntityProxy, nodeProxies);
                 }
-
-                foreach (IFittingProxy fitting in fittingProxies)
-                {
-                    IStartEntity startEntity = fitting.ToStartEntity();
-                    Vector<double> nodePosition = fitting.Position;
-
-                    StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                    StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePosition);
-                    ConnectNodes(startEntityProxy, nodeProxies);
-                }
-
-                foreach (ISegmentProxy normalizedSegment in normalizedSegments)
-                {
-                    IStartEntity startEntity = normalizedSegment.ToStartEntity();
-                    Vector<double>[] nodePositions =
-                    {
-                        normalizedSegment.Position, normalizedSegment.EndPosition
-                    };
-
-                    StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                    StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
-                    ConnectNodes(startEntityProxy, nodeProxies);
-                }
-
+                
                 startProject.OnImportFinish();
             }
         }
 
-        [Pure]
-        private static IReadOnlyCollection<ITopologyEntity> ImportTopologyProxies(IIfcProject project)
+        private IReadOnlyCollection<IEntityProxy> ImportProxies()
         {
-            ImporterRegistry registry = ImporterRegistry.GetInstance();
-            IImporter importer = registry.CreateImporter(project);
-            IReadOnlyCollection<IfcProduct> products = project.Model.Instances.OfType<IfcProduct>().ToArray();
-            return importer.ImportEntities(products);
+            using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
+            {
+                ImporterRegistry registry = ImporterRegistry.GetInstance();
+                IImporter importer = registry.CreateImporter(ifcProject);
+                IReadOnlyCollection<IfcProduct> products = ifcProject.Model.Instances.OfType<IfcProduct>().ToArray();
+                return importer.ImportProxies(products);
+            }
+        }
+
+        private IReadOnlyCollection<IBoundaryProxy> CreateBoundaryProxies(IReadOnlyCollection<IEntityProxy> entityProxies)
+        {
+            return entityProxies.Select(proxy => new BoundaryProxy(proxy, _boundaryResolver.ResolveBoundary(proxy, entityProxies))).ToArray();
+        }
+
+        private IReadOnlyCollection<ITopologyEntity> CreateTopologyEntities(IReadOnlyCollection<IBoundaryProxy> boundaryProxies)
+        {
+            Dictionary<IBoundaryProxy, IEnumerable<IBoundaryProxy>> connections = new Dictionary<IBoundaryProxy, IEnumerable<IBoundaryProxy>>();
+            Dictionary<IBoundaryProxy, ITopologyEntity> proxyToTopologyMap = new Dictionary<IBoundaryProxy, ITopologyEntity>();
+            
+            foreach (IBoundaryProxy boundaryProxy in boundaryProxies)
+            {
+                IReadOnlyCollection<IBoundaryProxy> connected = _connectionResolver.GetConnectedEntities(boundaryProxy, boundaryProxies).ToArray();
+                connections.Add(boundaryProxy, connected);
+                
+                IReadOnlyCollection<ITopologyNodeEntity> nodes = _nodeTopologyResolver.ResolveTopologyRaw(boundaryProxy, connected).ToArray();
+                
+                ProxyEntityAttribute attribute = boundaryProxy.Proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
+                Type topologyType = attribute.TopologyType;
+                ITopologyEntity topologyEntity = (ITopologyEntity)Activator.CreateInstance(topologyType, boundaryProxy, nodes);
+                
+                proxyToTopologyMap.Add(boundaryProxy, topologyEntity);
+            }
+
+            IReadOnlyCollection<ITopologyEntity> topologyEntities = proxyToTopologyMap.Values;
+            foreach (ITopologyEntity topologyEntity in topologyEntities)
+            {
+                IEnumerable<ITopologyEntity> connected = connections[topologyEntity.Proxy].Select(proxy => proxyToTopologyMap[proxy]);
+                topologyEntity.Connect(connected);
+            }
+
+            return topologyEntities;
         }
 
         private static void ConnectNodes(StartEntityProxy entity, params StartEntityProxy[] nodes)

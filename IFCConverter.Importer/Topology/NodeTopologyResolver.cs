@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 
-namespace IFCConverter.Importer.Entities.Topologies
+namespace IFCConverter.Importer.Topology
 {
     internal sealed class NodeTopologyResolver : INodeTopologyResolver
     {
@@ -20,6 +21,24 @@ namespace IFCConverter.Importer.Entities.Topologies
             _comparer = comparer;
         }
 
+        [Pure]
+        public IEnumerable<ITopologyNodeEntity> ResolveTopologyRaw(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> connected)
+        {
+            IEnumerable<IBoundaryProxy> connectedProxies = connected as IBoundaryProxy[] ?? connected.ToArray();
+
+            List<ITopologyNodeEntity> nodes = new List<ITopologyNodeEntity>();
+            if (proxy.Proxy is IFittingProxy fittingProxy)
+                nodes.Add(new TopologyNode(fittingProxy.Position));
+            else if (proxy.Proxy is ISegmentProxy segmentProxy)
+            {
+                nodes.Add(new TopologyNode(segmentProxy.Position));
+                nodes.Add(new TopologyNode(segmentProxy.EndPosition));
+            }
+
+            return nodes;
+        }
+
+        [Pure]
         public IEnumerable<ITopologyNodeEntity> ResolveTopology(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> connected)
         {
             IEnumerable<IBoundaryProxy> connectedProxies = connected as IBoundaryProxy[] ?? connected.ToArray();
@@ -38,6 +57,7 @@ namespace IFCConverter.Importer.Entities.Topologies
             return nodes;
         }
 
+        [Pure]
         private TopologyNode ResolveSegmentNode(Vector<double> segmentPoint, IEnumerable<IBoundaryProxy> connectedProxies)
         {
             foreach (IBoundaryProxy connectedProxy in connectedProxies)

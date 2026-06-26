@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using IFCConverter.Importer.Entities.Proxies;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Proxies;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
@@ -12,7 +12,13 @@ namespace IFCConverter.Importer.Normalizers
     internal sealed class SegmentNormalizer : ISegmentNormalizer
     {
         private const double DoubleTolerance = 1e-3;
+
+        private static readonly Lazy<SegmentNormalizer> Instance = new(() => new SegmentNormalizer());
         private readonly VectorComparer _comparer = new(DoubleTolerance);
+
+        private SegmentNormalizer()
+        {
+        }
 
         [Pure]
         public IReadOnlyCollection<ISegmentProxy> Normalize(IReadOnlyCollection<ISegmentProxy> segments)
@@ -48,6 +54,11 @@ namespace IFCConverter.Importer.Normalizers
             }
 
             return result;
+        }
+
+        public static SegmentNormalizer GetInstance()
+        {
+            return Instance.Value;
         }
 
         private static bool TryMerge(ISegmentProxy first, ISegmentProxy second, out ISegmentProxy merged)

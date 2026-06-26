@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
+using Start.Interfaces;
 
 namespace IFCConverter.Importer.Interfaces
 {
@@ -7,5 +8,6 @@ namespace IFCConverter.Importer.Interfaces
     {
         public IEntityProxy Proxy { get; }
         public IReadOnlyCollection<Vector<double>> Boundary { get; }
+        public IStartEntity ToStartEntity();
     }
 }

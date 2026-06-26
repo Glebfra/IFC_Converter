@@ -6,23 +6,18 @@ namespace IFCConverter.Importer.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
     internal sealed class ProxyEntityAttribute : Attribute
     {
+        public readonly Type TopologyType;
         public readonly Type? BoundaryResolverType;
         public readonly Type? ConnectionAugmenterType;
-        public readonly Type ConnectionResolverType;
         public readonly int ConnectionsCount;
 
-        public ProxyEntityAttribute(Type connectionResolverType, int connectionsCount, Type? connectionAugmenterType = null,
+        public ProxyEntityAttribute(int connectionsCount, Type topologyType, Type? connectionAugmenterType = null,
             Type? boundaryResolverType = null)
         {
-            ConnectionResolverType = connectionResolverType;
             ConnectionsCount = connectionsCount;
+            TopologyType = topologyType;
             BoundaryResolverType = boundaryResolverType;
             ConnectionAugmenterType = connectionAugmenterType;
-        }
-
-        public IEntityConnectionResolver GetConnectionResolver()
-        {
-            return (IEntityConnectionResolver)Activator.CreateInstance(ConnectionResolverType);
         }
 
         public IEntityConnectionAugmenter? GetConnectionAugmenter()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
@@ -27,7 +28,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
             if (resolver == null)
                 throw new InvalidOperationException($"Boundary resolver not configured for {proxy.GetType().Name}");
 
-            return resolver.ResolveBoundary(proxy, allProxies, attribute.ConnectionsCount);
+            return resolver.ResolveBoundary(proxy, allProxies).Take(attribute.ConnectionsCount).ToArray();
         }
     }
 }

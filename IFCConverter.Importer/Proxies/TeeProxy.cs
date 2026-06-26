@@ -1,15 +1,15 @@
 ﻿using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionAugmenters;
-using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
 using Start.Interfaces;
 
-namespace IFCConverter.Importer.Entities.Proxies
+namespace IFCConverter.Importer.Proxies
 {
-    [ProxyEntity(typeof(BoundPointConnectionResolver), 3, typeof(TeeConnectionAugmenter), typeof(TeeBoundaryResolver))]
+    [ProxyEntity(3, typeof(TeeTopologyEntity), typeof(TeeConnectionAugmenter), typeof(TeeBoundaryResolver))]
     internal sealed class TeeProxy : IFittingProxy
     {
 
@@ -34,7 +34,7 @@ namespace IFCConverter.Importer.Entities.Proxies
         public Vector<double> HeadProjection { get; }
 
         public string? Name { get; set; }
-        public Vector<double> Position { get; }
+        public Vector<double> Position { get; set; }
 
         public IStartEntity ToStartEntity()
         {

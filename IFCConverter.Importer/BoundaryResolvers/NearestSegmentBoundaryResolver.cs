@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
 {
     internal sealed class NearestSegmentBoundaryResolver : IBoundaryResolver
     {
-        public IReadOnlyCollection<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies, int boundaryCount)
+        public IEnumerable<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
             Vector<double> position = proxy.Position;
             IEnumerable<ISegmentProxy> segmentProxies = allProxies.OfType<ISegmentProxy>();
@@ -16,9 +16,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
                 {
                     segment.Position, segment.EndPosition
                 })
-                .OrderBy(segmentPosition => (position - segmentPosition).L2Norm())
-                .Take(boundaryCount)
-                .ToArray();
+                .OrderBy(segmentPosition => (position - segmentPosition).L2Norm());
         }
     }
 }

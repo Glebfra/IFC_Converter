@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Ifc.Extensions;
-using IFCConverter.Importer.Entities.Proxies;
+using IFCConverter.Importer.Proxies;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 using Xbim.Ifc4.Interfaces;

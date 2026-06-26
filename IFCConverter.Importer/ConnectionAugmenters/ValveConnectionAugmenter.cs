@@ -9,9 +9,8 @@ using Utils;
 
 namespace IFCConverter.Importer.ConnectionAugmenters
 {
-    internal sealed class TeeConnectionAugmenter : IEntityConnectionAugmenter
+    internal sealed class ValveConnectionAugmenter : IEntityConnectionAugmenter
     {
-        private const double MinLength = 1e-2;
         private const double DoubleEpsilon = 1e-3;
         private readonly VectorComparer _comparer = new(DoubleEpsilon);
 
@@ -19,36 +18,38 @@ namespace IFCConverter.Importer.ConnectionAugmenters
         {
             List<ISegmentProxy> generatedSegments = new();
 
-            if (topology.Proxy.Proxy is not TeeProxy teeProxy)
-                throw new Exception($"{nameof(topology.Proxy)} should be {nameof(TeeProxy)}");
+            if (topology is not ValveTopologyEntity valveTopologyEntity)
+                throw new Exception($"{nameof(topology)} should be {nameof(ValveTopologyEntity)}");
 
-            foreach (Vector<double> boundaryPoint in topology.Proxy.Boundary)
+            Vector<double> position = topology.Proxy.Proxy.Position;
+            IReadOnlyCollection<ISegmentProxy> connectedSegments = topology.Connected
+                .Select(obj => obj.Proxy.Proxy)
+                .OfType<ISegmentProxy>()
+                .ToArray();
+            double diameter = connectedSegments.Max(segment => segment.Diameter);
+
+            foreach (Vector<double> boundary in topology.Proxy.Boundary)
             {
                 bool isConnected = topology.Connected
                     .OfType<SegmentTopologyEntity>()
-                    .Any(segment => _comparer.Equals(segment.Nodes.ElementAt(0).Position, boundaryPoint) ||
-                                    _comparer.Equals(segment.Nodes.ElementAt(1).Position, boundaryPoint));
+                    .Any(segment => _comparer.Equals(segment.Nodes.ElementAt(0).Position, boundary) ||
+                                    _comparer.Equals(segment.Nodes.ElementAt(1).Position, boundary));
 
                 if (isConnected)
                     continue;
 
-                Vector<double> projection = boundaryPoint - teeProxy.Position;
+                Vector<double> projection = boundary - position;
                 double length = projection.L2Norm();
-                if (length < MinLength)
-                    length = MinLength;
                 Vector<double> direction = projection / length;
-                double diameter = direction.IsParallel(teeProxy.MainProjection)
-                    ? teeProxy.MainDiameter
-                    : teeProxy.HeadDiameter;
 
                 PipeSegmentProxy generatedSegment = new(
                     diameter,
                     length,
-                    teeProxy.Position,
+                    position,
                     direction
                 )
                 {
-                    Name = $"Generated segment for {teeProxy.Name}"
+                    Name = $"Generated segment for {topology.Proxy.Proxy.Name}"
                 };
                 generatedSegments.Add(generatedSegment);
             }

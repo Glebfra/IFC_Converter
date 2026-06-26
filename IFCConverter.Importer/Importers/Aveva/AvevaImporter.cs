@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Importer.Attributes;
-using IFCConverter.Importer.Entities.Topologies;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets.Aveva;
@@ -18,17 +16,10 @@ namespace IFCConverter.Importer.Importers.Aveva
     [IfcImporter(typeof(AvevaImporterImporterFilter))]
     internal class AvevaImporter : IImporter
     {
-        private const double _vectorTolerance = 1e-3;
-        private readonly IEntityTopologyResolver _entityTopologyResolver;
+        private const double VectorTolerance = 1e-3;
         private readonly Logger _logger = Logger.GetInstance();
 
-        public AvevaImporter()
-        {
-            _entityTopologyResolver = new EntityTopologyResolver(new VectorComparer(_vectorTolerance));
-        }
-
-        [Pure]
-        public IReadOnlyCollection<ITopologyEntity> ImportEntities(IEnumerable<IfcProduct> products)
+        public IReadOnlyCollection<IEntityProxy> ImportProxies(IEnumerable<IfcProduct> products)
         {
             IReadOnlyCollection<IfcProduct> ifcProductsCollection = products.ToArray();
 
@@ -46,7 +37,7 @@ namespace IFCConverter.Importer.Importers.Aveva
 
                 try
                 {
-                    IEntityProxy entityProxy = CreateEntityProxy(ifcProduct, (AvevaEntityType)entityType, ifcProductsCollection);
+                    IEntityProxy entityProxy = CreateEntityProxy(ifcProduct, (AvevaEntityType)entityType);
                     proxies.Add(entityProxy);
                 }
                 catch (Exception e)
@@ -55,7 +46,7 @@ namespace IFCConverter.Importer.Importers.Aveva
                 }
             }
 
-            return _entityTopologyResolver.ResolveTopologies(proxies);
+            return proxies;
         }
 
         private static AvevaEntityType? GetAvevaEntityType(AvevaEntityParameters parameters)
@@ -66,14 +57,15 @@ namespace IFCConverter.Importer.Importers.Aveva
                 "ELBOW" or "BEND" => AvevaEntityType.BEND,
                 "TEE" => AvevaEntityType.TEE,
                 "REDUCER" => AvevaEntityType.REDUCER,
+                "VALVE" => AvevaEntityType.VALVE,
+                "PCOMPONENT" => AvevaEntityType.PCOM,
                 _ => null
             };
         }
 
         private static IEntityProxy CreateEntityProxy(
             IfcProduct product,
-            AvevaEntityType entityType,
-            IReadOnlyCollection<IfcProduct> otherProducts)
+            AvevaEntityType entityType)
         {
             IfcBuildingElementProxy buildingElementProxy = (IfcBuildingElementProxy)product;
 
@@ -83,6 +75,8 @@ namespace IFCConverter.Importer.Importers.Aveva
                 AvevaEntityType.BEND => new AvevaBendImporter().ReadTyped(buildingElementProxy),
                 AvevaEntityType.TEE => new AvevaTeeImporter().ReadTyped(buildingElementProxy),
                 AvevaEntityType.REDUCER => new AvevaReducerImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.VALVE => new AvevaValveImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.PCOM => new AvevaPcomImporter().ReadTyped(buildingElementProxy),
                 _ => throw new Exception("Unsupported entity type.")
             };
         }
@@ -92,7 +86,9 @@ namespace IFCConverter.Importer.Importers.Aveva
             PIPE_SEGMENT,
             BEND,
             TEE,
-            REDUCER
+            REDUCER,
+            VALVE,
+            PCOM
         }
     }
 }

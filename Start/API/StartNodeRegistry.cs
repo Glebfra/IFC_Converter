@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities;
 using Start.Extensions;
@@ -13,9 +14,9 @@ namespace Start.API
         private readonly Dictionary<Vector<double>, StartEntityProxy> _nodes;
         private int _counter = 1;
 
-        public StartNodeRegistry(double tolerance)
+        public StartNodeRegistry(VectorComparer comparer)
         {
-            _nodes = new Dictionary<Vector<double>, StartEntityProxy>(new VectorComparer(tolerance));
+            _nodes = new Dictionary<Vector<double>, StartEntityProxy>(comparer);
         }
 
         public StartEntityProxy[] GetOrCreateNodes(IStartProject startProject, params Vector<double>[] positions)
