@@ -58,6 +58,7 @@ namespace IFCConverter.Importer.Importers.Aveva
                 "TEE" => AvevaEntityType.TEE,
                 "REDUCER" => AvevaEntityType.REDUCER,
                 "VALVE" => AvevaEntityType.VALVE,
+                "PCOMPONENT" => AvevaEntityType.PCOM,
                 _ => null
             };
         }
@@ -75,6 +76,7 @@ namespace IFCConverter.Importer.Importers.Aveva
                 AvevaEntityType.TEE => new AvevaTeeImporter().ReadTyped(buildingElementProxy),
                 AvevaEntityType.REDUCER => new AvevaReducerImporter().ReadTyped(buildingElementProxy),
                 AvevaEntityType.VALVE => new AvevaValveImporter().ReadTyped(buildingElementProxy),
+                AvevaEntityType.PCOM => new AvevaPcomImporter().ReadTyped(buildingElementProxy),
                 _ => throw new Exception("Unsupported entity type.")
             };
         }
@@ -85,7 +87,8 @@ namespace IFCConverter.Importer.Importers.Aveva
             BEND,
             TEE,
             REDUCER,
-            VALVE
+            VALVE,
+            PCOM
         }
     }
 }

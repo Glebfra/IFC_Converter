@@ -24,7 +24,12 @@ namespace IFCConverter.Importer.Topology
             IReadOnlyCollection<IBoundaryProxy> boundaryProxies = proxies
                 .Select(proxy => new BoundaryProxy(proxy, _boundaryResolver.ResolveBoundary(proxy, proxies)))
                 .ToArray();
+            
+            return Build(boundaryProxies);
+        }
 
+        public ITopologyModel Build(IReadOnlyCollection<IBoundaryProxy> boundaryProxies)
+        {
             List<ITopologyEntity> result = new();
             List<ITopologyNodeEntity> resultNodes = new();
             foreach (IBoundaryProxy boundaryProxy in boundaryProxies)

@@ -9,6 +9,14 @@ namespace IFCConverter.Importer.Topology
     {
         public TopologyEntity(
             IBoundaryProxy proxy,
+            IReadOnlyCollection<ITopologyNodeEntity> nodes)
+        {
+            Proxy = proxy;
+            Nodes = nodes;
+        }
+        
+        public TopologyEntity(
+            IBoundaryProxy proxy,
             IReadOnlyCollection<ITopologyNodeEntity> nodes,
             IReadOnlyCollection<IBoundaryProxy> connectedProxies
         )
@@ -18,9 +26,22 @@ namespace IFCConverter.Importer.Topology
             ConnectedProxies = connectedProxies;
         }
 
-        public IBoundaryProxy Proxy { get; }
-        public IReadOnlyCollection<IBoundaryProxy> ConnectedProxies { get; }
-        public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
+        public IBoundaryProxy Proxy { get; protected set; }
+        public IReadOnlyCollection<IBoundaryProxy> ConnectedProxies { get; protected set; }
+        public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; protected set; }
+
+        public IReadOnlyCollection<ITopologyEntity> Connected => _connected;
+        private readonly List<ITopologyEntity> _connected = new List<ITopologyEntity>();
+
+        public void Connect(ITopologyEntity topologyEntity)
+        {
+            _connected.Add(topologyEntity);
+        }
+
+        public void Connect(IEnumerable<ITopologyEntity> topologyEntities)
+        {
+            _connected.AddRange(topologyEntities);
+        }
 
         [Pure]
         public virtual IStartEntity ToStartEntity()

@@ -22,17 +22,18 @@ namespace IFCConverter.Importer.ConnectionAugmenters
                 throw new Exception($"{nameof(topology)} should be {nameof(ValveTopologyEntity)}");
 
             Vector<double> position = topology.Proxy.Proxy.Position;
-            IReadOnlyCollection<ISegmentProxy> connectedSegments = topology.ConnectedProxies
-                .Select(proxy => proxy.Proxy)
+            IReadOnlyCollection<ISegmentProxy> connectedSegments = topology.Connected
+                .Select(obj => obj.Proxy.Proxy)
                 .OfType<ISegmentProxy>()
                 .ToArray();
             double diameter = connectedSegments.Max(segment => segment.Diameter);
 
             foreach (Vector<double> boundary in topology.Proxy.Boundary)
             {
-                bool isConnected = connectedSegments
-                    .Any(segment => _comparer.Equals(segment.Position, boundary) ||
-                                    _comparer.Equals(segment.EndPosition, boundary));
+                bool isConnected = topology.Connected
+                    .OfType<SegmentTopologyEntity>()
+                    .Any(segment => _comparer.Equals(segment.Nodes.ElementAt(0).Position, boundary) ||
+                                    _comparer.Equals(segment.Nodes.ElementAt(1).Position, boundary));
 
                 if (isConnected)
                     continue;

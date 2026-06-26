@@ -7,12 +7,12 @@ using Utils;
 
 namespace IFCConverter.Importer.TopologyAugmenter
 {
-    internal sealed class NormalizeTopologyAugmenter : ITopologyAugmenter
+    internal sealed class NormalizeTopologyModelAugmenter : ITopologyModelAugmenter
     {
         private readonly TopologyModelBuilder _modelBuilder;
         private readonly ISegmentNormalizer _segmentNormalizer = SegmentNormalizer.GetInstance();
 
-        public NormalizeTopologyAugmenter(VectorComparer comparer)
+        public NormalizeTopologyModelAugmenter(VectorComparer comparer)
         {
             _modelBuilder = new TopologyModelBuilder(comparer);
         }

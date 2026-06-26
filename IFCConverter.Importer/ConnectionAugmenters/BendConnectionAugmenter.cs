@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
+using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 
@@ -17,17 +18,19 @@ namespace IFCConverter.Importer.ConnectionAugmenters
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity topology)
         {
             List<ISegmentProxy> generatedSegments = new();
+            
+            if (topology is not BendTopologyEntity)
+                throw new Exception($"{nameof(topology)} should be of type {nameof(BendTopologyEntity)}");
 
             if (topology.Proxy.Proxy is not BendProxy bendProxy)
-                throw new Exception($"{nameof(topology.Proxy)} should be {nameof(BendProxy)}");
+                throw new Exception($"{nameof(topology.Proxy.Proxy)} should be of type {nameof(BendProxy)}");
 
             foreach (Vector<double> boundaryPoint in topology.Proxy.Boundary)
             {
-                bool isConnected = topology.ConnectedProxies
-                    .Select(proxy => proxy.Proxy)
-                    .OfType<ISegmentProxy>()
-                    .Any(segment => _comparer.Equals(segment.Position, boundaryPoint) ||
-                                    _comparer.Equals(segment.EndPosition, boundaryPoint));
+                bool isConnected = topology.Connected
+                    .OfType<SegmentTopologyEntity>()
+                    .Any(segment => _comparer.Equals(segment.Nodes.ElementAt(0).Position, boundaryPoint) ||
+                                    _comparer.Equals(segment.Nodes.ElementAt(1).Position, boundaryPoint));
 
                 if (isConnected)
                     continue;

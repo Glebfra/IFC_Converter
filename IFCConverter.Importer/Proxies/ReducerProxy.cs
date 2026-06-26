@@ -4,13 +4,14 @@ using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
 using Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
-    [ProxyEntity(2, typeof(ReducerConnectionAugmenter), typeof(ReducerBoundaryResolver))]
+    [ProxyEntity(2, typeof(ReducerTopologyEntity), typeof(ReducerConnectionAugmenter), typeof(ReducerBoundaryResolver))]
     internal sealed class ReducerProxy : IFittingProxy
     {
         private readonly IReadOnlyList<Vector<double>> _boundPoints;

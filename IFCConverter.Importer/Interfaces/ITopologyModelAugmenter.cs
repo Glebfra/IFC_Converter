@@ -1,6 +1,6 @@
 ﻿namespace IFCConverter.Importer.Interfaces
 {
-    internal interface ITopologyAugmenter
+    internal interface ITopologyModelAugmenter
     {
         public ITopologyModel Augment(ITopologyModel model);
     }

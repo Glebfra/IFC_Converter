@@ -7,12 +7,12 @@ using Utils;
 
 namespace IFCConverter.Importer.TopologyAugmenter
 {
-    internal sealed class ConnectionSegmentTopologyAugmenter : ITopologyAugmenter
+    internal sealed class ConnectionSegmentTopologyModelAugmenter : ITopologyModelAugmenter
     {
         private readonly ConnectionAugmenter _connectionAugmenter = new();
         private readonly TopologyModelBuilder _modelBuilder;
 
-        public ConnectionSegmentTopologyAugmenter(VectorComparer comparer)
+        public ConnectionSegmentTopologyModelAugmenter(VectorComparer comparer)
         {
             _modelBuilder = new TopologyModelBuilder(comparer);
         }
