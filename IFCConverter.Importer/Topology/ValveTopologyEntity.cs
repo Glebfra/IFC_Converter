@@ -11,20 +11,15 @@ using Utils;
 namespace IFCConverter.Importer.Topology
 {
     [TopologyEntity(typeof(ValveConnectionAugmenter))]
-    internal sealed class ValveTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity
+    internal sealed class ValveTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
         private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
         
+        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
+        
         public ValveTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes)
             : base(proxy, nodes)
-        {
-            _length = (Proxy.Boundary.ElementAt(1) - Proxy.Boundary.ElementAt(0)).L2Norm();
-        }
-        
-        public ValveTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes,
-            IReadOnlyCollection<IBoundaryProxy> connectedProxies)
-            : base(proxy, nodes, connectedProxies)
         {
             _length = (Proxy.Boundary.ElementAt(1) - Proxy.Boundary.ElementAt(0)).L2Norm();
         }

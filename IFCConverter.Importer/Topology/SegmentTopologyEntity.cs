@@ -7,7 +7,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {
-    internal class SegmentTopologyEntity : TopologyEntity
+    internal class SegmentTopologyEntity : TopologyEntity, ISegmentTopologyEntity
     {
         private Vector<double> _resolvedProjection;
 
@@ -17,23 +17,6 @@ namespace IFCConverter.Importer.Topology
             IBoundaryProxy proxy,
             IReadOnlyCollection<ITopologyNodeEntity> nodes)
             : base(proxy, nodes)
-        {
-            Vector<double> resolvedStartPosition = nodes.ElementAt(0).Position;
-            Vector<double> resolvedEndPosition = nodes.ElementAt(1).Position;
-
-            ISegmentProxy segmentProxy = (ISegmentProxy)proxy.Proxy;
-            Vector<double> segmentProjection = segmentProxy.Direction * segmentProxy.Length;
-            Vector<double> resolvedProjection = resolvedEndPosition - resolvedStartPosition;
-
-            _resolvedStartPosition = resolvedStartPosition;
-            _resolvedProjection = segmentProjection.Normalize(2) * resolvedProjection.L2Norm();
-        }
-
-        public SegmentTopologyEntity(
-            IBoundaryProxy proxy,
-            IReadOnlyCollection<ITopologyNodeEntity> nodes,
-            IReadOnlyCollection<IBoundaryProxy> connectedProxies)
-            : base(proxy, nodes, connectedProxies)
         {
             Vector<double> resolvedStartPosition = nodes.ElementAt(0).Position;
             Vector<double> resolvedEndPosition = nodes.ElementAt(1).Position;

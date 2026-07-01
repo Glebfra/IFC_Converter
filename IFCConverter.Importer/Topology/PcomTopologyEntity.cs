@@ -6,17 +6,12 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {
-    internal sealed class PcomTopologyEntity : TopologyEntity
+    internal sealed class PcomTopologyEntity : TopologyEntity, ISegmentTopologyEntity
     {
         public PcomTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes) 
             : base(proxy, nodes)
         {
             Nodes = proxy.Boundary.Select(boundary => new TopologyNode(boundary)).ToArray();
-        }
-
-        public PcomTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes, IReadOnlyCollection<IBoundaryProxy> connectedProxies) 
-            : base(proxy, nodes, connectedProxies)
-        {
         }
 
         public override IStartEntity ToStartEntity()

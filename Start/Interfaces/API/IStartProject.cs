@@ -45,6 +45,8 @@ namespace Start.Interfaces
         [Pure]
         public int GetNumberElements(StartElementTypeEnum minType, StartElementTypeEnum maxType);
 
+        public StartEntityProxy AddEntity(IStartEntity entity);
+
         /// <summary>
         ///     Adds new element of specified type.
         /// </summary>

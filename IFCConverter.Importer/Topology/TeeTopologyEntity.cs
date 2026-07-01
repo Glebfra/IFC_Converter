@@ -9,16 +9,14 @@ using Utils;
 namespace IFCConverter.Importer.Topology
 {
     [TopologyEntity(typeof(TeeConnectionAugmenter))]
-    internal sealed class TeeTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity
+    internal sealed class TeeTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
         private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
         
+        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
+        
         public TeeTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes) : base(proxy, nodes)
-        {
-        }
-
-        public TeeTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes, IReadOnlyCollection<IBoundaryProxy> connectedProxies) : base(proxy, nodes, connectedProxies)
         {
         }
 

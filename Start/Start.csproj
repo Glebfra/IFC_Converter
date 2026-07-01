@@ -138,9 +138,7 @@
         <Compile Include="Entities\StartAbstractEntity.cs"/>
         <Compile Include="Entities\StartNodeEntity.cs"/>
         <Compile Include="Entities\StartNonStandardRestraintModule.cs"/>
-        <Compile Include="Extensions\StartApiExtensions.cs"/>
         <Compile Include="Extensions\StartDataArrayItemExtensions.cs"/>
-        <Compile Include="Extensions\StartElementTypeExtensions.cs"/>
         <Compile Include="Extensions\StartEntitiesExtensions.cs"/>
         <Compile Include="Interfaces\API\IStartAutoServer.cs"/>
         <Compile Include="Interfaces\API\IStartBaseRoot.cs"/>

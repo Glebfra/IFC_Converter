@@ -10,16 +10,14 @@ using Utils;
 namespace IFCConverter.Importer.Topology
 {
     [TopologyEntity(typeof(ReducerConnectionAugmenter))]
-    internal sealed class ReducerTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity
+    internal sealed class ReducerTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
         private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
         
+        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
+        
         public ReducerTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes) : base(proxy, nodes)
-        {
-        }
-
-        public ReducerTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes, IReadOnlyCollection<IBoundaryProxy> connectedProxies) : base(proxy, nodes, connectedProxies)
         {
         }
 

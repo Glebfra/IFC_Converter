@@ -20,5 +20,12 @@ namespace IFCConverter.Importer.ConnectionResolvers
             BoundPointConnectionResolver connectionResolver = new();
             return connectionResolver.GetConnectedEntities(proxy, allProxies);
         }
+
+        [Pure]
+        public IEnumerable<ITopologyEntity> GetConnectedEntities(ITopologyEntity entity, IEnumerable<ITopologyEntity> allTopologies)
+        {
+            TopologyConnectionResolver connectionResolver = new TopologyConnectionResolver();
+            return connectionResolver.GetConnectedEntities(entity, allTopologies);
+        }
     }
 }

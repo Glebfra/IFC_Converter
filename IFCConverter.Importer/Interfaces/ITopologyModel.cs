@@ -4,7 +4,9 @@ namespace IFCConverter.Importer.Interfaces
 {
     internal interface ITopologyModel
     {
-        public IReadOnlyCollection<ITopologyEntity> Entities { get; }
-        public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; }
+        public IEnumerable<ITopologyEntity> Entities { get; }
+
+        public void AddEntity(ITopologyEntity entity);
+        public void AddEntities(IEnumerable<ITopologyEntity> entities);
     }
 }

@@ -38,7 +38,7 @@ namespace Start.API
     ///         and calculates spatial positions.
     ///     </para>
     /// </remarks>
-    public class StartProject : IStartProject, IDisposable
+    public class StartProject : IStartProject
     {
         private static readonly Logger _logger = Logger.GetInstance();
 
@@ -136,6 +136,16 @@ namespace Start.API
         public int GetNumberElements(StartElementTypeEnum minType, StartElementTypeEnum maxType)
         {
             return _dataArray.GetNumberElements(minType, maxType);
+        }
+
+        public StartEntityProxy AddEntity(IStartEntity entity)
+        {
+            string entityJson = JsonConvert.SerializeObject(entity);
+            StartElementTypeEnum startElementType = entity.GetElementType();
+            IStartBaseRoot startBaseRoot = AddElement(startElementType, out int index);
+            startBaseRoot.SetDataJson(0, entityJson);
+
+            return new StartEntityProxy(startBaseRoot, index);
         }
 
         /// <summary>

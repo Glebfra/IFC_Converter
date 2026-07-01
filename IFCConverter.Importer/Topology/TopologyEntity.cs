@@ -14,20 +14,8 @@ namespace IFCConverter.Importer.Topology
             Proxy = proxy;
             Nodes = nodes;
         }
-        
-        public TopologyEntity(
-            IBoundaryProxy proxy,
-            IReadOnlyCollection<ITopologyNodeEntity> nodes,
-            IReadOnlyCollection<IBoundaryProxy> connectedProxies
-        )
-        {
-            Proxy = proxy;
-            Nodes = nodes;
-            ConnectedProxies = connectedProxies;
-        }
 
         public IBoundaryProxy Proxy { get; protected set; }
-        public IReadOnlyCollection<IBoundaryProxy> ConnectedProxies { get; protected set; }
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; protected set; }
 
         public IReadOnlyCollection<ITopologyEntity> Connected => _connected;
