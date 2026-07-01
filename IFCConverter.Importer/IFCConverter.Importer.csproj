@@ -147,7 +147,7 @@
             <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
         <Compile Include="Attributes\ProxyEntityAttribute.cs"/>
-        <Compile Include="Attributes\TopologyEntityAttribute.cs" />
+        <Compile Include="Attributes\TopologyEntityAttribute.cs"/>
         <Compile Include="BoundaryResolvers\BendBoundaryResolver.cs"/>
         <Compile Include="BoundaryResolvers\BoundaryResolver.cs"/>
         <Compile Include="BoundaryResolvers\NearestSegmentBoundaryResolver.cs"/>
@@ -161,7 +161,7 @@
         <Compile Include="ConnectionAugmenters\ValveConnectionAugmenter.cs"/>
         <Compile Include="ConnectionResolvers\BoundPointConnectionResolver.cs"/>
         <Compile Include="ConnectionResolvers\ConnectionResolver.cs"/>
-        <Compile Include="ConnectionResolvers\TopologyConnectionResolver.cs" />
+        <Compile Include="ConnectionResolvers\TopologyConnectionResolver.cs"/>
         <Compile Include="Extensions\IfcRootExtensions.cs"/>
         <Compile Include="Graph\ConnectionNode.cs"/>
         <Compile Include="Graph\TopologyGraph.cs"/>
@@ -173,7 +173,7 @@
         <Compile Include="Importers\Aveva\AvevaImporterImporterFilter.cs">
             <DependentUpon>AvevaImporter.cs</DependentUpon>
         </Compile>
-        <Compile Include="Importers\Aveva\AvevaPcomImporter.cs" />
+        <Compile Include="Importers\Aveva\AvevaPcomImporter.cs"/>
         <Compile Include="Importers\Aveva\AvevaPipeSegmentImporter.cs"/>
         <Compile Include="Importers\Aveva\AvevaReducerImporter.cs"/>
         <Compile Include="Importers\Aveva\AvevaTeeImporter.cs"/>
@@ -187,7 +187,7 @@
         <Compile Include="Interfaces\IEntityProxy.cs"/>
         <Compile Include="Interfaces\IEntityTopologyResolver.cs"/>
         <Compile Include="Interfaces\IFittingProxy.cs"/>
-        <Compile Include="Interfaces\IFittingTopologyEntity.cs" />
+        <Compile Include="Interfaces\IFittingTopologyEntity.cs"/>
         <Compile Include="Interfaces\IImporter.cs"/>
         <Compile Include="Interfaces\IImporterFilter.cs"/>
         <Compile Include="Interfaces\INodeTopologyResolver.cs"/>
@@ -195,11 +195,11 @@
         <Compile Include="Interfaces\IPropertySet.cs"/>
         <Compile Include="Interfaces\IResolvedProxy.cs"/>
         <Compile Include="Interfaces\IResolvedSegmentProxy.cs"/>
-        <Compile Include="Interfaces\ISegmentAugmentableTopologyEntity.cs" />
+        <Compile Include="Interfaces\ISegmentAugmentableTopologyEntity.cs"/>
         <Compile Include="Interfaces\ISegmentNormalizer.cs"/>
         <Compile Include="Interfaces\ISegmentProxy.cs"/>
-        <Compile Include="Interfaces\ISegmentTopologyEntity.cs" />
-        <Compile Include="Interfaces\ITopologyModelAugmenter.cs" />
+        <Compile Include="Interfaces\ISegmentTopologyEntity.cs"/>
+        <Compile Include="Interfaces\ITopologyModelAugmenter.cs"/>
         <Compile Include="Interfaces\ITopologyEntity.cs"/>
         <Compile Include="Interfaces\ITopologyModel.cs"/>
         <Compile Include="Interfaces\ITopologyNodeEntity.cs"/>
@@ -215,18 +215,18 @@
         <Compile Include="PropertySets\PropertySetRegistry.cs"/>
         <Compile Include="Proxies\BendProxy.cs"/>
         <Compile Include="Proxies\BoundaryProxy.cs"/>
-        <Compile Include="Proxies\PcomProxy.cs" />
+        <Compile Include="Proxies\PcomProxy.cs"/>
         <Compile Include="Proxies\PipeSegmentProxy.cs"/>
         <Compile Include="Proxies\ReducerProxy.cs"/>
         <Compile Include="Proxies\TeeProxy.cs"/>
         <Compile Include="Proxies\ValveProxy.cs"/>
-        <Compile Include="TopologyAugmenter\FittingsSegmentsAugmenter.cs" />
-        <Compile Include="Topology\BendTopologyEntity.cs" />
+        <Compile Include="TopologyAugmenter\FittingsSegmentsAugmenter.cs"/>
+        <Compile Include="Topology\BendTopologyEntity.cs"/>
         <Compile Include="Topology\NodeTopologyResolver.cs"/>
-        <Compile Include="Topology\PcomTopologyEntity.cs" />
-        <Compile Include="Topology\ReducerTopologyEntity.cs" />
+        <Compile Include="Topology\PcomTopologyEntity.cs"/>
+        <Compile Include="Topology\ReducerTopologyEntity.cs"/>
         <Compile Include="Topology\SegmentTopologyEntity.cs"/>
-        <Compile Include="Topology\TeeTopologyEntity.cs" />
+        <Compile Include="Topology\TeeTopologyEntity.cs"/>
         <Compile Include="Topology\TopologyEntityFactory.cs"/>
         <Compile Include="Topology\TopologyEntity.cs"/>
         <Compile Include="Topology\TopologyModel.cs"/>

@@ -26,7 +26,7 @@ namespace IFCConverter.Importer.Topology
         {
             IEnumerable<IBoundaryProxy> connectedProxies = connected as IBoundaryProxy[] ?? connected.ToArray();
 
-            List<ITopologyNodeEntity> nodes = new List<ITopologyNodeEntity>();
+            List<ITopologyNodeEntity> nodes = new();
             if (proxy.Proxy is IFittingProxy fittingProxy)
                 nodes.Add(new TopologyNode(fittingProxy.Position));
             else if (proxy.Proxy is ISegmentProxy segmentProxy)

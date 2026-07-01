@@ -13,7 +13,7 @@ namespace IFCConverter.Importer.Topology
         }
 
         public Vector<double> Position { get; }
-        
+
         public bool Equals(ITopologyNodeEntity other)
         {
             return Position.Equals(other.Position);

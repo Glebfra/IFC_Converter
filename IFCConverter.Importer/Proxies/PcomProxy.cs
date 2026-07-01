@@ -18,7 +18,7 @@ namespace IFCConverter.Importer.Proxies
 
         public Vector<double> Position { get; }
         public string? Name { get; set; }
-        
+
         public IStartEntity ToStartEntity()
         {
             return new StartRigidElementEntity

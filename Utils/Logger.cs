@@ -17,11 +17,11 @@ namespace Utils
         public const LoggerLevel LoggerLevel =
             #if INFO
             Utils.LoggerLevel.INFO;
-            #elif SYSTEM
+        #elif SYSTEM
             Utils.LoggerLevel.SYSTEM;
-            #else
+        #else
             Utils.LoggerLevel.ERROR;
-            #endif
+        #endif
 
         private static readonly Lazy<Logger> _instance = new(() => new Logger());
 

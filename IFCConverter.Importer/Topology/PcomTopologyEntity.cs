@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.Topology
 {
     internal sealed class PcomTopologyEntity : TopologyEntity, ISegmentTopologyEntity
     {
-        public PcomTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes) 
+        public PcomTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes)
             : base(proxy, nodes)
         {
             Nodes = proxy.Boundary.Select(boundary => new TopologyNode(boundary)).ToArray();

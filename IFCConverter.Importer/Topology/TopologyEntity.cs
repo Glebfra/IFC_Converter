@@ -7,6 +7,8 @@ namespace IFCConverter.Importer.Topology
 {
     internal class TopologyEntity : ITopologyEntity
     {
+        private readonly List<ITopologyEntity> _connected = new();
+
         public TopologyEntity(
             IBoundaryProxy proxy,
             IReadOnlyCollection<ITopologyNodeEntity> nodes)
@@ -19,7 +21,6 @@ namespace IFCConverter.Importer.Topology
         public IReadOnlyCollection<ITopologyNodeEntity> Nodes { get; protected set; }
 
         public IReadOnlyCollection<ITopologyEntity> Connected => _connected;
-        private readonly List<ITopologyEntity> _connected = new List<ITopologyEntity>();
 
         public void Connect(ITopologyEntity topologyEntity)
         {

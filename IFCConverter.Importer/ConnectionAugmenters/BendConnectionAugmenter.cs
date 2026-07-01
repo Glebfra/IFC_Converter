@@ -18,7 +18,7 @@ namespace IFCConverter.Importer.ConnectionAugmenters
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity topology)
         {
             List<ISegmentProxy> generatedSegments = new();
-            
+
             if (topology is not BendTopologyEntity)
                 throw new Exception($"{nameof(topology)} should be of type {nameof(BendTopologyEntity)}");
 

@@ -24,7 +24,7 @@ namespace IFCConverter.Importer.ConnectionResolvers
         [Pure]
         public IEnumerable<ITopologyEntity> GetConnectedEntities(ITopologyEntity entity, IEnumerable<ITopologyEntity> allTopologies)
         {
-            TopologyConnectionResolver connectionResolver = new TopologyConnectionResolver();
+            TopologyConnectionResolver connectionResolver = new();
             return connectionResolver.GetConnectedEntities(entity, allTopologies);
         }
     }

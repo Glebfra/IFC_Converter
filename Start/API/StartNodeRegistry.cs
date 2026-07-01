@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities;
-using Start.Extensions;
 using Start.Interfaces;
 using Utils;
 

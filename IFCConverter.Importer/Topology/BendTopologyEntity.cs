@@ -12,14 +12,14 @@ namespace IFCConverter.Importer.Topology
     internal sealed class BendTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
-        
-        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
-        
-        public BendTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes) 
+        private static readonly VectorComparer Comparer = new(DoubleTolerance);
+
+        public BendTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes)
             : base(proxy, nodes)
         {
         }
+
+        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
 
         public void Augment()
         {
@@ -41,7 +41,7 @@ namespace IFCConverter.Importer.Topology
                 }
 
                 Vector<double> projection = segmentEndNode.Position - segmentStartNode.Position;
-                
+
                 segmentTopologyEntity.Augment(segmentStartNode, segmentEndNode, projection);
             }
         }

@@ -14,17 +14,17 @@ namespace IFCConverter.Importer.Topology
     internal sealed class ValveTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
-        
-        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
-        
+        private static readonly VectorComparer Comparer = new(DoubleTolerance);
+
+        private readonly double _length;
+
         public ValveTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes)
             : base(proxy, nodes)
         {
             _length = (Proxy.Boundary.ElementAt(1) - Proxy.Boundary.ElementAt(0)).L2Norm();
         }
 
-        private readonly double _length;
+        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
 
         public override IStartEntity ToStartEntity()
         {
@@ -53,7 +53,7 @@ namespace IFCConverter.Importer.Topology
                 }
 
                 Vector<double> projection = segmentEndNode.Position - segmentStartNode.Position;
-                
+
                 segmentTopologyEntity.Augment(segmentStartNode, segmentEndNode, projection);
             }
         }

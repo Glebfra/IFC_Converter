@@ -12,18 +12,18 @@ namespace IFCConverter.Importer.Topology
     internal sealed class TeeTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
-        
-        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
-        
+        private static readonly VectorComparer Comparer = new(DoubleTolerance);
+
         public TeeTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes) : base(proxy, nodes)
         {
         }
 
+        public ITopologyNodeEntity Node => Nodes.ElementAt(0);
+
         public void Augment()
         {
             ITopologyNodeEntity teeNode = Nodes.ElementAt(0);
-            
+
             IEnumerable<SegmentTopologyEntity> segmentTopologyEntities = Connected.OfType<SegmentTopologyEntity>();
             foreach (SegmentTopologyEntity segmentTopologyEntity in segmentTopologyEntities)
             {
@@ -40,7 +40,7 @@ namespace IFCConverter.Importer.Topology
                 }
 
                 Vector<double> projection = segmentEndNode.Position - segmentStartNode.Position;
-                
+
                 segmentTopologyEntity.Augment(segmentStartNode, segmentEndNode, projection);
             }
         }

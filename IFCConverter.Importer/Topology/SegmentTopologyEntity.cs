@@ -12,7 +12,7 @@ namespace IFCConverter.Importer.Topology
         private Vector<double> _resolvedProjection;
 
         private Vector<double> _resolvedStartPosition;
-        
+
         public SegmentTopologyEntity(
             IBoundaryProxy proxy,
             IReadOnlyCollection<ITopologyNodeEntity> nodes)
@@ -29,17 +29,6 @@ namespace IFCConverter.Importer.Topology
             _resolvedProjection = segmentProjection.Normalize(2) * resolvedProjection.L2Norm();
         }
 
-        public void Augment(ITopologyNodeEntity startNode, ITopologyNodeEntity endNode, Vector<double> projection)
-        {
-            _resolvedProjection = projection;
-            _resolvedStartPosition = startNode.Position;
-
-            Nodes = new ITopologyNodeEntity[]
-            {
-                startNode, endNode
-            };
-        }
-
         public override IStartEntity ToStartEntity()
         {
             StartPipeEntity startSegmentEntity = (StartPipeEntity)base.ToStartEntity();
@@ -47,6 +36,17 @@ namespace IFCConverter.Importer.Topology
             startSegmentEntity.Projection = _resolvedProjection;
 
             return startSegmentEntity;
+        }
+
+        public void Augment(ITopologyNodeEntity startNode, ITopologyNodeEntity endNode, Vector<double> projection)
+        {
+            _resolvedProjection = projection;
+            _resolvedStartPosition = startNode.Position;
+
+            Nodes = new[]
+            {
+                startNode, endNode
+            };
         }
     }
 }
