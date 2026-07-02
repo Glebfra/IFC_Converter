@@ -1,6 +1,5 @@
 ﻿using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
-using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
@@ -9,7 +8,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
-    [ProxyEntity(3, typeof(TeeTopologyEntity), typeof(TeeConnectionAugmenter), typeof(TeeBoundaryResolver))]
+    [ProxyEntity(3, typeof(TeeTopologyEntity), typeof(TeeBoundaryResolver))]
     internal sealed class TeeProxy : IFittingProxy
     {
 

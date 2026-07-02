@@ -1,17 +1,18 @@
 ﻿using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
+using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Segments;
+using Start.Entities.Anchors;
 using Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
-    [ProxyEntity(2, typeof(PcomTopologyEntity), typeof(NearestSegmentBoundaryResolver))]
-    internal sealed class PcomProxy : IFittingProxy
+    [ProxyEntity(0, typeof(AttachmentTopologyEntity), typeof(AttachmentBoundaryResolver), typeof(PointInSegmentConnectionResolver))]
+    internal sealed class AttachmentProxy : IFittingProxy
     {
-        public PcomProxy(Vector<double> position)
+        public AttachmentProxy(Vector<double> position)
         {
             Position = position;
         }
@@ -21,10 +22,12 @@ namespace IFCConverter.Importer.Proxies
 
         public IStartEntity ToStartEntity()
         {
-            return new StartRigidElementEntity
+            StartRestingSupportAnchorEntity entity = new()
             {
-                Name = Name ?? string.Empty
+                Name = Name ?? string.Empty,
+                Position = Position
             };
+            return entity;
         }
     }
 }

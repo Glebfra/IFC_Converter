@@ -1,24 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Importer.TopologyAugmenter
 {
-    internal sealed class FittingsSegmentsAugmenter : ITopologyModelAugmenter
+    internal sealed class FittingsSegmentsModelAugmenter : ITopologyModelAugmenter
     {
-        private readonly BoundaryResolver _boundaryResolver = BoundaryResolver.GetInstance();
-        private readonly VectorComparer _comparer;
-
-        public FittingsSegmentsAugmenter(VectorComparer comparer)
-        {
-            _comparer = comparer;
-        }
-
         public void Augment(ref ITopologyModel model)
         {
             foreach (IFittingTopologyEntity fittingTopologyEntity in model.Entities.OfType<IFittingTopologyEntity>().ToArray())

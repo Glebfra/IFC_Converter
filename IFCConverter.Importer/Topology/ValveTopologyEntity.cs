@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IFCConverter.Importer.Attributes;
-using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
@@ -10,7 +8,6 @@ using Utils;
 
 namespace IFCConverter.Importer.Topology
 {
-    [TopologyEntity(typeof(ValveConnectionAugmenter))]
     internal sealed class ValveTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;

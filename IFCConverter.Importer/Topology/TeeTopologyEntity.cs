@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IFCConverter.Importer.Attributes;
-using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 
 namespace IFCConverter.Importer.Topology
 {
-    [TopologyEntity(typeof(TeeConnectionAugmenter))]
     internal sealed class TeeTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;

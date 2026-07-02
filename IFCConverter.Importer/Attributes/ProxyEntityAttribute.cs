@@ -1,4 +1,5 @@
 ﻿using System;
+using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 
 namespace IFCConverter.Importer.Attributes
@@ -6,25 +7,22 @@ namespace IFCConverter.Importer.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
     internal sealed class ProxyEntityAttribute : Attribute
     {
-        public readonly Type? BoundaryResolverType;
-        public readonly Type? ConnectionAugmenterType;
+        private readonly Type? BoundaryResolverType;
+        private readonly Type ConnectionResolverType;
         public readonly int ConnectionsCount;
         public readonly Type TopologyType;
 
-        public ProxyEntityAttribute(int connectionsCount, Type topologyType, Type? connectionAugmenterType = null,
-            Type? boundaryResolverType = null)
+        public ProxyEntityAttribute(int connectionsCount, Type topologyType, Type? boundaryResolverType = null, Type? connectionResolverType = null)
         {
             ConnectionsCount = connectionsCount;
             TopologyType = topologyType;
             BoundaryResolverType = boundaryResolverType;
-            ConnectionAugmenterType = connectionAugmenterType;
+            ConnectionResolverType = connectionResolverType ?? typeof(BoundPointConnectionResolver);
         }
 
-        public IEntityConnectionAugmenter? GetConnectionAugmenter()
+        public IConnectionResolver GetConnectionResolver()
         {
-            if (ConnectionAugmenterType == null)
-                return null;
-            return (IEntityConnectionAugmenter)Activator.CreateInstance(ConnectionAugmenterType);
+            return (IConnectionResolver)Activator.CreateInstance(ConnectionResolverType);
         }
 
         public IBoundaryResolver? GetBoundaryResolver()

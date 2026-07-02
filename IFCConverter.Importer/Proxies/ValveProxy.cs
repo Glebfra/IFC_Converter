@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
-using IFCConverter.Importer.ConnectionAugmenters;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
@@ -10,7 +9,7 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
-    [ProxyEntity(2, typeof(ValveTopologyEntity), typeof(ValveConnectionAugmenter), typeof(NearestSegmentBoundaryResolver))]
+    [ProxyEntity(2, typeof(ValveTopologyEntity), typeof(NearestSegmentBoundaryResolver))]
     internal sealed class ValveProxy : IFittingProxy
     {
         public ValveProxy(Vector<double> position)

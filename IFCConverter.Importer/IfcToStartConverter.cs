@@ -32,7 +32,8 @@ namespace IFCConverter.Importer
             _importDataContainer = importDataContainer;
             _nodeRegistry = new StartNodeRegistry(_comparer);
 
-            _modelAugmenters.Add(new FittingsSegmentsAugmenter(_comparer));
+            _modelAugmenters.Add(new FittingsSegmentsModelAugmenter());
+            _modelAugmenters.Add(new AttachmentPipeSplitModelAugmenter());
         }
 
         public void Convert(IStartDocument startDocument)

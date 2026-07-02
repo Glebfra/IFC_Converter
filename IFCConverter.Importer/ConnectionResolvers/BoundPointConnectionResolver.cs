@@ -6,7 +6,7 @@ using Utils;
 
 namespace IFCConverter.Importer.ConnectionResolvers
 {
-    internal sealed class BoundPointConnectionResolver
+    internal sealed class BoundPointConnectionResolver : IConnectionResolver
     {
         private const double Tolerance = 1e-3;
         private readonly VectorComparer _comparer = new(Tolerance);
