@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -23,7 +24,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
 
         public IReadOnlyCollection<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
-            ProxyEntityAttribute attribute = proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
+            ProxyEntityAttribute attribute = proxy.GetProxyEntityAttribute();
             IBoundaryResolver? resolver = attribute.GetBoundaryResolver();
             if (resolver == null)
                 throw new InvalidOperationException($"Boundary resolver not configured for {proxy.GetType().Name}");

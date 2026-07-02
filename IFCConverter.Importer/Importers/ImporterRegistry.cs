@@ -36,7 +36,7 @@ namespace IFCConverter.Importer.Importers
             if (match == null)
                 throw new InvalidOperationException("No matching importer found.");
 
-            return (IImporter)Activator.CreateInstance(match.ImporterType)!;
+            return ParameterlessConstructorRegistry<IImporter>.Create(match.ImporterType);
         }
 
         private void RegisterAll()
@@ -47,11 +47,7 @@ namespace IFCConverter.Importer.Importers
                 IfcImporterAttribute attribute = runtimeType.GetCustomAttribute<IfcImporterAttribute>();
                 if (!typeof(IImporterFilter).IsAssignableFrom(attribute.Filter))
                     continue;
-
-                IImporterFilter importerFilter =
-                    (IImporterFilter)Activator.CreateInstance(attribute.Filter, new object[]
-                    {
-                    });
+                IImporterFilter importerFilter = ParameterlessConstructorRegistry<IImporterFilter>.Create(attribute.Filter);
                 _registrations.Add(new ImporterRegistration(runtimeType, importerFilter, attribute.Priority));
             }
         }

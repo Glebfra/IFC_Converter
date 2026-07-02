@@ -1,6 +1,7 @@
 ﻿using System;
 using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
+using Utils;
 
 namespace IFCConverter.Importer.Attributes
 {
@@ -22,14 +23,14 @@ namespace IFCConverter.Importer.Attributes
 
         public IConnectionResolver GetConnectionResolver()
         {
-            return (IConnectionResolver)Activator.CreateInstance(ConnectionResolverType);
+            return ParameterlessConstructorRegistry<IConnectionResolver>.Create(ConnectionResolverType);
         }
 
         public IBoundaryResolver? GetBoundaryResolver()
         {
             if (BoundaryResolverType == null)
                 return null;
-            return (IBoundaryResolver)Activator.CreateInstance(BoundaryResolverType);
+            return ParameterlessConstructorRegistry<IBoundaryResolver>.Create(BoundaryResolverType);
         }
     }
 }

@@ -147,6 +147,7 @@
             <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
         <Compile Include="Attributes\ProxyEntityAttribute.cs"/>
+        <Compile Include="Attributes\TopologyEntityAttribute.cs" />
         <Compile Include="BoundaryResolvers\AttachmentBoundaryResolver.cs"/>
         <Compile Include="BoundaryResolvers\BendBoundaryResolver.cs"/>
         <Compile Include="BoundaryResolvers\BoundaryResolver.cs"/>
@@ -158,6 +159,8 @@
         <Compile Include="ConnectionResolvers\ConnectionResolver.cs"/>
         <Compile Include="ConnectionResolvers\PointInSegmentConnectionResolver.cs"/>
         <Compile Include="ConnectionResolvers\TopologyConnectionResolver.cs"/>
+        <Compile Include="ConstructorRegistry.cs" />
+        <Compile Include="Extensions\AttributeExtensions.cs" />
         <Compile Include="Extensions\IfcRootExtensions.cs"/>
         <Compile Include="Graph\ConnectionNode.cs"/>
         <Compile Include="Graph\TopologyGraph.cs"/>
@@ -197,6 +200,7 @@
         <Compile Include="Interfaces\ITopologyEntity.cs"/>
         <Compile Include="Interfaces\ITopologyModel.cs"/>
         <Compile Include="Interfaces\ITopologyNodeEntity.cs"/>
+        <Compile Include="Interfaces\ITopologySegmentAugmenter.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="PropertySets\AbstractPropertySet.cs"/>
         <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs"/>
@@ -214,8 +218,8 @@
         <Compile Include="Proxies\ReducerProxy.cs"/>
         <Compile Include="Proxies\TeeProxy.cs"/>
         <Compile Include="Proxies\ValveProxy.cs"/>
-        <Compile Include="TopologyAugmenter\AttachmentPipeSplitModelAugmenter.cs"/>
-        <Compile Include="TopologyAugmenter\FittingsSegmentsModelAugmenter.cs"/>
+        <Compile Include="TopologyModelAugmenter\AttachmentPipeSplitModelAugmenter.cs" />
+        <Compile Include="TopologyModelAugmenter\FittingsSegmentsModelAugmenter.cs" />
         <Compile Include="Topology\AttachmentTopologyEntity.cs"/>
         <Compile Include="Topology\BendTopologyEntity.cs"/>
         <Compile Include="Topology\PcomTopologyEntity.cs"/>

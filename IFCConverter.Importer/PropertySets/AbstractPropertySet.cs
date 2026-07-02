@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
+using Utils;
 
 namespace IFCConverter.Importer.PropertySets
 {
@@ -45,7 +46,7 @@ namespace IFCConverter.Importer.PropertySets
                 object convertedValue;
                 if (typeConverterType != null)
                 {
-                    IPropertyConverter converter = (IPropertyConverter)Activator.CreateInstance(typeConverterType);
+                    IPropertyConverter converter = ParameterlessConstructorRegistry<IPropertyConverter>.Create(typeConverterType);
                     convertedValue = converter.Read(value);
                 }
                 else

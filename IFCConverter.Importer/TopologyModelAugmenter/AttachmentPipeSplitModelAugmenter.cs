@@ -4,7 +4,7 @@ using IFCConverter.Importer.Proxies;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace IFCConverter.Importer.TopologyAugmenter
+namespace IFCConverter.Importer.TopologyModelAugmenter
 {
     internal sealed class AttachmentPipeSplitModelAugmenter : ITopologyModelAugmenter
     {

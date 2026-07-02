@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 
 namespace IFCConverter.Importer.ConnectionResolvers
@@ -19,7 +20,7 @@ namespace IFCConverter.Importer.ConnectionResolvers
         [Pure]
         public IEnumerable<IBoundaryProxy> GetConnectedEntities(IBoundaryProxy proxy, IEnumerable<IBoundaryProxy> allProxies)
         {
-            ProxyEntityAttribute attribute = proxy.Proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
+            ProxyEntityAttribute attribute = proxy.Proxy.GetProxyEntityAttribute();
             IConnectionResolver connectionResolver = attribute.GetConnectionResolver();
             return connectionResolver.GetConnectedEntities(proxy, allProxies);
         }

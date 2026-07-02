@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.ConnectionResolvers;
+using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
 using MathNet.Numerics.LinearAlgebra;
@@ -244,9 +244,9 @@ namespace IFCConverter.Importer.Topology
                 };
             }
 
-            ProxyEntityAttribute attribute = boundaryProxy.Proxy.GetType().GetCustomAttribute<ProxyEntityAttribute>();
+            ProxyEntityAttribute attribute = boundaryProxy.Proxy.GetProxyEntityAttribute();
             Type topologyType = attribute.TopologyType;
-            return (ITopologyEntity)Activator.CreateInstance(topologyType, boundaryProxy, nodes);
+            return ConstructorRegistry.CreateTopologyEntity(topologyType, boundaryProxy, nodes);
         }
 
         private void RecalculateConnections()

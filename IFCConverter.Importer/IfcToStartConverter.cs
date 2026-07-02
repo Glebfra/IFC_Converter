@@ -4,7 +4,7 @@ using System.Reflection;
 using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
-using IFCConverter.Importer.TopologyAugmenter;
+using IFCConverter.Importer.TopologyModelAugmenter;
 using IFCConverter.Utils;
 using MathNet.Numerics.LinearAlgebra;
 using Start.API;

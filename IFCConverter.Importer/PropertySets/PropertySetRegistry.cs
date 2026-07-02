@@ -36,7 +36,7 @@ namespace IFCConverter.Importer.PropertySets
             if (propertySetType == null)
                 throw new Exception($"Property set with name {propertySetName} is not registered");
 
-            T propertySet = (T)Activator.CreateInstance(propertySetType);
+            T propertySet = ParameterlessConstructorRegistry<T>.Create(propertySetType);
             propertySet.SetDictionary(ifcPropertySet.ToDictionary());
             return propertySet;
         }
