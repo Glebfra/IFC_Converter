@@ -31,8 +31,8 @@ namespace IFCConverter.Importer
         {
             _importDataContainer = importDataContainer;
             _nodeRegistry = new StartNodeRegistry(_comparer);
-
-            _modelAugmenters.Add(new FittingsSegmentsModelAugmenter());
+            
+            _modelAugmenters.Add(new FittingsConnectionSegmentsModelAugmenter());
             _modelAugmenters.Add(new AttachmentPipeSplitModelAugmenter());
         }
 
@@ -43,10 +43,7 @@ namespace IFCConverter.Importer
             IEnumerable<IEntityProxy> proxies = ImportProxies();
 
             ITopologyModel model = TopologyModel.Create(proxies, _comparer);
-            foreach (ITopologyModelAugmenter topologyModelAugmenter in _modelAugmenters)
-            {
-                topologyModelAugmenter.Augment(ref model);
-            }
+            _modelAugmenters.ForEach(augmenter => augmenter.Augment(model));
 
             using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {

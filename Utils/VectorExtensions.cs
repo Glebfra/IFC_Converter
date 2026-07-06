@@ -181,6 +181,12 @@ namespace Utils
             return first.Normalize(2).CrossProduct(second.Normalize(2)).L2Norm() < tolerance;
         }
 
+        [Pure]
+        public static bool IsCodirectional(this Vector<double> first, Vector<double> second, double tolerance = 1e-6)
+        {
+            return IsParallel(first, second, tolerance) && first.Normalize(2).DotProduct(second.Normalize(2)) > -tolerance;
+        }
+
         /// <summary>
         ///     Returns true if the two vectors are normal to each other within a specified tolerance. The method normalizes
         ///     both vectors and calculates their dot product. If the dot product is less than the given tolerance, it

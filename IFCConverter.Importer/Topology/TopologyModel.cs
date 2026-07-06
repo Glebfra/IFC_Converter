@@ -42,7 +42,6 @@ namespace IFCConverter.Importer.Topology
         {
             _entities = entities.ToList();
             RecalculateConnections();
-            Augment();
         }
 
         /// <summary>
@@ -158,6 +157,48 @@ namespace IFCConverter.Importer.Topology
         }
 
         /// <summary>
+        ///     Removes the specified topology entity from the model.
+        /// </summary>
+        /// <param name="entity">
+        ///     The topology entity to remove.
+        /// </param>
+        /// <remarks>
+        ///     Entity connectivity is updated after the operation.
+        /// </remarks>
+        public void RemoveEntity(ITopologyEntity entity)
+        {
+            foreach (ITopologyEntity topologyEntity in _entities)
+            {
+                topologyEntity.Disconnect(entity);
+            }
+            _entities.Remove(entity);
+            RecalculateConnections();
+        }
+        
+        /// <summary>
+        ///     Removes the specified topology entities from the model.
+        /// </summary>
+        /// <param name="entities">
+        ///     The topology entities to remove.
+        /// </param>
+        /// <remarks>
+        ///     Entity connectivity is updated after all entities have been removed.
+        /// </remarks>
+        public void RemoveEntities(IEnumerable<ITopologyEntity> entities)
+        {
+            IReadOnlyCollection<ITopologyEntity> entitiesArray = entities as IReadOnlyCollection<ITopologyEntity> ?? entities.ToArray();
+            foreach (ITopologyEntity topologyEntity in _entities)
+            {
+                topologyEntity.Disconnect(entitiesArray);
+            }
+            foreach (ITopologyEntity topologyEntity in entitiesArray)
+            {
+                _entities.Remove(topologyEntity);
+            }
+            RecalculateConnections();
+        }
+
+        /// <summary>
         ///     Creates a topology model from a collection of boundary proxies.
         /// </summary>
         /// <param name="boundaryProxies">
@@ -256,14 +297,6 @@ namespace IFCConverter.Importer.Topology
                 IEnumerable<ITopologyEntity> connectedEntities = ConnectionResolver.GetConnectedEntities(topologyEntity, _entities);
                 IEnumerable<ITopologyEntity> notConnectedEntities = connectedEntities.Where(connected => !topologyEntity.Connected.Contains(connected));
                 topologyEntity.Connect(notConnectedEntities);
-            }
-        }
-
-        private void Augment()
-        {
-            foreach (ISegmentAugmentableTopologyEntity segmentAugmentableTopologyEntity in _entities.OfType<ISegmentAugmentableTopologyEntity>())
-            {
-                segmentAugmentableTopologyEntity.Augment();
             }
         }
     }

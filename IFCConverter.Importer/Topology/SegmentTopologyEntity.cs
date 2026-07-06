@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Segments;
@@ -7,8 +8,11 @@ using Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {
+    [TopologyEntity]
     internal class SegmentTopologyEntity : TopologyEntity, ISegmentTopologyEntity
     {
+        public Vector<double> Projection => _resolvedProjection;
+        
         private Vector<double> _resolvedProjection;
 
         private Vector<double> _resolvedStartPosition;

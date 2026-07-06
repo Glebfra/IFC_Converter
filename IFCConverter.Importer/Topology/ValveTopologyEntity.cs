@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IFCConverter.Importer.Attributes;
+using IFCConverter.Importer.FittingSegmentAugmenters;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Fittings;
@@ -8,7 +10,8 @@ using Utils;
 
 namespace IFCConverter.Importer.Topology
 {
-    internal sealed class ValveTopologyEntity : TopologyEntity, ISegmentAugmentableTopologyEntity, IFittingTopologyEntity
+    [TopologyEntity(typeof(ValveTopologySegmentAugmenter))]
+    internal sealed class ValveTopologyEntity : TopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
         private static readonly VectorComparer Comparer = new(DoubleTolerance);
@@ -28,31 +31,6 @@ namespace IFCConverter.Importer.Topology
             StartValveEntity valveEntity = (StartValveEntity)base.ToStartEntity();
             valveEntity.Length.CreateFromSI(_length);
             return valveEntity;
-        }
-
-        public void Augment()
-        {
-            ITopologyNodeEntity valveNode = Nodes.ElementAt(0);
-
-            IEnumerable<SegmentTopologyEntity> segmentTopologyEntities = Connected.OfType<SegmentTopologyEntity>();
-            foreach (SegmentTopologyEntity segmentTopologyEntity in segmentTopologyEntities)
-            {
-                ITopologyNodeEntity segmentStartNode = segmentTopologyEntity.Nodes.ElementAt(0);
-                ITopologyNodeEntity segmentEndNode = segmentTopologyEntity.Nodes.ElementAt(1);
-
-                if (Comparer.NearerThan(segmentStartNode.Position, segmentEndNode.Position, valveNode.Position))
-                {
-                    segmentStartNode = valveNode;
-                }
-                else
-                {
-                    segmentEndNode = valveNode;
-                }
-
-                Vector<double> projection = segmentEndNode.Position - segmentStartNode.Position;
-
-                segmentTopologyEntity.Augment(segmentStartNode, segmentEndNode, projection);
-            }
         }
     }
 }

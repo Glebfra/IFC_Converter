@@ -82,7 +82,8 @@ namespace IFCConverter.Importer.Importers.Aveva
                 length * lengthPower,
                 diameters.Min() * lengthPower,
                 diameters.Max() * lengthPower,
-                (boundPoints[0] - boundPoints[1]).Normalize(2)
+                (boundPoints[0] - boundPoints[1]).Normalize(2),
+                axisDisplacement * lengthPower
             )
             {
                 Name = source.Name

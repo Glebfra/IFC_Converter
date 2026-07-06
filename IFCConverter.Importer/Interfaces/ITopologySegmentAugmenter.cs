@@ -1,7 +1,11 @@
-﻿namespace IFCConverter.Importer.Interfaces
+﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+
+namespace IFCConverter.Importer.Interfaces
 {
-    public interface ITopologySegmentAugmenter
+    internal interface ITopologySegmentAugmenter
     {
-        public void Augment();
+        [Pure]
+        public IEnumerable<ISegmentProxy> Augment(ITopologyEntity entity);
     }
 }

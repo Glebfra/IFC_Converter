@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.TopologyModelAugmenter
 {
     internal sealed class AttachmentPipeSplitModelAugmenter : ITopologyModelAugmenter
     {
-        public void Augment(ref ITopologyModel model)
+        public void Augment(ITopologyModel model)
         {
             foreach (AttachmentTopologyEntity attachmentTopologyEntity in model.Entities.OfType<AttachmentTopologyEntity>().ToArray())
             {

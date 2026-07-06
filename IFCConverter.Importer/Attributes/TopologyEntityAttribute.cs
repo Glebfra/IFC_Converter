@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Interfaces;
 using Utils;
 
@@ -7,19 +8,20 @@ namespace IFCConverter.Importer.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false, Inherited = true)]
     internal sealed class TopologyEntityAttribute : Attribute
     {
-        public readonly Type? TopologySegmentAugmenterType;
+        public readonly Type? SegmentAugmenterType;
 
-        public TopologyEntityAttribute(Type? topologySegmentAugmenterType = null)
+        public TopologyEntityAttribute(Type? segmentAugmenterType = null)
         {
-            TopologySegmentAugmenterType = topologySegmentAugmenterType;
+            SegmentAugmenterType = segmentAugmenterType;
         }
 
-        public ITopologySegmentAugmenter? GetTopologySegmentAugmenter()
+        [Pure]
+        public ITopologySegmentAugmenter? GetSegmentAugmenter()
         {
-            if (TopologySegmentAugmenterType == null)
+            if (SegmentAugmenterType == null)
                 return null;
 
-            return ParameterlessConstructorRegistry<ITopologySegmentAugmenter>.Create(TopologySegmentAugmenterType);
+            return ParameterlessConstructorRegistry<ITopologySegmentAugmenter>.Create(SegmentAugmenterType);
         }
     }
 }

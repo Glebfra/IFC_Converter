@@ -9,7 +9,7 @@ namespace IFCConverter.Importer.TopologyModelAugmenter
 {
     internal sealed class FittingsSegmentsModelAugmenter : ITopologyModelAugmenter
     {
-        public void Augment(ref ITopologyModel model)
+        public void Augment(ITopologyModel model)
         {
             foreach (IFittingTopologyEntity fittingTopologyEntity in model.Entities.OfType<IFittingTopologyEntity>().ToArray())
             {

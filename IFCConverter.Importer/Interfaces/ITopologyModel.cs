@@ -80,5 +80,27 @@ namespace IFCConverter.Importer.Interfaces
         ///     Connectivity is recalculated after all entities have been added.
         /// </remarks>
         public void AddEntities(IEnumerable<ITopologyEntity> entities);
+
+        /// <summary>
+        ///     Removes the specified topology entity from the model.
+        /// </summary>
+        /// <param name="entity">
+        ///     The topology entity to remove.
+        /// </param>
+        /// <remarks>
+        ///     Entity connectivity is updated after the operation.
+        /// </remarks>
+        public void RemoveEntity(ITopologyEntity entity);
+        
+        /// <summary>
+        ///     Removes the specified topology entities from the model.
+        /// </summary>
+        /// <param name="entities">
+        ///     The topology entities to remove.
+        /// </param>
+        /// <remarks>
+        ///     Entity connectivity is updated after all entities have been removed.
+        /// </remarks>
+        public void RemoveEntities(IEnumerable<ITopologyEntity> entities);
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
 using Start.Entities.Segments;
 using Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {
+    [TopologyEntity]
     internal sealed class PcomTopologyEntity : TopologyEntity, ISegmentTopologyEntity
     {
         public PcomTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes)

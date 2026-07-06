@@ -2,6 +2,6 @@
 {
     internal interface ITopologyModelAugmenter
     {
-        public void Augment(ref ITopologyModel model);
+        public void Augment(ITopologyModel model);
     }
 }

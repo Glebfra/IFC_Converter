@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
 using Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {
+    [TopologyEntity]
     internal class TopologyEntity : ITopologyEntity
     {
         private readonly List<ITopologyEntity> _connected = new();
@@ -30,6 +32,19 @@ namespace IFCConverter.Importer.Topology
         public void Connect(IEnumerable<ITopologyEntity> topologyEntities)
         {
             _connected.AddRange(topologyEntities);
+        }
+
+        public void Disconnect(ITopologyEntity topologyEntity)
+        {
+            _connected.Remove(topologyEntity);
+        }
+
+        public void Disconnect(IEnumerable<ITopologyEntity> topologyEntities)
+        {
+            foreach (ITopologyEntity topologyEntity in topologyEntities)
+            {
+                _connected.Remove(topologyEntity);
+            }
         }
 
         [Pure]
