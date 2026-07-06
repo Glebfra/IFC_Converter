@@ -1,36 +1,69 @@
-﻿using Newtonsoft.Json;
+﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using Newtonsoft.Json;
 using Start.API;
-using Start.Entities.Abstract;
+using Start.Attributes;
+using Start.Converters;
+using Start.Interfaces;
 using Start.StartProperties;
 
 namespace Start.Entities
 {
-    public class StartNodeEntity : StartAbstractEntity
+    /// <summary>
+    ///     Represents a node entity in the Start framework.
+    /// </summary>
+    [StartElement(StartElementTypeEnum.NODE)]
+    public sealed class StartNodeEntity : StartAbstractEntity, IStartNodeEntity
     {
-        [JsonIgnore]
-        [StartIgnore]
-        public override StartElementType Type { get; set; } = StartElementType.NODE;
-        
-        [JsonProperty(StartPropertyName.AdditionalWeightLoad)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<MassProperty, double>))]
-        public MassProperty AdditionalLoadFromWeight { get; set; } = MassProperty.Zero;
+        /// <summary>
+        ///     Gets or sets the name of the node.
+        /// </summary>
+        [JsonProperty(StartPropertyName.NodeName)]
+        public override string Name { get; set; } = string.Empty;
 
-        [JsonProperty(StartPropertyName.PipeName)]
-        public string Name { get; set; } = string.Empty;
-
+        /// <summary>
+        ///     Gets or sets the description of the node.
+        /// </summary>
         [JsonProperty(StartPropertyName.Description)]
         public string Description { get; set; } = string.Empty;
 
+        /// <summary>
+        ///     Gets or sets the X-coordinate of the node.
+        /// </summary>
         [JsonProperty(StartPropertyName.XCoord)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty XCoord { get; set; } = LengthProperty.Zero;
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> XCoord { get; set; } = new LengthValueProperty<double>();
 
+        /// <summary>
+        ///     Gets or sets the Y-coordinate of the node.
+        /// </summary>
         [JsonProperty(StartPropertyName.YCoord)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty YCoord { get; set; } = LengthProperty.Zero;
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> YCoord { get; set; } = new LengthValueProperty<double>();
 
+        /// <summary>
+        ///     Gets or sets the Z-coordinate of the node.
+        /// </summary>
         [JsonProperty(StartPropertyName.ZCoord)]
-        [JsonConverter(typeof(StartPropertyJsonConverter<LengthProperty, double>))]
-        public LengthProperty ZCoord { get; set; } = LengthProperty.Zero;
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> ZCoord { get; set; } = new LengthValueProperty<double>();
+
+        /// <summary>
+        ///     Gets and sets the position of the node as a 3D vector.
+        /// </summary>
+        [JsonIgnore]
+        public Vector<double> Position
+        {
+            get => new DenseVector(new[]
+            {
+                XCoord.SIProperty, YCoord.SIProperty, ZCoord.SIProperty
+            });
+            set
+            {
+                XCoord.CreateFromSI(value[0]);
+                YCoord.CreateFromSI(value[1]);
+                ZCoord.CreateFromSI(value[2]);
+            }
+        }
     }
 }

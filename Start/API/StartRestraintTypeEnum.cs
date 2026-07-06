@@ -1,5 +1,8 @@
 ﻿namespace Start.API
 {
+    /// <summary>
+    ///     Represents the enumeration for restraint types in the Start system.
+    /// </summary>
     public enum StartRestraintTypeEnum
     {
         ELASTIC = 51,

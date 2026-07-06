@@ -1,5 +1,8 @@
 ﻿namespace Start.API
 {
+    /// <summary>
+    ///     Represents the enumeration for manufacturing technologies in the Start system.
+    /// </summary>
     public enum StartManufacturingTechnologyEnum
     {
         ELECTRIC_WELDED = 0,

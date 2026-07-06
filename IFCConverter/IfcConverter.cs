@@ -3,9 +3,13 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using IFCConverter.GUI;
-using IFCConverter.Tools;
+using IFCConverter.Exporter;
+using IFCConverter.GUI.GUI;
+using IFCConverter.Importer;
+using IFCConverter.Utils;
 using Start.API;
+using Start.Interfaces;
+using Utils;
 
 namespace IFCConverter
 {
@@ -20,7 +24,7 @@ namespace IFCConverter
 
             return 1;
         }
-        
+
         [STAThread]
         public int Export(object startDocumentObject, int languageId)
         {
@@ -28,34 +32,31 @@ namespace IFCConverter
             {
                 Application.EnableVisualStyles();
                 Logger logger = Logger.GetInstance();
-            
+
                 Localize(languageId);
 
-                StartDocument startDocument = new StartDocument(startDocumentObject);
-                ExportDataContainer exportDataContainer = new ExportDataContainer()
+                StartDocument startDocument = new(startDocumentObject);
+                ExportDataContainer exportDataContainer = new()
                 {
                     InputFilePath = startDocument.GetPathName(),
                     LanguageId = languageId
                 };
 
                 DialogResult dialogResult;
-                using (ExportWindowForm exportWindowForm = new ExportWindowForm(exportDataContainer))
+                using (ExportWindowForm exportWindowForm = new(exportDataContainer))
                 {
                     dialogResult = exportWindowForm.ShowDialog();
                 }
 
-                if (dialogResult == DialogResult.Cancel)
-                {
-                    return (int)ConversionResult.Canceled;
-                }
-                
+                if (dialogResult == DialogResult.Cancel) return (int)ConversionResult.Canceled;
+
                 try
                 {
-                    logger.Info($"Converting start at {DateTime.Now}");
-                    IfcGenerator ifcGenerator = new IfcGenerator(exportDataContainer);
-                    ifcGenerator.Convert(startDocument);
-                    logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                    
+                    logger.System($"Converting started at {DateTime.Now}");
+                    StartToIfcConverter converter = new(exportDataContainer);
+                    converter.Convert(startDocument);
+                    logger.System($"Converting ended at {DateTime.Now}");
+
                     #if DEBUG
                     logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
                     #else
@@ -68,7 +69,7 @@ namespace IFCConverter
                         logger.Flush();
                     }
                     #endif
-                    
+
                     return (int)ConversionResult.Success;
                 }
                 catch (Exception ex)
@@ -77,8 +78,8 @@ namespace IFCConverter
                     logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
                     return (int)ConversionResult.Fail;
                 }
-            } 
-            catch (Exception ex)
+            }
+            catch (Exception)
             {
                 return (int)ConversionResult.Fail;
             }
@@ -91,19 +92,17 @@ namespace IFCConverter
             {
                 Localize(languageId);
 
-                ImportDataContainer importDataContainer = new ImportDataContainer();
+                ImportDataContainer importDataContainer = new();
                 DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
                 if (dialogResult == DialogResult.Cancel)
                     return (int)ConversionResult.Canceled;
-                    
-                using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
+
+                using (StartAutoServer autoServer = new(startAutoServerObject))
                 {
                     autoServer.SaveToFile(startTempFileName);
-                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName))
+                    using (IStartDocument startDocument = autoServer.LoadStartDocument(0x2, startTempFileName))
                     {
-                        int result = Import(startDocument, importDataContainer);
-
-                        return result;
+                        return Import(startDocument, importDataContainer);
                     }
                 }
             }
@@ -114,22 +113,26 @@ namespace IFCConverter
         }
 
         [STAThread]
-        public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName, string ifcFileName)
+        public int ImportFromFileOpen(object startAutoServerObject, int languageId, string startTempFileName,
+            string ifcFileName)
         {
             try
             {
                 Localize(languageId);
 
-                ImportDataContainer importDataContainer = new ImportDataContainer() { InputFilePath = ifcFileName };
+                ImportDataContainer importDataContainer = new()
+                {
+                    InputFilePath = ifcFileName
+                };
                 DialogResult dialogResult = ShowImportWindow(ref importDataContainer);
                 if (dialogResult == DialogResult.Cancel)
                     return (int)ConversionResult.Canceled;
-                
-                using (StartAutoServer autoServer = new StartAutoServer(startAutoServerObject))
+
+                using (StartAutoServer autoServer = new(startAutoServerObject))
                 {
-                    using (StartDocument startDocument = autoServer.LoadStartDocument(0x4, startTempFileName))
+                    using (IStartDocument startDocument = autoServer.LoadStartDocument(0x4, startTempFileName))
                     {
-                        return Import(autoServer, startDocument, importDataContainer, startTempFileName);
+                        return Import(startDocument, importDataContainer);
                     }
                 }
             }
@@ -143,58 +146,24 @@ namespace IFCConverter
         private DialogResult ShowImportWindow(ref ImportDataContainer importDataContainer)
         {
             Application.EnableVisualStyles();
-            
-            using (ImportWindowForm importWindowForm = new ImportWindowForm(importDataContainer))
+
+            using (ImportWindowForm importWindowForm = new(importDataContainer))
             {
                 return importWindowForm.ShowDialog();
             }
         }
 
-        private int Import(StartAutoServer autoServer, StartDocument startDocument, ImportDataContainer importDataContainer, string saveAsStartTempFileName)
+        private int Import(IStartDocument startDocument, ImportDataContainer importDataContainer)
         {
             Logger logger = Logger.GetInstance();
-            
+
             try
             {
                 logger.Info($"Converting start at {DateTime.Now}");
-                StartGenerator startGenerator = new StartGenerator(importDataContainer);
-                startGenerator.Convert(autoServer, startDocument, saveAsStartTempFileName);
-                logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                
-                #if DEBUG
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                #else
-                if (logger.HasErrors())
-                {
-                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                }
-                else
-                {
-                    logger.Flush();
-                }
-                #endif
-                
-                return (int)ConversionResult.Success;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.ToString());
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                return (int)ConversionResult.Fail;
-            }
-        }
-        
-        private int Import(StartDocument startDocument, ImportDataContainer importDataContainer)
-        {
-            Logger logger = Logger.GetInstance();
-            
-            try
-            {
-                logger.Info($"Converting start at {DateTime.Now}");
-                StartGenerator startGenerator = new StartGenerator(importDataContainer);
+                IfcToStartConverter startGenerator = new(importDataContainer);
                 startGenerator.Convert(startDocument);
                 logger.Info($"Convert is successfully ended at {DateTime.Now}");
-                
+
                 #if DEBUG
                 logger.SaveAs(importDataContainer.InputFilePath + ".log");
                 #else
@@ -207,7 +176,7 @@ namespace IFCConverter
                     logger.Flush();
                 }
                 #endif
-                    
+
                 return (int)ConversionResult.Success;
             }
             catch (Exception e)
@@ -220,7 +189,7 @@ namespace IFCConverter
 
         private void Localize(int languageId)
         {
-            CultureInfo ci = new CultureInfo(languageId);
+            CultureInfo ci = new(languageId);
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
         }

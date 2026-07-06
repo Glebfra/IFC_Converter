@@ -1,11 +1,22 @@
 ﻿using Newtonsoft.Json;
 using Start.API;
-using Start.Entities.Abstract;
+using Start.Attributes;
+using Start.Interfaces;
 
 namespace Start.Entities.Segments
 {
-    public class StartRigidElementEntity : StartAbstractSegmentEntity
+    /// <summary>
+    ///     Represents a rigid element entity in the Start framework.
+    ///     Inherits from <see cref="StartAbstractSegmentUndefinedEntity" /> and implements the
+    ///     <see cref="IStartMaterializedEntity" /> interface.
+    /// </summary>
+    [StartElement(StartElementTypeEnum.RIGID_ELEMENT)]
+    public sealed class StartRigidElementEntity : StartAbstractSegmentUndefinedEntity,
+        IStartMaterializedEntity
     {
+        /// <summary>
+        ///     Gets or sets the name of the material associated with the rigid element.
+        /// </summary>
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; } = string.Empty;
     }

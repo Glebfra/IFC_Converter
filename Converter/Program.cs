@@ -15,9 +15,9 @@ namespace Converter
             string ctpFilePath = convertArguments.CtpFilePath ?? string.Empty;
             string ifcFilePath = convertArguments.IfcFilePath ?? string.Empty;
 
-            using (StartAutoServer autoServer = new StartAutoServer())
+            using (StartAutoServer autoServer = new())
             {
-                IfcConverter converter = new IfcConverter();
+                IfcConverter converter = new();
 
                 int result = default;
                 switch (convertArguments.ConvertType)
@@ -25,7 +25,7 @@ namespace Converter
                     case ConvertTypeEnum.STARTtoIFC:
                     {
                         object? startDocument = autoServer.LoadStartDocumentRaw(0x4, convertArguments.CtpFilePath!);
-                        if (startDocument == null) 
+                        if (startDocument == null)
                             throw new NullReferenceException("Object ref is null");
                         result = converter.Export(startDocument, 1049);
                         break;
@@ -44,7 +44,7 @@ namespace Converter
 
         private static ConvertArguments GetConvertArguments(string[] args)
         {
-            ConvertArguments convertArguments = new ConvertArguments();
+            ConvertArguments convertArguments = new();
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == ConvertArguments.ConvertTypeArgument)
@@ -59,13 +59,13 @@ namespace Converter
                     i++;
                 }
             }
-            
+
             convertArguments.ConvertType ??= GetConvertType();
             convertArguments.CtpFilePath ??= GetCtpFilePath();
 
             return convertArguments;
         }
-        
+
         private static ConvertTypeEnum GetConvertType()
         {
             // ReSharper disable once LocalizableElement
@@ -109,14 +109,14 @@ namespace Converter
                     Console.WriteLine("Input file should be .ctp formatted");
                     continue;
                 }
-                
+
                 if (!File.Exists(ctpFilePath))
                 {
                     // ReSharper disable once LocalizableElement
                     Console.WriteLine("File does not exist");
                     continue;
                 }
-                
+
                 break;
             }
 
