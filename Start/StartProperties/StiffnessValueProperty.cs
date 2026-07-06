@@ -3,7 +3,7 @@ using Utils;
 
 namespace Start.StartProperties
 {
-    public class StiffnessValueProperty<T> : StartValueAbstractProperty<T> 
+    public class StiffnessValueProperty<T> : StartValueAbstractProperty<T>
         where T : struct, IComparable<T>
     {
         public override double StartToSIFactor => MathExtensions.MmToM;

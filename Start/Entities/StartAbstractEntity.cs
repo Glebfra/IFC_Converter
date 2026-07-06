@@ -63,8 +63,8 @@ namespace Start.Entities
                     continue;
 
                 object? value = propertyInfo.GetValue(obj);
-                string newPropertyName = propertyName != null 
-                    ? $"{propertyName}_{propertyInfo.Name}" 
+                string newPropertyName = propertyName != null
+                    ? $"{propertyName}_{propertyInfo.Name}"
                     : propertyInfo.Name;
                 switch (value)
                 {

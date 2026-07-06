@@ -38,14 +38,18 @@ namespace Start.API
     ///         and calculates spatial positions.
     ///     </para>
     /// </remarks>
-    public class StartProject : IStartProject, IDisposable
+    public class StartProject : IStartProject
     {
         private static readonly Logger _logger = Logger.GetInstance();
 
         private static readonly Dictionary<StartElementTypeEnum, Type> _startEntityTypesByElementType =
             AttributeFinder.GetClassesWithAttribute<StartElementAttribute>().SelectMany(type =>
                 type.GetCustomAttributes<StartElementAttribute>()
-                    .Select(attr => new { TypeEnum = attr.Type, Type = type })
+                    .Select(attr => new
+                    {
+                        TypeEnum = attr.Type,
+                        Type = type
+                    })
             ).ToDictionary(x => x.TypeEnum, x => x.Type);
 
         private readonly IStartAutoServer? _autoServer;
@@ -71,7 +75,10 @@ namespace Start.API
         /// </summary>
         public void OnImportFinish()
         {
-            _document?.SetViewOfModel(new[] { 1, 3 });
+            _document?.SetViewOfModel(new[]
+            {
+                1, 3
+            });
             _document?.DrawViewAll();
             _document?.DrawFitAll();
             _dataArray.DeleteElement(0);
@@ -100,7 +107,7 @@ namespace Start.API
         /// <param name="type">Element type filter.</param>
         /// <returns>Connected entity.</returns>
         [Pure]
-        public IStartBaseRoot GetConnEntity(StartBaseRoot entity, StartElementTypeEnum type)
+        public IStartBaseRoot GetConnEntity(IStartBaseRoot entity, StartElementTypeEnum type)
         {
             return entity.GetConnElemOnType(type, 0);
         }
@@ -129,6 +136,16 @@ namespace Start.API
         public int GetNumberElements(StartElementTypeEnum minType, StartElementTypeEnum maxType)
         {
             return _dataArray.GetNumberElements(minType, maxType);
+        }
+
+        public StartEntityProxy AddEntity(IStartEntity entity)
+        {
+            string entityJson = JsonConvert.SerializeObject(entity);
+            StartElementTypeEnum startElementType = entity.GetElementType();
+            IStartBaseRoot startBaseRoot = AddElement(startElementType, out int index);
+            startBaseRoot.SetDataJson(0, entityJson);
+
+            return new StartEntityProxy(startBaseRoot, index);
         }
 
         /// <summary>
@@ -193,7 +210,7 @@ namespace Start.API
         /// <param name="document">Loaded START document.</param>
         /// <returns>Initialized <see cref="StartProject" /> instance.</returns>
         [Pure]
-        public static IStartProject OpenFromDocument(StartDocument document)
+        public static IStartProject OpenFromDocument(IStartDocument document)
         {
             IStartBaseRootDataArray baseRootDataArray = document.GetDataArrayDispatch();
             return new StartProject(null, document, baseRootDataArray);
@@ -206,7 +223,7 @@ namespace Start.API
         /// <param name="startDocument">Associated START document.</param>
         /// <returns>Initialized <see cref="StartProject" /> instance.</returns>
         [Pure]
-        public static IStartProject OpenFromAutoServer(StartAutoServer autoServer, StartDocument startDocument)
+        public static IStartProject OpenFromAutoServer(IStartAutoServer autoServer, IStartDocument startDocument)
         {
             IStartBaseRootDataArray baseRootDataArray = autoServer.GetDataArrayDispatch();
             return new StartProject(autoServer, startDocument, baseRootDataArray);

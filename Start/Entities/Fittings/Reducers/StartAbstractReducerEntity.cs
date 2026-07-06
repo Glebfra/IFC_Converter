@@ -18,6 +18,10 @@ namespace Start.Entities.Fittings
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> LengthOfConicalPart { get; set; } = new LengthValueProperty<double>();
 
+        [JsonProperty(StartPropertyName.ReducerFullLength)]
+        [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
+        public IStartValueProperty<double> FullLength { get; set; } = new LengthValueProperty<double>();
+
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> ThicknessAtMaxDiameterPoint { get; set; } =
@@ -71,13 +75,15 @@ namespace Start.Entities.Fittings
         [StartIgnore]
         public IEnumerable<Vector<double>> Points => new[]
         {
-            SegmentWithMinDiameter.GetNearestPosition(Position),
-            SegmentWithMaxDiameter.GetNearestPosition(Position)
+            SegmentWithMinDiameter.GetNearestPosition(Position), SegmentWithMaxDiameter.GetNearestPosition(Position)
         };
 
         [JsonIgnore]
         [StartIgnore]
-        public IEnumerable<double> Diameters => new[] { MinDiameter.SIProperty, MaxDiameter.SIProperty };
+        public IEnumerable<double> Diameters => new[]
+        {
+            MinDiameter.SIProperty, MaxDiameter.SIProperty
+        };
 
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; } = string.Empty;

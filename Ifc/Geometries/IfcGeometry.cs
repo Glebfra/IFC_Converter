@@ -18,7 +18,10 @@ namespace Ifc.Geometries
     {
         public IfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext? representationContext = null)
         {
-            GeometryBuilders = new[] { geometryBuilder };
+            GeometryBuilders = new[]
+            {
+                geometryBuilder
+            };
             RepresentationContext = representationContext;
         }
 

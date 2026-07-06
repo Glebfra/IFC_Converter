@@ -39,10 +39,19 @@ namespace Start.API
         public object AddElement(StartElementTypeEnum type, out int index)
         {
             object element = new();
-            object[] args = { type, element };
+            object[] args =
+            {
+                type, element
+            };
 
-            ParameterModifier parameterModifier = new(2) { [1] = true };
-            ParameterModifier[] modifiers = { parameterModifier };
+            ParameterModifier parameterModifier = new(2)
+            {
+                [1] = true
+            };
+            ParameterModifier[] modifiers =
+            {
+                parameterModifier
+            };
 
             index = (int)_startBaseRootDataArray.GetType().InvokeMember(
                 "AddElement", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
@@ -62,10 +71,19 @@ namespace Start.API
         public object AddElementAndNode(StartElementTypeEnum type, int nSNode, int nENode, out int index)
         {
             object element = new();
-            object[] args = { type, nSNode, nENode, element };
+            object[] args =
+            {
+                type, nSNode, nENode, element
+            };
 
-            ParameterModifier parameterModifier = new(4) { [3] = true };
-            ParameterModifier[] modifiers = { parameterModifier };
+            ParameterModifier parameterModifier = new(4)
+            {
+                [3] = true
+            };
+            ParameterModifier[] modifiers =
+            {
+                parameterModifier
+            };
 
             index = (int)_startBaseRootDataArray.GetType().InvokeMember(
                 "AddElementAndNode", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null,
@@ -85,10 +103,19 @@ namespace Start.API
         public object AddElementAndNode(StartElementTypeEnum type, int nSNode, out int index)
         {
             object element = new();
-            object[] args = { type, nSNode, element };
+            object[] args =
+            {
+                type, nSNode, element
+            };
 
-            ParameterModifier parameterModifier = new(3) { [2] = true };
-            ParameterModifier[] modifiers = { parameterModifier };
+            ParameterModifier parameterModifier = new(3)
+            {
+                [2] = true
+            };
+            ParameterModifier[] modifiers =
+            {
+                parameterModifier
+            };
 
             index = (int)_startBaseRootDataArray.GetType().InvokeMember(
                 "AddElementAndNode", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null,
@@ -104,7 +131,10 @@ namespace Start.API
         /// <param name="id">The identifier of the element to delete.</param>
         public void DeleteElement(int id)
         {
-            object[] args = { id };
+            object[] args =
+            {
+                id
+            };
             _startBaseRootDataArray.GetType().InvokeMember("DeleteElement", BindingFlags.InvokeMethod, null,
                 _startBaseRootDataArray, args);
         }
@@ -116,7 +146,10 @@ namespace Start.API
         /// <param name="json">The JSON data to set.</param>
         public void SetDataBlockJson(int mode, string json)
         {
-            object[] args = { mode, json };
+            object[] args =
+            {
+                mode, json
+            };
             _startBaseRootDataArray.GetType().InvokeMember(
                 "SetDataBlockJson", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
             );
@@ -132,10 +165,19 @@ namespace Start.API
         public IStartBaseRoot GetElementDispatch(int id, StartElementTypeEnum minType, StartElementTypeEnum maxType)
         {
             object element = new();
-            object[] args = { id, minType, maxType, element };
+            object[] args =
+            {
+                id, minType, maxType, element
+            };
 
-            ParameterModifier parameterModifier = new(4) { [3] = true };
-            ParameterModifier[] modifiers = { parameterModifier };
+            ParameterModifier parameterModifier = new(4)
+            {
+                [3] = true
+            };
+            ParameterModifier[] modifiers =
+            {
+                parameterModifier
+            };
 
             _startBaseRootDataArray.GetType().InvokeMember(
                 "GetElementDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null,
@@ -154,10 +196,19 @@ namespace Start.API
         public IStartBaseRoot GetConnDispatch(int id, int nNumber)
         {
             object element = new();
-            object[] args = { id, nNumber, element };
+            object[] args =
+            {
+                id, nNumber, element
+            };
 
-            ParameterModifier parameterModifier = new(3) { [2] = true };
-            ParameterModifier[] modifiers = { parameterModifier };
+            ParameterModifier parameterModifier = new(3)
+            {
+                [2] = true
+            };
+            ParameterModifier[] modifiers =
+            {
+                parameterModifier
+            };
 
             _startBaseRootDataArray.GetType().InvokeMember(
                 "GetConnDispatch", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args, modifiers, null, null
@@ -175,7 +226,10 @@ namespace Start.API
         public int GetNumberElements(StartElementTypeEnum minType = StartElementTypeEnum.ALL,
             StartElementTypeEnum maxType = StartElementTypeEnum.ALL)
         {
-            object[] args = { minType, maxType };
+            object[] args =
+            {
+                minType, maxType
+            };
             object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
                 "GetNumberElements", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
             );
@@ -192,7 +246,10 @@ namespace Start.API
         /// <returns>The number of connections.</returns>
         public int GetNumberConns(int id, StartElementTypeEnum minType, StartElementTypeEnum maxType)
         {
-            object[] args = { id, minType, maxType };
+            object[] args =
+            {
+                id, minType, maxType
+            };
             object? elementsNumber = _startBaseRootDataArray.GetType().InvokeMember(
                 "GetNumberConns", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
             );
@@ -206,7 +263,10 @@ namespace Start.API
         /// <returns>The title of the element.</returns>
         public string GetTitle(int id)
         {
-            object[] args = { id };
+            object[] args =
+            {
+                id
+            };
             object? title = _startBaseRootDataArray.GetType().InvokeMember(
                 "GetTitle", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
             );
@@ -223,7 +283,10 @@ namespace Start.API
         /// <returns>The JSON data as a string.</returns>
         public string GetDataJson(StartElementTypeEnum minType, StartElementTypeEnum maxType, int mode = 0)
         {
-            object[] args = { mode, minType, maxType };
+            object[] args =
+            {
+                mode, minType, maxType
+            };
             object? dataJson = _startBaseRootDataArray.GetType().InvokeMember(
                 "GetInputDataJsonArray", BindingFlags.InvokeMethod, null, _startBaseRootDataArray, args
             );

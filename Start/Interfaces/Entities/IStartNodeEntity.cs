@@ -16,17 +16,8 @@ namespace Start.Interfaces
     ///         Other entities derive their spatial configuration from connected nodes.
     ///     </para>
     /// </remarks>
-    public interface IStartNodeEntity
+    public interface IStartNodeEntity : IStartEntity
     {
-        /// <summary>
-        ///     Gets or sets the display name of the node.
-        /// </summary>
-        /// <remarks>
-        ///     Used for human-readable identification in UI, logs, and exports.
-        ///     Does not have to be unique unless enforced by higher-level logic.
-        /// </remarks>
-        public string Name { get; set; }
-
         /// <summary>
         ///     Gets or sets the textual description of the node.
         /// </summary>
@@ -93,6 +84,6 @@ namespace Start.Interfaces
         ///         </item>
         ///     </list>
         /// </remarks>
-        public Vector<double> Position { get; }
+        public Vector<double> Position { get; set; }
     }
 }

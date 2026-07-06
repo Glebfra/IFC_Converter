@@ -56,7 +56,10 @@ namespace Start.API
         public object LoadStartDocumentRaw(int mode, string filepath)
         {
             object? document = AutoServer.GetType().InvokeMember(
-                "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, AutoServer, new object[] { mode, filepath, 0 }
+                "LoadCTAPTDocument", BindingFlags.InvokeMethod, null, AutoServer, new object[]
+                {
+                    mode, filepath, 0
+                }
             );
             return document;
         }
@@ -75,7 +78,10 @@ namespace Start.API
         public string GetMaterialJson(int nNorma, string material,
             StartManufacturingTechnologyEnum manufacturingTechnologyEnum, double thickness, int nElem, double temp)
         {
-            object[] args = { nNorma, material, (int)manufacturingTechnologyEnum, thickness, nElem, temp };
+            object[] args =
+            {
+                nNorma, material, (int)manufacturingTechnologyEnum, thickness, nElem, temp
+            };
             object? materialJson = AutoServer.GetType().InvokeMember(
                 "GetMaterialJson", BindingFlags.InvokeMethod, null, AutoServer, args
             );
@@ -90,7 +96,10 @@ namespace Start.API
         /// <param name="filepath">The file path where the state should be saved.</param>
         public void SaveToFile(string filepath)
         {
-            object[] args = { filepath };
+            object[] args =
+            {
+                filepath
+            };
             AutoServer.GetType().InvokeMember("SaveToFile", BindingFlags.InvokeMethod, null, AutoServer, args);
         }
 

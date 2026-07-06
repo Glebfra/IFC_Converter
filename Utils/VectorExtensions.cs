@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -17,43 +19,64 @@ namespace Utils
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> X => new DenseVector(new double[] { 1, 0, 0 });
+        public static Vector<double> X => new DenseVector(new double[]
+        {
+            1, 0, 0
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> Y => new DenseVector(new double[] { 0, 1, 0 });
+        public static Vector<double> Y => new DenseVector(new double[]
+        {
+            0, 1, 0
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> Z => new DenseVector(new double[] { 0, 0, 1 });
+        public static Vector<double> Z => new DenseVector(new double[]
+        {
+            0, 0, 1
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> XY => new DenseVector(new double[] { 1, 1, 0 });
+        public static Vector<double> XY => new DenseVector(new double[]
+        {
+            1, 1, 0
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> YZ => new DenseVector(new double[] { 0, 1, 1 });
+        public static Vector<double> YZ => new DenseVector(new double[]
+        {
+            0, 1, 1
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> XZ => new DenseVector(new double[] { 1, 0, 1 });
+        public static Vector<double> XZ => new DenseVector(new double[]
+        {
+            1, 0, 1
+        });
 
         /// <summary>
         ///     Represents the unit vectors along the X, Y, and Z axes, as well as their combinations. These vectors can be
         ///     used as reference points or directions in 3D space.
         /// </summary>
-        public static Vector<double> XYZ => new DenseVector(new double[] { 1, 1, 1 });
+        public static Vector<double> XYZ => new DenseVector(new double[]
+        {
+            1, 1, 1
+        });
 
         /// <summary>
         ///     Represents the right, up, and forward directions in a 3D coordinate system. These vectors can be used to
@@ -85,7 +108,10 @@ namespace Utils
         [Pure]
         public static Vector<double> ToHomogenous(this Vector<double> vector)
         {
-            return new DenseVector(new[] { vector[0], vector[1], vector[2], 1 });
+            return new DenseVector(new[]
+            {
+                vector[0], vector[1], vector[2], 1
+            });
         }
 
         /// <summary>
@@ -153,6 +179,12 @@ namespace Utils
         public static bool IsParallel(this Vector<double> first, Vector<double> second, double tolerance = 1e-6)
         {
             return first.Normalize(2).CrossProduct(second.Normalize(2)).L2Norm() < tolerance;
+        }
+
+        [Pure]
+        public static bool IsCodirectional(this Vector<double> first, Vector<double> second, double tolerance = 1e-6)
+        {
+            return IsParallel(first, second, tolerance) && first.Normalize(2).DotProduct(second.Normalize(2)) > -tolerance;
         }
 
         /// <summary>
@@ -266,6 +298,20 @@ namespace Utils
         public static string ToRowString(this Vector<double> vector)
         {
             return string.Join(";", vector);
+        }
+
+        [Pure]
+        public static Vector<double> Sum(this IEnumerable<Vector<double>> vectors)
+        {
+            Vector<double> result = Zero;
+            result = vectors.Aggregate(result, (current, vector) => current + vector);
+            return result;
+        }
+
+        [Pure]
+        public static Vector<double> Average(this IEnumerable<Vector<double>> vectors)
+        {
+            return 1.0 / vectors.Count() * vectors.Sum();
         }
     }
 }

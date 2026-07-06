@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Reflection;
 
@@ -13,9 +14,17 @@ namespace Utils
 
     public class Logger
     {
-        public const LoggerLevel LoggerLevel = Utils.LoggerLevel.INFO;
+        public const LoggerLevel LoggerLevel =
+            #if INFO
+            Utils.LoggerLevel.INFO;
+        #elif SYSTEM
+            Utils.LoggerLevel.SYSTEM;
+        #else
+            Utils.LoggerLevel.ERROR;
+        #endif
 
-        private static Logger? _instance;
+        private static readonly Lazy<Logger> _instance = new(() => new Logger());
+
         private int _countErrors;
 
         private Logger()
@@ -26,10 +35,10 @@ namespace Utils
 
         public static Logger GetInstance()
         {
-            return _instance ??= new Logger();
+            return _instance.Value;
         }
 
-        private void Flush()
+        public void Flush()
         {
             Logs = "";
         }
@@ -58,7 +67,7 @@ namespace Utils
         }
 
         [Pure]
-        private bool HasErrors()
+        public bool HasErrors()
         {
             return _countErrors != 0;
         }

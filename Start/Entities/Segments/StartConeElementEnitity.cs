@@ -35,7 +35,10 @@ namespace Start.Entities.Segments
         /// </summary>
         [JsonIgnore]
         [StartIgnore]
-        public IEnumerable<Vector<double>> Points => new[] { StartPosition, EndPosition };
+        public IEnumerable<Vector<double>> Points => new[]
+        {
+            StartPosition, EndPosition
+        };
 
         /// <summary>
         ///     Gets the diameters of the cone element, including the primary diameter and the second diameter.
@@ -43,7 +46,10 @@ namespace Start.Entities.Segments
         /// </summary>
         [JsonIgnore]
         [StartIgnore]
-        public IEnumerable<double> Diameters => new[] { Diameter.SIProperty, SecondDiameter.SIProperty };
+        public IEnumerable<double> Diameters => new[]
+        {
+            Diameter.SIProperty, SecondDiameter.SIProperty
+        };
 
         /// <summary>
         ///     Gets or sets the name of the material associated with the cone element.

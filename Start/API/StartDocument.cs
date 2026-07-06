@@ -36,7 +36,10 @@ namespace Start.API
         public string GetMaterialJson(int nNorma, string material,
             StartManufacturingTechnologyEnum manufacturingTechnologyEnum, double thickness, int nElem, double temp)
         {
-            object[] args = { nNorma, material, (int)manufacturingTechnologyEnum, thickness, nElem, temp };
+            object[] args =
+            {
+                nNorma, material, (int)manufacturingTechnologyEnum, thickness, nElem, temp
+            };
             object? materialJson = _document.GetType().InvokeMember(
                 "GetMaterialJson", BindingFlags.InvokeMethod, null, _document, args
             );

@@ -26,19 +26,31 @@ namespace Start.StartProperties
 
         public abstract double StartToSIFactor { get; }
 
-        public object GetStartProperty() => StartProperty;
+        public object GetStartProperty()
+        {
+            return StartProperty;
+        }
 
-        public object GetSIProperty() => SIProperty;
+        public object GetSIProperty()
+        {
+            return SIProperty;
+        }
 
-        public string GetStartUnit() => StartUnit;
+        public string GetStartUnit()
+        {
+            return StartUnit;
+        }
 
-        public string GetSIUnit() => SIUnit;
+        public string GetSIUnit()
+        {
+            return SIUnit;
+        }
 
         public IStartValueProperty<T> CreateFromStart(T startProperty)
         {
             dynamic property = startProperty;
             StartProperty = startProperty;
-            SIProperty = property * StartToSIFactor;
+            SIProperty = Convert.ChangeType(property * StartToSIFactor, typeof(T));
             return this;
         }
 
@@ -46,7 +58,7 @@ namespace Start.StartProperties
         {
             dynamic property = siProperty;
             SIProperty = siProperty;
-            StartProperty = property / StartToSIFactor;
+            StartProperty = Convert.ChangeType(property / StartToSIFactor, typeof(T));
             return this;
         }
 

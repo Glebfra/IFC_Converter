@@ -38,12 +38,18 @@ namespace Ifc.API
 
         public byte[] ToRGB()
         {
-            return new[] { Red, Green, Blue };
+            return new[]
+            {
+                Red, Green, Blue
+            };
         }
 
         public double[] ToNormal()
         {
-            return new[] { (double)Red / 255, (double)Green / 255, (double)Blue / 255 };
+            return new[]
+            {
+                (double)Red / 255, (double)Green / 255, (double)Blue / 255
+            };
         }
     }
 }

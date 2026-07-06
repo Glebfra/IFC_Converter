@@ -62,7 +62,10 @@ namespace Ifc.Geometries
                     double x = radius * sinTheta * Math.Cos(phi);
                     double y = radius * sinTheta * Math.Sin(phi);
                     double z = radius * cosTheta;
-                    Vector<double> temp = new DenseVector(new[] { x, y, z });
+                    Vector<double> temp = new DenseVector(new[]
+                    {
+                        x, y, z
+                    });
 
                     coordinates[index] = temp - properties.Center;
                 }
@@ -74,14 +77,18 @@ namespace Ifc.Geometries
             {
                 int[] indexes =
                 {
-                    i * _numSegments + j,
-                    i * _numSegments + (j + 1) % _numSegments,
-                    (i + 1) * _numSegments + j,
+                    i * _numSegments + j, i * _numSegments + (j + 1) % _numSegments, (i + 1) * _numSegments + j,
                     (i + 1) * _numSegments + (j + 1) % _numSegments
                 };
 
-                triangleIndices[arrIndex] = new[] { indexes[0] + 1, indexes[1] + 1, indexes[3] + 1 };
-                triangleIndices[arrIndex + 1] = new[] { indexes[0] + 1, indexes[3] + 1, indexes[2] + 1 };
+                triangleIndices[arrIndex] = new[]
+                {
+                    indexes[0] + 1, indexes[1] + 1, indexes[3] + 1
+                };
+                triangleIndices[arrIndex + 1] = new[]
+                {
+                    indexes[0] + 1, indexes[3] + 1, indexes[2] + 1
+                };
 
                 Vector<double> first = coordinates[triangleIndices[arrIndex][1] - 1]
                                        - coordinates[triangleIndices[arrIndex][0] - 1];
@@ -144,7 +151,10 @@ namespace Ifc.Geometries
 
                 double xBot = radius * Math.Cos(angle);
                 double yBot = radius * Math.Sin(angle);
-                Vector<double> temp = new DenseVector(new[] { xBot, yBot, 0 });
+                Vector<double> temp = new DenseVector(new[]
+                {
+                    xBot, yBot, 0
+                });
                 coordinates[i] = botMatrix.ApplyRotation(temp) + botMatrix.GetOffset();
             }
 
@@ -152,9 +162,7 @@ namespace Ifc.Geometries
             {
                 triangleIndices[i] = new[]
                 {
-                    (i + 0) % _numSegments + 1,
-                    (i + 1) % _numSegments + 1,
-                    _numSegments + 1
+                    (i + 0) % _numSegments + 1, (i + 1) % _numSegments + 1, _numSegments + 1
                 };
 
                 Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
@@ -166,9 +174,7 @@ namespace Ifc.Geometries
             {
                 triangleIndices[i] = new[]
                 {
-                    0 + 1,
-                    (i + 1) % _numSegments + 1,
-                    (i + 2) % _numSegments + 1
+                    0 + 1, (i + 1) % _numSegments + 1, (i + 2) % _numSegments + 1
                 };
 
                 Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
@@ -200,12 +206,18 @@ namespace Ifc.Geometries
 
                 double xBot = botRadius * cos;
                 double yBot = botRadius * sin;
-                Vector<double> bottomTemp = new DenseVector(new[] { xBot, yBot, 0 });
+                Vector<double> bottomTemp = new DenseVector(new[]
+                {
+                    xBot, yBot, 0
+                });
                 coordinates[i] = botMatrix.ApplyRotation(bottomTemp) + botMatrix.GetOffset();
 
                 double xTop = topRadius * cos;
                 double yTop = topRadius * sin;
-                Vector<double> topTemp = new DenseVector(new[] { xTop, yTop, 0 });
+                Vector<double> topTemp = new DenseVector(new[]
+                {
+                    xTop, yTop, 0
+                });
                 coordinates[i + 1] = topMatrix.ApplyRotation(topTemp) + topMatrix.GetOffset();
             }
 
@@ -213,15 +225,11 @@ namespace Ifc.Geometries
             {
                 triangleIndices[i] = new[]
                 {
-                    (i + 0) % (_numSegments * 2) + 1,
-                    (i + 2) % (_numSegments * 2) + 1,
-                    (i + 3) % (_numSegments * 2) + 1
+                    (i + 0) % (_numSegments * 2) + 1, (i + 2) % (_numSegments * 2) + 1, (i + 3) % (_numSegments * 2) + 1
                 };
                 triangleIndices[i + 1] = new[]
                 {
-                    (i + 0) % (_numSegments * 2) + 1,
-                    (i + 3) % (_numSegments * 2) + 1,
-                    (i + 1) % (_numSegments * 2) + 1
+                    (i + 0) % (_numSegments * 2) + 1, (i + 3) % (_numSegments * 2) + 1, (i + 1) % (_numSegments * 2) + 1
                 };
 
                 Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
@@ -237,15 +245,11 @@ namespace Ifc.Geometries
             {
                 triangleIndices[i] = new[]
                 {
-                    0 + 1,
-                    (i + 2) % (_numSegments * 2) + 1,
-                    (i + 4) % (_numSegments * 2) + 1
+                    0 + 1, (i + 2) % (_numSegments * 2) + 1, (i + 4) % (_numSegments * 2) + 1
                 };
                 triangleIndices[i + 1] = new[]
                 {
-                    1 + 1,
-                    (i + 3) % (_numSegments * 2) + 1,
-                    (i + 5) % (_numSegments * 2) + 1
+                    1 + 1, (i + 3) % (_numSegments * 2) + 1, (i + 5) % (_numSegments * 2) + 1
                 };
 
                 Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];

@@ -1,195 +1,196 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{856BFB4A-A305-446C-A540-1962BB035D5A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Start</RootNamespace>
-    <AssemblyName>Start</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <LangVersion>default</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="API\ExpansionJointTypeEnum.cs" />
-    <Compile Include="API\StartAutoServer.cs" />
-    <Compile Include="API\StartBaseRoot.cs" />
-    <Compile Include="API\StartBaseRootDataArray.cs" />
-    <Compile Include="API\StartConnectionTypeEnum.cs" />
-    <Compile Include="API\StartDataArrayItem.cs" />
-    <Compile Include="API\StartDocument.cs" />
-    <Compile Include="API\StartElementType.cs" />
-    <Compile Include="API\StartElementTypeEnum.cs" />
-    <Compile Include="API\StartLeakageCheckEnum.cs" />
-    <Compile Include="API\StartManufacturingTechnologyEnum.cs" />
-    <Compile Include="API\StartProject.cs" />
-    <Compile Include="API\StartRestraintAxesTypeEnum.cs" />
-    <Compile Include="API\StartRestraintTypeEnum.cs" />
-    <Compile Include="API\StartPermissibleLoadsEnum.cs" />
-    <Compile Include="API\StartPropertyName.cs" />
-    <Compile Include="Attributes\StartElementAttribute.cs" />
-    <Compile Include="Attributes\StartIgnoreAttribute.cs" />
-    <Compile Include="Converters\JsonStartConverter.cs" />
-    <Compile Include="Entities\Anchors\StartAbstractAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartAbstractConstantSpringAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartAbstractDirectionalGuideAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartAbstractSpringAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartConstantSpringHangerAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartConstantSpringSupportAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartDoubleDirectionalGuideAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartFixedAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartMomentFreeAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartNonstandardAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartRestingSupportAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartRigidHangerAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartSingleDirectionalGuideAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartSpringHangerAnchorEntity.cs" />
-    <Compile Include="Entities\Anchors\StartSpringSupportAnchorEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartAbstractBendEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartElbowEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartLongRadiusPipeBendEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartMilterBendEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartMilterJointEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartPipeBendEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartPreStressedPipeBendEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartSaddleBendEntity.cs" />
-    <Compile Include="Entities\Fittings\Bends\StartWeldedBendEntity.cs" />
-    <Compile Include="Entities\Fittings\Reducers\StartAbstractReducerEntity.cs" />
-    <Compile Include="Entities\Fittings\Reducers\StartReducerConcentricEntity.cs" />
-    <Compile Include="Entities\Fittings\Reducers\StartReducerEccentricEntity.cs" />
-    <Compile Include="Entities\Fittings\StartAbstractFittingEntity.cs" />
-    <Compile Include="Entities\Fittings\StartValveEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartAbstractTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartFabricatedTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartNonStandardTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartStandTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartStubInEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartSweepoletEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartWeldedTeeEntity.cs" />
-    <Compile Include="Entities\Fittings\Tees\StartWeldoletEntity.cs" />
-    <Compile Include="Entities\Joints\StartAbstractExpansionJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartAngularExpansionJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartAxialCouplingJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartAxialExpansionJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartAxialExpansionSlipJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartBallExpansionJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartLateralExpansionJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartNonStandardExpansionJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartTorsionExpansionJointEntity.cs" />
-    <Compile Include="Entities\Joints\StartUniversalExpansionJointEntity.cs" />
-    <Compile Include="Entities\Segments\StartAbstractSegmentEntity.cs" />
-    <Compile Include="Entities\Segments\StartAbstractSegmentUndefinedEntity.cs" />
-    <Compile Include="Entities\Segments\StartConeElementEnitity.cs" />
-    <Compile Include="Entities\Segments\StartCylindricalShellEntity.cs" />
-    <Compile Include="Entities\Segments\StartFlexibleElementEntity.cs" />
-    <Compile Include="Entities\Segments\StartPipeEntity.cs" />
-    <Compile Include="Entities\Segments\StartRigidElementEntity.cs" />
-    <Compile Include="Entities\StartAbstractEntity.cs" />
-    <Compile Include="Entities\StartNodeEntity.cs" />
-    <Compile Include="Entities\StartNonStandardRestraintModule.cs" />
-    <Compile Include="Extensions\StartDataArrayItemExtensions.cs" />
-    <Compile Include="Extensions\StartElementTypeExtensions.cs" />
-    <Compile Include="Extensions\StartEntitiesExtensions.cs" />
-    <Compile Include="Interfaces\API\IStartAutoServer.cs" />
-    <Compile Include="Interfaces\API\IStartBaseRoot.cs" />
-    <Compile Include="Interfaces\API\IStartBaseRootDataArray.cs" />
-    <Compile Include="Interfaces\API\IStartDocument.cs" />
-    <Compile Include="Interfaces\API\IStartProject.cs" />
-    <Compile Include="Interfaces\Entities\IStartAnchorEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartClippableEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartClippingEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartConeEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartFittingEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartMaterializedEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartNodeEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartOneNodeEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartSegmentDiameterUndefinedEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartSegmentEntity.cs" />
-    <Compile Include="Interfaces\Entities\IStartTwoNodeEntity.cs" />
-    <Compile Include="Interfaces\Properties\IStartEnumProperty.cs" />
-    <Compile Include="Interfaces\Properties\IStartExpansionModule.cs" />
-    <Compile Include="Interfaces\Properties\IStartProperty.cs" />
-    <Compile Include="Interfaces\Properties\IStartValueProperty.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartProperties\AngleValueProperty.cs" />
-    <Compile Include="StartProperties\AreaValueProperty.cs" />
-    <Compile Include="StartProperties\EnumProperty.cs" />
-    <Compile Include="StartProperties\FactorValueProperty.cs" />
-    <Compile Include="StartProperties\FlexibilityValueProperty.cs" />
-    <Compile Include="StartProperties\ForceValueProperty.cs" />
-    <Compile Include="StartProperties\LengthValueProperty.cs" />
-    <Compile Include="StartProperties\MassValueProperty.cs" />
-    <Compile Include="StartProperties\MomentValueProperty.cs" />
-    <Compile Include="StartProperties\PressureValueProperty.cs" />
-    <Compile Include="StartProperties\StartValueAbstractProperty.cs" />
-    <Compile Include="StartProperties\StiffnessValueProperty.cs" />
-    <Compile Include="StartProperties\TemperatureValueProperty.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Utils\Utils.csproj">
-      <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
-      <Name>Utils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{856BFB4A-A305-446C-A540-1962BB035D5A}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Start</RootNamespace>
+        <AssemblyName>Start</AssemblyName>
+        <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>none</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="mscorlib"/>
+        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+            <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Numerics"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="API\ExpansionJointTypeEnum.cs"/>
+        <Compile Include="API\StartAutoServer.cs"/>
+        <Compile Include="API\StartBaseRoot.cs"/>
+        <Compile Include="API\StartBaseRootDataArray.cs"/>
+        <Compile Include="API\StartConnectionTypeEnum.cs"/>
+        <Compile Include="API\StartDataArrayItem.cs"/>
+        <Compile Include="API\StartDocument.cs"/>
+        <Compile Include="API\StartEntityProxy.cs"/>
+        <Compile Include="API\StartElementType.cs"/>
+        <Compile Include="API\StartElementTypeEnum.cs"/>
+        <Compile Include="API\StartLeakageCheckEnum.cs"/>
+        <Compile Include="API\StartManufacturingTechnologyEnum.cs"/>
+        <Compile Include="API\StartNodeRegistry.cs"/>
+        <Compile Include="API\StartProject.cs"/>
+        <Compile Include="API\StartRestraintAxesTypeEnum.cs"/>
+        <Compile Include="API\StartRestraintTypeEnum.cs"/>
+        <Compile Include="API\StartPermissibleLoadsEnum.cs"/>
+        <Compile Include="API\StartPropertyName.cs"/>
+        <Compile Include="Attributes\StartElementAttribute.cs"/>
+        <Compile Include="Attributes\StartIgnoreAttribute.cs"/>
+        <Compile Include="Converters\JsonStartConverter.cs"/>
+        <Compile Include="Entities\Anchors\StartAbstractAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartAbstractConstantSpringAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartAbstractDirectionalGuideAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartAbstractSpringAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartConstantSpringHangerAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartConstantSpringSupportAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartDoubleDirectionalGuideAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartFixedAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartMomentFreeAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartNonstandardAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartRestingSupportAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartRigidHangerAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartSingleDirectionalGuideAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartSpringHangerAnchorEntity.cs"/>
+        <Compile Include="Entities\Anchors\StartSpringSupportAnchorEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartAbstractBendEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartElbowEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartLongRadiusPipeBendEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartMilterBendEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartMilterJointEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartPipeBendEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartPreStressedPipeBendEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartSaddleBendEntity.cs"/>
+        <Compile Include="Entities\Fittings\Bends\StartWeldedBendEntity.cs"/>
+        <Compile Include="Entities\Fittings\Reducers\StartAbstractReducerEntity.cs"/>
+        <Compile Include="Entities\Fittings\Reducers\StartReducerConcentricEntity.cs"/>
+        <Compile Include="Entities\Fittings\Reducers\StartReducerEccentricEntity.cs"/>
+        <Compile Include="Entities\Fittings\StartAbstractFittingEntity.cs"/>
+        <Compile Include="Entities\Fittings\StartValveEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartAbstractTeeEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartFabricatedTeeEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartNonStandardTeeEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartStandTeeEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartStubInEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartSweepoletEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartWeldedTeeEntity.cs"/>
+        <Compile Include="Entities\Fittings\Tees\StartWeldoletEntity.cs"/>
+        <Compile Include="Entities\Joints\StartAbstractExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartAngularExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartAxialCouplingJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartAxialExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartAxialExpansionSlipJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartBallExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartLateralExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartNonStandardExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartTorsionExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Joints\StartUniversalExpansionJointEntity.cs"/>
+        <Compile Include="Entities\Segments\StartAbstractSegmentEntity.cs"/>
+        <Compile Include="Entities\Segments\StartAbstractSegmentUndefinedEntity.cs"/>
+        <Compile Include="Entities\Segments\StartConeElementEnitity.cs"/>
+        <Compile Include="Entities\Segments\StartCylindricalShellEntity.cs"/>
+        <Compile Include="Entities\Segments\StartFlexibleElementEntity.cs"/>
+        <Compile Include="Entities\Segments\StartPipeEntity.cs"/>
+        <Compile Include="Entities\Segments\StartRigidElementEntity.cs"/>
+        <Compile Include="Entities\StartAbstractEntity.cs"/>
+        <Compile Include="Entities\StartNodeEntity.cs"/>
+        <Compile Include="Entities\StartNonStandardRestraintModule.cs"/>
+        <Compile Include="Extensions\StartDataArrayItemExtensions.cs"/>
+        <Compile Include="Extensions\StartEntitiesExtensions.cs"/>
+        <Compile Include="Interfaces\API\IStartAutoServer.cs"/>
+        <Compile Include="Interfaces\API\IStartBaseRoot.cs"/>
+        <Compile Include="Interfaces\API\IStartBaseRootDataArray.cs"/>
+        <Compile Include="Interfaces\API\IStartDocument.cs"/>
+        <Compile Include="Interfaces\API\IStartProject.cs"/>
+        <Compile Include="Interfaces\Entities\IStartAnchorEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartClippableEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartClippingEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartConeEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartFittingEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartMaterializedEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartNodeEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartOneNodeEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartSegmentDiameterUndefinedEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartSegmentEntity.cs"/>
+        <Compile Include="Interfaces\Entities\IStartTwoNodeEntity.cs"/>
+        <Compile Include="Interfaces\Properties\IStartEnumProperty.cs"/>
+        <Compile Include="Interfaces\Properties\IStartExpansionModule.cs"/>
+        <Compile Include="Interfaces\Properties\IStartProperty.cs"/>
+        <Compile Include="Interfaces\Properties\IStartValueProperty.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="StartProperties\AngleValueProperty.cs"/>
+        <Compile Include="StartProperties\AreaValueProperty.cs"/>
+        <Compile Include="StartProperties\EnumProperty.cs"/>
+        <Compile Include="StartProperties\FactorValueProperty.cs"/>
+        <Compile Include="StartProperties\FlexibilityValueProperty.cs"/>
+        <Compile Include="StartProperties\ForceValueProperty.cs"/>
+        <Compile Include="StartProperties\LengthValueProperty.cs"/>
+        <Compile Include="StartProperties\MassValueProperty.cs"/>
+        <Compile Include="StartProperties\MomentValueProperty.cs"/>
+        <Compile Include="StartProperties\PressureValueProperty.cs"/>
+        <Compile Include="StartProperties\StartValueAbstractProperty.cs"/>
+        <Compile Include="StartProperties\StiffnessValueProperty.cs"/>
+        <Compile Include="StartProperties\TemperatureValueProperty.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="packages.config"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Utils\Utils.csproj">
+            <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
+            <Name>Utils</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+           Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+      -->
 </Project>

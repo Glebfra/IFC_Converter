@@ -29,10 +29,18 @@ namespace Utils
 
             return DenseMatrix.OfArray(new[,]
             {
-                { 1, 0, 0, 0 },
-                { 0, cos, -sin, 0 },
-                { 0, sin, cos, 0 },
-                { 0, 0, 0, 1 }
+                {
+                    1, 0, 0, 0
+                },
+                {
+                    0, cos, -sin, 0
+                },
+                {
+                    0, sin, cos, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
             });
         }
 
@@ -57,10 +65,18 @@ namespace Utils
 
             return DenseMatrix.OfArray(new[,]
             {
-                { cos, 0, sin, 0 },
-                { 0, 1, 0, 0 },
-                { -sin, 0, cos, 0 },
-                { 0, 0, 0, 1 }
+                {
+                    cos, 0, sin, 0
+                },
+                {
+                    0, 1, 0, 0
+                },
+                {
+                    -sin, 0, cos, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
             });
         }
 
@@ -85,10 +101,45 @@ namespace Utils
 
             return DenseMatrix.OfArray(new[,]
             {
-                { cos, -sin, 0, 0 },
-                { sin, cos, 0, 0 },
-                { 0, 0, 1, 0 },
-                { 0, 0, 0, 1 }
+                {
+                    cos, -sin, 0, 0
+                },
+                {
+                    sin, cos, 0, 0
+                },
+                {
+                    0, 0, 1, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
+            });
+        }
+
+        [Pure]
+        public static Matrix<double> CreateRotationAroundVector(Vector<double> vector, double angle)
+        {
+            double cos = Math.Cos(angle);
+            double sin = Math.Sin(angle);
+
+            double x = vector[0];
+            double y = vector[1];
+            double z = vector[2];
+
+            return DenseMatrix.OfArray(new[,]
+            {
+                {
+                    cos + (1 - cos) * x * x, (1 - cos) * x * y - sin * z, (1 - cos) * x * z + sin * y, 0
+                },
+                {
+                    (1 - cos) * y * x + sin * z, cos + (1 - cos) * y * y, (1 - cos) * y * z - sin * x, 0
+                },
+                {
+                    (1 - cos) * z * x - sin * y, (1 - cos) * z * y + sin * x, cos + (1 - cos) * z * z, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
             });
         }
 
@@ -113,7 +164,7 @@ namespace Utils
         {
             return matrix.Row(0).SubVector(0, 3);
         }
-        
+
         /// <summary>
         ///     Returns the Y axis of the transformation matrix, which represents the up direction in a 3D coordinate system.
         /// </summary>
@@ -124,7 +175,7 @@ namespace Utils
         {
             return matrix.Row(1).SubVector(0, 3);
         }
-        
+
         /// <summary>
         ///     Returns the Z axis of the transformation matrix, which represents the forward direction in a 3D coordinate system.
         /// </summary>
@@ -135,7 +186,7 @@ namespace Utils
         {
             return matrix.Row(2).SubVector(0, 3);
         }
-        
+
         /// <summary>
         ///     Returns the offset (translation) component of the transformation matrix, which represents the position of the
         ///     object in 3D space.
@@ -177,7 +228,7 @@ namespace Utils
         {
             matrix.SetRow(2, 0, 3, vector);
         }
-        
+
         /// <summary>
         ///     Sets the offset of the transformation matrix, which represents the offset in a 3D coordinate system.
         /// </summary>
@@ -375,7 +426,10 @@ namespace Utils
         public static string ToRowString(this Matrix<double> matrix)
         {
             return
-                $"({matrix.GetX().ToRowString()}); ({matrix.GetY().ToRowString()}); ({matrix.GetZ().ToRowString()}); ({matrix.GetOffset().ToRowString()})";
+                $"({matrix.GetX().ToRowString()}); " +
+                $"({matrix.GetY().ToRowString()}); " +
+                $"({matrix.GetZ().ToRowString()}); " +
+                $"({matrix.GetOffset().ToRowString()})";
         }
     }
 }
