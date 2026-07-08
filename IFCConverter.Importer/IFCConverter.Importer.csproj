@@ -173,6 +173,7 @@
         <Compile Include="Importers\AbstractEntityImporter.cs" />
         <Compile Include="Importers\Aveva\AvevaAttachmentImporter.cs" />
         <Compile Include="Importers\Aveva\AvevaBendImporter.cs" />
+        <Compile Include="Importers\Aveva\AvevaFiltImporter.cs" />
         <Compile Include="Importers\Aveva\AvevaImporter.cs" />
         <Compile Include="Importers\Aveva\AvevaImporterImporterFilter.cs">
             <DependentUpon>AvevaImporter.cs</DependentUpon>
@@ -217,6 +218,7 @@
         <Compile Include="Proxies\AttachmentProxy.cs" />
         <Compile Include="Proxies\BendProxy.cs" />
         <Compile Include="Proxies\BoundaryProxy.cs" />
+        <Compile Include="Proxies\FiltProxy.cs" />
         <Compile Include="Proxies\PcomProxy.cs" />
         <Compile Include="Proxies\PipeSegmentProxy.cs" />
         <Compile Include="Proxies\ReducerProxy.cs" />
@@ -228,6 +230,7 @@
         <Compile Include="TopologyModelAugmenter\SegmentAugmentableModelAugmenter.cs" />
         <Compile Include="Topology\AttachmentTopologyEntity.cs" />
         <Compile Include="Topology\BendTopologyEntity.cs" />
+        <Compile Include="Topology\FiltTopologyEntity.cs" />
         <Compile Include="Topology\PcomTopologyEntity.cs" />
         <Compile Include="Topology\ReducerTopologyEntity.cs" />
         <Compile Include="Topology\SegmentTopologyEntity.cs" />
