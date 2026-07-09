@@ -45,6 +45,7 @@ namespace IFCConverter.Exporter.Converters
                 StartAbstractTeeEntity => new TeeConverter(model),
 
                 // Segment Entities
+                StartBeamEntity => new BeamConverter(model),
                 StartConeElementEntity => new ConeElementConverter(model),
                 StartAbstractSegmentEntity => new PipeConverter(model),
                 _ => null

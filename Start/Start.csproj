@@ -68,7 +68,6 @@
         <Compile Include="API\StartDataArrayItem.cs"/>
         <Compile Include="API\StartDocument.cs"/>
         <Compile Include="API\StartEntityProxy.cs"/>
-        <Compile Include="API\StartElementType.cs"/>
         <Compile Include="API\StartElementTypeEnum.cs"/>
         <Compile Include="API\StartLeakageCheckEnum.cs"/>
         <Compile Include="API\StartManufacturingTechnologyEnum.cs"/>
@@ -130,6 +129,7 @@
         <Compile Include="Entities\Joints\StartUniversalExpansionJointEntity.cs"/>
         <Compile Include="Entities\Segments\StartAbstractSegmentEntity.cs"/>
         <Compile Include="Entities\Segments\StartAbstractSegmentUndefinedEntity.cs"/>
+        <Compile Include="Entities\Segments\StartBeamEntity.cs" />
         <Compile Include="Entities\Segments\StartConeElementEnitity.cs"/>
         <Compile Include="Entities\Segments\StartCylindricalShellEntity.cs"/>
         <Compile Include="Entities\Segments\StartFlexibleElementEntity.cs"/>

@@ -141,6 +141,7 @@
         <Compile Include="Converters\ConverterFactory.cs"/>
         <Compile Include="Converters\Elements\AxialCouplingJointConverter.cs"/>
         <Compile Include="Converters\Elements\AxialExpansionJointConverter.cs"/>
+        <Compile Include="Converters\Elements\BeamConverter.cs" />
         <Compile Include="Converters\Elements\BendConverter.cs"/>
         <Compile Include="Converters\Elements\ConeElementConverter.cs"/>
         <Compile Include="Converters\Elements\ConstantSpringAnchorConverter.cs"/>

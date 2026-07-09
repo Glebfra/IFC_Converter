@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using Utils;
@@ -29,6 +30,13 @@ namespace Ifc.Geometries
     {
         public Vector<double> Center;
         public double Diameter;
+    }
+
+    public struct ExtrudedBodyTriangulatedGeometryProperties
+    {
+        public Vector<double>[] StartPoints;
+        public Vector<double> ExtrudedDirection;
+        public double Length;
     }
 
     public struct IfcTriangulatedProperties
@@ -130,6 +138,48 @@ namespace Ifc.Geometries
             Matrix<double> botMatrix = MatrixExtensions.CreateTransition(properties.BottomConeCenter, z);
             Matrix<double> topMatrix = MatrixExtensions.CreateTransition(properties.TopConeCenter, z);
             return CreateClippedCone(properties, botMatrix, topMatrix);
+        }
+
+        [Pure]
+        public static IfcTriangulatedProperties CreateExtrudedBody(ExtrudedBodyTriangulatedGeometryProperties properties)
+        {
+            Vector<double>[] coordinates = new Vector<double>[properties.StartPoints.Length * 2];
+
+            int[][] triangleIndices = new int[properties.StartPoints.Length * 2][];
+            Vector<double>[] normals = new Vector<double>[properties.StartPoints.Length * 2];
+            
+            for (int i = 0; i < properties.StartPoints.Length; i++)
+            {
+                coordinates[i] = properties.StartPoints[i];
+                coordinates[i + properties.StartPoints.Length] = properties.StartPoints[i] + properties.ExtrudedDirection * properties.Length;
+            }
+
+            int triangleIndex = 0;
+            for (int i = 0; i < properties.StartPoints.Length; i++)
+            {
+                triangleIndices[triangleIndex++] = new int[]
+                {
+                    i + 1, i + properties.StartPoints.Length + 1, (i + 1) % properties.StartPoints.Length + properties.StartPoints.Length + 1 
+                };
+                triangleIndices[triangleIndex++] = new int[]
+                {
+                    i + 1, (i + 1) % properties.StartPoints.Length + properties.StartPoints.Length + 1, (i + 1) % properties.StartPoints.Length + 1
+                };
+            }
+
+            for (int i = 0; i < triangleIndices.Length; i++)
+            {
+                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
+                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
+                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+            }
+
+            return new IfcTriangulatedProperties()
+            {
+                Coordinates = coordinates,
+                TriangleIndices = triangleIndices,
+                Normals = normals
+            };
         }
 
         [Pure]

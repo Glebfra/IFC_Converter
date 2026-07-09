@@ -10,6 +10,7 @@
         NODE = 1,
         RIGID_ELEMENT = 2,
         CYLINDRICAL_SHELL = 3,
+        BEAM = 4,
         FLEXIBLE_ELEMENT = 5,
         CONE_ELEMENT = 6,
         PIPE_BEND = 10,
