@@ -72,7 +72,7 @@ namespace Start.Entities.Segments
         /// </summary>
         [JsonProperty(StartPropertyName.Weight)]
         [JsonConverter(typeof(JsonStartConverter<MassValueProperty<double>>))]
-        public IStartValueProperty<double> PipeUnitWeight { get; set; } = new MassValueProperty<double>();
+        public IStartValueProperty<double> SegmentUnitWeight { get; set; } = new MassValueProperty<double>();
 
         /// <summary>
         ///     Gets or sets the name of the segment.

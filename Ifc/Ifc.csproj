@@ -75,6 +75,7 @@
         <Compile Include="API\IfcRepresentationType.cs"/>
         <Compile Include="Attributes\IfcRepresentationIdentifierAttribute.cs"/>
         <Compile Include="Attributes\IfcRepresentationTypeAttribute.cs"/>
+        <Compile Include="Builders\Elements\IfcBeamBuilder.cs" />
         <Compile Include="Builders\Elements\IfcDiscreteAccessoryBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcDistributionElementBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcDistributionFlowElementBuilder.cs"/>
@@ -117,6 +118,7 @@
         <Compile Include="Extensions\IfcVectorExtensions.cs"/>
         <Compile Include="Geometries\AxialCouplingJointGeometry.cs"/>
         <Compile Include="Geometries\AxialExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\BeamGeometry.cs" />
         <Compile Include="Geometries\BendGeometry.cs"/>
         <Compile Include="Geometries\ConeGeometry.cs"/>
         <Compile Include="Geometries\ConstantSpringAnchorGeometry.cs"/>
@@ -136,6 +138,7 @@
         <Compile Include="Geometries\TeeGeometry.cs"/>
         <Compile Include="Geometries\TorsionExpansionJointGeometry.cs"/>
         <Compile Include="Geometries\ValveGeometry.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcBeamBuilder.cs" />
         <Compile Include="Interfaces\Builders\Elements\IIfcDiscreteAccessoryBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcDistributionElementBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcDistributionFlowElementBuilder.cs"/>

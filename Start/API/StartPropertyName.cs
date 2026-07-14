@@ -34,6 +34,7 @@
         public const string WallThickness = "9";
         public const string MillTolerance = "13";
         public const string CorrosionAllowance = "14";
+        public const string BeamWidth = "16";
         public const string HeaderLength = "16";
         public const string BranchWallThickness = "18";
         public const string MillToleranceForBranch = "20";
@@ -61,6 +62,7 @@
         public const string SafetyFactorForLiftingCapacity = "73";
         public const string Flexibility = "74";
         public const string AxialFlexibility = "75";
+        public const string BeamArea = "76";
         public const string EffectiveArea = "76";
         public const string LeakageCheck = "82";
         public const string ChainRigidity = "112";
@@ -148,6 +150,11 @@
         public const string Pressure2 = "1097";
         public const string FrictionMoment3 = "1098";
         public const string Pressure3 = "1099";
+        public const string BeamAreaZm = "1101";
+        public const string BeamAreaYm = "1102";
+        public const string BeamType = "1105";
+        public const string BeamHeight = "1106";
+        public const string BeamSectionAxisAngle = "1107";
         public const string AnchorSupportWeight = "1282";
         public const string EffectiveDiameter = "1289";
         public const string StiffnessTempFactor = "1293";
