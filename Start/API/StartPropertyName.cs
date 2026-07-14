@@ -152,6 +152,7 @@
         public const string Pressure3 = "1099";
         public const string BeamAreaZm = "1101";
         public const string BeamAreaYm = "1102";
+        public const string BeamType = "1105";
         public const string BeamHeight = "1106";
         public const string BeamSectionAxisAngle = "1107";
         public const string AnchorSupportWeight = "1282";

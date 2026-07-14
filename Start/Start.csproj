@@ -64,6 +64,7 @@
         <Compile Include="API\StartAutoServer.cs"/>
         <Compile Include="API\StartBaseRoot.cs"/>
         <Compile Include="API\StartBaseRootDataArray.cs"/>
+        <Compile Include="API\StartBeamTypeEnum.cs" />
         <Compile Include="API\StartConnectionTypeEnum.cs"/>
         <Compile Include="API\StartDataArrayItem.cs"/>
         <Compile Include="API\StartDocument.cs"/>
@@ -145,6 +146,7 @@
         <Compile Include="Interfaces\API\IStartBaseRootDataArray.cs"/>
         <Compile Include="Interfaces\API\IStartDocument.cs"/>
         <Compile Include="Interfaces\API\IStartProject.cs"/>
+        <Compile Include="Interfaces\Augmenters\IStartEntityAugmenter.cs" />
         <Compile Include="Interfaces\Entities\IStartAnchorEntity.cs"/>
         <Compile Include="Interfaces\Entities\IStartClippableEntity.cs"/>
         <Compile Include="Interfaces\Entities\IStartClippingEntity.cs"/>
@@ -184,6 +186,9 @@
             <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
             <Name>Utils</Name>
         </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Augmenters\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

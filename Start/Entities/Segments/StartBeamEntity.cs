@@ -8,8 +8,11 @@ using Start.StartProperties;
 namespace Start.Entities.Segments
 {
     [StartElement(StartElementTypeEnum.BEAM)]
-    public sealed class StartBeamEntity : StartAbstractSegmentEntity
+    public sealed class StartBeamEntity : StartAbstractSegmentEntity, IStartMaterializedEntity
     {
+        [JsonProperty(StartPropertyName.MaterialName)]
+        public string MaterialName { get; set; } = string.Empty;
+        
         [JsonProperty(StartPropertyName.PipeName)]
         public override string Name { get; set; } = string.Empty;
 
@@ -36,5 +39,9 @@ namespace Start.Entities.Segments
         [JsonProperty(StartPropertyName.BeamHeight)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> Height { get; set; } = new LengthValueProperty<double>();
+
+        [JsonProperty(StartPropertyName.BeamType)]
+        [JsonConverter(typeof(JsonStartConverter<EnumProperty<StartBeamTypeEnum>>))]
+        public IStartEnumProperty<StartBeamTypeEnum> BeamType { get; set; } = new EnumProperty<StartBeamTypeEnum>();
     }
 }
