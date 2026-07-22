@@ -21,7 +21,7 @@ namespace IFCConverter.Exporter
     public class StartToIfcConverter
     {
         private readonly ExportDataContainer _exportDataContainer;
-        private readonly Logger _logger = Logger.GetInstance();
+        private static readonly Logger Logger = Logger.GetInstance();
 
         public StartToIfcConverter(ExportDataContainer exportDataContainer)
         {
@@ -30,12 +30,12 @@ namespace IFCConverter.Exporter
 
         public void Convert(StartDocument startDocument)
         {
-            _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
+            Logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
 
             using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
                 IStartEntity[] startEntities = startProject.GetStartEntities();
-                _logger.Info($"Found {startEntities.Count()} objects");
+                Logger.Info($"Found {startEntities.Count()} objects");
                 AugmentEntities(startEntities);
 
                 using (IfcProject ifcProject = IfcProject.CreateProject(startDocument.GetTitle()))
@@ -51,7 +51,7 @@ namespace IFCConverter.Exporter
                         }
                         catch (Exception ex)
                         {
-                            _logger.Error(
+                            Logger.Error(
                                 $"Error while converting entity {startEntity.GetType().FullName} with id {startEntity.ID}: {ex}");
                         }
 
@@ -67,6 +67,7 @@ namespace IFCConverter.Exporter
                 StartElementAttribute attribute = startEntity.GetStartElementAttribute();
                 foreach (IStartEntityAugmenter startEntityAugmenter in attribute.GetAugmenters())
                 {
+                    Logger.Info($"Augmenting {startEntity.GetType().FullName} | {startEntity.Name} with {startEntityAugmenter.GetType().Name}");
                     startEntityAugmenter.Augment(startEntity, startEntities);
                 }
             }
@@ -79,10 +80,10 @@ namespace IFCConverter.Exporter
             if (converter == null)
                 return null;
 
-            _logger.Info($"Created converter {converter?.GetType().FullName}");
+            Logger.Info($"Created converter {converter?.GetType().FullName}");
 
             IfcProduct? ifcProduct = converter?.BuildIfc(startEntity) as IfcProduct;
-            _logger.Info($"Created product {ifcProduct?.GetType().FullName} (global ifc id: {ifcProduct?.GlobalId})");
+            Logger.Info($"Created product {ifcProduct?.GetType().FullName} (global ifc id: {ifcProduct?.GlobalId})");
 
             return ifcProduct;
         }
