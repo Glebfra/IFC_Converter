@@ -11,7 +11,7 @@ namespace Start.Entities.Segments
     ///     Inherits from <see cref="StartAbstractSegmentEntity" /> and implements the
     ///     <see cref="IStartMaterializedEntity" /> interface.
     /// </summary>
-    [StartElement(StartElementTypeEnum.RIGID_ELEMENT, typeof(StartRigidElementDiameterAugmenter))]
+    [StartElement(StartElementTypeEnum.RIGID_ELEMENT, typeof(StartSegmentEntityDiameterAugmenter), typeof(StartClippableEntityAugmenter))]
     public sealed class StartRigidElementEntity : StartAbstractSegmentEntity, IStartMaterializedEntity
     {
         /// <summary>

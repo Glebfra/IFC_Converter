@@ -6,16 +6,16 @@ using Start.StartProperties;
 
 namespace Start.Augmenters
 {
-    internal sealed class StartRigidElementDiameterAugmenter : StartAbstractAugmenter<StartRigidElementEntity>
+    internal sealed class StartSegmentEntityDiameterAugmenter : StartAbstractAugmenter<IStartSegmentEntity>
     {
         private const double DefaultDiameter = 0.05;
         
-        public override void AugmentTyped(StartRigidElementEntity entity, IEnumerable<IStartEntity> otherEntities)
+        public override void AugmentTyped(IStartSegmentEntity entity, IEnumerable<IStartEntity> otherEntities)
         {
             entity.Diameter = ResolveDiameter(entity);
         }
 
-        private static IStartValueProperty<double> ResolveDiameter(StartRigidElementEntity entity)
+        private static IStartValueProperty<double> ResolveDiameter(IStartSegmentEntity entity)
         {
             HashSet<IStartSegmentEntity> visited = new HashSet<IStartSegmentEntity>();
             if (TryGetDiameterRecursive(entity, visited, out double diameter))

@@ -81,8 +81,9 @@
         <Compile Include="Attributes\StartElementAttribute.cs"/>
         <Compile Include="Attributes\StartIgnoreAttribute.cs"/>
         <Compile Include="Augmenters\StartAbstractAugmenter.cs" />
-        <Compile Include="Augmenters\StartFlexibleElementDiameterAugmenter.cs" />
-        <Compile Include="Augmenters\StartRigidElementDiameterAugmenter.cs" />
+        <Compile Include="Augmenters\StartClippableEntityAugmenter.cs" />
+        <Compile Include="Augmenters\StartReducerSegmentMoverAugmenter.cs" />
+        <Compile Include="Augmenters\StartSegmentEntityDiameterAugmenter.cs" />
         <Compile Include="Converters\JsonStartConverter.cs" />
         <Compile Include="Entities\Anchors\StartAbstractAnchorEntity.cs" />
         <Compile Include="Entities\Anchors\StartAbstractConstantSpringAnchorEntity.cs" />

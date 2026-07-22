@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Attributes;
+using Start.Augmenters;
 using Start.Converters;
 using Start.Interfaces;
 using Start.StartProperties;
@@ -12,7 +13,7 @@ namespace Start.Entities.Segments
     ///     Inherits from <see cref="StartAbstractSegmentEntity" /> and implements the <see cref="IStartMaterializedEntity" />
     ///     interface.
     /// </summary>
-    [StartElement(StartElementTypeEnum.PIPE_ELEMENT)]
+    [StartElement(StartElementTypeEnum.PIPE_ELEMENT, typeof(StartClippableEntityAugmenter))]
     public sealed class StartPipeEntity : StartAbstractSegmentEntity,
         IStartMaterializedEntity
     {

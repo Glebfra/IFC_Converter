@@ -3,6 +3,7 @@ using MathNet.Numerics.LinearAlgebra;
 using Newtonsoft.Json;
 using Start.API;
 using Start.Attributes;
+using Start.Augmenters;
 using Start.Converters;
 using Start.Interfaces;
 using Start.StartProperties;
@@ -13,7 +14,7 @@ namespace Start.Entities.Segments
     ///     Represents a cone element entity in the Start framework.
     ///     Implements the <see cref="IStartMaterializedEntity" /> and <see cref="IStartConeEntity" /> interfaces.
     /// </summary>
-    [StartElement(StartElementTypeEnum.CONE_ELEMENT)]
+    [StartElement(StartElementTypeEnum.CONE_ELEMENT, typeof(StartClippableEntityAugmenter))]
     public sealed class StartConeElementEntity : StartAbstractSegmentEntity,
         IStartMaterializedEntity, IStartConeEntity
     {

@@ -9,7 +9,7 @@ namespace Start.Entities.Segments
     ///     Represents a flexible element entity in the Start framework.
     ///     Inherits from <see cref="StartAbstractSegmentEntity" /> and implements the
     /// </summary>
-    [StartElement(StartElementTypeEnum.FLEXIBLE_ELEMENT, typeof(StartFlexibleElementDiameterAugmenter))]
+    [StartElement(StartElementTypeEnum.FLEXIBLE_ELEMENT, typeof(StartSegmentEntityDiameterAugmenter), typeof(StartClippableEntityAugmenter))]
     public sealed class StartFlexibleElementEntity : StartAbstractSegmentEntity
     {
     }
