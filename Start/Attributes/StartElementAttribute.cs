@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Start.API;
+using Start.Interfaces.Augmenters;
+using Utils;
 
 namespace Start.Attributes
 {
@@ -14,17 +18,22 @@ namespace Start.Attributes
         /// </summary>
         public StartElementTypeEnum Type;
 
-        public Type? StartEntityAugmenterType;
+        public Type[] StartEntityAugmenterTypes;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="StartElementAttribute" /> class with the specified element type.
         /// </summary>
         /// <param name="type">The type of the Start element.</param>
-        /// <param name="startEntityAugmenterType">The entity augmenter type</param>
-        public StartElementAttribute(StartElementTypeEnum type, Type? startEntityAugmenterType = null)
+        /// <param name="startEntityAugmenterTypes">The entity augmenters types</param>
+        public StartElementAttribute(StartElementTypeEnum type, params Type[] startEntityAugmenterTypes)
         {
             Type = type;
-            StartEntityAugmenterType = startEntityAugmenterType;
+            StartEntityAugmenterTypes = startEntityAugmenterTypes;
+        }
+
+        public IEnumerable<IStartEntityAugmenter> GetAugmenters()
+        {
+            return StartEntityAugmenterTypes.Select(ParameterlessConstructorRegistry<IStartEntityAugmenter>.Create);
         }
     }
 }

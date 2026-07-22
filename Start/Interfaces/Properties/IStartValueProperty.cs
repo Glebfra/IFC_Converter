@@ -4,6 +4,7 @@ namespace Start.Interfaces
 {
     public interface IStartValueProperty : IStartProperty
     {
+        public bool HasValue { get; }
         public object GetStartProperty();
         public object GetSIProperty();
         public string GetStartUnit();

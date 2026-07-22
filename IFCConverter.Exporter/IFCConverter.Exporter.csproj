@@ -162,6 +162,7 @@
         <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs"/>
         <Compile Include="Converters\Elements\ValveConverter.cs"/>
         <Compile Include="Converters\StartToIfcPropertyConverter.cs"/>
+        <Compile Include="Extensions\AttributeExtensions.cs" />
         <Compile Include="Extensions\StartEntityExtensions.cs"/>
         <Compile Include="Interfaces\IIfcElementConverter.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>

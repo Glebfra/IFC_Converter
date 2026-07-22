@@ -21,7 +21,7 @@ namespace Ifc.API
 
         private readonly IfcStore _model;
         private readonly ITransaction _transaction;
-
+    
         public IfcProject(IfcStore model)
         {
             _model = model;

@@ -4,12 +4,15 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Exporter.Converters;
+using IFCConverter.Exporter.Extensions;
 using IFCConverter.Exporter.Interfaces;
 using IFCConverter.Utils;
 using MathNet.Numerics.LinearAlgebra;
 using Start.API;
+using Start.Attributes;
 using Start.Entities.Fittings;
 using Start.Interfaces;
+using Start.Interfaces.Augmenters;
 using Utils;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
@@ -36,6 +39,7 @@ namespace IFCConverter.Exporter
             {
                 IStartEntity[] startEntities = startProject.GetStartEntities();
                 _logger.Info($"Found {startEntities.Count()} objects");
+                AugmentEntities(startEntities);
 
                 IStartClippableEntity[] clippableEntities = startEntities.OfType<IStartClippableEntity>().ToArray();
                 _logger.Info($"Clippable entities found {clippableEntities.Length} objects");
@@ -63,6 +67,18 @@ namespace IFCConverter.Exporter
                         }
 
                     ifcProject.SaveAs(_exportDataContainer.OutputFilePath);
+                }
+            }
+        }
+
+        private static void AugmentEntities(IReadOnlyCollection<IStartEntity> startEntities)
+        {
+            foreach (IStartEntity startEntity in startEntities)
+            {
+                StartElementAttribute attribute = startEntity.GetStartElementAttribute();
+                foreach (IStartEntityAugmenter startEntityAugmenter in attribute.GetAugmenters())
+                {
+                    startEntityAugmenter.Augment(startEntity, startEntities);
                 }
             }
         }
