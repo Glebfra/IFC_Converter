@@ -1,13 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Start.API;
 using Start.Attributes;
+using Start.Augmenters;
 using Start.Converters;
 using Start.Interfaces;
 using Start.StartProperties;
 
 namespace Start.Entities.Segments
 {
-    [StartElement(StartElementTypeEnum.BEAM)]
+    [StartElement(StartElementTypeEnum.BEAM, typeof(StartClippableEntityAugmenter))]
     public sealed class StartBeamEntity : StartAbstractSegmentEntity, IStartMaterializedEntity
     {
         [JsonProperty(StartPropertyName.MaterialName)]

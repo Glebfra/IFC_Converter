@@ -18,8 +18,27 @@ namespace Start.StartProperties
             return SIProperty.CompareTo(other.SIProperty);
         }
 
-        public T StartProperty { get; private set; }
-        public T SIProperty { get; private set; }
+        public T StartProperty
+        {
+            get;
+            private set
+            {
+                field = value;
+                HasValue = true;
+            }
+        }
+
+        public T SIProperty
+        {
+            get;
+            private set
+            {
+                field = value;
+                HasValue = true;
+            }
+        }
+
+        public bool HasValue { get; private set; }
 
         public abstract string StartUnit { get; }
         public abstract string SIUnit { get; }

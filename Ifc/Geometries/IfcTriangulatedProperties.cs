@@ -39,6 +39,12 @@ namespace Ifc.Geometries
         public double Length;
     }
 
+    public struct ExtrudedBodyByRefPointsTriangulatedGeometryProperties
+    {
+        public Vector<double>[] StartPoints;
+        public Vector<double>[] RefPoints;
+    }
+
     public struct IfcTriangulatedProperties
     {
         public IEnumerable<Vector<double>> Coordinates;
@@ -179,6 +185,26 @@ namespace Ifc.Geometries
                 Coordinates = coordinates,
                 TriangleIndices = triangleIndices,
                 Normals = normals
+            };
+        }
+
+        [Pure]
+        public static IfcTriangulatedProperties CreateExtrudedBodyByRefPoints(ExtrudedBodyByRefPointsTriangulatedGeometryProperties properties)
+        {
+            Vector<double>[] coordinates = new Vector<double>[properties.StartPoints.Length * properties.RefPoints.Length];
+            for (int i = 0; i < properties.StartPoints.Length; i++)
+            {
+                for (int j = 0; j < properties.RefPoints.Length; j++)
+                {
+                    coordinates[i + properties.StartPoints.Length * j] =  properties.StartPoints[i] + properties.RefPoints[j];
+                }
+            }
+
+            return new IfcTriangulatedProperties()
+            {
+                Coordinates = coordinates,
+                TriangleIndices = null,
+                Normals = null
             };
         }
 

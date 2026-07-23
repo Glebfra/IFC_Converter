@@ -31,7 +31,7 @@ namespace Ifc.Geometries
     }
 
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
-    [IfcRepresentationType(IfcRepresentationType.SolidModel)]
+    [IfcRepresentationType(IfcRepresentationType.SweptSolid)]
     public class TeeGeometry : IfcGeometry
     {
         public TeeGeometry(IIfcBuilder geometryBuilder,
@@ -73,8 +73,7 @@ namespace Ifc.Geometries
             Matrix<double>[] extrudedAreaSolidMatrices = positions
                 .Select((pos, index) => MatrixExtensions.CreateTransition(pos, xs[index], ys[index], zs[index]))
                 .ToArray();
-            Matrix<double> circleProfileDefMatrix =
-                MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Right);
+            Matrix<double> circleProfileDefMatrix = MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
 
             IIfcCircleProfileDefBuilder<IfcCircleProfileDef>[] profileDefBuilders =
                 new IIfcCircleProfileDefBuilder<IfcCircleProfileDef>[2];
@@ -84,8 +83,7 @@ namespace Ifc.Geometries
             for (int i = 0; i < 2; i++)
             {
                 profileDefBuilders[i] =
-                    new IfcCircleProfileDefBuilder<IfcCircleProfileDef>(diameters[i] / 2, IfcProfileTypeEnum.AREA,
-                        "Test profile def");
+                    new IfcCircleProfileDefBuilder<IfcCircleProfileDef>(diameters[i] / 2, IfcProfileTypeEnum.AREA, "Tee profile def");
                 profileDefBuilders[i].CreatePosition(model, circleProfileDefMatrix);
                 IIfcCircleProfileDef circleProfileDef = profileDefBuilders[i].CreateProfileDef(model);
 

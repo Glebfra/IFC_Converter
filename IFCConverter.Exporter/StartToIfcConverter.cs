@@ -4,24 +4,24 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Exporter.Converters;
+using IFCConverter.Exporter.Extensions;
 using IFCConverter.Exporter.Interfaces;
 using IFCConverter.Utils;
-using MathNet.Numerics.LinearAlgebra;
 using Start.API;
-using Start.Entities.Fittings;
+using Start.Attributes;
 using Start.Interfaces;
+using Start.Interfaces.Augmenters;
 using Utils;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using IfcProject = Ifc.API.IfcProject;
-using MatrixExtensions = Utils.MatrixExtensions;
 
 namespace IFCConverter.Exporter
 {
     public class StartToIfcConverter
     {
         private readonly ExportDataContainer _exportDataContainer;
-        private readonly Logger _logger = Logger.GetInstance();
+        private static readonly Logger Logger = Logger.GetInstance();
 
         public StartToIfcConverter(ExportDataContainer exportDataContainer)
         {
@@ -30,20 +30,13 @@ namespace IFCConverter.Exporter
 
         public void Convert(StartDocument startDocument)
         {
-            _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
+            Logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
 
             using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
                 IStartEntity[] startEntities = startProject.GetStartEntities();
-                _logger.Info($"Found {startEntities.Count()} objects");
-
-                IStartClippableEntity[] clippableEntities = startEntities.OfType<IStartClippableEntity>().ToArray();
-                _logger.Info($"Clippable entities found {clippableEntities.Length} objects");
-                ClipEntities(clippableEntities);
-
-                IEnumerable<StartReducerEccentricEntity> reducerEccentricEntities =
-                    startEntities.OfType<StartReducerEccentricEntity>();
-                MoveSegmentsWithReducers(reducerEccentricEntities);
+                Logger.Info($"Found {startEntities.Count()} objects");
+                AugmentEntities(startEntities);
 
                 using (IfcProject ifcProject = IfcProject.CreateProject(startDocument.GetTitle()))
                 {
@@ -58,7 +51,7 @@ namespace IFCConverter.Exporter
                         }
                         catch (Exception ex)
                         {
-                            _logger.Error(
+                            Logger.Error(
                                 $"Error while converting entity {startEntity.GetType().FullName} with id {startEntity.ID}: {ex}");
                         }
 
@@ -67,17 +60,15 @@ namespace IFCConverter.Exporter
             }
         }
 
-        private void ClipEntities(IEnumerable<IStartClippableEntity> clippableEntities)
+        private static void AugmentEntities(IReadOnlyCollection<IStartEntity> startEntities)
         {
-            foreach (IStartClippableEntity clippableEntity in clippableEntities)
+            foreach (IStartEntity startEntity in startEntities)
             {
-                IEnumerable<IStartClippingEntity> clippingEntities =
-                    clippableEntity.ConnectedEntities.OfType<IStartClippingEntity>();
-                foreach (IStartClippingEntity clippingEntity in clippingEntities)
+                StartElementAttribute attribute = startEntity.GetStartElementAttribute();
+                foreach (IStartEntityAugmenter startEntityAugmenter in attribute.GetAugmenters())
                 {
-                    clippingEntity.ClipEntity(clippableEntity);
-                    _logger.Info(
-                        $"Clipping entity {clippableEntity.GetType().FullName} by {clippingEntity.GetType().FullName}");
+                    Logger.Info($"Augmenting {startEntity.GetType().FullName} | {startEntity.Name} with {startEntityAugmenter.GetType().Name}");
+                    startEntityAugmenter.Augment(startEntity, startEntities);
                 }
             }
         }
@@ -89,33 +80,12 @@ namespace IFCConverter.Exporter
             if (converter == null)
                 return null;
 
-            _logger.Info($"Created converter {converter?.GetType().FullName}");
+            Logger.Info($"Created converter {converter?.GetType().FullName}");
 
             IfcProduct? ifcProduct = converter?.BuildIfc(startEntity) as IfcProduct;
-            _logger.Info($"Created product {ifcProduct?.GetType().FullName} (global ifc id: {ifcProduct?.GlobalId})");
+            Logger.Info($"Created product {ifcProduct?.GetType().FullName} (global ifc id: {ifcProduct?.GlobalId})");
 
             return ifcProduct;
-        }
-
-        private static void MoveSegmentsWithReducers(IEnumerable<StartReducerEccentricEntity> reducerEccentricEntities)
-        {
-            foreach (StartReducerEccentricEntity startReducerEccentricEntity in reducerEccentricEntities)
-            {
-                IStartSegmentEntity minDiameterSegmentEntity = startReducerEccentricEntity.SegmentWithMinDiameter;
-                IStartSegmentEntity maxDiameterSegmentEntity = startReducerEccentricEntity.SegmentWithMaxDiameter;
-
-                double angle = startReducerEccentricEntity.AngleBetweenEccentricityVectorAndZmAxis.SIProperty;
-                Matrix<double> minDiameterSegmentMatrix = minDiameterSegmentEntity.TransformationMatrix;
-                Matrix<double> rotationMatrix = MatrixExtensions.CreateRotationAroundZ(angle);
-                Matrix<double> rotatedMinDiameterSegmentMatrix = rotationMatrix * minDiameterSegmentMatrix;
-
-                Vector<double> displacement = rotatedMinDiameterSegmentMatrix.GetUp() * (
-                    maxDiameterSegmentEntity.Diameter.SIProperty - minDiameterSegmentEntity.Diameter.SIProperty
-                ) / 2;
-
-                if (maxDiameterSegmentEntity.IsStartPosition(startReducerEccentricEntity.Position))
-                    maxDiameterSegmentEntity.StartPosition += displacement;
-            }
         }
     }
 }
