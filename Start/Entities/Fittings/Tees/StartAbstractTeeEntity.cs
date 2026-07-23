@@ -126,13 +126,13 @@ namespace Start.Entities.Fittings
         public string MaterialName { get; set; } = string.Empty;
 
         [Pure]
-        public bool IsAttachedToHeadSegment(IStartSegmentEntity segmentEntity)
+        private bool IsAttachedToHeadSegment(IStartSegmentEntity segmentEntity)
         {
             return HeadSegment.Equals(segmentEntity);
         }
 
         [Pure]
-        public bool IsAttachedToMainSegment(IStartSegmentEntity segmentEntity)
+        private bool IsAttachedToMainSegment(IStartSegmentEntity segmentEntity)
         {
             return MainSegments.Any(segment => segment.Equals(segmentEntity));
         }

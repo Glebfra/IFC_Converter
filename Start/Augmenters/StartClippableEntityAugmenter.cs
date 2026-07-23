@@ -11,8 +11,7 @@ internal sealed class StartClippableEntityAugmenter : StartAbstractAugmenter<ISt
     
     public override void AugmentTyped(IStartClippableEntity entity, IEnumerable<IStartEntity> otherEntities)
     {
-        IEnumerable<IStartClippingEntity> clippingEntities =
-            entity.ConnectedEntities.OfType<IStartClippingEntity>();
+        IEnumerable<IStartClippingEntity> clippingEntities = entity.ConnectedEntities.OfType<IStartClippingEntity>();
         foreach (IStartClippingEntity clippingEntity in clippingEntities)
         {
             clippingEntity.ClipEntity(entity);
