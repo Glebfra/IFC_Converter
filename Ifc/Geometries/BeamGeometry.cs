@@ -69,7 +69,7 @@ namespace Ifc.Geometries
     /// Represents a BRep geometry for beam elements.
     /// </summary>
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
-    [IfcRepresentationType(IfcRepresentationType.Brep)]
+    [IfcRepresentationType(IfcRepresentationType.Tessellation)]
     public class BeamGeometry : IfcGeometry
     {
         private const double HeightToBeamFactor2 = 1.0;
@@ -119,7 +119,6 @@ namespace Ifc.Geometries
             Vector<double> yWidth = y * properties.Width / 2;
 
             Vector<double>[] startPoints = GenerateStartPoints(properties, xHeight, yWidth);
-            Vector<double>[] endPoints = startPoints.Select(startPoint => startPoint + properties.Direction * properties.Length).ToArray();
 
             ExtrudedBodyTriangulatedGeometryProperties bodyProperties = new ExtrudedBodyTriangulatedGeometryProperties()
             {
@@ -133,7 +132,7 @@ namespace Ifc.Geometries
             triangulatedFaceSetBuilder.AssignTriangleIndices(triangulatedProperties.TriangleIndices);
             triangulatedFaceSetBuilder.AssignNormals(triangulatedProperties.Normals);
             builders.Add(triangulatedFaceSetBuilder);
-
+            
             return new BeamGeometry(builders);
         }
 

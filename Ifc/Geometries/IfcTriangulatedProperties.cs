@@ -45,6 +45,11 @@ namespace Ifc.Geometries
         public Vector<double>[] RefPoints;
     }
 
+    public struct PlaneTriangulatedGeometryProperties
+    {
+        public Vector<double>[] PolygonPoints;
+    }
+
     public struct IfcTriangulatedProperties
     {
         public IEnumerable<Vector<double>> Coordinates;
@@ -151,8 +156,7 @@ namespace Ifc.Geometries
         {
             Vector<double>[] coordinates = new Vector<double>[properties.StartPoints.Length * 2];
 
-            int[][] triangleIndices = new int[properties.StartPoints.Length * 2][];
-            Vector<double>[] normals = new Vector<double>[properties.StartPoints.Length * 2];
+            List<int[]> triangleIndices = new List<int[]>(properties.StartPoints.Length * 2);
             
             for (int i = 0; i < properties.StartPoints.Length; i++)
             {
@@ -160,30 +164,51 @@ namespace Ifc.Geometries
                 coordinates[i + properties.StartPoints.Length] = properties.StartPoints[i] + properties.ExtrudedDirection * properties.Length;
             }
 
-            int triangleIndex = 0;
+            Vector<double>[] startPolygon = coordinates.Take(properties.StartPoints.Length).ToArray();
+            Vector<double>[] endPolygon = coordinates.Skip(properties.StartPoints.Length).ToArray();
+            
             for (int i = 0; i < properties.StartPoints.Length; i++)
             {
-                triangleIndices[triangleIndex++] = new int[]
+                triangleIndices.Add(new int[]
                 {
                     i + 1, i + properties.StartPoints.Length + 1, (i + 1) % properties.StartPoints.Length + properties.StartPoints.Length + 1 
-                };
-                triangleIndices[triangleIndex++] = new int[]
+                });
+                triangleIndices.Add(new int[]
                 {
                     i + 1, (i + 1) % properties.StartPoints.Length + properties.StartPoints.Length + 1, (i + 1) % properties.StartPoints.Length + 1
-                };
+                });
+            }
+            
+            int[][] startTriangleIndices = EarClippingTriangulator.Triangulate(startPolygon);
+            int[][] endTriangleIndices = EarClippingTriangulator.Triangulate(endPolygon);
+
+            for (int i = 0; i < startTriangleIndices.Length; i++)
+            {
+                for (int j = 0; j < startTriangleIndices[i].Length; j++)
+                {
+                    startTriangleIndices[i][j] += 1;
+                }
             }
 
-            for (int i = 0; i < triangleIndices.Length; i++)
+            for (int i = 0; i < endTriangleIndices.Length; i++)
             {
-                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
-                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+                for (int j = 0; j < endTriangleIndices[i].Length; j++)
+                {
+                    endTriangleIndices[i][j] += properties.StartPoints.Length + 1;
+                }
             }
+            
+            triangleIndices.AddRange(startTriangleIndices);
+            triangleIndices.AddRange(endTriangleIndices);
+
+            int[][] triangleIndicesArr = triangleIndices.ToArray();
+
+            Vector<double>[] normals = CreateNormals(coordinates, triangleIndicesArr);
 
             return new IfcTriangulatedProperties()
             {
                 Coordinates = coordinates,
-                TriangleIndices = triangleIndices,
+                TriangleIndices = triangleIndicesArr,
                 Normals = normals
             };
         }
@@ -192,11 +217,12 @@ namespace Ifc.Geometries
         public static IfcTriangulatedProperties CreateExtrudedBodyByRefPoints(ExtrudedBodyByRefPointsTriangulatedGeometryProperties properties)
         {
             Vector<double>[] coordinates = new Vector<double>[properties.StartPoints.Length * properties.RefPoints.Length];
-            for (int i = 0; i < properties.StartPoints.Length; i++)
+            for (int i = 0; i < properties.RefPoints.Length; i++)
             {
-                for (int j = 0; j < properties.RefPoints.Length; j++)
+                for (int j = 0; j < properties.StartPoints.Length; j++)
                 {
-                    coordinates[i + properties.StartPoints.Length * j] =  properties.StartPoints[i] + properties.RefPoints[j];
+                    int index = i * properties.StartPoints.Length + j;
+                    coordinates[index] = properties.RefPoints[i] + properties.StartPoints[j];
                 }
             }
 
@@ -206,6 +232,44 @@ namespace Ifc.Geometries
                 TriangleIndices = null,
                 Normals = null
             };
+        }
+
+        [Pure]
+        public static IfcTriangulatedProperties CreatePolygon(PlaneTriangulatedGeometryProperties properties)
+        {
+            Vector<double>[] coordinates = new Vector<double>[properties.PolygonPoints.Length];
+            Array.Copy(properties.PolygonPoints, coordinates, properties.PolygonPoints.Length);
+            
+            int[][] triangleIndices = EarClippingTriangulator.Triangulate(properties.PolygonPoints);
+            for (int i = 0; i < triangleIndices.Length; i++)
+            {
+                for (int j = 0; j < triangleIndices[i].Length; j++)
+                {
+                    triangleIndices[i][j] += 1;
+                }
+            }
+            Vector<double>[] normals = CreateNormals(coordinates, triangleIndices);
+            
+            return new IfcTriangulatedProperties()
+            {
+                Coordinates = coordinates,
+                TriangleIndices = triangleIndices,
+                Normals = normals
+            };
+        }
+
+        [Pure]
+        private static Vector<double>[] CreateNormals(Vector<double>[] coordinates, int[][] triangleIndices)
+        {
+            Vector<double>[] normals = new Vector<double>[triangleIndices.Length];
+            for (int i = 0; i < triangleIndices.Length; i++)
+            {
+                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
+                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
+                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+            }
+
+            return normals;
         }
 
         [Pure]
@@ -343,6 +407,192 @@ namespace Ifc.Geometries
                 TriangleIndices = triangleIndices,
                 Normals = normals
             };
+        }
+    }
+    
+    internal struct Vector2
+    {
+        public double X;
+        public double Y;
+
+        public Vector2(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public Vector<double> ToVector2()
+        {
+            return new DenseVector(new double[]
+            {
+                X, Y
+            });
+        }
+
+        public Vector<double> ToVector3()
+        {
+            return new DenseVector(new double[]
+            {
+                X, Y, 0.0
+            });
+        }
+    }   
+    
+    internal class PlaneProjection
+    {
+        private readonly Vector<double> _origin;
+        private readonly Vector<double> _u;
+        private readonly Vector<double> _v;
+
+        public PlaneProjection(Vector<double> origin, Vector<double> u, Vector<double> v)
+        {
+            _origin = origin;
+            _u = u;
+            _v = v;
+        }
+
+        public Vector2 Project(Vector<double> point)
+        {
+            Vector<double> d = point - _origin;
+            return new Vector2(
+                d.DotProduct(_u),
+                d.DotProduct(_v)
+            );
+        }
+
+        public Vector2[] Project(Vector<double>[] points)
+        {
+            Vector2[] result = new Vector2[points.Length];
+            for (int i = 0; i < points.Length; i++)
+            {
+                result[i] = Project(points[i]);
+            }
+
+            return result;
+        }
+    }
+    
+    internal static class PlaneProjectionFactory
+    {
+        public static PlaneProjection Create(Vector<double>[] points)
+        {
+            if (points.Length < 3)
+                throw new ArgumentException("At least 3 points are required");
+
+            Vector<double> origin = points[0];
+            Vector<double> u = (points[1] - origin).Normalize(2);
+
+            Vector<double> normal = ((points[1] - origin).CrossProduct(points[2] - origin)).Normalize(2);
+            Vector<double> v = normal.CrossProduct(u);
+            
+            return new PlaneProjection(origin, u, v);
+        }
+    }
+    
+    public static class EarClippingTriangulator
+    {
+        public static int[][] Triangulate(IReadOnlyList<Vector<double>> vertices)
+        {
+            Vector<double>[] verticesArr = vertices as Vector<double>[] ?? vertices.ToArray();
+            PlaneProjection projection = PlaneProjectionFactory.Create(verticesArr);
+            Vector2[] points2D = projection.Project(verticesArr);
+            
+            if (points2D.Length < 3)
+                throw new ArgumentException("Polygon must contain at least 3 vertices");
+
+            List<int[]> triangles = new List<int[]>();
+            List<int> polygon = new List<int>(points2D.Length);
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                polygon.Add(i);
+            }
+
+            if (!IsCounterClockwise(points2D))
+                polygon.Reverse();
+
+            while (polygon.Count > 3)
+            {
+                bool earFound = false;
+
+                for (int i = 0; i < polygon.Count; i++)
+                {
+                    int prev = polygon[(i - 1 + polygon.Count) % polygon.Count];
+                    int curr = polygon[i];
+                    int next = polygon[(i + 1) % polygon.Count];
+                    
+                    if (!IsConvex(points2D[prev], points2D[curr], points2D[next]))
+                        continue;
+
+                    bool containsPoint = false;
+
+                    for (int j = 0; j < polygon.Count; j++)
+                    {
+                        int p = polygon[j];
+                        
+                        if (p == prev || p == curr || p == next)
+                            continue;
+
+                        if (PointInTriangle(points2D[p], points2D[prev], points2D[curr], points2D[next]))
+                        {
+                            containsPoint = true;
+                            break;
+                        }
+                    }
+
+                    if (containsPoint)
+                        continue;
+                    
+                    triangles.Add(new int[] { prev, curr, next });
+                    polygon.RemoveAt(i);
+
+                    earFound = true;
+                    break;
+                }
+
+                if (!earFound)
+                    throw new InvalidOperationException("Failed to triangulate polygon. Polygon may be self-intersecting");
+            }
+            
+            triangles.Add(new int[] { polygon[0], polygon[1], polygon[2] });
+            return triangles.ToArray();
+        }
+
+        private static bool IsCounterClockwise(IReadOnlyList<Vector2> vertices)
+        {
+            double area = 0;
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector2 a = vertices[i];
+                Vector2 b = vertices[(i + 1) % vertices.Count];
+
+                area += a.X * b.Y - b.X * a.Y;
+            }
+
+            return area > 0;
+        }
+
+        private static double Cross(Vector2 a, Vector2 b, Vector2 c)
+        {
+            return (b.X - a.X) * (c.Y - a.Y) -
+                   (b.Y - a.Y) * (c.X - a.X);
+        }
+
+        private static bool IsConvex(Vector2 a, Vector2 b, Vector2 c)
+        {
+            return Cross(a, b, c) > 0;
+        }
+
+        private static bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+        {
+            double c1 =  Cross(a, b, p);
+            double c2 = Cross(b, c, p);
+            double c3 = Cross(c, a, p);
+
+            bool hasNegative = c1 < 0 || c2 < 0 || c3 < 0;
+            bool hasPositive = c1 > 0 || c2 > 0 || c3 > 0;
+            
+            return !(hasNegative && hasPositive);
         }
     }
 }
