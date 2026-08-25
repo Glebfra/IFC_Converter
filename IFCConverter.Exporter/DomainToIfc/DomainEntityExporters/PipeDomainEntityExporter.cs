@@ -3,6 +3,7 @@ using Ifc.Builders.Elements;
 using Ifc.Geometries;
 using Ifc.Interfaces;
 using IFCConverter.Domain.Entities;
+using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -19,12 +20,15 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             return entity is PipeSegment;
         }
 
-        public IIfcProduct Export(Entity entity, IModel model, ExportContext context)
+        public void Export(Entity entity, IModel model, ExportContext context)
         {
             PipeSegment segment = (PipeSegment)entity;
             
             Vector<double> projection =  segment.EndPort.Position - segment.StartPort.Position;
             double length = projection.L2Norm();
+            if (length.AlmostEqual(0))
+                return;
+            
             Vector<double> direction = projection / length;
             
             IIfcGeometry geometry = PipeGeometry.CreateGeometry(model, new PipeGeometryProperties()
@@ -44,8 +48,6 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 
             IfcPipeSegment instance = builder.CreateInstance(model);
             context.Register(entity, instance);
-            
-            return instance;
         }
     }
 }

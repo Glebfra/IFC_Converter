@@ -168,6 +168,7 @@
         <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\PipeDomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\ReducerDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\TeeDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\ValveDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainToIfcPhaseRegistry.cs" />

@@ -4,11 +4,9 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Extensions;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
-using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Start.Entities.Segments;
 using Start.Interfaces;
-using Utils;
 
 namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
 {
@@ -41,14 +39,13 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
                     continue;
                 }
                 
+                //TODO create a new clipping algorithm
                 foreach (Port connectedEntityPort in connectedEntity.Ports)
                 {
                     if (!IsSegmentContainPoint(entity, connectedEntityPort.Position))
                         continue;
-                    
-                    Port entityPort = entity.StartPort.Position.IsNearerThan(entity.EndPort.Position, connectedEntityPort.Position)
-                        ? entity.StartPort
-                        : entity.EndPort;
+
+                    Port entityPort = entity.GetNearestPort(connectedEntityPort);
                     entityPort.SetGeometry(connectedEntityPort.Position, connectedEntityPort.Direction.Negate());
                 }
             }
@@ -82,8 +79,11 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
             Vector<double> reducerDirection = (reducer.PortB.Position - reducer.PortA.Position).Normalize(2);
             Vector<double> segmentDirection = segment.GetDirectionFromPoint(reducer.Position);
 
-            if (!reducerDirection.AlmostEqual(segmentDirection, Tolerance))
+            if (reducerDirection.DotProduct(segmentDirection) < 0)
                 return;
+
+            Port segmentNearestPort = segment.GetNearestPort(reducer.PortA);
+            segmentNearestPort.SetGeometry(reducer.PortB.Position, reducer.PortB.Direction.Negate());
         }
     }
 }

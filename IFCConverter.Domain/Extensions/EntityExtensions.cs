@@ -1,4 +1,5 @@
 ﻿using IFCConverter.Domain.Entities;
+using IFCConverter.Domain.Topology;
 using MathNet.Numerics.LinearAlgebra;
 using Utils;
 
@@ -34,6 +35,25 @@ namespace IFCConverter.Domain.Extensions
         public static Vector<double> GetDirectionFromPoint(this PipeSegment segment, Vector<double> point)
         {
             return segment.GetProjectionFromPoint(point).Normalize(2);
+        }
+
+        public static Port GetNearestPort(this Entity entity, Port port)
+        {
+            Port? nearest = null;
+            
+            foreach (Port entityPort in entity.Ports)
+            {
+                if (nearest == null)
+                {
+                    nearest = entityPort;
+                    continue;
+                }
+
+                if (entityPort.Position.IsNearerThan(nearest.Position, port.Position))
+                    nearest = entityPort;
+            }
+
+            return nearest!;
         }
     }
 }

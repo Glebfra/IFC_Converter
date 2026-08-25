@@ -19,7 +19,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             return entity is Elbow;
         }
 
-        public IIfcProduct Export(Entity entity, IModel model, ExportContext context)
+        public void Export(Entity entity, IModel model, ExportContext context)
         {
             Elbow elbow = (Elbow)entity;
             double diameter = Math.Max(
@@ -45,8 +45,6 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 
             IfcPipeFitting instance = builder.CreateInstance(model);
             context.Register(entity, instance);
-
-            return instance;
         }
     }
 }

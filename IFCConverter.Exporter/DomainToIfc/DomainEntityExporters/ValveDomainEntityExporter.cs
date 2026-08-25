@@ -20,7 +20,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             return entity is Valve;
         }
 
-        public IIfcProduct Export(Entity entity, IModel model, ExportContext context)
+        public void Export(Entity entity, IModel model, ExportContext context)
         {
             Valve valve = (Valve)entity;
             double diameter = valve.Ports.Max(port => port.Metadata.Diameter);
@@ -45,8 +45,6 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 
             IIfcPipeFitting instance = builder.CreateInstance(model);
             context.Register(entity, instance);
-
-            return instance;
         }
     }
 }

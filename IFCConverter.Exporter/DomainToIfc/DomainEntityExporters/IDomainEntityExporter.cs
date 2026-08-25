@@ -7,6 +7,6 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
     internal interface IDomainEntityExporter
     {
         bool CanExport(Entity entity);
-        IIfcProduct Export(Entity entity, IModel model, ExportContext context);
+        void Export(Entity entity, IModel model, ExportContext context);
     }
 }
