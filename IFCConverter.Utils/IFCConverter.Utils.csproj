@@ -40,12 +40,21 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="AbstractPhaseRegistry.cs" />
         <Compile Include="ConversionResult.cs"/>
         <Compile Include="ExportDataContainer.cs"/>
+        <Compile Include="IDependableAttribute.cs" />
         <Compile Include="IfcExportType.cs"/>
         <Compile Include="IfcExportTypeEnum.cs"/>
         <Compile Include="ImportDataContainer.cs"/>
+        <Compile Include="IRegistry.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Utils\Utils.csproj">
+        <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
+        <Name>Utils</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

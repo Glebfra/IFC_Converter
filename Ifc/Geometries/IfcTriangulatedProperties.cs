@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using Utils;
@@ -24,6 +25,16 @@ namespace Ifc.Geometries
         public Vector<double>? Direction;
         public double TopDiameter;
         public double BottomDiameter;
+    }
+
+    public struct TorusTriangulatedGeometryProperties
+    {
+        public Vector<double> FirstDirection;
+        public Vector<double> SecondDirection;
+        public double ProfileRadius;
+        public double SectionsRadius;
+        public int ProfileSize;
+        public int SectionsCount;
     }
 
     public struct SphereTriangulatedGeometryProperties
@@ -152,12 +163,21 @@ namespace Ifc.Geometries
         }
 
         [Pure]
+        public static IfcTriangulatedProperties CreateTorus(TorusTriangulatedGeometryProperties properties)
+        {
+            Vector<double> direction = properties.FirstDirection.Normalize(2);
+            Vector<double> upDirection = properties.FirstDirection.CrossProduct(properties.SecondDirection).Normalize(2);
+            Vector<double> rightDirection = upDirection.CrossProduct(direction).Normalize(2);
+            throw new NotImplementedException();
+        }
+
+        [Pure]
         public static IfcTriangulatedProperties CreateExtrudedBody(ExtrudedBodyTriangulatedGeometryProperties properties)
         {
             Vector<double>[] coordinates = new Vector<double>[properties.StartPoints.Length * 2];
 
             List<int[]> triangleIndices = new List<int[]>(properties.StartPoints.Length * 2);
-            
+
             for (int i = 0; i < properties.StartPoints.Length; i++)
             {
                 coordinates[i] = properties.StartPoints[i];
@@ -166,19 +186,16 @@ namespace Ifc.Geometries
 
             Vector<double>[] startPolygon = coordinates.Take(properties.StartPoints.Length).ToArray();
             Vector<double>[] endPolygon = coordinates.Skip(properties.StartPoints.Length).ToArray();
-            
+
             for (int i = 0; i < properties.StartPoints.Length; i++)
             {
-                triangleIndices.Add(new int[]
-                {
-                    i + 1, i + properties.StartPoints.Length + 1, (i + 1) % properties.StartPoints.Length + properties.StartPoints.Length + 1 
-                });
-                triangleIndices.Add(new int[]
-                {
-                    i + 1, (i + 1) % properties.StartPoints.Length + properties.StartPoints.Length + 1, (i + 1) % properties.StartPoints.Length + 1
-                });
+                int a = i;
+                int b = i + properties.StartPoints.Length;
+                int c = (i + 1) % properties.StartPoints.Length;
+                int d = (i + 1) % properties.StartPoints.Length + properties.StartPoints.Length;
+                triangleIndices.AddRange(CreateRectanglePolygon(a, b, c, d));
             }
-            
+
             int[][] startTriangleIndices = EarClippingTriangulator.Triangulate(startPolygon);
             int[][] endTriangleIndices = EarClippingTriangulator.Triangulate(endPolygon);
 
@@ -197,7 +214,7 @@ namespace Ifc.Geometries
                     endTriangleIndices[i][j] += properties.StartPoints.Length + 1;
                 }
             }
-            
+
             triangleIndices.AddRange(startTriangleIndices);
             triangleIndices.AddRange(endTriangleIndices);
 
@@ -216,21 +233,68 @@ namespace Ifc.Geometries
         [Pure]
         public static IfcTriangulatedProperties CreateExtrudedBodyByRefPoints(ExtrudedBodyByRefPointsTriangulatedGeometryProperties properties)
         {
-            Vector<double>[] coordinates = new Vector<double>[properties.StartPoints.Length * properties.RefPoints.Length];
-            for (int i = 0; i < properties.RefPoints.Length; i++)
+            int profileSize = properties.StartPoints.Length;
+            int sectionsCount = properties.RefPoints.Length;
+            
+            if (sectionsCount < 2)
+                throw new ArgumentException("RefPoints must contain at least two points.");
+            
+            Vector<double>[] coordinates = new Vector<double>[profileSize * sectionsCount];
+            List<int[]> triangleIndices = new List<int[]>(profileSize * sectionsCount * 2);
+
+            for (int i = 0; i < sectionsCount; i++)
             {
-                for (int j = 0; j < properties.StartPoints.Length; j++)
+                for (int j = 0; j < profileSize; j++)
                 {
-                    int index = i * properties.StartPoints.Length + j;
-                    coordinates[index] = properties.RefPoints[i] + properties.StartPoints[j];
+                    int index = i * profileSize + j;
+                    coordinates[index] = properties.StartPoints[j] + properties.RefPoints[i];
                 }
             }
+
+            for (int i = 0; i < sectionsCount - 1; i++)
+            {
+                for (int j = 0; j < profileSize; j++)
+                {
+                    int next = (j + 1) % profileSize;
+
+                    int a = i * profileSize + j;
+                    int b = i * profileSize + next;
+                    int c = (i + 1) * profileSize + j;
+                    int d = (i + 1) * profileSize + next;
+                    triangleIndices.AddRange(CreateRectanglePolygon(a, b, c, d));
+                }
+            }
+
+            int[][] startCap = EarClippingTriangulator.Triangulate(coordinates.Take(profileSize).ToArray());
+            int[][] endCap = EarClippingTriangulator.Triangulate(coordinates.Skip(profileSize * (sectionsCount - 1)).Take(profileSize).ToArray());
+
+            for (int i = 0; i < startCap.Length; i++)
+            {
+                for (int j = 0; j < startCap[i].Length; j++)
+                {
+                    startCap[i][j] += 1;
+                }
+            }
+
+            for (int i = 0; i < endCap.Length; i++)
+            {
+                for (int j = 0; j < endCap[i].Length; j++)
+                {
+                    endCap[i][j] += 1;
+                }
+            }
+            
+            triangleIndices.AddRange(startCap);
+            triangleIndices.AddRange(endCap);
+
+            int[][] triangleIndicesArr = triangleIndices.ToArray();
+            Vector<double>[] normals = CreateNormals(coordinates, triangleIndicesArr);
 
             return new IfcTriangulatedProperties()
             {
                 Coordinates = coordinates,
-                TriangleIndices = null,
-                Normals = null
+                TriangleIndices = triangleIndicesArr,
+                Normals = normals
             };
         }
 
@@ -239,7 +303,7 @@ namespace Ifc.Geometries
         {
             Vector<double>[] coordinates = new Vector<double>[properties.PolygonPoints.Length];
             Array.Copy(properties.PolygonPoints, coordinates, properties.PolygonPoints.Length);
-            
+
             int[][] triangleIndices = EarClippingTriangulator.Triangulate(properties.PolygonPoints);
             for (int i = 0; i < triangleIndices.Length; i++)
             {
@@ -248,13 +312,79 @@ namespace Ifc.Geometries
                     triangleIndices[i][j] += 1;
                 }
             }
+
             Vector<double>[] normals = CreateNormals(coordinates, triangleIndices);
-            
+
             return new IfcTriangulatedProperties()
             {
                 Coordinates = coordinates,
                 TriangleIndices = triangleIndices,
                 Normals = normals
+            };
+        }
+        
+        [Pure]
+        public static IfcTriangulatedProperties CreateMesh(Vector<double>[][] vertices)
+        {
+            List<Vector<double>> coordinates = new List<Vector<double>>();
+            
+            int sectionsCount = vertices.Length;
+            List<int[]> triangleIndices = new List<int[]>();
+            
+            for (int i = 0; i < sectionsCount; i++)
+            {
+                int profileSize = vertices[i].Length;
+                for (int j = 0; j < profileSize; j++)
+                {
+                    coordinates.Add(vertices[i][j]);
+                    
+                    int next = (j + 1) % profileSize;
+                    
+                    int a = i * profileSize + j;
+                    int b = i * profileSize + next;
+                    int c = (i + 1) * profileSize + j;
+                    int d = (i + 1) * profileSize + next;
+                    triangleIndices.AddRange(CreateRectanglePolygon(a, b, c, d));
+                }
+            }
+
+            Vector<double>[] coordinatesArr = coordinates.ToArray();
+            int[][] triangleIndicesArr = triangleIndices.ToArray();
+            Vector<double>[] normals = CreateNormals(coordinatesArr, triangleIndicesArr);
+
+            return new IfcTriangulatedProperties()
+            {
+                Coordinates = coordinates,
+                TriangleIndices = triangleIndicesArr,
+                Normals = normals
+            };
+        }
+        
+        [Pure]
+        private static int[][] CreateRectanglePolygon(int a, int b, int c, int d)
+        {
+            return new int[][]
+            {
+                new int[]
+                {
+                    a + 1, b + 1, c + 1
+                },
+                new int[]
+                {
+                    b + 1, d + 1, c + 1
+                }
+            };
+        }
+
+        [Pure]
+        private static int[][] CreateTrianglePolygon(int a, int b, int c)
+        {
+            return new int[][]
+            {
+                new int[]
+                {
+                    a + 1, b + 1, c + 1
+                }
             };
         }
 

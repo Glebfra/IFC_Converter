@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Utils
 {
@@ -38,6 +40,78 @@ namespace Utils
                 angle = segmentMatrix.GetY().Angle(VectorExtensions.Z);
 
             return diameter / (2 * Math.Sin(angle)); // r / sin(a)
+        }
+
+        [Pure]
+        public static Vector<double>[][] CreateTorus(Matrix<double> transformation, double profileRadius, double sectionsRadius, 
+            int profileSize, int sectionsCount)
+        {
+            return CreateTorusSegment(transformation, profileRadius, sectionsRadius, 2 * Math.PI, profileSize, sectionsCount);
+        }
+
+        [Pure]
+        public static Vector<double>[][] CreateTorusSegment(Matrix<double> transformation, double profileRadius, double sectionsRadius, double angle,
+            int profileSize = 16, int sectionsCount = 5)
+        {
+            Vector<double>[][] points = new Vector<double>[sectionsCount][];
+
+            for (int i = 0; i < sectionsCount; i++)
+            {
+                Vector<double>[] profilePoints = new Vector<double>[profileSize];
+                double psi = angle * i / (sectionsCount - 1);
+                for (int j = 0; j < profileSize; j++)
+                {
+                    double phi = 2 * Math.PI * j / profileSize;
+                    double x = (sectionsRadius + profileRadius * Math.Cos(psi)) * Math.Cos(phi);
+                    double y = (sectionsRadius + profileRadius * Math.Cos(psi)) * Math.Sin(phi);
+                    double z = profileRadius * Math.Sin(psi);
+                    Vector<double> point = new DenseVector(new double[]
+                    {
+                        x, y, z
+                    });
+
+                    profilePoints[j] = transformation.GetRotation().Multiply(point) + transformation.GetOffset();
+                }
+
+                points[i] = profilePoints;
+            }
+
+            return points;
+        }
+
+        [Pure]
+        public static Vector<double>[] CreateCircle(Vector<double> origin, double radius, Vector<double> direction, Vector<double> refDirection, int numSegments = 16)
+        {
+            return CreateArc(origin, radius, 2 * Math.PI, direction, refDirection, numSegments, endPoint: false);
+        }
+
+        [Pure]
+        public static Vector<double>[] CreateArc(Vector<double> origin, double radius, double angle, Vector<double> direction, Vector<double> refDirection, 
+            int numSegments = 8, bool endPoint = false)
+        {
+            Vector<double> directionNorm = direction.Normalize(2);
+            Vector<double> refDirectionNorm = refDirection.Normalize(2);
+            Vector<double> upDirectionNorm = directionNorm.CrossProduct(refDirectionNorm).Normalize(2);
+
+            Matrix<double> transform = MatrixExtensions.CreateTransition(origin, refDirectionNorm, upDirectionNorm, directionNorm).GetRotation();
+            Matrix<double> transformInv = transform.Inverse();
+            
+            Vector<double>[] localPoints = new Vector<double>[numSegments];
+
+            int divFactor = endPoint ? numSegments - 1 : numSegments;
+            for (int i = 0; i < numSegments; i++)
+            {
+                double t = angle * i / divFactor;
+                double x = radius * Math.Cos(t);
+                double y = radius * Math.Sin(t);
+                localPoints[i] = new DenseVector(new double[]
+                {
+                    x, y, 0.0
+                });
+            }
+
+            Vector<double>[] worldPoints = localPoints.Select(point => transformInv.Multiply(point) + origin).ToArray();
+            return worldPoints;
         }
     }
 }

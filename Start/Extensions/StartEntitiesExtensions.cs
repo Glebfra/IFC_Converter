@@ -17,6 +17,14 @@ namespace Start.Extensions
         private const double EQUALS_TOLERANCE = 1e-6;
 
         private static readonly Dictionary<Type, StartElementTypeEnum> _elementTypesCache = new();
+        private static readonly Dictionary<Type, StartElementAttribute> StartElementCache = new Dictionary<Type, StartElementAttribute>();
+        
+        [Pure]
+        public static StartElementAttribute GetStartElementAttribute(this IStartEntity entity)
+        {
+            Type type = entity.GetType();
+            return StartElementCache.GetOrAdd(type, t => t.GetCustomAttribute<StartElementAttribute>());
+        }
 
         [Pure]
         public static bool IsConnectedTo(this IStartEntity startEntity, IStartEntity otherEntity)

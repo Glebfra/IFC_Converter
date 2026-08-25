@@ -202,6 +202,30 @@ namespace Utils
         {
             return Math.Abs(first.DotProduct(second)) < tolerance;
         }
+        
+        [Pure]
+        public static bool LessThan(this Vector<double> first, Vector<double> second)
+        {
+            return first.L2Norm() < second.L2Norm();
+        }
+        
+        [Pure]
+        public static bool GreaterThan(this Vector<double> first, Vector<double> second)
+        {
+            return first.L2Norm() > second.L2Norm();
+        }
+
+        [Pure]
+        public static bool IsNearerThan(this Vector<double> first, Vector<double> second, Vector<double> origin)
+        {
+            return (first - origin).L2Norm() <= (second - origin).L2Norm();
+        }
+        
+        [Pure]
+        public static bool FartherThan(this Vector<double> first, Vector<double> second, Vector<double> origin)
+        {
+            return (first - origin).L2Norm() >= (second - origin).L2Norm();
+        }
 
         /// <summary>
         ///     Calculates the cross product of two vectors. The cross product is a vector that is perpendicular to both

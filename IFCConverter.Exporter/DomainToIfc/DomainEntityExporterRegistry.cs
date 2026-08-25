@@ -1,0 +1,23 @@
+﻿using IFCConverter.Domain.Entities;
+using IFCConverter.Exporter.DomainToIfc.DomainEntityExporters;
+using Utils;
+
+namespace IFCConverter.Exporter.DomainToIfc
+{
+    internal sealed class DomainEntityExporterRegistry : ReflectionRegistry<IDomainEntityExporter>, IDomainEntityExporterRegistry
+    {
+        public DomainEntityExporterRegistry() : base(typeof(DomainEntityExporterRegistry).Assembly)
+        {
+        }
+        
+        public IDomainEntityExporter Resolve(Entity entity)
+        {
+            return Resolve(exporter => exporter.CanExport(entity));
+        }
+
+        public bool TryResolve(Entity entity, out IDomainEntityExporter exporter)
+        {
+            return TryResolve(exporter => exporter.CanExport(entity), out exporter);
+        }
+    }
+}
