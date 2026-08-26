@@ -16,19 +16,19 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
             return source is StartValveEntity;
         }
 
-        public Entity Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
+        public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartValveEntity start = (StartValveEntity)source;
             StartElementTypeEnum startType = start.GetStartElementAttribute().Type;
             
-            Valve valve = new Valve(EntityId.New());
-            valve.Position = start.Position;
-            valve.Length = start.Length.SIProperty;
-            
+            Valve valve = new Valve(EntityId.New())
+            {
+                Position = start.Position,
+                Length = start.Length.SIProperty
+            };
+
             model.Add(valve);
             context.Register(source, valve);
-            
-            return valve;
         }
     }
 }

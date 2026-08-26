@@ -1,4 +1,5 @@
-﻿using IFCConverter.Domain.Entities;
+﻿using System.Collections.Generic;
+using IFCConverter.Domain.Entities;
 using IFCConverter.Exporter.DomainToIfc.DomainEntityExporters;
 using Utils;
 
@@ -13,6 +14,11 @@ namespace IFCConverter.Exporter.DomainToIfc
         public IDomainEntityExporter Resolve(Entity entity)
         {
             return Resolve(exporter => exporter.CanExport(entity));
+        }
+
+        public IEnumerable<IDomainEntityExporter> ResolveAll(Entity source)
+        {
+            return ResolveAll(exporter => exporter.CanExport(source));
         }
 
         public bool TryResolve(Entity entity, out IDomainEntityExporter exporter)

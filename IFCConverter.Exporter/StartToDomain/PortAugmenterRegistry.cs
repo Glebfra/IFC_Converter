@@ -1,4 +1,5 @@
-﻿using IFCConverter.Exporter.StartToDomain.PortAugmenters;
+﻿using System.Collections.Generic;
+using IFCConverter.Exporter.StartToDomain.PortAugmenters;
 using Start.Interfaces;
 using Utils;
 
@@ -13,6 +14,11 @@ namespace IFCConverter.Exporter.StartToDomain
         public IPortAugmenter Resolve(IStartEntity source)
         {
             return Resolve(augmenter => augmenter.CanAugment(source));
+        }
+
+        public IEnumerable<IPortAugmenter> ResolveAll(IStartEntity source)
+        {
+            return ResolveAll(augmenter => augmenter.CanAugment(source));
         }
 
         public bool TryResolve(IStartEntity source, out IPortAugmenter result)

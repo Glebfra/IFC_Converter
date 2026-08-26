@@ -19,19 +19,19 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
             return source is StartAbstractBendEntity;
         }
 
-        public Entity Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
+        public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartAbstractBendEntity start = (StartAbstractBendEntity)source;
             StartElementTypeEnum startType = start.GetStartElementAttribute().Type;
             
-            Elbow elbow = new Elbow(EntityId.New());
-            elbow.Position = start.Position;
-            elbow.Radius = start.Radius.SIProperty;
-            
+            Elbow elbow = new Elbow(EntityId.New())
+            {
+                Position = start.Position,
+                Radius = start.Radius.SIProperty
+            };
+
             model.Add(elbow);
             context.Register(source, elbow);
-            
-            return elbow;
         }
     }
 }

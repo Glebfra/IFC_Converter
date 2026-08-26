@@ -13,19 +13,18 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
             return source is StartAbstractReducerEntity;
         }
 
-        public Entity Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
+        public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartAbstractReducerEntity start = (StartAbstractReducerEntity)source;
 
-            Reducer reducer = new Reducer(EntityId.New());
-
-            reducer.Position = start.Position;
-            reducer.Length = start.LengthOfConicalPart.SIProperty;
+            Reducer reducer = new Reducer(EntityId.New())
+            {
+                Position = start.Position,
+                Length = start.LengthOfConicalPart.SIProperty
+            };
 
             model.Add(reducer);
             context.Register(source, reducer);
-            
-            return reducer;
         }
     }
 }

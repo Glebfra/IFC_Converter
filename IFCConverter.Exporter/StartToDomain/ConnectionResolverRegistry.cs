@@ -1,4 +1,5 @@
-﻿using IFCConverter.Exporter.StartToDomain.ConnectionResolvers;
+﻿using System.Collections.Generic;
+using IFCConverter.Exporter.StartToDomain.ConnectionResolvers;
 using Start.Interfaces;
 using Utils;
 
@@ -13,6 +14,11 @@ namespace IFCConverter.Exporter.StartToDomain
         public IConnectionResolver Resolve(IStartEntity source)
         {
             return Resolve(resolver => resolver.CanResolve(source));
+        }
+
+        public IEnumerable<IConnectionResolver> ResolveAll(IStartEntity source)
+        {
+            return ResolveAll(resolver => resolver.CanResolve(source));
         }
 
         public bool TryResolve(IStartEntity source, out IConnectionResolver result)

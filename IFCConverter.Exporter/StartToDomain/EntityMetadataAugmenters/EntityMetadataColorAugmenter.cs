@@ -1,5 +1,6 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
+using Start.Entities.Anchors;
 using Start.Entities.Fittings;
 using Start.Entities.Segments;
 using Start.Interfaces;
@@ -23,6 +24,8 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
         {
             switch (source)
             {
+                case StartAbstractAnchorEntity:
+                    return "#4ab636";
                 case StartAbstractFittingEntity:
                     return "#5f4e7c";
                 case StartAbstractSegmentEntity:

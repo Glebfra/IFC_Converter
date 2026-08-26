@@ -17,17 +17,17 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
             return source is StartAbstractTeeEntity;
         }
 
-        public Entity Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
+        public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartAbstractTeeEntity start = (StartAbstractTeeEntity)source;
             
-            Tee tee = new Tee(EntityId.New());
-            tee.Position = start.Position;
-            
+            Tee tee = new Tee(EntityId.New())
+            {
+                Position = start.Position
+            };
+
             model.Add(tee);
             context.Register(source, tee);
-            
-            return tee;
         }
     }
 }

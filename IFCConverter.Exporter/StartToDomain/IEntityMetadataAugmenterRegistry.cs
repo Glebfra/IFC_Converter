@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters;
+﻿using IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters;
+using IFCConverter.Utils;
 using Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain
 {
-    internal interface IEntityMetadataAugmenterRegistry
+    internal interface IEntityMetadataAugmenterRegistry : IRegistry<IStartEntity, IEntityMetadataAugmenter, StartMappingContext>
     {
-        public IEnumerable<IEntityMetadataAugmenter> ResolveAll(IStartEntity source, StartMappingContext context);
     }
 }
