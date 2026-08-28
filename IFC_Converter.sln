@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCConverter.Exporter", "IF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCConverter.Domain", "IFCConverter.Domain\IFCConverter.Domain.csproj", "{73FFC3F0-41C5-4A3D-AD7D-AAF8DF5F322E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCConverter.Geometry", "IFCConverter.Geometry\IFCConverter.Geometry.csproj", "{3D0BAEE1-928D-4CD0-BD14-D17D5B2BC54D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{73FFC3F0-41C5-4A3D-AD7D-AAF8DF5F322E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73FFC3F0-41C5-4A3D-AD7D-AAF8DF5F322E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73FFC3F0-41C5-4A3D-AD7D-AAF8DF5F322E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D0BAEE1-928D-4CD0-BD14-D17D5B2BC54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D0BAEE1-928D-4CD0-BD14-D17D5B2BC54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D0BAEE1-928D-4CD0-BD14-D17D5B2BC54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D0BAEE1-928D-4CD0-BD14-D17D5B2BC54D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
