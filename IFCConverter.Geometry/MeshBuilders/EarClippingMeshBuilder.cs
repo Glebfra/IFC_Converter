@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using IFCConverter.Geometry.Triangulators;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Geometry.MeshBuilders
@@ -7,6 +8,7 @@ namespace IFCConverter.Geometry.MeshBuilders
     public sealed class EarClippingMeshBuilder : MeshBuilder
     {
         private readonly Vector<double>[] _vertices;
+        private readonly ITriangulator _triangulator = new EarClippingTriangulator();
         
         public EarClippingMeshBuilder(Vector<double>[] vertices)
         {
@@ -16,7 +18,7 @@ namespace IFCConverter.Geometry.MeshBuilders
         [Pure]
         public override IMesh Build()
         {
-            int[][] triangles = EarClippingTriangulator.Triangulate(_vertices);
+            int[][] triangles = _triangulator.Triangulate(_vertices);
             return BuildMesh(_vertices, triangles);
         }
     }

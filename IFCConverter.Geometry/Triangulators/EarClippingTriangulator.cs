@@ -4,11 +4,11 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using Utils;
 
-namespace IFCConverter.Geometry
+namespace IFCConverter.Geometry.Triangulators
 {
-    public static class EarClippingTriangulator
+    internal class EarClippingTriangulator : ITriangulator
     {
-        public static int[][] Triangulate(Vector<double>[] vertices)
+        public int[][] Triangulate(Vector<double>[] vertices)
         {
             PlaneProjection projection = PlaneProjectionFactory.Create(vertices);
             Vector2[] points2D = projection.Project(vertices);

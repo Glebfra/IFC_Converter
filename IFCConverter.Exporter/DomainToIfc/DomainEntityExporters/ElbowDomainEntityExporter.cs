@@ -5,6 +5,7 @@ using Ifc.Geometries;
 using Ifc.Interfaces;
 using IFCConverter.Domain.Entities;
 using MathNet.Numerics.LinearAlgebra;
+using Utils;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
@@ -27,13 +28,13 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
                 elbow.PortB.Metadata.Diameter
             );
             
-            IIfcGeometry geometry = BendGeometry.CreateGeometry(model, new BendGeometryProperties()
+            IIfcGeometry geometry = BendTriangulatedGeometry.CreateGeometry(model, new BendTriangulatedGeometryProperties()
             {
-                BendRadius = elbow.Radius,
                 PipeDiameter = diameter,
-                Position = elbow.GetAxisPos() - elbow.Position,
-                Direction = elbow.PortA.Direction.Negate(),
-                EndDirection = elbow.PortB.Direction,
+                
+                Position = CalculateLocalArcCenter(elbow.PortA.Direction, elbow.PortB.Direction, elbow.Radius),
+                StartArcPosition = elbow.PortA.Position - elbow.Position,
+                EndArcPosition = elbow.PortB.Position - elbow.Position,
             });
             geometry.AssignColor(Color.FromHEX(entity.Metadata.Color!));
             
@@ -45,6 +46,18 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 
             IfcPipeFitting instance = builder.CreateInstance(model);
             context.Register(entity, instance);
+        }
+
+        private static Vector<double> CalculateLocalArcCenter(Vector<double> directionA, Vector<double> directionB, double radius)
+        {
+            Vector<double> firstDirection = directionA.Normalize(2);
+            Vector<double> secondDirection = directionB.Normalize(2);
+
+            double angle = firstDirection.Angle(secondDirection);
+
+            double displacementLength = radius / Math.Sin(angle / 2);
+            Vector<double> bisector = (firstDirection + secondDirection).Normalize(2);
+            return bisector * displacementLength;
         }
     }
 }

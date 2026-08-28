@@ -46,14 +46,15 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="EarClippingTriangulator.cs" />
         <Compile Include="IMesh.cs" />
         <Compile Include="Mesh.cs" />
         <Compile Include="MeshBuilders\EarClippingMeshBuilder.cs" />
         <Compile Include="MeshBuilders\IMeshBuilder.cs" />
         <Compile Include="MeshBuilders\MeshBuilder.cs" />
-        <Compile Include="MeshBuilders\TorusMeshBuilder.cs" />
+        <Compile Include="MeshBuilders\TorusSegmentMeshBuilder.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Triangulators\EarClippingTriangulator.cs" />
+        <Compile Include="Triangulators\ITriangulator.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

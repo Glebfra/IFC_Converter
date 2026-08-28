@@ -122,6 +122,7 @@
         <Compile Include="Geometries\AxialExpansionJointGeometry.cs" />
         <Compile Include="Geometries\BeamGeometry.cs" />
         <Compile Include="Geometries\BendGeometry.cs" />
+        <Compile Include="Geometries\BendTriangulatedGeometry.cs" />
         <Compile Include="Geometries\ConeGeometry.cs" />
         <Compile Include="Geometries\ConstantSpringAnchorGeometry.cs" />
         <Compile Include="Geometries\DirectionalGuideAnchorGeometry.cs" />
@@ -189,6 +190,10 @@
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\IFCConverter.Geometry\IFCConverter.Geometry.csproj">
+          <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
+          <Name>IFCConverter.Geometry</Name>
+        </ProjectReference>
         <ProjectReference Include="..\Start\Start.csproj">
             <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
             <Name>Start</Name>

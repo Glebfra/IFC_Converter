@@ -85,6 +85,22 @@ namespace Ifc.Geometries
             Color = color;
         }
 
+        [Pure]
+        protected static int[][] ChangeTriangleIndexation(int[][] triangleIndices)
+        {
+            int[][] changedTriangleIndices = new int[triangleIndices.Length][];
+            for (int i = 0; i < triangleIndices.Length; i++)
+            {
+                changedTriangleIndices[i] = triangleIndices[i];
+                for (int j = 0; j < triangleIndices[i].Length; j++)
+                {
+                    changedTriangleIndices[i][j]++;
+                }
+            }
+
+            return changedTriangleIndices;
+        }
+
         private void StyleItems(IModel model, IColor color, IEnumerable<IIfcRepresentationItem> representationItems)
         {
             IIfcColourRgb colourRgb = CreateColourRgb(model, color);
