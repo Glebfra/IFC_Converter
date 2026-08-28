@@ -5,7 +5,7 @@ namespace IFCConverter.Domain.Identity
     public readonly struct ConnectionId : IEquatable<ConnectionId>
     {
         public Guid Value { get; }
-        
+
         public ConnectionId(Guid value)
         {
             Value = value;
@@ -15,7 +15,7 @@ namespace IFCConverter.Domain.Identity
         {
             return new ConnectionId(Guid.NewGuid());
         }
-        
+
         public bool Equals(ConnectionId other)
         {
             return Value.Equals(other.Value);

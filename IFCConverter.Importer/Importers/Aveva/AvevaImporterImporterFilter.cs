@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
-using Ifc.Interfaces;
+using IFCConverter.IFC.Interfaces;
 using IFCConverter.Importer.Interfaces;
 
 namespace IFCConverter.Importer.Importers.Aveva

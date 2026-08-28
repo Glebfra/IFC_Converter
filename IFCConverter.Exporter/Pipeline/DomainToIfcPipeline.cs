@@ -9,7 +9,7 @@ namespace IFCConverter.Exporter.Pipeline
     internal sealed class DomainToIfcPipeline
     {
         private readonly DomainToIfcPhaseRegistry _phaseRegistry = new DomainToIfcPhaseRegistry();
-        
+
         public void Execute(EngineeringModel domain, IModel ifcModel, Action<IIfcProduct> addProduct)
         {
             if (domain == null)
@@ -24,6 +24,7 @@ namespace IFCConverter.Exporter.Pipeline
             {
                 domainToIfcPhase.Execute(domain, ifcModel, context);
             }
+
             foreach (IIfcProduct product in context.Products)
             {
                 addProduct(product);

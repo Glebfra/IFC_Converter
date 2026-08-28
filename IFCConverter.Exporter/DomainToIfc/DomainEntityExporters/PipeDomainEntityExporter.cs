@@ -1,15 +1,15 @@
-﻿using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
-using IFCConverter.Domain.Entities;
+﻿using IFCConverter.Domain.Entities;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using VectorExtensions = Utils.VectorExtensions;
-using MatrixExtensions = Utils.MatrixExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -23,22 +23,22 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
         public void Export(Entity entity, IModel model, ExportContext context)
         {
             PipeSegment segment = (PipeSegment)entity;
-            
-            Vector<double> projection =  segment.EndPort.Position - segment.StartPort.Position;
+
+            Vector<double> projection = segment.EndPort.Position - segment.StartPort.Position;
             double length = projection.L2Norm();
             if (length.AlmostEqual(0))
                 return;
-            
+
             Vector<double> direction = projection / length;
-            
-            IIfcGeometry geometry = PipeGeometry.CreateGeometry(model, new PipeGeometryProperties()
+
+            IIfcGeometry geometry = PipeGeometry.CreateGeometry(model, new PipeGeometryProperties
             {
                 Diameter = segment.Diameter.Value,
                 Length = length,
                 Position = VectorExtensions.Zero,
                 Direction = VectorExtensions.Z
             });
-            geometry.AssignColor(Color.FromHEX(entity.Metadata.Color!));
+            geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
 
             Matrix<double> placement = MatrixExtensions.CreateTransition(segment.StartPort.Position, direction);
             IIfcPipeSegmentBuilder<IfcPipeSegment> builder =

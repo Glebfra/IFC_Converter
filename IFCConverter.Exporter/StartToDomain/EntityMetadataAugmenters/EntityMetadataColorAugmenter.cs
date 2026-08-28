@@ -1,9 +1,9 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using Start.Entities.Anchors;
-using Start.Entities.Fittings;
-using Start.Entities.Segments;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Anchors;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
 {
@@ -24,11 +24,11 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
         {
             switch (source)
             {
-                case StartAbstractAnchorEntity:
+                case StartAbstractAnchorEntity _:
                     return "#4ab636";
-                case StartAbstractFittingEntity:
+                case StartAbstractFittingEntity _:
                     return "#5f4e7c";
-                case StartAbstractSegmentEntity:
+                case StartAbstractSegmentEntity _:
                 default:
                     return "#bebebe";
             }

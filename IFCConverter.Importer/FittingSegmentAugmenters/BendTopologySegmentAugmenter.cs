@@ -4,21 +4,21 @@ using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
 using IFCConverter.Importer.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Importer.FittingSegmentAugmenters
 {
     internal sealed class BendTopologySegmentAugmenter : ITopologySegmentAugmenter
     {
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new(DoubleTolerance);
-        
+        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
+
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity entity)
         {
-            if (entity is not BendTopologyEntity bendTopologyEntity)
+            if (!(entity is BendTopologyEntity bendTopologyEntity))
                 throw new InvalidOperationException($"{nameof(entity)}  must be of type {nameof(BendTopologyEntity)}");
-            
+
             return Augment(bendTopologyEntity);
         }
 
@@ -26,7 +26,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
         {
             IReadOnlyCollection<SegmentTopologyEntity> connectedSegments = entity.Connected.OfType<SegmentTopologyEntity>().ToArray();
             AugmentConnectedSegments(connectedSegments, entity);
-            
+
             IEnumerable<ISegmentProxy> result = GenerateConnectedSegments(connectedSegments, entity);
             return result;
         }
@@ -38,7 +38,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
             {
                 ITopologyNodeEntity startNode = connectedSegment.Nodes.ElementAt(0);
                 ITopologyNodeEntity endNode = connectedSegment.Nodes.ElementAt(1);
-                
+
                 if (Comparer.NearerThan(startNode.Position, endNode.Position, bendNode.Position))
                 {
                     startNode = bendNode;
@@ -47,7 +47,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
                 {
                     endNode = bendNode;
                 }
-                
+
                 Vector<double> projection = endNode.Position - startNode.Position;
                 connectedSegment.Augment(startNode, endNode, projection);
             }
@@ -59,7 +59,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
         {
             BendProxy bendProxy = (BendProxy)bendTopologyEntity.Proxy.Proxy;
             List<ISegmentProxy> result = new List<ISegmentProxy>();
-            
+
             ITopologyNodeEntity bendNode = bendTopologyEntity.Node;
             IReadOnlyCollection<Vector<double>> segmentDirections = existingSegments.Select(segment => segment.Projection.Normalize(2)).ToArray();
             IReadOnlyCollection<Vector<double>> boundaries = bendTopologyEntity.Proxy.Boundary;

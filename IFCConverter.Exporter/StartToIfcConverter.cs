@@ -7,25 +7,25 @@ using IFCConverter.Exporter.Converters;
 using IFCConverter.Exporter.Extensions;
 using IFCConverter.Exporter.Interfaces;
 using IFCConverter.Exporter.Pipeline;
-using IFCConverter.Utils;
-using Start.API;
-using Start.Attributes;
-using Start.Interfaces;
-using Start.Interfaces.Augmenters;
-using Utils;
+using IFCConverter.Utils.Diagnostics;
+using IFCConverter.Utils.Pipeline;
+using IFCConverter.Start.API;
+using IFCConverter.Start.Attributes;
+using IFCConverter.Start.Interfaces;
+using IFCConverter.Start.Interfaces.Augmenters;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
-using IfcProject = Ifc.API.IfcProject;
-using IIfcProject = Ifc.Interfaces.IIfcProject;
+using IfcProject = IFCConverter.IFC.API.IfcProject;
+using IIfcProject = IFCConverter.IFC.Interfaces.IIfcProject;
 
 namespace IFCConverter.Exporter
 {
     public class StartToIfcConverter
     {
-        private readonly ExportDataContainer _exportDataContainer;
-        
-        private readonly StartToIfcPipeline _pipeline = new StartToIfcPipeline();
         private static readonly Logger Logger = Logger.GetInstance();
+        private readonly ExportDataContainer _exportDataContainer;
+
+        private readonly StartToIfcPipeline _pipeline = new StartToIfcPipeline();
 
         public StartToIfcConverter(ExportDataContainer exportDataContainer)
         {
@@ -36,7 +36,7 @@ namespace IFCConverter.Exporter
         {
             if (startDocument == null)
                 throw new ArgumentNullException(nameof(startDocument));
-            
+
             Logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
 
             IStartEntity[] startEntities;
@@ -52,7 +52,7 @@ namespace IFCConverter.Exporter
                     {
                         ifcProject.AddEntityRaw((IfcProduct)product);
                     });
-                    
+
                     ifcProject.SaveAs(_exportDataContainer.OutputFilePath);
                 }
             }
@@ -99,15 +99,15 @@ namespace IFCConverter.Exporter
         }
 
         [Pure]
-        private IfcProduct? CreateIfcEntity(IModel model, IStartEntity startEntity)
+        private IfcProduct CreateIfcEntity(IModel model, IStartEntity startEntity)
         {
-            IIfcElementConverter? converter = ConverterFactory.CreateConverter(model, startEntity);
+            IIfcElementConverter converter = ConverterFactory.CreateConverter(model, startEntity);
             if (converter == null)
                 return null;
 
             Logger.Info($"Created converter {converter?.GetType().FullName}");
 
-            IfcProduct? ifcProduct = converter?.BuildIfc(startEntity) as IfcProduct;
+            IfcProduct ifcProduct = converter?.BuildIfc(startEntity) as IfcProduct;
             Logger.Info($"Created product {ifcProduct?.GetType().FullName} (global ifc id: {ifcProduct?.GlobalId})");
 
             return ifcProduct;

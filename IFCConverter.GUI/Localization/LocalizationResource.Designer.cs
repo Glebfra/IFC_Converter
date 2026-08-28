@@ -123,7 +123,7 @@ namespace IFCConverter.GUI.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a full path of Ifc file to be saved.
+        ///   Looks up a localized string similar to Enter a full path of IFCConverter.IFC file to be saved.
         /// </summary>
         internal static string ExportWindowForm_OutputFilePath_Label_Text {
             get {
@@ -150,7 +150,7 @@ namespace IFCConverter.GUI.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export to Ifc.
+        ///   Looks up a localized string similar to Export to IFCConverter.IFC.
         /// </summary>
         internal static string ExportWindowForm_Text {
             get {
@@ -222,7 +222,7 @@ namespace IFCConverter.GUI.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a full path of Ifc file to be imported.
+        ///   Looks up a localized string similar to Enter a full path of IFCConverter.IFC file to be imported.
         /// </summary>
         internal static string ImportWindowForm_InputFilePath_Label_Text {
             get {
@@ -240,7 +240,7 @@ namespace IFCConverter.GUI.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import from Ifc.
+        ///   Looks up a localized string similar to Import from IFCConverter.IFC.
         /// </summary>
         internal static string ImportWindowForm_Text {
             get {

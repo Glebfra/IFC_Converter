@@ -1,9 +1,9 @@
 ﻿using System;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using Start.API;
-using Start.Extensions;
-using Start.Interfaces;
+using IFCConverter.Start.API;
+using IFCConverter.Start.Extensions;
+using IFCConverter.Start.Interfaces;
 using Xbim.Ifc.Extensions;
 
 namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
@@ -28,7 +28,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
         {
             if (!source.Name.IsEmpty())
                 return source.Name;
-            
+
             switch (source)
             {
                 case IStartOneNodeEntity oneNodeEntity:
@@ -44,7 +44,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
         {
             return $"{oneNodeEntity.GetType().Name}_{oneNodeEntity.Node.Name}";
         }
-        
+
         private static string GenerateTwoNodeEntityName(IStartTwoNodeEntity twoNodeEntity)
         {
             return $"{twoNodeEntity.GetType().Name}_{twoNodeEntity.StartNode.Name}_{twoNodeEntity.EndNode.Name}";

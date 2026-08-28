@@ -3,8 +3,8 @@ using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Segments;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
@@ -17,7 +17,7 @@ namespace IFCConverter.Importer.Proxies
         }
 
         public Vector<double> Position { get; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public IStartEntity ToStartEntity()
         {

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Utils.Reflection;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain
 {

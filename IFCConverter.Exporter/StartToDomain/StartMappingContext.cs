@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
-using Start.Interfaces;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain
 {
@@ -20,7 +20,7 @@ namespace IFCConverter.Exporter.StartToDomain
 
             if (_entities.ContainsKey(source))
                 throw new InvalidOperationException("START entity is already mapped");
-            
+
             RegisterEntity(source, target.Id);
         }
 
@@ -29,7 +29,7 @@ namespace IFCConverter.Exporter.StartToDomain
             IStartEntity result;
             if (!_entitiesReversed.TryGetValue(id, out result))
                 throw new KeyNotFoundException("START entity has not been mapped");
-            
+
             return result;
         }
 
@@ -43,7 +43,7 @@ namespace IFCConverter.Exporter.StartToDomain
             EntityId result;
             if (!_entities.TryGetValue(source, out result))
                 throw new KeyNotFoundException("START entity has not been mapped");
-            
+
             return result;
         }
 

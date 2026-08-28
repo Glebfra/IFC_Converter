@@ -12,8 +12,8 @@
         <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <Deterministic>true</Deterministic>
-        <LangVersion>default</LangVersion>
-        <Nullable>enable</Nullable>
+        <LangVersion>7.3</LangVersion>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>
@@ -83,16 +83,16 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Domain\IFCConverter.Domain.csproj">
-          <Project>{73ffc3f0-41c5-4a3d-ad7d-aaf8df5f322e}</Project>
-          <Name>IFCConverter.Domain</Name>
+            <Project>{73ffc3f0-41c5-4a3d-ad7d-aaf8df5f322e}</Project>
+            <Name>IFCConverter.Domain</Name>
         </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Exporter\IFCConverter.Exporter.csproj">
             <Project>{ad860eed-1bac-4b03-8327-5d9a3452c794}</Project>
             <Name>IFCConverter.Exporter</Name>
         </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Geometry\IFCConverter.Geometry.csproj">
-          <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
-          <Name>IFCConverter.Geometry</Name>
+            <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
+            <Name>IFCConverter.Geometry</Name>
         </ProjectReference>
         <ProjectReference Include="..\IFCConverter.GUI\IFCConverter.GUI.csproj">
             <Project>{1e4d34b3-2c04-4816-a9b3-9c78e2d29d85}</Project>
@@ -110,13 +110,9 @@
             <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
             <Name>Ifc</Name>
         </ProjectReference>
-        <ProjectReference Include="..\Start\Start.csproj">
+        <ProjectReference Include="..\IFCConverter.Start\IFCConverter.Start.csproj">
             <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
-            <Name>Start</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\Utils\Utils.csproj">
-            <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
-            <Name>Utils</Name>
+            <Name>IFCConverter.Start</Name>
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

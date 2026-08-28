@@ -5,7 +5,7 @@ namespace IFCConverter.Domain.Identity
     public readonly struct PortId : IEquatable<PortId>
     {
         public Guid Value { get; }
-        
+
         public PortId(Guid value)
         {
             Value = value;

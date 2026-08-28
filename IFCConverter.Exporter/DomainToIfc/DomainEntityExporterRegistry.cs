@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Exporter.DomainToIfc.DomainEntityExporters;
-using Utils;
+using IFCConverter.Utils.Reflection;
 
 namespace IFCConverter.Exporter.DomainToIfc
 {
@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.DomainToIfc
         public DomainEntityExporterRegistry() : base(typeof(DomainEntityExporterRegistry).Assembly)
         {
         }
-        
+
         public IDomainEntityExporter Resolve(Entity entity)
         {
             return Resolve(exporter => exporter.CanExport(entity));
@@ -23,7 +23,7 @@ namespace IFCConverter.Exporter.DomainToIfc
 
         public bool TryResolve(Entity entity, out IDomainEntityExporter exporter)
         {
-            return TryResolve(exporter => exporter.CanExport(entity), out exporter);
+            return TryResolve(exp => exp.CanExport(entity), out exporter);
         }
     }
 }

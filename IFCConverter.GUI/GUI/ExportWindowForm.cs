@@ -3,7 +3,8 @@ using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 using IFCConverter.GUI.Localization;
-using IFCConverter.Utils;
+using IFCConverter.Utils.IFC;
+using IFCConverter.Utils.Pipeline;
 
 namespace IFCConverter.GUI.GUI
 {
@@ -25,7 +26,7 @@ namespace IFCConverter.GUI.GUI
 
         private void LocalizeComponents()
         {
-            ArrayList types = new()
+            ArrayList types = new ArrayList
             {
                 new IfcExportType(IfcExportTypeEnum.VERTEX, LocalizationResource.ExportWindowForm_ExportType_Vertex),
                 new IfcExportType(IfcExportTypeEnum.CAD, LocalizationResource.ExportWindowForm_ExportType_Topological)
@@ -48,7 +49,7 @@ namespace IFCConverter.GUI.GUI
             int vertexNum = Convert.ToInt32(vertexSegmentsTextbox.Text);
             if (!IsValidVertexNum(vertexNum)) return;
 
-            if (exportTypeCombobox.SelectedItem is not IfcExportType exportType)
+            if (!(exportTypeCombobox.SelectedItem is IfcExportType exportType))
             {
                 MessageBox.Show(LocalizationResource.ExportWindowForm_ExportType_Error,
                     LocalizationResource.MessageBox_Title_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -109,11 +110,11 @@ namespace IFCConverter.GUI.GUI
 
         private void selectOutputFilePathButton_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveFileDialog = new())
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 //saveFileDialog.FileName = Имя файла старт;
                 saveFileDialog.Title = LocalizationResource.ExportWindowForm_SaveDialogFile_Title;
-                saveFileDialog.Filter = @"Ifc files (*.ifc)|*.ifc";
+                saveFileDialog.Filter = @"IFCConverter.IFC files (*.ifc)|*.ifc";
                 saveFileDialog.DefaultExt = ".ifc";
                 saveFileDialog.RestoreDirectory = true;
 

@@ -1,24 +1,25 @@
 ﻿using System;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Domain.Entities
 {
     public sealed class Elbow : Fitting
     {
-        public Port PortA { get; }
-        public Port PortB { get; }
-        
-        public Vector<double> Position { get; set; }
-        public double Radius { get; set; }
-        
+
         public Elbow(EntityId id) : base(id)
         {
             PortA = CreatePort();
             PortB = CreatePort();
         }
+
+        public Port PortA { get; }
+        public Port PortB { get; }
+
+        public Vector<double> Position { get; set; }
+        public double Radius { get; set; }
 
         public Vector<double> GetAxisPos()
         {

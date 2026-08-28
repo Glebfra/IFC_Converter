@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using IFCConverter.GUI.Localization;
-using IFCConverter.Utils;
+using IFCConverter.Utils.Pipeline;
 
 namespace IFCConverter.GUI.GUI
 {
@@ -79,7 +79,7 @@ namespace IFCConverter.GUI.GUI
 
         private void selectInputFilePathButton_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new())
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = @"IFC files (*.ifc)|*.ifc";
                 openFileDialog.DefaultExt = ".ifc";

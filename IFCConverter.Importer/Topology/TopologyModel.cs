@@ -7,8 +7,8 @@ using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Importer.Topology
 {
@@ -25,7 +25,7 @@ namespace IFCConverter.Importer.Topology
     internal sealed class TopologyModel : ITopologyModel
     {
         private const double DefaultDoubleTolerance = 1e-3;
-        private static readonly VectorComparer DefaultComparer = new(DefaultDoubleTolerance);
+        private static readonly VectorComparer DefaultComparer = new VectorComparer(DefaultDoubleTolerance);
 
         private static readonly BoundaryResolver BoundaryResolver = BoundaryResolver.GetInstance();
         private static readonly ConnectionResolver ConnectionResolver = ConnectionResolver.GetInstance();
@@ -87,7 +87,7 @@ namespace IFCConverter.Importer.Topology
             List<IEntityProxy> allProxies = _entities.Select(entity => entity.Proxy.Proxy).ToList();
             allProxies.AddRange(proxiesArray);
 
-            List<IBoundaryProxy> boundaryProxies = new();
+            List<IBoundaryProxy> boundaryProxies = new List<IBoundaryProxy>();
             foreach (IEntityProxy proxy in proxiesArray)
             {
                 IReadOnlyCollection<Vector<double>> boundary = BoundaryResolver.ResolveBoundary(proxy, allProxies);
@@ -171,10 +171,11 @@ namespace IFCConverter.Importer.Topology
             {
                 topologyEntity.Disconnect(entity);
             }
+
             _entities.Remove(entity);
             RecalculateConnections();
         }
-        
+
         /// <summary>
         ///     Removes the specified topology entities from the model.
         /// </summary>
@@ -191,10 +192,12 @@ namespace IFCConverter.Importer.Topology
             {
                 topologyEntity.Disconnect(entitiesArray);
             }
+
             foreach (ITopologyEntity topologyEntity in entitiesArray)
             {
                 _entities.Remove(topologyEntity);
             }
+
             RecalculateConnections();
         }
 
@@ -211,11 +214,15 @@ namespace IFCConverter.Importer.Topology
         /// <returns>
         ///     A fully initialized <see cref="TopologyModel" />.
         /// </returns>
-        public static TopologyModel Create(IEnumerable<IBoundaryProxy> boundaryProxies, VectorComparer? comparer = null)
+        public static TopologyModel Create(IEnumerable<IBoundaryProxy> boundaryProxies, VectorComparer comparer = null)
         {
             IReadOnlyCollection<IBoundaryProxy> boundaryProxiesArray = boundaryProxies as IReadOnlyCollection<IBoundaryProxy> ?? boundaryProxies.ToArray();
 
-            comparer ??= DefaultComparer;
+            if (comparer == null)
+            {
+                comparer = DefaultComparer;
+            }
+
             IEnumerable<ITopologyEntity> result = CreateTopologyEntities(boundaryProxiesArray);
 
             return new TopologyModel(result);
@@ -234,7 +241,7 @@ namespace IFCConverter.Importer.Topology
         /// <returns>
         ///     A fully initialized <see cref="TopologyModel" />.
         /// </returns>
-        public static TopologyModel Create(IEnumerable<IEntityProxy> proxies, VectorComparer? comparer = null)
+        public static TopologyModel Create(IEnumerable<IEntityProxy> proxies, VectorComparer comparer = null)
         {
             IReadOnlyCollection<IEntityProxy> proxiesArray = proxies as IReadOnlyCollection<IEntityProxy> ?? proxies.ToArray();
 
@@ -247,8 +254,8 @@ namespace IFCConverter.Importer.Topology
 
         private static IEnumerable<ITopologyEntity> CreateTopologyEntities(IReadOnlyCollection<IBoundaryProxy> boundaryProxies)
         {
-            Dictionary<IBoundaryProxy, IEnumerable<IBoundaryProxy>> connections = new();
-            Dictionary<IBoundaryProxy, ITopologyEntity> proxyToTopologyMap = new();
+            Dictionary<IBoundaryProxy, IEnumerable<IBoundaryProxy>> connections = new Dictionary<IBoundaryProxy, IEnumerable<IBoundaryProxy>>();
+            Dictionary<IBoundaryProxy, ITopologyEntity> proxyToTopologyMap = new Dictionary<IBoundaryProxy, ITopologyEntity>();
 
             foreach (IBoundaryProxy boundaryProxy in boundaryProxies)
             {

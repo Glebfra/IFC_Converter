@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using IFCConverter.Domain;
+﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
-using Start.Attributes;
-using Start.Entities.Fittings;
-using Start.Interfaces;
-using Xbim.Ifc.Extensions;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
 {
@@ -20,7 +16,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartAbstractTeeEntity start = (StartAbstractTeeEntity)source;
-            
+
             Tee tee = new Tee(EntityId.New())
             {
                 Position = start.Position

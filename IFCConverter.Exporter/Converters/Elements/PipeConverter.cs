@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Utils.Diagnostics;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Segments;
-using Utils;
+using IFCConverter.Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = Utils.MatrixExtensions;
-using VectorExtensions = Utils.VectorExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements
 {
@@ -55,28 +56,36 @@ namespace IFCConverter.Exporter.Converters.Elements
         [Pure]
         private static IfcPipeSegmentTypeEnum GetIfcTypeEnum(StartAbstractSegmentEntity start)
         {
-            return start switch
+            switch (start)
             {
-                StartFlexibleElementEntity => IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT,
-                StartRigidElementEntity => IfcPipeSegmentTypeEnum.RIGIDSEGMENT,
-                StartCylindricalShellEntity => IfcPipeSegmentTypeEnum.RIGIDSEGMENT,
-                StartConeElementEntity => IfcPipeSegmentTypeEnum.RIGIDSEGMENT,
-                StartPipeEntity => IfcPipeSegmentTypeEnum.RIGIDSEGMENT,
-                _ => IfcPipeSegmentTypeEnum.USERDEFINED
-            };
+                case StartFlexibleElementEntity startFlexibleElementEntity:
+                    return IfcPipeSegmentTypeEnum.FLEXIBLESEGMENT;
+                case StartRigidElementEntity _:
+                case StartCylindricalShellEntity _:
+                case StartConeElementEntity _:
+                case StartPipeEntity _:
+                    return IfcPipeSegmentTypeEnum.RIGIDSEGMENT;
+                default:
+                    return IfcPipeSegmentTypeEnum.USERDEFINED;
+            }
         }
 
         [Pure]
         private static Color GetIfcColor(StartAbstractSegmentEntity start)
         {
-            return start switch
+            switch (start)
             {
-                StartFlexibleElementEntity => Color.FromHEX("00509f"),
-                StartRigidElementEntity => Color.FromHEX("009249"),
-                StartCylindricalShellEntity => Color.FromHEX("3e3ec0"),
-                StartConeElementEntity => Color.FromHEX("46008b"),
-                _ => Color.FromHEX("bebebe")
-            };
+                case StartFlexibleElementEntity startFlexibleElementEntity:
+                    return Color.FromHEX("00509f");
+                case StartRigidElementEntity startRigidElementEntity:
+                    return Color.FromHEX("009249");
+                case StartCylindricalShellEntity startCylindricalShellEntity:
+                    return Color.FromHEX("3e3ec0");
+                case StartConeElementEntity startConeElementEntity:
+                    return Color.FromHEX("46008b");
+                default:
+                    return Color.FromHEX("bebebe");
+            }
         }
     }
 }

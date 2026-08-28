@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Ifc.Extensions;
+using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Proxies;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
 
@@ -17,7 +17,7 @@ namespace IFCConverter.Importer.Importers.Aveva
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
 
-            if (representationItems[0] is not IIfcExtrudedAreaSolid extrudedAreaSolid)
+            if (!(representationItems[0] is IIfcExtrudedAreaSolid extrudedAreaSolid))
                 throw new Exception("The representation item is not an extruded area solid.");
 
             Matrix<double> position = extrudedAreaSolid.Position.ToMatrix();
@@ -25,7 +25,7 @@ namespace IFCConverter.Importer.Importers.Aveva
             Vector<double> extrudedDirection = extrudedAreaSolid.ExtrudedDirection.ToVector();
             Vector<double> pipeDirection = rotation.LeftMultiply(extrudedDirection);
 
-            IIfcCircleProfileDef? profileDef = extrudedAreaSolid.SweptArea as IIfcCircleProfileDef;
+            IIfcCircleProfileDef profileDef = extrudedAreaSolid.SweptArea as IIfcCircleProfileDef;
             if (profileDef == null)
                 throw new Exception("The swept area is not a circle profile definition.");
 

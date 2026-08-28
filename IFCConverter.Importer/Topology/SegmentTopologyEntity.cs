@@ -3,17 +3,14 @@ using System.Linq;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Segments;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {
     [TopologyEntity]
     internal class SegmentTopologyEntity : TopologyEntity, ISegmentTopologyEntity
     {
-        public Vector<double> Projection => _resolvedProjection;
-        
-        private Vector<double> _resolvedProjection;
 
         private Vector<double> _resolvedStartPosition;
 
@@ -30,21 +27,23 @@ namespace IFCConverter.Importer.Topology
             Vector<double> resolvedProjection = resolvedEndPosition - resolvedStartPosition;
 
             _resolvedStartPosition = resolvedStartPosition;
-            _resolvedProjection = segmentProjection.Normalize(2) * resolvedProjection.L2Norm();
+            Projection = segmentProjection.Normalize(2) * resolvedProjection.L2Norm();
         }
+
+        public Vector<double> Projection { get; private set; }
 
         public override IStartEntity ToStartEntity()
         {
             StartPipeEntity startSegmentEntity = (StartPipeEntity)base.ToStartEntity();
             startSegmentEntity.StartPosition = _resolvedStartPosition;
-            startSegmentEntity.Projection = _resolvedProjection;
+            startSegmentEntity.Projection = Projection;
 
             return startSegmentEntity;
         }
 
         public void Augment(ITopologyNodeEntity startNode, ITopologyNodeEntity endNode, Vector<double> projection)
         {
-            _resolvedProjection = projection;
+            Projection = projection;
             _resolvedStartPosition = startNode.Position;
 
             Nodes = new[]

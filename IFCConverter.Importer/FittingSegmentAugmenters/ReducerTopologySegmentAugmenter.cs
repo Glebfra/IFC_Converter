@@ -4,8 +4,8 @@ using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
 using IFCConverter.Importer.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Importer.FittingSegmentAugmenters
 {
@@ -13,13 +13,13 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
     {
         private const double MinLength = 1e-2;
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new(DoubleTolerance);
-        
+        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
+
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity entity)
         {
-            if (entity is not ReducerTopologyEntity reducerTopologyEntity)
+            if (!(entity is ReducerTopologyEntity reducerTopologyEntity))
                 throw new InvalidOperationException($"{nameof(entity)}  must be of type {nameof(ReducerTopologyEntity)}");
-            
+
             return Augment(reducerTopologyEntity);
         }
 
@@ -27,7 +27,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
         {
             IReadOnlyCollection<SegmentTopologyEntity> connectedSegments = entity.Connected.OfType<SegmentTopologyEntity>().ToArray();
             AugmentConnectedSegments(connectedSegments, entity);
-            
+
             IEnumerable<ISegmentProxy> result = GenerateConnectedSegments(connectedSegments, entity);
             return result;
         }
@@ -35,7 +35,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
         private static void AugmentConnectedSegments(IEnumerable<SegmentTopologyEntity> connectedSegments, ReducerTopologyEntity reducerTopologyEntity)
         {
             ITopologyNodeEntity reducerNode = reducerTopologyEntity.Node;
-            
+
             foreach (SegmentTopologyEntity connectedSegment in connectedSegments)
             {
                 ITopologyNodeEntity segmentStartNode = connectedSegment.Nodes.ElementAt(0);
@@ -66,7 +66,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
             ReducerProxy reducerProxy = (ReducerProxy)reducerTopologyEntity.Proxy.Proxy;
             List<ISegmentProxy> result = new List<ISegmentProxy>();
             Vector<double> reducerDirection = (boundaries.ElementAt(0) - boundaries.ElementAt(1) + reducerProxy.AxisDisplacement).Normalize(2);
-            
+
             ITopologyNodeEntity reducerNode = reducerTopologyEntity.Node;
             foreach (Vector<double> boundary in boundaries)
             {
@@ -81,9 +81,9 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
                 double diameter = boundary.Equals(reducerNode.Position)
                     ? reducerProxy.MinDiameter
                     : reducerProxy.MaxDiameter;
-                
+
                 Vector<double> directionToBoundary = projectionToBoundary / projectionLength;
-                
+
                 ISegmentProxy newSegmentProxy = new PipeSegmentProxy(
                     diameter,
                     projectionLength,
@@ -95,7 +95,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
                 };
                 // result.Add(newSegmentProxy);
             }
-            
+
             return result;
         }
     }

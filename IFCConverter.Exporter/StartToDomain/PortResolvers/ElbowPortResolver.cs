@@ -3,11 +3,11 @@ using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Extensions;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Extensions;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -22,17 +22,17 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
         {
             if (!context.TryGetEntityId(source, out EntityId id))
                 return;
-            
+
             StartAbstractBendEntity start = (StartAbstractBendEntity)source;
             Elbow elbow = (Elbow)model.GetEntity(id);
-            
+
             IStartSegmentEntity[] segments = start.ConnectedEntities
                 .OfType<IStartSegmentEntity>()
                 .ToArray();
 
             if (segments.Length != 2)
                 throw new InvalidOperationException($"Elbow '{elbow.Id}' must have exactly two connected segments");
-            
+
             IStartSegmentEntity firstSegment = segments[0];
             IStartSegmentEntity secondSegment = segments[1];
 
@@ -40,10 +40,10 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             Vector<double> secondDirection = secondSegment.GetProjectionFromPoint(elbow.Position).Normalize(2);
             double angle = Math.PI - firstDirection.Angle(secondDirection);
             double torusSegmentLength = MathExtensions.CalculateTorusSegmentLength(elbow.Radius, angle);
-            
+
             elbow.PortA.SetGeometry(elbow.Position + firstDirection * torusSegmentLength, firstDirection);
             elbow.PortB.SetGeometry(elbow.Position + secondDirection * torusSegmentLength, secondDirection);
-            
+
             elbow.PortA.Metadata.Diameter = firstSegment.Diameter.SIProperty;
             elbow.PortB.Metadata.Diameter = secondSegment.Diameter.SIProperty;
         }

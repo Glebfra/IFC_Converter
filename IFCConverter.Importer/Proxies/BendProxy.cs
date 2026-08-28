@@ -4,8 +4,8 @@ using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
@@ -29,14 +29,14 @@ namespace IFCConverter.Importer.Proxies
 
         public double Diameter { get; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public Vector<double> Position { get; set; }
 
         [Pure]
         public IStartEntity ToStartEntity()
         {
-            StartElbowEntity elbowEntity = new();
+            StartElbowEntity elbowEntity = new StartElbowEntity();
             elbowEntity.Radius.CreateFromSI(Radius);
             elbowEntity.Position = Position;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Exporter.StartToDomain.StartEntityImporters;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Utils.Reflection;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain
 {
@@ -23,7 +23,7 @@ namespace IFCConverter.Exporter.StartToDomain
 
         public bool TryResolve(IStartEntity source, out IStartEntityImporter importer)
         {
-            return TryResolve(importer => importer.CanImport(source), out importer);
+            return TryResolve(imp => imp.CanImport(source), out importer);
         }
     }
 }

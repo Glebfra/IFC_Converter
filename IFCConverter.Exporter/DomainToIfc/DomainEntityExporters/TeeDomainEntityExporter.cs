@@ -1,15 +1,15 @@
 ﻿using System;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
 using IFCConverter.Domain.Entities;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = Utils.MatrixExtensions;
-using VectorExtensions = Utils.VectorExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -23,7 +23,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
         public void Export(Entity entity, IModel model, ExportContext context)
         {
             Tee tee = (Tee)entity;
-            
+
             double headDiameter = tee.PortC.Metadata.Diameter;
             Vector<double> headProjection = tee.PortC.Position - tee.Position;
             double headLength = headProjection.L2Norm();
@@ -33,20 +33,20 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             Vector<double> mainProjection = tee.PortB.Position - tee.PortA.Position;
             double mainLength = mainProjection.L2Norm();
             Vector<double> mainDirection = mainProjection / mainLength;
-            
-            IIfcGeometry geometry = TeeGeometry.CreateGeometry(model, new TeeGeometryProperties()
+
+            IIfcGeometry geometry = TeeGeometry.CreateGeometry(model, new TeeGeometryProperties
             {
                 Position = VectorExtensions.Zero,
-                
+
                 HeadDiameter = headDiameter,
                 HeadLength = headLength,
                 HeadDirection = headDirection,
-                
+
                 MainDiameter = mainDiameter,
                 MainLength = mainLength,
                 MainDirection = mainDirection
             });
-            geometry.AssignColor(Color.FromHEX(entity.Metadata.Color!));
+            geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
 
             Matrix<double> placement = MatrixExtensions.CreateTransition(tee.Position);
             IIfcPipeFittingBuilder<IfcPipeFitting> builder =

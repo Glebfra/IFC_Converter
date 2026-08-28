@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics;
-using Start.Entities;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.Entities;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.ConnectionResolvers
 {
@@ -16,7 +15,7 @@ namespace IFCConverter.Exporter.StartToDomain.ConnectionResolvers
     {
         private const double Tolerance = 1e-6;
         private readonly VectorComparer _vectorComparer = new VectorComparer(Tolerance);
-        
+
         public bool CanResolve(IStartEntity source)
         {
             return source is StartAbstractEntity;

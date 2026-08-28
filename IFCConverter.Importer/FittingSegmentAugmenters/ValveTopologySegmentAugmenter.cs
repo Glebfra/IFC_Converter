@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Importer.FittingSegmentAugmenters
 {
     internal sealed class ValveTopologySegmentAugmenter : ITopologySegmentAugmenter
     {
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new(DoubleTolerance);
-        
+        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
+
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity entity)
         {
-            if (entity is not ValveTopologyEntity valveTopologyEntity)
+            if (!(entity is ValveTopologyEntity valveTopologyEntity))
                 throw new InvalidOperationException($"{nameof(entity)}  must be of type {nameof(ValveTopologyEntity)}");
-            
+
             return Augment(valveTopologyEntity);
         }
 
@@ -25,7 +25,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
         {
             IReadOnlyCollection<SegmentTopologyEntity> connectedSegments = entity.Connected.OfType<SegmentTopologyEntity>().ToArray();
             AugmentConnectedSegments(connectedSegments, entity);
-            
+
             return Enumerable.Empty<ISegmentProxy>();
         }
 
@@ -36,7 +36,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
             {
                 ITopologyNodeEntity startNode = connectedSegment.Nodes.ElementAt(0);
                 ITopologyNodeEntity endNode = connectedSegment.Nodes.ElementAt(1);
-                
+
                 if (Comparer.NearerThan(startNode.Position, endNode.Position, valveNode.Position))
                 {
                     startNode = valveNode;
@@ -45,7 +45,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
                 {
                     endNode = valveNode;
                 }
-                
+
                 Vector<double> projection = endNode.Position - startNode.Position;
                 connectedSegment.Augment(startNode, endNode, projection);
             }

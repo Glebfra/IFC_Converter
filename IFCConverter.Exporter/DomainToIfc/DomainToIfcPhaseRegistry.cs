@@ -1,5 +1,5 @@
 ﻿using IFCConverter.Exporter.Attributes;
-using IFCConverter.Utils;
+using IFCConverter.Utils.Registries;
 
 namespace IFCConverter.Exporter.DomainToIfc
 {

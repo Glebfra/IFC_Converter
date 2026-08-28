@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Geometry.MeshBuilders
 {
     public sealed class TorusSegmentMeshBuilder : MeshBuilder
     {
-        private readonly Vector<double> _center;
-        private readonly Vector<double> _start;
-        private readonly Vector<double> _end;
-
-        private readonly double _radius;
 
         private readonly int _arcSegments;
+        private readonly Vector<double> _center;
+        private readonly Vector<double> _end;
         private readonly int _profileSegments;
 
-        public TorusSegmentMeshBuilder(Vector<double> center, Vector<double> start, Vector<double> end, double radius, int arcSegments = 32, int profileSegments = 16)
+        private readonly double _radius;
+        private readonly Vector<double> _start;
+
+        public TorusSegmentMeshBuilder(Vector<double> center, Vector<double> start, Vector<double> end, double radius, int arcSegments = 32,
+            int profileSegments = 16)
         {
             _center = center;
             _start = start;
@@ -41,7 +42,7 @@ namespace IFCConverter.Geometry.MeshBuilders
 
             List<Vector<double>> vertices = new List<Vector<double>>((_arcSegments + 1) * _profileSegments);
             List<int[]> triangles = new List<int[]>(_arcSegments * _profileSegments * 2);
-            
+
             for (int i = 0; i <= _arcSegments; i++)
             {
                 double theta =
@@ -49,7 +50,7 @@ namespace IFCConverter.Geometry.MeshBuilders
 
                 double cosTheta = Math.Cos(theta);
                 double sinTheta = Math.Sin(theta);
-                
+
                 Vector<double> radial = cosTheta * u + sinTheta * v;
                 Vector<double> sectionCenter = _center + torusRadius * radial;
 
@@ -64,7 +65,7 @@ namespace IFCConverter.Geometry.MeshBuilders
                     vertices.Add(point);
                 }
             }
-            
+
             for (int i = 0; i < _arcSegments; i++)
             {
                 int currentRow = i * _profileSegments;
@@ -79,8 +80,14 @@ namespace IFCConverter.Geometry.MeshBuilders
                     int c = nextRow + nextProfile;
                     int d = nextRow + j;
 
-                    triangles.Add(new[] { a, b, c });
-                    triangles.Add(new[] { a, c, d });
+                    triangles.Add(new[]
+                    {
+                        a, b, c
+                    });
+                    triangles.Add(new[]
+                    {
+                        a, c, d
+                    });
                 }
             }
 

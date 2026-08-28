@@ -5,6 +5,6 @@ namespace IFCConverter.Exporter.DomainToIfc
 {
     public interface IDomainToIfcPhase
     {
-        public void Execute(EngineeringModel domain, IModel model, ExportContext context);
+        void Execute(EngineeringModel domain, IModel model, ExportContext context);
     }
 }

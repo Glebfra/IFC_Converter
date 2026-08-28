@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using IFCConverter.Domain;
+﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
-using Start.API;
-using Start.Attributes;
-using Start.Entities.Fittings;
-using Start.Extensions;
-using Start.Interfaces;
-using Xbim.Ifc.Extensions;
+using IFCConverter.Start.API;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Extensions;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
 {
@@ -23,7 +19,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         {
             StartAbstractBendEntity start = (StartAbstractBendEntity)source;
             StartElementTypeEnum startType = start.GetStartElementAttribute().Type;
-            
+
             Elbow elbow = new Elbow(EntityId.New())
             {
                 Position = start.Position,

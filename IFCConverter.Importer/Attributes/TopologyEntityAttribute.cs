@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Interfaces;
-using Utils;
+using IFCConverter.Utils.Reflection;
 
 namespace IFCConverter.Importer.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     internal sealed class TopologyEntityAttribute : Attribute
     {
-        public readonly Type? SegmentAugmenterType;
+        public readonly Type SegmentAugmenterType;
 
-        public TopologyEntityAttribute(Type? segmentAugmenterType = null)
+        public TopologyEntityAttribute(Type segmentAugmenterType = null)
         {
             SegmentAugmenterType = segmentAugmenterType;
         }
 
         [Pure]
-        public ITopologySegmentAugmenter? GetSegmentAugmenter()
+        public ITopologySegmentAugmenter GetSegmentAugmenter()
         {
             if (SegmentAugmenterType == null)
                 return null;

@@ -27,14 +27,19 @@ namespace IFCConverter.Importer.Attributes
         [Pure]
         public bool IsMatch(string name)
         {
-            return PropertyMatchMode switch
+            switch (PropertyMatchMode)
             {
-                PropertyMatchMode.Exact => string.Equals(name, Name),
-                PropertyMatchMode.StartsWith => name.StartsWith(Name),
-                PropertyMatchMode.Contains => name.Contains(Name),
-                PropertyMatchMode.Regex => Regex.IsMatch(name, Name),
-                _ => false
-            };
+                case PropertyMatchMode.Exact:
+                    return string.Equals(name, Name);
+                case PropertyMatchMode.StartsWith:
+                    return name.StartsWith(Name);
+                case PropertyMatchMode.Contains:
+                    return name.Contains(Name);
+                case PropertyMatchMode.Regex:
+                    return Regex.IsMatch(name, Name);
+                default:
+                    return false;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Exporter.StartToDomain.PortAugmenters;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Utils.Reflection;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain
 {

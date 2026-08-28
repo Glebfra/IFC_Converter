@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.DomainToIfc.Phases
     public sealed class EntityExportPhase : IDomainToIfcPhase
     {
         private readonly IDomainEntityExporterRegistry _domainEntityExporterRegistry = new DomainEntityExporterRegistry();
-        
+
         public void Execute(EngineeringModel domain, IModel model, ExportContext context)
         {
             foreach (Entity domainEntity in domain.Entities)

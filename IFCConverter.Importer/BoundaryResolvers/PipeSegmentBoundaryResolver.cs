@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
 
         public IReadOnlyCollection<Vector<double>> ResolveBoundary(IEntityProxy proxy)
         {
-            if (proxy is not PipeSegmentProxy pipeSegmentProxy)
+            if (!(proxy is PipeSegmentProxy pipeSegmentProxy))
                 throw new InvalidCastException();
 
             return new[]

@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Linq;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Anchors;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.Entities.Anchors;
+using IFCConverter.Start.Interfaces;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using MatrixExtensions = Utils.MatrixExtensions;
-using VectorExtensions = Utils.VectorExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements
 {
@@ -78,12 +78,15 @@ namespace IFCConverter.Exporter.Converters.Elements
 
         private static Vector<double> GetDirection(StartAbstractConstantSpringAnchorEntity start)
         {
-            return start switch
+            switch (start)
             {
-                StartConstantSpringSupportAnchorEntity => VectorExtensions.Z,
-                StartConstantSpringSupportHangerAnchorEntity => -VectorExtensions.Z,
-                _ => VectorExtensions.Z
-            };
+                case StartConstantSpringSupportAnchorEntity startConstantSpringSupportAnchorEntity:
+                    return VectorExtensions.Z;
+                case StartConstantSpringSupportHangerAnchorEntity startConstantSpringSupportHangerAnchorEntity:
+                    return -VectorExtensions.Z;
+                default:
+                    return VectorExtensions.Z;
+            }
         }
     }
 }

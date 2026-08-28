@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using IFCConverter.Utils.Collections;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Importer.Graph
 {

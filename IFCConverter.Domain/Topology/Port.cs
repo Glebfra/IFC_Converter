@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using IFCConverter.Domain.Identity;
+﻿using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Metadata;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -7,6 +6,13 @@ namespace IFCConverter.Domain.Topology
 {
     public sealed class Port
     {
+
+        internal Port(PortId id, EntityId owner)
+        {
+            Id = id;
+            Owner = owner;
+        }
+
         public PortId Id { get; }
         public EntityId Owner { get; }
         public Vector<double> Position { get; internal set; }
@@ -14,12 +20,6 @@ namespace IFCConverter.Domain.Topology
         public PortRole Role { get; internal set; }
 
         public PortMetadata Metadata { get; } = new PortMetadata();
-        
-        internal Port(PortId id, EntityId owner)
-        {
-            Id = id;
-            Owner = owner;
-        }
 
         public void SetGeometry(Vector<double> position, Vector<double> direction)
         {

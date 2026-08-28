@@ -6,11 +6,6 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Tee : Fitting
     {
-        public Port PortA { get; }
-        public Port PortB { get; }
-        public Port PortC { get; }
-        
-        public Vector<double> Position { get; set; }
 
         public Tee(EntityId id) : base(id)
         {
@@ -18,5 +13,11 @@ namespace IFCConverter.Domain.Entities
             PortB = CreatePort();
             PortC = CreatePort();
         }
+
+        public Port PortA { get; }
+        public Port PortB { get; }
+        public Port PortC { get; }
+
+        public Vector<double> Position { get; set; }
     }
 }

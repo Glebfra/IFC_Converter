@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
-using Utils;
+using IFCConverter.Utils.Collections;
 
 namespace IFCConverter.Importer.Extensions
 {

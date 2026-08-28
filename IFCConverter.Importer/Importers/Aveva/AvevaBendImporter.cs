@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ifc.Extensions;
+using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets.Aveva;
 using IFCConverter.Importer.Proxies;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
 
@@ -21,10 +21,10 @@ namespace IFCConverter.Importer.Importers.Aveva
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
 
-            if (representationItems[0] is not IIfcRevolvedAreaSolid revolvedAreaSolid)
+            if (!(representationItems[0] is IIfcRevolvedAreaSolid revolvedAreaSolid))
                 throw new Exception("The representation item is not a revolved area solid.");
 
-            if (revolvedAreaSolid.SweptArea is not IIfcCircleProfileDef circleProfileDef)
+            if (!(revolvedAreaSolid.SweptArea is IIfcCircleProfileDef circleProfileDef))
                 throw new Exception("The representation item is not a circle profile def.");
 
             double diameter = circleProfileDef.Radius * 2;
@@ -36,7 +36,7 @@ namespace IFCConverter.Importer.Importers.Aveva
             double radius = axisLocalPosition.L2Norm();
 
             IEnumerable<IPropertySet> propertySets = source.GetPropertySets();
-            AvevaPset? avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
+            AvevaPset avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
             if (avevaPset == null)
                 throw new Exception("The required Aveva property set is missing.");
 

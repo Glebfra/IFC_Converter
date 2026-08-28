@@ -4,8 +4,8 @@ using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
@@ -18,12 +18,12 @@ namespace IFCConverter.Importer.Proxies
         }
 
         public Vector<double> Position { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Pure]
         public IStartEntity ToStartEntity()
         {
-            StartValveEntity valveEntity = new()
+            StartValveEntity valveEntity = new StartValveEntity
             {
                 Position = Position,
                 Name = Name ?? string.Empty

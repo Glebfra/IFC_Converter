@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using IFCConverter.Importer.Interfaces;
-using Utils;
+using IFCConverter.Utils.Collections;
 
 namespace IFCConverter.Importer
 {
@@ -16,16 +16,16 @@ namespace IFCConverter.Importer
         {
             return TopologyEntityFactoryCache.GetOrAdd(type, CreateTopologyEntityFactory)(entityProxy, nodes);
         }
-        
+
         private static Func<IBoundaryProxy, IReadOnlyCollection<ITopologyNodeEntity>, ITopologyEntity> CreateTopologyEntityFactory(Type type)
         {
-            ConstructorInfo constructor = type.GetConstructor(new Type[]
+            ConstructorInfo constructor = type.GetConstructor(new[]
             {
                 typeof(IBoundaryProxy), typeof(IReadOnlyCollection<ITopologyNodeEntity>)
-            })!;
+            });
             ParameterExpression proxy = Expression.Parameter(typeof(IBoundaryProxy));
             ParameterExpression nodes = Expression.Parameter(typeof(IReadOnlyCollection<ITopologyNodeEntity>));
-            
+
             NewExpression body = Expression.New(constructor, proxy, nodes);
 
             return Expression.Lambda<Func<IBoundaryProxy, IReadOnlyCollection<ITopologyNodeEntity>, ITopologyEntity>>(body, proxy, nodes).Compile();

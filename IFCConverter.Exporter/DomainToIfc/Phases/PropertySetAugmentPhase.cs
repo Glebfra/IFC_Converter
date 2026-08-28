@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.DomainToIfc.Phases
     public class PropertySetAugmentPhase : IDomainToIfcPhase
     {
         private readonly IPropertySetAugmentersRegistry _propertySetAugmentersRegistry = new PropertySetAugmenterRegistry();
-        
+
         public void Execute(EngineeringModel domain, IModel model, ExportContext context)
         {
             foreach (Entity domainEntity in domain.Entities)

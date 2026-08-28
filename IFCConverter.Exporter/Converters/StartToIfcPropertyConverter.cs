@@ -1,6 +1,6 @@
 ﻿using System;
-using Start.Interfaces;
-using Start.StartProperties;
+using IFCConverter.Start.Interfaces;
+using IFCConverter.Start.StartProperties;
 using Xbim.Ifc4.MeasureResource;
 
 namespace IFCConverter.Exporter.Converters
@@ -9,16 +9,23 @@ namespace IFCConverter.Exporter.Converters
     {
         public static IfcValue ConvertToIfcValue(object property)
         {
-            return property switch
+            switch (property)
             {
-                int => new IfcInteger(Convert.ToInt32(property)),
-                double => new IfcReal(Convert.ToDouble(property)),
-                string => new IfcText(Convert.ToString(property)),
-                IStartValueProperty<double> valueProperty => ConvertToIfcValue(valueProperty),
-                IStartValueProperty<int> intValueProperty => ConvertToIfcValue(intValueProperty),
-                IStartEnumProperty<Enum> enumProperty => ConvertToIfcValue(enumProperty),
-                _ => new IfcText(property?.ToString() ?? "")
-            };
+                case int _:
+                    return new IfcInteger(Convert.ToInt32(property));
+                case double _:
+                    return new IfcReal(Convert.ToDouble(property));
+                case string _:
+                    return new IfcText(Convert.ToString(property));
+                case IStartValueProperty<double> valueProperty:
+                    return ConvertToIfcValue(valueProperty);
+                case IStartValueProperty<int> intValueProperty:
+                    return ConvertToIfcValue(intValueProperty);
+                case IStartEnumProperty<Enum> enumProperty:
+                    return ConvertToIfcValue(enumProperty);
+                default:
+                    return new IfcText(property?.ToString() ?? "");
+            }
         }
 
         public static IfcValue ConvertToIfcValue<T>(IStartValueProperty<T> property)
@@ -26,18 +33,27 @@ namespace IFCConverter.Exporter.Converters
         {
             double doubleProperty = Convert.ToDouble(property.SIProperty);
 
-            return property switch
+            switch (property)
             {
-                AngleValueProperty<T> => new IfcPositivePlaneAngleMeasure(doubleProperty),
-                AreaValueProperty<T> => new IfcAreaMeasure(doubleProperty),
-                ForceValueProperty<T> => new IfcForceMeasure(doubleProperty),
-                LengthValueProperty<T> => new IfcLengthMeasure(doubleProperty),
-                MassValueProperty<T> => new IfcMassMeasure(doubleProperty),
-                MomentValueProperty<T> => new IfcLinearMomentMeasure(doubleProperty),
-                PressureValueProperty<T> => new IfcPressureMeasure(doubleProperty),
-                TemperatureValueProperty<T> => new IfcThermodynamicTemperatureMeasure(doubleProperty),
-                _ => new IfcReal(doubleProperty)
-            };
+                case AngleValueProperty<T> _:
+                    return new IfcPositivePlaneAngleMeasure(doubleProperty);
+                case AreaValueProperty<T> _:
+                    return new IfcAreaMeasure(doubleProperty);
+                case ForceValueProperty<T> _:
+                    return new IfcForceMeasure(doubleProperty);
+                case LengthValueProperty<T> _:
+                    return new IfcLengthMeasure(doubleProperty);
+                case MassValueProperty<T> _:
+                    return new IfcMassMeasure(doubleProperty);
+                case MomentValueProperty<T> _:
+                    return new IfcLinearMomentMeasure(doubleProperty);
+                case PressureValueProperty<T> _:
+                    return new IfcPressureMeasure(doubleProperty);
+                case TemperatureValueProperty<T> _:
+                    return new IfcThermodynamicTemperatureMeasure(doubleProperty);
+                default:
+                    return new IfcReal(doubleProperty);
+            }
         }
 
         public static IfcValue ConvertToIfcValue<T>(IStartEnumProperty<T> property)

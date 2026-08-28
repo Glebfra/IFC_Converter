@@ -6,8 +6,8 @@ namespace IFCConverter.Exporter.DomainToIfc
 {
     internal interface IPropertySetAugmentersRegistry
     {
-        public IPropertySetAugmenter Resolve(Entity entity, ExportContext context);
-        public IEnumerable<IPropertySetAugmenter> ResolveAll(Entity entity, ExportContext context);
-        public bool TryResolve(Entity entity, ExportContext context, out IPropertySetAugmenter exporter);
+        IPropertySetAugmenter Resolve(Entity entity, ExportContext context);
+        IEnumerable<IPropertySetAugmenter> ResolveAll(Entity entity, ExportContext context);
+        bool TryResolve(Entity entity, ExportContext context, out IPropertySetAugmenter exporter);
     }
 }

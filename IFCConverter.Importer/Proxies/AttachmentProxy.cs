@@ -4,8 +4,8 @@ using IFCConverter.Importer.ConnectionResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Anchors;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Anchors;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
@@ -18,11 +18,11 @@ namespace IFCConverter.Importer.Proxies
         }
 
         public Vector<double> Position { get; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public IStartEntity ToStartEntity()
         {
-            StartRestingSupportAnchorEntity entity = new()
+            StartRestingSupportAnchorEntity entity = new StartRestingSupportAnchorEntity
             {
                 Name = Name ?? string.Empty,
                 Position = Position

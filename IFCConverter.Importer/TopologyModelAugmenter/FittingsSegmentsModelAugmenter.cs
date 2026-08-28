@@ -21,12 +21,12 @@ namespace IFCConverter.Importer.TopologyModelAugmenter
                     double length = projection.L2Norm();
                     Vector<double> direction = projection / length;
 
-                    PipeSegmentProxy segmentProxy = new(0.1, length, start, direction)
+                    PipeSegmentProxy segmentProxy = new PipeSegmentProxy(0.1, length, start, direction)
                     {
                         Name = $"Generated segment for {fittingTopologyEntity.Proxy.Proxy.Name} | {connectedFitting.Proxy.Proxy.Name}"
                     };
 
-                    Vector<double>[] boundary = new[]
+                    Vector<double>[] boundary =
                     {
                         start, end
                     };

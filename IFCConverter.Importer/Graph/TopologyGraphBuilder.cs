@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Importer.Interfaces;
-using Utils;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Importer.Graph
 {
@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.Graph
 
         public TopologyGraph Build(IEnumerable<IFittingProxy> fittings, IEnumerable<IResolvedSegmentProxy> segments)
         {
-            TopologyGraph graph = new(_comparer);
+            TopologyGraph graph = new TopologyGraph(_comparer);
 
             foreach (IFittingProxy fitting in fittings)
             {

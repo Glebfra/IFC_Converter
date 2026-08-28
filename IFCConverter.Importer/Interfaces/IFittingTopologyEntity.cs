@@ -2,6 +2,6 @@
 {
     internal interface IFittingTopologyEntity : ITopologyEntity
     {
-        public ITopologyNodeEntity Node { get; }
+        ITopologyNodeEntity Node { get; }
     }
 }

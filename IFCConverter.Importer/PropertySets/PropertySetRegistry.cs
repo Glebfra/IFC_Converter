@@ -5,16 +5,16 @@ using System.Linq;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Extensions;
-using Utils;
+using IFCConverter.Utils.Reflection;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Importer.PropertySets
 {
     internal class PropertySetRegistry
     {
-        private static readonly Lazy<PropertySetRegistry> _instance = new(() => new PropertySetRegistry());
+        private static readonly Lazy<PropertySetRegistry> _instance = new Lazy<PropertySetRegistry>(() => new PropertySetRegistry());
 
-        private readonly List<Type> _propertySetsList = new();
+        private readonly List<Type> _propertySetsList = new List<Type>();
 
         private PropertySetRegistry()
         {
@@ -31,7 +31,7 @@ namespace IFCConverter.Importer.PropertySets
             where T : AbstractPropertySet
         {
             string propertySetName = ifcPropertySet.Name ?? string.Empty;
-            Type? propertySetType = _propertySetsList
+            Type propertySetType = _propertySetsList
                 .FirstOrDefault(type => type.GetCustomAttribute<PropertySetAttribute>().IsMatch(propertySetName));
             if (propertySetType == null)
                 throw new Exception($"Property set with name {propertySetName} is not registered");
@@ -46,7 +46,7 @@ namespace IFCConverter.Importer.PropertySets
             IEnumerable<Type> propertySetsTypes = AttributeFinder.GetClassesWithAttribute<PropertySetAttribute>();
             foreach (Type propertySetsType in propertySetsTypes)
             {
-                PropertySetAttribute? propertySetAttribute =
+                PropertySetAttribute propertySetAttribute =
                     propertySetsType.GetCustomAttribute<PropertySetAttribute>();
                 if (propertySetAttribute == null)
                     continue;

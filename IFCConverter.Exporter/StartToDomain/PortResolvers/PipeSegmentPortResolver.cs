@@ -2,9 +2,9 @@
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Segments;
-using Start.Extensions;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Extensions;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -21,7 +21,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
                 return;
             StartAbstractSegmentEntity start = (StartAbstractSegmentEntity)source;
             PipeSegment entity = (PipeSegment)model.GetEntity(id);
-            
+
             ResolvePortA(start, entity);
             ResolvePortB(start, entity);
         }
@@ -30,7 +30,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
         {
             Vector<double> position = startSegment.StartNode.Position;
             Vector<double> direction = ResolveDirection(startSegment, position);
-            
+
             segment.StartPort.SetGeometry(position, direction);
             segment.StartPort.Metadata.Diameter = startSegment.Diameter.SIProperty;
         }
@@ -39,7 +39,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
         {
             Vector<double> position = startSegment.EndNode.Position;
             Vector<double> direction = ResolveDirection(startSegment, position);
-            
+
             segment.EndPort.SetGeometry(position, direction);
             segment.EndPort.Metadata.Diameter = startSegment.Diameter.SIProperty;
         }

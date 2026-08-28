@@ -76,7 +76,7 @@
         <value>未知的导入类型</value>
     </data>
     <data name="ImportWindowForm_Text" xml:space="preserve">
-        <value>输入格式为 Ifc</value>
+        <value>输入格式为 IFCConverter.IFC</value>
     </data>
     <data name="ImportWindowForm_InputFilePath_Label_Text" xml:space="preserve">
         <value>输入要导入的IFC文件完整路径

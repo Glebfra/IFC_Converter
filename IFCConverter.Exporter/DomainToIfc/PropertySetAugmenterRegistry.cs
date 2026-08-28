@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Exporter.DomainToIfc.PropertySetAugmenters;
-using Utils;
+using IFCConverter.Utils.Reflection;
 
 namespace IFCConverter.Exporter.DomainToIfc
 {

@@ -11,7 +11,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
     {
         public IEnumerable<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
-            if (proxy is not ReducerProxy reducerProxy)
+            if (!(proxy is ReducerProxy reducerProxy))
                 throw new InvalidCastException();
 
             return reducerProxy.Boundary.ToArray();

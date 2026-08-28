@@ -1,6 +1,6 @@
 ﻿using IFCConverter.Exporter.StartToDomain.PortResolvers;
-using IFCConverter.Utils;
-using Start.Interfaces;
+using IFCConverter.Utils.Registries;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain
 {

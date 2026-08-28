@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ifc.Extensions;
+using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets.Aveva;
 using IFCConverter.Importer.Proxies;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
-using Utils;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
-using VectorExtensions = Utils.VectorExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Importer.Importers.Aveva
 {
     internal class AvevaReducerImporter : AbstractEntityImporter<IfcBuildingElementProxy, ReducerProxy>
     {
         private const double _tolerance = 1e-6;
-        private readonly VectorComparer _comparer = new(_tolerance);
+        private readonly VectorComparer _comparer = new VectorComparer(_tolerance);
 
         public override ReducerProxy ReadTyped(IfcBuildingElementProxy source)
         {
@@ -26,11 +26,11 @@ namespace IFCConverter.Importer.Importers.Aveva
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
 
-            if (representationItems[0] is not IIfcTriangulatedFaceSet faceSet)
+            if (!(representationItems[0] is IIfcTriangulatedFaceSet faceSet))
                 throw new Exception("The representation item is not a triangulated face set.");
 
             IEnumerable<IPropertySet> propertySets = source.GetPropertySets();
-            AvevaPset? avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
+            AvevaPset avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
             if (avevaPset == null)
                 throw new Exception("The required Aveva property set is missing.");
 

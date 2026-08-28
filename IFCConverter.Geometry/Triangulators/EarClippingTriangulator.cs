@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
-using Utils;
 
 namespace IFCConverter.Geometry.Triangulators
 {
@@ -59,7 +59,7 @@ namespace IFCConverter.Geometry.Triangulators
                     if (containsPoint)
                         continue;
 
-                    triangles.Add(new int[]
+                    triangles.Add(new[]
                     {
                         prev, curr, next
                     });
@@ -73,13 +73,13 @@ namespace IFCConverter.Geometry.Triangulators
                     throw new InvalidOperationException("Failed to triangulate polygon. Polygon may be self-intersecting");
             }
 
-            triangles.Add(new int[]
+            triangles.Add(new[]
             {
                 polygon[0], polygon[1], polygon[2]
             });
             return triangles.ToArray();
         }
-        
+
         private static bool IsCounterClockwise(IReadOnlyList<Vector2> vertices)
         {
             double area = 0;
@@ -107,17 +107,17 @@ namespace IFCConverter.Geometry.Triangulators
 
         private static bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
         {
-            double c1 =  Cross(a, b, p);
+            double c1 = Cross(a, b, p);
             double c2 = Cross(b, c, p);
             double c3 = Cross(c, a, p);
 
             bool hasNegative = c1 < 0 || c2 < 0 || c3 < 0;
             bool hasPositive = c1 > 0 || c2 > 0 || c3 > 0;
-            
+
             return !(hasNegative && hasPositive);
         }
     }
-    
+
     internal static class PlaneProjectionFactory
     {
         public static PlaneProjection Create(Vector<double>[] points)
@@ -128,13 +128,13 @@ namespace IFCConverter.Geometry.Triangulators
             Vector<double> origin = points[0];
             Vector<double> u = (points[1] - origin).Normalize(2);
 
-            Vector<double> normal = ((points[1] - origin).CrossProduct(points[2] - origin)).Normalize(2);
+            Vector<double> normal = (points[1] - origin).CrossProduct(points[2] - origin).Normalize(2);
             Vector<double> v = normal.CrossProduct(u);
-            
+
             return new PlaneProjection(origin, u, v);
         }
     }
-    
+
     internal class PlaneProjection
     {
         private readonly Vector<double> _origin;
@@ -168,7 +168,7 @@ namespace IFCConverter.Geometry.Triangulators
             return result;
         }
     }
-    
+
     internal struct Vector2
     {
         public double X;
@@ -182,7 +182,7 @@ namespace IFCConverter.Geometry.Triangulators
 
         public Vector<double> ToVector2()
         {
-            return new DenseVector(new double[]
+            return new DenseVector(new[]
             {
                 X, Y
             });
@@ -190,10 +190,10 @@ namespace IFCConverter.Geometry.Triangulators
 
         public Vector<double> ToVector3()
         {
-            return new DenseVector(new double[]
+            return new DenseVector(new[]
             {
                 X, Y, 0.0
             });
         }
-    }   
+    }
 }

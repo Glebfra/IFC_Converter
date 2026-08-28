@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Exporter.StartToDomain.PortResolvers;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Utils.Reflection;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain
 {
@@ -23,7 +23,7 @@ namespace IFCConverter.Exporter.StartToDomain
 
         public bool TryResolve(IStartEntity source, out IPortResolver resolver)
         {
-            return TryResolve(resolver => resolver.CanResolve(source), out resolver);
+            return TryResolve(res => res.CanResolve(source), out resolver);
         }
     }
 }

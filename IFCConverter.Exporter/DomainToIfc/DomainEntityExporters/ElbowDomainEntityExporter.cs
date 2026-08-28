@@ -1,15 +1,15 @@
 ﻿using System;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
 using IFCConverter.Domain.Entities;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = Utils.MatrixExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -27,17 +27,17 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
                 elbow.PortA.Metadata.Diameter,
                 elbow.PortB.Metadata.Diameter
             );
-            
-            IIfcGeometry geometry = BendTriangulatedGeometry.CreateGeometry(model, new BendTriangulatedGeometryProperties()
+
+            IIfcGeometry geometry = BendTriangulatedGeometry.CreateGeometry(model, new BendTriangulatedGeometryProperties
             {
                 PipeDiameter = diameter,
-                
+
                 Position = CalculateLocalArcCenter(elbow.PortA.Direction, elbow.PortB.Direction, elbow.Radius),
                 StartArcPosition = elbow.PortA.Position - elbow.Position,
-                EndArcPosition = elbow.PortB.Position - elbow.Position,
+                EndArcPosition = elbow.PortB.Position - elbow.Position
             });
-            geometry.AssignColor(Color.FromHEX(entity.Metadata.Color!));
-            
+            geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
+
             Matrix<double> placement = MatrixExtensions.CreateTransition(elbow.Position);
             IIfcPipeFittingBuilder<IfcPipeFitting> builder =
                 new IfcPipeFittingBuilder<IfcPipeFitting>(elbow.Metadata.Name, elbow.Metadata.Type, IfcPipeFittingTypeEnum.BEND);

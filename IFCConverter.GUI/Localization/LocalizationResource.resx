@@ -34,10 +34,10 @@
         <value>Export</value>
     </data>
     <data name="ExportWindowForm_Text" xml:space="preserve">
-        <value>Export to Ifc</value>
+        <value>Export to IFCConverter.IFC</value>
     </data>
     <data name="ExportWindowForm_OutputFilePath_Label_Text" xml:space="preserve">
-        <value>Enter a full path of Ifc file to be saved</value>
+        <value>Enter a full path of IFCConverter.IFC file to be saved</value>
     </data>
     <data name="DirectoryDoesNotExists_Error" xml:space="preserve">
         <value>Selected directory does not exist</value>
@@ -70,7 +70,7 @@
         <value>Vertex segments num shoud be above 4</value>
     </data>
     <data name="ImportWindowForm_Text" xml:space="preserve">
-        <value>Import from Ifc</value>
+        <value>Import from IFCConverter.IFC</value>
     </data>
     <data name="ImportWindowForm_ImportButton_Text" xml:space="preserve">
         <value>Import</value>
@@ -79,7 +79,7 @@
         <value>Browse...</value>
     </data>
     <data name="ImportWindowForm_InputFilePath_Label_Text" xml:space="preserve">
-        <value>Enter a full path of Ifc file to be imported</value>
+        <value>Enter a full path of IFCConverter.IFC file to be imported</value>
     </data>
     <data name="ImportWindowForm_ImportType_Label_Text" xml:space="preserve">
         <value>Import profile</value>

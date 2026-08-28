@@ -51,7 +51,7 @@ namespace IFCConverter.Importer.PropertySets.Aveva
         [Property("NWELDS")] public int Nwelds = default;
 
         [Property("ORI", converter: typeof(AvevaMatrixPropertyConverter))]
-        public Matrix<double> Ori = default!;
+        public Matrix<double> Ori = default;
 
         [Property("ORIL", converter: typeof(AvevaBoolPropertyConverter))]
         public bool Oril = default;
@@ -60,7 +60,7 @@ namespace IFCConverter.Importer.PropertySets.Aveva
         [Property("PIPE")] public string Pipe = string.Empty;
 
         [Property("POS", converter: typeof(AvevaVectorPropertyConverter))]
-        public Vector<double> Pos = default!;
+        public Vector<double> Pos = default;
 
         [Property("POSI", converter: typeof(AvevaBoolPropertyConverter))]
         public bool Posi = default;

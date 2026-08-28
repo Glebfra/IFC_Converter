@@ -5,7 +5,7 @@ namespace IFCConverter.Importer.PropertySets.Converters
 {
     internal sealed class AvevaBoolPropertyConverter : AbstractPropertyConverter<IfcValue, bool>
     {
-        private static readonly Dictionary<string, bool> BoolMap = new();
+        private static readonly Dictionary<string, bool> BoolMap = new Dictionary<string, bool>();
 
         public AvevaBoolPropertyConverter()
         {

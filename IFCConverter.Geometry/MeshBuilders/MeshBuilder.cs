@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
-using VectorExtensions = Utils.VectorExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Geometry.MeshBuilders
 {
@@ -10,11 +10,14 @@ namespace IFCConverter.Geometry.MeshBuilders
     {
         [Pure]
         public abstract IMesh Build();
-        
+
         [Pure]
         protected static Vector<double> CreateVector(double x, double y, double z)
         {
-            return new DenseVector(new double[] { x, y, z});
+            return new DenseVector(new[]
+            {
+                x, y, z
+            });
         }
 
         protected static void AddRectangle(List<int[]> triangles, int a, int b, int c, int d)
@@ -25,7 +28,10 @@ namespace IFCConverter.Geometry.MeshBuilders
 
         protected static void AddTriangle(List<int[]> triangles, int a, int b, int c)
         {
-            triangles.Add(new []{ a, b, c });
+            triangles.Add(new[]
+            {
+                a, b, c
+            });
         }
 
         [Pure]

@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using IFCConverter.Domain;
+﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
-using Start.Attributes;
-using Start.Entities.Segments;
-using Start.Interfaces;
-using Xbim.Ifc.Extensions;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
 {
@@ -20,7 +16,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartAbstractSegmentEntity start = (StartAbstractSegmentEntity)source;
-            
+
             PipeSegment pipe = new PipeSegment(EntityId.New())
             {
                 Diameter = start.Diameter.SIProperty,

@@ -1,14 +1,14 @@
 ﻿using System.Linq;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
 using IFCConverter.Domain.Entities;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = Utils.MatrixExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -25,14 +25,14 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             Vector<double> forward = (reducer.PortB.Position - reducer.PortA.Position).DotProduct(reducer.PortA.Direction) * reducer.PortA.Direction;
             Vector<double>[] positions = reducer.Ports.Select(port => port.Position - reducer.Position).ToArray();
             double[] diameters = reducer.Ports.Select(port => port.Metadata.Diameter).ToArray();
-             
-            IIfcGeometry geometry = ConeGeometry.CreateGeometry(model, new ConeGeometryProperties()
+
+            IIfcGeometry geometry = ConeGeometry.CreateGeometry(model, new ConeGeometryProperties
             {
                 Direction = forward,
                 Diameters = diameters,
                 Positions = positions
             });
-            geometry.AssignColor(Color.FromHEX(reducer.Metadata.Color!));
+            geometry.AssignColor(Color.FromHEX(reducer.Metadata.Color));
 
             Matrix<double> placement = MatrixExtensions.CreateTransition(reducer.Position);
             IIfcPipeFittingBuilder<IIfcPipeFitting> builder =

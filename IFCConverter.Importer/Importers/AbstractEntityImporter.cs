@@ -26,7 +26,7 @@ namespace IFCConverter.Importer.Importers
             if (_lengthPowerCache != null)
                 return (double)_lengthPowerCache;
 
-            IfcSIUnit? siUnit = source.Model.Instances
+            IfcSIUnit siUnit = source.Model.Instances
                 .OfType<IfcSIUnit>()
                 .FirstOrDefault(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
             _lengthPowerCache = siUnit?.Power ?? 1.0;

@@ -11,17 +11,17 @@ namespace IFCConverter.Exporter.DomainToIfc
         private readonly Dictionary<EntityId, IIfcProduct> _products = new Dictionary<EntityId, IIfcProduct>();
 
         public IReadOnlyCollection<IIfcProduct> Products => _products.Values;
-        
+
         public void Register(Entity entity, IIfcProduct product)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
-            
+
             if (_products.ContainsKey(entity.Id))
-                throw new InvalidOperationException($"Domain entity is already exported");
-            
+                throw new InvalidOperationException("Domain entity is already exported");
+
             _products.Add(entity.Id, product);
         }
 
@@ -31,7 +31,7 @@ namespace IFCConverter.Exporter.DomainToIfc
             if (!_products.TryGetValue(entityId, out product))
                 throw new KeyNotFoundException($"No IFC product exists for Domain entity {entityId}");
 
-            return product!;
+            return product;
         }
 
         public bool TryGet(EntityId entityId, out IIfcProduct result)

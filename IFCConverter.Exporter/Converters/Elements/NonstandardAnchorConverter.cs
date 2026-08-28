@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
-using Start.API;
-using Start.Entities;
-using Start.Entities.Anchors;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.API;
+using IFCConverter.Start.Entities;
+using IFCConverter.Start.Entities.Anchors;
+using IFCConverter.Start.Interfaces;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using MatrixExtensions = Utils.MatrixExtensions;
-using VectorExtensions = Utils.VectorExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements
 {
@@ -35,8 +35,8 @@ namespace IFCConverter.Exporter.Converters.Elements
             double diameter = segmentEntities.Max(segmentEntity => segmentEntity.Diameter).SIProperty;
 
             StartNonStandardRestraintModule[] restraintModules = start.Restraints.ToArray();
-            List<Vector<double>> positions = new(restraintModules.Length);
-            List<Vector<double>> directions = new(restraintModules.Length);
+            List<Vector<double>> positions = new List<Vector<double>>(restraintModules.Length);
+            List<Vector<double>> directions = new List<Vector<double>>(restraintModules.Length);
 
             for (int i = 0; i < restraintModules.Length; i++)
             {
@@ -122,8 +122,8 @@ namespace IFCConverter.Exporter.Converters.Elements
             foreach (IStartSegmentEntity segmentEntity in segmentEntities)
             {
                 StartNodeEntity[] nodeEntities = segmentEntity.ConnectedEntities.OfType<StartNodeEntity>().ToArray();
-                StartNodeEntity? startNode = nodeEntities.FirstOrDefault(item => item.ID == start.SectionStartNode);
-                StartNodeEntity? endNode = nodeEntities.FirstOrDefault(item => item.ID == start.SectionEndNode);
+                StartNodeEntity startNode = nodeEntities.FirstOrDefault(item => item.ID == start.SectionStartNode);
+                StartNodeEntity endNode = nodeEntities.FirstOrDefault(item => item.ID == start.SectionEndNode);
                 if (startNode == null || endNode == null)
                     continue;
 

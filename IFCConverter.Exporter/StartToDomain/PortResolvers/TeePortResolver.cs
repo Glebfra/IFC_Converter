@@ -4,22 +4,17 @@ using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Extensions;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Extensions;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
     internal sealed class TeePortResolver : IPortResolver
     {
-        private struct FilteredSegments
-        {
-            public IStartSegmentEntity HeadSegment;
-            public IStartSegmentEntity[] MainSegments;
-        }
-        
+
         public bool CanResolve(IStartEntity source)
         {
             return source is StartAbstractTeeEntity;
@@ -29,10 +24,10 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
         {
             if (!context.TryGetEntityId(source, out EntityId id))
                 return;
-            
+
             StartAbstractTeeEntity start = (StartAbstractTeeEntity)source;
             Tee entity = (Tee)model.GetEntity(id);
-            
+
             IStartSegmentEntity[] segments = start.ConnectedEntities.OfType<IStartSegmentEntity>().ToArray();
             if (segments.Length != 3)
                 throw new InvalidOperationException($"Tee '{entity.Id}' must have exactly three connected segments");
@@ -46,8 +41,8 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
         private static FilteredSegments FilterSegments(IStartSegmentEntity[] segmentEntities)
         {
             IStartSegmentEntity[] mainSegments = new IStartSegmentEntity[2];
-            IStartSegmentEntity? headSegment = null;
-            
+            IStartSegmentEntity headSegment = null;
+
             for (int i = 0; i < 3; i++)
             for (int j = i + 1; j < 3; j++)
             {
@@ -62,7 +57,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             if (headSegment == null)
                 throw new InvalidOperationException("Cannot filter segments on tee");
 
-            return new FilteredSegments()
+            return new FilteredSegments
             {
                 HeadSegment = headSegment,
                 MainSegments = mainSegments
@@ -74,6 +69,12 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             Vector<double> direction = startSegment.GetProjectionFromPoint(position).Normalize(2);
             port.SetGeometry(position + direction * length, direction);
             port.Metadata.Diameter = startSegment.Diameter.SIProperty;
+        }
+
+        private struct FilteredSegments
+        {
+            public IStartSegmentEntity HeadSegment;
+            public IStartSegmentEntity[] MainSegments;
         }
     }
 }

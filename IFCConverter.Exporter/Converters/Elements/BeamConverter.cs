@@ -1,16 +1,17 @@
-﻿using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
+﻿using System;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.API;
-using Start.Entities.Segments;
-using Utils;
+using IFCConverter.Start.API;
+using IFCConverter.Start.Entities.Segments;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
-using MatrixExtensions = Utils.MatrixExtensions;
-using VectorExtensions = Utils.VectorExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements
 {
@@ -24,11 +25,11 @@ namespace IFCConverter.Exporter.Converters.Elements
         {
             Matrix<double> transformationMatrix = start.TransformationMatrix;
             Vector<double> direction = transformationMatrix.GetZ();
-            
+
             Matrix<double> ma = MatrixExtensions.CreateRotationAroundVector(direction, start.SectionAxisAngle.SIProperty).GetRotation();
             Vector<double> refDirection = ma.LeftMultiply(direction.CreateNormalVector());
-            
-            BeamGeometryProperties properties = new BeamGeometryProperties()
+
+            BeamGeometryProperties properties = new BeamGeometryProperties
             {
                 Position = VectorExtensions.Zero,
                 Direction = direction,
@@ -37,7 +38,7 @@ namespace IFCConverter.Exporter.Converters.Elements
                 Height = start.Height.SIProperty,
                 Width = start.Width.SIProperty,
                 GeometryType = CreateGeometryType(start),
-                Diameter = start.Diameter.SIProperty,
+                Diameter = start.Diameter.SIProperty
             };
             IIfcGeometry geometry = BeamGeometry.CreateGeometry(_Model, properties);
             geometry.AssignColor(Color.FromHEX("#00FFFF"));
@@ -56,24 +57,32 @@ namespace IFCConverter.Exporter.Converters.Elements
 
         public override StartBeamEntity BuildStartElement(IfcBeam ifc)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         private static BendGeometryType CreateGeometryType(StartBeamEntity start)
         {
-            return start.BeamType.EnumValue switch
+            switch (start.BeamType.EnumValue)
             {
-                StartBeamTypeEnum.NONSTANDARD => BendGeometryType.IBEAM,
-                StartBeamTypeEnum.IBEAM => BendGeometryType.IBEAM,
-                StartBeamTypeEnum.CHANNEL => BendGeometryType.CHANNEL,
-                StartBeamTypeEnum.TBEAM => BendGeometryType.TBEAM,
-                StartBeamTypeEnum.CORNERBEAM => BendGeometryType.CORNERBEAM,
-                StartBeamTypeEnum.BOXBEAM => BendGeometryType.RECTANGULARBEAM,
-                StartBeamTypeEnum.PIPEBEAM => BendGeometryType.CIRCLEBEAM,
-                StartBeamTypeEnum.CIRCLEBEAM => BendGeometryType.CIRCLEBEAM,
-                StartBeamTypeEnum.RECTANGULARBEAM => BendGeometryType.RECTANGULARBEAM,
-                _ => BendGeometryType.IBEAM
-            };
+                case StartBeamTypeEnum.NONSTANDARD:
+                case StartBeamTypeEnum.IBEAM:
+                    return BendGeometryType.IBEAM;
+                case StartBeamTypeEnum.CHANNEL:
+                    return BendGeometryType.CHANNEL;
+                case StartBeamTypeEnum.TBEAM:
+                    return BendGeometryType.TBEAM;
+                case StartBeamTypeEnum.CORNERBEAM:
+                    return BendGeometryType.CORNERBEAM;
+                case StartBeamTypeEnum.BOXBEAM:
+                    return BendGeometryType.RECTANGULARBEAM;
+                case StartBeamTypeEnum.PIPEBEAM:
+                case StartBeamTypeEnum.CIRCLEBEAM:
+                    return BendGeometryType.CIRCLEBEAM;
+                case StartBeamTypeEnum.RECTANGULARBEAM:
+                    return BendGeometryType.RECTANGULARBEAM;
+                default:
+                    return BendGeometryType.IBEAM;
+            }
         }
     }
 }

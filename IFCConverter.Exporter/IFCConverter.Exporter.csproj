@@ -11,8 +11,8 @@
         <AssemblyName>IFCConverter.Exporter</AssemblyName>
         <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>default</LangVersion>
-        <Nullable>enable</Nullable>
+        <LangVersion>7.3</LangVersion>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -138,116 +138,120 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Attributes\DomainToIfcPhaseAttribute.cs" />
-        <Compile Include="Attributes\StartToDomainPhaseAttribute.cs" />
-        <Compile Include="Converters\ConverterFactory.cs" />
-        <Compile Include="Converters\Elements\AxialCouplingJointConverter.cs" />
-        <Compile Include="Converters\Elements\AxialExpansionJointConverter.cs" />
-        <Compile Include="Converters\Elements\BeamConverter.cs" />
-        <Compile Include="Converters\Elements\BendConverter.cs" />
-        <Compile Include="Converters\Elements\ConeElementConverter.cs" />
-        <Compile Include="Converters\Elements\ConstantSpringAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\DirectionalGuideAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\FixedAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\IfcElementConverter.cs" />
-        <Compile Include="Converters\Elements\LateralExpansionJointConverter.cs" />
-        <Compile Include="Converters\Elements\MomentFreeAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\NonstandardAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\PipeConverter.cs" />
-        <Compile Include="Converters\Elements\ReducerConverter.cs" />
-        <Compile Include="Converters\Elements\RestingSupportAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\RigidHangerAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\SegmentedExpansionJointConverter.cs" />
-        <Compile Include="Converters\Elements\SphericalPipesJointConverter.cs" />
-        <Compile Include="Converters\Elements\SpringAnchorConverter.cs" />
-        <Compile Include="Converters\Elements\TeeConverter.cs" />
-        <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs" />
-        <Compile Include="Converters\Elements\ValveConverter.cs" />
-        <Compile Include="Converters\StartToIfcPropertyConverter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporterRegistry.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\FixedAnchorDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\SpringAnchorDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\PipeDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\ReducerDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\TeeDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\ValveDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainToIfcPhaseRegistry.cs" />
-        <Compile Include="DomainToIfc\ExportContext.cs" />
-        <Compile Include="DomainToIfc\IDomainEntityExporterRegistry.cs" />
-        <Compile Include="DomainToIfc\IDomainToIfcPhase.cs" />
-        <Compile Include="DomainToIfc\IPropertySetAugmentersRegistry.cs" />
-        <Compile Include="DomainToIfc\Phases\EntityExportPhase.cs" />
-        <Compile Include="DomainToIfc\Phases\PropertySetAugmentPhase.cs" />
-        <Compile Include="DomainToIfc\PropertySetAugmenterRegistry.cs" />
-        <Compile Include="DomainToIfc\PropertySetAugmenters\IPropertySetAugmenter.cs" />
-        <Compile Include="DomainToIfc\PropertySetAugmenters\MetadataPropertySetAugmenter.cs" />
-        <Compile Include="DomainToIfc\PropertySetAugmenters\PipeSegmentPropertySetAugmenter.cs" />
-        <Compile Include="StartToDomain\ConnectionResolverRegistry.cs" />
-        <Compile Include="StartToDomain\ConnectionResolvers\IConnectionResolver.cs" />
-        <Compile Include="StartToDomain\ConnectionResolvers\ConnectionResolver.cs" />
-        <Compile Include="StartToDomain\EntityMetadataAugmenterRegistry.cs" />
-        <Compile Include="StartToDomain\EntityMetadataAugmenters\AnchorEntityMetadataAugmenter.cs" />
-        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataAugmenter.cs" />
-        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataColorAugmenter.cs" />
-        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataMaterialAugmenter.cs" />
-        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataPropertiesAugmenter.cs" />
-        <Compile Include="StartToDomain\EntityMetadataAugmenters\IEntityMetadataAugmenter.cs" />
-        <Compile Include="StartToDomain\IConnectionResolverRegistry.cs" />
-        <Compile Include="StartToDomain\IEntityMetadataAugmenterRegistry.cs" />
-        <Compile Include="StartToDomain\IPortAugmenterRegistry.cs" />
-        <Compile Include="StartToDomain\IPortResolverRegistry.cs" />
-        <Compile Include="StartToDomain\IStartToDomainPhase.cs" />
-        <Compile Include="StartToDomain\IStartEntityImporterRegistry.cs" />
-        <Compile Include="StartToDomain\Phases\ConnectionResolverPhase.cs" />
-        <Compile Include="StartToDomain\Phases\EntityImportPhase.cs" />
-        <Compile Include="StartToDomain\Phases\EntityMetadataAugmentPhase.cs" />
-        <Compile Include="StartToDomain\Phases\PortAugmenterPhase.cs" />
-        <Compile Include="StartToDomain\Phases\PortResolvePhase.cs" />
-        <Compile Include="StartToDomain\PortAugmenterRegistry.cs" />
-        <Compile Include="StartToDomain\PortAugmenters\IPortAugmenter.cs" />
-        <Compile Include="StartToDomain\PortAugmenters\PipeSegmentPortAugmenter.cs" />
-        <Compile Include="StartToDomain\PortResolverRegistry.cs" />
-        <Compile Include="StartToDomain\PortResolvers\AnchorPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\ElbowPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\FixedAnchorPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\IPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\PipeSegmentPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\ReducerPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\TeePortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\ValvePortResolver.cs" />
-        <Compile Include="StartToDomain\StartEntityImporterRegistry.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporter.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\StartReducerEntityImporter.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\StartValveEntityImporter.cs" />
-        <Compile Include="StartToDomain\StartMappingContext.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\IStartEntityImporter.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\StartBendEntityImporter.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\StartPipeEntityImporter.cs" />
-        <Compile Include="Extensions\AttributeExtensions.cs" />
-        <Compile Include="Extensions\StartEntityExtensions.cs" />
-        <Compile Include="Interfaces\IIfcElementConverter.cs" />
-        <Compile Include="Pipeline\DomainToIfcPipeline.cs" />
-        <Compile Include="Pipeline\StartToDomainPipeline.cs" />
-        <Compile Include="Pipeline\StartToIfcPipeline.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\StartTeeEntityImporter.cs" />
-        <Compile Include="StartToDomain\StartToDomainPhaseRegistry.cs" />
-        <Compile Include="StartToIfcConverter.cs" />
+        <Compile Include="Attributes\DomainToIfcPhaseAttribute.cs"/>
+        <Compile Include="Attributes\StartToDomainPhaseAttribute.cs"/>
+        <Compile Include="Converters\ConverterFactory.cs"/>
+        <Compile Include="Converters\Elements\AxialCouplingJointConverter.cs"/>
+        <Compile Include="Converters\Elements\AxialExpansionJointConverter.cs"/>
+        <Compile Include="Converters\Elements\BeamConverter.cs"/>
+        <Compile Include="Converters\Elements\BendConverter.cs"/>
+        <Compile Include="Converters\Elements\ConeElementConverter.cs"/>
+        <Compile Include="Converters\Elements\ConstantSpringAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\DirectionalGuideAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\FixedAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\IfcElementConverter.cs"/>
+        <Compile Include="Converters\Elements\LateralExpansionJointConverter.cs"/>
+        <Compile Include="Converters\Elements\MomentFreeAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\NonstandardAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\PipeConverter.cs"/>
+        <Compile Include="Converters\Elements\ReducerConverter.cs"/>
+        <Compile Include="Converters\Elements\RestingSupportAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\RigidHangerAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\SegmentedExpansionJointConverter.cs"/>
+        <Compile Include="Converters\Elements\SphericalPipesJointConverter.cs"/>
+        <Compile Include="Converters\Elements\SpringAnchorConverter.cs"/>
+        <Compile Include="Converters\Elements\TeeConverter.cs"/>
+        <Compile Include="Converters\Elements\TorsionExpansionJointConverter.cs"/>
+        <Compile Include="Converters\Elements\ValveConverter.cs"/>
+        <Compile Include="Converters\StartToIfcPropertyConverter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporterRegistry.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\FixedAnchorDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\SpringAnchorDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\PipeDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\ReducerDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\TeeDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\ValveDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainToIfcPhaseRegistry.cs"/>
+        <Compile Include="DomainToIfc\ExportContext.cs"/>
+        <Compile Include="DomainToIfc\IDomainEntityExporterRegistry.cs"/>
+        <Compile Include="DomainToIfc\IDomainToIfcPhase.cs"/>
+        <Compile Include="DomainToIfc\IPropertySetAugmentersRegistry.cs"/>
+        <Compile Include="DomainToIfc\Phases\EntityExportPhase.cs"/>
+        <Compile Include="DomainToIfc\Phases\PropertySetAugmentPhase.cs"/>
+        <Compile Include="DomainToIfc\PropertySetAugmenterRegistry.cs"/>
+        <Compile Include="DomainToIfc\PropertySetAugmenters\IPropertySetAugmenter.cs"/>
+        <Compile Include="DomainToIfc\PropertySetAugmenters\MetadataPropertySetAugmenter.cs"/>
+        <Compile Include="DomainToIfc\PropertySetAugmenters\PipeSegmentPropertySetAugmenter.cs"/>
+        <Compile Include="StartToDomain\ConnectionResolverRegistry.cs"/>
+        <Compile Include="StartToDomain\ConnectionResolvers\IConnectionResolver.cs"/>
+        <Compile Include="StartToDomain\ConnectionResolvers\ConnectionResolver.cs"/>
+        <Compile Include="StartToDomain\EntityMetadataAugmenterRegistry.cs"/>
+        <Compile Include="StartToDomain\EntityMetadataAugmenters\AnchorEntityMetadataAugmenter.cs"/>
+        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataAugmenter.cs"/>
+        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataColorAugmenter.cs"/>
+        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataMaterialAugmenter.cs"/>
+        <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataPropertiesAugmenter.cs"/>
+        <Compile Include="StartToDomain\EntityMetadataAugmenters\IEntityMetadataAugmenter.cs"/>
+        <Compile Include="StartToDomain\IConnectionResolverRegistry.cs"/>
+        <Compile Include="StartToDomain\IEntityMetadataAugmenterRegistry.cs"/>
+        <Compile Include="StartToDomain\IPortAugmenterRegistry.cs"/>
+        <Compile Include="StartToDomain\IPortResolverRegistry.cs"/>
+        <Compile Include="StartToDomain\IStartToDomainPhase.cs"/>
+        <Compile Include="StartToDomain\IStartEntityImporterRegistry.cs"/>
+        <Compile Include="StartToDomain\Phases\ConnectionResolverPhase.cs"/>
+        <Compile Include="StartToDomain\Phases\EntityImportPhase.cs"/>
+        <Compile Include="StartToDomain\Phases\EntityMetadataAugmentPhase.cs"/>
+        <Compile Include="StartToDomain\Phases\PortAugmenterPhase.cs"/>
+        <Compile Include="StartToDomain\Phases\PortResolvePhase.cs"/>
+        <Compile Include="StartToDomain\PortAugmenterRegistry.cs"/>
+        <Compile Include="StartToDomain\PortAugmenters\IPortAugmenter.cs"/>
+        <Compile Include="StartToDomain\PortAugmenters\PipeSegmentPortAugmenter.cs"/>
+        <Compile Include="StartToDomain\PortResolverRegistry.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\AnchorPortResolver.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\ElbowPortResolver.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\FixedAnchorPortResolver.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\IPortResolver.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\PipeSegmentPortResolver.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\ReducerPortResolver.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\TeePortResolver.cs"/>
+        <Compile Include="StartToDomain\PortResolvers\ValvePortResolver.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporterRegistry.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporter.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\StartReducerEntityImporter.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\StartValveEntityImporter.cs"/>
+        <Compile Include="StartToDomain\StartMappingContext.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\IStartEntityImporter.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\StartBendEntityImporter.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\StartPipeEntityImporter.cs"/>
+        <Compile Include="Extensions\AttributeExtensions.cs"/>
+        <Compile Include="Extensions\StartEntityExtensions.cs"/>
+        <Compile Include="Interfaces\IIfcElementConverter.cs"/>
+        <Compile Include="Pipeline\DomainToIfcPipeline.cs"/>
+        <Compile Include="Pipeline\StartToDomainPipeline.cs"/>
+        <Compile Include="Pipeline\StartToIfcPipeline.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\StartTeeEntityImporter.cs"/>
+        <Compile Include="StartToDomain\StartToDomainPhaseRegistry.cs"/>
+        <Compile Include="StartToIfcConverter.cs"/>
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config" />
-        <None Include="packages.config" />
+        <None Include="App.config"/>
+        <None Include="packages.config"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Domain\IFCConverter.Domain.csproj">
-          <Project>{73ffc3f0-41c5-4a3d-ad7d-aaf8df5f322e}</Project>
-          <Name>IFCConverter.Domain</Name>
+            <Project>{73ffc3f0-41c5-4a3d-ad7d-aaf8df5f322e}</Project>
+            <Name>IFCConverter.Domain</Name>
         </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Geometry\IFCConverter.Geometry.csproj">
-          <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
-          <Name>IFCConverter.Geometry</Name>
+            <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
+            <Name>IFCConverter.Geometry</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\IFCConverter.IFC\IFCConverter.IFC.csproj">
+          <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
+          <Name>IFCConverter.IFC</Name>
         </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
             <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
@@ -257,13 +261,9 @@
             <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
             <Name>Ifc</Name>
         </ProjectReference>
-        <ProjectReference Include="..\Start\Start.csproj">
+        <ProjectReference Include="..\IFCConverter.Start\IFCConverter.Start.csproj">
             <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>
-            <Name>Start</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\Utils\Utils.csproj">
-            <Project>{c0f6c033-13c4-4697-b94c-7aaf585eff57}</Project>
-            <Name>Utils</Name>
+            <Name>IFCConverter.Start</Name>
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

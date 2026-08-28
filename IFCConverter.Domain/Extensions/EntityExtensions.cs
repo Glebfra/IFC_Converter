@@ -1,7 +1,7 @@
 ﻿using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Domain.Extensions
 {
@@ -9,7 +9,7 @@ namespace IFCConverter.Domain.Extensions
     {
         private const double Tolerance = 1e-6;
         private static readonly VectorComparer Comparer = new VectorComparer(Tolerance);
-        
+
         public static Vector<double> GetProjection(this PipeSegment segment)
         {
             return segment.EndPort.Position - segment.StartPort.Position;
@@ -39,8 +39,8 @@ namespace IFCConverter.Domain.Extensions
 
         public static Port GetNearestPort(this Entity entity, Port port)
         {
-            Port? nearest = null;
-            
+            Port nearest = null;
+
             foreach (Port entityPort in entity.Ports)
             {
                 if (nearest == null)
@@ -53,7 +53,7 @@ namespace IFCConverter.Domain.Extensions
                     nearest = entityPort;
             }
 
-            return nearest!;
+            return nearest;
         }
     }
 }

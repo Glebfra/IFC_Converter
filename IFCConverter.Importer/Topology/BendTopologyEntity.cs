@@ -3,8 +3,7 @@ using System.Linq;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.FittingSegmentAugmenters;
 using IFCConverter.Importer.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
-using Utils;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Importer.Topology
 {
@@ -12,7 +11,7 @@ namespace IFCConverter.Importer.Topology
     internal sealed class BendTopologyEntity : TopologyEntity, IFittingTopologyEntity
     {
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new(DoubleTolerance);
+        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
 
         public BendTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes)
             : base(proxy, nodes)

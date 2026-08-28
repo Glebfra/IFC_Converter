@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.ConnectionResolvers
     {
         public IEnumerable<ITopologyEntity> GetConnectedEntities(ITopologyEntity entity, IEnumerable<ITopologyEntity> allTopologies)
         {
-            List<ITopologyEntity> result = new();
+            List<ITopologyEntity> result = new List<ITopologyEntity>();
             foreach (ITopologyEntity otherTopology in allTopologies)
             {
                 if (entity.Equals(otherTopology))

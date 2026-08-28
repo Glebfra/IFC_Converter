@@ -5,15 +5,15 @@ using IFCConverter.Domain.Extensions;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Segments;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
 {
     internal sealed class PipeSegmentPortAugmenter : IPortAugmenter
     {
         private const double Tolerance = 1e-6;
-        
+
         public bool CanAugment(IStartEntity source)
         {
             return source is StartAbstractSegmentEntity;
@@ -23,22 +23,22 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
         {
             if (!context.TryGetEntityId(source, out EntityId id))
                 return;
-            
+
             PipeSegment entity = (PipeSegment)model.GetEntity(id);
-            
+
             foreach (IStartFittingEntity startConnectedEntity in source.ConnectedEntities.OfType<IStartFittingEntity>())
             {
                 if (!context.TryGetEntityId(startConnectedEntity, out EntityId connectedId))
                     continue;
-                
+
                 Entity connectedEntity = model.GetEntity(connectedId);
-                
+
                 if (connectedEntity is Reducer reducer)
                 {
                     ResolveReducerPort(entity, reducer);
                     continue;
                 }
-                
+
                 //TODO create a new clipping algorithm
                 foreach (Port connectedEntityPort in connectedEntity.Ports)
                 {

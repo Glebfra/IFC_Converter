@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Extensions;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Extensions;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.Extensions
 {

@@ -3,8 +3,8 @@ using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
@@ -32,13 +32,15 @@ namespace IFCConverter.Importer.Proxies
         public Vector<double> MainProjection { get; }
         public Vector<double> HeadProjection { get; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public Vector<double> Position { get; set; }
 
         public IStartEntity ToStartEntity()
         {
-            StartWeldedTeeEntity teeEntity = new();
-            teeEntity.Position = Position;
+            StartWeldedTeeEntity teeEntity = new StartWeldedTeeEntity
+            {
+                Position = Position
+            };
 
             double headLength = HeadProjection.L2Norm();
             double mainLength = MainProjection.L2Norm();
