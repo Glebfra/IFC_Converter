@@ -238,7 +238,6 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config"/>
-        <None Include="packages.config"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Domain\IFCConverter.Domain.csproj">
@@ -256,10 +255,6 @@
         <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
             <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
             <Name>IFCConverter.Utils</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\Ifc\Ifc.csproj">
-            <Project>{c509e8a8-34e8-407d-b022-377288f59c5c}</Project>
-            <Name>Ifc</Name>
         </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Start\IFCConverter.Start.csproj">
             <Project>{856bfb4a-a305-446c-a540-1962bb035d5a}</Project>

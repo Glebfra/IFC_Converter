@@ -57,9 +57,6 @@
         <Compile Include="Triangulators\ITriangulator.cs"/>
     </ItemGroup>
     <ItemGroup>
-        <None Include="packages.config"/>
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
             <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
             <Name>IFCConverter.Utils</Name>
