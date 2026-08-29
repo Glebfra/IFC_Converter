@@ -14,27 +14,24 @@ using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEntityExporters
 {
-    internal sealed class FixedAnchorDomainEntityExporter : IDomainEntityExporter
+    internal sealed class FixedAnchorDomainEntityExporter : IAnchorDomainEntityExporter
     {
-        public bool CanExport(Entity entity)
+        public bool CanExport(Anchor anchor)
         {
-            if (!Enum.TryParse(entity.Metadata.Type, out StartElementTypeEnum type))
+            if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
                 return false;
-
-            return entity is Anchor && type == StartElementTypeEnum.ANCHOR;
+            return type == StartElementTypeEnum.ANCHOR;
         }
 
-        public void Export(Entity entity, IModel model, ExportContext context)
+        public void Export(Anchor anchor, IModel model, ExportContext context)
         {
-            Anchor anchor = (Anchor)entity;
-
             IIfcGeometry geometry = FixedAnchorGeometry.CreateGeometry(model, new FixedAnchorGeometryProperties
             {
                 Diameter = anchor.Port.Metadata.Diameter,
                 Direction = anchor.Port.Direction,
                 Position = VectorExtensions.Zero
             });
-            geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
+            geometry.AssignColor(Color.FromHEX(anchor.Metadata.Color));
 
             Matrix<double> placement = MatrixExtensions.CreateTransition(anchor.Position);
             IIfcDiscreteAccessoryBuilder<IIfcDiscreteAccessory> builder =
@@ -43,7 +40,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
             builder.CreateObjectPlacement(model, placement);
 
             IIfcDiscreteAccessory instance = builder.CreateInstance(model);
-            context.Register(entity, instance);
+            context.Register(anchor, instance);
         }
     }
 }

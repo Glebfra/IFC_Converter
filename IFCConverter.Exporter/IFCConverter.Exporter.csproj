@@ -165,7 +165,12 @@
         <Compile Include="Converters\Elements\ValveConverter.cs"/>
         <Compile Include="Converters\StartToIfcPropertyConverter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporterRegistry.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\AnchorDomainEntityExportersRegistry.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\FixedAnchorDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\IAnchorDomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\IAnchorDomainEntityExportersRegistry.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\MomentFreeAnchorDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\SpringAnchorDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs"/>

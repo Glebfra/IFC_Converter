@@ -4,10 +4,10 @@ using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
-using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.API;
+using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
 using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
@@ -15,28 +15,24 @@ using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEntityExporters
 {
-    internal sealed class SpringAnchorDomainEntityExporter : IAnchorDomainEntityExporter
+    internal sealed class MomentFreeAnchorDomainEntityExporter : IAnchorDomainEntityExporter
     {
         public bool CanExport(Anchor anchor)
         {
             if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
                 return false;
 
-            return type == StartElementTypeEnum.SPRING_HANGER ||
-                   type == StartElementTypeEnum.SPRING_SUPPORT;
+            return type == StartElementTypeEnum.MOMENT_FREE_ANCHOR;
         }
 
         public void Export(Anchor anchor, IModel model, ExportContext context)
         {
-            if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
-                return;
-            
             Matrix<double> segmentMatrix = (Matrix<double>)anchor.Metadata.Meta["SegmentMatrix"];
             double diameter = anchor.Port.Metadata.Diameter;
-
+            
             bool isDoubleSided = segmentMatrix.GetZ().IsParallel(VectorExtensions.Z);
-            Vector<double> direction = GetDirection(type);
-
+            Vector<double> direction = VectorExtensions.Z;
+            
             Vector<double> position, doubleSidedDisplacement;
             if (isDoubleSided)
             {
@@ -50,15 +46,14 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
                 doubleSidedDisplacement = VectorExtensions.Zero;
             }
 
-            IIfcGeometry geometry = SpringAnchorGeometry.CreateGeometry(model,
-                new SpringAnchorGeometryProperties
-                {
-                    Position = position,
-                    Direction = direction,
-                    Diameter = diameter,
-                    IsDoubleSided = isDoubleSided,
-                    DoubleSidedDisplacement = doubleSidedDisplacement
-                });
+            IIfcGeometry geometry = MomentFreeAnchorGeometry.CreateGeometry(model, new HingedAnchorGeometryProperties()
+            {
+                Position = position,
+                Direction = direction,
+                Diameter = diameter,
+                IsDoubleSided = isDoubleSided,
+                DoubleSidedDisplacement = doubleSidedDisplacement
+            });
             geometry.AssignColor(Color.FromHEX(anchor.Metadata.Color));
 
             Matrix<double> placement = MatrixExtensions.CreateTransition(anchor.Position);
@@ -67,21 +62,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
 
-            IIfcDiscreteAccessory instance = builder.CreateInstance(model);
+            IIfcProduct instance = builder.CreateInstance(model);
             context.Register(anchor, instance);
-        }
-        
-        private static Vector<double> GetDirection(StartElementTypeEnum type)
-        {
-            switch (type)
-            {
-                case StartElementTypeEnum.SPRING_SUPPORT:
-                    return VectorExtensions.Z;
-                case StartElementTypeEnum.SPRING_HANGER:
-                    return VectorExtensions.Z.Negate();
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(type));
         }
     }
 }
