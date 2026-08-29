@@ -16,7 +16,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 
         public bool TryResolve(Anchor anchor, out IAnchorDomainEntityExporter exporter)
         {
-            return TryResolve(exp => @exp.CanExport(anchor), out exporter);
+            return TryResolve(exp => exp.CanExport(anchor), out exporter);
         }
     }
 }
