@@ -173,6 +173,7 @@
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\IAnchorDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\IAnchorDomainEntityExportersRegistry.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\MomentFreeAnchorDomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\NonstandardAnchorDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\SpringAnchorDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs"/>
@@ -226,6 +227,11 @@
         <Compile Include="StartToDomain\PortResolvers\ValvePortResolver.cs"/>
         <Compile Include="StartToDomain\StartEntityImporterRegistry.cs"/>
         <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporter.cs"/>
+        <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\IStartAnchorEntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\IStartAnchorEntityImportersRegistry.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\StartAnchorEntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\StartAnchorEntityImportersRegistry.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\StartNonstandardAnchorEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartReducerEntityImporter.cs"/>
         <Compile Include="StartToDomain\StartEntityImporters\StartValveEntityImporter.cs"/>
         <Compile Include="StartToDomain\StartMappingContext.cs"/>

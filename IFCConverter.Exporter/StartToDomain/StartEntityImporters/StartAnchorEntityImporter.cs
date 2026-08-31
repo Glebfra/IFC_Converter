@@ -1,6 +1,5 @@
 ﻿using IFCConverter.Domain;
-using IFCConverter.Domain.Entities;
-using IFCConverter.Domain.Identity;
+using IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEntityImporters;
 using IFCConverter.Start.Entities.Anchors;
 using IFCConverter.Start.Interfaces;
 
@@ -8,6 +7,8 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
 {
     internal sealed class StartAnchorEntityImporter : IStartEntityImporter
     {
+        private readonly IStartAnchorEntityImportersRegistry _registry = new StartAnchorEntityImportersRegistry();
+        
         public bool CanImport(IStartEntity source)
         {
             return source is StartAbstractAnchorEntity;
@@ -16,14 +17,8 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartAbstractAnchorEntity start = (StartAbstractAnchorEntity)source;
-
-            Anchor anchor = new Anchor(EntityId.New())
-            {
-                Position = start.Position
-            };
-
-            model.Add(anchor);
-            context.Register(source, anchor);
+            if (_registry.TryResolve(start, out IStartAnchorEntityImporter importer))
+                importer.Import(start, model, context);
         }
     }
 }

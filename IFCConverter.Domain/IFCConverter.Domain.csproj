@@ -50,6 +50,9 @@
     <ItemGroup>
         <Compile Include="EngineeringModel.cs"/>
         <Compile Include="Entities\Anchor.cs"/>
+        <Compile Include="Entities\AnchorRestraint.cs">
+          <DependentUpon>Anchor.cs</DependentUpon>
+        </Compile>
         <Compile Include="Entities\Elbow.cs"/>
         <Compile Include="Entities\Entity.cs"/>
         <Compile Include="Entities\Fitting.cs"/>

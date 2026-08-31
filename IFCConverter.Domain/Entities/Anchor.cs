@@ -1,4 +1,5 @@
-﻿using IFCConverter.Domain.Identity;
+﻿using System.Collections.Generic;
+using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -14,5 +15,7 @@ namespace IFCConverter.Domain.Entities
 
         public Port Port { get; }
         public Vector<double> Position { get; set; }
+
+        public List<AnchorRestraint> Restraints { get; } = new List<AnchorRestraint>();
     }
 }
