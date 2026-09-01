@@ -33,9 +33,9 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
                 throw new InvalidOperationException($"Tee '{entity.Id}' must have exactly three connected segments");
 
             FilteredSegments filteredSegments = FilterSegments(segments);
-            ResolvePort(filteredSegments.MainSegments[0], entity.PortA, entity.Position, start.MainLength / 2);
-            ResolvePort(filteredSegments.MainSegments[1], entity.PortB, entity.Position, start.MainLength / 2);
-            ResolvePort(filteredSegments.HeadSegment, entity.PortC, entity.Position, start.HeadLength);
+            ResolvePort(filteredSegments.MainSegments[0], entity.PortA, entity.Position, start.MainLength / 2, model, context);
+            ResolvePort(filteredSegments.MainSegments[1], entity.PortB, entity.Position, start.MainLength / 2, model, context);
+            ResolvePort(filteredSegments.HeadSegment, entity.PortC, entity.Position, start.HeadLength, model, context);
         }
 
         private static FilteredSegments FilterSegments(IStartSegmentEntity[] segmentEntities)
@@ -64,11 +64,11 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             };
         }
 
-        private static void ResolvePort(IStartSegmentEntity startSegment, Port port, Vector<double> position, double length)
+        private static void ResolvePort(IStartSegmentEntity startSegment, Port port, Vector<double> position, double length, EngineeringModel model, StartMappingContext context)
         {
             Vector<double> direction = startSegment.GetProjectionFromPoint(position).Normalize(2);
             port.SetGeometry(position + direction * length, direction);
-            port.Metadata.Diameter = startSegment.Diameter.SIProperty;
+            port.Metadata.Diameter = DiameterFinder.GetDiameter(startSegment, model, context);
         }
 
         private struct FilteredSegments

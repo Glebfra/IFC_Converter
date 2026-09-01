@@ -24,7 +24,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
             if (!context.TryGetEntityId(source, out EntityId id))
                 return;
 
-            PipeSegment entity = (PipeSegment)model.GetEntity(id);
+            Segment entity = (Segment)model.GetEntity(id);
 
             foreach (IStartFittingEntity startConnectedEntity in source.ConnectedEntities.OfType<IStartFittingEntity>())
             {
@@ -51,7 +51,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
             }
         }
 
-        private bool IsSegmentContainPoint(PipeSegment segment, Vector<double> point)
+        private bool IsSegmentContainPoint(Segment segment, Vector<double> point)
         {
             const double epsilon = 1e-6;
 
@@ -74,7 +74,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
             return (point - projection).L2Norm() < epsilon;
         }
 
-        private static void ResolveReducerPort(PipeSegment segment, Reducer reducer)
+        private static void ResolveReducerPort(Segment segment, Reducer reducer)
         {
             Vector<double> reducerDirection = (reducer.PortB.Position - reducer.PortA.Position).Normalize(2);
             Vector<double> segmentDirection = segment.GetDirectionFromPoint(reducer.Position);

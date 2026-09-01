@@ -57,7 +57,7 @@
         <Compile Include="Entities\Entity.cs"/>
         <Compile Include="Entities\Fitting.cs"/>
         <Compile Include="Entities\Joint.cs" />
-        <Compile Include="Entities\PipeSegment.cs"/>
+        <Compile Include="Entities\Segment.cs" />
         <Compile Include="Entities\Reducer.cs"/>
         <Compile Include="Entities\Tee.cs"/>
         <Compile Include="Entities\Valve.cs"/>

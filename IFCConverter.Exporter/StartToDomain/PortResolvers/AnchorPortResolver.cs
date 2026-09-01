@@ -20,7 +20,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             Anchor anchor = (Anchor)model.GetEntity(context.GetEntityId(source));
 
             IStartSegmentEntity[] segments = source.ConnectedEntities.OfType<IStartSegmentEntity>().ToArray();
-            double diameter = segments.Max(segment => segment.Diameter.SIProperty);
+            double diameter = DiameterFinder.GetMaxDiameter(segments, model, context);
 
             Vector<double> position = anchor.Position;
             Vector<double> direction = VectorExtensions.Z;

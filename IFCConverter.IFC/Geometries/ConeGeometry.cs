@@ -37,13 +37,11 @@ namespace IFCConverter.IFC.Geometries
 
         public static ConeGeometry CreateGeometry(IModel model, ConeGeometryProperties properties)
         {
-            Vector<double> direction = properties.Positions[1] - properties.Positions[0];
-
             IfcTriangulatedProperties triangulatedProperties = IfcTriangulatedProperties.CreateClippedCone(
                 new ClippedConeTriangulatedGeometryProperties
                 {
-                    BottomConeCenter = VectorExtensions.Zero,
-                    TopConeCenter = direction,
+                    BottomConeCenter = properties.Positions[0],
+                    TopConeCenter = properties.Positions[1],
                     BottomDiameter = properties.Diameters[0],
                     TopDiameter = properties.Diameters[1],
                     Direction = properties.Direction

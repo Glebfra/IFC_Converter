@@ -30,9 +30,9 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             
             joint.PortA.SetGeometry(portPositions[0], directions[0]);
             joint.PortB.SetGeometry(portPositions[1], directions[1]);
-            
-            joint.PortA.Metadata.Diameter = segments[0].Diameter.SIProperty;
-            joint.PortB.Metadata.Diameter = segments[1].Diameter.SIProperty;
+
+            joint.PortA.Metadata.Diameter = DiameterFinder.GetDiameter(segments[0], model, context);
+            joint.PortB.Metadata.Diameter = DiameterFinder.GetDiameter(segments[1], model, context);
         }
     }
 }

@@ -177,6 +177,7 @@
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\RestingSupportAnchorDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\RigidHangerAnchorDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\SpringAnchorDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\ConeSegmentDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporter.cs" />
@@ -189,7 +190,7 @@
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\SegmentedExpansionJointDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\StandardAxialJointDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\TorsionExpansionJointDomainEntityExporter.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\PipeDomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\SegmentDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\ReducerDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\TeeDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\ValveDomainEntityExporter.cs" />
@@ -234,7 +235,8 @@
         <Compile Include="StartToDomain\PortResolvers\FixedAnchorPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\IPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\JointPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\PipeSegmentPortResolver.cs" />
+        <Compile Include="StartToDomain\PortResolvers\DiameterFinder.cs" />
+        <Compile Include="StartToDomain\PortResolvers\SegmentPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\ReducerPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\TeePortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\ValvePortResolver.cs" />
@@ -247,11 +249,17 @@
         <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\StartNonstandardAnchorEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartExpansionJointEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartReducerEntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporters\IStartSegmentEntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporters\IStartSegmentEntityImportersRegistry.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporters\SegmentDiameterFinder.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporters\StartSegmentDefinedDiameterEntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporters\StartSegmentEntityImportersRegistry.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporters\StartSegmentUndefinedDiameterEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartValveEntityImporter.cs" />
         <Compile Include="StartToDomain\StartMappingContext.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\IStartEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartBendEntityImporter.cs" />
-        <Compile Include="StartToDomain\StartEntityImporters\StartPipeEntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporter.cs" />
         <Compile Include="Extensions\AttributeExtensions.cs" />
         <Compile Include="Extensions\StartEntityExtensions.cs" />
         <Compile Include="Interfaces\IIfcElementConverter.cs" />

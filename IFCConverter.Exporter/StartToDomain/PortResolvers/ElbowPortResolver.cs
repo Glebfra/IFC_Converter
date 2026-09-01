@@ -44,8 +44,8 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             elbow.PortA.SetGeometry(elbow.Position + firstDirection * torusSegmentLength, firstDirection);
             elbow.PortB.SetGeometry(elbow.Position + secondDirection * torusSegmentLength, secondDirection);
 
-            elbow.PortA.Metadata.Diameter = firstSegment.Diameter.SIProperty;
-            elbow.PortB.Metadata.Diameter = secondSegment.Diameter.SIProperty;
+            elbow.PortA.Metadata.Diameter = DiameterFinder.GetDiameter(firstSegment, model, context);
+            elbow.PortB.Metadata.Diameter = DiameterFinder.GetDiameter(secondSegment, model, context);
         }
     }
 }

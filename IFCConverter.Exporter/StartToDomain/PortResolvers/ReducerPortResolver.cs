@@ -35,8 +35,8 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             reducer.PortA.SetGeometry(reducer.Position, directionToMinSegment);
             reducer.PortB.SetGeometry(maxPosition, directionToMaxSegment);
 
-            reducer.PortA.Metadata.Diameter = minSegment.Diameter.SIProperty;
-            reducer.PortB.Metadata.Diameter = maxSegment.Diameter.SIProperty;
+            reducer.PortA.Metadata.Diameter = DiameterFinder.GetDiameter(minSegment, model, context);
+            reducer.PortB.Metadata.Diameter = DiameterFinder.GetDiameter(maxSegment, model, context);
         }
     }
 }

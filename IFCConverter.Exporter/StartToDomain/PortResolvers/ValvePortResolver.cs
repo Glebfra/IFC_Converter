@@ -35,8 +35,8 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             valve.PortA.SetGeometry(portPositions[0], directions[0]);
             valve.PortB.SetGeometry(portPositions[1], directions[1]);
 
-            valve.PortA.Metadata.Diameter = segments[0].Diameter.SIProperty;
-            valve.PortB.Metadata.Diameter = segments[1].Diameter.SIProperty;
+            valve.PortA.Metadata.Diameter = DiameterFinder.GetDiameter(segments[0], model, context);
+            valve.PortB.Metadata.Diameter = DiameterFinder.GetDiameter(segments[1], model, context);
         }
     }
 }

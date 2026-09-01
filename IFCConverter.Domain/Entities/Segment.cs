@@ -3,10 +3,9 @@ using IFCConverter.Domain.Topology;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class PipeSegment : Entity
+    public class Segment : Entity
     {
-
-        public PipeSegment(EntityId id) : base(id)
+        public Segment(EntityId id) : base(id)
         {
             StartPort = CreatePort();
             EndPort = CreatePort();
@@ -15,7 +14,6 @@ namespace IFCConverter.Domain.Entities
         public Port StartPort { get; }
         public Port EndPort { get; }
 
-        public double? Diameter { get; set; }
-        public double? WallThickness { get; set; }
+        public double Diameter { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
-    internal sealed class PipeSegmentPortResolver : IPortResolver
+    internal sealed class SegmentPortResolver : IPortResolver
     {
         public bool CanResolve(IStartEntity source)
         {
@@ -20,13 +20,13 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             if (!context.TryGetEntityId(source, out EntityId id))
                 return;
             StartAbstractSegmentEntity start = (StartAbstractSegmentEntity)source;
-            PipeSegment entity = (PipeSegment)model.GetEntity(id);
+            Segment entity = (Segment)model.GetEntity(id);
 
             ResolvePortA(start, entity);
             ResolvePortB(start, entity);
         }
 
-        private static void ResolvePortA(IStartSegmentEntity startSegment, PipeSegment segment)
+        private static void ResolvePortA(IStartSegmentEntity startSegment, Segment segment)
         {
             Vector<double> position = startSegment.StartNode.Position;
             Vector<double> direction = ResolveDirection(startSegment, position);
@@ -35,13 +35,22 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             segment.StartPort.Metadata.Diameter = startSegment.Diameter.SIProperty;
         }
 
-        private static void ResolvePortB(IStartSegmentEntity startSegment, PipeSegment segment)
+        private static void ResolvePortB(IStartSegmentEntity startSegment, Segment segment)
         {
             Vector<double> position = startSegment.EndNode.Position;
             Vector<double> direction = ResolveDirection(startSegment, position);
 
             segment.EndPort.SetGeometry(position, direction);
-            segment.EndPort.Metadata.Diameter = startSegment.Diameter.SIProperty;
+            
+            switch (startSegment)
+            {
+                case StartConeElementEntity coneElementEntity:
+                    segment.EndPort.Metadata.Diameter = coneElementEntity.SecondDiameter.SIProperty;
+                    break;
+                default:
+                    segment.EndPort.Metadata.Diameter = startSegment.Diameter.SIProperty;
+                    break;
+            }
         }
 
         private static Vector<double> ResolveDirection(IStartSegmentEntity startSegment, Vector<double> position)
