@@ -193,6 +193,7 @@
         <Compile Include="Extensions\IfcVectorExtensions.cs"/>
         <Compile Include="Geometries\AxialCouplingJointGeometry.cs"/>
         <Compile Include="Geometries\AxialExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\SphericalExpansionJointGeometry.cs" />
         <Compile Include="Geometries\BeamGeometry.cs"/>
         <Compile Include="Geometries\BendGeometry.cs"/>
         <Compile Include="Geometries\BendTriangulatedGeometry.cs"/>

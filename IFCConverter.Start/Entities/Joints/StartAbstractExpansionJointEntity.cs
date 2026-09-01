@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace IFCConverter.Start.Entities.Joints
 {
     public abstract class StartAbstractExpansionJointEntity : StartAbstractEntity,
-        IStartOneNodeEntity, IStartClippingEntity
+        IStartFittingEntity, IStartClippingEntity
     {
         [JsonProperty(StartPropertyName.Length)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
