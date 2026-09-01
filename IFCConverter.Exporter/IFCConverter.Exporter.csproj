@@ -181,6 +181,7 @@
         <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\AbstractJointDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\AxialCouplingJointDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\SphericalJointDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\IJointDomainEntityExporter.cs" />
