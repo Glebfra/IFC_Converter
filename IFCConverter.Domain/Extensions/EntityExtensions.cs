@@ -55,5 +55,24 @@ namespace IFCConverter.Domain.Extensions
 
             return nearest;
         }
+
+        public static Port GetNearestPort(this Entity entity, Vector<double> position)
+        {
+            Port nearest = null;
+            
+            foreach (Port entityPort in entity.Ports)
+            {
+                if (nearest == null)
+                {
+                    nearest = entityPort;
+                    continue;
+                }
+
+                if (entityPort.Position.IsNearerThan(nearest.Position, position))
+                    nearest = entityPort;
+            }
+
+            return nearest;
+        }
     }
 }

@@ -17,8 +17,7 @@ namespace IFCConverter.Domain.Entities
 
         public Port PortA { get; }
         public Port PortB { get; }
-
-        public Vector<double> Position { get; set; }
+        
         public double Radius { get; set; }
 
         public Vector<double> GetAxisPos()

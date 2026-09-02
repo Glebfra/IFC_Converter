@@ -31,7 +31,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
                 if (!context.TryGetEntityId(startConnectedEntity, out EntityId connectedId))
                     continue;
 
-                Entity connectedEntity = model.GetEntity(connectedId);
+                Fitting connectedEntity = (Fitting)model.GetEntity(connectedId);
 
                 if (connectedEntity is Reducer reducer)
                 {
@@ -39,13 +39,16 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
                     continue;
                 }
 
-                //TODO create a new clipping algorithm
+                Vector<double> fittingPos = connectedEntity.Position;
+                if (!IsSegmentContainPoint(entity, fittingPos))
+                    continue;
+                
                 foreach (Port connectedEntityPort in connectedEntity.Ports)
                 {
                     if (!IsSegmentContainPoint(entity, connectedEntityPort.Position))
                         continue;
 
-                    Port entityPort = entity.GetNearestPort(connectedEntityPort);
+                    Port entityPort = entity.GetNearestPort(fittingPos);
                     entityPort.SetGeometry(connectedEntityPort.Position, connectedEntityPort.Direction.Negate());
                 }
             }

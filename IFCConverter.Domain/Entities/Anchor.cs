@@ -14,7 +14,6 @@ namespace IFCConverter.Domain.Entities
         }
 
         public Port Port { get; }
-        public Vector<double> Position { get; set; }
 
         public List<AnchorRestraint> Restraints { get; } = new List<AnchorRestraint>();
     }

@@ -14,11 +14,11 @@ namespace IFCConverter.Utils.Diagnostics
 
     public class Logger
     {
-        public const LoggerLevel LoggerLevel =
+        public const LoggerLevel Level =
             #if INFO
-            Utils.LoggerLevel.INFO;
+            LoggerLevel.INFO;
             #elif SYSTEM
-            Utils.LoggerLevel.SYSTEM;
+            LoggerLevel.SYSTEM;
             #else
             Diagnostics.LoggerLevel.ERROR;
         #endif
@@ -45,7 +45,7 @@ namespace IFCConverter.Utils.Diagnostics
 
         public void Info(string message)
         {
-            if (LoggerLevel < LoggerLevel.INFO)
+            if (Level < LoggerLevel.INFO)
                 return;
             string formattedMessage = $"[INFO] [{Assembly.GetCallingAssembly().GetName().Name}] {message} \n";
             Logs += formattedMessage;
@@ -53,7 +53,7 @@ namespace IFCConverter.Utils.Diagnostics
 
         public void System(string message)
         {
-            if (LoggerLevel < LoggerLevel.SYSTEM)
+            if (Level < LoggerLevel.SYSTEM)
                 return;
             string formattedMessage = $"[SYSTEM] [{Assembly.GetCallingAssembly().GetName().Name}] {message}\n";
             Logs += formattedMessage;

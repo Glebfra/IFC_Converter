@@ -9,7 +9,6 @@ namespace IFCConverter.Domain.Entities
         public Port PortA { get; }
         public Port PortB { get; }
         
-        public Vector<double> Position { get; set; }
         public double Length { get; set; }
         
         public Joint(EntityId id) : base(id)
