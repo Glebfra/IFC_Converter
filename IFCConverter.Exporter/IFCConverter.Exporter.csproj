@@ -181,10 +181,11 @@
         <Compile Include="DomainToIfc\DomainEntityExporters\ConeSegmentDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporters\VesselEquipmentDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporters\EquipmentDomainEntityExportersRegistry.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporters\IEquipmentDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporters\IEquipmentDomainEntityExportersRegistry.cs" />
-        <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporters\PumpApi610DomainEntityExporter.cs" />
+        <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporters\PumpApi610EquipmentDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\IDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\JointDomainEntityExporters\AbstractJointDomainEntityExporter.cs" />
@@ -240,6 +241,7 @@
         <Compile Include="StartToDomain\PortResolverRegistry.cs" />
         <Compile Include="StartToDomain\PortResolvers\AnchorPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\ElbowPortResolver.cs" />
+        <Compile Include="StartToDomain\PortResolvers\EquipmentPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\IPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\JointPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\DiameterFinder.cs" />
@@ -261,6 +263,7 @@
         <Compile Include="StartToDomain\StartEntityImporters\StartEquipmentEntityImporters\IStartEquipmentEntityImportersRegistry.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartEquipmentEntityImporters\StartEquipmentEntityImportersRegistry.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartEquipmentEntityImporters\StartPumpApi610EntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartEquipmentEntityImporters\StartVesselEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartExpansionJointEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartReducerEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartSegmentEntityImporters\IStartSegmentEntityImporter.cs" />

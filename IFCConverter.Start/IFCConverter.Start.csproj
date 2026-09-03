@@ -102,6 +102,7 @@
         <Compile Include="Entities\Anchors\StartSpringSupportAnchorEntity.cs"/>
         <Compile Include="Entities\Equipments\StartAbstractEquipmentEntity.cs" />
         <Compile Include="Entities\Equipments\StartAbstractPumpEntity.cs" />
+        <Compile Include="Entities\Equipments\StartVesselEntity.cs" />
         <Compile Include="Entities\Equipments\StartPumpApi610Entity.cs" />
         <Compile Include="Entities\Fittings\Bends\StartAbstractBendEntity.cs" />
         <Compile Include="Entities\Fittings\Bends\StartElbowEntity.cs" />

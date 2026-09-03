@@ -218,6 +218,7 @@
         <Compile Include="Geometries\TeeGeometry.cs"/>
         <Compile Include="Geometries\TorsionExpansionJointGeometry.cs"/>
         <Compile Include="Geometries\ValveGeometry.cs"/>
+        <Compile Include="Geometries\VesselGeometry.cs" />
         <Compile Include="Interfaces\Builders\Elements\IIfcBeamBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcDiscreteAccessoryBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcDistributionElementBuilder.cs"/>
