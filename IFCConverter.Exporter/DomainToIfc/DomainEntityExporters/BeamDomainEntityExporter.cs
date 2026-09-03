@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;

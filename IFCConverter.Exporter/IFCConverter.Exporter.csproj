@@ -240,7 +240,6 @@
         <Compile Include="StartToDomain\PortResolverRegistry.cs" />
         <Compile Include="StartToDomain\PortResolvers\AnchorPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\ElbowPortResolver.cs" />
-        <Compile Include="StartToDomain\PortResolvers\FixedAnchorPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\IPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\JointPortResolver.cs" />
         <Compile Include="StartToDomain\PortResolvers\DiameterFinder.cs" />
