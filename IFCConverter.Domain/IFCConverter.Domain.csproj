@@ -55,8 +55,10 @@
         </Compile>
         <Compile Include="Entities\Elbow.cs"/>
         <Compile Include="Entities\Entity.cs"/>
+        <Compile Include="Entities\Equipment.cs" />
         <Compile Include="Entities\Fitting.cs"/>
         <Compile Include="Entities\Joint.cs" />
+        <Compile Include="Entities\PumpApi610.cs" />
         <Compile Include="Entities\Segment.cs" />
         <Compile Include="Entities\Reducer.cs"/>
         <Compile Include="Entities\Tee.cs"/>

@@ -38,43 +38,22 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
                     ResolveReducerPort(entity, reducer);
                     continue;
                 }
-
-                Vector<double> fittingPos = connectedEntity.Position;
-                if (!IsSegmentContainPoint(entity, fittingPos))
-                    continue;
                 
-                foreach (Port connectedEntityPort in connectedEntity.Ports)
+                foreach (Vector<double> fittingPos in connectedEntity.Positions)
                 {
-                    if (!IsSegmentContainPoint(entity, connectedEntityPort.Position))
+                    if (!entity.IsSegmentContainPoint(fittingPos))
                         continue;
+                
+                    foreach (Port connectedEntityPort in connectedEntity.Ports)
+                    {
+                        if (!entity.IsSegmentContainPoint(connectedEntityPort.Position))
+                            continue;
 
-                    Port entityPort = entity.GetNearestPort(fittingPos);
-                    entityPort.SetGeometry(connectedEntityPort.Position, connectedEntityPort.Direction.Negate());
+                        Port entityPort = entity.GetNearestPort(fittingPos);
+                        entityPort.SetGeometry(connectedEntityPort.Position, connectedEntityPort.Direction.Negate());
+                    }
                 }
             }
-        }
-
-        private bool IsSegmentContainPoint(Segment segment, Vector<double> point)
-        {
-            const double epsilon = 1e-6;
-
-            Vector<double> start = segment.StartPort.Position;
-            Vector<double> end = segment.EndPort.Position;
-
-            Vector<double> direction = end - start;
-            Vector<double> toPoint = point - start;
-
-            double lengthSquared = direction.DotProduct(direction);
-
-            if (lengthSquared < epsilon * epsilon)
-                return (point - start).L2Norm() < epsilon;
-
-            double t = toPoint.DotProduct(direction) / lengthSquared;
-            if (t < -epsilon || t > 1.0 + epsilon)
-                return false;
-
-            Vector<double> projection = start + direction * t;
-            return (point - projection).L2Norm() < epsilon;
         }
 
         private static void ResolveReducerPort(Segment segment, Reducer reducer)

@@ -7,7 +7,6 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Anchor : Fitting
     {
-
         public Anchor(EntityId id) : base(id)
         {
             Port = CreatePort();

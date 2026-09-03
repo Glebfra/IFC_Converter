@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Entities;
+using IFCConverter.Start.Entities.Equipments;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Utils.Reflection;
@@ -307,6 +308,7 @@ namespace IFCConverter.Start.API
         private static void AddPositionsToEntities(ref StartDataArrayItem[] dataArrayItems)
         {
             foreach (StartDataArrayItem startDataArrayItem in dataArrayItems)
+            {
                 try
                 {
                     // Calculating and setting positions for entities
@@ -316,6 +318,11 @@ namespace IFCConverter.Start.API
                         .ToArray();
                     switch (entity)
                     {
+                        case StartPumpApi610Entity pumpApi610Entity:
+                            pumpApi610Entity.Position = connNodes[0].Position;
+                            if (connNodes.Length == 2)
+                                pumpApi610Entity.SecondPosition = connNodes[1].Position;
+                            break;
                         case IStartOneNodeEntity oneNodeEntity:
                         {
                             oneNodeEntity.Position = connNodes[0].Position;
@@ -332,6 +339,7 @@ namespace IFCConverter.Start.API
                 {
                     _logger.Error(e.ToString());
                 }
+            }
         }
 
         /// <summary>

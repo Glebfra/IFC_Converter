@@ -154,10 +154,12 @@
         <Compile Include="Builders\Elements\IfcDistributionFlowElementBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcElementBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcFlowElementBuilder.cs"/>
+        <Compile Include="Builders\Elements\IfcFlowMovingDeviceBuilder.cs" />
         <Compile Include="Builders\Elements\IfcFlowSegmentBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcPipeFittingBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcPipeSegmentBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcProductBuilder.cs"/>
+        <Compile Include="Builders\Elements\IfcPumpBuilder.cs" />
         <Compile Include="Builders\Geometry\Brep\IfcFaceBuilder.cs"/>
         <Compile Include="Builders\Geometry\Curve\IfcBoundedCurveBuilder.cs"/>
         <Compile Include="Builders\Geometry\Curve\IfcCircleBuilder.cs"/>
@@ -193,6 +195,7 @@
         <Compile Include="Extensions\IfcVectorExtensions.cs"/>
         <Compile Include="Geometries\AxialCouplingJointGeometry.cs"/>
         <Compile Include="Geometries\AxialExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\PumpApi610Geometry.cs" />
         <Compile Include="Geometries\SphericalExpansionJointGeometry.cs" />
         <Compile Include="Geometries\BeamGeometry.cs"/>
         <Compile Include="Geometries\BendGeometry.cs"/>
@@ -221,10 +224,12 @@
         <Compile Include="Interfaces\Builders\Elements\IIfcDistributionFlowElementBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcElementBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcFlowFittingBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcFlowMovingDeviceBuilder.cs" />
         <Compile Include="Interfaces\Builders\Elements\IIfcFlowSegmentBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcPipeFittingBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcPipeSegmentBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Elements\IIfcProductBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcPumpBuilder.cs" />
         <Compile Include="Interfaces\Builders\Geometry\Brep\IIfcFaceBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcBoundedCurveBuilder.cs"/>
         <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcCircleBuilder.cs"/>

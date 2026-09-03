@@ -1,8 +1,10 @@
-﻿using IFCConverter.Start.API;
+﻿using System.Collections.Generic;
+using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
+using MathNet.Numerics.LinearAlgebra;
 using Newtonsoft.Json;
 
 namespace IFCConverter.Start.Entities.Equipments
@@ -44,5 +46,24 @@ namespace IFCConverter.Start.Entities.Equipments
         [JsonProperty(StartPropertyName.Temperature)]
         [JsonConverter(typeof(JsonStartConverter<TemperatureValueProperty<double>>))]
         public IStartValueProperty<double> Temperature { get; set; } = new TemperatureValueProperty<double>();
+        
+        [JsonIgnore]
+        [StartIgnore]
+        public Vector<double> SecondPosition { get; set; }
+
+        [JsonIgnore]
+        [StartIgnore]
+        public Vector<double>[] Positions
+        {
+            get
+            {
+                List<Vector<double>> positions = new List<Vector<double>>();
+                positions.Add(Position);
+                if (SecondPosition != null)
+                    positions.Add(SecondPosition);
+
+                return positions.ToArray();
+            }
+        }
     }
 }

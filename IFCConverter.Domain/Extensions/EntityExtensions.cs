@@ -74,5 +74,28 @@ namespace IFCConverter.Domain.Extensions
 
             return nearest;
         }
+        
+        public static bool IsSegmentContainPoint(this Segment segment, Vector<double> point)
+        {
+            const double epsilon = 1e-6;
+
+            Vector<double> start = segment.StartPort.Position;
+            Vector<double> end = segment.EndPort.Position;
+
+            Vector<double> direction = end - start;
+            Vector<double> toPoint = point - start;
+
+            double lengthSquared = direction.DotProduct(direction);
+
+            if (lengthSquared < epsilon * epsilon)
+                return (point - start).L2Norm() < epsilon;
+
+            double t = toPoint.DotProduct(direction) / lengthSquared;
+            if (t < -epsilon || t > 1.0 + epsilon)
+                return false;
+
+            Vector<double> projection = start + direction * t;
+            return (point - projection).L2Norm() < epsilon;
+        }
     }
 }

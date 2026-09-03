@@ -11,7 +11,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
     {
         public bool CanResolve(IStartEntity source, StartMappingContext context)
         {
-            return context.TryGetEntityId(source, out _) && source is StartAbstractAnchorEntity && !(source is StartFixedAnchorEntity);
+            return context.TryGetEntityId(source, out _) && source is StartAbstractAnchorEntity;
         }
 
         public void Augment(IStartEntity source, EngineeringModel model, StartMappingContext context)

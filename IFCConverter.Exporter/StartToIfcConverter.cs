@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using IFCConverter.Exporter.Converters;
-using IFCConverter.Exporter.Extensions;
-using IFCConverter.Exporter.Interfaces;
 using IFCConverter.Exporter.Pipeline;
 using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Utils.Pipeline;
 using IFCConverter.Start.API;
-using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Start.Interfaces.Augmenters;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using IfcProject = IFCConverter.IFC.API.IfcProject;
@@ -56,61 +49,6 @@ namespace IFCConverter.Exporter
                     ifcProject.SaveAs(_exportDataContainer.OutputFilePath);
                 }
             }
-
-            // using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
-            // {
-            //     IStartEntity[] startEntities = startProject.GetStartEntities();
-            //     Logger.Info($"Found {startEntities.Count()} objects");
-            //     AugmentEntities(startEntities);
-            //
-            //     using (IfcProject ifcProject = IfcProject.CreateProject(startDocument.GetTitle()))
-            //     {
-            //         IModel model = ifcProject.Model;
-            //         foreach (IStartEntity startEntity in startEntities)
-            //             try
-            //             {
-            //                 IfcProduct? ifcProduct = CreateIfcEntity(model, startEntity);
-            //                 if (ifcProduct == null)
-            //                     continue;
-            //                 ifcProject.AddEntityRaw(ifcProduct);
-            //             }
-            //             catch (Exception ex)
-            //             {
-            //                 Logger.Error(
-            //                     $"Error while converting entity {startEntity.GetType().FullName} with id {startEntity.ID}: {ex}");
-            //             }
-            //
-            //         ifcProject.SaveAs(_exportDataContainer.OutputFilePath);
-            //     }
-            // }
-        }
-
-        private static void AugmentEntities(IReadOnlyCollection<IStartEntity> startEntities)
-        {
-            foreach (IStartEntity startEntity in startEntities)
-            {
-                StartElementAttribute attribute = startEntity.GetStartElementAttribute();
-                foreach (IStartEntityAugmenter startEntityAugmenter in attribute.GetAugmenters())
-                {
-                    Logger.Info($"Augmenting {startEntity.GetType().FullName} | {startEntity.Name} with {startEntityAugmenter.GetType().Name}");
-                    startEntityAugmenter.Augment(startEntity, startEntities);
-                }
-            }
-        }
-
-        [Pure]
-        private IfcProduct CreateIfcEntity(IModel model, IStartEntity startEntity)
-        {
-            IIfcElementConverter converter = ConverterFactory.CreateConverter(model, startEntity);
-            if (converter == null)
-                return null;
-
-            Logger.Info($"Created converter {converter?.GetType().FullName}");
-
-            IfcProduct ifcProduct = converter?.BuildIfc(startEntity) as IfcProduct;
-            Logger.Info($"Created product {ifcProduct?.GetType().FullName} (global ifc id: {ifcProduct?.GlobalId})");
-
-            return ifcProduct;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Start.Entities.Anchors;
+using IFCConverter.Start.Entities.Equipments;
 using IFCConverter.Start.Entities.Fittings;
 using IFCConverter.Start.Entities.Joints;
 using IFCConverter.Start.Entities.Segments;
@@ -33,6 +34,8 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
                     return "#009249";
                 case StartConeElementEntity _:
                     return "#46008b";
+                case StartAbstractEquipmentEntity _:
+                    return "#695689";
                 case StartAbstractAnchorEntity _:
                     return "#4ab636";
                 case StartAbstractExpansionJointEntity _:

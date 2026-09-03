@@ -19,6 +19,7 @@ namespace IFCConverter.Domain.Entities
         public EntityId Id { get; }
         public EntityMetadata Metadata { get; } = new EntityMetadata();
         public IReadOnlyCollection<Port> Ports => _ports;
+        public abstract IReadOnlyCollection<Vector<double>> Positions { get; }
 
         protected Port CreatePort(Vector<double> position = null, Vector<double> direction = null, PortRole role = PortRole.Connection)
         {

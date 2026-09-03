@@ -6,7 +6,6 @@ namespace IFCConverter.Domain.Topology
 {
     public sealed class Port
     {
-
         internal Port(PortId id, EntityId owner)
         {
             Id = id;
@@ -17,7 +16,7 @@ namespace IFCConverter.Domain.Topology
         public EntityId Owner { get; }
         public Vector<double> Position { get; internal set; }
         public Vector<double> Direction { get; internal set; }
-        public PortRole Role { get; internal set; }
+        public PortRole Role { get; internal set; } = PortRole.Connection;
 
         public PortMetadata Metadata { get; } = new PortMetadata();
 
