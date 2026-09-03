@@ -2,7 +2,8 @@
 
 namespace IFCConverter.IFC.Interfaces
 {
-    public interface IIfcBeamBuilder<T>
+    public interface IIfcBeamBuilder<out T> : IIfcElementBuilder<T>
+        where T : IIfcBeam
     {
         IfcBeamTypeEnum PredefinedType { get; }
     }

@@ -10,29 +10,29 @@ namespace IFCConverter.Domain.Extensions
         private const double Tolerance = 1e-6;
         private static readonly VectorComparer Comparer = new VectorComparer(Tolerance);
 
-        public static Vector<double> GetProjection(this Segment segment)
+        public static Vector<double> GetProjection(this AbstractSegment segment)
         {
             return segment.EndPort.Position - segment.StartPort.Position;
         }
 
-        public static Vector<double> GetDirection(this Segment segment)
+        public static Vector<double> GetDirection(this AbstractSegment segment)
         {
             return segment.GetProjection().Normalize(2);
         }
 
-        public static double GetLength(this Segment segment)
+        public static double GetLength(this AbstractSegment segment)
         {
             return segment.GetProjection().L2Norm();
         }
 
-        public static Vector<double> GetProjectionFromPoint(this Segment segment, Vector<double> point)
+        public static Vector<double> GetProjectionFromPoint(this AbstractSegment segment, Vector<double> point)
         {
             return segment.StartPort.Position.IsNearerThan(segment.EndPort.Position, point)
                 ? segment.GetProjection()
                 : segment.GetProjection().Negate();
         }
 
-        public static Vector<double> GetDirectionFromPoint(this Segment segment, Vector<double> point)
+        public static Vector<double> GetDirectionFromPoint(this AbstractSegment segment, Vector<double> point)
         {
             return segment.GetProjectionFromPoint(point).Normalize(2);
         }
@@ -75,7 +75,7 @@ namespace IFCConverter.Domain.Extensions
             return nearest;
         }
         
-        public static bool IsSegmentContainPoint(this Segment segment, Vector<double> point)
+        public static bool IsSegmentContainPoint(this AbstractSegment segment, Vector<double> point)
         {
             const double epsilon = 1e-6;
 

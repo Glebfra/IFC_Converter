@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Entities
 {
-    public abstract class Fitting : Entity
+    public abstract class AbstractFitting : Entity
     {
         public Vector<double> Position { get; set; }
         
@@ -13,7 +13,7 @@ namespace IFCConverter.Domain.Entities
             Position
         };
         
-        protected Fitting(EntityId id) : base(id)
+        protected AbstractFitting(EntityId id) : base(id)
         {
         }
     }

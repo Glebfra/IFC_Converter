@@ -3,7 +3,7 @@ using IFCConverter.Domain.Topology;
 
 namespace IFCConverter.Domain.Entities
 {
-    public class Equipment : Fitting
+    public class Equipment : AbstractFitting
     {
         public Port PortA { get; set; }
         public Port PortB { get; set; }

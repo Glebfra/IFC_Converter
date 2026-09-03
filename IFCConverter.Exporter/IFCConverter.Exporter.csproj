@@ -177,6 +177,7 @@
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\RestingSupportAnchorDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\RigidHangerAnchorDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\AnchorDomainEntityExporters\SpringAnchorDomainEntityExporter.cs"/>
+        <Compile Include="DomainToIfc\DomainEntityExporters\BeamDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\ConeSegmentDomainEntityExporter.cs" />
         <Compile Include="DomainToIfc\DomainEntityExporters\ElbowDomainEntityExporter.cs"/>
         <Compile Include="DomainToIfc\DomainEntityExporters\EquipmentDomainEntityExporter.cs" />
@@ -216,6 +217,7 @@
         <Compile Include="StartToDomain\ConnectionResolvers\ConnectionResolver.cs" />
         <Compile Include="StartToDomain\EntityMetadataAugmenterRegistry.cs" />
         <Compile Include="StartToDomain\EntityMetadataAugmenters\AnchorEntityMetadataAugmenter.cs" />
+        <Compile Include="StartToDomain\EntityMetadataAugmenters\BeamEntityMetadataAugmenter.cs" />
         <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataAugmenter.cs" />
         <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataColorAugmenter.cs" />
         <Compile Include="StartToDomain\EntityMetadataAugmenters\EntityMetadataMaterialAugmenter.cs" />
@@ -254,6 +256,7 @@
         <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\StartAnchorEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\StartAnchorEntityImportersRegistry.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartAnchorEntityImporters\StartNonstandardAnchorEntityImporter.cs" />
+        <Compile Include="StartToDomain\StartEntityImporters\StartBeamEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartEquipmentEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartEquipmentEntityImporters\IStartEquipmentEntityImporter.cs" />
         <Compile Include="StartToDomain\StartEntityImporters\StartEquipmentEntityImporters\IStartEquipmentEntityImportersRegistry.cs" />

@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class Reducer : Fitting
+    public sealed class Reducer : AbstractFitting
     {
         public Reducer(EntityId id) : base(id)
         {

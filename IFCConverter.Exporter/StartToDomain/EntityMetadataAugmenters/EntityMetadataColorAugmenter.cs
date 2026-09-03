@@ -26,6 +26,8 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
         {
             switch (source)
             {
+                case StartBeamEntity _:
+                    return "#00FFFF";
                 case StartFlexibleElementEntity _:
                     return "#00509f";
                 case StartCylindricalShellEntity _:

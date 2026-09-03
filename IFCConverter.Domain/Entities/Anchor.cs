@@ -5,7 +5,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class Anchor : Fitting
+    public sealed class Anchor : AbstractFitting
     {
         public Anchor(EntityId id) : base(id)
         {

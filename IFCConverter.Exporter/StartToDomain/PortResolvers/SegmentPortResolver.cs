@@ -20,13 +20,13 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             if (!context.TryGetEntityId(source, out EntityId id))
                 return;
             StartAbstractSegmentEntity start = (StartAbstractSegmentEntity)source;
-            Segment entity = (Segment)model.GetEntity(id);
+            AbstractSegment entity = (AbstractSegment)model.GetEntity(id);
 
             ResolvePortA(start, entity);
             ResolvePortB(start, entity);
         }
 
-        private static void ResolvePortA(IStartSegmentEntity startSegment, Segment segment)
+        private static void ResolvePortA(IStartSegmentEntity startSegment, AbstractSegment segment)
         {
             Vector<double> position = startSegment.StartNode.Position;
             Vector<double> direction = ResolveDirection(startSegment, position);
@@ -35,7 +35,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             segment.StartPort.Metadata.Diameter = startSegment.Diameter.SIProperty;
         }
 
-        private static void ResolvePortB(IStartSegmentEntity startSegment, Segment segment)
+        private static void ResolvePortB(IStartSegmentEntity startSegment, AbstractSegment segment)
         {
             Vector<double> position = startSegment.EndNode.Position;
             Vector<double> direction = ResolveDirection(startSegment, position);

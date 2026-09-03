@@ -24,14 +24,14 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
             if (!context.TryGetEntityId(source, out EntityId id))
                 return;
 
-            Segment entity = (Segment)model.GetEntity(id);
+            AbstractSegment entity = (AbstractSegment)model.GetEntity(id);
 
             foreach (IStartFittingEntity startConnectedEntity in source.ConnectedEntities.OfType<IStartFittingEntity>())
             {
                 if (!context.TryGetEntityId(startConnectedEntity, out EntityId connectedId))
                     continue;
 
-                Fitting connectedEntity = (Fitting)model.GetEntity(connectedId);
+                AbstractFitting connectedEntity = (AbstractFitting)model.GetEntity(connectedId);
 
                 if (connectedEntity is Reducer reducer)
                 {
@@ -56,7 +56,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
             }
         }
 
-        private static void ResolveReducerPort(Segment segment, Reducer reducer)
+        private static void ResolveReducerPort(AbstractSegment segment, Reducer reducer)
         {
             Vector<double> reducerDirection = (reducer.PortB.Position - reducer.PortA.Position).Normalize(2);
             Vector<double> segmentDirection = segment.GetDirectionFromPoint(reducer.Position);

@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class Joint : Fitting
+    public sealed class Joint : AbstractFitting
     {
         public Port PortA { get; }
         public Port PortB { get; }

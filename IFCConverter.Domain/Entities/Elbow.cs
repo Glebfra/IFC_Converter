@@ -6,7 +6,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class Elbow : Fitting
+    public sealed class Elbow : AbstractFitting
     {
 
         public Elbow(EntityId id) : base(id)

@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class Valve : Fitting
+    public sealed class Valve : AbstractFitting
     {
 
         public Valve(EntityId id) : base(id)

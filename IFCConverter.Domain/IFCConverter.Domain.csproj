@@ -49,14 +49,16 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="EngineeringModel.cs"/>
+        <Compile Include="Entities\AbstractSegment.cs" />
         <Compile Include="Entities\Anchor.cs"/>
         <Compile Include="Entities\AnchorRestraint.cs">
           <DependentUpon>Anchor.cs</DependentUpon>
         </Compile>
+        <Compile Include="Entities\Beam.cs" />
         <Compile Include="Entities\Elbow.cs"/>
         <Compile Include="Entities\Entity.cs"/>
         <Compile Include="Entities\Equipment.cs" />
-        <Compile Include="Entities\Fitting.cs"/>
+        <Compile Include="Entities\AbstractFitting.cs" />
         <Compile Include="Entities\Joint.cs" />
         <Compile Include="Entities\PumpApi610.cs" />
         <Compile Include="Entities\Segment.cs" />
