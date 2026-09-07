@@ -4,21 +4,21 @@ using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
 using IFCConverter.Importer.Topology;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 
 namespace IFCConverter.Importer.FittingSegmentAugmenters
 {
     internal sealed class TeeTopologySegmentAugmenter : ITopologySegmentAugmenter
     {
         private const double DoubleTolerance = 1e-3;
-        private static readonly VectorComparer Comparer = new(DoubleTolerance);
-        
+        private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
+
         public IEnumerable<ISegmentProxy> Augment(ITopologyEntity entity)
         {
-            if (entity is not TeeTopologyEntity teeTopologyEntity)
+            if (!(entity is TeeTopologyEntity teeTopologyEntity))
                 throw new InvalidOperationException($"{nameof(entity)}  must be of type {nameof(TeeTopologyEntity)}");
-            
+
             return Augment(teeTopologyEntity);
         }
 
@@ -26,7 +26,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
         {
             IReadOnlyCollection<SegmentTopologyEntity> connectedSegments = entity.Connected.OfType<SegmentTopologyEntity>().ToArray();
             AugmentConnectedSegments(connectedSegments, entity);
-            
+
             IEnumerable<ISegmentProxy> result = GenerateConnectedSegments(connectedSegments, entity);
             return result;
         }
@@ -38,7 +38,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
             {
                 ITopologyNodeEntity startNode = connectedSegment.Nodes.ElementAt(0);
                 ITopologyNodeEntity endNode = connectedSegment.Nodes.ElementAt(1);
-                
+
                 if (Comparer.NearerThan(startNode.Position, endNode.Position, teeNode.Position))
                 {
                     startNode = teeNode;
@@ -47,7 +47,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
                 {
                     endNode = teeNode;
                 }
-                
+
                 Vector<double> projection = endNode.Position - startNode.Position;
                 connectedSegment.Augment(startNode, endNode, projection);
             }
@@ -72,11 +72,11 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
                 if (isAlreadyConnected)
                     continue;
 
-                double diameter = directionToBoundary.IsParallel(teeProxy.MainProjection) 
-                    ? teeProxy.MainDiameter 
+                double diameter = directionToBoundary.IsParallel(teeProxy.MainProjection)
+                    ? teeProxy.MainDiameter
                     : teeProxy.HeadDiameter;
-                
-                
+
+
                 ISegmentProxy newSegmentProxy = new PipeSegmentProxy(
                     diameter,
                     projectionLength,
@@ -88,7 +88,7 @@ namespace IFCConverter.Importer.FittingSegmentAugmenters
                 };
                 result.Add(newSegmentProxy);
             }
-            
+
             return result;
         }
     }

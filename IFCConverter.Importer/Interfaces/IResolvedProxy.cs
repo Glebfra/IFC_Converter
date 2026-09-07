@@ -2,6 +2,6 @@
 {
     internal interface IResolvedProxy
     {
-        public ISegmentProxy Source { get; }
+        ISegmentProxy Source { get; }
     }
 }

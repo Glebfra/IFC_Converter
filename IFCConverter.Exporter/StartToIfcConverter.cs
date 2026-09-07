@@ -1,27 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using IFCConverter.Exporter.Converters;
-using IFCConverter.Exporter.Extensions;
-using IFCConverter.Exporter.Interfaces;
-using IFCConverter.Utils;
-using Start.API;
-using Start.Attributes;
-using Start.Interfaces;
-using Start.Interfaces.Augmenters;
-using Utils;
+using IFCConverter.Exporter.Pipeline;
+using IFCConverter.Utils.Diagnostics;
+using IFCConverter.Utils.Pipeline;
+using IFCConverter.Start.API;
+using IFCConverter.Start.Interfaces;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
-using IfcProject = Ifc.API.IfcProject;
+using IfcProject = IFCConverter.IFC.API.IfcProject;
+using IIfcProject = IFCConverter.IFC.Interfaces.IIfcProject;
 
 namespace IFCConverter.Exporter
 {
     public class StartToIfcConverter
     {
-        private readonly ExportDataContainer _exportDataContainer;
         private static readonly Logger Logger = Logger.GetInstance();
+        private readonly ExportDataContainer _exportDataContainer;
+
+        private readonly StartToIfcPipeline _pipeline = new StartToIfcPipeline();
 
         public StartToIfcConverter(ExportDataContainer exportDataContainer)
         {
@@ -30,62 +27,28 @@ namespace IFCConverter.Exporter
 
         public void Convert(StartDocument startDocument)
         {
+            if (startDocument == null)
+                throw new ArgumentNullException(nameof(startDocument));
+
             Logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
 
+            IStartEntity[] startEntities;
             using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
             {
-                IStartEntity[] startEntities = startProject.GetStartEntities();
+                startEntities = startProject.GetStartEntities().ToArray();
                 Logger.Info($"Found {startEntities.Count()} objects");
-                AugmentEntities(startEntities);
 
-                using (IfcProject ifcProject = IfcProject.CreateProject(startDocument.GetTitle()))
+                using (IIfcProject ifcProject = IfcProject.CreateProject(startDocument.GetTitle()))
                 {
                     IModel model = ifcProject.Model;
-                    foreach (IStartEntity startEntity in startEntities)
-                        try
-                        {
-                            IfcProduct? ifcProduct = CreateIfcEntity(model, startEntity);
-                            if (ifcProduct == null)
-                                continue;
-                            ifcProject.AddEntityRaw(ifcProduct);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Error(
-                                $"Error while converting entity {startEntity.GetType().FullName} with id {startEntity.ID}: {ex}");
-                        }
+                    _pipeline.Execute(startEntities, model, product =>
+                    {
+                        ifcProject.AddEntityRaw((IfcProduct)product);
+                    });
 
                     ifcProject.SaveAs(_exportDataContainer.OutputFilePath);
                 }
             }
-        }
-
-        private static void AugmentEntities(IReadOnlyCollection<IStartEntity> startEntities)
-        {
-            foreach (IStartEntity startEntity in startEntities)
-            {
-                StartElementAttribute attribute = startEntity.GetStartElementAttribute();
-                foreach (IStartEntityAugmenter startEntityAugmenter in attribute.GetAugmenters())
-                {
-                    Logger.Info($"Augmenting {startEntity.GetType().FullName} | {startEntity.Name} with {startEntityAugmenter.GetType().Name}");
-                    startEntityAugmenter.Augment(startEntity, startEntities);
-                }
-            }
-        }
-
-        [Pure]
-        private IfcProduct? CreateIfcEntity(IModel model, IStartEntity startEntity)
-        {
-            IIfcElementConverter? converter = ConverterFactory.CreateConverter(model, startEntity);
-            if (converter == null)
-                return null;
-
-            Logger.Info($"Created converter {converter?.GetType().FullName}");
-
-            IfcProduct? ifcProduct = converter?.BuildIfc(startEntity) as IfcProduct;
-            Logger.Info($"Created product {ifcProduct?.GetType().FullName} (global ifc id: {ifcProduct?.GlobalId})");
-
-            return ifcProduct;
         }
     }
 }

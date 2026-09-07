@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ifc.Extensions;
+using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets.Aveva;
 using IFCConverter.Importer.Proxies;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedBldgElements;
 
@@ -16,7 +16,7 @@ namespace IFCConverter.Importer.Importers.Aveva
     internal class AvevaTeeImporter : AbstractEntityImporter<IfcBuildingElementProxy, TeeProxy>
     {
         private const double _vectorTolerance = 1e-3;
-        private readonly VectorComparer _vectorComparer = new(_vectorTolerance);
+        private readonly VectorComparer _vectorComparer = new VectorComparer(_vectorTolerance);
 
         public override TeeProxy ReadTyped(IfcBuildingElementProxy source)
         {
@@ -25,18 +25,18 @@ namespace IFCConverter.Importer.Importers.Aveva
                 throw new Exception("Expected exactly two representation items for the given source.");
 
             IEnumerable<IPropertySet> propertySets = source.GetPropertySets();
-            AvevaPset? avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
+            AvevaPset avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
             if (avevaPset == null)
                 throw new Exception("The required Aveva property set is missing.");
 
-            Vector<double> mainProjection = default!, headProjection = default!;
+            Vector<double> mainProjection = default, headProjection = default;
             double mainDiameter = default, headDiameter = default;
             Vector<double> teePosition = avevaPset.Pos;
 
             IIfcExtrudedAreaSolid[] extrudedAreaSolids = representationItems.Cast<IIfcExtrudedAreaSolid>().ToArray();
             foreach (IIfcExtrudedAreaSolid extrudedAreaSolid in extrudedAreaSolids)
             {
-                if (extrudedAreaSolid.SweptArea is not IIfcCircleProfileDef profileDef)
+                if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef profileDef))
                     throw new Exception("The swept area is not a circle profile definition.");
 
                 double teeBranchDiameter = profileDef.Radius * 2;

@@ -20,7 +20,7 @@ namespace IFCConverter.Importer.Importers
 
         private static Func<IImporter> CreateFactory(Type type)
         {
-            ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes)!;
+            ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
             NewExpression newExpression = Expression.New(constructor);
             Expression<Func<IImporter>> lambda = Expression.Lambda<Func<IImporter>>(newExpression);
             return lambda.Compile();

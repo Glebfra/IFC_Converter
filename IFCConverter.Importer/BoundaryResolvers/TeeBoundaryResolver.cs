@@ -10,7 +10,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
     {
         public IEnumerable<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
-            if (proxy is not TeeProxy teeProxy)
+            if (!(proxy is TeeProxy teeProxy))
                 throw new InvalidCastException();
 
             return new[]

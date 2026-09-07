@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Utils.Diagnostics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Utils;
+using IFCConverter.Start.Entities.Fittings;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = Utils.MatrixExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements
 {

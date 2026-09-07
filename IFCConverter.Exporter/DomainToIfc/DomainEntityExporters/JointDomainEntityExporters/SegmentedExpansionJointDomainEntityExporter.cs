@@ -1,0 +1,37 @@
+﻿using System;
+using System.Linq;
+using IFCConverter.Domain.Entities;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Start.API;
+using MathNet.Numerics.LinearAlgebra;
+using Xbim.Common;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
+
+namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEntityExporters
+{
+    internal sealed class SegmentedExpansionJointDomainEntityExporter : AbstractJointDomainEntityExporter
+    {
+        public override bool CanExport(Joint joint)
+        {
+            if (!Enum.TryParse(joint.Metadata.Type, out StartElementTypeEnum type))
+                return false;
+
+            return type == StartElementTypeEnum.UNIVERSAL_EXPANSION_JOINT || 
+                   type == StartElementTypeEnum.NONSTANDARD_EXPANSION_JOINT;
+        }
+
+        override protected IIfcGeometry CreateGeometry(Joint joint, IModel model)
+        {
+            double diameter = joint.Ports.Max(port => port.Metadata.Diameter);
+            Vector<double>[] points = joint.Ports.Select(port => port.Position - joint.Position).ToArray();
+            
+            return SegmentedExpansionJointGeometry.CreateGeometry(model, new SegmentedExpansionJointGeometryProperties()
+            {
+                Position = VectorExtensions.Zero,
+                Diameter = diameter,
+                Points = points
+            });
+        }
+    }
+}

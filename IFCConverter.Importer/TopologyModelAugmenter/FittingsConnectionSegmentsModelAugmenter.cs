@@ -14,12 +14,13 @@ namespace IFCConverter.Importer.TopologyModelAugmenter
             foreach (IFittingTopologyEntity fittingTopologyEntity in model.Entities.OfType<IFittingTopologyEntity>().ToArray())
             {
                 TopologyEntityAttribute attribute = fittingTopologyEntity.GetTopologyEntityAttribute();
-                ITopologySegmentAugmenter? augmenter = attribute.GetSegmentAugmenter();
+                ITopologySegmentAugmenter augmenter = attribute.GetSegmentAugmenter();
                 if (augmenter == null)
                     continue;
 
                 result.AddRange(augmenter.Augment(fittingTopologyEntity));
             }
+
             model.AddEntities(result);
         }
     }

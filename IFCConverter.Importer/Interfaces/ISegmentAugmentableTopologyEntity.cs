@@ -2,6 +2,6 @@
 {
     public interface ISegmentAugmentableTopologyEntity
     {
-        public void Augment();
+        void Augment();
     }
 }

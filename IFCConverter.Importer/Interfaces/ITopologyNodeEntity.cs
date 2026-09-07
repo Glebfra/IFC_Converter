@@ -5,6 +5,6 @@ namespace IFCConverter.Importer.Interfaces
 {
     public interface ITopologyNodeEntity : IEquatable<ITopologyNodeEntity>
     {
-        public Vector<double> Position { get; }
+        Vector<double> Position { get; }
     }
 }
