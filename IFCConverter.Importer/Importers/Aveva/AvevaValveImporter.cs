@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.Importers.Aveva
         public override ValveProxy ReadTyped(IfcBuildingElementProxy source)
         {
             IEnumerable<IPropertySet> propertySets = source.GetPropertySets();
-            AvevaPset? avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
+            AvevaPset avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
             if (avevaPset == null)
                 throw new Exception("The required Aveva property set is missing.");
 

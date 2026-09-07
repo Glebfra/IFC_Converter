@@ -5,33 +5,34 @@ using IFCConverter.Importer.Importers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using IFCConverter.Importer.TopologyModelAugmenter;
-using IFCConverter.Utils;
+using IFCConverter.Utils.Diagnostics;
+using IFCConverter.Utils.Mathematics;
+using IFCConverter.Utils.Pipeline;
 using MathNet.Numerics.LinearAlgebra;
-using Start.API;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.API;
+using IFCConverter.Start.Interfaces;
 using Xbim.Ifc4.Kernel;
-using IfcProject = Ifc.API.IfcProject;
+using IfcProject = IFCConverter.IFC.API.IfcProject;
 
 namespace IFCConverter.Importer
 {
     public class IfcToStartConverter
     {
         private const double VectorTolerance = 1e-3;
-        private readonly VectorComparer _comparer = new(VectorTolerance);
+        private readonly VectorComparer _comparer = new VectorComparer(VectorTolerance);
 
         private readonly ImportDataContainer _importDataContainer;
 
         private readonly Logger _logger = Logger.GetInstance();
 
-        private readonly List<ITopologyModelAugmenter> _modelAugmenters = new();
+        private readonly List<ITopologyModelAugmenter> _modelAugmenters = new List<ITopologyModelAugmenter>();
         private readonly StartNodeRegistry _nodeRegistry;
 
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
             _importDataContainer = importDataContainer;
             _nodeRegistry = new StartNodeRegistry(_comparer);
-            
+
             _modelAugmenters.Add(new FittingsConnectionSegmentsModelAugmenter());
             _modelAugmenters.Add(new AttachmentPipeSplitModelAugmenter());
         }

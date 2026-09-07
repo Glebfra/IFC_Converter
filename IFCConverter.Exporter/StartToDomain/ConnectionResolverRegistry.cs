@@ -1,0 +1,29 @@
+﻿using System.Collections.Generic;
+using IFCConverter.Exporter.StartToDomain.ConnectionResolvers;
+using IFCConverter.Utils.Reflection;
+using IFCConverter.Start.Interfaces;
+
+namespace IFCConverter.Exporter.StartToDomain
+{
+    internal sealed class ConnectionResolverRegistry : ReflectionRegistry<IConnectionResolver>, IConnectionResolverRegistry
+    {
+        public ConnectionResolverRegistry() : base(typeof(ConnectionResolverRegistry).Assembly)
+        {
+        }
+
+        public IConnectionResolver Resolve(IStartEntity source)
+        {
+            return Resolve(resolver => resolver.CanResolve(source));
+        }
+
+        public IEnumerable<IConnectionResolver> ResolveAll(IStartEntity source)
+        {
+            return ResolveAll(resolver => resolver.CanResolve(source));
+        }
+
+        public bool TryResolve(IStartEntity source, out IConnectionResolver result)
+        {
+            return TryResolve(resolver => resolver.CanResolve(source), out result);
+        }
+    }
+}

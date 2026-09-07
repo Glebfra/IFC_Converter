@@ -11,7 +11,7 @@ namespace IFCConverter.Importer.Interfaces
         /// <summary>
         ///     Gets all topology entities contained in the model.
         /// </summary>
-        public IEnumerable<ITopologyEntity> Entities { get; }
+        IEnumerable<ITopologyEntity> Entities { get; }
 
         /// <summary>
         ///     Adds a new entity proxy to the topology model.
@@ -24,7 +24,7 @@ namespace IFCConverter.Importer.Interfaces
         ///     topology entity is created and added to the model.
         ///     Connections are recalculated after the entity is added.
         /// </remarks>
-        public void AddEntity(IEntityProxy proxy);
+        void AddEntity(IEntityProxy proxy);
 
         /// <summary>
         ///     Adds a boundary proxy to the topology model.
@@ -36,7 +36,7 @@ namespace IFCConverter.Importer.Interfaces
         ///     The boundary proxy is converted into its corresponding topology entity
         ///     before being added to the model.
         /// </remarks>
-        public void AddEntity(IBoundaryProxy boundaryProxy);
+        void AddEntity(IBoundaryProxy boundaryProxy);
 
         /// <summary>
         ///     Adds an existing topology entity to the model.
@@ -47,7 +47,7 @@ namespace IFCConverter.Importer.Interfaces
         /// <remarks>
         ///     Connectivity is recalculated after the entity has been added.
         /// </remarks>
-        public void AddEntity(ITopologyEntity entity);
+        void AddEntity(ITopologyEntity entity);
 
         /// <summary>
         ///     Adds multiple entity proxies to the topology model.
@@ -60,7 +60,7 @@ namespace IFCConverter.Importer.Interfaces
         ///     provided proxies to ensure consistent connectivity.
         ///     Connections are recalculated after all entities have been added.
         /// </remarks>
-        public void AddEntities(IEnumerable<IEntityProxy> proxies);
+        void AddEntities(IEnumerable<IEntityProxy> proxies);
 
         /// <summary>
         ///     Adds multiple boundary proxies to the topology model.
@@ -68,7 +68,7 @@ namespace IFCConverter.Importer.Interfaces
         /// <param name="boundaryProxies">
         ///     The boundary proxies to add.
         /// </param>
-        public void AddEntities(IEnumerable<IBoundaryProxy> boundaryProxies);
+        void AddEntities(IEnumerable<IBoundaryProxy> boundaryProxies);
 
         /// <summary>
         ///     Adds multiple topology entities to the model.
@@ -79,7 +79,7 @@ namespace IFCConverter.Importer.Interfaces
         /// <remarks>
         ///     Connectivity is recalculated after all entities have been added.
         /// </remarks>
-        public void AddEntities(IEnumerable<ITopologyEntity> entities);
+        void AddEntities(IEnumerable<ITopologyEntity> entities);
 
         /// <summary>
         ///     Removes the specified topology entity from the model.
@@ -90,8 +90,8 @@ namespace IFCConverter.Importer.Interfaces
         /// <remarks>
         ///     Entity connectivity is updated after the operation.
         /// </remarks>
-        public void RemoveEntity(ITopologyEntity entity);
-        
+        void RemoveEntity(ITopologyEntity entity);
+
         /// <summary>
         ///     Removes the specified topology entities from the model.
         /// </summary>
@@ -101,6 +101,6 @@ namespace IFCConverter.Importer.Interfaces
         /// <remarks>
         ///     Entity connectivity is updated after all entities have been removed.
         /// </remarks>
-        public void RemoveEntities(IEnumerable<ITopologyEntity> entities);
+        void RemoveEntities(IEnumerable<ITopologyEntity> entities);
     }
 }

@@ -2,14 +2,15 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using Ifc.Builders;
-using Ifc.Builders.Properties;
-using Ifc.Interfaces;
 using IFCConverter.Exporter.Interfaces;
+using IFCConverter.IFC.Builders;
+using IFCConverter.IFC.Builders.Properties;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.IFC.Interfaces.Properties;
+using IFCConverter.Utils.Diagnostics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Attributes;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.Attributes;
+using IFCConverter.Start.Interfaces;
 using Xbim.Common;
 using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.Interfaces;
@@ -37,7 +38,7 @@ namespace IFCConverter.Exporter.Converters.Elements
 
         public object BuildStart(object ifc)
         {
-            return BuildStartElement((TIfc)ifc)!;
+            return BuildStartElement((TIfc)ifc);
         }
 
         [Pure]
@@ -79,18 +80,16 @@ namespace IFCConverter.Exporter.Converters.Elements
         {
             return !start.Name.IsEmpty()
                 ? start.Name
-                : start switch
-                {
-                    IStartTwoNodeEntity twoNodeEntity =>
-                        $"{start.GetType().Name}_{twoNodeEntity.StartNode.Name}_{twoNodeEntity.EndNode.Name}",
-                    IStartOneNodeEntity oneNodeEntity => $"{start.GetType().Name}_{oneNodeEntity.Node.Name}",
-                    _ => $"{start.GetType().Name}_{start.ID}"
-                };
+                : start is IStartTwoNodeEntity twoNodeEntity
+                    ? $"{start.GetType().Name}_{twoNodeEntity.StartNode.Name}_{twoNodeEntity.EndNode.Name}"
+                    : start is IStartOneNodeEntity oneNodeEntity
+                        ? $"{start.GetType().Name}_{oneNodeEntity.Node.Name}"
+                        : $"{start.GetType().Name}_{start.ID}";
         }
 
         private void TryAddMaterial(TStart start, IIfcProductBuilder<TIfc> builder)
         {
-            if (start is not IStartMaterializedEntity materializedEntity)
+            if (!(start is IStartMaterializedEntity materializedEntity))
                 return;
 
             IIfcMaterialBuilder materialBuilder = new IfcMaterialBuilder(materializedEntity.MaterialName, "", "");
@@ -106,10 +105,10 @@ namespace IFCConverter.Exporter.Converters.Elements
                 .Select(pair =>
                 {
                     string propertyName = pair.Key;
-                    IfcText propertyValue = new(pair.Value);
+                    IfcText propertyValue = new IfcText(pair.Value);
                     string propertyDescription = "";
                     return new IfcPropertySingleValueBuilder<IfcPropertySingleValue>(propertyName, propertyDescription,
-                        propertyValue, null!);
+                        propertyValue, null);
                 });
             IIfcPropertySetBuilder propertySetBuilder = new IfcPropertySetBuilder("Pset_Start", propertyBuilders);
             return propertySetBuilder.CreatePropertySet(_Model);

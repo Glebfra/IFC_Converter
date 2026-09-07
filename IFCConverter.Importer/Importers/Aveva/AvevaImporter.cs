@@ -6,7 +6,7 @@ using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets.Aveva;
-using Utils;
+using IFCConverter.Utils.Diagnostics;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.SharedBldgElements;
 
@@ -23,11 +23,11 @@ namespace IFCConverter.Importer.Importers.Aveva
         {
             IReadOnlyCollection<IfcProduct> ifcProductsCollection = products.ToArray();
 
-            List<IEntityProxy> proxies = new();
+            List<IEntityProxy> proxies = new List<IEntityProxy>();
             foreach (IfcProduct ifcProduct in ifcProductsCollection)
             {
                 IPropertySet[] propertySets = ifcProduct.GetPropertySets().ToArray();
-                AvevaEntityParameters? parameters = propertySets.OfType<AvevaEntityParameters>().FirstOrDefault();
+                AvevaEntityParameters parameters = propertySets.OfType<AvevaEntityParameters>().FirstOrDefault();
                 if (parameters == null)
                     continue;
 
@@ -51,17 +51,26 @@ namespace IFCConverter.Importer.Importers.Aveva
 
         private static AvevaEntityType? GetAvevaEntityType(AvevaEntityParameters parameters)
         {
-            return parameters.E3DType switch
+            switch (parameters.E3DType)
             {
-                "TUBING" => AvevaEntityType.PIPE_SEGMENT,
-                "ELBOW" or "BEND" => AvevaEntityType.BEND,
-                "TEE" => AvevaEntityType.TEE,
-                "REDUCER" => AvevaEntityType.REDUCER,
-                "VALVE" => AvevaEntityType.VALVE,
-                "PCOMPONENT" => AvevaEntityType.PCOM,
-                "ATTACHMENT" => AvevaEntityType.ATTACHMENT,
-                _ => null
-            };
+                case "TUBING":
+                    return AvevaEntityType.PIPE_SEGMENT;
+                case "ELBOW":
+                case "BEND":
+                    return AvevaEntityType.BEND;
+                case "TEE":
+                    return AvevaEntityType.TEE;
+                case "REDUCER":
+                    return AvevaEntityType.REDUCER;
+                case "VALVE":
+                    return AvevaEntityType.VALVE;
+                case "PCOMPONENT":
+                    return AvevaEntityType.PCOM;
+                case "ATTACHMENT":
+                    return AvevaEntityType.ATTACHMENT;
+                default:
+                    return null;
+            }
         }
 
         private static IEntityProxy CreateEntityProxy(
@@ -70,17 +79,25 @@ namespace IFCConverter.Importer.Importers.Aveva
         {
             IfcBuildingElementProxy buildingElementProxy = (IfcBuildingElementProxy)product;
 
-            return entityType switch
+            switch (entityType)
             {
-                AvevaEntityType.PIPE_SEGMENT => new AvevaPipeSegmentImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.BEND => new AvevaBendImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.TEE => new AvevaTeeImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.REDUCER => new AvevaReducerImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.VALVE => new AvevaValveImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.PCOM => new AvevaPcomImporter().ReadTyped(buildingElementProxy),
-                AvevaEntityType.ATTACHMENT => new AvevaAttachmentImporter().ReadTyped(buildingElementProxy),
-                _ => throw new Exception("Unsupported entity type.")
-            };
+                case AvevaEntityType.PIPE_SEGMENT:
+                    return new AvevaPipeSegmentImporter().ReadTyped(buildingElementProxy);
+                case AvevaEntityType.BEND:
+                    return new AvevaBendImporter().ReadTyped(buildingElementProxy);
+                case AvevaEntityType.TEE:
+                    return new AvevaTeeImporter().ReadTyped(buildingElementProxy);
+                case AvevaEntityType.REDUCER:
+                    return new AvevaReducerImporter().ReadTyped(buildingElementProxy);
+                case AvevaEntityType.VALVE:
+                    return new AvevaValveImporter().ReadTyped(buildingElementProxy);
+                case AvevaEntityType.PCOM:
+                    return new AvevaPcomImporter().ReadTyped(buildingElementProxy);
+                case AvevaEntityType.ATTACHMENT:
+                    return new AvevaAttachmentImporter().ReadTyped(buildingElementProxy);
+                default:
+                    throw new Exception("Unsupported entity type.");
+            }
         }
 
         private enum AvevaEntityType

@@ -2,8 +2,8 @@
 using System.Linq;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
-using Start.Entities.Segments;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {

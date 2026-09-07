@@ -2,14 +2,14 @@
 using System.Diagnostics.Contracts;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
-using Start.Interfaces;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Topology
 {
     [TopologyEntity]
     internal class TopologyEntity : ITopologyEntity
     {
-        private readonly List<ITopologyEntity> _connected = new();
+        private readonly List<ITopologyEntity> _connected = new List<ITopologyEntity>();
 
         public TopologyEntity(
             IBoundaryProxy proxy,

@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using Ifc.Interfaces;
+using IFCConverter.IFC.Interfaces;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
-using Utils;
+using IFCConverter.Utils.Reflection;
 
 namespace IFCConverter.Importer.Importers
 {
     internal class ImporterRegistry
     {
-        private static readonly Lazy<ImporterRegistry> _instance = new(() => new ImporterRegistry());
+        private static readonly Lazy<ImporterRegistry> _instance = new Lazy<ImporterRegistry>(() => new ImporterRegistry());
 
-        private readonly List<ImporterRegistration> _registrations = new();
+        private readonly List<ImporterRegistration> _registrations = new List<ImporterRegistration>();
 
         private ImporterRegistry()
         {
@@ -29,7 +29,7 @@ namespace IFCConverter.Importer.Importers
         [Pure]
         public IImporter CreateImporter(IIfcProject ifcProject)
         {
-            ImporterRegistration? match = _registrations
+            ImporterRegistration match = _registrations
                 .Where(r => r.ImporterFilter.IsMatch(ifcProject))
                 .OrderByDescending(r => r.Priority)
                 .FirstOrDefault();
