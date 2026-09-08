@@ -68,8 +68,6 @@ namespace IFCConverter.Importer.Importers.Aveva
                     return AvevaEntityType.PCOM;
                 case "ATTACHMENT":
                     return AvevaEntityType.ATTACHMENT;
-                case "FILTER":
-                    return AvevaEntityType.FILTER;
                 default:
                     return null;
             }
@@ -110,8 +108,7 @@ namespace IFCConverter.Importer.Importers.Aveva
             REDUCER,
             VALVE,
             PCOM,
-            ATTACHMENT,
-            FILTER,
+            ATTACHMENT
         }
     }
 }
