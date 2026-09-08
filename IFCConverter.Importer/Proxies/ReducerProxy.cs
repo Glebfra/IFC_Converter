@@ -5,8 +5,8 @@ using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
@@ -16,7 +16,7 @@ namespace IFCConverter.Importer.Proxies
         private readonly IReadOnlyList<Vector<double>> _boundPoints;
 
         private readonly bool _isEccentric;
-        private IEnumerable<Vector<double>>? _boundary;
+        private IEnumerable<Vector<double>> _boundary;
 
         public ReducerProxy(Vector<double> position, IReadOnlyList<Vector<double>> boundPoints, bool isEccentric,
             double length, double minDiameter, double maxDiameter, Vector<double> direction, Vector<double> axisDisplacement)
@@ -38,16 +38,16 @@ namespace IFCConverter.Importer.Proxies
 
         public double Length { get; }
 
-        public IEnumerable<Vector<double>> Boundary => _boundary ??= GetBoundaryPoints();
+        public IEnumerable<Vector<double>> Boundary => _boundary ?? (_boundary = GetBoundaryPoints());
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public Vector<double> Position { get; set; }
 
         public IStartEntity ToStartEntity()
         {
             StartAbstractReducerEntity abstractReducerEntity = _isEccentric
                 ? new StartReducerEccentricEntity()
-                : new StartReducerConcentricEntity();
+                : (StartAbstractReducerEntity)new StartReducerConcentricEntity();
             abstractReducerEntity.LengthOfConicalPart.CreateFromSI(Length);
             abstractReducerEntity.Position = Position;
 

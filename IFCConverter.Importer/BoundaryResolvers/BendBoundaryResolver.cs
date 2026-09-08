@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Proxies;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Utils;
-using MatrixExtensions = Utils.MatrixExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Importer.BoundaryResolvers
 {
@@ -13,7 +13,7 @@ namespace IFCConverter.Importer.BoundaryResolvers
     {
         public IEnumerable<Vector<double>> ResolveBoundary(IEntityProxy proxy, IReadOnlyCollection<IEntityProxy> allProxies)
         {
-            if (proxy is not BendProxy bendProxy)
+            if (!(proxy is BendProxy bendProxy))
                 throw new InvalidCastException();
 
             Vector<double> axis = (bendProxy.Position - bendProxy.AxisPosition).Normalize(2);

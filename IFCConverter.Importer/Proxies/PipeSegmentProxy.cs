@@ -4,8 +4,8 @@ using IFCConverter.Importer.BoundaryResolvers;
 using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.Topology;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Segments;
-using Start.Interfaces;
+using IFCConverter.Start.Entities.Segments;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Proxies
 {
@@ -23,7 +23,7 @@ namespace IFCConverter.Importer.Proxies
 
         public double Diameter { get; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public double Length { get; }
         public Vector<double> Position { get; }
         public Vector<double> Direction { get; }
@@ -34,7 +34,7 @@ namespace IFCConverter.Importer.Proxies
         {
             Vector<double> pipeProjection = Direction * Length;
 
-            StartPipeEntity startPipeEntity = new();
+            StartPipeEntity startPipeEntity = new StartPipeEntity();
             startPipeEntity.Diameter.CreateFromSI(Diameter);
             startPipeEntity.StartPosition = Position;
             startPipeEntity.Projection = pipeProjection;

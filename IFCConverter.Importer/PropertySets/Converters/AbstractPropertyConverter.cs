@@ -11,7 +11,7 @@ namespace IFCConverter.Importer.PropertySets.Converters
         [Pure]
         public object Read(object value)
         {
-            return ReadTyped((TSource)value)!;
+            return ReadTyped((TSource)value);
         }
     }
 }

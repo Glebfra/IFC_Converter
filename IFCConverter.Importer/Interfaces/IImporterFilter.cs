@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics.Contracts;
-using Ifc.Interfaces;
+using IFCConverter.IFC.Interfaces;
 
 namespace IFCConverter.Importer.Interfaces
 {
     internal interface IImporterFilter
     {
         [Pure]
-        public bool IsMatch(IIfcProject ifcProject);
+        bool IsMatch(IIfcProject ifcProject);
     }
 }

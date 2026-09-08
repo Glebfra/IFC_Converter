@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Anchors;
-using Start.Interfaces;
-using Utils;
+using IFCConverter.Start.Entities.Anchors;
+using IFCConverter.Start.Interfaces;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using MatrixExtensions = Utils.MatrixExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements
 {
@@ -68,18 +68,21 @@ namespace IFCConverter.Exporter.Converters.Elements
             IStartSegmentEntity segmentEntity = start.ConnectedEntities.OfType<IStartSegmentEntity>().First();
             Matrix<double> segmentMatrix = segmentEntity.TransformationMatrix;
 
-            return start switch
+            switch (start)
             {
-                StartSingleDirectionalGuideAnchorEntity => new[]
-                {
-                    segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY()
-                },
-                StartDoubleDirectionalGuideAnchorEntity => new[]
-                {
-                    segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY(), -segmentMatrix.GetY()
-                },
-                _ => Array.Empty<Vector<double>>()
-            };
+                case StartSingleDirectionalGuideAnchorEntity startSingleDirectionalGuideAnchorEntity:
+                    return new[]
+                    {
+                        segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY()
+                    };
+                case StartDoubleDirectionalGuideAnchorEntity startDoubleDirectionalGuideAnchorEntity:
+                    return new[]
+                    {
+                        segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY(), -segmentMatrix.GetY()
+                    };
+                default:
+                    return Array.Empty<Vector<double>>();
+            }
         }
     }
 }

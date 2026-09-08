@@ -1,15 +1,15 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using Start.Interfaces;
+using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Importer.Interfaces
 {
     internal interface IResolvedSegmentProxy : IResolvedProxy
     {
-        public Vector<double> ResolvedStartPosition { get; }
-        public Vector<double> ResolvedEndPosition { get; }
+        Vector<double> ResolvedStartPosition { get; }
+        Vector<double> ResolvedEndPosition { get; }
 
-        public Vector<double> ResolvedProjection { get; }
+        Vector<double> ResolvedProjection { get; }
 
-        public IStartSegmentEntity ToStartEntity();
+        IStartSegmentEntity ToStartEntity();
     }
 }

@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Linq;
-using Ifc.API;
-using Ifc.Builders.Elements;
-using Ifc.Geometries;
-using Ifc.Interfaces;
+using IFCConverter.IFC.API;
+using IFCConverter.IFC.Builders.Elements;
+using IFCConverter.IFC.Geometries;
+using IFCConverter.IFC.Interfaces;
 using MathNet.Numerics.LinearAlgebra;
-using Start.Entities.Fittings;
-using Start.Extensions;
-using Utils;
+using IFCConverter.Start.Entities.Fittings;
+using IFCConverter.Start.Extensions;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = Utils.MatrixExtensions;
-using VectorExtensions = Utils.VectorExtensions;
+using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
+using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.Converters.Elements
 {
     internal sealed class TeeConverter : IfcElementConverter<StartAbstractTeeEntity, IfcPipeFitting>
     {
-        private readonly Logger _logger = Logger.GetInstance();
-
         public TeeConverter(IModel model) : base(model)
         {
         }
@@ -49,8 +46,7 @@ namespace IFCConverter.Exporter.Converters.Elements
 
         public override IIfcProductBuilder<IfcPipeFitting> CreateBuilder(StartAbstractTeeEntity start)
         {
-            return new IfcPipeFittingBuilder<IfcPipeFitting>(GenerateName(start), GenerateTag(start),
-                IfcPipeFittingTypeEnum.JUNCTION);
+            return new IfcPipeFittingBuilder<IfcPipeFitting>(GenerateName(start), GenerateTag(start), IfcPipeFittingTypeEnum.JUNCTION);
         }
 
         public override StartAbstractTeeEntity BuildStartElement(IfcPipeFitting ifc)

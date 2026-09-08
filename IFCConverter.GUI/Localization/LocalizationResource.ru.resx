@@ -25,7 +25,7 @@
         <value>Экспорт</value>
     </data>
     <data name="ExportWindowForm_Text" xml:space="preserve">
-        <value>Экспорт в Ifc</value>
+        <value>Экспорт в IFCConverter.IFC</value>
     </data>
     <data name="ExportWindowForm_OutputFilePath_Label_Text" xml:space="preserve">
         <value>Укажите полный путь для сохранения .ifc файла</value>
@@ -79,7 +79,7 @@
         <value>Обзор...</value>
     </data>
     <data name="ImportWindowForm_Text" xml:space="preserve">
-        <value>Импорт из Ifc</value>
+        <value>Импорт из IFCConverter.IFC</value>
     </data>
     <data name="ImportWindowForm_ImportType_Aveva" xml:space="preserve">
         <value>AVEVA</value>

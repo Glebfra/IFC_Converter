@@ -5,9 +5,9 @@ namespace IFCConverter.Exporter.Interfaces
     internal interface IIfcElementConverter
     {
         [Pure]
-        public object BuildIfc(object start);
+        object BuildIfc(object start);
 
         [Pure]
-        public object BuildStart(object ifc);
+        object BuildStart(object ifc);
     }
 }

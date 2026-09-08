@@ -8,12 +8,15 @@ namespace IFCConverter.Importer.Topology
     {
         public static ITopologyEntity CreateTopologyEntity(IBoundaryProxy proxy, IReadOnlyCollection<ITopologyNodeEntity> nodes)
         {
-            return proxy.Proxy switch
+            switch (proxy.Proxy)
             {
-                ValveProxy => new ValveTopologyEntity(proxy, nodes),
-                PipeSegmentProxy => new SegmentTopologyEntity(proxy, nodes),
-                _ => new TopologyEntity(proxy, nodes)
-            };
+                case ValveProxy _:
+                    return new ValveTopologyEntity(proxy, nodes);
+                case PipeSegmentProxy _:
+                    return new SegmentTopologyEntity(proxy, nodes);
+                default:
+                    return new TopologyEntity(proxy, nodes);
+            }
         }
     }
 }

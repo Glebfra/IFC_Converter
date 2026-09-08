@@ -1,0 +1,29 @@
+﻿using System.Collections.Generic;
+using IFCConverter.Exporter.StartToDomain.PortAugmenters;
+using IFCConverter.Utils.Reflection;
+using IFCConverter.Start.Interfaces;
+
+namespace IFCConverter.Exporter.StartToDomain
+{
+    internal sealed class PortAugmenterRegistry : ReflectionRegistry<IPortAugmenter>, IPortAugmenterRegistry
+    {
+        public PortAugmenterRegistry() : base(typeof(PortAugmenterRegistry).Assembly)
+        {
+        }
+
+        public IPortAugmenter Resolve(IStartEntity source)
+        {
+            return Resolve(augmenter => augmenter.CanAugment(source));
+        }
+
+        public IEnumerable<IPortAugmenter> ResolveAll(IStartEntity source)
+        {
+            return ResolveAll(augmenter => augmenter.CanAugment(source));
+        }
+
+        public bool TryResolve(IStartEntity source, out IPortAugmenter result)
+        {
+            return TryResolve(augmenter => augmenter.CanAugment(source), out result);
+        }
+    }
+}

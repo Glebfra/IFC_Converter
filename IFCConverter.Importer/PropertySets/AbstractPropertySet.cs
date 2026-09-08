@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.Interfaces;
-using Utils;
+using IFCConverter.Utils.Reflection;
 
 namespace IFCConverter.Importer.PropertySets
 {
@@ -40,8 +40,8 @@ namespace IFCConverter.Importer.PropertySets
         {
             try
             {
-                PropertyAttribute? propertyAttribute = fieldInfo.GetCustomAttribute<PropertyAttribute>();
-                Type? typeConverterType = propertyAttribute?.TypeConverter;
+                PropertyAttribute propertyAttribute = fieldInfo.GetCustomAttribute<PropertyAttribute>();
+                Type typeConverterType = propertyAttribute?.TypeConverter;
 
                 object convertedValue;
                 if (typeConverterType != null)
