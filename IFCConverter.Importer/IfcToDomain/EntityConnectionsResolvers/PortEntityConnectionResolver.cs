@@ -1,18 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using IFCConverter.Domain;
+﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Topology;
-using IFCConverter.Utils.Collections;
-using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics;
 
 namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
 {
     internal sealed class PortEntityConnectionResolver : IEntityConnectionResolver
     {
-        private const double DoubleTolerance = 1e-6;
-        private readonly VectorComparer _comparer = new VectorComparer(DoubleTolerance);
+        private const double DoubleTolerance = 1e-3;
         
         public bool CanResolve()
         {
@@ -21,26 +16,18 @@ namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
 
         public void Resolve(EngineeringModel model, ImportContext context)
         {
-            Dictionary<Vector<double>, List<Port>> ports = new Dictionary<Vector<double>, List<Port>>(_comparer);
-            
-            foreach (Port port in model.Ports)
+            foreach (Port firstPort in model.Ports)
             {
-                List<Port> portsList = ports.GetOrAdd(port.Position, _ => new List<Port>());
-                portsList.Add(port);
-            }
-            
-            foreach (List<Port> portsList in ports.Values)
-            {
-                if (portsList.Count == 0 || portsList.Count == 1)
-                    continue;
-                
-                Port firstPort = portsList.First();
                 Entity firstPortOwner = model.GetEntity(firstPort.Owner);
-                
-                foreach (Port secondPort in portsList.Skip(1))
+                foreach (Port secondPort in model.Ports)
                 {
+                    if (firstPort == secondPort)
+                        continue;
+                    
                     Entity secondPortOwner = model.GetEntity(secondPort.Owner);
-                    model.Connect(firstPort, secondPort, ResolveConnectionType(firstPortOwner, secondPortOwner));
+                    
+                    if (firstPort.Position.AlmostEqual(secondPort.Position, DoubleTolerance))
+                        model.Connect(firstPort, secondPort, ResolveConnectionType(firstPortOwner, secondPortOwner));
                 }
             }
         }

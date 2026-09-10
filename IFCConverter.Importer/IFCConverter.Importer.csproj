@@ -213,12 +213,12 @@
         <Compile Include="IfcToDomain\ImportContext.cs" />
         <Compile Include="IfcToDomain\ImportType.cs" />
         <Compile Include="IfcToDomain\ImportTypeResolver.cs" />
-        <Compile Include="IfcToDomain\Phases\ConnectionResolvePhase.cs" />
+        <Compile Include="IfcToDomain\Phases\EntityConnectionResolvePhase.cs" />
         <Compile Include="IfcToDomain\Phases\EntityImportPhase.cs" />
         <Compile Include="IfcToDomain\Phases\EntityMetadataAugmentPhase.cs" />
         <Compile Include="IfcToDomain\Phases\IfcToDomainPhaseRegistry.cs" />
         <Compile Include="IfcToDomain\Phases\IIfcToDomainPhase.cs" />
-        <Compile Include="IfcToDomain\Phases\PortResolvePhase.cs" />
+        <Compile Include="IfcToDomain\Phases\EntityPortResolvePhase.cs" />
         <Compile Include="IfcToDomain\EntityPortResolvers\AvevaEntityPortResolver.cs" />
         <Compile Include="IfcToDomain\EntityPortResolvers\AvevaEntityPortResolvers\AvevaEntityPortResolversRegistry.cs" />
         <Compile Include="IfcToDomain\EntityPortResolvers\AvevaEntityPortResolvers\AvevaSegmentEntityPortResolver.cs" />

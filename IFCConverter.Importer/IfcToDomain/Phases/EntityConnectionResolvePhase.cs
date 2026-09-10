@@ -5,8 +5,8 @@ using Xbim.Common;
 
 namespace IFCConverter.Importer.IfcToDomain.Phases
 {
-    [IfcToDomainPhase(1, typeof(PortResolvePhase))]
-    internal sealed class ConnectionResolvePhase : IIfcToDomainPhase
+    [IfcToDomainPhase(1, typeof(EntityPortResolvePhase))]
+    internal sealed class EntityConnectionResolvePhase : IIfcToDomainPhase
     {
         private readonly IEntityConnectionResolversRegistry _registry = new EntityConnectionsResolversRegistry();
         

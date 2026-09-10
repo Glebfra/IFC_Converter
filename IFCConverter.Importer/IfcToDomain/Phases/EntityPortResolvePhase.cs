@@ -7,7 +7,7 @@ using Xbim.Ifc4.Interfaces;
 namespace IFCConverter.Importer.IfcToDomain.Phases
 {
     [IfcToDomainPhase(1, typeof(EntityMetadataAugmentPhase))]
-    public sealed class PortResolvePhase : IIfcToDomainPhase
+    public sealed class EntityPortResolvePhase : IIfcToDomainPhase
     {
         private readonly IEntityPortResolversRegistry _registry = new EntityPortResolversRegistry();
         
