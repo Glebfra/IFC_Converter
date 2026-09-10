@@ -61,7 +61,7 @@ namespace IFCConverter.IFC.Extensions
 
             return properties;
         }
-
+        
         [Pure]
         public static IEnumerable<Vector<double>> GetCoordinates(this IIfcCartesianPointList3D pointList)
         {
@@ -74,6 +74,24 @@ namespace IFCConverter.IFC.Extensions
                 }));
 
             return result;
+        }
+        
+        [Pure]
+        public static IEnumerable<IIfcRepresentationItem> GetRepresentationItems(this IIfcProduct source)
+        {
+            IIfcProductRepresentation representation = source.Representation;
+            IEnumerable<IIfcRepresentation> representations = representation.Representations;
+            return representations.SelectMany(ifcRepresentation => ifcRepresentation.Items);
+        }
+
+        [Pure]
+        public static double GetLengthPower(this IModel model)
+        {
+            IfcSIUnit siUnit = model.Instances
+                .OfType<IfcSIUnit>()
+                .FirstOrDefault(unit => unit.UnitType == IfcUnitEnum.LENGTHUNIT);
+
+            return siUnit?.Power ?? 1.0;
         }
     }
 }
