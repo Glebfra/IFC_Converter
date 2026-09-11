@@ -6,7 +6,8 @@ using IFCConverter.Importer.DomainToStart.DomainAugmenters;
 
 namespace IFCConverter.Importer.DomainToStart.Phases
 {
-    internal sealed class DomainAugmentPhase
+    [DomainToStartPhase(1)]
+    internal sealed class DomainAugmentPhase : IDomainToStartPhase
     {
         private readonly IDomainAugmentersRegistry _registry = new DomainAugmentersRegistry();
         

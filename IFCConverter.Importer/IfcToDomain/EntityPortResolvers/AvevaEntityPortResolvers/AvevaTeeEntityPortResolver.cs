@@ -73,10 +73,13 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortR
                     mainDiameter = teeBranchDiameter;
                 }
             }
+
+            Vector<double> mainDirection = mainProjection.Normalize(2);
+            Vector<double> headDirection = headProjection.Normalize(2);
             
-            tee.PortA.SetGeometry(position - mainProjection / 2, mainProjection.Negate());
-            tee.PortB.SetGeometry(position + mainProjection / 2, mainProjection);
-            tee.PortC.SetGeometry(position + headProjection, headProjection);
+            tee.PortA.SetGeometry(position - mainProjection / 2, mainDirection.Negate());
+            tee.PortB.SetGeometry(position + mainProjection / 2, mainDirection);
+            tee.PortC.SetGeometry(position + headProjection, headDirection);
 
             tee.PortA.Metadata.Diameter = mainDiameter;
             tee.PortB.Metadata.Diameter = mainDiameter;

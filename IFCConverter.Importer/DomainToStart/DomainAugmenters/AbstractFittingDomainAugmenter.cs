@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
@@ -26,14 +25,12 @@ namespace IFCConverter.Importer.DomainToStart.DomainAugmenters
             
             foreach (Port port in entity.Ports)
             {
-                foreach (Connection connection in connections)
-                {
-                    if (IsConnectionAdded(connection, port))
-                        continue;
-
-                    Segment segment = AddSegment(port, fitting);
-                    model.Add(segment);
-                }
+                IEnumerable<Connection> portConnections = model.GetConnections(port.Id);
+                if (portConnections.Any())
+                    continue;
+                
+                Segment segment = AddSegment(port, fitting);
+                model.Add(segment);
             }
         }
 

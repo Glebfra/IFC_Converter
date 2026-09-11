@@ -6,7 +6,7 @@ using IFCConverter.Importer.Attributes;
 
 namespace IFCConverter.Importer.DomainToStart.Phases
 {
-    [DomainToStartPhase(1)]
+    [DomainToStartPhase(1, typeof(DomainAugmentPhase))]
     internal sealed class SegmentsPortAugmentPhase : IDomainToStartPhase
     {
         public void Execute(EngineeringModel model, ExportContext context)

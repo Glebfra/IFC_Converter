@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Importer.Pipeline;
 using IFCConverter.Utils.Diagnostics;
@@ -26,8 +25,7 @@ namespace IFCConverter.Importer
         public void Convert(IStartDocument startDocument)
         {
             _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
-
-            IEnumerable<IStartEntity> startEntities;
+            
             using (IIfcProject project = IfcProject.OpenProject(_importDataContainer.InputFilePath))
             {
                 IModel model = project.Model;
