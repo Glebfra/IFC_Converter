@@ -191,12 +191,23 @@ namespace IFCConverter.Utils.Mathematics
         ///     Returns the offset (translation) component of the transformation matrix, which represents the position of the
         ///     object in 3D space.
         /// </summary>
-        /// <param name="matrix"></param>
+        /// <param name="matrix">4x4 Matrix</param>
         /// <returns>3D Vector</returns>
         [Pure]
         public static Vector<double> GetOffset(this Matrix<double> matrix)
         {
             return matrix.Column(3).SubVector(0, 3);
+        }
+
+        /// <summary>
+        /// Returns the offset (translation) and rotation components of the transformation matirx
+        /// </summary>
+        /// <param name="matrix">4x4 Matrix</param>
+        /// <returns>3D Vector, 3x3 Matrix</returns>
+        [Pure]
+        public static (Vector<double>, Matrix<double>) Split(this Matrix<double> matrix)
+        {
+            return (matrix.GetOffset(), matrix.GetRotation());
         }
 
         /// <summary>

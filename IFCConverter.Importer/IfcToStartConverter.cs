@@ -1,75 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using IFCConverter.Importer.Importers;
-using IFCConverter.Importer.Interfaces;
-using IFCConverter.Importer.Topology;
-using IFCConverter.Importer.TopologyModelAugmenter;
+﻿using System.Reflection;
+using IFCConverter.IFC.Interfaces;
+using IFCConverter.Importer.Pipeline;
 using IFCConverter.Utils.Diagnostics;
-using IFCConverter.Utils.Mathematics;
 using IFCConverter.Utils.Pipeline;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Interfaces;
-using Xbim.Ifc4.Kernel;
+using Xbim.Common;
 using IfcProject = IFCConverter.IFC.API.IfcProject;
 
 namespace IFCConverter.Importer
 {
     public class IfcToStartConverter
     {
-        private const double VectorTolerance = 1e-3;
-        private readonly VectorComparer _comparer = new VectorComparer(VectorTolerance);
-
         private readonly ImportDataContainer _importDataContainer;
-
         private readonly Logger _logger = Logger.GetInstance();
 
-        private readonly List<ITopologyModelAugmenter> _modelAugmenters = new List<ITopologyModelAugmenter>();
-        private readonly StartNodeRegistry _nodeRegistry;
+        private readonly IfcToStartPipeline _pipeline = new IfcToStartPipeline();
 
         public IfcToStartConverter(ImportDataContainer importDataContainer)
         {
             _importDataContainer = importDataContainer;
-            _nodeRegistry = new StartNodeRegistry(_comparer);
-
-            _modelAugmenters.Add(new FittingsConnectionSegmentsModelAugmenter());
-            _modelAugmenters.Add(new AttachmentPipeSplitModelAugmenter());
         }
 
         public void Convert(IStartDocument startDocument)
         {
             _logger.System($"STARTtoIFC converter v.{Assembly.GetExecutingAssembly().GetName().Version}");
-
-            IEnumerable<IEntityProxy> proxies = ImportProxies();
-
-            ITopologyModel model = TopologyModel.Create(proxies, _comparer);
-            _modelAugmenters.ForEach(augmenter => augmenter.Augment(model));
-
-            using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
+            
+            using (IIfcProject project = IfcProject.OpenProject(_importDataContainer.InputFilePath))
             {
-                foreach (ITopologyEntity topologyEntity in model.Entities)
+                IModel model = project.Model;
+                using (IStartProject startProject = StartProject.OpenFromDocument(startDocument))
                 {
-                    IStartEntity startEntity = topologyEntity.ToStartEntity();
-                    Vector<double>[] nodePositions = topologyEntity.Nodes.Select(node => node.Position).ToArray();
-
-                    StartEntityProxy startEntityProxy = startProject.AddEntity(startEntity);
-                    StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(startProject, nodePositions);
-                    startEntityProxy.ConnectNodes(nodeProxies);
+                    _pipeline.Execute(model, startProject);
                 }
-
-                startProject.OnImportFinish();
-            }
-        }
-
-        private IEnumerable<IEntityProxy> ImportProxies()
-        {
-            using (IfcProject ifcProject = IfcProject.OpenProject(_importDataContainer.InputFilePath))
-            {
-                ImporterRegistry registry = ImporterRegistry.GetInstance();
-                IImporter importer = registry.CreateImporter(ifcProject);
-                IReadOnlyCollection<IfcProduct> products = ifcProject.Model.Instances.OfType<IfcProduct>().ToArray();
-                return importer.ImportProxies(products);
             }
         }
     }

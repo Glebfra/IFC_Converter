@@ -5,7 +5,6 @@ namespace IFCConverter.Geometry
 {
     public sealed class Mesh : IMesh
     {
-
         public Mesh(Vector<double>[] vertices, int[][] triangles, Vector<double>[] normals)
         {
             Vertices = vertices ?? throw new ArgumentNullException(nameof(vertices));

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
@@ -44,19 +46,36 @@ namespace IFCConverter.Domain
             return connection;
         }
 
+        [Pure]
         public Entity GetEntity(EntityId id)
         {
             return _entities[id];
         }
 
+        [Pure]
         public Port GetPort(PortId id)
         {
             return _ports[id];
         }
 
+        [Pure]
         public Connection GetConnection(ConnectionId id)
         {
             return _connections[id];
+        }
+
+        [Pure]
+        public IEnumerable<Connection> GetConnections(PortId id)
+        {
+            return _connections
+                .Where(connection => connection.Value.PortA.Id == id)
+                .Select(connection => connection.Value);
+        }
+
+        [Pure]
+        public IEnumerable<Connection> GetConnections(EntityId id)
+        {
+            return GetEntity(id).Ports.SelectMany(port => GetConnections(port.Id));
         }
 
         private void ValidatePort(Port port)
