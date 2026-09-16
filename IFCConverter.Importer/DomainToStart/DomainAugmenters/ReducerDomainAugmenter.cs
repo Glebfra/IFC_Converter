@@ -6,31 +6,27 @@ using IFCConverter.Domain.Topology;
 
 namespace IFCConverter.Importer.DomainToStart.DomainAugmenters
 {
-    internal sealed class AbstractFittingDomainAugmenter : AbstractDomainAugmenter
+    internal sealed class ReducerDomainAugmenter : AbstractDomainAugmenter
     {
         public override bool CanAugment(Entity entity)
         {
-            return entity is AbstractFitting && 
-                   !(entity is Reducer);
+            return entity is Reducer;
         }
 
         public override void Augment(Entity entity, EngineeringModel model, ExportContext context)
         {
-            AbstractFitting fitting = (AbstractFitting)entity;
+            Reducer reducer = (Reducer)entity;
 
             IReadOnlyCollection<Connection> connections = model.GetConnections(entity.Id).ToArray();
             if (connections.Count == entity.Ports.Count)
                 return;
-            
-            foreach (Port port in entity.Ports)
-            {
-                IEnumerable<Connection> portConnections = model.GetConnections(port.Id);
-                if (portConnections.Any())
-                    continue;
-                
-                Segment segment = AddSegment(port, fitting);
-                model.Add(segment);
-            }
+
+            IEnumerable<Connection> portConnection = model.GetConnections(reducer.PortB.Id);
+            if (portConnection.Any())
+                return;
+
+            Segment segment = AddSegment(reducer.PortB, reducer);
+            model.Add(segment);
         }
     }
 }
