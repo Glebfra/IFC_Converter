@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace IFCConverter.Importer.Interfaces
+namespace IFCConverter.Importer.PropertySets
 {
     internal interface IPropertyConverter
     {

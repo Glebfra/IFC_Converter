@@ -8,11 +8,9 @@ using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEntityExporters
 {
@@ -28,11 +26,11 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 
         public void Export(Anchor anchor, IModel model, ExportContext context)
         {
-            Matrix<double> segmentMatrix = (Matrix<double>)anchor.Metadata.Meta["SegmentMatrix"];
+            FixedMatrix<Dim4> segmentMatrix = (FixedMatrix<Dim4>)anchor.Metadata.Meta["SegmentMatrix"];
             double diameter = anchor.Port.Metadata.Diameter;
-            
-            List<Vector<double>> positions = new List<Vector<double>>(anchor.Restraints.Count);
-            List<Vector<double>> directions = new List<Vector<double>>(anchor.Restraints.Count);
+
+            List<FixedVector<Dim3>> positions = new List<FixedVector<Dim3>>(anchor.Restraints.Count);
+            List<FixedVector<Dim3>> directions = new List<FixedVector<Dim3>>(anchor.Restraints.Count);
 
             for (int i = 0; i < anchor.Restraints.Count; i++)
             {
@@ -42,20 +40,20 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 
                 if (restraint.IsDoubleSided)
                 {
-                    directions.Add(-restraint.Direction);
-                    positions.Add(CalculatePosition(segmentMatrix, -restraint.Direction, diameter));
+                    directions.Add(restraint.Direction.Negate());
+                    positions.Add(CalculatePosition(segmentMatrix, restraint.Direction.Negate(), diameter));
                 }
             }
-            
-            IIfcGeometry geometry = NonstandardAnchorGeometry.CreateGeometry(model, new NonstandardAnchorGeometryProperties()
+
+            IIfcGeometry geometry = NonstandardAnchorGeometry.CreateGeometry(model, new NonstandardAnchorGeometryProperties
             {
                 Diameter = diameter,
                 Positions = positions.ToArray(),
-                Directions = directions.ToArray(),
+                Directions = directions.ToArray()
             });
             geometry.AssignColor(Color.FromHEX(anchor.Metadata.Color));
-            
-            Matrix<double> placement = MatrixExtensions.CreateTransition(anchor.Position);
+
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(anchor.Position);
             IIfcDiscreteAccessoryBuilder<IIfcDiscreteAccessory> builder =
                 new IfcDiscreteAccessoryBuilder<IfcDiscreteAccessory>(anchor.Metadata.Name, anchor.Metadata.Type, IfcDiscreteAccessoryTypeEnum.NOTDEFINED);
             builder.AssignGeometry(geometry);
@@ -64,15 +62,15 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
             IIfcProduct instance = builder.CreateInstance(model);
             context.Register(anchor, instance);
         }
-        
+
         [Pure]
-        private static Vector<double> CalculatePosition(Matrix<double> segmentMatrix, Vector<double> direction,
+        private static FixedVector<Dim3> CalculatePosition(FixedMatrix<Dim4> segmentMatrix, FixedVector<Dim3> direction,
             double diameter)
         {
-            if (direction.IsParallel(segmentMatrix.GetZ(), 1e-3))
-                return segmentMatrix.GetY() * diameter / 2;
+            if (direction.IsParallel(segmentMatrix.GetZ().ToCartesian(), 1e-3))
+                return segmentMatrix.GetY().ToCartesian() * (diameter / 2);
 
-            return -direction * MathExtensions.CalculateAnchorDisplacement(segmentMatrix, diameter);
+            return direction.Negate() * MathExtensions.CalculateAnchorDisplacement(segmentMatrix, diameter);
         }
     }
 }

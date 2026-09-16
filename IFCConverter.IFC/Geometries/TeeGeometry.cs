@@ -9,13 +9,10 @@ using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
@@ -23,13 +20,13 @@ namespace IFCConverter.IFC.Geometries
     {
         public double HeadLength;
         public double HeadDiameter;
-        public Vector<double> HeadDirection;
+        public FixedVector<Dim3> HeadDirection;
 
         public double MainLength;
         public double MainDiameter;
-        public Vector<double> MainDirection;
+        public FixedVector<Dim3> MainDirection;
 
-        public Vector<double> Position;
+        public FixedVector<Dim3> Position;
     }
 
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
@@ -60,22 +57,22 @@ namespace IFCConverter.IFC.Geometries
                 properties.MainLength, properties.HeadLength
             };
 
-            Vector<double>[] zs =
+            FixedVector<Dim3>[] zs =
             {
                 properties.MainDirection, properties.HeadDirection
             };
-            Vector<double>[] xs = zs.Select(z => z.CreateNormalVector()).ToArray();
-            Vector<double>[] ys = zs.Select((z, index) => z.CrossProduct(xs[index]).Normalize(2)).ToArray();
+            FixedVector<Dim3>[] xs = zs.Select(z => z.CreateNormalVector()).ToArray();
+            FixedVector<Dim3>[] ys = zs.Select((z, index) => z.CreateNormalVector(xs[index]).Normalize()).ToArray();
 
-            Vector<double>[] positions =
+            FixedVector<Dim3>[] positions =
             {
-                properties.Position - properties.MainDirection * properties.MainLength / 2, properties.Position
+                properties.Position - properties.MainDirection * (properties.MainLength / 2), properties.Position
             };
 
-            Matrix<double>[] extrudedAreaSolidMatrices = positions
-                .Select((pos, index) => MatrixExtensions.CreateTransition(pos, xs[index], ys[index], zs[index]))
+            FixedMatrix<Dim4> circleProfileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+            FixedMatrix<Dim4>[] extrudedAreaSolidMatrices = positions
+                .Select((pos, index) => FixedMatrix<Dim4>.Builder.CreateTransition(pos, xs[index], ys[index], zs[index]))
                 .ToArray();
-            Matrix<double> circleProfileDefMatrix = MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
 
             IIfcCircleProfileDefBuilder<IfcCircleProfileDef>[] profileDefBuilders =
                 new IIfcCircleProfileDefBuilder<IfcCircleProfileDef>[2];
@@ -91,7 +88,7 @@ namespace IFCConverter.IFC.Geometries
 
                 extrudedAreaSolidBuilders[i] =
                     new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(
-                        lengths[i], VectorExtensions.Z, circleProfileDef
+                        lengths[i], FixedVector<Dim3>.Builder.Z(), circleProfileDef
                     );
                 extrudedAreaSolidBuilders[i].CreatePosition(model, extrudedAreaSolidMatrices[i]);
             }

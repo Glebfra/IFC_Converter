@@ -11,21 +11,21 @@ namespace IFCConverter.Importer.DomainToStart
         private readonly Dictionary<EntityId, IStartEntity> _entities = new Dictionary<EntityId, IStartEntity>();
         private readonly Dictionary<IStartEntity, EntityId> _reversedEntities = new Dictionary<IStartEntity, EntityId>();
 
-        public IStartProject StartProject { get; }
-        public IEnumerable<IStartEntity> StartEntities => _entities.Values;
-        
         public ExportContext(IStartProject startProject)
         {
             StartProject = startProject;
         }
-        
+
+        public IStartProject StartProject { get; }
+        public IEnumerable<IStartEntity> StartEntities => _entities.Values;
+
         public void Register(Entity entity, IStartEntity startEntity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             if (startEntity == null)
                 throw new ArgumentNullException(nameof(startEntity));
-            
+
             RegisterEntities(entity.Id, startEntity);
         }
 

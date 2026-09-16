@@ -7,7 +7,6 @@ using IFCConverter.IFC.Builders.Geometry.Tessellated;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
@@ -59,9 +58,9 @@ namespace IFCConverter.IFC.Geometries
         public double Width;
         public double Length;
         public double Diameter;
-        public Vector<double> Position;
-        public Vector<double> Direction;
-        public Vector<double> RefDirection;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3> Direction;
+        public FixedVector<Dim3> RefDirection;
         public BendGeometryType GeometryType;
     }
 
@@ -111,14 +110,14 @@ namespace IFCConverter.IFC.Geometries
         {
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
 
-            Vector<double> z = properties.Direction;
-            Vector<double> x = properties.RefDirection;
-            Vector<double> y = z.CrossProduct(x).Normalize(2);
+            FixedVector<Dim3> zAxis = properties.Direction;
+            FixedVector<Dim3> xAxis = properties.RefDirection;
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
 
-            Vector<double> xHeight = x * properties.Height / 2;
-            Vector<double> yWidth = y * properties.Width / 2;
+            FixedVector<Dim3> xHeight = xAxis * (properties.Height / 2);
+            FixedVector<Dim3> yWidth = yAxis * (properties.Width / 2);
 
-            Vector<double>[] startPoints = GenerateStartPoints(properties, xHeight, yWidth);
+            FixedVector<Dim3>[] startPoints = GenerateStartPoints(properties, xHeight, yWidth);
 
             ExtrudedBodyTriangulatedGeometryProperties bodyProperties = new ExtrudedBodyTriangulatedGeometryProperties
             {
@@ -144,7 +143,7 @@ namespace IFCConverter.IFC.Geometries
         /// <param name="yWidth">The local Y-axis scaled by half the beam width.</param>
         /// <returns>An array of cross-section points.</returns>
         [Pure]
-        private static Vector<double>[] GenerateStartPoints(BeamGeometryProperties properties, Vector<double> xHeight, Vector<double> yWidth)
+        private static FixedVector<Dim3>[] GenerateStartPoints(BeamGeometryProperties properties, FixedVector<Dim3> xHeight, FixedVector<Dim3> yWidth)
         {
             switch (properties.GeometryType)
             {
@@ -173,7 +172,7 @@ namespace IFCConverter.IFC.Geometries
         /// <param name="yWidth">The local Y-axis scaled by half the beam width.</param>
         /// <returns>An array of cross-section points.</returns>
         [Pure]
-        private static Vector<double>[] GenerateIBeamStartPoints(BeamGeometryProperties properties, Vector<double> xHeight, Vector<double> yWidth)
+        private static FixedVector<Dim3>[] GenerateIBeamStartPoints(BeamGeometryProperties properties, FixedVector<Dim3> xHeight, FixedVector<Dim3> yWidth)
         {
             return new[]
             {
@@ -200,7 +199,8 @@ namespace IFCConverter.IFC.Geometries
         /// <param name="yWidth">The local Y-axis scaled by half the beam width.</param>
         /// <returns>An array of cross-section points.</returns>
         [Pure]
-        private static Vector<double>[] GenerateChannelBeamStartPoints(BeamGeometryProperties properties, Vector<double> xHeight, Vector<double> yWidth)
+        private static FixedVector<Dim3>[] GenerateChannelBeamStartPoints(BeamGeometryProperties properties, FixedVector<Dim3> xHeight,
+            FixedVector<Dim3> yWidth)
         {
             return new[]
             {
@@ -223,7 +223,7 @@ namespace IFCConverter.IFC.Geometries
         /// <param name="yWidth">The local Y-axis scaled by half the beam width.</param>
         /// <returns>An array of cross-section points.</returns>
         [Pure]
-        private static Vector<double>[] GenerateTBeamStartPoints(BeamGeometryProperties properties, Vector<double> xHeight, Vector<double> yWidth)
+        private static FixedVector<Dim3>[] GenerateTBeamStartPoints(BeamGeometryProperties properties, FixedVector<Dim3> xHeight, FixedVector<Dim3> yWidth)
         {
             return new[]
             {
@@ -246,7 +246,8 @@ namespace IFCConverter.IFC.Geometries
         /// <param name="yWidth">The local Y-axis scaled by half the beam width.</param>
         /// <returns>An array of cross-section points.</returns>
         [Pure]
-        private static Vector<double>[] GenerateCornerBeamStartPoints(BeamGeometryProperties properties, Vector<double> xHeight, Vector<double> yWidth)
+        private static FixedVector<Dim3>[] GenerateCornerBeamStartPoints(BeamGeometryProperties properties, FixedVector<Dim3> xHeight,
+            FixedVector<Dim3> yWidth)
         {
             return new[]
             {
@@ -267,14 +268,15 @@ namespace IFCConverter.IFC.Geometries
         /// <param name="yWidth">The local Y-axis scaled by half the beam width.</param>
         /// <returns>An array of cross-section points approximating a circle.</returns>
         [Pure]
-        private static Vector<double>[] GenerateCircleBeamStartPoints(BeamGeometryProperties properties, Vector<double> xHeight, Vector<double> yWidth)
+        private static FixedVector<Dim3>[] GenerateCircleBeamStartPoints(BeamGeometryProperties properties, FixedVector<Dim3> xHeight,
+            FixedVector<Dim3> yWidth)
         {
             const int numPoints = 16;
-            Vector<double>[] points = new Vector<double>[numPoints];
+            FixedVector<Dim3>[] points = new FixedVector<Dim3>[numPoints];
             double radius = properties.Diameter / 2;
 
-            Vector<double> xHeightNorm = xHeight.Normalize(2);
-            Vector<double> yWidthNorm = yWidth.Normalize(2);
+            FixedVector<Dim3> xHeightNorm = xHeight.Normalize();
+            FixedVector<Dim3> yWidthNorm = yWidth.Normalize();
 
             for (int i = 0; i < numPoints; i++)
             {
@@ -293,7 +295,8 @@ namespace IFCConverter.IFC.Geometries
         /// <param name="yWidth">The local Y-axis scaled by half the beam width.</param>
         /// <returns>An array of cross-section corner points.</returns>
         [Pure]
-        private static Vector<double>[] GenerateRectangularBeamStartPoints(BeamGeometryProperties properties, Vector<double> xHeight, Vector<double> yWidth)
+        private static FixedVector<Dim3>[] GenerateRectangularBeamStartPoints(BeamGeometryProperties properties, FixedVector<Dim3> xHeight,
+            FixedVector<Dim3> yWidth)
         {
             return new[]
             {

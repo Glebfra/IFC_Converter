@@ -4,12 +4,10 @@ using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -25,18 +23,18 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             Tee tee = (Tee)entity;
 
             double headDiameter = tee.PortC.Metadata.Diameter;
-            Vector<double> headProjection = tee.PortC.Position - tee.Position;
+            FixedVector<Dim3> headProjection = tee.PortC.Position - tee.Position;
             double headLength = headProjection.L2Norm();
-            Vector<double> headDirection = headProjection / headLength;
+            FixedVector<Dim3> headDirection = headProjection * (1 / headLength);
 
             double mainDiameter = Math.Max(tee.PortA.Metadata.Diameter, tee.PortB.Metadata.Diameter);
-            Vector<double> mainProjection = tee.PortB.Position - tee.PortA.Position;
+            FixedVector<Dim3> mainProjection = tee.PortB.Position - tee.PortA.Position;
             double mainLength = mainProjection.L2Norm();
-            Vector<double> mainDirection = mainProjection / mainLength;
+            FixedVector<Dim3> mainDirection = mainProjection * (1 / mainLength);
 
             IIfcGeometry geometry = TeeGeometry.CreateGeometry(model, new TeeGeometryProperties
             {
-                Position = VectorExtensions.Zero,
+                Position = FixedVector<Dim3>.Zeros(),
 
                 HeadDiameter = headDiameter,
                 HeadLength = headLength,
@@ -48,7 +46,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             });
             geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
 
-            Matrix<double> placement = MatrixExtensions.CreateTransition(tee.Position);
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(tee.Position);
             IIfcPipeFittingBuilder<IfcPipeFitting> builder =
                 new IfcPipeFittingBuilder<IfcPipeFitting>(tee.Metadata.Name, tee.Metadata.Type, IfcPipeFittingTypeEnum.JUNCTION);
             builder.AssignGeometry(geometry);

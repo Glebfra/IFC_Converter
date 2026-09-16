@@ -9,23 +9,21 @@ using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct ConstantSpringSupportAnchorGeometryProperties
     {
-        public Vector<double> Position;
-        public Vector<double> Direction;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3> Direction;
         public double Diameter;
         public bool IsDoubleSided;
-        public Vector<double> DoubleSidedDisplacement;
+        public FixedVector<Dim3> DoubleSidedDisplacement;
     }
 
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
@@ -67,7 +65,7 @@ namespace IFCConverter.IFC.Geometries
             double coneDiameter = properties.Diameter * DiameterToConeDiameterFactor;
             double stickDiameter = properties.Diameter * DiameterToStickDiameterFactor;
 
-            Vector<double>[] topConeTopPoints = properties.IsDoubleSided
+            FixedVector<Dim3>[] topConeTopPoints = properties.IsDoubleSided
                 ? new[]
                 {
                     properties.Position + properties.DoubleSidedDisplacement, properties.Position - properties.DoubleSidedDisplacement
@@ -77,35 +75,41 @@ namespace IFCConverter.IFC.Geometries
                     properties.Position
                 };
 
-            Vector<double>[] topConeBotPoints = topConeTopPoints
+            FixedVector<Dim3>[] topConeBotPoints = topConeTopPoints
                 .Select(topConePoint => topConePoint - properties.Direction * coneLength)
                 .ToArray();
-            Vector<double>[] botStickPoints = topConeBotPoints
+            FixedVector<Dim3>[] botStickPoints = topConeBotPoints
                 .Select(botConePoint => botConePoint - properties.Direction * stickLength)
                 .ToArray();
-            Vector<double>[] botConeBotPoints = botStickPoints;
-            Vector<double>[] botConeTopPoints = botConeBotPoints
+            FixedVector<Dim3>[] botConeBotPoints = botStickPoints;
+            FixedVector<Dim3>[] botConeTopPoints = botConeBotPoints
                 .Select(botConeBotPoint => botConeBotPoint - properties.Direction * coneLength)
                 .ToArray();
-            Vector<double>[] basePoints = botConeTopPoints
+            FixedVector<Dim3>[] basePoints = botConeTopPoints
                 .Select(botConeTopPoint => botConeTopPoint - properties.Direction * baseLength)
                 .ToArray();
 
             for (int i = 0; i < topConeTopPoints.Length; i++)
             {
-                Vector<double> topConeTopPoint = topConeTopPoints[i];
-                Vector<double> topConeBotPoint = topConeBotPoints[i];
-                Vector<double> botStickPoint = botStickPoints[i];
-                Vector<double> botConeBotPoint = botConeBotPoints[i];
-                Vector<double> botConeTopPoint = botConeTopPoints[i];
-                Vector<double> basePoint = basePoints[i];
+                FixedVector<Dim3> topConeTopPoint = topConeTopPoints[i];
+                FixedVector<Dim3> topConeBotPoint = topConeBotPoints[i];
+                FixedVector<Dim3> botStickPoint = botStickPoints[i];
+                FixedVector<Dim3> botConeBotPoint = botConeBotPoints[i];
+                FixedVector<Dim3> botConeTopPoint = botConeTopPoints[i];
+                FixedVector<Dim3> basePoint = basePoints[i];
 
-                Matrix<double> profileDefMatrix =
-                    MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
-                Matrix<double> baseExtrudedAreaSolidMatrix =
-                    MatrixExtensions.CreateTransition(basePoint, properties.Direction);
-                Matrix<double> stickExtrudedAreaSolidMatrix =
-                    MatrixExtensions.CreateTransition(botStickPoint, properties.Direction);
+                FixedVector<Dim3> profileDefXAxis = FixedVector<Dim3>.Builder.X();
+                FixedVector<Dim3> profileDefYAxis = FixedVector<Dim3>.Builder.Y();
+                FixedVector<Dim3> profileDefZAxis = FixedVector<Dim3>.Builder.Z();
+                FixedMatrix<Dim4> profileDefMatrix =
+                    FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros(), profileDefXAxis, profileDefYAxis, profileDefZAxis);
+
+                FixedVector<Dim3> zAxis = properties.Direction;
+                FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+                FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+                FixedMatrix<Dim4> baseExtrudedAreaSolidMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(basePoint, xAxis, yAxis, zAxis);
+                FixedMatrix<Dim4> stickExtrudedAreaSolidMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(botStickPoint, xAxis, yAxis, zAxis);
 
                 IIfcRectangleProfileDefBuilder<IfcRectangleProfileDef> baseProfileDefBuilder =
                     new IfcRectangleProfileDefBuilder<IfcRectangleProfileDef>(
@@ -130,7 +134,7 @@ namespace IFCConverter.IFC.Geometries
                 builders.Add(botConeTriangulatedFaceSetBuilder);
 
                 IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> baseExtrudedAreaSolidBuilder =
-                    new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(baseLength, VectorExtensions.Z,
+                    new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(baseLength, FixedVector<Dim3>.Builder.Z(),
                         baseProfileDef);
                 baseExtrudedAreaSolidBuilder.CreatePosition(model, baseExtrudedAreaSolidMatrix);
                 builders.Add(baseExtrudedAreaSolidBuilder);
@@ -144,7 +148,7 @@ namespace IFCConverter.IFC.Geometries
                 IfcCircleProfileDef stickProfileDef = stickProfileDefBuilder.CreateProfileDef(model);
 
                 IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> stickExtrudedAreaSolidBuilder =
-                    new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(stickLength, VectorExtensions.Z,
+                    new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(stickLength, FixedVector<Dim3>.Builder.Z(),
                         stickProfileDef);
                 stickExtrudedAreaSolidBuilder.CreatePosition(model, stickExtrudedAreaSolidMatrix);
                 builders.Add(stickExtrudedAreaSolidBuilder);

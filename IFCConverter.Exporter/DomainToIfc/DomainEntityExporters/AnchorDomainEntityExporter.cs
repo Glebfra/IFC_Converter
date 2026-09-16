@@ -7,7 +7,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
     internal sealed class AnchorDomainEntityExporter : IDomainEntityExporter
     {
         private readonly IAnchorDomainEntityExportersRegistry _registry = new AnchorDomainEntityExportersRegistry();
-        
+
         public bool CanExport(Entity entity)
         {
             return entity is Anchor;

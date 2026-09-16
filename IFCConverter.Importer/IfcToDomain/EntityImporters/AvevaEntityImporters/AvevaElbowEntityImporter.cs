@@ -6,9 +6,9 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
-using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.PropertySets;
 using IFCConverter.Importer.PropertySets.Aveva;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 
@@ -31,14 +31,14 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AvevaEntityImporters
                 throw new Exception("The representation item is not a revolved area solid.");
 
             double lengthPower = product.Model.GetLengthPower();
-            
+
             IEnumerable<IPropertySet> propertySets = ((IfcProduct)product).GetPropertySets();
             AvevaPset avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
             if (avevaPset == null)
                 throw new Exception("The required Aveva property set is missing.");
-            Vector<double> position = avevaPset.Pos * lengthPower;
-            
-            Vector<double> axisLocalPosition = revolvedAreaSolid.Axis.Location.ToVector();
+            FixedVector<Dim3> position = avevaPset.Pos * lengthPower;
+
+            FixedVector<Dim3> axisLocalPosition = revolvedAreaSolid.Axis.Location.ToFixedVector<Dim3>();
             double radius = axisLocalPosition.L2Norm() * lengthPower;
 
             Elbow elbow = new Elbow(EntityId.New())
@@ -46,7 +46,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AvevaEntityImporters
                 Position = position,
                 Radius = radius
             };
-            
+
             model.Add(elbow);
             context.Register(elbow, product);
         }

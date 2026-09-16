@@ -1,7 +1,7 @@
 ﻿using System;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces.Geometry.Curve;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -13,13 +13,13 @@ namespace IFCConverter.IFC.Builders.Geometry.Curve
         public IIfcCartesianPoint Point { get; private set; }
         public IIfcVector Direction { get; private set; }
 
-        public IIfcCartesianPoint CreatePoint(IModel model, Vector<double> point)
+        public IIfcCartesianPoint CreatePoint(IModel model, FixedVector<Dim3> point)
         {
             Point = point.ToCartesianPoint(model);
             return Point;
         }
 
-        public IIfcVector CreateDirection(IModel model, Vector<double> vector)
+        public IIfcVector CreateDirection(IModel model, FixedVector<Dim3> vector)
         {
             Direction = vector.ToIfcVector(model);
             return Direction;

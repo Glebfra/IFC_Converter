@@ -10,7 +10,7 @@ namespace IFCConverter.Importer.IfcToDomain.Phases
     public sealed class EntityPortResolvePhase : IIfcToDomainPhase
     {
         private readonly IEntityPortResolversRegistry _registry = new EntityPortResolversRegistry();
-        
+
         public void Execute(IModel model, EngineeringModel domain, ImportContext context)
         {
             foreach (IIfcProduct product in model.Instances.OfType<IIfcProduct>())

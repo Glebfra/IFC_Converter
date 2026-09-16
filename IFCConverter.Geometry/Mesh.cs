@@ -1,19 +1,19 @@
 ﻿using System;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry
 {
     public sealed class Mesh : IMesh
     {
-        public Mesh(Vector<double>[] vertices, int[][] triangles, Vector<double>[] normals)
+        public Mesh(FixedVector<Dim3>[] vertices, int[][] triangles, FixedVector<Dim3>[] normals)
         {
             Vertices = vertices ?? throw new ArgumentNullException(nameof(vertices));
             Triangles = triangles ?? throw new ArgumentNullException(nameof(triangles));
             Normals = normals ?? throw new ArgumentNullException(nameof(normals));
         }
 
-        public Vector<double>[] Vertices { get; }
+        public FixedVector<Dim3>[] Vertices { get; }
         public int[][] Triangles { get; }
-        public Vector<double>[] Normals { get; }
+        public FixedVector<Dim3>[] Normals { get; }
     }
 }

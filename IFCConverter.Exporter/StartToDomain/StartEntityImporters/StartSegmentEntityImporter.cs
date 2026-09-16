@@ -8,7 +8,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
     internal sealed class StartSegmentEntityImporter : IStartEntityImporter
     {
         private readonly IStartSegmentEntityImportersRegistry _registry = new StartSegmentEntityImportersRegistry();
-        
+
         public bool CanImport(IStartEntity source)
         {
             return source is StartAbstractSegmentEntity;

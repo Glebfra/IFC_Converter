@@ -2,11 +2,10 @@
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEntityExporters
 {
@@ -19,7 +18,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
             IIfcGeometry geometry = CreateGeometry(joint, model);
             geometry.AssignColor(Color.FromHEX(joint.Metadata.Color));
 
-            Matrix<double> placement = MatrixExtensions.CreateTransition(joint.Position);
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(joint.Position);
             IIfcPipeFittingBuilder<IIfcPipeFitting> builder =
                 new IfcPipeFittingBuilder<IfcPipeFitting>(joint.Metadata.Name, joint.Metadata.Type, IfcPipeFittingTypeEnum.CONNECTOR);
             builder.AssignGeometry(geometry);

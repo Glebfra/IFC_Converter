@@ -8,8 +8,7 @@ namespace IFCConverter.Importer.IfcToDomain
 {
     public sealed class ImportContext
     {
-        public ImportType ImportType { get; }
-        
+
         private readonly Dictionary<EntityId, IIfcProduct> _entities = new Dictionary<EntityId, IIfcProduct>();
         private readonly Dictionary<IIfcProduct, EntityId> _entitiesReversed = new Dictionary<IIfcProduct, EntityId>();
 
@@ -18,13 +17,15 @@ namespace IFCConverter.Importer.IfcToDomain
             ImportType = importType;
         }
 
+        public ImportType ImportType { get; }
+
         public void Register(Entity entity, IIfcProduct product)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
-            
+
             RegisterEntity(entity.Id, product);
         }
 

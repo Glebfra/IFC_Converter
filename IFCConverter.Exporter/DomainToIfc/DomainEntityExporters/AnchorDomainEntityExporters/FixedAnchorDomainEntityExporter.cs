@@ -4,13 +4,11 @@ using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.API;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEntityExporters
 {
@@ -29,11 +27,11 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
             {
                 Diameter = anchor.Port.Metadata.Diameter,
                 Direction = anchor.Port.Direction,
-                Position = VectorExtensions.Zero
+                Position = FixedVector<Dim3>.Zeros()
             });
             geometry.AssignColor(Color.FromHEX(anchor.Metadata.Color));
 
-            Matrix<double> placement = MatrixExtensions.CreateTransition(anchor.Position);
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(anchor.Position);
             IIfcDiscreteAccessoryBuilder<IIfcDiscreteAccessory> builder =
                 new IfcDiscreteAccessoryBuilder<IfcDiscreteAccessory>(anchor.Metadata.Name, anchor.Metadata.Type, IfcDiscreteAccessoryTypeEnum.USERDEFINED);
             builder.AssignGeometry(geometry);

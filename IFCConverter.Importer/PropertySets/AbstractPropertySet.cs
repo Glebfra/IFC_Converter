@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Importer.Attributes;
-using IFCConverter.Importer.Interfaces;
 using IFCConverter.Utils.Reflection;
 
 namespace IFCConverter.Importer.PropertySets

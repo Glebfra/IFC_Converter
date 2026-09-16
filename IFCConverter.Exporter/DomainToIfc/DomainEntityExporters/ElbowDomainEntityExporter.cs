@@ -5,11 +5,9 @@ using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -38,7 +36,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             });
             geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
 
-            Matrix<double> placement = MatrixExtensions.CreateTransition(elbow.Position);
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(elbow.Position);
             IIfcPipeFittingBuilder<IfcPipeFitting> builder =
                 new IfcPipeFittingBuilder<IfcPipeFitting>(elbow.Metadata.Name, elbow.Metadata.Type, IfcPipeFittingTypeEnum.BEND);
             builder.AssignGeometry(geometry);
@@ -48,15 +46,15 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             context.Register(entity, instance);
         }
 
-        private static Vector<double> CalculateLocalArcCenter(Vector<double> directionA, Vector<double> directionB, double radius)
+        private static FixedVector<Dim3> CalculateLocalArcCenter(FixedVector<Dim3> directionA, FixedVector<Dim3> directionB, double radius)
         {
-            Vector<double> firstDirection = directionA.Normalize(2);
-            Vector<double> secondDirection = directionB.Normalize(2);
+            FixedVector<Dim3> firstDirection = directionA.Normalize();
+            FixedVector<Dim3> secondDirection = directionB.Normalize();
 
             double angle = firstDirection.Angle(secondDirection);
 
             double displacementLength = radius / Math.Sin(angle / 2);
-            Vector<double> bisector = (firstDirection + secondDirection).Normalize(2);
+            FixedVector<Dim3> bisector = (firstDirection + secondDirection).Normalize();
             return bisector * displacementLength;
         }
     }

@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace IFCConverter.Utils.Geometry
 {
     public static class EarClippingTriangulator
     {
-        public static int[][] Triangulate(IReadOnlyList<Vector<double>> vertices)
+        public static int[][] Triangulate(IReadOnlyList<FixedVector<Dim3>> vertices)
         {
-            Vector<double>[] verticesArr = vertices as Vector<double>[] ?? vertices.ToArray();
+            FixedVector<Dim3>[] verticesArr = vertices as FixedVector<Dim3>[] ?? vertices.ToArray();
             PlaneProjection projection = PlaneProjectionFactory.Create(verticesArr);
-            Vector2[] points2D = projection.Project(verticesArr);
+            FixedVector<Dim2>[] points2D = projection.Project(verticesArr);
 
             if (points2D.Length < 3)
                 throw new ArgumentException("Polygon must contain at least 3 vertices");
@@ -82,32 +80,32 @@ namespace IFCConverter.Utils.Geometry
             return triangles.ToArray();
         }
 
-        private static bool IsCounterClockwise(IReadOnlyList<Vector2> vertices)
+        private static bool IsCounterClockwise(IReadOnlyList<FixedVector<Dim2>> vertices)
         {
             double area = 0;
             for (int i = 0; i < vertices.Count; i++)
             {
-                Vector2 a = vertices[i];
-                Vector2 b = vertices[(i + 1) % vertices.Count];
+                FixedVector<Dim2> a = vertices[i];
+                FixedVector<Dim2> b = vertices[(i + 1) % vertices.Count];
 
-                area += a.X * b.Y - b.X * a.Y;
+                area += a.GetX() * b.GetY() - b.GetX() * a.GetY();
             }
 
             return area > 0;
         }
 
-        private static double Cross(Vector2 a, Vector2 b, Vector2 c)
+        private static double Cross(FixedVector<Dim2> a, FixedVector<Dim2> b, FixedVector<Dim2> c)
         {
-            return (b.X - a.X) * (c.Y - a.Y) -
-                   (b.Y - a.Y) * (c.X - a.X);
+            return (b.GetX() - a.GetX()) * (c.GetY() - a.GetY()) -
+                   (b.GetY() - a.GetY()) * (c.GetX() - a.GetX());
         }
 
-        private static bool IsConvex(Vector2 a, Vector2 b, Vector2 c)
+        private static bool IsConvex(FixedVector<Dim2> a, FixedVector<Dim2> b, FixedVector<Dim2> c)
         {
             return Cross(a, b, c) > 0;
         }
 
-        private static bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+        private static bool PointInTriangle(FixedVector<Dim2> p, FixedVector<Dim2> a, FixedVector<Dim2> b, FixedVector<Dim2> c)
         {
             double c1 = Cross(a, b, p);
             double c2 = Cross(b, c, p);
@@ -122,16 +120,16 @@ namespace IFCConverter.Utils.Geometry
 
     internal static class PlaneProjectionFactory
     {
-        public static PlaneProjection Create(Vector<double>[] points)
+        public static PlaneProjection Create(FixedVector<Dim3>[] points)
         {
             if (points.Length < 3)
                 throw new ArgumentException("At least 3 points are required");
 
-            Vector<double> origin = points[0];
-            Vector<double> u = (points[1] - origin).Normalize(2);
+            FixedVector<Dim3> origin = points[0];
+            FixedVector<Dim3> u = (points[1] - origin).Normalize();
 
-            Vector<double> normal = (points[1] - origin).CrossProduct(points[2] - origin).Normalize(2);
-            Vector<double> v = normal.CrossProduct(u);
+            FixedVector<Dim3> normal = (points[1] - origin).CrossProduct(points[2] - origin).Normalize();
+            FixedVector<Dim3> v = normal.CrossProduct(u);
 
             return new PlaneProjection(origin, u, v);
         }
@@ -139,63 +137,32 @@ namespace IFCConverter.Utils.Geometry
 
     internal class PlaneProjection
     {
-        private readonly Vector<double> _origin;
-        private readonly Vector<double> _u;
-        private readonly Vector<double> _v;
+        private readonly FixedVector<Dim3> _origin;
+        private readonly FixedVector<Dim3> _u;
+        private readonly FixedVector<Dim3> _v;
 
-        public PlaneProjection(Vector<double> origin, Vector<double> u, Vector<double> v)
+        public PlaneProjection(FixedVector<Dim3> origin, FixedVector<Dim3> u, FixedVector<Dim3> v)
         {
             _origin = origin;
             _u = u;
             _v = v;
         }
 
-        public Vector2 Project(Vector<double> point)
+        public FixedVector<Dim2> Project(FixedVector<Dim3> point)
         {
-            Vector<double> d = point - _origin;
-            return new Vector2(
-                d.DotProduct(_u),
-                d.DotProduct(_v)
-            );
+            FixedVector<Dim3> d = point - _origin;
+            return FixedVector<Dim2>.Builder.Dense(d.Dot(_u), d.Dot(_v));
         }
 
-        public Vector2[] Project(Vector<double>[] points)
+        public FixedVector<Dim2>[] Project(FixedVector<Dim3>[] points)
         {
-            Vector2[] result = new Vector2[points.Length];
+            FixedVector<Dim2>[] result = new FixedVector<Dim2>[points.Length];
             for (int i = 0; i < points.Length; i++)
             {
                 result[i] = Project(points[i]);
             }
 
             return result;
-        }
-    }
-
-    internal struct Vector2
-    {
-        public double X;
-        public double Y;
-
-        public Vector2(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public Vector<double> ToVector2()
-        {
-            return new DenseVector(new[]
-            {
-                X, Y
-            });
-        }
-
-        public Vector<double> ToVector3()
-        {
-            return new DenseVector(new[]
-            {
-                X, Y, 0.0
-            });
         }
     }
 }

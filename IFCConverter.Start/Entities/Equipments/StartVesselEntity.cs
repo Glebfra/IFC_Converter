@@ -10,20 +10,15 @@ namespace IFCConverter.Start.Entities.Equipments
     [StartElement(StartElementTypeEnum.VESSEL)]
     public sealed class StartVesselEntity : StartAbstractEquipmentEntity, IStartMaterializedEntity
     {
-        [JsonProperty(StartPropertyName.Name)]
-        public override string Name { get; set; }
 
-        [JsonProperty(StartPropertyName.MaterialName)]
-        public string MaterialName { get; set; }
-        
         [JsonProperty(StartPropertyName.MillTolerance)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> MillTolerance { get; set; } = new LengthValueProperty<double>();
-        
+
         [JsonProperty(StartPropertyName.CorrosionAllowance)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> CorrosionAllowance { get; set; } = new LengthValueProperty<double>();
-        
+
         [JsonProperty(StartPropertyName.Temperature)]
         [JsonConverter(typeof(JsonStartConverter<TemperatureValueProperty<double>>))]
         public IStartValueProperty<double> Temperature { get; set; } = new TemperatureValueProperty<double>();
@@ -40,5 +35,11 @@ namespace IFCConverter.Start.Entities.Equipments
         [JsonProperty(StartPropertyName.DeviceWallThickness)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> DeviceWallThickness { get; set; } = new LengthValueProperty<double>();
+
+        [JsonProperty(StartPropertyName.Name)]
+        public override string Name { get; set; }
+
+        [JsonProperty(StartPropertyName.MaterialName)]
+        public string MaterialName { get; set; }
     }
 }

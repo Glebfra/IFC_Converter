@@ -3,16 +3,15 @@ using System.Linq;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Converters;
+using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Newtonsoft.Json;
-using IFCConverter.Start.Extensions;
 
 namespace IFCConverter.Start.Entities.Fittings
 {
-    public abstract class StartAbstractReducerEntity : StartAbstractFittingEntity,
-        IStartOneNodeEntity, IStartClippingEntity, IStartConeEntity, IStartMaterializedEntity
+    public abstract class StartAbstractReducerEntity : StartAbstractFittingEntity, IStartConeEntity, IStartMaterializedEntity
     {
         [JsonProperty(StartPropertyName.ConicalPartLength)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
@@ -63,17 +62,9 @@ namespace IFCConverter.Start.Entities.Fittings
         public IStartSegmentEntity SegmentWithMaxDiameter =>
             ConnectedEntities.OfType<IStartSegmentEntity>().OrderByDescending(segment => segment.Diameter).First();
 
-        public void ClipEntity(IStartClippableEntity clippable)
-        {
-            if (clippable.Equals(SegmentWithMaxDiameter) &&
-                SegmentWithMaxDiameter is IStartClippableEntity clippableEntity
-               )
-                clippableEntity.Clip(Position, LengthOfConicalPart.SIProperty);
-        }
-
         [JsonIgnore]
         [StartIgnore]
-        public IEnumerable<Vector<double>> Points => new[]
+        public IEnumerable<FixedVector<Dim3>> Points => new[]
         {
             SegmentWithMinDiameter.GetNearestPosition(Position), SegmentWithMaxDiameter.GetNearestPosition(Position)
         };

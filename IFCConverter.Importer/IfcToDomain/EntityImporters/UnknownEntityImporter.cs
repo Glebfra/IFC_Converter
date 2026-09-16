@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class UnknownEntityImporter : IIfcEntityImporter
     {
         private readonly IUnknownEntityImportersRegistry _registry = new UnknownEntityImportersRegistry();
-        
+
         public bool CanImport(IIfcProduct product, ImportContext context)
         {
             return context.ImportType == ImportType.UNKNOWN;

@@ -1,10 +1,10 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Segments;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -28,8 +28,8 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 
         private static void ResolvePortA(IStartSegmentEntity startSegment, AbstractSegment segment)
         {
-            Vector<double> position = startSegment.StartNode.Position;
-            Vector<double> direction = ResolveDirection(startSegment, position);
+            FixedVector<Dim3> position = startSegment.StartNode.Position;
+            FixedVector<Dim3> direction = ResolveDirection(startSegment, position);
 
             segment.StartPort.SetGeometry(position, direction);
             segment.StartPort.Metadata.Diameter = startSegment.Diameter.SIProperty;
@@ -37,11 +37,11 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 
         private static void ResolvePortB(IStartSegmentEntity startSegment, AbstractSegment segment)
         {
-            Vector<double> position = startSegment.EndNode.Position;
-            Vector<double> direction = ResolveDirection(startSegment, position);
+            FixedVector<Dim3> position = startSegment.EndNode.Position;
+            FixedVector<Dim3> direction = ResolveDirection(startSegment, position);
 
             segment.EndPort.SetGeometry(position, direction);
-            
+
             switch (startSegment)
             {
                 case StartConeElementEntity coneElementEntity:
@@ -53,9 +53,9 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             }
         }
 
-        private static Vector<double> ResolveDirection(IStartSegmentEntity startSegment, Vector<double> position)
+        private static FixedVector<Dim3> ResolveDirection(IStartSegmentEntity startSegment, FixedVector<Dim3> position)
         {
-            return startSegment.GetProjectionFromPoint(position).Normalize(2).Negate();
+            return startSegment.GetProjectionFromPoint(position).Normalize().Negate();
         }
     }
 }

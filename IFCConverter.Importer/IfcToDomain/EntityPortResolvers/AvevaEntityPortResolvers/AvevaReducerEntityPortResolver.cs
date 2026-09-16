@@ -3,7 +3,7 @@ using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortResolvers
@@ -22,10 +22,10 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortR
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             Reducer reducer = (Reducer)model.GetEntity(context.GetEntityId(product));
-            
-            Vector<double>[] boundPoints = (Vector<double>[])reducer.Metadata.Meta["BoundPoints"];
-            Vector<double>[] directions = boundPoints.Select(point => (point - reducer.Position).Normalize(2)).ToArray();
-            
+
+            FixedVector<Dim3>[] boundPoints = (FixedVector<Dim3>[])reducer.Metadata.Meta["BoundPoints"];
+            FixedVector<Dim3>[] directions = boundPoints.Select(point => (point - reducer.Position).Normalize()).ToArray();
+
             double[] diameters = (double[])reducer.Metadata.Meta["Diameters"];
 
             int i = 0;

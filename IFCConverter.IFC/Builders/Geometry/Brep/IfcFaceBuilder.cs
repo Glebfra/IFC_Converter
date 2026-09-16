@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces.Geometry.Brep;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.TopologyResource;
@@ -16,7 +16,7 @@ namespace IFCConverter.IFC.Builders.Geometry.Brep
         public T IfcFace { get; private set; }
         public IEnumerable<IIfcFaceBound> Bounds => _bounds;
 
-        public IIfcFaceBound CreateFaceBound(IModel model, IEnumerable<Vector<double>> points)
+        public IIfcFaceBound CreateFaceBound(IModel model, IEnumerable<FixedVector<Dim3>> points)
         {
             IIfcFaceBound faceBound = model.Instances.New<IfcFaceBound>(bound =>
                 bound.Bound = points.ToPolyLoop(model)

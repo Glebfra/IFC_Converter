@@ -1,7 +1,7 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Start.Entities.Segments;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Importer.DomainToStart.EntityExporters
 {
@@ -19,11 +19,11 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             StartPipeEntity pipe = new StartPipeEntity();
             pipe.Diameter.CreateFromSI(segment.Diameter);
 
-            Vector<double> projection = segment.EndPort.Position - segment.StartPort.Position;
+            FixedVector<Dim3> projection = segment.EndPort.Position - segment.StartPort.Position;
             pipe.ProjectionAlongOXAxis.CreateFromSI(projection[0]);
             pipe.ProjectionAlongOYAxis.CreateFromSI(projection[1]);
             pipe.ProjectionAlongOZAxis.CreateFromSI(projection[2]);
-            
+
             context.Register(entity, pipe);
         }
     }

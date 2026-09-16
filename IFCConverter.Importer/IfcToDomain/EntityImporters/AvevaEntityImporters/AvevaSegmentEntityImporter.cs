@@ -20,7 +20,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AvevaEntityImporters
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
-            
+
             if (!(representationItems[0] is IIfcExtrudedAreaSolid extrudedAreaSolid))
                 throw new Exception("The representation item is not an extruded area solid.");
 
@@ -34,7 +34,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AvevaEntityImporters
             {
                 Diameter = diameter
             };
-            
+
             model.Add(segment);
             context.Register(segment, product);
         }

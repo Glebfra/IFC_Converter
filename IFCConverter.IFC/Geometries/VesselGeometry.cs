@@ -8,22 +8,20 @@ using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct VesselGeometryProperties
     {
-        public Vector<double>[] Points { get; set; }
+        public FixedVector<Dim3>[] Points { get; set; }
         public double Diameter { get; set; }
     }
-    
+
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
     [IfcRepresentationType(IfcRepresentationType.Tessellation)]
     public sealed class VesselGeometry : IfcGeometry
@@ -31,42 +29,44 @@ namespace IFCConverter.IFC.Geometries
         private const double GeometrySectorLengthFactor = 0.5;
         private const double ConeMaxDiameterFactor = 1.1;
         private const double DiameterExtrudedAreaSolidFactor = 1.3;
-        
-        public VesselGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null) : base(geometryBuilder, representationContext)
+
+        public VesselGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null) : base(geometryBuilder,
+            representationContext)
         {
         }
 
-        public VesselGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null) : base(geometryBuilders, representationContext)
+        public VesselGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null) : base(geometryBuilders,
+            representationContext)
         {
         }
 
         public static VesselGeometry CreateGeometry(IModel model, VesselGeometryProperties properties)
         {
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
-            
-            Vector<double> projection = properties.Points[1] - properties.Points[0];
+
+            FixedVector<Dim3> projection = properties.Points[1] - properties.Points[0];
             double length = projection.L2Norm();
-            Vector<double> direction = projection / length;
-            Vector<double> sectorDisplacement = direction * length * GeometrySectorLengthFactor;
+            FixedVector<Dim3> direction = projection * (1 / length);
+            FixedVector<Dim3> sectorDisplacement = direction * length * GeometrySectorLengthFactor;
 
             double extrudedAreaSolidDiameter = properties.Diameter * DiameterExtrudedAreaSolidFactor;
             double minConeDiameter = properties.Diameter;
             double maxConeDiameter = minConeDiameter * ConeMaxDiameterFactor;
-            
-            Vector<double> startConePoint = properties.Points[0];
-            Vector<double> endConePoint = startConePoint + sectorDisplacement;
+
+            FixedVector<Dim3> startConePoint = properties.Points[0];
+            FixedVector<Dim3> endConePoint = startConePoint + sectorDisplacement;
             builders.Add(CreateClippedCone(model, startConePoint, endConePoint, minConeDiameter, maxConeDiameter));
 
-            Vector<double> startExtrudedAreaSolidPoint = endConePoint;
-            Vector<double> endExtrudedAreaSolidPoint = startExtrudedAreaSolidPoint + sectorDisplacement;
+            FixedVector<Dim3> startExtrudedAreaSolidPoint = endConePoint;
+            FixedVector<Dim3> endExtrudedAreaSolidPoint = startExtrudedAreaSolidPoint + sectorDisplacement;
             builders.Add(CreateExtrudedAreaSolid(model, startExtrudedAreaSolidPoint, endExtrudedAreaSolidPoint, extrudedAreaSolidDiameter));
 
             return new VesselGeometry(builders);
         }
-        
-        private static IIfcBuilder CreateClippedCone(IModel model, Vector<double> start, Vector<double> end, double startDiameter, double endDiameter)
+
+        private static IIfcBuilder CreateClippedCone(IModel model, FixedVector<Dim3> start, FixedVector<Dim3> end, double startDiameter, double endDiameter)
         {
-            IfcTriangulatedProperties properties = IfcTriangulatedProperties.CreateClippedCone(new ClippedConeTriangulatedGeometryProperties()
+            IfcTriangulatedProperties properties = IfcTriangulatedProperties.CreateClippedCone(new ClippedConeTriangulatedGeometryProperties
             {
                 BottomConeCenter = start,
                 TopConeCenter = end,
@@ -82,23 +82,28 @@ namespace IFCConverter.IFC.Geometries
 
             return builder;
         }
-        
-        private static IIfcBuilder CreateExtrudedAreaSolid(IModel model, Vector<double> start, Vector<double> end, double diameter)
-        {
-            Vector<double> projection = (end - start);
-            double length = projection.L2Norm();
-            Vector<double> direction = projection / length;
 
-            Matrix<double> profileDefMatrix = MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
+        private static IIfcBuilder CreateExtrudedAreaSolid(IModel model, FixedVector<Dim3> start, FixedVector<Dim3> end, double diameter)
+        {
+            FixedVector<Dim3> projection = end - start;
+            double length = projection.L2Norm();
+            FixedVector<Dim3> direction = projection * (1 / length);
+
+            FixedVector<Dim3> zAxis = direction;
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+            FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+            FixedMatrix<Dim4> extrudedAreaSolidMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(start, xAxis, yAxis, zAxis);
+
             IIfcCircleProfileDefBuilder<IIfcCircleProfileDef> profileDefBuilder =
                 new IfcCircleProfileDefBuilder<IfcCircleProfileDef>(diameter / 2, IfcProfileTypeEnum.AREA, "");
             profileDefBuilder.CreatePosition(model, profileDefMatrix);
-            
+
             IIfcProfileDef profileDef = profileDefBuilder.CreateProfileDef(model);
 
-            Matrix<double> extrudedAreaSolidMatrix = MatrixExtensions.CreateTransition(start, direction);
             IIfcExtrudedAreaSolidBuilder<IIfcExtrudedAreaSolid> builder =
-                new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(length, VectorExtensions.Z, profileDef);
+                new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(length, FixedVector<Dim3>.Builder.Z(), profileDef);
             builder.CreatePosition(model, extrudedAreaSolidMatrix);
 
             return builder;

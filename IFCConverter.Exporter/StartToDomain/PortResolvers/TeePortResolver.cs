@@ -4,11 +4,10 @@ using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
-using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Fittings;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -64,9 +63,10 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             };
         }
 
-        private static void ResolvePort(IStartSegmentEntity startSegment, Port port, Vector<double> position, double length, EngineeringModel model, StartMappingContext context)
+        private static void ResolvePort(IStartSegmentEntity startSegment, Port port, FixedVector<Dim3> position, double length, EngineeringModel model,
+            StartMappingContext context)
         {
-            Vector<double> direction = startSegment.GetProjectionFromPoint(position).Normalize(2);
+            FixedVector<Dim3> direction = startSegment.GetProjectionFromPoint(position).Normalize();
             port.SetGeometry(position + direction * length, direction);
             port.Metadata.Diameter = DiameterFinder.GetDiameter(startSegment, model, context);
         }

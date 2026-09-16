@@ -1,6 +1,5 @@
 ﻿using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Entities
 {
@@ -15,7 +14,7 @@ namespace IFCConverter.Domain.Entities
 
         public Port PortA { get; }
         public Port PortB { get; }
-        
+
         public double Length { get; set; }
     }
 }

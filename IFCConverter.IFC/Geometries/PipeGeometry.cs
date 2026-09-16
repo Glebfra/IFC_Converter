@@ -8,14 +8,11 @@ using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
@@ -23,8 +20,8 @@ namespace IFCConverter.IFC.Geometries
     {
         public double Length;
         public double Diameter;
-        public Vector<double> Position;
-        public Vector<double> Direction;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3> Direction;
     }
 
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
@@ -46,13 +43,12 @@ namespace IFCConverter.IFC.Geometries
         [Pure]
         public static PipeGeometry CreateGeometry(IModel model, PipeGeometryProperties properties)
         {
-            Vector<double> z = properties.Direction;
-            Vector<double> x = z.CreateNormalVector();
-            Vector<double> y = z.CrossProduct(x).Normalize(2);
+            FixedVector<Dim3> zAxis = properties.Direction;
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).Normalize();
 
-            Matrix<double> extrudedAreaSolidMatrix = MatrixExtensions.CreateTransition(properties.Position, x, y, z);
-            Matrix<double> circleProfileDefMatrix =
-                MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
+            FixedMatrix<Dim4> circleProfileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+            FixedMatrix<Dim4> extrudedAreaSolidMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.Position, xAxis, yAxis, zAxis);
 
             double circleProfileDefRadius = properties.Diameter / 2;
             IIfcCircleProfileDefBuilder<IfcCircleProfileDef> circleProfileDefBuilder =
@@ -64,7 +60,7 @@ namespace IFCConverter.IFC.Geometries
 
             IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> extrudedAreaSolidBuilder =
                 new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(
-                    properties.Length, VectorExtensions.Forward, circleProfileDef
+                    properties.Length, FixedVector<Dim3>.Builder.Z(), circleProfileDef
                 );
             extrudedAreaSolidBuilder.CreatePosition(model, extrudedAreaSolidMatrix);
 

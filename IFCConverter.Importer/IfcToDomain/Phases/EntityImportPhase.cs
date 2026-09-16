@@ -10,7 +10,7 @@ namespace IFCConverter.Importer.IfcToDomain.Phases
     public sealed class EntityImportPhase : IIfcToDomainPhase
     {
         private readonly IIfcEntityImportersRegistry _registry = new IfcEntityImportersRegistry();
-        
+
         public void Execute(IModel model, EngineeringModel domain, ImportContext context)
         {
             foreach (IIfcProduct product in model.Instances.OfType<IIfcProduct>())

@@ -9,20 +9,18 @@ using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct TorsionExpansionJointGeometryProperties
     {
-        public Vector<double> Position;
-        public Vector<double>[] Points;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3>[] Points;
         public double Diameter;
     }
 
@@ -47,7 +45,7 @@ namespace IFCConverter.IFC.Geometries
         public static TorsionExpansionJointGeometry CreateGeometry(IModel model,
             TorsionExpansionJointGeometryProperties properties)
         {
-            Vector<double>[] directions = properties.Points
+            FixedVector<Dim3>[] directions = properties.Points
                 .Select(point => point - properties.Position)
                 .ToArray();
             double[] lengths = directions.Select(direction => direction.L2Norm()).ToArray();
@@ -56,11 +54,15 @@ namespace IFCConverter.IFC.Geometries
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
             for (int i = 0; i < directions.Length; i++)
             {
-                Vector<double> direction = directions[i].Normalize(2);
-                Vector<double> extrusionPoint = properties.Position + direction * segmentLengths[i] / 2;
-                Matrix<double> extrusionMatrix = MatrixExtensions.CreateTransition(extrusionPoint, direction);
-                Matrix<double> profileDefMatrix =
-                    MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
+                FixedVector<Dim3> direction = directions[i].Normalize();
+                FixedVector<Dim3> extrusionPoint = properties.Position + direction * (segmentLengths[i] / 2);
+
+                FixedVector<Dim3> zAxis = direction;
+                FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+                FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+                FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+                FixedMatrix<Dim4> extrusionMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(extrusionPoint, xAxis, yAxis, zAxis);
 
                 IIfcCircleProfileDefBuilder<IfcCircleProfileDef> profileDefBuilder =
                     new IfcCircleProfileDefBuilder<IfcCircleProfileDef>(
@@ -71,11 +73,11 @@ namespace IFCConverter.IFC.Geometries
 
                 IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> extrudedAreaSolidBuilder =
                     new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(
-                        segmentLengths[i], VectorExtensions.Z, profileDef
+                        segmentLengths[i], FixedVector<Dim3>.Builder.Z(), profileDef
                     );
                 extrudedAreaSolidBuilder.CreatePosition(model, extrusionMatrix);
 
-                Vector<double> bottomConePoint = extrusionPoint + direction * segmentLengths[i];
+                FixedVector<Dim3> bottomConePoint = extrusionPoint + direction * segmentLengths[i];
                 IfcTriangulatedProperties coneProperties = IfcTriangulatedProperties.CreateClippedCone(
                     new ClippedConeTriangulatedGeometryProperties
                     {

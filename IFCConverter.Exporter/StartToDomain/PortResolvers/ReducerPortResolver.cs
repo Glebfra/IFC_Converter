@@ -2,10 +2,10 @@
 using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Fittings;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -28,9 +28,9 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             IStartSegmentEntity minSegment = segments[0];
             IStartSegmentEntity maxSegment = segments[1];
 
-            Vector<double> directionToMinSegment = minSegment.GetProjectionFromPoint(reducer.Position);
-            Vector<double> directionToMaxSegment = maxSegment.GetProjectionFromPoint(maxSegment.GetNearestPosition(reducer.Position)).Normalize(2);
-            Vector<double> maxPosition = reducer.Position + directionToMaxSegment * (double)reducer.Length;
+            FixedVector<Dim3> directionToMinSegment = minSegment.GetProjectionFromPoint(reducer.Position);
+            FixedVector<Dim3> directionToMaxSegment = maxSegment.GetProjectionFromPoint(maxSegment.GetNearestPosition(reducer.Position)).Normalize();
+            FixedVector<Dim3> maxPosition = reducer.Position + directionToMaxSegment * reducer.Length;
 
             reducer.PortA.SetGeometry(reducer.Position, directionToMinSegment);
             reducer.PortB.SetGeometry(maxPosition, directionToMaxSegment);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Geometry.MeshResolvers
 {
@@ -25,7 +24,7 @@ namespace IFCConverter.Geometry.MeshResolvers
                 if (visited[start])
                     continue;
 
-                Vector<double> normal = mesh.Normals[start];
+                FixedVector<Dim3> normal = mesh.Normals[start];
 
                 if (normal.L2Norm() < 1e-12)
                 {
@@ -43,21 +42,21 @@ namespace IFCConverter.Geometry.MeshResolvers
                 {
                     int current = queue.Dequeue();
                     triangleIndices.Add(current);
-                    
+
                     foreach (int neighbour in adjacency[current])
                     {
                         if (visited[neighbour])
                             continue;
 
-                        double dot = Math.Abs(mesh.Normals[current].DotProduct(mesh.Normals[neighbour]));
+                        double dot = Math.Abs(mesh.Normals[current].Dot(mesh.Normals[neighbour]));
                         if (dot < 1.0 - _normalTolerance)
                             continue;
-                        
+
                         visited[neighbour] = true;
                         queue.Enqueue(neighbour);
                     }
                 }
-                
+
                 components.Add(new PlanarComponent(triangleIndices, normal, CalculateArea(mesh, triangleIndices)));
             }
 
@@ -78,7 +77,7 @@ namespace IFCConverter.Geometry.MeshResolvers
             Dictionary<int, List<int>> adjacency = new Dictionary<int, List<int>>();
             for (int i = 0; i < mesh.Triangles.Length; i++)
                 adjacency[i] = new List<int>();
-            
+
             foreach (List<int> trianglesForEdge in edgeTriangles.Values)
             {
                 for (int i = 0; i < trianglesForEdge.Count; i++)
@@ -87,7 +86,7 @@ namespace IFCConverter.Geometry.MeshResolvers
                     {
                         int a = trianglesForEdge[i];
                         int b = trianglesForEdge[j];
-                        
+
                         adjacency[a].Add(b);
                         adjacency[b].Add(a);
                     }
@@ -100,16 +99,16 @@ namespace IFCConverter.Geometry.MeshResolvers
         private static double CalculateArea(IMesh mesh, IReadOnlyList<int> triangleIndices)
         {
             double area = 0;
-            
+
             foreach (int triangleIndex in triangleIndices)
             {
                 int[] triangle = mesh.Triangles[triangleIndex];
 
-                Vector<double> p0 = mesh.Vertices[triangle[0]];
-                Vector<double> p1 = mesh.Vertices[triangle[1]];
-                Vector<double> p2 = mesh.Vertices[triangle[2]];
+                FixedVector<Dim3> p0 = mesh.Vertices[triangle[0]];
+                FixedVector<Dim3> p1 = mesh.Vertices[triangle[1]];
+                FixedVector<Dim3> p2 = mesh.Vertices[triangle[2]];
 
-                Vector<double> cross = (p1 - p0).CrossProduct(p2 - p0);
+                FixedVector<Dim3> cross = (p1 - p0).CrossProduct(p2 - p0);
 
                 area += cross.L2Norm();
             }
@@ -125,6 +124,7 @@ namespace IFCConverter.Geometry.MeshResolvers
                 list = new List<int>();
                 edges[edge] = list;
             }
+
             list.Add(triangleIndex);
         }
     }

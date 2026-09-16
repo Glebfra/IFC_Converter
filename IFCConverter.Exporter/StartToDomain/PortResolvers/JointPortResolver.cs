@@ -5,7 +5,7 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Start.Entities.Joints;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -19,15 +19,15 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
         public void Resolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             Joint joint = (Joint)model.GetEntity(context.GetEntityId(source));
-            
+
             IStartSegmentEntity[] segments = source.ConnectedEntities.OfType<IStartSegmentEntity>().ToArray();
             if (segments.Length != 2)
                 throw new InvalidOperationException($"Reducer '{joint.Id}' must have exactly two connected segments");
-            
-            Vector<double> position = joint.Position;
-            Vector<double>[] directions = segments.Select(segment => segment.GetProjectionFromPoint(position)).ToArray();
-            Vector<double>[] portPositions = directions.Select(direction => position + direction * joint.Length / 2).ToArray();
-            
+
+            FixedVector<Dim3> position = joint.Position;
+            FixedVector<Dim3>[] directions = segments.Select(segment => segment.GetProjectionFromPoint(position)).ToArray();
+            FixedVector<Dim3>[] portPositions = directions.Select(direction => position + direction * (joint.Length / 2)).ToArray();
+
             joint.PortA.SetGeometry(portPositions[0], directions[0]);
             joint.PortB.SetGeometry(portPositions[1], directions[1]);
 

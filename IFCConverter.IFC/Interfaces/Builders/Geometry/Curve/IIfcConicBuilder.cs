@@ -1,4 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -9,6 +9,6 @@ namespace IFCConverter.IFC.Interfaces.Geometry.Curve
     {
         IIfcAxis2Placement2D Position { get; }
 
-        IIfcAxis2Placement2D CreatePosition(IModel model, Matrix<double> matrix);
+        IIfcAxis2Placement2D CreatePosition(IModel model, FixedMatrix<Dim4> matrix);
     }
 }

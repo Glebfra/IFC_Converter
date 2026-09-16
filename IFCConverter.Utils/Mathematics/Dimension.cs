@@ -14,7 +14,7 @@
     {
         public int Dimension => 3;
     }
-    
+
     public struct Dim4 : IDimension
     {
         public int Dimension => 4;

@@ -4,10 +4,8 @@ using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
+using IFCConverter.Utils.Mathematics;
 using Newtonsoft.Json;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Start.Entities.Segments
 {
@@ -15,8 +13,7 @@ namespace IFCConverter.Start.Entities.Segments
     ///     Represents an abstract base class for segment entities in the IFCConverter.Start framework.
     ///     Implements various interfaces for clippable, segment, and two-node entities.
     /// </summary>
-    public abstract class StartAbstractSegmentEntity : StartAbstractEntity,
-        IStartClippableEntity, IStartSegmentEntity, IStartTwoNodeEntity
+    public abstract class StartAbstractSegmentEntity : StartAbstractEntity, IStartSegmentEntity
     {
         /// <summary>
         ///     Gets or sets the wall thickness of the segment.
@@ -81,19 +78,6 @@ namespace IFCConverter.Start.Entities.Segments
         public override string Name { get; set; } = string.Empty;
 
         /// <summary>
-        ///     Clips the segment by adjusting its start position and projection vector based on the specified position and length.
-        /// </summary>
-        /// <param name="position">The position to clip from.</param>
-        /// <param name="length">The length to clip.</param>
-        public void Clip(Vector<double> position, double length)
-        {
-            Vector<double> displacement = Projection.Normalize(2) * length;
-            if (IsStartPosition(position))
-                StartPosition += displacement;
-            Projection -= displacement;
-        }
-
-        /// <summary>
         ///     Gets or sets the diameter of the segment.
         /// </summary>
         [JsonProperty(StartPropertyName.Diameter)]
@@ -105,26 +89,24 @@ namespace IFCConverter.Start.Entities.Segments
         /// </summary>
         [JsonIgnore]
         [StartIgnore]
-        public virtual double Length => Projection.Norm(2);
+        public virtual double Length => Projection.L2Norm();
 
         /// <summary>
         ///     Gets or sets the start position of the segment as a vector.
         /// </summary>
         [JsonIgnore]
         [StartIgnore]
-        public Vector<double> StartPosition { get; set; }
+        public FixedVector<Dim3> StartPosition { get; set; }
 
         /// <summary>
         ///     Gets or sets the projection vector of the segment.
         /// </summary>
         [JsonIgnore]
         [StartIgnore]
-        public virtual Vector<double> Projection
+        public virtual FixedVector<Dim3> Projection
         {
-            get => new DenseVector(new[]
-            {
-                ProjectionAlongOXAxis.StartProperty, ProjectionAlongOYAxis.StartProperty, ProjectionAlongOZAxis.StartProperty
-            });
+            get => FixedVector<Dim3>.Builder.Dense(ProjectionAlongOXAxis.StartProperty, ProjectionAlongOYAxis.StartProperty,
+                ProjectionAlongOZAxis.StartProperty);
             set
             {
                 ProjectionAlongOXAxis.CreateFromStart(value[0]);
@@ -138,7 +120,7 @@ namespace IFCConverter.Start.Entities.Segments
         /// </summary>
         [JsonIgnore]
         [StartIgnore]
-        public Vector<double> EndPosition => StartPosition + Projection;
+        public FixedVector<Dim3> EndPosition => StartPosition + Projection;
 
         /// <summary>
         ///     Gets the start node entity of the segment.
@@ -158,18 +140,36 @@ namespace IFCConverter.Start.Entities.Segments
         ///     Gets the start transformation 4x4 matrix of the segment.
         /// </summary>
         [JsonIgnore]
-        public virtual Matrix<double> TransformationMatrix =>
-            MatrixExtensions.CreateTransitionWithWorldUp(StartPosition, Projection);
+        public virtual FixedMatrix<Dim4> TransformationMatrix
+        {
+            get
+            {
+                FixedVector<Dim3> xm = Projection.Normalize();
+
+                FixedVector<Dim3> firstArbitraryVector = FixedVector<Dim3>.Builder.Z();
+                if (firstArbitraryVector.IsParallel(xm))
+                    firstArbitraryVector = FixedVector<Dim3>.Builder.Y().Negate();
+                FixedVector<Dim3> secondArbitraryVector = xm.CrossProduct(firstArbitraryVector).Normalize();
+
+                FixedVector<Dim3> zm = xm.CrossProduct(secondArbitraryVector).Normalize();
+                if (zm.Dot(FixedVector<Dim3>.Builder.Z()) < 0)
+                    zm = zm.Negate();
+
+                FixedVector<Dim3> ym = zm.CreateNormalVector(xm).Normalize();
+
+                return FixedMatrix<Dim4>.Builder.CreateTransition(StartPosition, ym, zm, xm);
+            }
+        }
 
         /// <summary>
         ///     Determines whether the specified position is closer to the start position of the segment.
         /// </summary>
         /// <param name="position">The position to check.</param>
         /// <returns><c>true</c> if the position is closer to the start position; otherwise, <c>false</c>.</returns>
-        public bool IsStartPosition(Vector<double> position)
+        public bool IsStartPosition(FixedVector<Dim3> position)
         {
-            Vector<double> startDirection = StartPosition - position;
-            Vector<double> endDirection = EndPosition - position;
+            FixedVector<Dim3> startDirection = StartPosition - position;
+            FixedVector<Dim3> endDirection = EndPosition - position;
             return startDirection.L2Norm() < endDirection.L2Norm();
         }
     }

@@ -6,7 +6,7 @@ using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Builders.Geometry.Tessellated;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
@@ -17,8 +17,8 @@ namespace IFCConverter.IFC.Geometries
     {
         public double Diameter;
         public double Length;
-        public Vector<double> TopConePoint;
-        public Vector<double>[] BotConePoints;
+        public FixedVector<Dim3> TopConePoint;
+        public FixedVector<Dim3>[] BotConePoints;
     }
 
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]

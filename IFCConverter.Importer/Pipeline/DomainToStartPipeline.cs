@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.Pipeline
     internal sealed class DomainToStartPipeline
     {
         private readonly DomainToStartPhaseRegistry _registry = new DomainToStartPhaseRegistry();
-        
+
         public void Execute(EngineeringModel model, IStartProject startProject)
         {
             ExportContext context = new ExportContext(startProject);

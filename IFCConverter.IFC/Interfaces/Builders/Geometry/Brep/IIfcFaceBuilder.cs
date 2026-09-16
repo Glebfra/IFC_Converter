@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -11,7 +11,7 @@ namespace IFCConverter.IFC.Interfaces.Geometry.Brep
         T IfcFace { get; }
         IEnumerable<IIfcFaceBound> Bounds { get; }
 
-        IIfcFaceBound CreateFaceBound(IModel model, IEnumerable<Vector<double>> points);
+        IIfcFaceBound CreateFaceBound(IModel model, IEnumerable<FixedVector<Dim3>> points);
         T CreateFace(IModel model);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Topology;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Domain.Extensions
 {
@@ -10,14 +9,14 @@ namespace IFCConverter.Domain.Extensions
         private const double Tolerance = 1e-6;
         private static readonly VectorComparer Comparer = new VectorComparer(Tolerance);
 
-        public static Vector<double> GetProjection(this AbstractSegment segment)
+        public static FixedVector<Dim3> GetProjection(this AbstractSegment segment)
         {
             return segment.EndPort.Position - segment.StartPort.Position;
         }
 
-        public static Vector<double> GetDirection(this AbstractSegment segment)
+        public static FixedVector<Dim3> GetDirection(this AbstractSegment segment)
         {
-            return segment.GetProjection().Normalize(2);
+            return segment.GetProjection().Normalize();
         }
 
         public static double GetLength(this AbstractSegment segment)
@@ -25,16 +24,16 @@ namespace IFCConverter.Domain.Extensions
             return segment.GetProjection().L2Norm();
         }
 
-        public static Vector<double> GetProjectionFromPoint(this AbstractSegment segment, Vector<double> point)
+        public static FixedVector<Dim3> GetProjectionFromPoint(this AbstractSegment segment, FixedVector<Dim3> point)
         {
             return segment.StartPort.Position.IsNearerThan(segment.EndPort.Position, point)
                 ? segment.GetProjection()
                 : segment.GetProjection().Negate();
         }
 
-        public static Vector<double> GetDirectionFromPoint(this AbstractSegment segment, Vector<double> point)
+        public static FixedVector<Dim3> GetDirectionFromPoint(this AbstractSegment segment, FixedVector<Dim3> point)
         {
-            return segment.GetProjectionFromPoint(point).Normalize(2);
+            return segment.GetProjectionFromPoint(point).Normalize();
         }
 
         public static Port GetNearestPort(this Entity entity, Port port)
@@ -56,10 +55,10 @@ namespace IFCConverter.Domain.Extensions
             return nearest;
         }
 
-        public static Port GetNearestPort(this Entity entity, Vector<double> position)
+        public static Port GetNearestPort(this Entity entity, FixedVector<Dim3> position)
         {
             Port nearest = null;
-            
+
             foreach (Port entityPort in entity.Ports)
             {
                 if (nearest == null)
@@ -74,27 +73,27 @@ namespace IFCConverter.Domain.Extensions
 
             return nearest;
         }
-        
-        public static bool IsSegmentContainPoint(this AbstractSegment segment, Vector<double> point)
+
+        public static bool IsSegmentContainPoint(this AbstractSegment segment, FixedVector<Dim3> point)
         {
             const double epsilon = 1e-6;
 
-            Vector<double> start = segment.StartPort.Position;
-            Vector<double> end = segment.EndPort.Position;
+            FixedVector<Dim3> start = segment.StartPort.Position;
+            FixedVector<Dim3> end = segment.EndPort.Position;
 
-            Vector<double> direction = end - start;
-            Vector<double> toPoint = point - start;
+            FixedVector<Dim3> direction = end - start;
+            FixedVector<Dim3> toPoint = point - start;
 
-            double lengthSquared = direction.DotProduct(direction);
+            double lengthSquared = direction.Dot(direction);
 
             if (lengthSquared < epsilon * epsilon)
                 return (point - start).L2Norm() < epsilon;
 
-            double t = toPoint.DotProduct(direction) / lengthSquared;
+            double t = toPoint.Dot(direction) / lengthSquared;
             if (t < -epsilon || t > 1.0 + epsilon)
                 return false;
 
-            Vector<double> projection = start + direction * t;
+            FixedVector<Dim3> projection = start + direction * t;
             return (point - projection).L2Norm() < epsilon;
         }
     }

@@ -200,7 +200,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         /// <summary>
-        /// Returns the offset (translation) and rotation components of the transformation matirx
+        ///     Returns the offset (translation) and rotation components of the transformation matirx
         /// </summary>
         /// <param name="matrix">4x4 Matrix</param>
         /// <returns>3D Vector, 3x3 Matrix</returns>

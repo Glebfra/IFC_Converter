@@ -4,58 +4,54 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Utils.Geometry;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct ConeTriangulatedGeometryProperties
     {
-        public Vector<double> TopConePoint;
-        public Vector<double> BottomConeCenter;
+        public FixedVector<Dim3> TopConePoint;
+        public FixedVector<Dim3> BottomConeCenter;
         public double Diameter;
     }
 
     public struct ClippedConeTriangulatedGeometryProperties
     {
-        public Vector<double> TopConeCenter;
-        public Vector<double> BottomConeCenter;
-        public Vector<double> Direction;
+        public FixedVector<Dim3> TopConeCenter;
+        public FixedVector<Dim3> BottomConeCenter;
+        public FixedVector<Dim3> Direction;
         public double TopDiameter;
         public double BottomDiameter;
     }
 
     public struct SphereTriangulatedGeometryProperties
     {
-        public Vector<double> Center;
+        public FixedVector<Dim3> Center;
         public double Diameter;
     }
 
     public struct ExtrudedBodyTriangulatedGeometryProperties
     {
-        public Vector<double>[] StartPoints;
-        public Vector<double> ExtrudedDirection;
+        public FixedVector<Dim3>[] StartPoints;
+        public FixedVector<Dim3> ExtrudedDirection;
         public double Length;
     }
 
     public struct ExtrudedBodyByRefPointsTriangulatedGeometryProperties
     {
-        public Vector<double>[] StartPoints;
-        public Vector<double>[] RefPoints;
+        public FixedVector<Dim3>[] StartPoints;
+        public FixedVector<Dim3>[] RefPoints;
     }
 
     public struct PlaneTriangulatedGeometryProperties
     {
-        public Vector<double>[] PolygonPoints;
+        public FixedVector<Dim3>[] PolygonPoints;
     }
 
     public struct IfcTriangulatedProperties
     {
-        public IEnumerable<Vector<double>> Coordinates;
+        public IEnumerable<FixedVector<Dim3>> Coordinates;
         public IEnumerable<IEnumerable<int>> TriangleIndices;
-        public IEnumerable<Vector<double>> Normals;
+        public IEnumerable<FixedVector<Dim3>> Normals;
 
         private const int _numSegments = 16;
 
@@ -64,8 +60,8 @@ namespace IFCConverter.IFC.Geometries
         {
             double radius = properties.Diameter / 2;
 
-            Vector<double>[] coordinates = new Vector<double>[_numSegments * _numSegments];
-            Vector<double>[] normals = new Vector<double>[_numSegments * (_numSegments - 1) * 2];
+            FixedVector<Dim3>[] coordinates = new FixedVector<Dim3>[_numSegments * _numSegments];
+            FixedVector<Dim3>[] normals = new FixedVector<Dim3>[_numSegments * (_numSegments - 1) * 2];
             int[][] triangleIndices = new int[_numSegments * (_numSegments - 1) * 2][];
 
             for (int i = 0; i < _numSegments; i++)
@@ -82,10 +78,7 @@ namespace IFCConverter.IFC.Geometries
                     double x = radius * sinTheta * Math.Cos(phi);
                     double y = radius * sinTheta * Math.Sin(phi);
                     double z = radius * cosTheta;
-                    Vector<double> temp = new DenseVector(new[]
-                    {
-                        x, y, z
-                    });
+                    FixedVector<Dim3> temp = FixedVector<Dim3>.Builder.Dense(x, y, z);
 
                     coordinates[index] = temp - properties.Center;
                 }
@@ -110,17 +103,17 @@ namespace IFCConverter.IFC.Geometries
                     indexes[0] + 1, indexes[3] + 1, indexes[2] + 1
                 };
 
-                Vector<double> first = coordinates[triangleIndices[arrIndex][1] - 1]
-                                       - coordinates[triangleIndices[arrIndex][0] - 1];
-                Vector<double> second = coordinates[triangleIndices[arrIndex][2] - 1]
-                                        - coordinates[triangleIndices[arrIndex][1] - 1];
-                normals[arrIndex] = VectorExtensions.CreateNormalVector(first, second);
+                FixedVector<Dim3> first = coordinates[triangleIndices[arrIndex][1] - 1]
+                                          - coordinates[triangleIndices[arrIndex][0] - 1];
+                FixedVector<Dim3> second = coordinates[triangleIndices[arrIndex][2] - 1]
+                                           - coordinates[triangleIndices[arrIndex][1] - 1];
+                normals[arrIndex] = first.CreateNormalVector(second);
 
                 first = coordinates[triangleIndices[arrIndex + 1][1] - 1]
                         - coordinates[triangleIndices[arrIndex + 1][0] - 1];
                 second = coordinates[triangleIndices[arrIndex + 1][2] - 1]
                          - coordinates[triangleIndices[arrIndex + 1][1] - 1];
-                normals[arrIndex + 1] = VectorExtensions.CreateNormalVector(first, second);
+                normals[arrIndex + 1] = first.CreateNormalVector(second);
 
                 arrIndex += 2;
             }
@@ -136,26 +129,34 @@ namespace IFCConverter.IFC.Geometries
         [Pure]
         public static IfcTriangulatedProperties CreateCone(ConeTriangulatedGeometryProperties properties)
         {
-            Vector<double> heightDirection = properties.TopConePoint - properties.BottomConeCenter;
-            Matrix<double> botMatrix = MatrixExtensions.CreateTransition(properties.BottomConeCenter, heightDirection);
+            FixedVector<Dim3> zAxis = properties.TopConePoint - properties.BottomConeCenter;
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+            FixedMatrix<Dim4> botMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.BottomConeCenter, xAxis, yAxis, zAxis);
+
             return CreateCone(properties, botMatrix, properties.TopConePoint);
         }
 
         [Pure]
         public static IfcTriangulatedProperties CreateClippedCone(ClippedConeTriangulatedGeometryProperties properties)
         {
-            Vector<double> heightDirection = properties.Direction
-                                             ?? properties.TopConeCenter - properties.BottomConeCenter;
-            Vector<double> z = heightDirection.Normalize(2);
-            Matrix<double> botMatrix = MatrixExtensions.CreateTransition(properties.BottomConeCenter, z);
-            Matrix<double> topMatrix = MatrixExtensions.CreateTransition(properties.TopConeCenter, z);
+            FixedVector<Dim3> heightDirection = properties.Direction
+                                                ?? properties.TopConeCenter - properties.BottomConeCenter;
+            FixedVector<Dim3> zAxis = heightDirection.Normalize();
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+            FixedMatrix<Dim4> botMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.BottomConeCenter, xAxis, yAxis, zAxis);
+            FixedMatrix<Dim4> topMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.TopConeCenter, xAxis, yAxis, zAxis);
+
             return CreateClippedCone(properties, botMatrix, topMatrix);
         }
 
         [Pure]
         public static IfcTriangulatedProperties CreateExtrudedBody(ExtrudedBodyTriangulatedGeometryProperties properties)
         {
-            Vector<double>[] coordinates = new Vector<double>[properties.StartPoints.Length * 2];
+            FixedVector<Dim3>[] coordinates = new FixedVector<Dim3>[properties.StartPoints.Length * 2];
 
             List<int[]> triangleIndices = new List<int[]>(properties.StartPoints.Length * 2);
 
@@ -165,8 +166,8 @@ namespace IFCConverter.IFC.Geometries
                 coordinates[i + properties.StartPoints.Length] = properties.StartPoints[i] + properties.ExtrudedDirection * properties.Length;
             }
 
-            Vector<double>[] startPolygon = coordinates.Take(properties.StartPoints.Length).ToArray();
-            Vector<double>[] endPolygon = coordinates.Skip(properties.StartPoints.Length).ToArray();
+            FixedVector<Dim3>[] startPolygon = coordinates.Take(properties.StartPoints.Length).ToArray();
+            FixedVector<Dim3>[] endPolygon = coordinates.Skip(properties.StartPoints.Length).ToArray();
 
             for (int i = 0; i < properties.StartPoints.Length; i++)
             {
@@ -201,7 +202,7 @@ namespace IFCConverter.IFC.Geometries
 
             int[][] triangleIndicesArr = triangleIndices.ToArray();
 
-            Vector<double>[] normals = CreateNormals(coordinates, triangleIndicesArr);
+            FixedVector<Dim3>[] normals = CreateNormals(coordinates, triangleIndicesArr);
 
             return new IfcTriangulatedProperties
             {
@@ -220,7 +221,7 @@ namespace IFCConverter.IFC.Geometries
             if (sectionsCount < 2)
                 throw new ArgumentException("RefPoints must contain at least two points.");
 
-            Vector<double>[] coordinates = new Vector<double>[profileSize * sectionsCount];
+            FixedVector<Dim3>[] coordinates = new FixedVector<Dim3>[profileSize * sectionsCount];
             List<int[]> triangleIndices = new List<int[]>(profileSize * sectionsCount * 2);
 
             for (int i = 0; i < sectionsCount; i++)
@@ -269,7 +270,7 @@ namespace IFCConverter.IFC.Geometries
             triangleIndices.AddRange(endCap);
 
             int[][] triangleIndicesArr = triangleIndices.ToArray();
-            Vector<double>[] normals = CreateNormals(coordinates, triangleIndicesArr);
+            FixedVector<Dim3>[] normals = CreateNormals(coordinates, triangleIndicesArr);
 
             return new IfcTriangulatedProperties
             {
@@ -282,7 +283,7 @@ namespace IFCConverter.IFC.Geometries
         [Pure]
         public static IfcTriangulatedProperties CreatePolygon(PlaneTriangulatedGeometryProperties properties)
         {
-            Vector<double>[] coordinates = new Vector<double>[properties.PolygonPoints.Length];
+            FixedVector<Dim3>[] coordinates = new FixedVector<Dim3>[properties.PolygonPoints.Length];
             Array.Copy(properties.PolygonPoints, coordinates, properties.PolygonPoints.Length);
 
             int[][] triangleIndices = EarClippingTriangulator.Triangulate(properties.PolygonPoints);
@@ -294,7 +295,7 @@ namespace IFCConverter.IFC.Geometries
                 }
             }
 
-            Vector<double>[] normals = CreateNormals(coordinates, triangleIndices);
+            FixedVector<Dim3>[] normals = CreateNormals(coordinates, triangleIndices);
 
             return new IfcTriangulatedProperties
             {
@@ -333,14 +334,14 @@ namespace IFCConverter.IFC.Geometries
         }
 
         [Pure]
-        private static Vector<double>[] CreateNormals(Vector<double>[] coordinates, int[][] triangleIndices)
+        private static FixedVector<Dim3>[] CreateNormals(FixedVector<Dim3>[] coordinates, int[][] triangleIndices)
         {
-            Vector<double>[] normals = new Vector<double>[triangleIndices.Length];
+            FixedVector<Dim3>[] normals = new FixedVector<Dim3>[triangleIndices.Length];
             for (int i = 0; i < triangleIndices.Length; i++)
             {
-                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
-                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+                FixedVector<Dim3> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
+                FixedVector<Dim3> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
+                normals[i] = first.CreateNormalVector(second);
             }
 
             return normals;
@@ -348,13 +349,13 @@ namespace IFCConverter.IFC.Geometries
 
         [Pure]
         private static IfcTriangulatedProperties CreateCone(ConeTriangulatedGeometryProperties properties,
-            Matrix<double> botMatrix, Vector<double> topConePoint)
+            FixedMatrix<Dim4> botMatrix, FixedVector<Dim3> topConePoint)
         {
-            Vector<double> botCenter = botMatrix.GetOffset();
+            FixedVector<Dim3> botCenter = botMatrix.GetOffset().ToCartesian();
             double radius = properties.Diameter / 2;
 
-            Vector<double>[] coordinates = new Vector<double>[_numSegments + 1];
-            Vector<double>[] normals = new Vector<double>[_numSegments * 2];
+            FixedVector<Dim3>[] coordinates = new FixedVector<Dim3>[_numSegments + 1];
+            FixedVector<Dim3>[] normals = new FixedVector<Dim3>[_numSegments * 2];
             int[][] triangleIndices = new int[_numSegments * 2][];
 
             coordinates[_numSegments] = topConePoint;
@@ -365,11 +366,8 @@ namespace IFCConverter.IFC.Geometries
 
                 double xBot = radius * Math.Cos(angle);
                 double yBot = radius * Math.Sin(angle);
-                Vector<double> temp = new DenseVector(new[]
-                {
-                    xBot, yBot, 0
-                });
-                coordinates[i] = botMatrix.ApplyRotation(temp) + botMatrix.GetOffset();
+                FixedVector<Dim3> temp = FixedVector<Dim3>.Builder.Dense(xBot, yBot, 0);
+                coordinates[i] = botMatrix.GetRotation() * temp + botMatrix.GetTranslation();
             }
 
             for (int i = 0; i < _numSegments; i++)
@@ -379,9 +377,9 @@ namespace IFCConverter.IFC.Geometries
                     (i + 0) % _numSegments + 1, (i + 1) % _numSegments + 1, _numSegments + 1
                 };
 
-                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
-                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+                FixedVector<Dim3> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
+                FixedVector<Dim3> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
+                normals[i] = first.CreateNormalVector(second);
             }
 
             for (int i = _numSegments; i < _numSegments * 2; i++)
@@ -391,9 +389,9 @@ namespace IFCConverter.IFC.Geometries
                     0 + 1, (i + 1) % _numSegments + 1, (i + 2) % _numSegments + 1
                 };
 
-                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
-                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+                FixedVector<Dim3> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
+                FixedVector<Dim3> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
+                normals[i] = first.CreateNormalVector(second);
             }
 
             return new IfcTriangulatedProperties
@@ -406,10 +404,10 @@ namespace IFCConverter.IFC.Geometries
 
         [Pure]
         private static IfcTriangulatedProperties CreateClippedCone(ClippedConeTriangulatedGeometryProperties properties,
-            Matrix<double> botMatrix, Matrix<double> topMatrix)
+            FixedMatrix<Dim4> botMatrix, FixedMatrix<Dim4> topMatrix)
         {
-            Vector<double>[] coordinates = new Vector<double>[_numSegments * 2];
-            Vector<double>[] normals = new Vector<double>[_numSegments * 4];
+            FixedVector<Dim3>[] coordinates = new FixedVector<Dim3>[_numSegments * 2];
+            FixedVector<Dim3>[] normals = new FixedVector<Dim3>[_numSegments * 4];
             int[][] triangleIndices = new int[_numSegments * 4][];
 
             double botRadius = properties.BottomDiameter / 2, topRadius = properties.TopDiameter / 2;
@@ -420,19 +418,13 @@ namespace IFCConverter.IFC.Geometries
 
                 double xBot = botRadius * cos;
                 double yBot = botRadius * sin;
-                Vector<double> bottomTemp = new DenseVector(new[]
-                {
-                    xBot, yBot, 0
-                });
-                coordinates[i] = botMatrix.ApplyRotation(bottomTemp) + botMatrix.GetOffset();
+                FixedVector<Dim3> bottomTemp = FixedVector<Dim3>.Builder.Dense(xBot, yBot, 0);
+                coordinates[i] = botMatrix.GetRotation() * bottomTemp + botMatrix.GetTranslation();
 
                 double xTop = topRadius * cos;
                 double yTop = topRadius * sin;
-                Vector<double> topTemp = new DenseVector(new[]
-                {
-                    xTop, yTop, 0
-                });
-                coordinates[i + 1] = topMatrix.ApplyRotation(topTemp) + topMatrix.GetOffset();
+                FixedVector<Dim3> topTemp = FixedVector<Dim3>.Builder.Dense(xTop, yTop, 0);
+                coordinates[i + 1] = topMatrix.GetRotation() * topTemp + topMatrix.GetTranslation();
             }
 
             for (int i = 0; i < _numSegments * 2; i += 2)
@@ -446,13 +438,13 @@ namespace IFCConverter.IFC.Geometries
                     (i + 0) % (_numSegments * 2) + 1, (i + 3) % (_numSegments * 2) + 1, (i + 1) % (_numSegments * 2) + 1
                 };
 
-                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
-                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+                FixedVector<Dim3> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
+                FixedVector<Dim3> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
+                normals[i] = first.CreateNormalVector(second);
 
                 first = coordinates[triangleIndices[i + 1][1] - 1] - coordinates[triangleIndices[i + 1][0] - 1];
                 second = coordinates[triangleIndices[i + 1][2] - 1] - coordinates[triangleIndices[i + 1][1] - 1];
-                normals[i + 1] = VectorExtensions.CreateNormalVector(first, second);
+                normals[i + 1] = first.CreateNormalVector(second);
             }
 
             for (int i = _numSegments * 2; i < _numSegments * 4; i += 2)
@@ -466,13 +458,13 @@ namespace IFCConverter.IFC.Geometries
                     1 + 1, (i + 3) % (_numSegments * 2) + 1, (i + 5) % (_numSegments * 2) + 1
                 };
 
-                Vector<double> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
-                Vector<double> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+                FixedVector<Dim3> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
+                FixedVector<Dim3> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
+                normals[i] = first.CreateNormalVector(second);
 
                 first = coordinates[triangleIndices[i + 1][1] - 1] - coordinates[triangleIndices[i + 1][0] - 1];
                 second = coordinates[triangleIndices[i + 1][2] - 1] - coordinates[triangleIndices[i + 1][1] - 1];
-                normals[i + 1] = VectorExtensions.CreateNormalVector(first, second);
+                normals[i + 1] = first.CreateNormalVector(second);
             }
 
             return new IfcTriangulatedProperties

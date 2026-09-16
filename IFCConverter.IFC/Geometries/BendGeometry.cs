@@ -8,13 +8,10 @@ using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
@@ -23,9 +20,9 @@ namespace IFCConverter.IFC.Geometries
         public double BendRadius;
         public double PipeDiameter;
 
-        public Vector<double> Position;
-        public Vector<double> Direction;
-        public Vector<double> EndDirection;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3> Direction;
+        public FixedVector<Dim3> EndDirection;
     }
 
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
@@ -48,14 +45,14 @@ namespace IFCConverter.IFC.Geometries
         public static BendGeometry CreateGeometry(IModel model, BendGeometryProperties properties)
         {
             double angle = properties.Direction.Angle(properties.EndDirection);
-            Vector<double> z = properties.Direction.Normalize(2);
-            Vector<double> y = properties.Direction.CrossProduct(properties.EndDirection).Normalize(2);
-            Vector<double> x = y.CrossProduct(z).Normalize(2);
+            FixedVector<Dim3> zAxis = properties.Direction.Normalize();
+            FixedVector<Dim3> yAxis = properties.Direction.CrossProduct(properties.EndDirection).Normalize();
+            FixedVector<Dim3> xAxis = yAxis.CreateNormalVector(zAxis).Normalize();
 
-            Vector<double> axisPosition = VectorExtensions.X * properties.BendRadius;
+            FixedVector<Dim3> axisPosition = FixedVector<Dim3>.Builder.X() * properties.BendRadius;
 
-            Matrix<double> circleProfileDefMatrix = MatrixExtensions.CreateTransition(VectorExtensions.Zero);
-            Matrix<double> revolvedAreaSolidMatrix = MatrixExtensions.CreateTransition(properties.Position, x, y, z);
+            FixedMatrix<Dim4> circleProfileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+            FixedMatrix<Dim4> revolvedAreaSolidMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.Position, xAxis, yAxis, zAxis);
 
             IIfcCircleProfileDefBuilder<IIfcCircleProfileDef> circleProfileDefBuilder =
                 new IfcCircleProfileDefBuilder<IfcCircleProfileDef>(
@@ -67,7 +64,7 @@ namespace IFCConverter.IFC.Geometries
 
             IIfcRevolvedAreaSolidBuilder<IIfcRevolvedAreaSolid> revolvedAreaSolidBuilder =
                 new IfcRevolvedAreaSolidBuilder<IfcRevolvedAreaSolid>(angle, profileDef);
-            revolvedAreaSolidBuilder.CreateAxis(model, axisPosition, VectorExtensions.Y.Negate());
+            revolvedAreaSolidBuilder.CreateAxis(model, axisPosition, FixedVector<Dim3>.Builder.Y().Negate());
             revolvedAreaSolidBuilder.CreatePosition(model, revolvedAreaSolidMatrix);
 
             return new BendGeometry(revolvedAreaSolidBuilder);

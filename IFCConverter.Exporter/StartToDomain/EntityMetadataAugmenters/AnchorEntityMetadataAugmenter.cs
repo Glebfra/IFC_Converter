@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Anchors;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
 {
@@ -19,7 +19,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
             Entity entity = model.GetEntity(context.GetEntityId(source));
 
             IStartSegmentEntity segmentEntity = source.ConnectedEntities.OfType<IStartSegmentEntity>().First();
-            Matrix<double> segmentMatrix = segmentEntity.TransformationMatrix;
+            FixedMatrix<Dim4> segmentMatrix = segmentEntity.TransformationMatrix;
             entity.Metadata.Meta.Add("SegmentMatrix", segmentMatrix);
         }
     }

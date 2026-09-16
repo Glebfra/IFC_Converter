@@ -7,7 +7,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
     internal sealed class EquipmentDomainEntityExporter : IDomainEntityExporter
     {
         private readonly IEquipmentDomainEntityExportersRegistry _registry = new EquipmentDomainEntityExportersRegistry();
-        
+
         public bool CanExport(Entity entity)
         {
             return entity is Equipment;

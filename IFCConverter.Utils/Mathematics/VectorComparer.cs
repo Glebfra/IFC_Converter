@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Utils.Mathematics
 {
-    public sealed class VectorComparer : IEqualityComparer<Vector<double>>
+    public sealed class VectorComparer : IEqualityComparer<FixedVector<Dim3>>
     {
         private readonly double _tolerance;
 
@@ -15,7 +14,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool Equals(Vector<double> x, Vector<double> y)
+        public bool Equals(FixedVector<Dim3> x, FixedVector<Dim3> y)
         {
             if (x == null || y == null)
                 return false;
@@ -27,7 +26,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public int GetHashCode(Vector<double> obj)
+        public int GetHashCode(FixedVector<Dim3> obj)
         {
             long x = Quantize(obj[0]);
             long y = Quantize(obj[1]);
@@ -46,7 +45,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool LessThan(Vector<double> x, Vector<double> y)
+        public bool LessThan(FixedVector<Dim3> x, FixedVector<Dim3> y)
         {
             if (x == null || y == null)
                 return false;
@@ -55,7 +54,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool GreaterThan(Vector<double> x, Vector<double> y)
+        public bool GreaterThan(FixedVector<Dim3> x, FixedVector<Dim3> y)
         {
             if (x == null || y == null)
                 return false;
@@ -64,7 +63,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool NearerThan(Vector<double> x, Vector<double> y, Vector<double> origin)
+        public bool NearerThan(FixedVector<Dim3> x, FixedVector<Dim3> y, FixedVector<Dim3> origin)
         {
             if (x == null || y == null)
                 return false;
@@ -73,7 +72,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool FartherThan(Vector<double> x, Vector<double> y, Vector<double> origin)
+        public bool FartherThan(FixedVector<Dim3> x, FixedVector<Dim3> y, FixedVector<Dim3> origin)
         {
             if (x == null || y == null)
                 return false;
@@ -82,9 +81,9 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool IsParallel(Vector<double> first, Vector<double> second)
+        public bool IsParallel(FixedVector<Dim3> first, FixedVector<Dim3> second)
         {
-            return first.Normalize(2).CrossProduct(second.Normalize(2)).L2Norm() < _tolerance;
+            return first.Normalize().CrossProduct(second.Normalize()).L2Norm() < _tolerance;
         }
 
         [Pure]

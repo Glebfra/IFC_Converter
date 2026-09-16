@@ -17,9 +17,9 @@ namespace IFCConverter.Utils.Diagnostics
         public const LoggerLevel Level =
             #if INFO
             LoggerLevel.INFO;
-            #elif SYSTEM
+        #elif SYSTEM
             LoggerLevel.SYSTEM;
-            #else
+        #else
             Diagnostics.LoggerLevel.ERROR;
         #endif
 

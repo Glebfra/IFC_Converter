@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Start.Interfaces
 {
@@ -13,7 +13,7 @@ namespace IFCConverter.Start.Interfaces
         ///     Gets the collection of points that define the cone.
         ///     Each point is represented as a vector.
         /// </summary>
-        IEnumerable<Vector<double>> Points { get; }
+        IEnumerable<FixedVector<Dim3>> Points { get; }
 
         /// <summary>
         ///     Gets the collection of diameters corresponding to the points of the cone.

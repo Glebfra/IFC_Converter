@@ -7,7 +7,7 @@ using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Builders.Geometry.Tessellated;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
@@ -18,9 +18,9 @@ namespace IFCConverter.IFC.Geometries
     {
         public double PipeDiameter;
 
-        public Vector<double> Position;
-        public Vector<double> StartArcPosition;
-        public Vector<double> EndArcPosition;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3> StartArcPosition;
+        public FixedVector<Dim3> EndArcPosition;
     }
 
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]

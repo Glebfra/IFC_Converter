@@ -7,11 +7,10 @@ using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.EquipmentDomainEntityExporters
 {
@@ -21,7 +20,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.EquipmentDomai
         {
             if (!Enum.TryParse(equipment.Metadata.Type, out StartElementTypeEnum type))
                 return false;
-            
+
             return type == StartElementTypeEnum.PUMP_API_610 && equipment is PumpApi610;
         }
 
@@ -33,15 +32,15 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.EquipmentDomai
             diameters.Add(Math.Max(pump.PortA.Metadata.Diameter, pump.PortB.Metadata.Diameter));
             if (pump.SecondPosition != null)
                 diameters.Add(Math.Max(pump.SecondPortA.Metadata.Diameter, pump.SecondPortB.Metadata.Diameter));
-            
-            IIfcGeometry geometry = PumpApi610Geometry.CreateGeometry(model, new PumpApi610GeometryProperties()
+
+            IIfcGeometry geometry = PumpApi610Geometry.CreateGeometry(model, new PumpApi610GeometryProperties
             {
                 Points = pump.Ports.Select(port => port.Position - pump.Position).ToArray(),
-                Diameters = diameters.ToArray(),
+                Diameters = diameters.ToArray()
             });
             geometry.AssignColor(Color.FromHEX(pump.Metadata.Color));
-            
-            Matrix<double> placement = MatrixExtensions.CreateTransition(equipment.Position);
+
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(equipment.Position);
             IIfcPumpBuilder<IIfcPump> builder = new IfcPumpBuilder<IfcPump>(equipment.Metadata.Name, equipment.Metadata.Type, IfcPumpTypeEnum.NOTDEFINED);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);

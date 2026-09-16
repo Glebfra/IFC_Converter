@@ -1,14 +1,13 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Topology;
-using MathNet.Numerics;
 
 namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
 {
     internal sealed class PortEntityConnectionResolver : IEntityConnectionResolver
     {
         private const double DoubleTolerance = 1e-3;
-        
+
         public bool CanResolve()
         {
             return true;
@@ -23,18 +22,18 @@ namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
                 {
                     if (firstPort == secondPort)
                         continue;
-                    
+
                     Entity secondPortOwner = model.GetEntity(secondPort.Owner);
-                    
+
                     if (firstPort.Position.AlmostEqual(secondPort.Position, DoubleTolerance))
                         model.Connect(firstPort, secondPort, ResolveConnectionType(firstPortOwner, secondPortOwner));
                 }
             }
         }
-        
+
         private static ConnectionType ResolveConnectionType(Entity first, Entity second)
         {
-            if (first is AbstractSegment && second is AbstractFitting || 
+            if (first is AbstractSegment && second is AbstractFitting ||
                 first is AbstractFitting && second is AbstractSegment)
                 return ConnectionType.PipeToFitting;
             if (first is AbstractSegment && second is AbstractSegment)

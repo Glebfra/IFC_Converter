@@ -9,7 +9,8 @@ using Newtonsoft.Json;
 namespace IFCConverter.Start.Entities
 {
     /// <summary>
-    ///     Represents an abstract base class for IFCConverter.Start entities, implementing the <see cref="IStartEntity" /> interface.
+    ///     Represents an abstract base class for IFCConverter.Start entities, implementing the <see cref="IStartEntity" />
+    ///     interface.
     /// </summary>
     [DebuggerDisplay("Name: {Name}")]
     public abstract class StartAbstractEntity : IStartEntity

@@ -5,7 +5,6 @@ using IFCConverter.Importer.Attributes;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Importer.DomainToStart.Phases
 {
@@ -20,21 +19,21 @@ namespace IFCConverter.Importer.DomainToStart.Phases
         {
             _nodeRegistry = new StartNodeRegistry(_comparer);
         }
-        
+
         public void Execute(EngineeringModel model, ExportContext context)
         {
             IStartProject project = context.StartProject;
-            
+
             foreach (IStartEntity startEntity in context.StartEntities)
             {
                 Entity entity = model.GetEntity(context.GetEntityId(startEntity));
-                Vector<double>[] nodePositions = entity.Positions.ToArray();
-                
+                FixedVector<Dim3>[] nodePositions = entity.Positions.ToArray();
+
                 StartEntityProxy startEntityProxy = project.AddEntity(startEntity);
                 StartEntityProxy[] nodeProxies = _nodeRegistry.GetOrCreateNodes(project, nodePositions);
                 startEntityProxy.ConnectNodes(nodeProxies);
             }
-            
+
             project.OnImportFinish();
         }
     }

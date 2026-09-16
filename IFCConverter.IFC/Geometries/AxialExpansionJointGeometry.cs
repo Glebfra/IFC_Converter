@@ -7,20 +7,18 @@ using IFCConverter.IFC.Builders.Geometry.SolidModel;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct DoubleExtrudedJointGeometryProperties
     {
-        public Vector<double> Position;
-        public Vector<double>[] Points;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3>[] Points;
         public double Diameter;
     }
 
@@ -49,7 +47,7 @@ namespace IFCConverter.IFC.Geometries
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
 
             double length = (properties.Points[1] - properties.Points[0]).L2Norm();
-            Vector<double>[] directions = properties.Points
+            FixedVector<Dim3>[] directions = properties.Points
                 .Select(point => point - properties.Position)
                 .ToArray();
             double[] diameters =
@@ -59,10 +57,13 @@ namespace IFCConverter.IFC.Geometries
 
             for (int i = 0; i < directions.Length; i++)
             {
-                Vector<double> direction = directions[i];
-                Matrix<double> extrudedAreaMatrix = MatrixExtensions.CreateTransition(properties.Position, direction);
-                Matrix<double> profileDefMatrix =
-                    MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
+                FixedVector<Dim3> direction = directions[i];
+                FixedVector<Dim3> zAxis = direction;
+                FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+                FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+                FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+                FixedMatrix<Dim4> extrudedAreaMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.Position, xAxis, yAxis, zAxis);
 
                 IIfcCircleProfileDefBuilder<IfcCircleProfileDef> profileDefBuilder =
                     new IfcCircleProfileDefBuilder<IfcCircleProfileDef>(
@@ -73,7 +74,7 @@ namespace IFCConverter.IFC.Geometries
                 IfcCircleProfileDef profileDef = profileDefBuilder.CreateProfileDef(model);
 
                 IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> extrudedAreaSolidBuilder =
-                    new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(length / 2, VectorExtensions.Z, profileDef);
+                    new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(length / 2, FixedVector<Dim3>.Builder.Z(), profileDef);
                 extrudedAreaSolidBuilder.CreatePosition(model, extrudedAreaMatrix);
 
                 builders.Add(extrudedAreaSolidBuilder);

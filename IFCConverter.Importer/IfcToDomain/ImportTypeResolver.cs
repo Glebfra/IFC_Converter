@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.IfcToDomain
         {
             if (model.Header.CreatingApplication.Contains("AVEVA E3D"))
                 return ImportType.AVEVA;
-            
+
             return ImportType.UNKNOWN;
         }
     }

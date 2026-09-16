@@ -33,6 +33,16 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
+        public static double CalculateAnchorDisplacement(FixedMatrix<Dim4> segmentMatrix, double diameter)
+        {
+            double angle = segmentMatrix.GetZ().Angle(FixedVector<Dim4>.Builder.Z());
+            if (angle.AlmostEqual(0, 1e-6)) // a!=0 => sin(a)!=0
+                angle = segmentMatrix.GetY().Angle(FixedVector<Dim4>.Builder.Z());
+
+            return diameter / (2 * Math.Sin(angle)); // r / sin(a)
+        }
+
+        [Pure]
         public static double CalculateAnchorDisplacement(Matrix<double> segmentMatrix, double diameter)
         {
             double angle = segmentMatrix.GetZ().Angle(VectorExtensions.Z);

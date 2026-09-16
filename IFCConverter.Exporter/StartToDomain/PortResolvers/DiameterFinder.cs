@@ -17,7 +17,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             {
                 if (!context.TryGetEntityId(startSegment, out EntityId id))
                     continue;
-                
+
                 switch (model.GetEntity(id))
                 {
                     case Beam beam:
@@ -46,7 +46,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 
         private static double GetMaxDiameter(Beam beam)
         {
-            double[] values = new double[]
+            double[] values =
             {
                 beam.Diameter, beam.Height, beam.Width
             };

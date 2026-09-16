@@ -1,7 +1,7 @@
 ﻿using System;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -18,7 +18,7 @@ namespace IFCConverter.IFC.Builders.Geometry.SolidModel
         public IIfcProfileDef ProfileDef { get; }
         public IIfcAxis2Placement3D Position { get; private set; }
 
-        public virtual IIfcAxis2Placement3D CreatePosition(IModel model, Matrix<double> matrix)
+        public virtual IIfcAxis2Placement3D CreatePosition(IModel model, FixedMatrix<Dim4> matrix)
         {
             Position = matrix.ToAxis2Placement3D(model);
             return Position;

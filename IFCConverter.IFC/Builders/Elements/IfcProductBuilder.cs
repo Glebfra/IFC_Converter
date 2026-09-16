@@ -4,7 +4,6 @@ using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Interfaces;
@@ -27,13 +26,13 @@ namespace IFCConverter.IFC.Builders.Elements
 
         public List<IIfcPropertySet> PropertySets { get; } = new List<IIfcPropertySet>();
 
-        public IIfcObjectPlacement CreateObjectPlacement(IModel model, Matrix<double> matrix)
+        public IIfcObjectPlacement CreateObjectPlacement(IModel model, FixedMatrix<Dim4> matrix)
         {
             string transactionName = $"{nameof(IfcProductBuilder<T>)}: {nameof(CreateObjectPlacement)}";
             _logger.Info($"Begin transaction: {transactionName}");
 
             ObjectPlacement = matrix.ToIfcObjectPlacement(model);
-            _logger.Info($"Created object placement with matrix: {matrix.ToRowString()}");
+            _logger.Info($"Created object placement with matrix: {matrix}");
 
             return ObjectPlacement;
         }

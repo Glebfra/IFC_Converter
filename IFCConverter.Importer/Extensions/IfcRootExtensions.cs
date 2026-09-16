@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using IFCConverter.Importer.Interfaces;
 using IFCConverter.Importer.PropertySets;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;

@@ -1,6 +1,6 @@
 ﻿using IFCConverter.Exporter.StartToDomain.StartEntityImporters;
-using IFCConverter.Utils.Registries;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Registries;
 
 namespace IFCConverter.Exporter.StartToDomain
 {

@@ -4,9 +4,9 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Extensions;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Segments;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
 {
@@ -38,12 +38,12 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
                     ResolveReducerPort(entity, reducer);
                     continue;
                 }
-                
-                foreach (Vector<double> fittingPos in connectedEntity.Positions)
+
+                foreach (FixedVector<Dim3> fittingPos in connectedEntity.Positions)
                 {
                     if (!entity.IsSegmentContainPoint(fittingPos))
                         continue;
-                
+
                     foreach (Port connectedEntityPort in connectedEntity.Ports)
                     {
                         if (!entity.IsSegmentContainPoint(connectedEntityPort.Position))
@@ -58,10 +58,10 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
 
         private static void ResolveReducerPort(AbstractSegment segment, Reducer reducer)
         {
-            Vector<double> reducerDirection = (reducer.PortB.Position - reducer.PortA.Position).Normalize(2);
-            Vector<double> segmentDirection = segment.GetDirectionFromPoint(reducer.Position);
+            FixedVector<Dim3> reducerDirection = (reducer.PortB.Position - reducer.PortA.Position).Normalize();
+            FixedVector<Dim3> segmentDirection = segment.GetDirectionFromPoint(reducer.Position);
 
-            if (reducerDirection.DotProduct(segmentDirection) < 0)
+            if (reducerDirection.Dot(segmentDirection) < 0)
                 return;
 
             Port segmentNearestPort = segment.GetNearestPort(reducer.PortA);

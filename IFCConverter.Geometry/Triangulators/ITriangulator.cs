@@ -1,9 +1,9 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Triangulators
 {
     internal interface ITriangulator
     {
-        int[][] Triangulate(Vector<double>[] vertices);
+        int[][] Triangulate(FixedVector<Dim3>[] vertices);
     }
 }

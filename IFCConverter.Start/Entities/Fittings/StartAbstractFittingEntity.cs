@@ -4,7 +4,7 @@ using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Newtonsoft.Json;
 
 namespace IFCConverter.Start.Entities.Fittings
@@ -15,7 +15,7 @@ namespace IFCConverter.Start.Entities.Fittings
         [JsonConverter(typeof(JsonStartConverter<MassValueProperty<double>>))]
         public IStartValueProperty<double> Weight { get; set; } = new MassValueProperty<double>();
 
-        [JsonIgnore] public Vector<double> Position { get; set; } = default;
+        [JsonIgnore] public FixedVector<Dim3> Position { get; set; } = default;
 
         [JsonIgnore] [StartIgnore] public IStartNodeEntity Node => ConnectedEntities.OfType<IStartNodeEntity>().First();
 

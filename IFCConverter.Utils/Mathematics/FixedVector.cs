@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -18,18 +21,30 @@ namespace IFCConverter.Utils.Mathematics
         {
             if (values.Length != Dimension)
                 throw new ArgumentException($"The vector length {values.Length} is not equal to the dimension {Dimension}.");
-            
+
             return new FixedVector<TDimension>(Vector<double>.Build.Dense(values));
         }
     }
-    
-    public class FixedVector<TDimension>
+
+    public class FixedVector<TDimension> : IEnumerable<double>, IEquatable<FixedVector<TDimension>>
         where TDimension : struct, IDimension
     {
+
+        public FixedVector(Vector<double> vector)
+        {
+            if (vector == null)
+                throw new ArgumentNullException(nameof(vector));
+
+            if (vector.Count != Dimension)
+                throw new ArgumentException($"The vector dimension {vector.Count} is not equal to the dimension {Dimension}.");
+
+            Vector = vector;
+        }
+
         private static int Dimension => Dimension<TDimension>.Dim;
         public static FixedVectorBuilder<TDimension> Builder => new FixedVectorBuilder<TDimension>();
-        
-        public Vector<double> Vector { get; }
+
+        internal Vector<double> Vector { get; }
 
         public double this[int index]
         {
@@ -37,15 +52,24 @@ namespace IFCConverter.Utils.Mathematics
             set => Vector[index] = value;
         }
 
-        public FixedVector(Vector<double> vector)
+        public IEnumerator<double> GetEnumerator()
         {
-            if (vector == null)
-                throw new ArgumentNullException(nameof(vector));
-            
-            if (vector.Count != Dimension)
-                throw new ArgumentException($"The vector dimension {vector.Count} is not equal to the dimension {Dimension}.");
-            
-            Vector = vector;
+            for (int i = 0; i < Vector.Count; i++)
+                yield return Vector[i];
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public bool Equals(FixedVector<TDimension> other)
+        {
+            if (other is null)
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+            return Equals(Vector, other.Vector);
         }
 
         public double Dot(FixedVector<TDimension> other)
@@ -63,6 +87,11 @@ namespace IFCConverter.Utils.Mathematics
             return IsParallel(this, vector, maximumAbsoluteError);
         }
 
+        public bool IsNormal(FixedVector<TDimension> b, double maximumAbsoluteError = 1e-6)
+        {
+            return IsNormal(this, b, maximumAbsoluteError);
+        }
+
         public FixedVector<TDimension> Normalize()
         {
             return Normalize(this);
@@ -70,7 +99,7 @@ namespace IFCConverter.Utils.Mathematics
 
         public FixedVector<TDimension> Negate()
         {
-            return new FixedVector<TDimension>(Vector.Negate());
+            return Negate(this);
         }
 
         public bool AlmostEqual(FixedVector<TDimension> other, double maximumAbsoluteError = 1e-6)
@@ -78,32 +107,57 @@ namespace IFCConverter.Utils.Mathematics
             return AlmostEqual(this, other, maximumAbsoluteError);
         }
 
+        public bool IsLessThan(FixedVector<TDimension> other)
+        {
+            return IsLessThan(this, other);
+        }
+
+        public bool IsGreaterThan(FixedVector<TDimension> other)
+        {
+            return IsGreaterThan(this, other);
+        }
+
+        public bool IsNearerThan(FixedVector<TDimension> other, FixedVector<TDimension> origin)
+        {
+            return IsNearerThan(this, other, origin);
+        }
+
+        public bool IsFartherThan(FixedVector<TDimension> other, FixedVector<TDimension> origin)
+        {
+            return IsFartherThan(this, other, origin);
+        }
+
+        public double Angle(FixedVector<TDimension> other)
+        {
+            return Angle(this, other);
+        }
+
         public override string ToString()
         {
             return Vector.ToString();
         }
 
-        public static FixedVector<TDimension> operator+(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        public static FixedVector<TDimension> operator +(FixedVector<TDimension> a, FixedVector<TDimension> b)
         {
             return Add(a, b);
         }
-        
-        public static FixedVector<TDimension> operator-(FixedVector<TDimension> a, FixedVector<TDimension> b)
+
+        public static FixedVector<TDimension> operator -(FixedVector<TDimension> a, FixedVector<TDimension> b)
         {
             return Subtract(a, b);
         }
 
-        public static double operator*(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        public static double operator *(FixedVector<TDimension> a, FixedVector<TDimension> b)
         {
             return Multiply(a, b);
         }
 
-        public static FixedVector<TDimension> operator*(FixedVector<TDimension> a, double scalar)
+        public static FixedVector<TDimension> operator *(FixedVector<TDimension> a, double scalar)
         {
             return Multiply(a, scalar);
         }
-        
-        public static FixedVector<TDimension> operator*(double scalar, FixedVector<TDimension> a)
+
+        public static FixedVector<TDimension> operator *(double scalar, FixedVector<TDimension> a)
         {
             return Multiply(a, scalar);
         }
@@ -137,7 +191,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             return Dot(a, b);
         }
-        
+
         public static double Dot(FixedVector<TDimension> a, FixedVector<TDimension> b)
         {
             return a.Vector.DotProduct(b.Vector);
@@ -156,16 +210,21 @@ namespace IFCConverter.Utils.Mathematics
             if (aLength <= maximumAbsoluteError ||
                 bLength <= maximumAbsoluteError)
                 return false;
-            
+
             double dot = a.Dot(b) / (aLength * bLength);
             return Math.Abs(Math.Abs(dot) - 1.0) <= maximumAbsoluteError;
+        }
+
+        public static bool IsNormal(FixedVector<TDimension> a, FixedVector<TDimension> b, double maximumAbsoluteError = 1e-6)
+        {
+            return Math.Abs(a.Dot(b)) < maximumAbsoluteError;
         }
 
         public static FixedVector<TDimension> Normalize(FixedVector<TDimension> vector)
         {
             return new FixedVector<TDimension>(vector.Vector.Normalize(2));
         }
-        
+
         public static FixedVector<TDimension> Negate(FixedVector<TDimension> vector)
         {
             return new FixedVector<TDimension>(vector.Vector.Negate());
@@ -175,43 +234,99 @@ namespace IFCConverter.Utils.Mathematics
         {
             return a.Vector.AlmostEqual(b.Vector, maximumAbsoluteError);
         }
+
+        public static bool IsLessThan(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        {
+            return a.L2Norm() < b.L2Norm();
+        }
+
+        public static bool IsGreaterThan(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        {
+            return a.L2Norm() > b.L2Norm();
+        }
+
+        public static bool IsNearerThan(FixedVector<TDimension> a, FixedVector<TDimension> b, FixedVector<TDimension> origin)
+        {
+            return (a - origin).L2Norm() <= (b - origin).L2Norm();
+        }
+
+        public static bool IsFartherThan(FixedVector<TDimension> a, FixedVector<TDimension> b, FixedVector<TDimension> origin)
+        {
+            return (a - origin).L2Norm() >= (b - origin).L2Norm();
+        }
+
+        public static double Angle(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        {
+            return a.Vector.Angle(b.Vector);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (obj.GetType() != GetType())
+                return false;
+            return Equals((FixedVector<TDimension>)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Vector != null ? Vector.GetHashCode() : 0;
+        }
+    }
+
+    public static class FixedVectorExtensions
+    {
+        public static FixedVector<TDimension> Sum<TDimension>(this IEnumerable<FixedVector<TDimension>> vectors)
+            where TDimension : struct, IDimension
+        {
+            return vectors.Aggregate(FixedVector<TDimension>.Zeros(), (current, vector) => current + vector);
+        }
+
+        public static FixedVector<TDimension> Average<TDimension>(this IEnumerable<FixedVector<TDimension>> vectors)
+            where TDimension : struct, IDimension
+        {
+            return vectors.Sum() * (1 / vectors.Count());
+        }
     }
 
     public static class FixedVector2Extensions
     {
-        public static double GetX(this FixedVector<Dim3> vector)
+        public static double GetX(this FixedVector<Dim2> vector)
         {
             return vector[0];
         }
-        
-        public static double GetY(this FixedVector<Dim3> vector)
+
+        public static double GetY(this FixedVector<Dim2> vector)
         {
             return vector[1];
         }
-        
-        public static void SetX(this FixedVector<Dim3> vector, double value)
+
+        public static void SetX(this FixedVector<Dim2> vector, double value)
         {
             vector[0] = value;
         }
 
-        public static void SetY(this FixedVector<Dim3> vector, double value)
+        public static void SetY(this FixedVector<Dim2> vector, double value)
         {
             vector[1] = value;
         }
     }
-    
+
     public static class FixedVector3Extensions
     {
         public static double GetX(this FixedVector<Dim3> vector)
         {
             return vector[0];
         }
-        
+
         public static double GetY(this FixedVector<Dim3> vector)
         {
             return vector[1];
         }
-        
+
         public static double GetZ(this FixedVector<Dim3> vector)
         {
             return vector[2];
@@ -246,7 +361,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             return a.CrossProduct(b);
         }
-        
+
         public static FixedVector<Dim3> CrossProduct(this FixedVector<Dim3> a, FixedVector<Dim3> b)
         {
             return new FixedVector<Dim3>(a.Vector.CrossProduct(b.Vector));
@@ -256,35 +371,35 @@ namespace IFCConverter.Utils.Mathematics
         {
             return FixedVector<Dim4>.Builder.Dense(vector[0], vector[1], vector[2], value);
         }
-        
+
         public static FixedVector<Dim3> X(this FixedVectorBuilder<Dim3> builder)
         {
             return builder.Dense(1, 0, 0);
         }
-        
+
         public static FixedVector<Dim3> Y(this FixedVectorBuilder<Dim3> builder)
         {
             return builder.Dense(0, 1, 0);
         }
-        
+
         public static FixedVector<Dim3> Z(this FixedVectorBuilder<Dim3> builder)
         {
             return builder.Dense(0, 0, 1);
         }
-        
+
         public static FixedVector<Dim3> Dense(this FixedVectorBuilder<Dim3> builder, double x)
         {
-            return builder.Dense(new double[] { x, 0, 0 });
+            return builder.Dense(x, 0, 0);
         }
-        
+
         public static FixedVector<Dim3> Dense(this FixedVectorBuilder<Dim3> builder, double x, double y)
         {
-            return builder.Dense(new double[] { x, y, 0 });
+            return builder.Dense(x, y, 0);
         }
-        
+
         public static FixedVector<Dim3> Dense(this FixedVectorBuilder<Dim3> builder, double x, double y, double z)
         {
-            return builder.Dense(new double[] { x, y, z });
+            return builder.Dense(x, y, z);
         }
     }
 
@@ -294,12 +409,12 @@ namespace IFCConverter.Utils.Mathematics
         {
             return vector[0];
         }
-        
+
         public static double GetY(this FixedVector<Dim4> vector)
         {
             return vector[1];
         }
-        
+
         public static double GetZ(this FixedVector<Dim4> vector)
         {
             return vector[2];
@@ -340,40 +455,40 @@ namespace IFCConverter.Utils.Mathematics
         {
             return builder.Dense(1, 0, 0, 0);
         }
-        
+
         public static FixedVector<Dim4> Y(this FixedVectorBuilder<Dim4> builder)
         {
             return builder.Dense(0, 1, 0, 0);
         }
-        
+
         public static FixedVector<Dim4> Z(this FixedVectorBuilder<Dim4> builder)
         {
             return builder.Dense(0, 0, 1, 0);
         }
-        
+
         public static FixedVector<Dim4> W(this FixedVectorBuilder<Dim4> builder)
         {
             return builder.Dense(0, 0, 0, 1);
         }
-        
+
         public static FixedVector<Dim4> Dense(this FixedVectorBuilder<Dim4> builder, double x)
         {
-            return builder.Dense(new double[] { x, 0, 0, 0 });
+            return builder.Dense(x, 0, 0, 0);
         }
-        
+
         public static FixedVector<Dim4> Dense(this FixedVectorBuilder<Dim4> builder, double x, double y)
         {
-            return builder.Dense(new double[] { x, y, 0, 0 });
+            return builder.Dense(x, y, 0, 0);
         }
-        
+
         public static FixedVector<Dim4> Dense(this FixedVectorBuilder<Dim4> builder, double x, double y, double z)
         {
-            return builder.Dense(new double[] { x, y, z, 0 });
+            return builder.Dense(x, y, z, 0);
         }
-        
+
         public static FixedVector<Dim4> Dense(this FixedVectorBuilder<Dim4> builder, double x, double y, double z, double w)
         {
-            return builder.Dense(new double[] { x, y, z, w });
+            return builder.Dense(x, y, z, w);
         }
     }
 }

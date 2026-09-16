@@ -7,11 +7,9 @@ using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEntityExporters
 {
@@ -30,13 +28,13 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
         {
             if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
                 return;
-            
-            Matrix<double> segmentMatrix = (Matrix<double>)anchor.Metadata.Meta["SegmentMatrix"];
+
+            FixedMatrix<Dim4> segmentMatrix = (FixedMatrix<Dim4>)anchor.Metadata.Meta["SegmentMatrix"];
             double diameter = anchor.Port.Metadata.Diameter;
-            
-            Vector<double>[] directions = CreateDirections(segmentMatrix, type);
-            Vector<double>[] positions = directions
-                .Select(direction => -direction * diameter / 2)
+
+            FixedVector<Dim3>[] directions = CreateDirections(segmentMatrix, type);
+            FixedVector<Dim3>[] positions = directions
+                .Select(direction => direction.Negate() * (diameter / 2))
                 .ToArray();
 
             IIfcGeometry geometry = DirectionalGuideAnchorGeometry.CreateGeometry(model, new DirectionalGuideAnchorGeometryProperties
@@ -46,8 +44,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
                 Directions = directions
             });
             geometry.AssignColor(Color.FromHEX(anchor.Metadata.Color));
-            
-            Matrix<double> placement = MatrixExtensions.CreateTransition(anchor.Position);
+
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(anchor.Position);
             IIfcDiscreteAccessoryBuilder<IIfcDiscreteAccessory> builder =
                 new IfcDiscreteAccessoryBuilder<IfcDiscreteAccessory>(anchor.Metadata.Name, anchor.Metadata.Type, IfcDiscreteAccessoryTypeEnum.USERDEFINED);
             builder.AssignGeometry(geometry);
@@ -57,16 +55,23 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
             context.Register(anchor, instance);
         }
 
-        private static Vector<double>[] CreateDirections(Matrix<double> segmentMatrix, StartElementTypeEnum type)
+        private static FixedVector<Dim3>[] CreateDirections(FixedMatrix<Dim4> segmentMatrix, StartElementTypeEnum type)
         {
             switch (type)
             {
                 case StartElementTypeEnum.GUIDE_SINGLE_DIRECTION_SUPPORT:
-                    return new[] { segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY() };
+                    return new[]
+                    {
+                        segmentMatrix.GetX().ToCartesian(), segmentMatrix.GetX().Negate().ToCartesian(), segmentMatrix.GetY().ToCartesian()
+                    };
                 case StartElementTypeEnum.GUIDE_DOUBLE_DIRECTION_SUPPORT:
-                    return new[] { segmentMatrix.GetX(), -segmentMatrix.GetX(), segmentMatrix.GetY(), -segmentMatrix.GetY() };
+                    return new[]
+                    {
+                        segmentMatrix.GetX().ToCartesian(), segmentMatrix.GetX().Negate().ToCartesian(), segmentMatrix.GetY().ToCartesian(),
+                        segmentMatrix.GetY().Negate().ToCartesian()
+                    };
                 default:
-                    return Array.Empty<Vector<double>>();
+                    return Array.Empty<FixedVector<Dim3>>();
             }
         }
     }

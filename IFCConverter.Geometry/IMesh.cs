@@ -1,11 +1,11 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry
 {
     public interface IMesh
     {
-        Vector<double>[] Vertices { get; }
+        FixedVector<Dim3>[] Vertices { get; }
         int[][] Triangles { get; }
-        Vector<double>[] Normals { get; }
+        FixedVector<Dim3>[] Normals { get; }
     }
 }

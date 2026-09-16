@@ -22,10 +22,10 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.UnknownEntityImporte
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
-            
+
             if (!(representationItems[0] is IfcExtrudedAreaSolid extrudedAreaSolid))
                 throw new Exception("The representation item is not a extruded area solid.");
-            
+
             if (!(extrudedAreaSolid.SweptArea is IfcCircleProfileDef circleProfileDef))
                 throw new Exception("The representation item is not a CircleProfileDef.");
 
@@ -34,7 +34,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.UnknownEntityImporte
             {
                 Diameter = circleProfileDef.Radius * 2 * lengthPower
             };
-            
+
             model.Add(segment);
             context.Register(segment, product);
         }

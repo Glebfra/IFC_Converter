@@ -4,23 +4,14 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Geometry;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.IFC.Extensions
 {
     public static class IfcRootExtensions
     {
-        [Pure]
-        public static Vector<double> ToVector(this IIfcCartesianPoint cartesianPoint)
-        {
-            return cartesianPoint.Coordinates.Cast<IIfcValue>().ToVector();
-        }
-
         [Pure]
         public static FixedVector<TDimension> ToFixedVector<TDimension>(this IIfcCartesianPoint cartesianPoint)
             where TDimension : struct, IDimension
@@ -29,28 +20,9 @@ namespace IFCConverter.IFC.Extensions
         }
 
         [Pure]
-        public static Vector<double> ToVector(this IIfcDirection direction)
-        {
-            return new DenseVector(new[]
-            {
-                direction.X, direction.Y, direction.Z
-            });
-        }
-
-        [Pure]
         public static FixedVector<Dim3> ToFixedVector(this IIfcDirection direction)
         {
-            return FixedVector<Dim3>.Builder.Dense(new double[]
-            {
-                direction.X, direction.Y, direction.Z
-            });
-        }
-
-        [Pure]
-        public static Vector<double> ToVector(this IEnumerable<IfcParameterValue> values)
-        {
-            double[] doubles = values.Select(value => Convert.ToDouble(value.Value)).ToArray();
-            return new DenseVector(doubles);
+            return FixedVector<Dim3>.Builder.Dense(direction.X, direction.Y, direction.Z);
         }
 
         [Pure]
@@ -62,33 +34,11 @@ namespace IFCConverter.IFC.Extensions
         }
 
         [Pure]
-        public static Vector<double> ToVector(this IEnumerable<IIfcValue> values)
-        {
-            double[] doubles = values.Select(value => Convert.ToDouble(value.Value)).ToArray();
-            return new DenseVector(doubles);
-        }
-
-        [Pure]
         public static FixedVector<TDimension> ToFixedVector<TDimension>(this IEnumerable<IIfcValue> values)
             where TDimension : struct, IDimension
         {
             double[] doubles = values.Select(value => Convert.ToDouble(value.Value)).ToArray();
             return FixedVector<TDimension>.Builder.Dense(doubles);
-        }
-
-        [Pure]
-        public static Matrix<double> ToMatrix(this IIfcAxis2Placement axis2Placement)
-        {
-            switch (axis2Placement)
-            {
-                case IIfcAxis2Placement2D axis2Placement2D:
-                    return axis2Placement2D.ToMatrix();
-                case IIfcAxis2Placement3D axis2Placement3D:
-                    return axis2Placement3D.ToMatrix();
-                default:
-                    throw new InvalidCastException($"Cannot cast {axis2Placement.GetType().Name} to " +
-                                                   $"{nameof(IIfcAxis2Placement2D)} or {nameof(IIfcAxis2Placement3D)}.");
-            }
         }
 
         [Pure]
@@ -107,17 +57,6 @@ namespace IFCConverter.IFC.Extensions
         }
 
         [Pure]
-        public static Matrix<double> ToMatrix(this IIfcAxis2Placement2D axis2Placement2D)
-        {
-            Vector<double> position = axis2Placement2D.Location.ToVector();
-            Vector<double> refDirection = axis2Placement2D.RefDirection.ToVector().Normalize(2);
-            Vector<double> upDirection = refDirection.CreateNormalVector().Normalize(2);
-            Vector<double> axis = refDirection.CrossProduct(upDirection).Normalize(2);
-
-            return MatrixExtensions.CreateTransition(position, refDirection, upDirection, axis);
-        }
-
-        [Pure]
         public static FixedMatrix<Dim4> ToFixedMatrix(this IIfcAxis2Placement2D axis2Placement2D)
         {
             FixedVector<Dim3> position = axis2Placement2D.Location.ToFixedVector<Dim3>();
@@ -126,17 +65,6 @@ namespace IFCConverter.IFC.Extensions
             FixedVector<Dim3> axis = refDirection.CrossProduct(upDirection).Normalize();
 
             return FixedMatrix<Dim4>.Builder.CreateTransition(position, refDirection, upDirection, axis);
-        }
-
-        [Pure]
-        public static Matrix<double> ToMatrix(this IIfcAxis2Placement3D axis2Placement3D)
-        {
-            Vector<double> axis = axis2Placement3D.Axis.ToVector();
-            Vector<double> refDirection = axis2Placement3D.RefDirection.ToVector();
-            Vector<double> upDirection = axis.CrossProduct(refDirection);
-            Vector<double> position = axis2Placement3D.Location.ToVector();
-
-            return MatrixExtensions.CreateTransition(position, refDirection, upDirection, axis);
         }
 
         [Pure]
@@ -164,20 +92,6 @@ namespace IFCConverter.IFC.Extensions
 
             return properties;
         }
-        
-        [Pure]
-        public static IEnumerable<Vector<double>> GetCoordinates(this IIfcCartesianPointList3D pointList)
-        {
-            List<Vector<double>> result = new List<Vector<double>>();
-
-            foreach (IItemSet<IfcLengthMeasure> ifcLengthMeasures in pointList.CoordList)
-                result.Add(new DenseVector(new double[]
-                {
-                    ifcLengthMeasures[0], ifcLengthMeasures[1], ifcLengthMeasures[2]
-                }));
-
-            return result;
-        }
 
         [Pure]
         public static IEnumerable<FixedVector<Dim3>> GetFixedCoordinates(this IIfcCartesianPointList3D pointList)
@@ -185,15 +99,12 @@ namespace IFCConverter.IFC.Extensions
             List<FixedVector<Dim3>> result = new List<FixedVector<Dim3>>();
             foreach (IItemSet<IfcLengthMeasure> ifcLengthMeasures in pointList.CoordList)
             {
-                result.Add(FixedVector<Dim3>.Builder.Dense(new double[]
-                {
-                    ifcLengthMeasures[0], ifcLengthMeasures[1], ifcLengthMeasures[2]
-                }));
+                result.Add(FixedVector<Dim3>.Builder.Dense(ifcLengthMeasures[0], ifcLengthMeasures[1], ifcLengthMeasures[2]));
             }
 
             return result;
         }
-        
+
         [Pure]
         public static IEnumerable<IIfcRepresentationItem> GetRepresentationItems(this IIfcProduct source)
         {
@@ -215,8 +126,8 @@ namespace IFCConverter.IFC.Extensions
         [Pure]
         public static Mesh GetMesh(this IIfcTriangulatedFaceSet triangulatedFaceSet)
         {
-            Vector<double>[] vertices = triangulatedFaceSet.Coordinates.GetCoordinates().ToArray();
-            Vector<double>[] normals = triangulatedFaceSet.Normals.Select(normal => normal.ToVector()).ToArray();
+            FixedVector<Dim3>[] vertices = triangulatedFaceSet.Coordinates.GetFixedCoordinates().ToArray();
+            FixedVector<Dim3>[] normals = triangulatedFaceSet.Normals.Select(normal => normal.ToFixedVector<Dim3>()).ToArray();
             int[][] triangles = triangulatedFaceSet.CoordIndex.Select(indices => indices.Select(index => (int)index - 1).ToArray()).ToArray();
             return new Mesh(vertices, triangles, normals);
         }

@@ -1,6 +1,5 @@
 ﻿using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
-using IFCConverter.Start.Augmenters;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
@@ -13,7 +12,7 @@ namespace IFCConverter.Start.Entities.Segments
     ///     Inherits from <see cref="StartAbstractSegmentEntity" /> and implements the <see cref="IStartMaterializedEntity" />
     ///     interface
     /// </summary>
-    [StartElement(StartElementTypeEnum.CYLINDRICAL_SHELL, typeof(StartClippableEntityAugmenter))]
+    [StartElement(StartElementTypeEnum.CYLINDRICAL_SHELL)]
     public sealed class StartCylindricalShellEntity : StartAbstractSegmentEntity,
         IStartMaterializedEntity
     {

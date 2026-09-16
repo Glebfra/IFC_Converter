@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
     {
         public bool CanImport(StartAbstractSegmentEntity segment)
         {
-            return segment is StartRigidElementEntity || 
+            return segment is StartRigidElementEntity ||
                    segment is StartFlexibleElementEntity;
         }
 
@@ -24,7 +24,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
             {
                 Diameter = diameter.Value
             };
-            
+
             model.Add(pipe);
             context.Register(segment, pipe);
         }

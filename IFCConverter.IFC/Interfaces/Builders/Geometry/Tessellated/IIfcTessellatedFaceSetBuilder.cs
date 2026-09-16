@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -10,6 +10,6 @@ namespace IFCConverter.IFC.Interfaces.Geometry.Tessellated
     {
         IIfcCartesianPointList3D Coordinates { get; }
 
-        IIfcCartesianPointList3D CreateCoordinates(IModel model, IEnumerable<Vector<double>> coordinates);
+        IIfcCartesianPointList3D CreateCoordinates(IModel model, IEnumerable<FixedVector<Dim3>> coordinates);
     }
 }

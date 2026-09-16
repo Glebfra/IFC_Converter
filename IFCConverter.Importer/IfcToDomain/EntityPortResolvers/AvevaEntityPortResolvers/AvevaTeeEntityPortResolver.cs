@@ -5,7 +5,6 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortResolvers
@@ -14,7 +13,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortR
     {
         private const double DoubleTolerance = 1e-6;
         private readonly VectorComparer _comparer = new VectorComparer(DoubleTolerance);
-        
+
         public bool CanResolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             if (!context.TryGetEntityId(product, out EntityId id))
@@ -27,36 +26,36 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortR
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             Tee tee = (Tee)model.GetEntity(context.GetEntityId(product));
-            Vector<double> position = tee.Position;
-            
+            FixedVector<Dim3> position = tee.Position;
+
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 2)
                 throw new Exception("Expected exactly two representation items for the given source.");
 
             double lengthPower = product.Model.GetLengthPower();
-            
-            Vector<double> mainProjection = default, headProjection = default;
+
+            FixedVector<Dim3> mainProjection = default, headProjection = default;
             double mainDiameter = default, headDiameter = default;
-            
+
             IIfcExtrudedAreaSolid[] extrudedAreaSolids = representationItems.Cast<IIfcExtrudedAreaSolid>().ToArray();
             foreach (IIfcExtrudedAreaSolid extrudedAreaSolid in extrudedAreaSolids)
             {
                 if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef profileDef))
                     throw new Exception("The swept area is not a circle profile definition.");
-                
+
                 double teeBranchDiameter = profileDef.Radius * 2 * lengthPower;
-                
-                Matrix<double> matrix = extrudedAreaSolid.Position.ToMatrix();
-                Matrix<double> rotation = matrix.GetRotation();
-                
-                Vector<double> extrudedDir = extrudedAreaSolid.ExtrudedDirection.ToVector();
-                Vector<double> teeBranchDir = rotation.LeftMultiply(extrudedDir).Normalize(2);
+
+                FixedMatrix<Dim4> matrix = extrudedAreaSolid.Position.ToFixedMatrix();
+                FixedMatrix<Dim3> rotation = matrix.GetRotation();
+
+                FixedVector<Dim3> extrudedDir = extrudedAreaSolid.ExtrudedDirection.ToFixedVector();
+                FixedVector<Dim3> teeBranchDir = rotation.LeftMultiply(extrudedDir).Normalize();
                 double teeBranchLength = extrudedAreaSolid.Depth * lengthPower;
-                
-                Vector<double> startPos = matrix.GetOffset() * lengthPower;
-                Vector<double> projection = teeBranchDir * teeBranchLength;
-                Vector<double> endPos = startPos + projection;
-                
+
+                FixedVector<Dim3> startPos = matrix.GetTranslation() * lengthPower;
+                FixedVector<Dim3> projection = teeBranchDir * teeBranchLength;
+                FixedVector<Dim3> endPos = startPos + projection;
+
                 if (_comparer.Equals(startPos, position))
                 {
                     headProjection = projection;
@@ -64,7 +63,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortR
                 }
                 else if (_comparer.Equals(endPos, position))
                 {
-                    headProjection = -projection;
+                    headProjection = projection.Negate();
                     headDiameter = teeBranchDiameter;
                 }
                 else
@@ -74,11 +73,11 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortR
                 }
             }
 
-            Vector<double> mainDirection = mainProjection.Normalize(2);
-            Vector<double> headDirection = headProjection.Normalize(2);
-            
-            tee.PortA.SetGeometry(position - mainProjection / 2, mainDirection.Negate());
-            tee.PortB.SetGeometry(position + mainProjection / 2, mainDirection);
+            FixedVector<Dim3> mainDirection = mainProjection.Normalize();
+            FixedVector<Dim3> headDirection = headProjection.Normalize();
+
+            tee.PortA.SetGeometry(position - mainProjection * (1.0 / 2), mainDirection.Negate());
+            tee.PortB.SetGeometry(position + mainProjection * (1.0 / 2), mainDirection);
             tee.PortC.SetGeometry(position + headProjection, headDirection);
 
             tee.PortA.Metadata.Diameter = mainDiameter;

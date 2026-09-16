@@ -8,10 +8,6 @@ using IFCConverter.Start.Entities;
 using IFCConverter.Start.Entities.Anchors;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEntityImporters
 {
@@ -25,18 +21,18 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEn
         public void Import(StartAbstractAnchorEntity start, EngineeringModel model, StartMappingContext context)
         {
             StartNonstandardAnchorEntity nonstandardStart = (StartNonstandardAnchorEntity)start;
-            
+
             Anchor anchor = new Anchor(EntityId.New())
             {
                 Position = start.Position
             };
-            
+
             foreach (StartNonStandardRestraintModule startNonStandardRestraintModule in nonstandardStart.Restraints)
             {
                 AnchorRestraint restraint = new AnchorRestraint
                 {
                     IsDoubleSided = startNonStandardRestraintModule.Type.EnumValue == StartRestraintTypeEnum.RIGID_DOUBLE_SIDED,
-                    Direction = CalculateDirection(nonstandardStart, startNonStandardRestraintModule),
+                    Direction = CalculateDirection(nonstandardStart, startNonStandardRestraintModule)
                 };
 
                 anchor.Restraints.Add(restraint);
@@ -46,10 +42,10 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEn
             context.Register(start, anchor);
         }
 
-        private static Vector<double> CalculateDirection(StartNonstandardAnchorEntity start, StartNonStandardRestraintModule module)
+        private static FixedVector<Dim3> CalculateDirection(StartNonstandardAnchorEntity start, StartNonStandardRestraintModule module)
         {
             IStartSegmentEntity[] segmentEntities = start.ConnectedEntities.OfType<IStartSegmentEntity>().ToArray();
-            
+
             double restraintX = module.AngleX.SIProperty < 0
                 ? -Math.Cos(module.AngleX.SIProperty)
                 : Math.Cos(module.AngleX.SIProperty);
@@ -59,10 +55,10 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEn
             double restraintZ = module.AngleZ.SIProperty < 0
                 ? -Math.Cos(module.AngleZ.SIProperty)
                 : Math.Cos(module.AngleZ.SIProperty);
-            
+
             if (module.Local.EnumValue == StartRestraintAxesTypeEnum.NOT_LOCAL)
-                return new DenseVector(new double[] { restraintX, restraintY, restraintZ });
-            
+                return FixedVector<Dim3>.Builder.Dense(restraintX, restraintY, restraintZ);
+
             foreach (IStartSegmentEntity segmentEntity in segmentEntities)
             {
                 StartNodeEntity[] nodeEntities = segmentEntity.ConnectedEntities.OfType<StartNodeEntity>().ToArray();
@@ -71,14 +67,18 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEn
                 if (startNode == null || endNode == null)
                     continue;
 
-                Vector<double> direction = endNode.Position - startNode.Position;
-                Matrix<double> transitionMatrix =
-                    MatrixExtensions.CreateTransitionWithWorldUp(VectorExtensions.Zero, direction);
-                return transitionMatrix.GetZ() * restraintX +
-                       transitionMatrix.GetX() * restraintY +
-                       transitionMatrix.GetY() * restraintZ;
+                FixedVector<Dim3> direction = endNode.Position - startNode.Position;
+
+                FixedVector<Dim3> zAxis = direction;
+                FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+                FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+                FixedMatrix<Dim4> transitionMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros(), xAxis, yAxis, zAxis);
+                return transitionMatrix.GetZ().ToCartesian() * restraintX +
+                       transitionMatrix.GetX().ToCartesian() * restraintY +
+                       transitionMatrix.GetY().ToCartesian() * restraintZ;
             }
-            
+
             throw new Exception("Cannot calculate direction for anchor restraint module");
         }
     }

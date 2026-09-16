@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using IFCConverter.Domain;
+﻿using IFCConverter.Domain;
 using IFCConverter.Utils.Reflection;
 using Xbim.Ifc4.Interfaces;
 

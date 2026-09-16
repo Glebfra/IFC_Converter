@@ -5,6 +5,5 @@ namespace IFCConverter.IFC.Interfaces
     public interface IIfcFlowMovingDeviceBuilder<out T> : IIfcDistributionFlowElementBuilder<T>
         where T : IIfcFlowMovingDevice
     {
-        
     }
 }

@@ -10,7 +10,7 @@ namespace IFCConverter.Importer.DomainToStart.Phases
     internal sealed class DomainAugmentPhase : IDomainToStartPhase
     {
         private readonly IDomainAugmentersRegistry _registry = new DomainAugmentersRegistry();
-        
+
         public void Execute(EngineeringModel model, ExportContext context)
         {
             foreach (Entity entity in model.Entities.ToArray())

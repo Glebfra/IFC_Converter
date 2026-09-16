@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using IFCConverter.Domain;
 using IFCConverter.Exporter.StartToDomain;
-using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Diagnostics;
 
 namespace IFCConverter.Exporter.Pipeline
 {

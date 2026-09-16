@@ -10,7 +10,7 @@ namespace IFCConverter.Importer.DomainToStart.DomainAugmenters
     {
         public override bool CanAugment(Entity entity)
         {
-            return entity is AbstractFitting && 
+            return entity is AbstractFitting &&
                    !(entity is Reducer);
         }
 
@@ -21,13 +21,13 @@ namespace IFCConverter.Importer.DomainToStart.DomainAugmenters
             IReadOnlyCollection<Connection> connections = model.GetConnections(entity.Id).ToArray();
             if (connections.Count == entity.Ports.Count)
                 return;
-            
+
             foreach (Port port in entity.Ports)
             {
                 IEnumerable<Connection> portConnections = model.GetConnections(port.Id);
                 if (portConnections.Any())
                     continue;
-                
+
                 Segment segment = AddSegment(port, fitting);
                 model.Add(segment);
             }

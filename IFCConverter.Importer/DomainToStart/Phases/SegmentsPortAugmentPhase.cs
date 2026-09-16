@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.DomainToStart.Phases
             {
                 if (connection.Type != ConnectionType.PipeToFitting)
                     continue;
-                
+
                 EntityId portAEntityId = connection.PortA.Owner;
                 EntityId portBEntityId = connection.PortB.Owner;
 

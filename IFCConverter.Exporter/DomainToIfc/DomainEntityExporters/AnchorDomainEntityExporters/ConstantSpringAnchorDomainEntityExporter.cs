@@ -6,12 +6,9 @@ using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.SharedComponentElements;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEntityExporters
 {
@@ -21,7 +18,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
         {
             if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
                 return false;
-            
+
             return type == StartElementTypeEnum.CONSTANT_FORCE_SUPPORT ||
                    type == StartElementTypeEnum.CONSTANT_FORCE_SUPPORT_HANGER;
         }
@@ -30,27 +27,28 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
         {
             if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
                 return;
-            
-            Matrix<double> segmentMatrix = (Matrix<double>)anchor.Metadata.Meta["SegmentMatrix"];
+
+            FixedMatrix<Dim4> segmentMatrix = (FixedMatrix<Dim4>)anchor.Metadata.Meta["SegmentMatrix"];
+
             double diameter = anchor.Port.Metadata.Diameter;
-            
-            bool isDoubleSided = segmentMatrix.GetZ().IsParallel(VectorExtensions.Z);
-            Vector<double> direction = GetDirection(type);
-            
-            Vector<double> position, doubleSidedDisplacement;
+
+            bool isDoubleSided = segmentMatrix.GetZ().ToCartesian().IsParallel(FixedVector<Dim3>.Builder.Z());
+            FixedVector<Dim3> direction = GetDirection(type);
+
+            FixedVector<Dim3> position, doubleSidedDisplacement;
             if (isDoubleSided)
             {
-                position = VectorExtensions.Zero;
-                doubleSidedDisplacement = segmentMatrix.GetX() * diameter;
+                position = FixedVector<Dim3>.Zeros();
+                doubleSidedDisplacement = segmentMatrix.GetX().ToCartesian() * diameter;
             }
             else
             {
                 double displacement = MathExtensions.CalculateAnchorDisplacement(segmentMatrix, diameter);
                 position = -displacement * direction;
-                doubleSidedDisplacement = VectorExtensions.Zero;
+                doubleSidedDisplacement = FixedVector<Dim3>.Zeros();
             }
-            
-            IIfcGeometry geometry = ConstantSpringAnchorGeometry.CreateGeometry(model, new ConstantSpringSupportAnchorGeometryProperties()
+
+            IIfcGeometry geometry = ConstantSpringAnchorGeometry.CreateGeometry(model, new ConstantSpringSupportAnchorGeometryProperties
             {
                 Position = position,
                 Direction = direction,
@@ -59,8 +57,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
                 DoubleSidedDisplacement = doubleSidedDisplacement
             });
             geometry.AssignColor(Color.FromHEX(anchor.Metadata.Color));
-            
-            Matrix<double> placement = MatrixExtensions.CreateTransition(anchor.Position);
+
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(anchor.Position);
             IIfcDiscreteAccessoryBuilder<IIfcDiscreteAccessory> builder =
                 new IfcDiscreteAccessoryBuilder<IfcDiscreteAccessory>(anchor.Metadata.Name, anchor.Metadata.Type, IfcDiscreteAccessoryTypeEnum.USERDEFINED);
             builder.AssignGeometry(geometry);
@@ -69,15 +67,15 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
             IIfcDiscreteAccessory instance = builder.CreateInstance(model);
             context.Register(anchor, instance);
         }
-        
-        private static Vector<double> GetDirection(StartElementTypeEnum type)
+
+        private static FixedVector<Dim3> GetDirection(StartElementTypeEnum type)
         {
             switch (type)
             {
                 case StartElementTypeEnum.CONSTANT_FORCE_SUPPORT:
-                    return VectorExtensions.Z;
+                    return FixedVector<Dim3>.Builder.Z();
                 case StartElementTypeEnum.CONSTANT_FORCE_SUPPORT_HANGER:
-                    return VectorExtensions.Z.Negate();
+                    return FixedVector<Dim3>.Builder.Z().Negate();
             }
 
             throw new ArgumentOutOfRangeException(nameof(type));

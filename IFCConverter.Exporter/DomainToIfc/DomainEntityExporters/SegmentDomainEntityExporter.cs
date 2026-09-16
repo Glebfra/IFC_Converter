@@ -5,13 +5,11 @@ using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
+using IFCConverter.Utils.Mathematics;
 using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -21,8 +19,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
         {
             if (!Enum.TryParse(entity.Metadata.Type, out StartElementTypeEnum type))
                 return false;
-            
-            return entity is Segment && 
+
+            return entity is Segment &&
                    type != StartElementTypeEnum.CONE_ELEMENT;
         }
 
@@ -30,23 +28,27 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
         {
             Segment segment = (Segment)entity;
 
-            Vector<double> projection = segment.EndPort.Position - segment.StartPort.Position;
+            FixedVector<Dim3> projection = segment.EndPort.Position - segment.StartPort.Position;
             double length = projection.L2Norm();
             if (length.AlmostEqual(0))
                 return;
 
-            Vector<double> direction = projection / length;
+            FixedVector<Dim3> direction = projection * (1 / length);
 
             IIfcGeometry geometry = PipeGeometry.CreateGeometry(model, new PipeGeometryProperties
             {
                 Diameter = segment.Diameter,
                 Length = length,
-                Position = VectorExtensions.Zero,
-                Direction = VectorExtensions.Z
+                Position = FixedVector<Dim3>.Zeros(),
+                Direction = FixedVector<Dim3>.Builder.Z()
             });
             geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
 
-            Matrix<double> placement = MatrixExtensions.CreateTransition(segment.StartPort.Position, direction);
+            FixedVector<Dim3> zAxis = direction;
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(segment.StartPort.Position, xAxis, yAxis, zAxis);
             IIfcPipeSegmentBuilder<IfcPipeSegment> builder =
                 new IfcPipeSegmentBuilder<IfcPipeSegment>(entity.Metadata.Name, entity.Metadata.Type, IfcPipeSegmentTypeEnum.RIGIDSEGMENT);
             builder.AssignGeometry(geometry);

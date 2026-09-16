@@ -21,7 +21,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartEquipmen
                 Position = start.Position,
                 SecondPosition = start.SecondPosition
             };
-            
+
             model.Add(equipment);
             context.Register(start, equipment);
         }

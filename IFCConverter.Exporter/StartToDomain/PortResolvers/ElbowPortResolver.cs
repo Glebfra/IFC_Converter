@@ -3,11 +3,10 @@ using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
-using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Fittings;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -36,8 +35,8 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             IStartSegmentEntity firstSegment = segments[0];
             IStartSegmentEntity secondSegment = segments[1];
 
-            Vector<double> firstDirection = firstSegment.GetProjectionFromPoint(elbow.Position).Normalize(2);
-            Vector<double> secondDirection = secondSegment.GetProjectionFromPoint(elbow.Position).Normalize(2);
+            FixedVector<Dim3> firstDirection = firstSegment.GetProjectionFromPoint(elbow.Position).Normalize();
+            FixedVector<Dim3> secondDirection = secondSegment.GetProjectionFromPoint(elbow.Position).Normalize();
             double angle = Math.PI - firstDirection.Angle(secondDirection);
             double torusSegmentLength = MathExtensions.CalculateTorusSegmentLength(elbow.Radius, angle);
 

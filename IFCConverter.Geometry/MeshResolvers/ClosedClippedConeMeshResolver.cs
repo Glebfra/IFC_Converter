@@ -5,15 +5,15 @@ namespace IFCConverter.Geometry.MeshResolvers
 {
     public struct ClosedClippedConeMeshProperties
     {
-        
+
     }
-    
+
     public sealed class ClosedClippedConeMeshResolver
     {
+        private readonly PlanarComponentFinder _finder;
         private readonly double _normalTolerance;
         private readonly double _planeTolerance;
-        private readonly PlanarComponentFinder _finder;
-        
+
         public ClosedClippedConeMeshResolver(double normalTolerance = 1e-6, double planeTolerance = 1e-4)
         {
             _normalTolerance = normalTolerance;

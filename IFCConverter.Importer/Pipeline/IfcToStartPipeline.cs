@@ -6,8 +6,8 @@ namespace IFCConverter.Importer.Pipeline
 {
     internal sealed class IfcToStartPipeline
     {
-        private readonly IfcToDomainPipeline _ifcToDomainPipeline = new IfcToDomainPipeline();
         private readonly DomainToStartPipeline _domainToStartPipeline = new DomainToStartPipeline();
+        private readonly IfcToDomainPipeline _ifcToDomainPipeline = new IfcToDomainPipeline();
 
         public void Execute(IModel model, IStartProject startProject)
         {

@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
         public EntityConnectionsResolversRegistry() : base(typeof(EntityConnectionsResolversRegistry).Assembly)
         {
         }
-        
+
         public IEnumerable<IEntityConnectionResolver> ResolveAll()
         {
             return ResolveAll(resolver => resolver.CanResolve());

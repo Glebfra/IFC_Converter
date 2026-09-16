@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
-using IFCConverter.Start.Augmenters;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Newtonsoft.Json;
 
 namespace IFCConverter.Start.Entities.Segments
@@ -14,7 +13,7 @@ namespace IFCConverter.Start.Entities.Segments
     ///     Represents a cone element entity in the IFCConverter.Start framework.
     ///     Implements the <see cref="IStartMaterializedEntity" /> and <see cref="IStartConeEntity" /> interfaces.
     /// </summary>
-    [StartElement(StartElementTypeEnum.CONE_ELEMENT, typeof(StartClippableEntityAugmenter))]
+    [StartElement(StartElementTypeEnum.CONE_ELEMENT)]
     public sealed class StartConeElementEntity : StartAbstractSegmentEntity,
         IStartMaterializedEntity, IStartConeEntity
     {
@@ -28,7 +27,7 @@ namespace IFCConverter.Start.Entities.Segments
         /// <summary>
         ///     Gets the position of the cone element, which corresponds to its start position.
         /// </summary>
-        public Vector<double> Position => StartPosition;
+        public FixedVector<Dim3> Position => StartPosition;
 
         /// <summary>
         ///     Gets the points defining the cone element, including the start and end positions.
@@ -36,7 +35,7 @@ namespace IFCConverter.Start.Entities.Segments
         /// </summary>
         [JsonIgnore]
         [StartIgnore]
-        public IEnumerable<Vector<double>> Points => new[]
+        public IEnumerable<FixedVector<Dim3>> Points => new[]
         {
             StartPosition, EndPosition
         };

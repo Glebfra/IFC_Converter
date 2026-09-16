@@ -8,7 +8,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
     internal sealed class StartEquipmentEntityImporter : IStartEntityImporter
     {
         private readonly IStartEquipmentEntityImportersRegistry _registry = new StartEquipmentEntityImportersRegistry();
-        
+
         public bool CanImport(IStartEntity source)
         {
             return source is StartAbstractEquipmentEntity;

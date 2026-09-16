@@ -8,9 +8,9 @@ namespace IFCConverter.IFC.Builders.Relations
     public class IfcRelAssociatesMaterialBuilder<T> : IIfcRelAssociatesMaterialBuilder<T>
         where T : IIfcRelAssociatesMaterial, IInstantiableEntity
     {
-        private IIfcMaterial _material;
         private readonly List<IIfcDefinitionSelect> _relatedObjects = new List<IIfcDefinitionSelect>();
-        
+        private IIfcMaterial _material;
+
         public IIfcMaterialSelect RelatingMaterial => _material;
         public IReadOnlyCollection<IIfcDefinitionSelect> RelatedObjects => _relatedObjects;
 

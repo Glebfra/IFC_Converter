@@ -6,7 +6,7 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
-using IFCConverter.Importer.Interfaces;
+using IFCConverter.Importer.PropertySets;
 using IFCConverter.Importer.PropertySets.Aveva;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
@@ -33,7 +33,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AvevaEntityImporters
             {
                 Position = avevaPset.Pos * lengthPower
             };
-            
+
             model.Add(tee);
             context.Register(tee, product);
         }

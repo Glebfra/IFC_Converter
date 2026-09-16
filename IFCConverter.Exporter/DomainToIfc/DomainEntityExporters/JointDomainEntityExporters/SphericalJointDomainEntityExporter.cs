@@ -3,8 +3,8 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEntityExporters
 {
@@ -15,15 +15,15 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
             if (!Enum.TryParse(joint.Metadata.Type, out StartElementTypeEnum type))
                 return false;
 
-            return type == StartElementTypeEnum.BALL_EXPANSION_JOINT || 
+            return type == StartElementTypeEnum.BALL_EXPANSION_JOINT ||
                    type == StartElementTypeEnum.ANGULAR_EXPANSION_JOINT;
         }
 
         override protected IIfcGeometry CreateGeometry(Joint joint, IModel model)
         {
-            return BallExpansionJointGeometry.CreateGeometry(model, new BallExpansionJointGeometryProperties()
+            return BallExpansionJointGeometry.CreateGeometry(model, new BallExpansionJointGeometryProperties
             {
-                Position = VectorExtensions.Zero,
+                Position = FixedVector<Dim3>.Zeros(),
                 Diameter = joint.Length * 2
             });
         }

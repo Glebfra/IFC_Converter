@@ -9,8 +9,8 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
     {
         public bool CanImport(StartAbstractSegmentEntity segment)
         {
-            return segment is StartPipeEntity || 
-                   segment is StartCylindricalShellEntity || 
+            return segment is StartPipeEntity ||
+                   segment is StartCylindricalShellEntity ||
                    segment is StartConeElementEntity;
         }
 
@@ -18,7 +18,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
         {
             Segment pipe = new Segment(EntityId.New())
             {
-                Diameter = segment.Diameter.SIProperty,
+                Diameter = segment.Diameter.SIProperty
             };
 
             model.Add(pipe);
