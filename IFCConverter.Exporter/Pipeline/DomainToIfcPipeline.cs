@@ -1,6 +1,7 @@
 ﻿using System;
 using IFCConverter.Domain;
 using IFCConverter.Exporter.DomainToIfc;
+using IFCConverter.Exporter.DomainToIfc.Phases;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
