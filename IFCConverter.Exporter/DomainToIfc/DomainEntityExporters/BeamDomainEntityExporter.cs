@@ -22,14 +22,17 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
         public void Export(Entity entity, IModel model, ExportContext context)
         {
             Beam beam = (Beam)entity;
-
             FixedMatrix<Dim4> transformation = (FixedMatrix<Dim4>)beam.Metadata.Meta["TransformationMatrix"];
-            FixedMatrix<Dim3> ma = FixedMatrix<Dim3>.Builder.CreateRotationAroundVector(transformation.GetZ().ToCartesian(), beam.SectionAxisAngle);
-            FixedVector<Dim3> refDirection = ma.Multiply(transformation.GetY().ToCartesian());
+
+            FixedMatrix<Dim3> rotation = transformation.GetRotation();
+            FixedMatrix<Dim3> ma = FixedMatrix<Dim3>.Builder.CreateRotationAroundVector(rotation.GetZ(), beam.SectionAxisAngle);
+            rotation = ma * rotation;
+
+            FixedVector<Dim3> direction = rotation.GetZ();
+            FixedVector<Dim3> refDirection = rotation.GetY();
 
             FixedVector<Dim3> projection = beam.EndPort.Position - beam.StartPort.Position;
             double length = projection.L2Norm();
-            FixedVector<Dim3> direction = projection * (1 / length);
 
             if (!Enum.TryParse((string)entity.Metadata.Meta["BeamType"], out StartBeamTypeEnum type))
                 throw new InvalidOperationException($"Cannot find type for {entity.Id}");

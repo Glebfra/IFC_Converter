@@ -58,9 +58,7 @@
         <Compile Include="Mathematics\FixedMatrix.cs"/>
         <Compile Include="Mathematics\FixedVector.cs"/>
         <Compile Include="Mathematics\MathExtensions.cs"/>
-        <Compile Include="Mathematics\MatrixExtensions.cs"/>
         <Compile Include="Mathematics\VectorComparer.cs"/>
-        <Compile Include="Mathematics\VectorExtensions.cs"/>
         <Compile Include="Pipeline\ConversionResult.cs"/>
         <Compile Include="Pipeline\ExportDataContainer.cs"/>
         <Compile Include="Pipeline\IDependableAttribute.cs"/>

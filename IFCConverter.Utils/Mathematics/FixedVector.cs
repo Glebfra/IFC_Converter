@@ -257,7 +257,7 @@ namespace IFCConverter.Utils.Mathematics
 
         public static double Angle(FixedVector<TDimension> a, FixedVector<TDimension> b)
         {
-            return a.Vector.Angle(b.Vector);
+            return Math.Acos(a.Vector.Normalize(2).DotProduct(b.Vector.Normalize(2)));
         }
 
         public override bool Equals(object obj)
@@ -364,7 +364,7 @@ namespace IFCConverter.Utils.Mathematics
 
         public static FixedVector<Dim3> CrossProduct(this FixedVector<Dim3> a, FixedVector<Dim3> b)
         {
-            return new FixedVector<Dim3>(a.Vector.CrossProduct(b.Vector));
+            return FixedVector<Dim3>.Builder.Dense(a[1] * b[2] - a[2] * b[1], -a[0] * b[2] + a[2] * b[0], a[0] * b[1] - a[1] * b[0]);
         }
 
         public static FixedVector<Dim4> ToHomogeneous(this FixedVector<Dim3> vector, double value)

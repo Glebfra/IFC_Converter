@@ -140,26 +140,7 @@ namespace IFCConverter.Start.Entities.Segments
         ///     Gets the start transformation 4x4 matrix of the segment.
         /// </summary>
         [JsonIgnore]
-        public virtual FixedMatrix<Dim4> TransformationMatrix
-        {
-            get
-            {
-                FixedVector<Dim3> xm = Projection.Normalize();
-
-                FixedVector<Dim3> firstArbitraryVector = FixedVector<Dim3>.Builder.Z();
-                if (firstArbitraryVector.IsParallel(xm))
-                    firstArbitraryVector = FixedVector<Dim3>.Builder.Y().Negate();
-                FixedVector<Dim3> secondArbitraryVector = xm.CrossProduct(firstArbitraryVector).Normalize();
-
-                FixedVector<Dim3> zm = xm.CrossProduct(secondArbitraryVector).Normalize();
-                if (zm.Dot(FixedVector<Dim3>.Builder.Z()) < 0)
-                    zm = zm.Negate();
-
-                FixedVector<Dim3> ym = zm.CreateNormalVector(xm).Normalize();
-
-                return FixedMatrix<Dim4>.Builder.CreateTransition(StartPosition, ym, zm, xm);
-            }
-        }
+        public virtual FixedMatrix<Dim4> TransformationMatrix => GetTransformationMatrix();
 
         /// <summary>
         ///     Determines whether the specified position is closer to the start position of the segment.
@@ -171,6 +152,20 @@ namespace IFCConverter.Start.Entities.Segments
             FixedVector<Dim3> startDirection = StartPosition - position;
             FixedVector<Dim3> endDirection = EndPosition - position;
             return startDirection.L2Norm() < endDirection.L2Norm();
+        }
+
+        private FixedMatrix<Dim4> GetTransformationMatrix()
+        {
+            FixedVector<Dim3> globalUp = FixedVector<Dim3>.Builder.Z();
+            FixedVector<Dim3> xm = Projection.Normalize();
+
+            if (xm.IsParallel(globalUp))
+                globalUp = FixedVector<Dim3>.Builder.Y();
+
+            FixedVector<Dim3> ym = globalUp.CreateNormalVector(xm).Normalize();
+            FixedVector<Dim3> zm = xm.CreateNormalVector(ym).Normalize();
+
+            return FixedMatrix<Dim4>.Builder.CreateTransition(StartPosition, ym, zm, xm);
         }
     }
 }

@@ -50,8 +50,8 @@ namespace IFCConverter.IFC.Geometries
             FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
 
             FixedVector<Dim3> zAxis = properties.Direction.Normalize();
-            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
-            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector().Normalize();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).Normalize();
             FixedMatrix<Dim4> extrudedAreaMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(extrudedPoint, xAxis, yAxis, zAxis);
 
             double xDim = properties.Diameter * DiameterToXDimFactor;
@@ -66,7 +66,7 @@ namespace IFCConverter.IFC.Geometries
 
             IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> extrudedAreaSolidBuilder =
                 new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(
-                    length, FixedVector<Dim3>.Zeros(), profileDef
+                    length, FixedVector<Dim3>.Builder.Z(), profileDef
                 );
             extrudedAreaSolidBuilder.CreatePosition(model, extrudedAreaMatrix);
 

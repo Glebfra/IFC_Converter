@@ -45,48 +45,6 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool LessThan(FixedVector<Dim3> x, FixedVector<Dim3> y)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return x.L2Norm() < y.L2Norm();
-        }
-
-        [Pure]
-        public bool GreaterThan(FixedVector<Dim3> x, FixedVector<Dim3> y)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return x.L2Norm() > y.L2Norm();
-        }
-
-        [Pure]
-        public bool NearerThan(FixedVector<Dim3> x, FixedVector<Dim3> y, FixedVector<Dim3> origin)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return (x - origin).L2Norm() <= (y - origin).L2Norm();
-        }
-
-        [Pure]
-        public bool FartherThan(FixedVector<Dim3> x, FixedVector<Dim3> y, FixedVector<Dim3> origin)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return (x - origin).L2Norm() >= (y - origin).L2Norm();
-        }
-
-        [Pure]
-        public bool IsParallel(FixedVector<Dim3> first, FixedVector<Dim3> second)
-        {
-            return first.Normalize().CrossProduct(second.Normalize()).L2Norm() < _tolerance;
-        }
-
-        [Pure]
         private long Quantize(double value)
         {
             return (long)Math.Round(value / _tolerance);

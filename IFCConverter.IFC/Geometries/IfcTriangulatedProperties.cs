@@ -129,9 +129,9 @@ namespace IFCConverter.IFC.Geometries
         [Pure]
         public static IfcTriangulatedProperties CreateCone(ConeTriangulatedGeometryProperties properties)
         {
-            FixedVector<Dim3> zAxis = properties.TopConePoint - properties.BottomConeCenter;
-            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
-            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+            FixedVector<Dim3> zAxis = (properties.TopConePoint - properties.BottomConeCenter).Normalize();
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector().Normalize();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).Normalize();
 
             FixedMatrix<Dim4> botMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.BottomConeCenter, xAxis, yAxis, zAxis);
 
@@ -144,8 +144,8 @@ namespace IFCConverter.IFC.Geometries
             FixedVector<Dim3> heightDirection = properties.Direction
                                                 ?? properties.TopConeCenter - properties.BottomConeCenter;
             FixedVector<Dim3> zAxis = heightDirection.Normalize();
-            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
-            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector().Normalize();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).Normalize();
 
             FixedMatrix<Dim4> botMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.BottomConeCenter, xAxis, yAxis, zAxis);
             FixedMatrix<Dim4> topMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.TopConeCenter, xAxis, yAxis, zAxis);
