@@ -8,10 +8,11 @@ namespace IFCConverter.Importer.Pipeline
     internal sealed class IfcToDomainPipeline
     {
         private readonly IfcToDomainPhaseRegistry _registry = new IfcToDomainPhaseRegistry();
+        private readonly ImportTypeResolver _importTypeResolver = new ImportTypeResolver();
 
         public EngineeringModel Execute(IModel model)
         {
-            ImportType type = ResolveType(model);
+            ImportType type = _importTypeResolver.ResolveImportType(model);
 
             EngineeringModel domain = new EngineeringModel();
             ImportContext context = new ImportContext(type);
@@ -20,14 +21,6 @@ namespace IFCConverter.Importer.Pipeline
                 ifcToDomainPhase.Execute(model, domain, context);
 
             return domain;
-        }
-
-        private static ImportType ResolveType(IModel model)
-        {
-            if (model.Header.CreatingApplication.Contains("AVEVA E3D"))
-                return ImportType.AVEVA;
-
-            return ImportType.UNKNOWN;
         }
     }
 }
