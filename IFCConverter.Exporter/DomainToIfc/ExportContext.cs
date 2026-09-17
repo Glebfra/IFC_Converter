@@ -9,6 +9,7 @@ namespace IFCConverter.Exporter.DomainToIfc
     public sealed class ExportContext
     {
         private readonly Dictionary<EntityId, IIfcProduct> _products = new Dictionary<EntityId, IIfcProduct>();
+        private readonly Dictionary<string, IIfcMaterial> _materials = new Dictionary<string, IIfcMaterial>();
 
         public IReadOnlyCollection<IIfcProduct> Products => _products.Values;
 
@@ -25,6 +26,19 @@ namespace IFCConverter.Exporter.DomainToIfc
             _products.Add(entity.Id, product);
         }
 
+        public void RegisterMaterial(string materialName, IIfcMaterial material)
+        {
+            if (materialName == null)
+                throw new ArgumentNullException(nameof(materialName));
+            if (material == null)
+                throw new ArgumentNullException(nameof(material));
+            
+            if (_materials.ContainsKey(materialName))
+                throw new InvalidOperationException("Material already registered");
+            
+            _materials.Add(materialName, material);
+        }
+
         public IIfcProduct Get(EntityId entityId)
         {
             IIfcProduct product;
@@ -37,6 +51,20 @@ namespace IFCConverter.Exporter.DomainToIfc
         public bool TryGet(EntityId entityId, out IIfcProduct result)
         {
             return _products.TryGetValue(entityId, out result);
+        }
+
+        public IIfcMaterial GetMaterial(string materialName)
+        {
+            IIfcMaterial material;
+            if (!_materials.TryGetValue(materialName, out material))
+                throw new KeyNotFoundException($"No IFC material exists with name {materialName}");
+            
+            return material;
+        }
+
+        public bool TryGetMaterial(string materialName, out IIfcMaterial material)
+        {
+            return _materials.TryGetValue(materialName, out material);
         }
     }
 }

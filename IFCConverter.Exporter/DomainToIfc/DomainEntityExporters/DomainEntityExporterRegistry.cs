@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Domain.Entities;
-using IFCConverter.Exporter.DomainToIfc.DomainEntityExporters;
 using IFCConverter.Utils.Reflection;
 
-namespace IFCConverter.Exporter.DomainToIfc
+namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
     internal sealed class DomainEntityExporterRegistry : ReflectionRegistry<IDomainEntityExporter>, IDomainEntityExporterRegistry
     {

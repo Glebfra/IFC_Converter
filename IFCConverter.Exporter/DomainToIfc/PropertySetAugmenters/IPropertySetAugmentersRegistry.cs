@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Domain.Entities;
-using IFCConverter.Exporter.DomainToIfc.PropertySetAugmenters;
 
-namespace IFCConverter.Exporter.DomainToIfc
+namespace IFCConverter.Exporter.DomainToIfc.PropertySetAugmenters
 {
     internal interface IPropertySetAugmentersRegistry
     {
