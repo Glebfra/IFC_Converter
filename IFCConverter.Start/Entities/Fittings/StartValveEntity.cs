@@ -8,8 +8,7 @@ using Newtonsoft.Json;
 namespace IFCConverter.Start.Entities.Fittings
 {
     [StartElement(StartElementTypeEnum.VALVE)]
-    public sealed class StartValveEntity : StartAbstractFittingEntity,
-        IStartClippingEntity
+    public sealed class StartValveEntity : StartAbstractFittingEntity
     {
         [JsonProperty(StartPropertyName.Diameter)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
@@ -31,10 +30,5 @@ namespace IFCConverter.Start.Entities.Fittings
         [JsonProperty(StartPropertyName.NominalPressure)]
         [JsonConverter(typeof(JsonStartConverter<PressureValueProperty<double>>))]
         public IStartValueProperty<double> NominalPressure { get; set; } = new PressureValueProperty<double>();
-
-        public void ClipEntity(IStartClippableEntity clippable)
-        {
-            clippable.Clip(Position, Length.SIProperty / 2);
-        }
     }
 }

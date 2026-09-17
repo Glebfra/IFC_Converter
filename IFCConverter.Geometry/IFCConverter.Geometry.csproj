@@ -33,7 +33,7 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+        <Reference Include="MathNet.Numerics">
             <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
         </Reference>
         <Reference Include="mscorlib"/>
@@ -52,11 +52,11 @@
         <Compile Include="MeshBuilders\IMeshBuilder.cs"/>
         <Compile Include="MeshBuilders\MeshBuilder.cs"/>
         <Compile Include="MeshBuilders\TorusSegmentMeshBuilder.cs"/>
-        <Compile Include="MeshResolvers\ClippedConeGeometry.cs" />
-        <Compile Include="MeshResolvers\ClippedConeMeshAnalyzer.cs" />
-        <Compile Include="MeshResolvers\ClosedClippedConeMeshResolver.cs" />
-        <Compile Include="MeshResolvers\PlanarComponent.cs" />
-        <Compile Include="MeshResolvers\PlanarComponentFinder.cs" />
+        <Compile Include="MeshResolvers\ClippedConeGeometry.cs"/>
+        <Compile Include="MeshResolvers\ClippedConeMeshAnalyzer.cs"/>
+        <Compile Include="MeshResolvers\ClosedClippedConeMeshResolver.cs"/>
+        <Compile Include="MeshResolvers\PlanarComponent.cs"/>
+        <Compile Include="MeshResolvers\PlanarComponentFinder.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Triangulators\EarClippingTriangulator.cs"/>
         <Compile Include="Triangulators\ITriangulator.cs"/>

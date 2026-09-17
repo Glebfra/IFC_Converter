@@ -8,7 +8,7 @@ namespace IFCConverter.Utils.Mathematics
         where TDimension : struct, IDimension
     {
         private static int Dimension => Dimension<TDimension>.Dim;
-        
+
         public FixedMatrix<TDimension> Dense()
         {
             return new FixedMatrix<TDimension>(Matrix<double>.Build.Dense(Dimension, Dimension));
@@ -18,14 +18,15 @@ namespace IFCConverter.Utils.Mathematics
         {
             if (values.Length != Dimension * Dimension)
                 throw new ArgumentException($"Expected the list of values with length {Dimension * Dimension}, but taken {values.Length}");
-            
+
             return new FixedMatrix<TDimension>(Matrix<double>.Build.Dense(Dimension, Dimension, values));
         }
 
         public FixedMatrix<TDimension> Dense(double[,] values)
         {
             if (values.GetLength(0) != Dimension || values.GetLength(1) != Dimension)
-                throw new ArgumentException($"Expected the list of values with size {Dimension}x{Dimension}, but taken {values.GetLength(0)}x{values.GetLength(1)}");
+                throw new ArgumentException(
+                    $"Expected the list of values with size {Dimension}x{Dimension}, but taken {values.GetLength(0)}x{values.GetLength(1)}");
 
             return new FixedMatrix<TDimension>(Matrix<double>.Build.DenseOfArray(values));
         }
@@ -34,47 +35,48 @@ namespace IFCConverter.Utils.Mathematics
         {
             if (vector.Length != Dimension)
                 throw new ArgumentException($"Expected the list of vectors with length {Dimension}, but taken {vector.Length}");
-            
+
             return new FixedMatrix<TDimension>(Matrix<double>.Build.DenseOfColumnVectors(vector.Select(vec => vec.Vector)));
         }
     }
-    
+
     public class FixedMatrix<TDimension>
         where TDimension : struct, IDimension
     {
+
+        public FixedMatrix(Matrix<double> matrix)
+        {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
+            if (matrix.RowCount != Dimension || matrix.ColumnCount != Dimension)
+                throw new ArgumentException($"Expected matrix {Dimension}x{Dimension}");
+
+            Matrix = matrix;
+        }
+
         public static int Dimension => Dimension<TDimension>.Dim;
         public static FixedMatrixBuilder<TDimension> Builder => new FixedMatrixBuilder<TDimension>();
 
-        public Matrix<double> Matrix { get; }
+        internal Matrix<double> Matrix { get; }
 
         public double this[int row, int col]
         {
             get => Matrix[row, col];
             set => Matrix[row, col] = value;
         }
-        
-        public FixedMatrix(Matrix<double> matrix)
-        {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
-            
-            if (matrix.RowCount != Dimension || matrix.ColumnCount != Dimension)
-                throw new ArgumentException($"Expected matrix {Dimension}x{Dimension}");
-            
-            Matrix = matrix;
-        }
 
         public void SetSubMatrix<TOtherDimension>(FixedMatrix<TOtherDimension> other, int rowIndex, int colIndex)
             where TOtherDimension : struct, IDimension
         {
             int otherDim = FixedMatrix<TOtherDimension>.Dimension;
-            
+
             if (Dimension < otherDim)
                 throw new ArgumentOutOfRangeException(nameof(FixedMatrix<TOtherDimension>));
-            
+
             if (rowIndex + otherDim >= Dimension || colIndex + otherDim >= Dimension)
                 throw new ArgumentOutOfRangeException($"Resulted endCol || endRow is higher than matrix dimension: {Dimension}");
-            
+
             Matrix.SetSubMatrix(rowIndex, colIndex, other.Matrix);
         }
 
@@ -143,31 +145,31 @@ namespace IFCConverter.Utils.Mathematics
             return new FixedMatrix<TDimension>(Matrix<double>.Build.DenseIdentity(Dimension));
         }
 
-        public static FixedMatrix<TDimension> operator+(FixedMatrix<TDimension> a, FixedMatrix<TDimension> b)
+        public static FixedMatrix<TDimension> operator +(FixedMatrix<TDimension> a, FixedMatrix<TDimension> b)
         {
             return Add(a, b);
         }
 
-        public static FixedMatrix<TDimension> operator-(FixedMatrix<TDimension> a, FixedMatrix<TDimension> b)
+        public static FixedMatrix<TDimension> operator -(FixedMatrix<TDimension> a, FixedMatrix<TDimension> b)
         {
             return Subtract(a, b);
         }
 
-        public static FixedMatrix<TDimension> operator*(FixedMatrix<TDimension> a, FixedMatrix<TDimension> b)
+        public static FixedMatrix<TDimension> operator *(FixedMatrix<TDimension> a, FixedMatrix<TDimension> b)
         {
             return Multiply(a, b);
         }
 
-        public static FixedVector<TDimension> operator*(FixedMatrix<TDimension> a, FixedVector<TDimension> b)
+        public static FixedVector<TDimension> operator *(FixedMatrix<TDimension> a, FixedVector<TDimension> b)
         {
             return Multiply(a, b);
         }
-        
-        public static FixedVector<TDimension> operator*(FixedVector<TDimension> b, FixedMatrix<TDimension> a)
+
+        public static FixedVector<TDimension> operator *(FixedVector<TDimension> b, FixedMatrix<TDimension> a)
         {
             return LeftMultiply(a, b);
         }
-        
+
         public static FixedMatrix<TDimension> Add(FixedMatrix<TDimension> a, FixedMatrix<TDimension> b)
         {
             return new FixedMatrix<TDimension>(a.Matrix.Add(b.Matrix));
@@ -187,7 +189,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             return new FixedVector<TDimension>(a.Matrix.Multiply(b.Vector));
         }
-        
+
         public static FixedVector<TDimension> LeftMultiply(FixedMatrix<TDimension> a, FixedVector<TDimension> b)
         {
             return new FixedVector<TDimension>(a.Matrix.LeftMultiply(b.Vector));
@@ -200,30 +202,113 @@ namespace IFCConverter.Utils.Mathematics
         {
             return matrix.GetColumn(0);
         }
-        
+
         public static FixedVector<Dim3> GetY(this FixedMatrix<Dim3> matrix)
         {
             return matrix.GetColumn(1);
         }
-        
+
         public static FixedVector<Dim3> GetZ(this FixedMatrix<Dim3> matrix)
         {
             return matrix.GetColumn(2);
         }
-        
+
         public static void SetX(this FixedMatrix<Dim3> matrix, FixedVector<Dim3> vector)
         {
             matrix.SetColumn(0, vector);
         }
-        
+
         public static void SetY(this FixedMatrix<Dim3> matrix, FixedVector<Dim3> vector)
         {
             matrix.SetColumn(1, vector);
         }
-        
+
         public static void SetZ(this FixedMatrix<Dim3> matrix, FixedVector<Dim3> vector)
         {
             matrix.SetColumn(2, vector);
+        }
+
+        public static FixedMatrix<Dim3> CreateRotationAroundX(this FixedMatrixBuilder<Dim3> builder, double angle)
+        {
+            double cos = Math.Cos(angle);
+            double sin = Math.Sin(angle);
+
+            return builder.Dense(new[,]
+            {
+                {
+                    1, 0, 0, 0
+                },
+                {
+                    0, cos, -sin, 0
+                },
+                {
+                    0, sin, cos, 0
+                },
+                {
+                    0, 0, 0, 1
+                }
+            });
+        }
+
+        public static FixedMatrix<Dim3> CreateRotationAroundY(this FixedMatrixBuilder<Dim3> builder, double angle)
+        {
+            double cos = Math.Cos(angle);
+            double sin = Math.Sin(angle);
+
+            return builder.Dense(new[,]
+            {
+                {
+                    cos, 0, sin
+                },
+                {
+                    0, 1, 0
+                },
+                {
+                    -sin, 0, cos
+                }
+            });
+        }
+
+        public static FixedMatrix<Dim3> CreateRotationAroundZ(this FixedMatrixBuilder<Dim3> builder, double angle)
+        {
+            double cos = Math.Cos(angle);
+            double sin = Math.Sin(angle);
+
+            return builder.Dense(new[,]
+            {
+                {
+                    cos, -sin, 0
+                },
+                {
+                    sin, cos, 0
+                },
+                {
+                    0, 0, 1
+                }
+            });
+        }
+
+        public static FixedMatrix<Dim3> CreateRotationAroundVector(this FixedMatrixBuilder<Dim3> builder, FixedVector<Dim3> vector, double angle)
+        {
+            double cos = Math.Cos(angle);
+            double sin = Math.Sin(angle);
+
+            double x = vector.GetX();
+            double y = vector.GetY();
+            double z = vector.GetZ();
+
+            return builder.Dense(new[,]
+            {
+                {
+                    cos + (1 - cos) * x * x, (1 - cos) * x * y - sin * z, (1 - cos) * x * z + sin * y
+                },
+                {
+                    (1 - cos) * y * x + sin * z, cos + (1 - cos) * y * y, (1 - cos) * y * z - sin * x
+                },
+                {
+                    (1 - cos) * z * x - sin * y, (1 - cos) * z * y + sin * x, cos + (1 - cos) * z * z
+                }
+            });
         }
 
         public static FixedMatrix<Dim3> CreateTransition(this FixedMatrixBuilder<Dim3> builder,
@@ -242,7 +327,7 @@ namespace IFCConverter.Utils.Mathematics
             FixedVector<Dim3> zAxisNorm = zAxis.Normalize();
             FixedVector<Dim3> xAxisNorm = zAxisNorm.CreateNormalVector().Normalize();
             FixedVector<Dim3> yAxisNorm = zAxisNorm.CreateNormalVector(xAxisNorm).Normalize();
-            
+
             FixedMatrix<Dim3> matrix = builder.Dense();
             matrix.SetX(xAxisNorm);
             matrix.SetZ(yAxisNorm);
@@ -265,19 +350,19 @@ namespace IFCConverter.Utils.Mathematics
             return matrix;
         }
     }
-    
+
     public static class FixedMatrix4Extensions
     {
         public static FixedVector<Dim4> GetX(this FixedMatrix<Dim4> matrix)
         {
             return matrix.GetColumn(0);
         }
-        
+
         public static FixedVector<Dim4> GetY(this FixedMatrix<Dim4> matrix)
         {
             return matrix.GetColumn(1);
         }
-        
+
         public static FixedVector<Dim4> GetZ(this FixedMatrix<Dim4> matrix)
         {
             return matrix.GetColumn(2);
@@ -287,17 +372,17 @@ namespace IFCConverter.Utils.Mathematics
         {
             return matrix.GetColumn(3);
         }
-        
+
         public static void SetX(this FixedMatrix<Dim4> matrix, FixedVector<Dim4> vector)
         {
             matrix.SetColumn(0, vector);
         }
-        
+
         public static void SetY(this FixedMatrix<Dim4> matrix, FixedVector<Dim4> vector)
         {
             matrix.SetColumn(1, vector);
         }
-        
+
         public static void SetZ(this FixedMatrix<Dim4> matrix, FixedVector<Dim4> vector)
         {
             matrix.SetColumn(2, vector);
@@ -317,7 +402,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             return new FixedMatrix<Dim3>(matrix.Matrix.SubMatrix(0, 3, 0, 3));
         }
-        
+
         public static FixedMatrix<Dim4> CreateTransition(this FixedMatrixBuilder<Dim4> builder, FixedVector<Dim4> offset)
         {
             FixedVector<Dim4> xAxis = FixedVector<Dim4>.Builder.X();
@@ -333,13 +418,13 @@ namespace IFCConverter.Utils.Mathematics
             return builder.CreateTransition(offsetNorm);
         }
 
-        public static FixedMatrix<Dim4> CreateTransition(this FixedMatrixBuilder<Dim4> builder, 
+        public static FixedMatrix<Dim4> CreateTransition(this FixedMatrixBuilder<Dim4> builder,
             FixedVector<Dim4> offset, FixedVector<Dim4> xAxis, FixedVector<Dim4> yAxis, FixedVector<Dim4> zAxis)
         {
             FixedMatrix<Dim4> matrix = builder.Dense(xAxis, yAxis, zAxis, offset);
             return matrix;
         }
-        
+
         public static FixedMatrix<Dim4> CreateTransition(this FixedMatrixBuilder<Dim4> builder,
             FixedVector<Dim3> offset, FixedVector<Dim3> xAxis, FixedVector<Dim3> yAxis, FixedVector<Dim3> zAxis)
         {

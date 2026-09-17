@@ -1,7 +1,7 @@
 ﻿using System;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces.Geometry.Curve;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -12,7 +12,7 @@ namespace IFCConverter.IFC.Builders.Geometry.Curve
     {
         public IIfcAxis2Placement2D Position { get; private set; }
 
-        public IIfcAxis2Placement2D CreatePosition(IModel model, Matrix<double> matrix)
+        public IIfcAxis2Placement2D CreatePosition(IModel model, FixedMatrix<Dim4> matrix)
         {
             Position = matrix.ToAxis2Placement2D(model);
             return Position;

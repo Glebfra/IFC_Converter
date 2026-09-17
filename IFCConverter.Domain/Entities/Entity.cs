@@ -2,8 +2,7 @@
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Metadata;
 using IFCConverter.Domain.Topology;
-using MathNet.Numerics.LinearAlgebra;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Domain.Entities
 {
@@ -19,13 +18,13 @@ namespace IFCConverter.Domain.Entities
         public EntityId Id { get; }
         public EntityMetadata Metadata { get; } = new EntityMetadata();
         public IReadOnlyCollection<Port> Ports => _ports;
-        public abstract IReadOnlyCollection<Vector<double>> Positions { get; }
+        public abstract IReadOnlyCollection<FixedVector<Dim3>> Positions { get; }
 
-        protected Port CreatePort(Vector<double> position = null, Vector<double> direction = null, PortRole role = PortRole.Connection)
+        protected Port CreatePort(FixedVector<Dim3> position = null, FixedVector<Dim3> direction = null, PortRole role = PortRole.Connection)
         {
             Port port = new Port(PortId.New(), Id);
-            port.Position = position ?? VectorExtensions.Zero;
-            port.Direction = direction ?? VectorExtensions.Zero;
+            port.Position = position ?? FixedVector<Dim3>.Zeros();
+            port.Direction = direction ?? FixedVector<Dim3>.Zeros();
             port.Role = role;
             _ports.Add(port);
 

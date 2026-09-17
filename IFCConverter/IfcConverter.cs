@@ -6,10 +6,10 @@ using System.Windows.Forms;
 using IFCConverter.Exporter;
 using IFCConverter.GUI.GUI;
 using IFCConverter.Importer;
-using IFCConverter.Utils.Diagnostics;
-using IFCConverter.Utils.Pipeline;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Diagnostics;
+using IFCConverter.Utils.Pipeline;
 
 namespace IFCConverter
 {

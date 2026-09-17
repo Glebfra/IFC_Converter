@@ -1,4 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.IFC.Interfaces.Geometry.SolidModel
@@ -6,7 +6,7 @@ namespace IFCConverter.IFC.Interfaces.Geometry.SolidModel
     public interface IIfcExtrudedAreaSolidBuilder<out T> : IIfcSweptAreaSolidBuilder<T>
         where T : IIfcExtrudedAreaSolid
     {
-        Vector<double> ExtrusionDirection { get; }
+        FixedVector<Dim3> ExtrusionDirection { get; }
         double Length { get; }
     }
 }

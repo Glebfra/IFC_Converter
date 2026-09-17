@@ -1,6 +1,5 @@
 ﻿using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
-using IFCConverter.Start.Augmenters;
 using IFCConverter.Start.Interfaces;
 using Newtonsoft.Json;
 
@@ -11,7 +10,7 @@ namespace IFCConverter.Start.Entities.Segments
     ///     Inherits from <see cref="StartAbstractSegmentEntity" /> and implements the
     ///     <see cref="IStartMaterializedEntity" /> interface.
     /// </summary>
-    [StartElement(StartElementTypeEnum.RIGID_ELEMENT, typeof(StartSegmentEntityDiameterAugmenter), typeof(StartClippableEntityAugmenter))]
+    [StartElement(StartElementTypeEnum.RIGID_ELEMENT)]
     public sealed class StartRigidElementEntity : StartAbstractSegmentEntity, IStartMaterializedEntity
     {
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.Contracts;
-using IFCConverter.Importer.Interfaces;
 
 namespace IFCConverter.Importer.PropertySets.Converters
 {

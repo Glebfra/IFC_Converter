@@ -3,10 +3,10 @@ using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Fittings;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -27,10 +27,10 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             if (segments.Length != 2)
                 throw new InvalidOperationException($"Valve '{valve.Id}' must have exactly two segments");
 
-            Vector<double> position = valve.Position;
-            Vector<double>[] directions = segments.Select(segment => segment.GetProjectionFromPoint(position).Normalize(2)).ToArray();
+            FixedVector<Dim3> position = valve.Position;
+            FixedVector<Dim3>[] directions = segments.Select(segment => segment.GetProjectionFromPoint(position).Normalize()).ToArray();
 
-            Vector<double>[] portPositions = directions.Select(direction => position + direction * valve.Length / 2).ToArray();
+            FixedVector<Dim3>[] portPositions = directions.Select(direction => position + direction * (valve.Length / 2)).ToArray();
 
             valve.PortA.SetGeometry(portPositions[0], directions[0]);
             valve.PortB.SetGeometry(portPositions[1], directions[1]);

@@ -4,12 +4,10 @@ using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -24,20 +22,20 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
         {
             Valve valve = (Valve)entity;
             double diameter = valve.Ports.Max(port => port.Metadata.Diameter);
-            Vector<double> valvePosition = valve.Position;
+            FixedVector<Dim3> valvePosition = valve.Position;
 
-            Vector<double>[] botConePoints = valve.Ports.Select(port => valvePosition - port.Position).ToArray();
+            FixedVector<Dim3>[] botConePoints = valve.Ports.Select(port => valvePosition - port.Position).ToArray();
 
             IIfcGeometry geometry = ValveGeometry.CreateGeometry(model, new ValveGeometryProperties
             {
                 Length = valve.Length,
                 Diameter = diameter,
                 BotConePoints = botConePoints,
-                TopConePoint = VectorExtensions.Zero
+                TopConePoint = FixedVector<Dim3>.Zeros()
             });
             geometry.AssignColor(Color.FromHEX(valve.Metadata.Color));
 
-            Matrix<double> placement = MatrixExtensions.CreateTransition(valvePosition);
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(valvePosition);
             IIfcPipeFittingBuilder<IIfcPipeFitting> builder =
                 new IfcPipeFittingBuilder<IfcPipeFitting>(valve.Metadata.Name, valve.Metadata.Type, IfcPipeFittingTypeEnum.CONNECTOR);
             builder.AssignGeometry(geometry);

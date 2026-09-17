@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.MeshBuilders
 {
@@ -10,15 +8,6 @@ namespace IFCConverter.Geometry.MeshBuilders
     {
         [Pure]
         public abstract IMesh Build();
-
-        [Pure]
-        protected static Vector<double> CreateVector(double x, double y, double z)
-        {
-            return new DenseVector(new[]
-            {
-                x, y, z
-            });
-        }
 
         protected static void AddRectangle(List<int[]> triangles, int a, int b, int c, int d)
         {
@@ -35,26 +24,26 @@ namespace IFCConverter.Geometry.MeshBuilders
         }
 
         [Pure]
-        protected static Vector<double>[] CreateNormals(Vector<double>[] vertices, int[][] triangles)
+        protected static FixedVector<Dim3>[] CreateNormals(FixedVector<Dim3>[] vertices, int[][] triangles)
         {
-            Vector<double>[] normals = new Vector<double>[triangles.Length];
+            FixedVector<Dim3>[] normals = new FixedVector<Dim3>[triangles.Length];
 
             for (int i = 0; i < triangles.Length; i++)
             {
                 int[] triangle = triangles[i];
 
-                Vector<double> first = vertices[triangle[1]] - vertices[triangle[0]];
-                Vector<double> second = vertices[triangle[2]] - vertices[triangle[1]];
-                normals[i] = VectorExtensions.CreateNormalVector(first, second);
+                FixedVector<Dim3> first = vertices[triangle[1]] - vertices[triangle[0]];
+                FixedVector<Dim3> second = vertices[triangle[2]] - vertices[triangle[1]];
+                normals[i] = first.CreateNormalVector(second);
             }
 
             return normals;
         }
 
         [Pure]
-        protected static Mesh BuildMesh(Vector<double>[] vertices, int[][] triangles)
+        protected static Mesh BuildMesh(FixedVector<Dim3>[] vertices, int[][] triangles)
         {
-            Vector<double>[] normals = CreateNormals(vertices, triangles);
+            FixedVector<Dim3>[] normals = CreateNormals(vertices, triangles);
             return new Mesh(vertices, triangles, normals);
         }
     }

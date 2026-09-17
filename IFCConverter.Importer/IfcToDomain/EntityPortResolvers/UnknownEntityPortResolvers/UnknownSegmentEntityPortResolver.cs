@@ -19,7 +19,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.UnknownEntityPor
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             Segment segment = (Segment)model.GetEntity(context.GetEntityId(product));
-            
+
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
@@ -36,20 +36,20 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.UnknownEntityPor
                 globalMatrix = localMatrix * globalMatrix;
                 localPlacement = localPlacement.PlacementRelTo as IIfcLocalPlacement;
             }
-            
+
             FixedVector<Dim3> position = globalMatrix.GetTranslation();
             FixedMatrix<Dim3> rotation = globalMatrix.GetRotation();
 
             FixedVector<Dim3> direction = rotation * extrudedAreaSolid.ExtrudedDirection.ToFixedVector();
             double length = extrudedAreaSolid.Depth;
-            
+
             double lengthPower = product.Model.GetLengthPower();
             FixedVector<Dim3> startPos = position * lengthPower;
             FixedVector<Dim3> endPos = startPos + direction * (lengthPower * length);
-            
-            segment.StartPort.SetGeometry(startPos.Vector, direction.Vector);
-            segment.EndPort.SetGeometry(endPos.Vector, direction.Negate().Vector);
-            
+
+            segment.StartPort.SetGeometry(startPos, direction);
+            segment.EndPort.SetGeometry(endPos, direction.Negate());
+
             segment.StartPort.Metadata.Diameter = segment.Diameter;
             segment.EndPort.Metadata.Diameter = segment.Diameter;
         }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -17,7 +17,7 @@ namespace IFCConverter.IFC.Interfaces
         IIfcMaterial Material { get; }
         List<IIfcPropertySet> PropertySets { get; }
 
-        IIfcObjectPlacement CreateObjectPlacement(IModel model, Matrix<double> matrix);
+        IIfcObjectPlacement CreateObjectPlacement(IModel model, FixedMatrix<Dim4> matrix);
 
         T CreateInstance(IModel model);
         void AssignPlacement(IIfcObjectPlacement ifcObjectPlacement);

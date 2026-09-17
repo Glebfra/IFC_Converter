@@ -9,7 +9,7 @@ namespace IFCConverter.Importer.IfcToDomain.Phases
     internal sealed class EntityConnectionResolvePhase : IIfcToDomainPhase
     {
         private readonly IEntityConnectionResolversRegistry _registry = new EntityConnectionsResolversRegistry();
-        
+
         public void Execute(IModel model, EngineeringModel domain, ImportContext context)
         {
             foreach (IEntityConnectionResolver resolver in _registry.ResolveAll())

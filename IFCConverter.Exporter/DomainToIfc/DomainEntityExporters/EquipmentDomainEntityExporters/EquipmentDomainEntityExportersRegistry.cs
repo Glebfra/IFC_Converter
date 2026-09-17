@@ -3,7 +3,8 @@ using IFCConverter.Utils.Reflection;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.EquipmentDomainEntityExporters
 {
-    internal sealed class EquipmentDomainEntityExportersRegistry : ReflectionRegistry<IEquipmentDomainEntityExporter>, IEquipmentDomainEntityExportersRegistry
+    internal sealed class EquipmentDomainEntityExportersRegistry : ReflectionRegistry<IEquipmentDomainEntityExporter>,
+        IEquipmentDomainEntityExportersRegistry
     {
         public EquipmentDomainEntityExportersRegistry() : base(typeof(EquipmentDomainEntityExportersRegistry).Assembly)
         {

@@ -4,18 +4,17 @@ using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Builders.Geometry.Tessellated;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct ConeGeometryProperties
     {
-        public Vector<double> Direction;
-        public Vector<double>[] Positions;
+        public FixedVector<Dim3> Direction;
+        public FixedVector<Dim3>[] Positions;
         public double[] Diameters;
     }
 

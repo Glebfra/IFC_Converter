@@ -39,106 +39,106 @@
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
+        <Reference Include="MathNet.Numerics">
+            <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Extensions.Logging, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Extensions.Logging.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Extensions.Logging.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.1.1\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+            <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
         </Reference>
         <Reference Include="mscorlib"/>
         <Reference Include="System"/>
         <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+            <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
         </Reference>
         <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+            <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
         </Reference>
-        <Reference Include="System.ComponentModel.Composition" />
+        <Reference Include="System.ComponentModel.Composition"/>
         <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+            <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
         </Reference>
         <Reference Include="System.Core"/>
         <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+            <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
         </Reference>
         <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+            <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
         </Reference>
         <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+            <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
         </Reference>
-        <Reference Include="System.IO.Compression.FileSystem" />
+        <Reference Include="System.IO.Compression.FileSystem"/>
         <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+            <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
         </Reference>
         <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+            <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
         </Reference>
         <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+            <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
         </Reference>
         <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+            <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
         </Reference>
         <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
+            <HintPath>..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
         </Reference>
         <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+            <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
         </Reference>
         <Reference Include="System.Numerics"/>
         <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+            <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
         </Reference>
         <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+            <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
         </Reference>
         <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+            <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
         </Reference>
         <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+            <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
         </Reference>
         <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+            <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
         </Reference>
-        <Reference Include="System.Xml" />
-        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Xml"/>
+        <Reference Include="System.Xml.Linq"/>
         <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+            <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Common, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Common.5.1.341\lib\net46\Xbim.Common.dll</HintPath>
+            <HintPath>..\packages\Xbim.Common.5.1.341\lib\net46\Xbim.Common.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Ifc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Ifc.5.1.341\lib\net46\Xbim.Ifc.dll</HintPath>
+            <HintPath>..\packages\Xbim.Ifc.5.1.341\lib\net46\Xbim.Ifc.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Ifc2x3, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Ifc2x3.5.1.341\lib\net46\Xbim.Ifc2x3.dll</HintPath>
+            <HintPath>..\packages\Xbim.Ifc2x3.5.1.341\lib\net46\Xbim.Ifc2x3.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.Ifc4, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
+            <HintPath>..\packages\Xbim.Ifc4.5.1.341\lib\net46\Xbim.Ifc4.dll</HintPath>
         </Reference>
         <Reference Include="Xbim.IO.MemoryModel, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-          <HintPath>..\packages\Xbim.IO.MemoryModel.5.1.341\lib\net46\Xbim.IO.MemoryModel.dll</HintPath>
+            <HintPath>..\packages\Xbim.IO.MemoryModel.5.1.341\lib\net46\Xbim.IO.MemoryModel.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -154,12 +154,12 @@
         <Compile Include="Builders\Elements\IfcDistributionFlowElementBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcElementBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcFlowElementBuilder.cs"/>
-        <Compile Include="Builders\Elements\IfcFlowMovingDeviceBuilder.cs" />
+        <Compile Include="Builders\Elements\IfcFlowMovingDeviceBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcFlowSegmentBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcPipeFittingBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcPipeSegmentBuilder.cs"/>
         <Compile Include="Builders\Elements\IfcProductBuilder.cs"/>
-        <Compile Include="Builders\Elements\IfcPumpBuilder.cs" />
+        <Compile Include="Builders\Elements\IfcPumpBuilder.cs"/>
         <Compile Include="Builders\Geometry\Brep\IfcFaceBuilder.cs"/>
         <Compile Include="Builders\Geometry\Curve\IfcBoundedCurveBuilder.cs"/>
         <Compile Include="Builders\Geometry\Curve\IfcCircleBuilder.cs"/>
@@ -190,81 +190,81 @@
         <Compile Include="Builders\Relations\IfcRelAssociatesMaterialBuilder.cs"/>
         <Compile Include="Builders\Relations\IfcRelDefinesByPropertiesBuilder.cs"/>
         <Compile Include="Exceptions\IfcEntityCreatedException.cs"/>
-        <Compile Include="Extensions\IfcMatrixExtensions.cs" />
-        <Compile Include="Extensions\IfcRootExtensions.cs" />
-        <Compile Include="Extensions\IfcVectorExtensions.cs" />
-        <Compile Include="Geometries\AxialCouplingJointGeometry.cs" />
-        <Compile Include="Geometries\AxialExpansionJointGeometry.cs" />
-        <Compile Include="Geometries\PumpApi610Geometry.cs" />
-        <Compile Include="Geometries\SphericalExpansionJointGeometry.cs" />
-        <Compile Include="Geometries\BeamGeometry.cs" />
-        <Compile Include="Geometries\BendGeometry.cs" />
-        <Compile Include="Geometries\BendTriangulatedGeometry.cs" />
-        <Compile Include="Geometries\ConeGeometry.cs" />
-        <Compile Include="Geometries\ConstantSpringAnchorGeometry.cs" />
-        <Compile Include="Geometries\DirectionalGuideAnchorGeometry.cs" />
-        <Compile Include="Geometries\FixedAnchorGeometry.cs" />
-        <Compile Include="Geometries\IfcGeometry.cs" />
-        <Compile Include="Geometries\IfcTriangulatedProperties.cs" />
-        <Compile Include="Geometries\LateralExpansionJointGeometry.cs" />
-        <Compile Include="Geometries\MomentFreeAnchorGeometry.cs" />
-        <Compile Include="Geometries\NonstandardAnchorGeometry.cs" />
-        <Compile Include="Geometries\PipeGeometry.cs" />
-        <Compile Include="Geometries\RestingSupportAnchorGeometry.cs" />
-        <Compile Include="Geometries\RigidHangerAnchorGeometry.cs" />
-        <Compile Include="Geometries\SegmentedExpansionJointGeometry.cs" />
-        <Compile Include="Geometries\SphericalPipesJointGeometry.cs" />
-        <Compile Include="Geometries\SpringAnchorGeometry.cs" />
-        <Compile Include="Geometries\TeeGeometry.cs" />
-        <Compile Include="Geometries\TorsionExpansionJointGeometry.cs" />
-        <Compile Include="Geometries\ValveGeometry.cs" />
-        <Compile Include="Geometries\VesselGeometry.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcBeamBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcDiscreteAccessoryBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcDistributionElementBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcDistributionFlowElementBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcElementBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcFlowFittingBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcFlowMovingDeviceBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcFlowSegmentBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcPipeFittingBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcPipeSegmentBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcProductBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Elements\IIfcPumpBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Brep\IIfcFaceBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcBoundedCurveBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcCircleBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcConicBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcCurveBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcLineBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcPolylineBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcCircleHollowProfileDefBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcCircleProfileDefBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcParameterizedProfileDefBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcProfileDefBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcRectangleProfileDefBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcExtrudedAreaSolidBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcRevolvedAreaSolidBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcSolidModelBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcSurfaceCurveSweptAreaSolidBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcSweptAreaSolidBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Tessellated\IIfcTessellatedFaceSetBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Tessellated\IIfcTessellatedItemBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Geometry\Tessellated\IIfcTriangulatedFaceSetBuilder.cs" />
-        <Compile Include="Interfaces\Builders\IIfcBuilder.cs" />
-        <Compile Include="Interfaces\Builders\IIfcMaterialBuilder.cs" />
-        <Compile Include="Interfaces\Builders\IIfcPortBuilder.cs" />
-        <Compile Include="Interfaces\Builders\IIfcStyledSurfaceBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Properties\IIfcPropertyBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Properties\IIfcPropertySetBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Properties\IIfcPropertySingleValueBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Properties\IIfcSimplePropertyBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Relations\IIfcRelAssociatesMaterialBuilder.cs" />
-        <Compile Include="Interfaces\Builders\Relations\IIfcRelDefinesByPropertiesBuilder.cs" />
-        <Compile Include="Interfaces\Geometry\IIfcGeometry.cs" />
-        <Compile Include="Interfaces\IColor.cs" />
-        <Compile Include="Interfaces\IIfcProject.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Extensions\IfcMatrixExtensions.cs"/>
+        <Compile Include="Extensions\IfcRootExtensions.cs"/>
+        <Compile Include="Extensions\IfcVectorExtensions.cs"/>
+        <Compile Include="Geometries\AxialCouplingJointGeometry.cs"/>
+        <Compile Include="Geometries\AxialExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\PumpApi610Geometry.cs"/>
+        <Compile Include="Geometries\SphericalExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\BeamGeometry.cs"/>
+        <Compile Include="Geometries\BendGeometry.cs"/>
+        <Compile Include="Geometries\BendTriangulatedGeometry.cs"/>
+        <Compile Include="Geometries\ConeGeometry.cs"/>
+        <Compile Include="Geometries\ConstantSpringAnchorGeometry.cs"/>
+        <Compile Include="Geometries\DirectionalGuideAnchorGeometry.cs"/>
+        <Compile Include="Geometries\FixedAnchorGeometry.cs"/>
+        <Compile Include="Geometries\IfcGeometry.cs"/>
+        <Compile Include="Geometries\IfcTriangulatedProperties.cs"/>
+        <Compile Include="Geometries\LateralExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\MomentFreeAnchorGeometry.cs"/>
+        <Compile Include="Geometries\NonstandardAnchorGeometry.cs"/>
+        <Compile Include="Geometries\PipeGeometry.cs"/>
+        <Compile Include="Geometries\RestingSupportAnchorGeometry.cs"/>
+        <Compile Include="Geometries\RigidHangerAnchorGeometry.cs"/>
+        <Compile Include="Geometries\SegmentedExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\SphericalPipesJointGeometry.cs"/>
+        <Compile Include="Geometries\SpringAnchorGeometry.cs"/>
+        <Compile Include="Geometries\TeeGeometry.cs"/>
+        <Compile Include="Geometries\TorsionExpansionJointGeometry.cs"/>
+        <Compile Include="Geometries\ValveGeometry.cs"/>
+        <Compile Include="Geometries\VesselGeometry.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcBeamBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcDiscreteAccessoryBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcDistributionElementBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcDistributionFlowElementBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcElementBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcFlowFittingBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcFlowMovingDeviceBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcFlowSegmentBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcPipeFittingBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcPipeSegmentBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcProductBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Elements\IIfcPumpBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Brep\IIfcFaceBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcBoundedCurveBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcCircleBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcConicBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcCurveBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcLineBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Curve\IIfcPolylineBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcCircleHollowProfileDefBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcCircleProfileDefBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcParameterizedProfileDefBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcProfileDefBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\ProfileDef\IIfcRectangleProfileDefBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcExtrudedAreaSolidBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcRevolvedAreaSolidBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcSolidModelBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcSurfaceCurveSweptAreaSolidBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\SolidModel\IIfcSweptAreaSolidBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Tessellated\IIfcTessellatedFaceSetBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Tessellated\IIfcTessellatedItemBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Geometry\Tessellated\IIfcTriangulatedFaceSetBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\IIfcBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\IIfcMaterialBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\IIfcPortBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\IIfcStyledSurfaceBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Properties\IIfcPropertyBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Properties\IIfcPropertySetBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Properties\IIfcPropertySingleValueBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Properties\IIfcSimplePropertyBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Relations\IIfcRelAssociatesMaterialBuilder.cs"/>
+        <Compile Include="Interfaces\Builders\Relations\IIfcRelDefinesByPropertiesBuilder.cs"/>
+        <Compile Include="Interfaces\Geometry\IIfcGeometry.cs"/>
+        <Compile Include="Interfaces\IColor.cs"/>
+        <Compile Include="Interfaces\IIfcProject.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Geometry\IFCConverter.Geometry.csproj">
@@ -281,8 +281,8 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <None Include="App.config" />
-      <None Include="packages.config" />
+        <None Include="App.config"/>
+        <None Include="packages.config"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

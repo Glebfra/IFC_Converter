@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using IFCConverter.Geometry.Triangulators;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.MeshBuilders
 {
     public sealed class EarClippingMeshBuilder : MeshBuilder
     {
         private readonly ITriangulator _triangulator = new EarClippingTriangulator();
-        private readonly Vector<double>[] _vertices;
+        private readonly FixedVector<Dim3>[] _vertices;
 
-        public EarClippingMeshBuilder(Vector<double>[] vertices)
+        public EarClippingMeshBuilder(FixedVector<Dim3>[] vertices)
         {
             _vertices = vertices ?? throw new ArgumentNullException(nameof(vertices));
         }

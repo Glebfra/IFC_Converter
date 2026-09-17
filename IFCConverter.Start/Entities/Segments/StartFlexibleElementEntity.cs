@@ -1,6 +1,5 @@
 ﻿using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
-using IFCConverter.Start.Augmenters;
 
 namespace IFCConverter.Start.Entities.Segments
 {
@@ -8,7 +7,7 @@ namespace IFCConverter.Start.Entities.Segments
     ///     Represents a flexible element entity in the IFCConverter.Start framework.
     ///     Inherits from <see cref="StartAbstractSegmentEntity" /> and implements the
     /// </summary>
-    [StartElement(StartElementTypeEnum.FLEXIBLE_ELEMENT, typeof(StartSegmentEntityDiameterAugmenter), typeof(StartClippableEntityAugmenter))]
+    [StartElement(StartElementTypeEnum.FLEXIBLE_ELEMENT)]
     public sealed class StartFlexibleElementEntity : StartAbstractSegmentEntity
     {
     }

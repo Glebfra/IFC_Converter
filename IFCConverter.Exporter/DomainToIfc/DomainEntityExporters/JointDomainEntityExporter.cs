@@ -7,7 +7,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
     internal sealed class JointDomainEntityExporter : IDomainEntityExporter
     {
         private readonly IJointDomainEntityExportersRegistry _registry = new JointDomainEntityExportersRegistry();
-        
+
         public bool CanExport(Entity entity)
         {
             return entity is Joint;

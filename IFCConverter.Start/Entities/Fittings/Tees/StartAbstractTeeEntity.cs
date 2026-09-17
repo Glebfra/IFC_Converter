@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
-using IFCConverter.Utils.Mathematics;
 using Newtonsoft.Json;
 
 namespace IFCConverter.Start.Entities.Fittings
 {
-    public abstract class StartAbstractTeeEntity : StartAbstractFittingEntity,
-        IStartOneNodeEntity, IStartFittingEntity, IStartMaterializedEntity, IStartClippingEntity
+    public abstract class StartAbstractTeeEntity : StartAbstractFittingEntity, IStartMaterializedEntity
     {
         private readonly IStartSegmentEntity[] _mainSegments = new IStartSegmentEntity[2];
         private IStartSegmentEntity _headSegment;
@@ -111,31 +108,8 @@ namespace IFCConverter.Start.Entities.Fittings
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> CrotchRadius { get; set; } = new LengthValueProperty<double>();
 
-        public void ClipEntity(IStartClippableEntity clippable)
-        {
-            if (!(clippable is IStartSegmentEntity segmentEntity))
-                throw new NotImplementedException("Clipping is only implemented for segments");
-
-            if (IsAttachedToHeadSegment(segmentEntity))
-                clippable.Clip(Position, HeadLength);
-            else if (IsAttachedToMainSegment(segmentEntity))
-                clippable.Clip(Position, MainLength / 2);
-        }
-
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; } = string.Empty;
-
-        [Pure]
-        private bool IsAttachedToHeadSegment(IStartSegmentEntity segmentEntity)
-        {
-            return HeadSegment.Equals(segmentEntity);
-        }
-
-        [Pure]
-        private bool IsAttachedToMainSegment(IStartSegmentEntity segmentEntity)
-        {
-            return MainSegments.Any(segment => segment.Equals(segmentEntity));
-        }
 
         private void FilterSegments()
         {

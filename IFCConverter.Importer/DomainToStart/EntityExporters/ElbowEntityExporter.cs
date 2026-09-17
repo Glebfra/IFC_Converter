@@ -18,7 +18,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             StartElbowEntity startElbowEntity = new StartElbowEntity();
             startElbowEntity.Position = elbow.Position;
             startElbowEntity.Radius.CreateFromStart(elbow.Radius);
-            
+
             context.Register(elbow, startElbowEntity);
         }
     }

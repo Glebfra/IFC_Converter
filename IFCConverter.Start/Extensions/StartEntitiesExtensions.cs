@@ -7,8 +7,7 @@ using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Collections;
-using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Start.Extensions
 {
@@ -29,19 +28,19 @@ namespace IFCConverter.Start.Extensions
         [Pure]
         public static bool IsConnectedTo(this IStartEntity startEntity, IStartEntity otherEntity)
         {
-            IEnumerable<Vector<double>> startEntityPositions = startEntity.GetPositions();
-            IEnumerable<Vector<double>> otherEntityPositions = otherEntity.GetPositions();
+            IEnumerable<FixedVector<Dim3>> startEntityPositions = startEntity.GetPositions();
+            IEnumerable<FixedVector<Dim3>> otherEntityPositions = otherEntity.GetPositions();
 
             return (
                 from startEntityPosition in startEntityPositions
                 from otherEntityPosition in otherEntityPositions
-                where startEntityPosition.AlmostEqual(otherEntityPosition, EQUALS_TOLERANCE)
+                where startEntityPosition.AlmostEqual(otherEntityPosition)
                 select startEntityPosition
             ).Any();
         }
 
         [Pure]
-        public static IEnumerable<Vector<double>> GetPositions(this IStartEntity startEntity)
+        public static IEnumerable<FixedVector<Dim3>> GetPositions(this IStartEntity startEntity)
         {
             switch (startEntity)
             {
@@ -69,22 +68,22 @@ namespace IFCConverter.Start.Extensions
         }
 
         [Pure]
-        public static Vector<double> GetDirectionToEntity(this IStartEntity startEntity, Vector<double> position)
+        public static FixedVector<Dim3> GetDirectionToEntity(this IStartEntity startEntity, FixedVector<Dim3> position)
         {
             return startEntity.GetNearestPosition(position) - position;
         }
 
         [Pure]
-        public static Vector<double> GetProjectionFromPoint(this IStartSegmentEntity segmentEntity,
-            Vector<double> position)
+        public static FixedVector<Dim3> GetProjectionFromPoint(this IStartSegmentEntity segmentEntity,
+            FixedVector<Dim3> position)
         {
             return segmentEntity.IsStartPosition(position)
-                ? segmentEntity.Projection.Normalize(2)
-                : segmentEntity.Projection.Normalize(2).Negate();
+                ? segmentEntity.Projection.Normalize()
+                : segmentEntity.Projection.Normalize().Negate();
         }
 
         [Pure]
-        public static Vector<double> GetNearestPosition(this IStartEntity startEntity, Vector<double> position)
+        public static FixedVector<Dim3> GetNearestPosition(this IStartEntity startEntity, FixedVector<Dim3> position)
         {
             switch (startEntity)
             {

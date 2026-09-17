@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
@@ -13,6 +13,6 @@ namespace IFCConverter.IFC.Interfaces.Geometry.Tessellated
         IItemSet<IItemSet<IfcParameterValue>> Normals { get; }
 
         void AssignTriangleIndices(IEnumerable<IEnumerable<int>> coordIndex);
-        void AssignNormals(IEnumerable<Vector<double>> normals);
+        void AssignNormals(IEnumerable<FixedVector<Dim3>> normals);
     }
 }

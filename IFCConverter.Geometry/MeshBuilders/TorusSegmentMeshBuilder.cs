@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Geometry.MeshBuilders
 {
@@ -9,14 +8,14 @@ namespace IFCConverter.Geometry.MeshBuilders
     {
 
         private readonly int _arcSegments;
-        private readonly Vector<double> _center;
-        private readonly Vector<double> _end;
+        private readonly FixedVector<Dim3> _center;
+        private readonly FixedVector<Dim3> _end;
         private readonly int _profileSegments;
 
         private readonly double _radius;
-        private readonly Vector<double> _start;
+        private readonly FixedVector<Dim3> _start;
 
-        public TorusSegmentMeshBuilder(Vector<double> center, Vector<double> start, Vector<double> end, double radius, int arcSegments = 32,
+        public TorusSegmentMeshBuilder(FixedVector<Dim3> center, FixedVector<Dim3> start, FixedVector<Dim3> end, double radius, int arcSegments = 32,
             int profileSegments = 16)
         {
             _center = center;
@@ -29,18 +28,18 @@ namespace IFCConverter.Geometry.MeshBuilders
 
         public override IMesh Build()
         {
-            Vector<double> startVector = _start - _center;
-            Vector<double> endVector = _end - _center;
+            FixedVector<Dim3> startVector = _start - _center;
+            FixedVector<Dim3> endVector = _end - _center;
 
             double torusRadius = startVector.L2Norm();
 
-            Vector<double> u = startVector.Normalize(2);
-            Vector<double> n = startVector.CrossProduct(endVector).Normalize(2);
-            Vector<double> v = n.CrossProduct(u).Normalize(2);
+            FixedVector<Dim3> u = startVector.Normalize();
+            FixedVector<Dim3> n = startVector.CrossProduct(endVector).Normalize();
+            FixedVector<Dim3> v = n.CrossProduct(u).Normalize();
 
-            double angle = Math.Atan2(endVector.DotProduct(v), endVector.DotProduct(u));
+            double angle = Math.Atan2(endVector.Dot(v), endVector.Dot(u));
 
-            List<Vector<double>> vertices = new List<Vector<double>>((_arcSegments + 1) * _profileSegments);
+            List<FixedVector<Dim3>> vertices = new List<FixedVector<Dim3>>((_arcSegments + 1) * _profileSegments);
             List<int[]> triangles = new List<int[]>(_arcSegments * _profileSegments * 2);
 
             for (int i = 0; i <= _arcSegments; i++)
@@ -51,8 +50,8 @@ namespace IFCConverter.Geometry.MeshBuilders
                 double cosTheta = Math.Cos(theta);
                 double sinTheta = Math.Sin(theta);
 
-                Vector<double> radial = cosTheta * u + sinTheta * v;
-                Vector<double> sectionCenter = _center + torusRadius * radial;
+                FixedVector<Dim3> radial = cosTheta * u + sinTheta * v;
+                FixedVector<Dim3> sectionCenter = _center + torusRadius * radial;
 
                 for (int j = 0; j < _profileSegments; j++)
                 {
@@ -61,7 +60,7 @@ namespace IFCConverter.Geometry.MeshBuilders
                     double cosPhi = Math.Cos(phi);
                     double sinPhi = Math.Sin(phi);
 
-                    Vector<double> point = sectionCenter + _radius * (cosPhi * radial + sinPhi * n);
+                    FixedVector<Dim3> point = sectionCenter + _radius * (cosPhi * radial + sinPhi * n);
                     vertices.Add(point);
                 }
             }

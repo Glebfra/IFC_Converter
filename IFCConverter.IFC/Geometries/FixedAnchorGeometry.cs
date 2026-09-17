@@ -6,20 +6,18 @@ using IFCConverter.IFC.Builders.Geometry.SolidModel;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct FixedAnchorGeometryProperties
     {
-        public Vector<double> Position;
-        public Vector<double> Direction;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3> Direction;
         public double Diameter;
     }
 
@@ -48,11 +46,13 @@ namespace IFCConverter.IFC.Geometries
         {
             double length = properties.Diameter * DiameterToLengthFactor;
 
-            Vector<double> extrudedPoint = properties.Position - properties.Direction.Normalize(2) * length;
-            Matrix<double> extrudedAreaMatrix =
-                MatrixExtensions.CreateTransition(extrudedPoint, properties.Direction);
-            Matrix<double> profileDefMatrix =
-                MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
+            FixedVector<Dim3> extrudedPoint = properties.Position - properties.Direction.Normalize() * length;
+            FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+
+            FixedVector<Dim3> zAxis = properties.Direction.Normalize();
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector().Normalize();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).Normalize();
+            FixedMatrix<Dim4> extrudedAreaMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(extrudedPoint, xAxis, yAxis, zAxis);
 
             double xDim = properties.Diameter * DiameterToXDimFactor;
             double yDim = xDim * XDimToYDimFactor;
@@ -66,7 +66,7 @@ namespace IFCConverter.IFC.Geometries
 
             IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> extrudedAreaSolidBuilder =
                 new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(
-                    length, VectorExtensions.Z, profileDef
+                    length, FixedVector<Dim3>.Builder.Z(), profileDef
                 );
             extrudedAreaSolidBuilder.CreatePosition(model, extrudedAreaMatrix);
 

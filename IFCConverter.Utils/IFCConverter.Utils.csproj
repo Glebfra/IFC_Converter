@@ -54,13 +54,11 @@
         <Compile Include="Geometry\EarClippingTriangulator.cs"/>
         <Compile Include="IFC\IfcExportType.cs"/>
         <Compile Include="IFC\IfcExportTypeEnum.cs"/>
-        <Compile Include="Mathematics\Dimension.cs" />
-        <Compile Include="Mathematics\FixedMatrix.cs" />
-        <Compile Include="Mathematics\FixedVector.cs" />
+        <Compile Include="Mathematics\Dimension.cs"/>
+        <Compile Include="Mathematics\FixedMatrix.cs"/>
+        <Compile Include="Mathematics\FixedVector.cs"/>
         <Compile Include="Mathematics\MathExtensions.cs"/>
-        <Compile Include="Mathematics\MatrixExtensions.cs"/>
         <Compile Include="Mathematics\VectorComparer.cs"/>
-        <Compile Include="Mathematics\VectorExtensions.cs"/>
         <Compile Include="Pipeline\ConversionResult.cs"/>
         <Compile Include="Pipeline\ExportDataContainer.cs"/>
         <Compile Include="Pipeline\IDependableAttribute.cs"/>
@@ -71,6 +69,9 @@
         <Compile Include="Reflection\ReflectionRegistry.cs"/>
         <Compile Include="Registries\AbstractPhaseRegistry.cs"/>
         <Compile Include="Registries\IRegistry.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="packages.config"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

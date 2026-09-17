@@ -6,12 +6,10 @@ using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
-using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
@@ -29,18 +27,18 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
         public void Export(Entity entity, IModel model, ExportContext context)
         {
             Segment segment = (Segment)entity;
-            
-            Vector<double>[] positons = segment.Ports.Select(port => port.Position - segment.StartPort.Position).ToArray();
+
+            FixedVector<Dim3>[] positons = segment.Ports.Select(port => port.Position - segment.StartPort.Position).ToArray();
             double[] diameters = segment.Ports.Select(port => port.Metadata.Diameter).ToArray();
-            
-            IIfcGeometry geometry = ConeGeometry.CreateGeometry(model, new ConeGeometryProperties()
+
+            IIfcGeometry geometry = ConeGeometry.CreateGeometry(model, new ConeGeometryProperties
             {
                 Diameters = diameters,
                 Positions = positons
             });
             geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
-            
-            Matrix<double> placement = MatrixExtensions.CreateTransition(segment.StartPort.Position);
+
+            FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(segment.StartPort.Position);
             IIfcPipeSegmentBuilder<IfcPipeSegment> builder =
                 new IfcPipeSegmentBuilder<IfcPipeSegment>(entity.Metadata.Name, entity.Metadata.Type, IfcPipeSegmentTypeEnum.RIGIDSEGMENT);
             builder.AssignGeometry(geometry);

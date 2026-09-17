@@ -1,4 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Start.Interfaces
 {
@@ -10,17 +10,17 @@ namespace IFCConverter.Start.Interfaces
         /// <summary>
         ///     Gets or sets the starting position of the entity as a vector of doubles.
         /// </summary>
-        Vector<double> StartPosition { get; set; }
+        FixedVector<Dim3> StartPosition { get; set; }
 
         /// <summary>
         ///     Gets or sets the direction vector from the starting position.
         /// </summary>
-        Vector<double> Projection { get; set; }
+        FixedVector<Dim3> Projection { get; set; }
 
         /// <summary>
         ///     Gets the ending position of the entity as a vector of doubles.
         /// </summary>
-        Vector<double> EndPosition { get; }
+        FixedVector<Dim3> EndPosition { get; }
 
         /// <summary>
         ///     Gets the start node entity of the two node entity.
@@ -35,8 +35,8 @@ namespace IFCConverter.Start.Interfaces
         /// <summary>
         ///     Gets the start transformation matrix of the two node entity.
         /// </summary>
-        Matrix<double> TransformationMatrix { get; }
+        FixedMatrix<Dim4> TransformationMatrix { get; }
 
-        bool IsStartPosition(Vector<double> position);
+        bool IsStartPosition(FixedVector<Dim3> position);
     }
 }

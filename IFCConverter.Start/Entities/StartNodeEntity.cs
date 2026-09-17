@@ -3,8 +3,7 @@ using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
+using IFCConverter.Utils.Mathematics;
 using Newtonsoft.Json;
 
 namespace IFCConverter.Start.Entities
@@ -52,17 +51,14 @@ namespace IFCConverter.Start.Entities
         ///     Gets and sets the position of the node as a 3D vector.
         /// </summary>
         [JsonIgnore]
-        public Vector<double> Position
+        public FixedVector<Dim3> Position
         {
-            get => new DenseVector(new[]
-            {
-                XCoord.SIProperty, YCoord.SIProperty, ZCoord.SIProperty
-            });
+            get => FixedVector<Dim3>.Builder.Dense(XCoord.SIProperty, YCoord.SIProperty, ZCoord.SIProperty);
             set
             {
-                XCoord.CreateFromSI(value[0]);
-                YCoord.CreateFromSI(value[1]);
-                ZCoord.CreateFromSI(value[2]);
+                XCoord.CreateFromSI(value.GetX());
+                YCoord.CreateFromSI(value.GetY());
+                ZCoord.CreateFromSI(value.GetZ());
             }
         }
     }

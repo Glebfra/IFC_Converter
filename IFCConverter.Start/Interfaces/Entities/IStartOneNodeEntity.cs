@@ -1,4 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Start.Interfaces
 {
@@ -10,7 +10,7 @@ namespace IFCConverter.Start.Interfaces
         /// <summary>
         ///     Gets or sets the position of the node as a vector of doubles.
         /// </summary>
-        Vector<double> Position { get; set; }
+        FixedVector<Dim3> Position { get; set; }
 
         IStartNodeEntity Node { get; }
     }

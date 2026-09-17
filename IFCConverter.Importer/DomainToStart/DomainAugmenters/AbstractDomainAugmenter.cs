@@ -2,7 +2,7 @@
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Importer.DomainToStart.DomainAugmenters
 {
@@ -13,19 +13,25 @@ namespace IFCConverter.Importer.DomainToStart.DomainAugmenters
 
         protected static Segment AddSegment(Port port, AbstractFitting fitting)
         {
-            Vector<double> projection = port.Position - fitting.Position;
+            FixedVector<Dim3> projection = port.Position - fitting.Position;
             double length = projection.L2Norm();
-            
+
             Segment segment = new Segment(EntityId.New())
             {
-                Diameter = port.Metadata.Diameter,
+                Diameter = port.Metadata.Diameter
             };
 
-            Vector<double> startPos = fitting.Position;
-            Vector<double> endPos = startPos + length * port.Direction;
+            FixedVector<Dim3> startPos = fitting.Position;
+            FixedVector<Dim3> endPos = startPos + length * port.Direction;
 
-            Vector<double>[] positions = new Vector<double>[] { startPos, endPos };
-            Vector<double>[] directions = new Vector<double>[] { port.Direction.Negate(), port.Direction };
+            FixedVector<Dim3>[] positions =
+            {
+                startPos, endPos
+            };
+            FixedVector<Dim3>[] directions =
+            {
+                port.Direction.Negate(), port.Direction
+            };
 
             int i = 0;
             foreach (Port segmentPort in segment.Ports)

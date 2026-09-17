@@ -22,7 +22,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
                 Position = start.Position,
                 Length = start.Length.SIProperty
             };
-            
+
             model.Add(joint);
             context.Register(start, joint);
         }

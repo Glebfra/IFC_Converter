@@ -35,9 +35,6 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-            <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
-        </Reference>
         <Reference Include="mscorlib"/>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
@@ -49,19 +46,19 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="EngineeringModel.cs"/>
-        <Compile Include="Entities\AbstractSegment.cs" />
+        <Compile Include="Entities\AbstractSegment.cs"/>
         <Compile Include="Entities\Anchor.cs"/>
         <Compile Include="Entities\AnchorRestraint.cs">
-          <DependentUpon>Anchor.cs</DependentUpon>
+            <DependentUpon>Anchor.cs</DependentUpon>
         </Compile>
-        <Compile Include="Entities\Beam.cs" />
+        <Compile Include="Entities\Beam.cs"/>
         <Compile Include="Entities\Elbow.cs"/>
         <Compile Include="Entities\Entity.cs"/>
-        <Compile Include="Entities\Equipment.cs" />
-        <Compile Include="Entities\AbstractFitting.cs" />
-        <Compile Include="Entities\Joint.cs" />
-        <Compile Include="Entities\PumpApi610.cs" />
-        <Compile Include="Entities\Segment.cs" />
+        <Compile Include="Entities\Equipment.cs"/>
+        <Compile Include="Entities\AbstractFitting.cs"/>
+        <Compile Include="Entities\Joint.cs"/>
+        <Compile Include="Entities\PumpApi610.cs"/>
+        <Compile Include="Entities\Segment.cs"/>
         <Compile Include="Entities\Reducer.cs"/>
         <Compile Include="Entities\Tee.cs"/>
         <Compile Include="Entities\Valve.cs"/>

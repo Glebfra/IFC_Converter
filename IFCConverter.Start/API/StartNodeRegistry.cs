@@ -4,21 +4,20 @@ using IFCConverter.Start.Entities;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Collections;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Start.API
 {
     public sealed class StartNodeRegistry
     {
-        private readonly Dictionary<Vector<double>, StartEntityProxy> _nodes;
+        private readonly Dictionary<FixedVector<Dim3>, StartEntityProxy> _nodes;
         private int _counter = 1;
 
         public StartNodeRegistry(VectorComparer comparer)
         {
-            _nodes = new Dictionary<Vector<double>, StartEntityProxy>(comparer);
+            _nodes = new Dictionary<FixedVector<Dim3>, StartEntityProxy>(comparer);
         }
 
-        public StartEntityProxy[] GetOrCreateNodes(IStartProject startProject, params Vector<double>[] positions)
+        public StartEntityProxy[] GetOrCreateNodes(IStartProject startProject, params FixedVector<Dim3>[] positions)
         {
             return positions
                 .Select(position => _nodes.GetOrAdd(position, vector =>

@@ -10,12 +10,12 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
     {
         private const double PipeDiameterFactor = 1.0 / 2;
         private const double CylindricalShellDiameterFactor = 1.0 / 20;
-        
+
         public static double? GetDiameter(IStartSegmentEntity start)
         {
             HashSet<IStartSegmentEntity> visited = new HashSet<IStartSegmentEntity>();
             Queue<IStartSegmentEntity> queue = new Queue<IStartSegmentEntity>();
-            
+
             queue.Enqueue(start);
 
             while (queue.Count > 0)
@@ -30,7 +30,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
                     case StartPipeEntity _:
                         return GetDiameter(start, element);
                 }
-                
+
                 foreach (IStartSegmentEntity startSegmentEntity in element.ConnectedEntities.OfType<IStartSegmentEntity>())
                 {
                     if (!visited.Contains(startSegmentEntity))

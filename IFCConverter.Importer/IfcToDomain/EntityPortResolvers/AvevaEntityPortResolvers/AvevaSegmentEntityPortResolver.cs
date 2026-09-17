@@ -6,7 +6,6 @@ using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortResolvers
@@ -25,27 +24,33 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortR
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             Segment segment = (Segment)model.GetEntity(context.GetEntityId(product));
-            
+
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 throw new Exception("Expected exactly one representation item for the given source.");
-            
+
             if (!(representationItems[0] is IIfcExtrudedAreaSolid extrudedAreaSolid))
                 throw new Exception("The representation item is not an extruded area solid.");
-            
-            Matrix<double> position = extrudedAreaSolid.Position.ToMatrix();
-            Matrix<double> rotation = position.GetRotation();
-            Vector<double> extrudedDirection = extrudedAreaSolid.ExtrudedDirection.ToVector();
-            Vector<double> pipeDirection = rotation.LeftMultiply(extrudedDirection).Normalize(2);
+
+            FixedMatrix<Dim4> position = extrudedAreaSolid.Position.ToFixedMatrix();
+            FixedMatrix<Dim3> rotation = position.GetRotation();
+            FixedVector<Dim3> extrudedDirection = extrudedAreaSolid.ExtrudedDirection.ToFixedVector();
+            FixedVector<Dim3> pipeDirection = rotation.LeftMultiply(extrudedDirection).Normalize();
 
             double lengthPower = product.Model.GetLengthPower();
             double length = extrudedAreaSolid.Depth * lengthPower;
-            
-            Vector<double> startPos = position.GetOffset() * lengthPower;
-            Vector<double> endPos = startPos + length * pipeDirection;
 
-            Vector<double>[] positions = new Vector<double>[] { startPos, endPos };
-            Vector<double>[] directions = new Vector<double>[] { pipeDirection.Negate(), pipeDirection };
+            FixedVector<Dim3> startPos = position.GetTranslation() * lengthPower;
+            FixedVector<Dim3> endPos = startPos + length * pipeDirection;
+
+            FixedVector<Dim3>[] positions =
+            {
+                startPos, endPos
+            };
+            FixedVector<Dim3>[] directions =
+            {
+                pipeDirection.Negate(), pipeDirection
+            };
 
             int i = 0;
             foreach (Port port in segment.Ports)

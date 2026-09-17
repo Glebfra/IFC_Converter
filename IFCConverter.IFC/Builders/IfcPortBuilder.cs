@@ -1,7 +1,7 @@
 ﻿using System;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Interfaces;
@@ -43,7 +43,7 @@ namespace IFCConverter.IFC.Builders
             return IfcPort;
         }
 
-        public IIfcObjectPlacement CreateObjectPlacement(IModel model, Matrix<double> matrix3D)
+        public IIfcObjectPlacement CreateObjectPlacement(IModel model, FixedMatrix<Dim4> matrix3D)
         {
             ObjectPlacement = matrix3D.ToIfcObjectPlacement(model);
             return ObjectPlacement;

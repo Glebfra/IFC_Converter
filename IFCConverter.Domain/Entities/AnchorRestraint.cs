@@ -1,10 +1,10 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Domain.Entities
 {
     public sealed class AnchorRestraint
     {
         public bool IsDoubleSided { get; set; }
-        public Vector<double> Direction { get; set; }
+        public FixedVector<Dim3> Direction { get; set; }
     }
 }

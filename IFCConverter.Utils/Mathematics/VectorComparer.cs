@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace IFCConverter.Utils.Mathematics
 {
-    public sealed class VectorComparer : IEqualityComparer<Vector<double>>
+    public sealed class VectorComparer : IEqualityComparer<FixedVector<Dim3>>
     {
         private readonly double _tolerance;
 
@@ -15,7 +14,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public bool Equals(Vector<double> x, Vector<double> y)
+        public bool Equals(FixedVector<Dim3> x, FixedVector<Dim3> y)
         {
             if (x == null || y == null)
                 return false;
@@ -27,7 +26,7 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         [Pure]
-        public int GetHashCode(Vector<double> obj)
+        public int GetHashCode(FixedVector<Dim3> obj)
         {
             long x = Quantize(obj[0]);
             long y = Quantize(obj[1]);
@@ -43,48 +42,6 @@ namespace IFCConverter.Utils.Mathematics
 
                 return hash;
             }
-        }
-
-        [Pure]
-        public bool LessThan(Vector<double> x, Vector<double> y)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return x.L2Norm() < y.L2Norm();
-        }
-
-        [Pure]
-        public bool GreaterThan(Vector<double> x, Vector<double> y)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return x.L2Norm() > y.L2Norm();
-        }
-
-        [Pure]
-        public bool NearerThan(Vector<double> x, Vector<double> y, Vector<double> origin)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return (x - origin).L2Norm() <= (y - origin).L2Norm();
-        }
-
-        [Pure]
-        public bool FartherThan(Vector<double> x, Vector<double> y, Vector<double> origin)
-        {
-            if (x == null || y == null)
-                return false;
-
-            return (x - origin).L2Norm() >= (y - origin).L2Norm();
-        }
-
-        [Pure]
-        public bool IsParallel(Vector<double> first, Vector<double> second)
-        {
-            return first.Normalize(2).CrossProduct(second.Normalize(2)).L2Norm() < _tolerance;
         }
 
         [Pure]

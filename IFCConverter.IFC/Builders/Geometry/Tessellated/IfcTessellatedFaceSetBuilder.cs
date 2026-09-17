@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -12,7 +12,7 @@ namespace IFCConverter.IFC.Builders.Geometry.Tessellated
     {
         public IIfcCartesianPointList3D Coordinates { get; private set; }
 
-        public IIfcCartesianPointList3D CreateCoordinates(IModel model, IEnumerable<Vector<double>> coordinates)
+        public IIfcCartesianPointList3D CreateCoordinates(IModel model, IEnumerable<FixedVector<Dim3>> coordinates)
         {
             Coordinates = coordinates.ToCartesianPointList3D(model);
             return Coordinates;

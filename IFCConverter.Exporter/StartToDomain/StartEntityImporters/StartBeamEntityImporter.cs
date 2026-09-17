@@ -23,7 +23,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
                 Diameter = start.Diameter.SIProperty,
                 SectionAxisAngle = start.SectionAxisAngle.SIProperty
             };
-            
+
             model.Add(beam);
             context.Register(source, beam);
         }

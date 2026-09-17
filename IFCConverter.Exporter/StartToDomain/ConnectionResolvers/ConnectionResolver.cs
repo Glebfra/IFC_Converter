@@ -4,10 +4,9 @@ using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
-using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics;
 using IFCConverter.Start.Entities;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.ConnectionResolvers
 {
@@ -33,7 +32,7 @@ namespace IFCConverter.Exporter.StartToDomain.ConnectionResolvers
             {
                 Port entityPort = model.GetPort(entityPortId);
                 IEnumerable<Port> connectiblePorts = model.Ports
-                    .Where(port => entityPort.Position.AlmostEqual(port.Position, Tolerance) &&
+                    .Where(port => entityPort.Position.AlmostEqual(port.Position) &&
                                    !port.Equals(entityPort));
 
                 foreach (Port connectiblePort in connectiblePorts)

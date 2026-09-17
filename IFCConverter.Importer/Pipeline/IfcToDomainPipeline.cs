@@ -12,7 +12,7 @@ namespace IFCConverter.Importer.Pipeline
         public EngineeringModel Execute(IModel model)
         {
             ImportType type = ResolveType(model);
-            
+
             EngineeringModel domain = new EngineeringModel();
             ImportContext context = new ImportContext(type);
 
@@ -21,7 +21,7 @@ namespace IFCConverter.Importer.Pipeline
 
             return domain;
         }
-        
+
         private static ImportType ResolveType(IModel model)
         {
             if (model.Header.CreatingApplication.Contains("AVEVA E3D"))

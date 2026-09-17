@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using IFCConverter.Domain;
-using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Diagnostics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 

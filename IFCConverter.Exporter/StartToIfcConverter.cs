@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using IFCConverter.Exporter.Pipeline;
-using IFCConverter.Utils.Diagnostics;
-using IFCConverter.Utils.Pipeline;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Diagnostics;
+using IFCConverter.Utils.Pipeline;
 using Xbim.Common;
 using Xbim.Ifc4.Kernel;
 using IfcProject = IFCConverter.IFC.API.IfcProject;

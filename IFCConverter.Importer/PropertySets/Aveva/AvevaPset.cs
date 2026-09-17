@@ -1,6 +1,6 @@
 ﻿using IFCConverter.Importer.Attributes;
 using IFCConverter.Importer.PropertySets.Converters;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Importer.PropertySets.Aveva
 {
@@ -51,7 +51,7 @@ namespace IFCConverter.Importer.PropertySets.Aveva
         [Property("NWELDS")] public int Nwelds = default;
 
         [Property("ORI", converter: typeof(AvevaMatrixPropertyConverter))]
-        public Matrix<double> Ori = default;
+        public FixedMatrix<Dim3> Ori = default;
 
         [Property("ORIL", converter: typeof(AvevaBoolPropertyConverter))]
         public bool Oril = default;
@@ -60,7 +60,7 @@ namespace IFCConverter.Importer.PropertySets.Aveva
         [Property("PIPE")] public string Pipe = string.Empty;
 
         [Property("POS", converter: typeof(AvevaVectorPropertyConverter))]
-        public Vector<double> Pos = default;
+        public FixedVector<Dim3> Pos = default;
 
         [Property("POSI", converter: typeof(AvevaBoolPropertyConverter))]
         public bool Posi = default;

@@ -8,7 +8,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
     internal sealed class StartAnchorEntityImporter : IStartEntityImporter
     {
         private readonly IStartAnchorEntityImportersRegistry _registry = new StartAnchorEntityImportersRegistry();
-        
+
         public bool CanImport(IStartEntity source)
         {
             return source is StartAbstractAnchorEntity;

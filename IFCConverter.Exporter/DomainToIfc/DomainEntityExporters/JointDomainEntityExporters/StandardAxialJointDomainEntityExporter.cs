@@ -4,9 +4,8 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEntityExporters
 {
@@ -17,18 +16,18 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
             if (!Enum.TryParse(joint.Metadata.Type, out StartElementTypeEnum type))
                 return false;
 
-            return type == StartElementTypeEnum.AXIAL_EXPANSION_JOINT || 
+            return type == StartElementTypeEnum.AXIAL_EXPANSION_JOINT ||
                    type == StartElementTypeEnum.AXIAL_EXPANSION_SLIP_JOINT;
         }
 
         override protected IIfcGeometry CreateGeometry(Joint joint, IModel model)
         {
             double diameter = joint.Ports.Max(port => port.Metadata.Diameter);
-            Vector<double>[] points = joint.Ports.Select(port => port.Position - joint.Position).ToArray();
-            
-            return AxialExpansionJointGeometry.CreateGeometry(model, new DoubleExtrudedJointGeometryProperties()
+            FixedVector<Dim3>[] points = joint.Ports.Select(port => port.Position - joint.Position).ToArray();
+
+            return AxialExpansionJointGeometry.CreateGeometry(model, new DoubleExtrudedJointGeometryProperties
             {
-                Position = VectorExtensions.Zero,
+                Position = FixedVector<Dim3>.Zeros(),
                 Diameter = diameter,
                 Points = points
             });

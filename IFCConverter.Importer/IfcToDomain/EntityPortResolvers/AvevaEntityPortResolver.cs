@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers
     internal sealed class AvevaEntityPortResolver : IEntityPortResolver
     {
         private readonly IAvevaEntityPortResolversRegistry _registry = new AvevaEntityPortResolversRegistry();
-        
+
         public bool CanResolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             if (!context.TryGetEntityId(product, out EntityId id))

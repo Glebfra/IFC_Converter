@@ -9,7 +9,7 @@ namespace IFCConverter.Importer.DomainToStart.Phases
     public sealed class EntityExportPhase : IDomainToStartPhase
     {
         private readonly IEntityExportersRegistry _registry = new EntityExportersRegistry();
-        
+
         public void Execute(EngineeringModel model, ExportContext context)
         {
             foreach (Entity entity in model.Entities)

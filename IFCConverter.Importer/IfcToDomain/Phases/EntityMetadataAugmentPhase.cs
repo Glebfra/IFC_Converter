@@ -10,7 +10,7 @@ namespace IFCConverter.Importer.IfcToDomain.Phases
     public sealed class EntityMetadataAugmentPhase : IIfcToDomainPhase
     {
         private readonly IEntityMetadataAugmentersRegistry _registry = new EntityMetadataAugmentersRegistry();
-        
+
         public void Execute(IModel model, EngineeringModel domain, ImportContext context)
         {
             foreach (IIfcProduct product in model.Instances.OfType<IIfcProduct>())

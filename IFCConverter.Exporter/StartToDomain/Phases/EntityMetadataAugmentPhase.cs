@@ -2,8 +2,8 @@
 using IFCConverter.Domain;
 using IFCConverter.Exporter.Attributes;
 using IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters;
-using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Start.Interfaces;
+using IFCConverter.Utils.Diagnostics;
 
 namespace IFCConverter.Exporter.StartToDomain.Phases
 {

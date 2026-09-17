@@ -1,4 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -14,6 +14,6 @@ namespace IFCConverter.IFC.Interfaces
         IfcFlowDirectionEnum FlowDirectionEnum { get; }
 
         IIfcPort CreatePort(IModel model);
-        IIfcObjectPlacement CreateObjectPlacement(IModel model, Matrix<double> matrix);
+        IIfcObjectPlacement CreateObjectPlacement(IModel model, FixedMatrix<Dim4> matrix);
     }
 }

@@ -2,11 +2,10 @@
 using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using MathNet.Numerics.LinearAlgebra;
 using IFCConverter.Start.Entities.Anchors;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 {
@@ -24,23 +23,23 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             IStartSegmentEntity[] segments = source.ConnectedEntities.OfType<IStartSegmentEntity>().ToArray();
             double diameter = DiameterFinder.GetMaxDiameter(segments, model, context);
 
-            Vector<double> position = anchor.Position;
-            Vector<double> direction = CalculateDirection(source, segments, position);
+            FixedVector<Dim3> position = anchor.Position;
+            FixedVector<Dim3> direction = CalculateDirection(source, segments, position);
 
             anchor.Port.SetGeometry(position, direction);
             anchor.Port.Metadata.Diameter = diameter;
         }
 
-        private static Vector<double> CalculateDirection(IStartEntity source, IStartSegmentEntity[] segments, Vector<double> position)
+        private static FixedVector<Dim3> CalculateDirection(IStartEntity source, IStartSegmentEntity[] segments, FixedVector<Dim3> position)
         {
             switch (source)
             {
                 case StartFixedAnchorEntity _:
-                    return segments.First().GetProjectionFromPoint(position).Normalize(2);
+                    return segments.First().GetProjectionFromPoint(position).Normalize();
                 case StartAbstractAnchorEntity _:
-                    return VectorExtensions.Z;
+                    return FixedVector<Dim3>.Builder.Z();
             }
-            
+
             throw new InvalidOperationException($"Cannot calculate direction for {source}");
         }
     }

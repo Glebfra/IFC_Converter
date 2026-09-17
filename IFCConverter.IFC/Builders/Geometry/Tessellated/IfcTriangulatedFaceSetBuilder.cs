@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
@@ -21,7 +21,7 @@ namespace IFCConverter.IFC.Builders.Geometry.Tessellated
             _coordIndex = coordIndex;
         }
 
-        public void AssignNormals(IEnumerable<Vector<double>> normals)
+        public void AssignNormals(IEnumerable<FixedVector<Dim3>> normals)
         {
             _normals = normals;
         }

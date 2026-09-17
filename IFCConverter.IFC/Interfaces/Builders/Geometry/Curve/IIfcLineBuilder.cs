@@ -1,4 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -10,7 +10,7 @@ namespace IFCConverter.IFC.Interfaces.Geometry.Curve
         IIfcCartesianPoint Point { get; }
         IIfcVector Direction { get; }
 
-        IIfcCartesianPoint CreatePoint(IModel model, Vector<double> point);
-        IIfcVector CreateDirection(IModel model, Vector<double> vector);
+        IIfcCartesianPoint CreatePoint(IModel model, FixedVector<Dim3> point);
+        IIfcVector CreateDirection(IModel model, FixedVector<Dim3> vector);
     }
 }

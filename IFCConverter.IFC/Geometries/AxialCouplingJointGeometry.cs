@@ -6,20 +6,18 @@ using IFCConverter.IFC.Builders.Geometry.SolidModel;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
-using MathNet.Numerics.LinearAlgebra;
+using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
-using MatrixExtensions = IFCConverter.Utils.Mathematics.MatrixExtensions;
-using VectorExtensions = IFCConverter.Utils.Mathematics.VectorExtensions;
 
 namespace IFCConverter.IFC.Geometries
 {
     public struct AxialCouplingJointGeometryProperties
     {
-        public Vector<double> Position;
-        public Vector<double> Direction;
+        public FixedVector<Dim3> Position;
+        public FixedVector<Dim3> Direction;
         public double Diameter;
     }
 
@@ -50,11 +48,14 @@ namespace IFCConverter.IFC.Geometries
             double outerDiameter = properties.Diameter * DiameterToOuterDiameterFactor;
             double wallThickness = outerDiameter - innerDiameter;
 
-            Vector<double> extrudedAreaPoint = properties.Position - properties.Direction * (length / 2);
-            Matrix<double> extrudedAreaMatrix =
-                MatrixExtensions.CreateTransition(extrudedAreaPoint, properties.Direction);
-            Matrix<double> profileDefMatrix =
-                MatrixExtensions.CreateTransition(VectorExtensions.Zero, VectorExtensions.Z);
+            FixedVector<Dim3> extrudedAreaPoint = properties.Position - properties.Direction * (length / 2);
+
+            FixedVector<Dim3> zAxis = properties.Direction;
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
+
+            FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
+            FixedMatrix<Dim4> extrudedAreaMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(extrudedAreaPoint, xAxis, yAxis, zAxis);
 
             IIfcCircleHollowProfileDefBuilder<IfcCircleHollowProfileDef> profileDefBuilder =
                 new IfcCircleHollowProfileDefBuilder<IfcCircleHollowProfileDef>(
@@ -65,7 +66,7 @@ namespace IFCConverter.IFC.Geometries
             IfcCircleHollowProfileDef profileDef = profileDefBuilder.CreateProfileDef(model);
 
             IIfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid> extrudedAreaSolidBuilder =
-                new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(length, VectorExtensions.Z, profileDef);
+                new IfcExtrudedAreaSolidBuilder<IfcExtrudedAreaSolid>(length, FixedVector<Dim3>.Builder.Z(), profileDef);
             extrudedAreaSolidBuilder.CreatePosition(model, extrudedAreaMatrix);
 
             return new AxialCouplingJointGeometry(extrudedAreaSolidBuilder);

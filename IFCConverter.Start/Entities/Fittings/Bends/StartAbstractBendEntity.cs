@@ -1,17 +1,12 @@
-﻿using System.Linq;
-using IFCConverter.Start.API;
+﻿using IFCConverter.Start.API;
 using IFCConverter.Start.Converters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Start.StartProperties;
-using IFCConverter.Utils.Mathematics;
-using MathNet.Numerics.LinearAlgebra;
 using Newtonsoft.Json;
-using IFCConverter.Start.Extensions;
 
 namespace IFCConverter.Start.Entities.Fittings
 {
-    public abstract class StartAbstractBendEntity : StartAbstractFittingEntity,
-        IStartOneNodeEntity, IStartFittingEntity, IStartMaterializedEntity, IStartClippingEntity
+    public abstract class StartAbstractBendEntity : StartAbstractFittingEntity, IStartMaterializedEntity
     {
         [JsonProperty(StartPropertyName.WallThickness)]
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
@@ -42,21 +37,7 @@ namespace IFCConverter.Start.Entities.Fittings
         [JsonConverter(typeof(JsonStartConverter<LengthValueProperty<double>>))]
         public IStartValueProperty<double> MillToleranceOutside { get; set; } = new LengthValueProperty<double>();
 
-        public void ClipEntity(IStartClippableEntity clippable)
-        {
-            clippable.Clip(Position, GetClipLength());
-        }
-
         [JsonProperty(StartPropertyName.MaterialName)]
         public string MaterialName { get; set; } = string.Empty;
-
-        private double GetClipLength()
-        {
-            IStartSegmentEntity[] segmentEntities = ConnectedEntities.OfType<IStartSegmentEntity>().ToArray();
-            Vector<double> firstDir = segmentEntities[0].GetProjectionFromPoint(Position).Negate();
-            Vector<double> secondDir = segmentEntities[1].GetProjectionFromPoint(Position);
-            double angle = firstDir.Angle(secondDir);
-            return MathExtensions.CalculateTorusSegmentLength(Radius.SIProperty, angle);
-        }
     }
 }
