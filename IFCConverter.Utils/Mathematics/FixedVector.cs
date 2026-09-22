@@ -17,12 +17,27 @@ namespace IFCConverter.Utils.Mathematics
             return new FixedVector<TDimension>(Vector<double>.Build.Dense(Dimension));
         }
 
+        public FixedVector<TDimension> Dense(double value)
+        {
+            return new FixedVector<TDimension>(Vector<double>.Build.Dense(Dimension, value));
+        }
+
         public FixedVector<TDimension> Dense(params double[] values)
         {
             if (values.Length != Dimension)
                 throw new ArgumentException($"The vector length {values.Length} is not equal to the dimension {Dimension}.");
 
             return new FixedVector<TDimension>(Vector<double>.Build.Dense(values));
+        }
+
+        public FixedVector<TDimension> Zeros()
+        {
+            return Dense(0.0);
+        }
+
+        public FixedVector<TDimension> Ones()
+        {
+            return Dense(1.0);
         }
     }
 
@@ -312,6 +327,26 @@ namespace IFCConverter.Utils.Mathematics
         public static void SetY(this FixedVector<Dim2> vector, double value)
         {
             vector[1] = value;
+        }
+        
+        public static FixedVector<Dim2> X(this FixedVectorBuilder<Dim2> builder)
+        {
+            return builder.Dense(1, 0);
+        }
+
+        public static FixedVector<Dim2> Y(this FixedVectorBuilder<Dim2> builder)
+        {
+            return builder.Dense(0, 1);
+        }
+        
+        public static FixedVector<Dim2> Dense(this FixedVectorBuilder<Dim2> builder, double x)
+        {
+            return builder.Dense(x, 0);
+        }
+
+        public static FixedVector<Dim2> Dense(this FixedVectorBuilder<Dim2> builder, double x, double y)
+        {
+            return builder.Dense(x, y);
         }
     }
 
