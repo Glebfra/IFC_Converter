@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
+using IFCConverter.Geometry.Mesh;
 
 namespace IFCConverter.Geometry.MeshBuilders
 {

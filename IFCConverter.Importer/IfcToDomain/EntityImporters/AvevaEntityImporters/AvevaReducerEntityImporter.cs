@@ -5,6 +5,7 @@ using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Geometry;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Geometry.MeshResolvers;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
@@ -64,8 +65,8 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AvevaEntityImporters
                 .Where(vertex => Math.Abs(vertex[0] - localMaxPoint[0]) < DoubleTolerance)
                 .ToArray();
 
-            FixedVector<Dim3> firstCircleLocalCenterPoint = firstCircleLocalPoints.Average();
-            FixedVector<Dim3> secondCircleLocalCenterPoint = secondCircleLocalPoints.Average();
+            FixedVector<Dim3> firstCircleLocalCenterPoint = firstCircleLocalPoints.Mean();
+            FixedVector<Dim3> secondCircleLocalCenterPoint = secondCircleLocalPoints.Mean();
 
             FixedVector<Dim3> centerDisplacement = secondCircleLocalCenterPoint - firstCircleLocalCenterPoint;
             FixedVector<Dim3> axisDisplacement = centerDisplacement.Dot(objToWorldMat.GetZ()) * objToWorldMat.GetZ();

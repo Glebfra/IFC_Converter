@@ -1,4 +1,5 @@
 ﻿using System;
+using IFCConverter.Geometry.Mesh;
 
 namespace IFCConverter.Geometry.MeshResolvers
 {

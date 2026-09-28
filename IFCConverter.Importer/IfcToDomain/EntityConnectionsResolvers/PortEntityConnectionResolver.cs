@@ -24,7 +24,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
                         continue;
 
                     Entity secondPortOwner = model.GetEntity(secondPort.Owner);
-
+                    
                     if (firstPort.Position.AlmostEqual(secondPort.Position, DoubleTolerance))
                         model.Connect(firstPort, secondPort, ResolveConnectionType(firstPortOwner, secondPortOwner));
                 }

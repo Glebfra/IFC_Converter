@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.MeshBuilders
@@ -41,10 +42,10 @@ namespace IFCConverter.Geometry.MeshBuilders
         }
 
         [Pure]
-        protected static Mesh BuildMesh(FixedVector<Dim3>[] vertices, int[][] triangles)
+        protected static Mesh.Mesh BuildMesh(FixedVector<Dim3>[] vertices, int[][] triangles)
         {
             FixedVector<Dim3>[] normals = CreateNormals(vertices, triangles);
-            return new Mesh(vertices, triangles, normals);
+            return new Mesh.Mesh(vertices, triangles, normals);
         }
     }
 }

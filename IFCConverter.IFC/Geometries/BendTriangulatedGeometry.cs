@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using IFCConverter.Geometry;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Geometry.MeshBuilders;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Attributes;
