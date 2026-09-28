@@ -2,23 +2,18 @@
 using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.Interfaces;
 
-namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.AvevaEntityPortResolvers
+namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.ElbowEntityPortResolvers
 {
-    internal sealed class AvevaElbowEntityPortResolver : IAvevaEntityPortResolver
+    internal sealed class AvevaElbowEntityPortResolver : IElbowEntityPortResolver
     {
         public bool CanResolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            if (!context.TryGetEntityId(product, out EntityId id))
-                return false;
-
-            Entity entity = model.GetEntity(id);
-            return entity is Elbow;
+            return context.ImportType == ImportType.AVEVA;
         }
 
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)

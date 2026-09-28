@@ -1,22 +1,17 @@
 ﻿using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.Interfaces;
 
-namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.UnknownEntityPortResolvers
+namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.ElbowEntityPortResolvers
 {
-    internal sealed class UnknownElbowEntityPortResolver : IUnknownEntityPortResolver
+    internal sealed class UnknownElbowEntityPortResolver : IElbowEntityPortResolver
     {
         public bool CanResolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            if (!context.TryGetEntityId(product, out EntityId id))
-                return false;
-            Entity entity = model.GetEntity(id);
-            return entity is Elbow elbow && 
-                   elbow.Metadata.Meta.ContainsKey("BoundaryCenters");
+            return context.ImportType == ImportType.UNKNOWN;
         }
 
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)

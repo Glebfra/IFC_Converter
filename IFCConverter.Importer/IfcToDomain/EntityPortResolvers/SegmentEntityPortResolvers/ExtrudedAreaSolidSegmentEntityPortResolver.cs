@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.Extensions;
@@ -7,27 +6,31 @@ using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 
-namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.UnknownEntityPortResolvers
+namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.SegmentEntityPortResolvers
 {
-    internal sealed class UnknownSegmentEntityPortResolver : IUnknownEntityPortResolver
+    internal sealed class ExtrudedAreaSolidSegmentEntityPortResolver : ISegmentEntityPortResolver
     {
         public bool CanResolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            return model.GetEntity(context.GetEntityId(product)) is Segment;
+            IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
+            if (representationItems.Length != 1)
+                return false;
+            if (!(representationItems[0] is IfcExtrudedAreaSolid extrudedAreaSolid))
+                return false;
+            if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
+                return false;
+
+            return true;
         }
 
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             Segment segment = (Segment)model.GetEntity(context.GetEntityId(product));
-
+            
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
-            if (representationItems.Length != 1)
-                throw new Exception("Expected exactly one representation item for the given source.");
-            if (!(representationItems[0] is IfcExtrudedAreaSolid extrudedAreaSolid))
-                throw new Exception("The representation item is not a extruded area solid.");
-            if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
-                throw new Exception("The given product is not a local placement.");
-
+            IfcExtrudedAreaSolid extrudedAreaSolid = (IfcExtrudedAreaSolid)representationItems[0];
+            IIfcLocalPlacement localPlacement = (IIfcLocalPlacement)product.ObjectPlacement;
+            
             FixedMatrix<Dim4> globalMatrix = extrudedAreaSolid.Position.ToFixedMatrix();
 
             while (localPlacement != null)

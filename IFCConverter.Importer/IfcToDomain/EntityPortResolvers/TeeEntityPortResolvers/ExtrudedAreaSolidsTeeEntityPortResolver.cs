@@ -1,52 +1,50 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
-using IFCConverter.Domain.Identity;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Ifc4.Interfaces;
 
-namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.UnknownEntityPortResolvers
+namespace IFCConverter.Importer.IfcToDomain.EntityPortResolvers.TeeEntityPortResolvers
 {
-    internal sealed class UnknownTeePortResolver : IUnknownEntityPortResolver
+    internal sealed class ExtrudedAreaSolidsTeeEntityPortResolver : ITeeEntityPortResolver
     {
         private const double DoubleTolerance = 1e-6;
         private readonly VectorComparer _comparer = new VectorComparer(DoubleTolerance);
         
         public bool CanResolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            if (!context.TryGetEntityId(product, out EntityId id))
+            IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
+            if (representationItems.Length != 2)
                 return false;
-            Entity entity = model.GetEntity(id);
-
-            return entity is Tee;
+            
+            foreach (IIfcRepresentationItem ifcRepresentationItem in representationItems)
+            {
+                if (!(ifcRepresentationItem is IIfcExtrudedAreaSolid extrudedAreaSolid))
+                    return false;
+                if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef profileDef))
+                    return false;
+            }
+            
+            return true;
         }
 
         public void Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             Tee tee = (Tee)model.GetEntity(context.GetEntityId(product));
-            
-            IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
-            if (representationItems.Length != 2)
-                throw new Exception("Expected exactly two representation item for the given source.");
-            
-            if (!representationItems.Any(item => item is IIfcExtrudedAreaSolid))
-                throw new Exception("The representation items is not a extruded area solid.");
-            IIfcExtrudedAreaSolid[] extrudedAreaSolids = representationItems.Cast<IIfcExtrudedAreaSolid>().ToArray();
+
+            IIfcExtrudedAreaSolid[] extrudedAreaSolids = product.GetRepresentationItems().Cast<IIfcExtrudedAreaSolid>().ToArray();
+            double lengthPower = product.Model.GetLengthPower();
 
             FixedVector<Dim3> position = tee.Position;
             FixedMatrix<Dim4> globalMatrix = (FixedMatrix<Dim4>)tee.Metadata.Meta["GlobalMatrix"];
             
-            double lengthPower = product.Model.GetLengthPower();
             FixedVector<Dim3> mainProjection = default, headProjection = default;
             double mainDiameter = default, headDiameter = default;
             
             foreach (IIfcExtrudedAreaSolid extrudedAreaSolid in extrudedAreaSolids)
             {
-                if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef profileDef))
-                    throw new Exception("The swept area is not a circle profile definition.");
-
+                IIfcCircleProfileDef profileDef = (IIfcCircleProfileDef)extrudedAreaSolid.SweptArea;
                 double teeBranchDiameter = profileDef.Radius * 2 * lengthPower;
 
                 FixedMatrix<Dim4> matrix = globalMatrix * extrudedAreaSolid.Position.ToFixedMatrix();
