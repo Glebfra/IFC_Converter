@@ -300,10 +300,11 @@ namespace IFCConverter.Utils.Mathematics
             return vectors.Aggregate(FixedVector<TDimension>.Zeros(), (current, vector) => current + vector);
         }
 
-        public static FixedVector<TDimension> Average<TDimension>(this IEnumerable<FixedVector<TDimension>> vectors)
+        public static FixedVector<TDimension> Mean<TDimension>(this IEnumerable<FixedVector<TDimension>> vectors)
             where TDimension : struct, IDimension
         {
-            return vectors.Sum() * (1 / vectors.Count());
+            IReadOnlyCollection<FixedVector<TDimension>> vectorsArr = vectors.ToArray();
+            return vectorsArr.Sum() * (1.0 / vectorsArr.Count);
         }
     }
 

@@ -403,6 +403,11 @@ namespace IFCConverter.Utils.Mathematics
             return new FixedMatrix<Dim3>(matrix.Matrix.SubMatrix(0, 3, 0, 3));
         }
 
+        public static FixedMatrix<Dim4> CreateTransition(this FixedMatrixBuilder<Dim4> builder, FixedVector<Dim3> offset, FixedMatrix<Dim3> rotation)
+        {
+            return builder.CreateTransition(offset, rotation.GetX(), rotation.GetY(), rotation.GetZ());
+        }
+
         public static FixedMatrix<Dim4> CreateTransition(this FixedMatrixBuilder<Dim4> builder, FixedVector<Dim4> offset)
         {
             FixedVector<Dim4> xAxis = FixedVector<Dim4>.Builder.X();

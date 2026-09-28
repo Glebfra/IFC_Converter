@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using IFCConverter.Geometry.Mesh;
 
 namespace IFCConverter.Geometry.MeshResolvers
 {

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry
+namespace IFCConverter.Geometry.Mesh
 {
     public sealed class Mesh : IMesh
     {
@@ -15,5 +17,10 @@ namespace IFCConverter.Geometry
         public FixedVector<Dim3>[] Vertices { get; }
         public int[][] Triangles { get; }
         public FixedVector<Dim3>[] Normals { get; }
+
+        public IEnumerable<Triangle> GetTriangles()
+        {
+            return Triangles.Select(triangle => new Triangle(triangle[0], triangle[1], triangle[2]));
+        }
     }
 }
