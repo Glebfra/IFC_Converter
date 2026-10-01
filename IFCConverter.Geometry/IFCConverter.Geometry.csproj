@@ -48,6 +48,11 @@
     <ItemGroup>
         <Compile Include="Boundary\BoundaryLoop.cs" />
         <Compile Include="Boundary\BoundaryLoopBuilder.cs" />
+        <Compile Include="Curves\Arc3D.cs" />
+        <Compile Include="Curves\Circle3D.cs" />
+        <Compile Include="Curves\ICurve3D.cs" />
+        <Compile Include="Curves\Line3D.cs" />
+        <Compile Include="IGeometry.cs" />
         <Compile Include="MeshBuilders\EarClippingMeshBuilder.cs"/>
         <Compile Include="MeshBuilders\IMeshBuilder.cs"/>
         <Compile Include="MeshBuilders\MeshBuilder.cs"/>
@@ -62,6 +67,8 @@
         <Compile Include="Mesh\Mesh.cs" />
         <Compile Include="Mesh\MeshTopology.cs" />
         <Compile Include="Mesh\Triangle.cs" />
+        <Compile Include="Profiles\Profile2D.cs" />
+        <Compile Include="Profiles\ProfileLoop.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Triangulators\EarClippingTriangulator.cs"/>
         <Compile Include="Triangulators\ITriangulator.cs"/>

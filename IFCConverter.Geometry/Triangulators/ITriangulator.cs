@@ -1,9 +1,10 @@
-﻿using IFCConverter.Utils.Mathematics;
+﻿using IFCConverter.Geometry.Mesh;
+using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Triangulators
 {
     internal interface ITriangulator
     {
-        int[][] Triangulate(FixedVector<Dim3>[] vertices);
+        Triangle[] Triangulate(FixedVector<Dim3>[] vertices);
     }
 }

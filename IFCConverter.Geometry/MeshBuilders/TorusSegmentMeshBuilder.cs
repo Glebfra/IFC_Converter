@@ -41,7 +41,7 @@ namespace IFCConverter.Geometry.MeshBuilders
             double angle = Math.Atan2(endVector.Dot(v), endVector.Dot(u));
 
             List<FixedVector<Dim3>> vertices = new List<FixedVector<Dim3>>((_arcSegments + 1) * _profileSegments);
-            List<int[]> triangles = new List<int[]>(_arcSegments * _profileSegments * 2);
+            List<Triangle> triangles = new List<Triangle>(_arcSegments * _profileSegments * 2);
 
             for (int i = 0; i <= _arcSegments; i++)
             {
@@ -80,14 +80,8 @@ namespace IFCConverter.Geometry.MeshBuilders
                     int c = nextRow + nextProfile;
                     int d = nextRow + j;
 
-                    triangles.Add(new[]
-                    {
-                        a, b, c
-                    });
-                    triangles.Add(new[]
-                    {
-                        a, c, d
-                    });
+                    triangles.Add(new Triangle(a, b, c));
+                    triangles.Add(new Triangle(a, c, d));
                 }
             }
 

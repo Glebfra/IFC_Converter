@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Triangulators
 {
     internal class EarClippingTriangulator : ITriangulator
     {
-        public int[][] Triangulate(FixedVector<Dim3>[] vertices)
+        public Triangle[] Triangulate(FixedVector<Dim3>[] vertices)
         {
             FixedVector<Dim3>[] verticesArr = vertices ?? vertices.ToArray();
             PlaneProjection projection = PlaneProjectionFactory.Create(verticesArr);
@@ -16,7 +17,7 @@ namespace IFCConverter.Geometry.Triangulators
             if (points2D.Length < 3)
                 throw new ArgumentException("Polygon must contain at least 3 vertices");
 
-            List<int[]> triangles = new List<int[]>();
+            List<Triangle> triangles = new List<Triangle>();
             List<int> polygon = new List<int>(points2D.Length);
 
             for (int i = 0; i < vertices.Length; i++)
@@ -59,10 +60,7 @@ namespace IFCConverter.Geometry.Triangulators
                     if (containsPoint)
                         continue;
 
-                    triangles.Add(new[]
-                    {
-                        prev, curr, next
-                    });
+                    triangles.Add(new Triangle(prev, curr, next));
                     polygon.RemoveAt(i);
 
                     earFound = true;
@@ -73,10 +71,7 @@ namespace IFCConverter.Geometry.Triangulators
                     throw new InvalidOperationException("Failed to triangulate polygon. Polygon may be self-intersecting");
             }
 
-            triangles.Add(new[]
-            {
-                polygon[0], polygon[1], polygon[2]
-            });
+            triangles.Add(new Triangle(polygon[0], polygon[1], polygon[2]));
             return triangles.ToArray();
         }
 

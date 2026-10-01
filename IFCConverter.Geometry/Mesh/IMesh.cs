@@ -3,12 +3,18 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Mesh
 {
-    public interface IMesh
+    public interface IMesh : IGeometry
     {
-        FixedVector<Dim3>[] Vertices { get; }
-        int[][] Triangles { get; }
-        FixedVector<Dim3>[] Normals { get; }
+        IReadOnlyList<FixedVector<Dim3>> Vertices { get; }
+        IReadOnlyList<Triangle> Triangles { get; }
+        IReadOnlyList<FixedVector<Dim3>> Normals { get; }
+        
+        int VertexCount { get; }
+        int TriangleCount { get; }
+        int NormalCount { get; }
 
-        IEnumerable<Triangle> GetTriangles();
+        int AddVertex(FixedVector<Dim3> vertex);
+        int AddTriangle(Triangle triangle);
+        int AddNormal(FixedVector<Dim3> normal);
     }
 }

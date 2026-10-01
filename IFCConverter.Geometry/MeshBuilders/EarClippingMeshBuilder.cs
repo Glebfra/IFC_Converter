@@ -19,7 +19,7 @@ namespace IFCConverter.Geometry.MeshBuilders
         [Pure]
         public override IMesh Build()
         {
-            int[][] triangles = _triangulator.Triangulate(_vertices);
+            Triangle[] triangles = _triangulator.Triangulate(_vertices);
             return BuildMesh(_vertices, triangles);
         }
     }

@@ -25,13 +25,13 @@ namespace IFCConverter.Geometry.MeshBuilders
         }
 
         [Pure]
-        protected static FixedVector<Dim3>[] CreateNormals(FixedVector<Dim3>[] vertices, int[][] triangles)
+        protected static FixedVector<Dim3>[] CreateNormals(FixedVector<Dim3>[] vertices, Triangle[] triangles)
         {
             FixedVector<Dim3>[] normals = new FixedVector<Dim3>[triangles.Length];
 
             for (int i = 0; i < triangles.Length; i++)
             {
-                int[] triangle = triangles[i];
+                Triangle triangle = triangles[i];
 
                 FixedVector<Dim3> first = vertices[triangle[1]] - vertices[triangle[0]];
                 FixedVector<Dim3> second = vertices[triangle[2]] - vertices[triangle[1]];
@@ -42,7 +42,7 @@ namespace IFCConverter.Geometry.MeshBuilders
         }
 
         [Pure]
-        protected static Mesh.Mesh BuildMesh(FixedVector<Dim3>[] vertices, int[][] triangles)
+        protected static IMesh BuildMesh(FixedVector<Dim3>[] vertices, Triangle[] triangles)
         {
             FixedVector<Dim3>[] normals = CreateNormals(vertices, triangles);
             return new Mesh.Mesh(vertices, triangles, normals);

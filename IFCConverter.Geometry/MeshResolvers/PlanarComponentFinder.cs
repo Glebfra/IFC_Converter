@@ -17,10 +17,10 @@ namespace IFCConverter.Geometry.MeshResolvers
         public IReadOnlyList<PlanarComponent> Find(IMesh mesh)
         {
             Dictionary<int, List<int>> adjacency = BuildTriangleAdjacency(mesh);
-            bool[] visited = new bool[mesh.Triangles.Length];
+            bool[] visited = new bool[mesh.TriangleCount];
             List<PlanarComponent> components = new List<PlanarComponent>();
 
-            for (int start = 0; start < mesh.Triangles.Length; start++)
+            for (int start = 0; start < mesh.TriangleCount; start++)
             {
                 if (visited[start])
                     continue;
@@ -67,16 +67,16 @@ namespace IFCConverter.Geometry.MeshResolvers
         private static Dictionary<int, List<int>> BuildTriangleAdjacency(IMesh mesh)
         {
             Dictionary<(int, int), List<int>> edgeTriangles = new Dictionary<(int, int), List<int>>();
-            for (int i = 0; i < mesh.Triangles.Length; i++)
+            for (int i = 0; i < mesh.TriangleCount; i++)
             {
-                int[] triangle = mesh.Triangles[i];
+                Triangle triangle = mesh.Triangles[i];
                 AddEdge(edgeTriangles, triangle[0], triangle[1], i);
                 AddEdge(edgeTriangles, triangle[1], triangle[2], i);
                 AddEdge(edgeTriangles, triangle[2], triangle[0], i);
             }
 
             Dictionary<int, List<int>> adjacency = new Dictionary<int, List<int>>();
-            for (int i = 0; i < mesh.Triangles.Length; i++)
+            for (int i = 0; i < mesh.TriangleCount; i++)
                 adjacency[i] = new List<int>();
 
             foreach (List<int> trianglesForEdge in edgeTriangles.Values)
@@ -103,7 +103,7 @@ namespace IFCConverter.Geometry.MeshResolvers
 
             foreach (int triangleIndex in triangleIndices)
             {
-                int[] triangle = mesh.Triangles[triangleIndex];
+                Triangle triangle = mesh.Triangles[triangleIndex];
 
                 FixedVector<Dim3> p0 = mesh.Vertices[triangle[0]];
                 FixedVector<Dim3> p1 = mesh.Vertices[triangle[1]];

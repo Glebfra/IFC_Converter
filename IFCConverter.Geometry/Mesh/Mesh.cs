@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Utils.Mathematics;
 
@@ -7,20 +6,48 @@ namespace IFCConverter.Geometry.Mesh
 {
     public sealed class Mesh : IMesh
     {
-        public Mesh(FixedVector<Dim3>[] vertices, int[][] triangles, FixedVector<Dim3>[] normals)
+        private readonly List<FixedVector<Dim3>> _vertices;
+        private readonly List<Triangle> _triangles;
+        private readonly List<FixedVector<Dim3>> _normals;
+
+        public IReadOnlyList<FixedVector<Dim3>> Vertices => _vertices;
+        public IReadOnlyList<Triangle> Triangles => _triangles;
+        public IReadOnlyList<FixedVector<Dim3>> Normals => _normals;
+        
+        public int VertexCount => _vertices.Count;
+        public int TriangleCount => _triangles.Count;
+        public int NormalCount => _normals.Count;
+        
+        public Mesh()
         {
-            Vertices = vertices ?? throw new ArgumentNullException(nameof(vertices));
-            Triangles = triangles ?? throw new ArgumentNullException(nameof(triangles));
-            Normals = normals ?? throw new ArgumentNullException(nameof(normals));
+            _vertices = new List<FixedVector<Dim3>>();
+            _triangles = new List<Triangle>();
+            _normals = new List<FixedVector<Dim3>>();
         }
 
-        public FixedVector<Dim3>[] Vertices { get; }
-        public int[][] Triangles { get; }
-        public FixedVector<Dim3>[] Normals { get; }
-
-        public IEnumerable<Triangle> GetTriangles()
+        public Mesh(IEnumerable<FixedVector<Dim3>> vertices, IEnumerable<Triangle> triangles, IEnumerable<FixedVector<Dim3>> normals)
         {
-            return Triangles.Select(triangle => new Triangle(triangle[0], triangle[1], triangle[2]));
+            _vertices = vertices.ToList();
+            _triangles = triangles.ToList();
+            _normals = normals.ToList();
+        }
+
+        public int AddVertex(FixedVector<Dim3> vertex)
+        {
+            _vertices.Add(vertex);
+            return _vertices.Count - 1;
+        }
+
+        public int AddTriangle(Triangle triangle)
+        {
+            _triangles.Add(triangle);
+            return _triangles.Count - 1;
+        }
+
+        public int AddNormal(FixedVector<Dim3> normal)
+        {
+            _normals.Add(normal);
+            return _normals.Count - 1;
         }
     }
 }

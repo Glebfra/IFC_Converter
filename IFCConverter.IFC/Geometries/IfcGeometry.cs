@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Interfaces;
@@ -86,19 +87,11 @@ namespace IFCConverter.IFC.Geometries
         }
 
         [Pure]
-        protected static int[][] ChangeTriangleIndexation(int[][] triangleIndices)
+        protected static IReadOnlyList<Triangle> ChangeTriangleIndexation(IReadOnlyList<Triangle> triangleIndices)
         {
-            int[][] changedTriangleIndices = new int[triangleIndices.Length][];
-            for (int i = 0; i < triangleIndices.Length; i++)
-            {
-                changedTriangleIndices[i] = triangleIndices[i];
-                for (int j = 0; j < triangleIndices[i].Length; j++)
-                {
-                    changedTriangleIndices[i][j]++;
-                }
-            }
-
-            return changedTriangleIndices;
+            return triangleIndices.Select(triangle => triangle.Select(index => index + 1).ToArray())
+                .Select(indices => new Triangle(indices[0], indices[1], indices[2]))
+                .ToArray();
         }
 
         private void StyleItems(IModel model, IColor color, IEnumerable<IIfcRepresentationItem> representationItems)

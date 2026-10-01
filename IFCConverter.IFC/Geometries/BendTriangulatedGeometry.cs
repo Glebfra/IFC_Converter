@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using IFCConverter.Geometry;
+using System.Linq;
 using IFCConverter.Geometry.Mesh;
 using IFCConverter.Geometry.MeshBuilders;
 using IFCConverter.IFC.API;
@@ -48,11 +48,11 @@ namespace IFCConverter.IFC.Geometries
                 properties.PipeDiameter / 2);
 
             IMesh mesh = meshBuilder.Build();
-            int[][] triangles = ChangeTriangleIndexation(mesh.Triangles);
+            IReadOnlyList<Triangle> triangles = ChangeTriangleIndexation(mesh.Triangles);
 
             IIfcTriangulatedFaceSetBuilder<IIfcTriangulatedFaceSet> builder = new IfcTriangulatedFaceSetBuilder<IfcTriangulatedFaceSet>();
             builder.CreateCoordinates(model, mesh.Vertices);
-            builder.AssignTriangleIndices(triangles);
+            builder.AssignTriangleIndices(triangles.Cast<IEnumerable<int>>());
             builder.AssignNormals(mesh.Normals);
 
             return new BendTriangulatedGeometry(builder);
