@@ -11,12 +11,14 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
 
         public IIfcEntityImporter Resolve(IIfcProduct entity, ImportContext context)
         {
-            return Resolve(importer => importer.CanImport(entity, context));
+            EntityType type = EntityTypeResolver.ResolveType(entity, context.ImportType);
+            return Resolve(importer => importer.CanImport(type));
         }
 
         public bool TryResolve(IIfcProduct product, ImportContext context, out IIfcEntityImporter importer)
         {
-            return TryResolve(imp => imp.CanImport(product, context), out importer);
+            EntityType type = EntityTypeResolver.ResolveType(product, context.ImportType);
+            return TryResolve(imp => imp.CanImport(type), out importer);
         }
     }
 }

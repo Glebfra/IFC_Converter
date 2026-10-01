@@ -8,7 +8,6 @@ namespace IFCConverter.Importer.IfcToDomain
 {
     public sealed class ImportContext
     {
-
         private readonly Dictionary<EntityId, IIfcProduct> _entities = new Dictionary<EntityId, IIfcProduct>();
         private readonly Dictionary<IIfcProduct, EntityId> _entitiesReversed = new Dictionary<IIfcProduct, EntityId>();
 
