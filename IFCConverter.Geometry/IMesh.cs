@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry.Mesh
+namespace IFCConverter.Geometry
 {
     public interface IMesh : IGeometry
     {
         IReadOnlyList<FixedVector<Dim3>> Vertices { get; }
         IReadOnlyList<Triangle> Triangles { get; }
-        IReadOnlyList<FixedVector<Dim3>> Normals { get; }
+        IReadOnlyList<FixedVector<Dim3>> FaceNormals { get; }
         
         int VertexCount { get; }
         int TriangleCount { get; }
-        int NormalCount { get; }
+        int FaceNormalCount { get; }
 
         int AddVertex(FixedVector<Dim3> vertex);
         int AddTriangle(Triangle triangle);
-        int AddNormal(FixedVector<Dim3> normal);
+        int AddFaceNormal(FixedVector<Dim3> faceNormal);
     }
 }

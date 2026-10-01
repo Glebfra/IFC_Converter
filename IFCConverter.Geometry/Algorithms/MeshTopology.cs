@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace IFCConverter.Geometry.Mesh
+namespace IFCConverter.Geometry.Algorithms
 {
     public static class MeshTopology
     {

@@ -3,7 +3,7 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Curves
 {
-    public sealed class Arc3D : ICurve3D
+    public readonly struct Arc3D : ICurve3D
     {
         public Circle3D Circle { get; }
         

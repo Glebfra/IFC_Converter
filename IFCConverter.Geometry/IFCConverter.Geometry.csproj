@@ -46,30 +46,32 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Algorithms\BoundaryLoopBuilder.cs" />
+        <Compile Include="Algorithms\EarClippingMeshBuilder.cs" />
+        <Compile Include="Algorithms\IMeshBuilder.cs" />
+        <Compile Include="Algorithms\MeshBuilder.cs" />
+        <Compile Include="Algorithms\MeshGeometry.cs" />
+        <Compile Include="Algorithms\MeshResolvers\ClippedConeGeometry.cs" />
+        <Compile Include="Algorithms\MeshResolvers\ClippedConeMeshAnalyzer.cs" />
+        <Compile Include="Algorithms\MeshResolvers\ClosedClippedConeMeshResolver.cs" />
+        <Compile Include="Algorithms\MeshResolvers\PlanarComponent.cs" />
+        <Compile Include="Algorithms\MeshResolvers\PlanarComponentFinder.cs" />
+        <Compile Include="Algorithms\MeshTopology.cs" />
+        <Compile Include="Algorithms\TorusSegmentMeshBuilder.cs" />
         <Compile Include="Boundary\BoundaryLoop.cs" />
-        <Compile Include="Boundary\BoundaryLoopBuilder.cs" />
         <Compile Include="Curves\Arc3D.cs" />
         <Compile Include="Curves\Circle3D.cs" />
         <Compile Include="Curves\ICurve3D.cs" />
         <Compile Include="Curves\Line3D.cs" />
+        <Compile Include="Edge.cs" />
         <Compile Include="IGeometry.cs" />
-        <Compile Include="MeshBuilders\EarClippingMeshBuilder.cs"/>
-        <Compile Include="MeshBuilders\IMeshBuilder.cs"/>
-        <Compile Include="MeshBuilders\MeshBuilder.cs"/>
-        <Compile Include="MeshBuilders\TorusSegmentMeshBuilder.cs"/>
-        <Compile Include="MeshResolvers\ClippedConeGeometry.cs"/>
-        <Compile Include="MeshResolvers\ClippedConeMeshAnalyzer.cs"/>
-        <Compile Include="MeshResolvers\ClosedClippedConeMeshResolver.cs"/>
-        <Compile Include="MeshResolvers\PlanarComponent.cs"/>
-        <Compile Include="MeshResolvers\PlanarComponentFinder.cs"/>
-        <Compile Include="Mesh\Edge.cs" />
-        <Compile Include="Mesh\IMesh.cs" />
-        <Compile Include="Mesh\Mesh.cs" />
-        <Compile Include="Mesh\MeshTopology.cs" />
-        <Compile Include="Mesh\Triangle.cs" />
+        <Compile Include="IMesh.cs" />
+        <Compile Include="Mesh.cs" />
         <Compile Include="Profiles\Profile2D.cs" />
         <Compile Include="Profiles\ProfileLoop.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Solids\ExtrudedSolid.cs" />
+        <Compile Include="Triangle.cs" />
         <Compile Include="Triangulators\EarClippingTriangulator.cs"/>
         <Compile Include="Triangulators\ITriangulator.cs"/>
     </ItemGroup>

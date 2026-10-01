@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry.MeshResolvers
+namespace IFCConverter.Geometry.Algorithms.MeshResolvers
 {
     internal sealed class PlanarComponentFinder
     {
@@ -25,7 +24,7 @@ namespace IFCConverter.Geometry.MeshResolvers
                 if (visited[start])
                     continue;
 
-                FixedVector<Dim3> normal = mesh.Normals[start];
+                FixedVector<Dim3> normal = mesh.FaceNormals[start];
 
                 if (normal.L2Norm() < 1e-12)
                 {
@@ -49,7 +48,7 @@ namespace IFCConverter.Geometry.MeshResolvers
                         if (visited[neighbour])
                             continue;
 
-                        double dot = Math.Abs(mesh.Normals[current].Dot(mesh.Normals[neighbour]));
+                        double dot = Math.Abs(mesh.FaceNormals[current].Dot(mesh.FaceNormals[neighbour]));
                         if (dot < 1.0 - _normalTolerance)
                             continue;
 

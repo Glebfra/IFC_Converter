@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace IFCConverter.Geometry.Mesh
+namespace IFCConverter.Geometry
 {
     public readonly struct Triangle : IEnumerable<int>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IFCConverter.Geometry.Mesh
+namespace IFCConverter.Geometry
 {
     public readonly struct Edge : IEquatable<Edge>
     {

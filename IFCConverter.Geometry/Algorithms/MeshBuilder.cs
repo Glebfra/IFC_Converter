@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry.MeshBuilders
+namespace IFCConverter.Geometry.Algorithms
 {
     public abstract class MeshBuilder : IMeshBuilder
     {
@@ -45,7 +44,7 @@ namespace IFCConverter.Geometry.MeshBuilders
         protected static IMesh BuildMesh(FixedVector<Dim3>[] vertices, Triangle[] triangles)
         {
             FixedVector<Dim3>[] normals = CreateNormals(vertices, triangles);
-            return new Mesh.Mesh(vertices, triangles, normals);
+            return new Mesh(vertices, triangles, normals);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IFCConverter.Geometry.Mesh;
+using IFCConverter.Geometry.Boundary;
 
-namespace IFCConverter.Geometry.Boundary
+namespace IFCConverter.Geometry.Algorithms
 {
     public static class BoundaryLoopBuilder
     {

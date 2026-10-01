@@ -1,5 +1,4 @@
-﻿using IFCConverter.Geometry.Mesh;
-using IFCConverter.Utils.Mathematics;
+﻿using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Triangulators
 {

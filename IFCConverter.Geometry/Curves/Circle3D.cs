@@ -4,20 +4,18 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Curves
 {
-    public sealed class Circle3D : ICurve3D
+    public readonly struct Circle3D : ICurve3D
     {
         public FixedVector<Dim3> Center { get; }
-        public FixedVector<Dim3> Axis { get; }
         
         public FixedVector<Dim3> BasisX { get; }
         public FixedVector<Dim3> BasisY { get; }
         
         public double Radius { get; }
         
-        public Circle3D(FixedVector<Dim3> center, FixedVector<Dim3> axis, FixedVector<Dim3> basisX, FixedVector<Dim3> basisY, double radius)
+        public Circle3D(FixedVector<Dim3> center, FixedVector<Dim3> basisX, FixedVector<Dim3> basisY, double radius)
         {
             Center = center;
-            Axis = axis.Normalize();
             BasisX = basisX.Normalize();
             BasisY = basisY.Normalize();
             Radius = radius;

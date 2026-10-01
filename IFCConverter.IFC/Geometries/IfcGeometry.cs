@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using IFCConverter.Geometry.Mesh;
+using IFCConverter.Geometry;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Interfaces;

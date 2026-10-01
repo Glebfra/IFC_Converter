@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry.MeshResolvers
+namespace IFCConverter.Geometry.Algorithms.MeshResolvers
 {
     internal sealed class PlanarComponent
     {

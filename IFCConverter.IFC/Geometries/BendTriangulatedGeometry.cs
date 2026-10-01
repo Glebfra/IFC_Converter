@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using IFCConverter.Geometry.Mesh;
-using IFCConverter.Geometry.MeshBuilders;
+using IFCConverter.Geometry;
+using IFCConverter.Geometry.Algorithms;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Builders.Geometry.Tessellated;
@@ -53,7 +53,7 @@ namespace IFCConverter.IFC.Geometries
             IIfcTriangulatedFaceSetBuilder<IIfcTriangulatedFaceSet> builder = new IfcTriangulatedFaceSetBuilder<IfcTriangulatedFaceSet>();
             builder.CreateCoordinates(model, mesh.Vertices);
             builder.AssignTriangleIndices(triangles.Cast<IEnumerable<int>>());
-            builder.AssignNormals(mesh.Normals);
+            builder.AssignNormals(mesh.FaceNormals);
 
             return new BendTriangulatedGeometry(builder);
         }

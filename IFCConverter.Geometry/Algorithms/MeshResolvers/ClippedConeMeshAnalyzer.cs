@@ -1,7 +1,6 @@
 ﻿using System;
-using IFCConverter.Geometry.Mesh;
 
-namespace IFCConverter.Geometry.MeshResolvers
+namespace IFCConverter.Geometry.Algorithms.MeshResolvers
 {
     public sealed class ClippedConeMeshAnalyzer
     {

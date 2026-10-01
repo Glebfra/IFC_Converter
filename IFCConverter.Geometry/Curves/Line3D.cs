@@ -3,7 +3,7 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Curves
 {
-    public sealed class Line3D : ICurve3D
+    public readonly struct Line3D : ICurve3D
     {
         public FixedVector<Dim3> Origin { get; }
         public FixedVector<Dim3> Direction { get; }

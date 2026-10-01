@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Geometry.Profiles
 {
-    public sealed class Profile2D : IGeometry
+    public readonly struct Profile2D : IGeometry
     {
         public IReadOnlyList<ProfileLoop> Loops { get; }
         

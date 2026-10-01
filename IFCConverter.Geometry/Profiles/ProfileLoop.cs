@@ -3,7 +3,7 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Profiles
 {
-    public sealed class ProfileLoop
+    public readonly struct ProfileLoop
     {
         public IReadOnlyList<FixedVector<Dim2>> Points { get; }
         public bool IsHole { get; }

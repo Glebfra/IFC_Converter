@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using IFCConverter.Geometry.Mesh;
 using IFCConverter.Geometry.Triangulators;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry.MeshBuilders
+namespace IFCConverter.Geometry.Algorithms
 {
     public sealed class EarClippingMeshBuilder : MeshBuilder
     {
