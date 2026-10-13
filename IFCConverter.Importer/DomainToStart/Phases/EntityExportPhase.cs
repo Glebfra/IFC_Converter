@@ -5,7 +5,7 @@ using IFCConverter.Importer.DomainToStart.EntityExporters;
 
 namespace IFCConverter.Importer.DomainToStart.Phases
 {
-    [DomainToStartPhase(1, typeof(SegmentsPortAugmentPhase))]
+    [DomainToStartPhase(1, typeof(MissingConnectionsAugmentPhase))]
     public sealed class EntityExportPhase : IDomainToStartPhase
     {
         private readonly IEntityExportersRegistry _registry = new EntityExportersRegistry();

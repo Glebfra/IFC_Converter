@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IFCConverter.Geometry.Mesh;
 
 namespace IFCConverter.Geometry.Boundary
 {
-    public sealed class BoundaryLoop
+    public readonly struct BoundaryLoop
     {
-        private List<int> _vertices;
+        private readonly List<int> _vertices;
         
         public IReadOnlyList<int> Vertices => _vertices;
         public int Count => _vertices.Count;

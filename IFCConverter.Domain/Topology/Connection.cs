@@ -1,10 +1,10 @@
-﻿using IFCConverter.Domain.Identity;
+﻿using System.Collections.Generic;
+using IFCConverter.Domain.Identity;
 
 namespace IFCConverter.Domain.Topology
 {
     public sealed class Connection
     {
-
         internal Connection(ConnectionId id, Port portA, Port portB, ConnectionType type)
         {
             Id = id;
@@ -18,5 +18,14 @@ namespace IFCConverter.Domain.Topology
 
         public Port PortA { get; }
         public Port PortB { get; }
+
+        public IEnumerable<Port> Ports
+        {
+            get
+            {
+                yield return PortA;
+                yield return PortB;
+            }
+        }
     }
 }

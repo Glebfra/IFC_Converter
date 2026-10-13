@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Geometry;
-using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
@@ -129,8 +128,11 @@ namespace IFCConverter.IFC.Extensions
         {
             FixedVector<Dim3>[] vertices = triangulatedFaceSet.Coordinates.GetFixedCoordinates().ToArray();
             FixedVector<Dim3>[] normals = triangulatedFaceSet.Normals.Select(normal => normal.ToFixedVector<Dim3>()).ToArray();
-            int[][] triangles = triangulatedFaceSet.CoordIndex.Select(indices => indices.Select(index => (int)index - 1).ToArray()).ToArray();
-            return new Mesh(vertices, triangles, normals);
+            Triangle[] triangles = triangulatedFaceSet.CoordIndex
+                .Select(indices => indices.Select(index => (int)index - 1).ToArray())
+                .Select(indices => new Triangle(indices[0], indices[1], indices[2]))
+                .ToArray();
+            return new Mesh(vertices, triangles);
         }
     }
 }

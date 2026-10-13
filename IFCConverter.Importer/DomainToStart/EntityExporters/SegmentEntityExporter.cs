@@ -20,6 +20,9 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             pipe.Diameter.CreateFromSI(segment.Diameter);
 
             FixedVector<Dim3> projection = segment.EndPort.Position - segment.StartPort.Position;
+            if (segment.Metadata.Meta.TryGetValue("Projection", out object projectionValue))
+                projection =  (FixedVector<Dim3>)projectionValue;
+            
             pipe.ProjectionAlongOXAxis.CreateFromSI(projection[0]);
             pipe.ProjectionAlongOYAxis.CreateFromSI(projection[1]);
             pipe.ProjectionAlongOZAxis.CreateFromSI(projection[2]);
