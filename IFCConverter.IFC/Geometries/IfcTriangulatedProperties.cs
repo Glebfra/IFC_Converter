@@ -440,11 +440,11 @@ namespace IFCConverter.IFC.Geometries
 
                 FixedVector<Dim3> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
                 FixedVector<Dim3> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = first.CreateNormalVector(second);
+                normals[i] = first.CreateNormalVector(second).Normalize();
 
                 first = coordinates[triangleIndices[i + 1][1] - 1] - coordinates[triangleIndices[i + 1][0] - 1];
                 second = coordinates[triangleIndices[i + 1][2] - 1] - coordinates[triangleIndices[i + 1][1] - 1];
-                normals[i + 1] = first.CreateNormalVector(second);
+                normals[i + 1] = first.CreateNormalVector(second).Normalize();
             }
 
             for (int i = _numSegments * 2; i < _numSegments * 4; i += 2)
@@ -460,11 +460,11 @@ namespace IFCConverter.IFC.Geometries
 
                 FixedVector<Dim3> first = coordinates[triangleIndices[i][1] - 1] - coordinates[triangleIndices[i][0] - 1];
                 FixedVector<Dim3> second = coordinates[triangleIndices[i][2] - 1] - coordinates[triangleIndices[i][1] - 1];
-                normals[i] = first.CreateNormalVector(second);
+                normals[i] = first.CreateNormalVector(second).Normalize();
 
                 first = coordinates[triangleIndices[i + 1][1] - 1] - coordinates[triangleIndices[i + 1][0] - 1];
                 second = coordinates[triangleIndices[i + 1][2] - 1] - coordinates[triangleIndices[i + 1][1] - 1];
-                normals[i + 1] = first.CreateNormalVector(second);
+                normals[i + 1] = first.CreateNormalVector(second).Normalize();
             }
 
             return new IfcTriangulatedProperties

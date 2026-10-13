@@ -23,8 +23,10 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
                 ? (StartAbstractReducerEntity)new StartReducerEccentricEntity()
                 : new StartReducerConcentricEntity();
 
-            startReducer.LengthOfConicalPart.CreateFromSI((reducer.PortB.Position - reducer.PortA.Position).L2Norm());
+            startReducer.LengthOfConicalPart.CreateFromSI(reducer.Length);
             startReducer.Position = reducer.Position;
+            
+            context.Register(reducer, startReducer);
         }
     }
 }

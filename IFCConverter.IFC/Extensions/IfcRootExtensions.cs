@@ -132,7 +132,7 @@ namespace IFCConverter.IFC.Extensions
                 .Select(indices => indices.Select(index => (int)index - 1).ToArray())
                 .Select(indices => new Triangle(indices[0], indices[1], indices[2]))
                 .ToArray();
-            return new Mesh(vertices, triangles, normals);
+            return new Mesh(vertices, triangles);
         }
     }
 }

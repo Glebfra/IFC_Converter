@@ -76,6 +76,8 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
                             return EntityType.ELBOW;
                         case IfcPipeFittingTypeEnum.JUNCTION:
                             return EntityType.TEE;
+                        case IfcPipeFittingTypeEnum.TRANSITION:
+                            return EntityType.REDUCER;
                         default:
                             return EntityType.UNKNOWN;
                     }

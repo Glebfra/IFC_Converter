@@ -68,7 +68,7 @@ namespace IFCConverter.Domain
         public IEnumerable<Connection> GetConnections(PortId id)
         {
             return _connections
-                .Where(connection => connection.Value.PortA.Id == id)
+                .Where(connection => connection.Value.PortA.Id == id || connection.Value.PortB.Id == id)
                 .Select(connection => connection.Value);
         }
 

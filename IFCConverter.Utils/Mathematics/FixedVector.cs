@@ -84,7 +84,7 @@ namespace IFCConverter.Utils.Mathematics
                 return false;
             if (ReferenceEquals(this, other))
                 return true;
-            return Equals(Vector, other.Vector);
+            return Vector.Equals(other.Vector);
         }
 
         public double Dot(FixedVector<TDimension> other)

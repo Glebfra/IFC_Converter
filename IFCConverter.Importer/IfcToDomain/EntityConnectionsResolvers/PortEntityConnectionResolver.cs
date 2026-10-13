@@ -1,4 +1,5 @@
-﻿using IFCConverter.Domain;
+﻿using System.Collections.Generic;
+using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Topology;
 
@@ -15,18 +16,25 @@ namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
 
         public void Resolve(EngineeringModel model, ImportContext context)
         {
-            foreach (Port firstPort in model.Ports)
+            List<Port> ports = new List<Port>(model.Ports);
+            
+            for (int i = 0; i < ports.Count; i++)
             {
+                Port firstPort = ports[i];
                 Entity firstPortOwner = model.GetEntity(firstPort.Owner);
-                foreach (Port secondPort in model.Ports)
+                
+                for (int j = i + 1; j < ports.Count; j++)
                 {
-                    if (firstPort == secondPort)
-                        continue;
-
+                    Port secondPort = ports[j];
                     Entity secondPortOwner = model.GetEntity(secondPort.Owner);
                     
-                    if (firstPort.Position.AlmostEqual(secondPort.Position, DoubleTolerance))
-                        model.Connect(firstPort, secondPort, ResolveConnectionType(firstPortOwner, secondPortOwner));
+                    if (firstPort.Owner == secondPort.Owner)
+                        continue;
+                    
+                    if (!firstPort.Position.AlmostEqual(secondPort.Position, DoubleTolerance))
+                        continue;
+
+                    model.Connect(firstPort, secondPort, ResolveConnectionType(firstPortOwner, secondPortOwner));
                 }
             }
         }

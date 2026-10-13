@@ -47,6 +47,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Algorithms\BoundaryLoopBuilder.cs" />
+        <Compile Include="Algorithms\ClosedMeshTopology.cs" />
         <Compile Include="Algorithms\EarClippingMeshBuilder.cs" />
         <Compile Include="Algorithms\IMeshBuilder.cs" />
         <Compile Include="Algorithms\MeshBuilder.cs" />
@@ -57,6 +58,7 @@
         <Compile Include="Algorithms\MeshResolvers\PlanarComponent.cs" />
         <Compile Include="Algorithms\MeshResolvers\PlanarComponentFinder.cs" />
         <Compile Include="Algorithms\MeshTopology.cs" />
+        <Compile Include="Algorithms\PlanarRegionFinder.cs" />
         <Compile Include="Algorithms\TorusSegmentMeshBuilder.cs" />
         <Compile Include="Boundary\BoundaryLoop.cs" />
         <Compile Include="Curves\Arc3D.cs" />
@@ -67,6 +69,7 @@
         <Compile Include="IGeometry.cs" />
         <Compile Include="IMesh.cs" />
         <Compile Include="Mesh.cs" />
+        <Compile Include="PlanarRegion.cs" />
         <Compile Include="Profiles\Profile2D.cs" />
         <Compile Include="Profiles\ProfileLoop.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
