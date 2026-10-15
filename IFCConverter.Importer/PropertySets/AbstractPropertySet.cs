@@ -19,6 +19,16 @@ namespace IFCConverter.Importer.PropertySets
             );
         }
 
+        [Pure]
+        public Dictionary<string, object> GetNotNullDictionary()
+        {
+            return GetType()
+                .GetFields()
+                .Select(info => new { Info = info, Value = info.GetValue(this) })
+                .Where(obj => obj.Value != null)
+                .ToDictionary(obj => GetFieldName(obj.Info), obj => obj.Value);
+        }
+
         public void SetDictionary(Dictionary<string, object> dictionary)
         {
             foreach (FieldInfo field in GetType().GetFields())

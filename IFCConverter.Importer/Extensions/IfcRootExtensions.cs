@@ -30,7 +30,12 @@ namespace IFCConverter.Importer.Extensions
         public static IEnumerable<IPropertySet> GetPropertySets(this IfcProduct product)
         {
             PropertySetRegistry registry = PropertySetRegistry.GetInstance();
-            return product.PropertySets.Select(set => registry.Read<AbstractPropertySet>(set));
+            return product.PropertySets.Select(set =>
+            {
+                if (registry.TryRead(set, out IPropertySet propertySet))
+                    return propertySet;
+                return null;
+            }).Where(set => set != null);
         }
 
         [Pure]

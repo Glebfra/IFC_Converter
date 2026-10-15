@@ -13,7 +13,6 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
         public IReducerEntityImporter Resolve(IIfcProduct product)
         {
             return Resolve(importer => importer.CanImport(product));
-            throw new System.NotImplementedException();
         }
 
         public bool TryResolve(IIfcProduct product, out IReducerEntityImporter importer)

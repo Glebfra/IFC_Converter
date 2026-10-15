@@ -8,6 +8,9 @@ namespace IFCConverter.Importer.PropertySets
         [Pure]
         Dictionary<string, object> GetDictionary();
 
+        [Pure]
+        Dictionary<string, object> GetNotNullDictionary();
+
         void SetDictionary(Dictionary<string, object> dictionary);
     }
 }

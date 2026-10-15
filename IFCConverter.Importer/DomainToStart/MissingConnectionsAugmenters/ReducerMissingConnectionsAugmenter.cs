@@ -2,6 +2,7 @@
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Topology;
+using IFCConverter.Importer.Extensions;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Importer.DomainToStart.MissingConnectionsAugmenters
@@ -12,7 +13,7 @@ namespace IFCConverter.Importer.DomainToStart.MissingConnectionsAugmenters
         
         public bool CanAugment(Entity entity, EngineeringModel model, ExportContext context)
         {
-            return entity is Reducer && model.GetConnections(entity.Id).Count() != 2;
+            return entity is Reducer && entity.GetConnections(model).Count() != 2;
         }
 
         public void Augment(Entity entity, EngineeringModel model, ExportContext context)
@@ -22,7 +23,7 @@ namespace IFCConverter.Importer.DomainToStart.MissingConnectionsAugmenters
             
             foreach (Port reducerPort in reducerPorts)
             {
-                Connection connection = model.GetConnections(reducerPort.Id).FirstOrDefault();
+                Connection connection = reducerPort.GetConnections(model).FirstOrDefault();
                 if (connection != null)
                     continue;
                 

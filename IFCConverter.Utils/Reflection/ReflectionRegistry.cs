@@ -25,15 +25,7 @@ namespace IFCConverter.Utils.Reflection
             return assembly
                 .GetTypes()
                 .Where(IsValidImplementation)
-                .Select(type =>
-                {
-                    TContract instance = ParameterlessConstructorRegistry<TContract>.Create(type);
-                    return new
-                    {
-                        Type = type,
-                        Instance = instance
-                    };
-                })
+                .Select(type => new { Type = type, Instance = ParameterlessConstructorRegistry<TContract>.Create(type) })
                 .ToDictionary(x => x.Type, x => x.Instance);
         }
 
@@ -45,7 +37,7 @@ namespace IFCConverter.Utils.Reflection
                    && type.GetConstructor(Type.EmptyTypes) != null;
         }
 
-        public TContract Resolve(Func<TContract, bool> predicate)
+        protected TContract Resolve(Func<TContract, bool> predicate)
         {
             TContract result = _items.Values.FirstOrDefault(predicate);
             if (result == null)
@@ -54,13 +46,13 @@ namespace IFCConverter.Utils.Reflection
             return result;
         }
 
-        public IEnumerable<TContract> ResolveAll(Func<TContract, bool> predicate)
+        protected IEnumerable<TContract> ResolveAll(Func<TContract, bool> predicate)
         {
             IEnumerable<TContract> result = _items.Values.Where(predicate);
             return result;
         }
 
-        public bool TryResolve(Func<TContract, bool> predicate, out TContract result)
+        protected bool TryResolve(Func<TContract, bool> predicate, out TContract result)
         {
             result = _items.Values.FirstOrDefault(predicate);
             return result != null;

@@ -8,6 +8,9 @@ namespace IFCConverter.Geometry.Algorithms
     {
         public static FixedVector<Dim3> GetFaceNormal(IMesh mesh, int triangleIndex)
         {
+            if (mesh == null)
+                throw new ArgumentNullException(nameof(mesh));
+            
             Triangle triangle = mesh.Triangles[triangleIndex];
             
             FixedVector<Dim3> a = mesh.Vertices[triangle.A];

@@ -175,6 +175,7 @@
         <Compile Include="DomainToStart\Phases\MissingConnectionsAugmentPhase.cs" />
         <Compile Include="DomainToStart\Phases\StartProjectEntityCreationPhase.cs" />
         <Compile Include="DomainToStart\SegmentCreator.cs" />
+        <Compile Include="Extensions\EngineeringModelExtensions.cs" />
         <Compile Include="Extensions\IfcRootExtensions.cs" />
         <Compile Include="Extensions\MeshExtensions.cs" />
         <Compile Include="IfcToDomain\EntityConnectionsResolvers\EntityConnectionsResolversRegistry.cs" />
@@ -191,6 +192,9 @@
         <Compile Include="IfcToDomain\EntityImporters\IfcEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImportersRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\IIfcPostEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\IIfcPostEntityImportersRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\IfcPostEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\IReducerEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\IReducerEntityImportersRegistry.cs" />
@@ -207,11 +211,18 @@
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\TeeEntityImportersRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImportersRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\NearestSegmentsValveEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\TriangulatedFaceSetValveEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\ValveEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityMetadataAugmenters\AvevaEntityMetadataAugmenter.cs" />
         <Compile Include="IfcToDomain\EntityMetadataAugmenters\EntityMetadataAugmenter.cs" />
         <Compile Include="IfcToDomain\EntityMetadataAugmenters\EntityMetadataAugmentersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityMetadataAugmenters\IEntityMetadataAugmenter.cs" />
         <Compile Include="IfcToDomain\EntityMetadataAugmenters\IEntityMetadataAugmentersRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityMetadataAugmenters\StartPsetMetadataAugmenter.cs" />
         <Compile Include="IfcToDomain\ImportContext.cs" />
         <Compile Include="IfcToDomain\ImportType.cs" />
         <Compile Include="IfcToDomain\ImportTypeResolver.cs" />
@@ -232,9 +243,12 @@
         <Compile Include="PropertySets\Converters\AvevaBoolPropertyConverter.cs" />
         <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
         <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
+        <Compile Include="PropertySets\Converters\EnumPropertyConverter.cs" />
+        <Compile Include="PropertySets\Converters\StartPropertyConverter.cs" />
         <Compile Include="PropertySets\IPropertyConverter.cs" />
         <Compile Include="PropertySets\IPropertySet.cs" />
         <Compile Include="PropertySets\PropertySetRegistry.cs" />
+        <Compile Include="PropertySets\Start\StartPset.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Domain\IFCConverter.Domain.csproj">

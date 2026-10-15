@@ -237,6 +237,9 @@ namespace IFCConverter.Utils.Mathematics
 
         public static FixedVector<TDimension> Normalize(FixedVector<TDimension> vector)
         {
+            if (vector.L2Norm().AlmostEqual(0.0, 1e-6))
+                throw new InvalidOperationException();
+            
             return new FixedVector<TDimension>(vector.Vector.Normalize(2));
         }
 

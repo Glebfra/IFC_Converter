@@ -74,7 +74,7 @@ namespace IFCConverter.Utils.Mathematics
             if (Dimension < otherDim)
                 throw new ArgumentOutOfRangeException(nameof(FixedMatrix<TOtherDimension>));
 
-            if (rowIndex + otherDim >= Dimension || colIndex + otherDim >= Dimension)
+            if (rowIndex + otherDim > Dimension || colIndex + otherDim > Dimension)
                 throw new ArgumentOutOfRangeException($"Resulted endCol || endRow is higher than matrix dimension: {Dimension}");
 
             Matrix.SetSubMatrix(rowIndex, colIndex, other.Matrix);
@@ -236,16 +236,13 @@ namespace IFCConverter.Utils.Mathematics
             return builder.Dense(new[,]
             {
                 {
-                    1, 0, 0, 0
+                    1, 0, 0
                 },
                 {
-                    0, cos, -sin, 0
+                    0, cos, -sin
                 },
                 {
-                    0, sin, cos, 0
-                },
-                {
-                    0, 0, 0, 1
+                    0, sin, cos
                 }
             });
         }
@@ -330,7 +327,7 @@ namespace IFCConverter.Utils.Mathematics
 
             FixedMatrix<Dim3> matrix = builder.Dense();
             matrix.SetX(xAxisNorm);
-            matrix.SetZ(yAxisNorm);
+            matrix.SetY(yAxisNorm);
             matrix.SetZ(zAxisNorm);
 
             return matrix;

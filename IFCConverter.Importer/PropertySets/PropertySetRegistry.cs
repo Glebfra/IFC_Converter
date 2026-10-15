@@ -10,7 +10,7 @@ using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Importer.PropertySets
 {
-    internal class PropertySetRegistry
+    internal sealed class PropertySetRegistry
     {
         private static readonly Lazy<PropertySetRegistry> _instance = new Lazy<PropertySetRegistry>(() => new PropertySetRegistry());
 
@@ -28,17 +28,29 @@ namespace IFCConverter.Importer.PropertySets
 
         [Pure]
         public T Read<T>(IIfcPropertySet ifcPropertySet)
-            where T : AbstractPropertySet
+            where T : IPropertySet
         {
+            if (!TryRead(ifcPropertySet, out T pSet))
+                throw new Exception($"Property set with name {ifcPropertySet.Name} is not registered.");
+            
+            return pSet;
+        }
+
+        [Pure]
+        public bool TryRead<T>(IIfcPropertySet ifcPropertySet, out T propertySet)
+            where T : IPropertySet
+        {
+            propertySet = default;
+            
             string propertySetName = ifcPropertySet.Name ?? string.Empty;
             Type propertySetType = _propertySetsList
                 .FirstOrDefault(type => type.GetCustomAttribute<PropertySetAttribute>().IsMatch(propertySetName));
             if (propertySetType == null)
-                throw new Exception($"Property set with name {propertySetName} is not registered");
+                return false;
 
-            T propertySet = ParameterlessConstructorRegistry<T>.Create(propertySetType);
+            propertySet = ParameterlessConstructorRegistry<T>.Create(propertySetType);
             propertySet.SetDictionary(ifcPropertySet.ToDictionary());
-            return propertySet;
+            return true;
         }
 
         private void RegisterAll()

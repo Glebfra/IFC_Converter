@@ -21,7 +21,7 @@ namespace IFCConverter.Domain
         public void Add(Entity entity)
         {
             if (_entities.ContainsKey(entity.Id))
-                throw new InvalidOperationException($"Entity {entity.Id}  already exists");
+                throw new InvalidOperationException($"Entity {entity.Id} is already exists");
             _entities.Add(entity.Id, entity);
 
             foreach (Port port in entity.Ports)

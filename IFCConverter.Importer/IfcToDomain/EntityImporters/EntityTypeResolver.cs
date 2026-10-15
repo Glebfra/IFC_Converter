@@ -78,6 +78,8 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
                             return EntityType.TEE;
                         case IfcPipeFittingTypeEnum.TRANSITION:
                             return EntityType.REDUCER;
+                        case IfcPipeFittingTypeEnum.CONNECTOR:
+                            return EntityType.VALVE;
                         default:
                             return EntityType.UNKNOWN;
                     }

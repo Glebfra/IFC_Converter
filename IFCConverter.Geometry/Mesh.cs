@@ -5,7 +5,7 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry
 {
-    public readonly struct Mesh : IMesh
+    public class Mesh : IMesh
     {
         private readonly List<FixedVector<Dim3>> _vertices;
         private readonly List<Triangle> _triangles;
