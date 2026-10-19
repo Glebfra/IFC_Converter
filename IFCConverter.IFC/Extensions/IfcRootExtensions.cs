@@ -109,9 +109,23 @@ namespace IFCConverter.IFC.Extensions
         [Pure]
         public static IEnumerable<IIfcRepresentationItem> GetRepresentationItems(this IIfcProduct source)
         {
+            if (!source.TryGetRepresentationItems(out IEnumerable<IIfcRepresentationItem> items))
+                return Array.Empty<IIfcRepresentationItem>();
+            return items;
+        }
+
+        [Pure]
+        public static bool TryGetRepresentationItems(this IIfcProduct source, out IEnumerable<IIfcRepresentationItem> items)
+        {
+            items = null;
+            
             IIfcProductRepresentation representation = source.Representation;
+            if (representation == null)
+                return false;
+            
             IEnumerable<IIfcRepresentation> representations = representation.Representations;
-            return representations.SelectMany(ifcRepresentation => ifcRepresentation.Items);
+            items = representations.SelectMany(ifcRepresentation => ifcRepresentation.Items);
+            return true;
         }
 
         [Pure]
