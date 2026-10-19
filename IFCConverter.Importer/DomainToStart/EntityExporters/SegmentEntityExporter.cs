@@ -24,6 +24,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             pipe.ProjectionAlongOXAxis.CreateFromSI(projection[0]);
             pipe.ProjectionAlongOYAxis.CreateFromSI(projection[1]);
             pipe.ProjectionAlongOZAxis.CreateFromSI(projection[2]);
+            pipe.Name = segment.Metadata.Name;
 
             context.Register(entity, pipe);
         }

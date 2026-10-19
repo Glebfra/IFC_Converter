@@ -6,9 +6,6 @@ namespace IFCConverter.Domain.Extensions
 {
     public static class EntityExtensions
     {
-        private const double Tolerance = 1e-6;
-        private static readonly VectorComparer Comparer = new VectorComparer(Tolerance);
-
         public static FixedVector<Dim3> GetProjection(this AbstractSegment segment)
         {
             return segment.EndPort.Position - segment.StartPort.Position;
@@ -16,7 +13,7 @@ namespace IFCConverter.Domain.Extensions
 
         public static FixedVector<Dim3> GetDirection(this AbstractSegment segment)
         {
-            return segment.GetProjection().Normalize();
+            return segment.GetProjection().SafeNormalize();
         }
 
         public static double GetLength(this AbstractSegment segment)
@@ -33,7 +30,7 @@ namespace IFCConverter.Domain.Extensions
 
         public static FixedVector<Dim3> GetDirectionFromPoint(this AbstractSegment segment, FixedVector<Dim3> point)
         {
-            return segment.GetProjectionFromPoint(point).Normalize();
+            return segment.GetProjectionFromPoint(point).SafeNormalize();
         }
 
         public static Port GetNearestPort(this Entity entity, Port port)

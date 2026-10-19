@@ -12,7 +12,7 @@ namespace IFCConverter.Domain.Extensions
             double diameter, string name = null,
             FixedVector<Dim3> projection = null)
         {
-            FixedVector<Dim3> direction = (end - start).Normalize();
+            FixedVector<Dim3> direction = (end - start).SafeNormalize();
 
             Segment segment = new Segment(EntityId.New())
             {

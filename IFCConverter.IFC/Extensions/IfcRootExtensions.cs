@@ -62,8 +62,8 @@ namespace IFCConverter.IFC.Extensions
         {
             FixedVector<Dim3> position = axis2Placement2D.Location.ToFixedVector<Dim3>();
             FixedVector<Dim3> refDirection = axis2Placement2D.RefDirection.ToFixedVector();
-            FixedVector<Dim3> upDirection = refDirection.CreateNormalVector().Normalize();
-            FixedVector<Dim3> axis = refDirection.CrossProduct(upDirection).Normalize();
+            FixedVector<Dim3> upDirection = refDirection.CreateNormalVector().SafeNormalize();
+            FixedVector<Dim3> axis = refDirection.CrossProduct(upDirection).SafeNormalize();
 
             return FixedMatrix<Dim4>.Builder.CreateTransition(position, refDirection, upDirection, axis);
         }

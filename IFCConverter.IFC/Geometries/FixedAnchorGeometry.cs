@@ -46,12 +46,12 @@ namespace IFCConverter.IFC.Geometries
         {
             double length = properties.Diameter * DiameterToLengthFactor;
 
-            FixedVector<Dim3> extrudedPoint = properties.Position - properties.Direction.Normalize() * length;
+            FixedVector<Dim3> extrudedPoint = properties.Position - properties.Direction.SafeNormalize() * length;
             FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
 
-            FixedVector<Dim3> zAxis = properties.Direction.Normalize();
-            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector().Normalize();
-            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).Normalize();
+            FixedVector<Dim3> zAxis = properties.Direction.SafeNormalize();
+            FixedVector<Dim3> xAxis = zAxis.CreateNormalVector().SafeNormalize();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).SafeNormalize();
             FixedMatrix<Dim4> extrudedAreaMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(extrudedPoint, xAxis, yAxis, zAxis);
 
             double xDim = properties.Diameter * DiameterToXDimFactor;

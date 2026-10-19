@@ -54,7 +54,7 @@ namespace IFCConverter.IFC.Geometries
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
             for (int i = 0; i < directions.Length; i++)
             {
-                FixedVector<Dim3> direction = directions[i].Normalize();
+                FixedVector<Dim3> direction = directions[i].SafeNormalize();
                 FixedVector<Dim3> extrusionPoint = properties.Position + direction * (segmentLengths[i] / 2);
 
                 FixedVector<Dim3> zAxis = direction;

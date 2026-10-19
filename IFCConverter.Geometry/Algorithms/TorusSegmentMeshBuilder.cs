@@ -33,9 +33,9 @@ namespace IFCConverter.Geometry.Algorithms
 
             double torusRadius = startVector.L2Norm();
 
-            FixedVector<Dim3> u = startVector.Normalize();
-            FixedVector<Dim3> n = startVector.CrossProduct(endVector).Normalize();
-            FixedVector<Dim3> v = n.CrossProduct(u).Normalize();
+            FixedVector<Dim3> u = startVector.SafeNormalize();
+            FixedVector<Dim3> n = startVector.CrossProduct(endVector).SafeNormalize();
+            FixedVector<Dim3> v = n.CrossProduct(u).SafeNormalize();
 
             double angle = Math.Atan2(endVector.Dot(v), endVector.Dot(u));
 

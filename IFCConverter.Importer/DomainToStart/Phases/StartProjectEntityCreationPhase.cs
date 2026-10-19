@@ -12,12 +12,11 @@ namespace IFCConverter.Importer.DomainToStart.Phases
     public class StartProjectEntityCreationPhase : IDomainToStartPhase
     {
         private const double DoubleTolerance = 1e-3;
-        private readonly VectorComparer _comparer = new VectorComparer(DoubleTolerance);
         private readonly StartNodeRegistry _nodeRegistry;
 
         public StartProjectEntityCreationPhase()
         {
-            _nodeRegistry = new StartNodeRegistry(_comparer);
+            _nodeRegistry = new StartNodeRegistry(DoubleTolerance);
         }
 
         public void Execute(EngineeringModel model, ExportContext context)

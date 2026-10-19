@@ -52,7 +52,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
 
             FixedMatrix<Dim3> angleRotation = FixedMatrix<Dim3>.Builder.CreateRotationAroundVector(axisDirection, angle / 2);
             FixedVector<Dim3> OA = globalPosition - axisPosition;
-            FixedVector<Dim3> OC = (angleRotation * OA).Normalize() * displacement;
+            FixedVector<Dim3> OC = (angleRotation * OA).SafeNormalize() * displacement;
 
             FixedVector<Dim3> center = axisPosition + OC;
 
@@ -76,7 +76,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
                 globalPosition,
                 globalRotation * localSecondPosition + globalAxisPosition
             };
-            FixedVector<Dim3>[] portDirections = portPositions.Select(position => (position - center).Normalize()).ToArray();
+            FixedVector<Dim3>[] portDirections = portPositions.Select(position => (position - center).SafeNormalize()).ToArray();
 
             int i = 0;
             foreach (Port port in elbow.Ports)

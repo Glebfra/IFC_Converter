@@ -21,6 +21,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
 
             startReducer.LengthOfConicalPart.CreateFromSI(reducer.Length);
             startReducer.Position = reducer.Position;
+            startReducer.Name = reducer.Metadata.Name;
             
             context.Register(reducer, startReducer);
         }

@@ -70,7 +70,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
             int idx = 0;
             foreach (Port port in elbow.Ports)
             {
-                FixedVector<Dim3> direction = (boundaryCenters[idx] - elbow.Position).Normalize();
+                FixedVector<Dim3> direction = (boundaryCenters[idx] - elbow.Position).SafeNormalize();
                 port.SetGeometry(boundaryCenters[idx], direction);
                 port.Metadata.Diameter = diameters[idx];
                 

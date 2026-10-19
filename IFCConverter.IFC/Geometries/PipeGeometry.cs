@@ -45,7 +45,7 @@ namespace IFCConverter.IFC.Geometries
         {
             FixedVector<Dim3> zAxis = properties.Direction;
             FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
-            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).Normalize();
+            FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis).SafeNormalize();
 
             FixedMatrix<Dim4> circleProfileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
             FixedMatrix<Dim4> extrudedAreaSolidMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.Position, xAxis, yAxis, zAxis);

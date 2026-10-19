@@ -97,7 +97,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
             DiametersData diametersData = FilterCenters(boundaryCenters, diameters);
             FixedVector<Dim3> reducerDirection = diametersData.MaxDiameterCenter - diametersData.MinDiameterCenter;
             FixedVector<Dim3> reducerAxisProjection = reducerDirection.Dot(normals[0]) * normals[0];
-            FixedVector<Dim3> reducerAxisDirection = reducerAxisProjection.Normalize();
+            FixedVector<Dim3> reducerAxisDirection = reducerAxisProjection.SafeNormalize();
             
             Reducer reducer = new Reducer(EntityId.New())
             {

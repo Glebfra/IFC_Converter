@@ -12,9 +12,6 @@ namespace IFCConverter.Exporter.StartToDomain.ConnectionResolvers
 {
     internal sealed class ConnectionResolver : IConnectionResolver
     {
-        private const double Tolerance = 1e-6;
-        private readonly VectorComparer _vectorComparer = new VectorComparer(Tolerance);
-
         public bool CanResolve(IStartEntity source)
         {
             return source is StartAbstractEntity;

@@ -55,7 +55,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 
         private static FixedVector<Dim3> ResolveDirection(IStartSegmentEntity startSegment, FixedVector<Dim3> position)
         {
-            return startSegment.GetProjectionFromPoint(position).Normalize().Negate();
+            return startSegment.GetProjectionFromPoint(position).SafeNormalize().Negate();
         }
     }
 }

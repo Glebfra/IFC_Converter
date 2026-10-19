@@ -66,7 +66,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
         private static void ResolvePort(IStartSegmentEntity startSegment, Port port, FixedVector<Dim3> position, double length, EngineeringModel model,
             StartMappingContext context)
         {
-            FixedVector<Dim3> direction = startSegment.GetProjectionFromPoint(position).Normalize();
+            FixedVector<Dim3> direction = startSegment.GetProjectionFromPoint(position).SafeNormalize();
             port.SetGeometry(position + direction * length, direction);
             port.Metadata.Diameter = DiameterFinder.GetDiameter(startSegment, model, context);
         }

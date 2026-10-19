@@ -48,13 +48,13 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 
         private static FixedVector<Dim3> CalculateLocalArcCenter(FixedVector<Dim3> directionA, FixedVector<Dim3> directionB, double radius)
         {
-            FixedVector<Dim3> firstDirection = directionA.Normalize();
-            FixedVector<Dim3> secondDirection = directionB.Normalize();
+            FixedVector<Dim3> firstDirection = directionA.SafeNormalize();
+            FixedVector<Dim3> secondDirection = directionB.SafeNormalize();
 
             double angle = firstDirection.Angle(secondDirection);
 
             double displacementLength = radius / Math.Sin(angle / 2);
-            FixedVector<Dim3> bisector = (firstDirection + secondDirection).Normalize();
+            FixedVector<Dim3> bisector = (firstDirection + secondDirection).SafeNormalize();
             return bisector * displacementLength;
         }
     }

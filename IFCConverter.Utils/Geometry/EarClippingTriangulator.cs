@@ -126,9 +126,9 @@ namespace IFCConverter.Utils.Geometry
                 throw new ArgumentException("At least 3 points are required");
 
             FixedVector<Dim3> origin = points[0];
-            FixedVector<Dim3> u = (points[1] - origin).Normalize();
+            FixedVector<Dim3> u = (points[1] - origin).SafeNormalize();
 
-            FixedVector<Dim3> normal = (points[1] - origin).CrossProduct(points[2] - origin).Normalize();
+            FixedVector<Dim3> normal = (points[1] - origin).CrossProduct(points[2] - origin).SafeNormalize();
             FixedVector<Dim3> v = normal.CrossProduct(u);
 
             return new PlaneProjection(origin, u, v);

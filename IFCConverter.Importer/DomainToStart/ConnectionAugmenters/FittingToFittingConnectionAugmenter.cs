@@ -60,29 +60,15 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
             Reducer reducer = (Reducer)fittings.First(fitting => fitting is Reducer);
             AbstractFitting abstractFitting = fittings.First(fitting => fitting != reducer);
 
-            if (reducer.Position.AlmostEqual(portPosition))
-            {
-                yield return SegmentCreator.CreateSegment(abstractFitting.Position, reducer.Position, diameter);
-            }
-            else
-            {
-                FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
+            FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
             
-                yield return SegmentCreator.CreateSegment(
-                    reducer.Position, 
-                    portPosition, 
-                    diameter, 
-                    $"{fittings[0].Metadata.Name}_{fittings[1].Metadata.Name}_connection",
-                    (portPosition - reducer.Position).Dot(reducerAxis) * reducerAxis
-                );
-
-                yield return SegmentCreator.CreateSegment(
-                    abstractFitting.Position,
-                    portPosition,
-                    diameter,
-                    $"{fittings[0].Metadata.Name}_{fittings[1].Metadata.Name}_connection"
-                );
-            }
+            yield return SegmentCreator.CreateSegment(
+                reducer.Position, 
+                abstractFitting.Position, 
+                diameter, 
+                $"{fittings[0].Metadata.Name}_{fittings[1].Metadata.Name}_connection",
+                (abstractFitting.Position - reducer.Position).Dot(reducerAxis) * reducerAxis
+            );
         }
 
         private static IEnumerable<Segment> Augment(AbstractFitting[] fittings, double diameter)

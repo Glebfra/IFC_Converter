@@ -321,9 +321,9 @@ namespace IFCConverter.Utils.Mathematics
 
         public static FixedMatrix<Dim3> CreateTransition(this FixedMatrixBuilder<Dim3> builder, FixedVector<Dim3> zAxis)
         {
-            FixedVector<Dim3> zAxisNorm = zAxis.Normalize();
-            FixedVector<Dim3> xAxisNorm = zAxisNorm.CreateNormalVector().Normalize();
-            FixedVector<Dim3> yAxisNorm = zAxisNorm.CreateNormalVector(xAxisNorm).Normalize();
+            FixedVector<Dim3> zAxisNorm = zAxis.SafeNormalize();
+            FixedVector<Dim3> xAxisNorm = zAxisNorm.CreateNormalVector().SafeNormalize();
+            FixedVector<Dim3> yAxisNorm = zAxisNorm.CreateNormalVector(xAxisNorm).SafeNormalize();
 
             FixedMatrix<Dim3> matrix = builder.Dense();
             matrix.SetX(xAxisNorm);
@@ -335,9 +335,9 @@ namespace IFCConverter.Utils.Mathematics
 
         public static FixedMatrix<Dim3> CreateTransition(this FixedMatrixBuilder<Dim3> builder, FixedVector<Dim3> xAxis, FixedVector<Dim3> yAxis)
         {
-            FixedVector<Dim3> xAxisNorm = xAxis.Normalize();
-            FixedVector<Dim3> yAxisNorm = yAxis.Normalize();
-            FixedVector<Dim3> zAxisNorm = xAxisNorm.CreateNormalVector(yAxisNorm).Normalize();
+            FixedVector<Dim3> xAxisNorm = xAxis.SafeNormalize();
+            FixedVector<Dim3> yAxisNorm = yAxis.SafeNormalize();
+            FixedVector<Dim3> zAxisNorm = xAxisNorm.CreateNormalVector(yAxisNorm).SafeNormalize();
 
             FixedMatrix<Dim3> matrix = builder.Dense();
             matrix.SetX(xAxisNorm);

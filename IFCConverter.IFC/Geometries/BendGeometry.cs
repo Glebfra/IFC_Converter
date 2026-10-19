@@ -45,9 +45,9 @@ namespace IFCConverter.IFC.Geometries
         public static BendGeometry CreateGeometry(IModel model, BendGeometryProperties properties)
         {
             double angle = properties.Direction.Angle(properties.EndDirection);
-            FixedVector<Dim3> zAxis = properties.Direction.Normalize();
-            FixedVector<Dim3> yAxis = properties.Direction.CrossProduct(properties.EndDirection).Normalize();
-            FixedVector<Dim3> xAxis = yAxis.CreateNormalVector(zAxis).Normalize();
+            FixedVector<Dim3> zAxis = properties.Direction.SafeNormalize();
+            FixedVector<Dim3> yAxis = properties.Direction.CrossProduct(properties.EndDirection).SafeNormalize();
+            FixedVector<Dim3> xAxis = yAxis.CreateNormalVector(zAxis).SafeNormalize();
 
             FixedVector<Dim3> axisPosition = FixedVector<Dim3>.Builder.X() * properties.BendRadius;
 

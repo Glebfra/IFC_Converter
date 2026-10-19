@@ -28,7 +28,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
                 throw new InvalidOperationException($"Valve '{valve.Id}' must have exactly two segments");
 
             FixedVector<Dim3> position = valve.Position;
-            FixedVector<Dim3>[] directions = segments.Select(segment => segment.GetProjectionFromPoint(position).Normalize()).ToArray();
+            FixedVector<Dim3>[] directions = segments.Select(segment => segment.GetProjectionFromPoint(position).SafeNormalize()).ToArray();
 
             FixedVector<Dim3>[] portPositions = directions.Select(direction => position + direction * (valve.Length / 2)).ToArray();
 

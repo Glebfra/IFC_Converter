@@ -157,13 +157,13 @@ namespace IFCConverter.Start.Entities.Segments
         private FixedMatrix<Dim4> GetTransformationMatrix()
         {
             FixedVector<Dim3> globalUp = FixedVector<Dim3>.Builder.Z();
-            FixedVector<Dim3> xm = Projection.Normalize();
+            FixedVector<Dim3> xm = Projection.SafeNormalize();
 
             if (xm.IsParallel(globalUp))
                 globalUp = FixedVector<Dim3>.Builder.Y();
 
-            FixedVector<Dim3> ym = globalUp.CreateNormalVector(xm).Normalize();
-            FixedVector<Dim3> zm = xm.CreateNormalVector(ym).Normalize();
+            FixedVector<Dim3> ym = globalUp.CreateNormalVector(xm).SafeNormalize();
+            FixedVector<Dim3> zm = xm.CreateNormalVector(ym).SafeNormalize();
 
             return FixedMatrix<Dim4>.Builder.CreateTransition(StartPosition, ym, zm, xm);
         }
