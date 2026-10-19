@@ -30,14 +30,6 @@ namespace IFCConverter.Importer.IfcToDomain.EntityMetadataAugmenters
 
             IfcProduct ifcProduct = (IfcProduct)product;
             IPropertySet[] propertySets = ifcProduct.GetPropertySets().ToArray();
-
-            AvevaPset avevaPset = propertySets.OfType<AvevaPset>().FirstOrDefault();
-            if (avevaPset != null)
-                entity.Metadata.Meta.Add(nameof(AvevaPset), avevaPset);
-
-            AvevaEntityParameters avevaEntityParameters = propertySets.OfType<AvevaEntityParameters>().FirstOrDefault();
-            if (avevaEntityParameters != null)
-                entity.Metadata.Meta.Add(nameof(AvevaEntityParameters), avevaEntityParameters);
         }
     }
 }

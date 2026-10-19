@@ -19,7 +19,7 @@ namespace IFCConverter.Exporter.StartToDomain.Phases
 
             foreach (IStartEntity startEntity in source)
             {
-                foreach (IEntityMetadataAugmenter entityMetadataAugmenter in _augmenterRegistry.ResolveAll(startEntity, context))
+                foreach (IEntityMetadataAugmenter entityMetadataAugmenter in _augmenterRegistry.ResolveAll(startEntity, model, context))
                 {
                     entityMetadataAugmenter.Augment(startEntity, model, context);
                 }

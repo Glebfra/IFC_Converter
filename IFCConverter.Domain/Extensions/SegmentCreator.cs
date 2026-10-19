@@ -3,9 +3,9 @@ using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Importer.DomainToStart
+namespace IFCConverter.Domain.Extensions
 {
-    internal static class SegmentCreator
+    public static class SegmentCreator
     {
         public static Segment CreateSegment(
             FixedVector<Dim3> start, FixedVector<Dim3> end, 
@@ -33,9 +33,9 @@ namespace IFCConverter.Importer.DomainToStart
             }
 
             segment.Metadata.Name = name ?? string.Empty;
-            
+
             if (projection != null)
-                segment.Metadata.Meta.Add("Projection", projection);
+                segment.TypedMetadata.Projection = projection;
             
             return segment;
         }

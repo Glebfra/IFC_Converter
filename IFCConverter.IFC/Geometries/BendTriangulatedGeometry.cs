@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Geometry;
 using IFCConverter.Geometry.Algorithms;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Builders.Geometry.Tessellated;
@@ -12,6 +13,7 @@ using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
+using IMeshBuilder = IFCConverter.Geometry.Algorithms.IMeshBuilder;
 
 namespace IFCConverter.IFC.Geometries
 {

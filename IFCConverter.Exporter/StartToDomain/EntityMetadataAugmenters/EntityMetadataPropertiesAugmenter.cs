@@ -7,7 +7,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
 {
     internal sealed class EntityMetadataPropertiesAugmenter : IEntityMetadataAugmenter
     {
-        public bool CanResolve(IStartEntity source, StartMappingContext context)
+        public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             return context.TryGetEntityId(source, out _);
         }

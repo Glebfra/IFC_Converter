@@ -48,7 +48,7 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
             if (reducer.Position.AlmostEqual(port.Position))
                 return;
             
-            FixedVector<Dim3> reducerAxis = (FixedVector<Dim3>)reducer.Metadata.Meta["Axis"];
+            FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
 
             Segment segment = SegmentCreator.CreateSegment(
                 reducer.Position,

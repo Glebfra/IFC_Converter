@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Algorithms
 {
     public sealed class TorusSegmentMeshBuilder : MeshBuilder
     {
-
         private readonly int _arcSegments;
         private readonly FixedVector<Dim3> _center;
         private readonly FixedVector<Dim3> _end;

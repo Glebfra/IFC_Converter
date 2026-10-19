@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry
+namespace IFCConverter.Geometry.Mesh
 {
     public interface IMesh : IGeometry
     {

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using IFCConverter.Domain.Identity;
+using IFCConverter.Domain.Metadata;
 using IFCConverter.Domain.Topology;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class Anchor : AbstractFitting
+    public sealed class Anchor : AbstractFitting<AnchorMetadata>
     {
         public Anchor(EntityId id) : base(id)
         {
@@ -14,5 +15,6 @@ namespace IFCConverter.Domain.Entities
         public Port Port { get; }
 
         public List<AnchorRestraint> Restraints { get; } = new List<AnchorRestraint>();
+        public override AnchorMetadata TypedMetadata { get; } = new AnchorMetadata();
     }
 }

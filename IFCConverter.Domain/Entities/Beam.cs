@@ -1,8 +1,9 @@
 ﻿using IFCConverter.Domain.Identity;
+using IFCConverter.Domain.Metadata;
 
 namespace IFCConverter.Domain.Entities
 {
-    public class Beam : AbstractSegment
+    public class Beam : AbstractSegment<BeamMetadata>
     {
 
         public Beam(EntityId id) : base(id)
@@ -13,5 +14,7 @@ namespace IFCConverter.Domain.Entities
         public double Height { get; set; }
         public double Diameter { get; set; }
         public double SectionAxisAngle { get; set; }
+
+        public override BeamMetadata TypedMetadata { get; } = new BeamMetadata();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace IFCConverter.Domain.Metadata
 {
-    public sealed class EntityMetadata
+    public class EntityMetadata : IEntityMetadata
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -10,6 +10,5 @@ namespace IFCConverter.Domain.Metadata
         public string MaterialName { get; set; }
         public string Color { get; set; }
         public IDictionary<string, object> Properties { get; } = new Dictionary<string, object>();
-        public IDictionary<string, object> Meta { get; } = new Dictionary<string, object>();
     }
 }

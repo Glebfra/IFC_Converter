@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IFCConverter.Domain;
 using IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Reflection;
@@ -11,19 +12,19 @@ namespace IFCConverter.Exporter.StartToDomain
         {
         }
 
-        public IEntityMetadataAugmenter Resolve(IStartEntity entity, StartMappingContext context)
+        public IEntityMetadataAugmenter Resolve(IStartEntity entity, EngineeringModel model, StartMappingContext context)
         {
-            return Resolve(augmenter => augmenter.CanResolve(entity, context));
+            return Resolve(augmenter => augmenter.CanResolve(entity, model, context));
         }
 
-        public IEnumerable<IEntityMetadataAugmenter> ResolveAll(IStartEntity source, StartMappingContext context)
+        public IEnumerable<IEntityMetadataAugmenter> ResolveAll(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            return ResolveAll(augmenter => augmenter.CanResolve(source, context));
+            return ResolveAll(augmenter => augmenter.CanResolve(source, model, context));
         }
 
-        public bool TryResolve(IStartEntity entity, StartMappingContext context, out IEntityMetadataAugmenter registration)
+        public bool TryResolve(IStartEntity entity,  EngineeringModel model, StartMappingContext context, out IEntityMetadataAugmenter registration)
         {
-            return TryResolve(augmenter => augmenter.CanResolve(entity, context), out registration);
+            return TryResolve(augmenter => augmenter.CanResolve(entity, model, context), out registration);
         }
     }
 }

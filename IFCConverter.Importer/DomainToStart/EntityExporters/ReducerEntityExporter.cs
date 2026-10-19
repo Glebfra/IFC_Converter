@@ -14,12 +14,8 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
         public void Export(Entity entity, EngineeringModel model, ExportContext context)
         {
             Reducer reducer = (Reducer)entity;
-
-            bool isEccentric = false;
-            if (entity.Metadata.Meta.TryGetValue("IsEccentric", out object isEccentricValue))
-                isEccentric = (bool)isEccentricValue;
-
-            StartAbstractReducerEntity startReducer = isEccentric
+            
+            StartAbstractReducerEntity startReducer = reducer.TypedMetadata.IsEccentric
                 ? (StartAbstractReducerEntity)new StartReducerEccentricEntity()
                 : new StartReducerConcentricEntity();
 

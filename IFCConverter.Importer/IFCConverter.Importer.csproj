@@ -174,7 +174,6 @@
         <Compile Include="DomainToStart\Phases\IDomainToStartPhase.cs" />
         <Compile Include="DomainToStart\Phases\MissingConnectionsAugmentPhase.cs" />
         <Compile Include="DomainToStart\Phases\StartProjectEntityCreationPhase.cs" />
-        <Compile Include="DomainToStart\SegmentCreator.cs" />
         <Compile Include="Extensions\EngineeringModelExtensions.cs" />
         <Compile Include="Extensions\IfcRootExtensions.cs" />
         <Compile Include="Extensions\MeshExtensions.cs" />

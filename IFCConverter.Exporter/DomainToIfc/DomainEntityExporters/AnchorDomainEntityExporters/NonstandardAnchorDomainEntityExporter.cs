@@ -26,7 +26,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 
         public void Export(Anchor anchor, IModel model, ExportContext context)
         {
-            FixedMatrix<Dim4> segmentMatrix = (FixedMatrix<Dim4>)anchor.Metadata.Meta["SegmentMatrix"];
+            FixedMatrix<Dim4> segmentMatrix = anchor.TypedMetadata.SegmentMatrix;
             double diameter = anchor.Port.Metadata.Diameter;
 
             List<FixedVector<Dim3>> positions = new List<FixedVector<Dim3>>(anchor.Restraints.Count);

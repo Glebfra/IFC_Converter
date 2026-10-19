@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
+using IFCConverter.Domain.Extensions;
 using IFCConverter.Domain.Topology;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Utils.Mathematics;

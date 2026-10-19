@@ -9,6 +9,7 @@ using IFCConverter.Domain.Topology;
 using IFCConverter.Geometry;
 using IFCConverter.Geometry.Algorithms;
 using IFCConverter.Geometry.Boundary;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Utils.Mathematics;

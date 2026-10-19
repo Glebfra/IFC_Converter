@@ -112,6 +112,11 @@ namespace IFCConverter.Utils.Mathematics
             return Normalize(this);
         }
 
+        public FixedVector<TDimension> SafeNormalize()
+        {
+            return SafeNormalize(this);
+        }
+
         public FixedVector<TDimension> Negate()
         {
             return Negate(this);
@@ -241,6 +246,18 @@ namespace IFCConverter.Utils.Mathematics
                 throw new InvalidOperationException();
             
             return new FixedVector<TDimension>(vector.Vector.Normalize(2));
+        }
+
+        public static FixedVector<TDimension> SafeNormalize(FixedVector<TDimension> vector)
+        {
+            try
+            {
+                return Normalize(vector);
+            }
+            catch (InvalidOperationException)
+            {
+                return Zeros();
+            }
         }
 
         public static FixedVector<TDimension> Negate(FixedVector<TDimension> vector)

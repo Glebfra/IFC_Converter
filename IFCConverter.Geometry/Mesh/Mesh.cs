@@ -3,7 +3,7 @@ using System.Linq;
 using IFCConverter.Geometry.Algorithms;
 using IFCConverter.Utils.Mathematics;
 
-namespace IFCConverter.Geometry
+namespace IFCConverter.Geometry.Mesh
 {
     public class Mesh : IMesh
     {
