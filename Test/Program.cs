@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Geometry;
@@ -31,17 +30,20 @@ namespace Test
         public static void Main(string[] args)
         {
             IMeshBuilder meshBuilder = new MeshBuilder();
+            ConeMeshBuilder clippedConeMeshBuilder = new ConeMeshBuilder(1.0, 2.0);
+            clippedConeMeshBuilder.AddPolygon(clippedConeMeshBuilder.RingIndices);
 
-            const int itemsCounts = 20;
-            for (int i = 0; i < itemsCounts; i++)
-            {
-                double angle = 2 * Math.PI * i / itemsCounts;
-                meshBuilder.Add(new SphereMeshBuilder(1.0, 16, 16)
-                    .Translate(FixedVector<Dim3>.Builder.Dense(10 * Math.Cos(angle), 10 * Math.Sin(angle), 0))
-                );
-            }
-
-            meshBuilder.Add(new ConeMeshBuilder(5.0, 10.0));
+            FixedVector<Dim3> direction = FixedVector<Dim3>.Builder.Dense(1.0, 1.0, 1.0).SafeNormalize();
+            FixedVector<Dim3> rightDirection = direction.CreateNormalVector().SafeNormalize();
+            FixedVector<Dim3> upDirection = direction.CreateNormalVector(rightDirection).SafeNormalize();
+            
+            meshBuilder
+                .Add(clippedConeMeshBuilder)
+                .Transform(FixedMatrix<Dim3>.Builder.CreateTransition(
+                    rightDirection,
+                    upDirection,
+                    direction
+                ));
             IMesh mesh = meshBuilder.Build();
 
             using (IIfcProject project = IfcProject.CreateProject("Test"))
@@ -57,7 +59,6 @@ namespace Test
 
                 IIfcPipeFittingBuilder<IfcPipeFitting> pipeFittingBuilder = 
                     new IfcPipeFittingBuilder<IfcPipeFitting>("Test", "", IfcPipeFittingTypeEnum.NOTDEFINED);
-                pipeFittingBuilder.AssignGeometry(new BendTriangulatedGeometry(geometryBuilder));
                 pipeFittingBuilder.CreateObjectPlacement(model, FixedMatrix<Dim4>.Identity());
 
                 IfcPipeFitting pipeFitting = pipeFittingBuilder.CreateInstance(model);

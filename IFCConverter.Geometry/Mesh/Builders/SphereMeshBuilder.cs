@@ -3,11 +3,11 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Mesh.Builders
 {
-    public class SphereMeshBuilder : MeshBuilder
+    public sealed class SphereMeshBuilder : MeshBuilder
     {
         public SphereMeshBuilder(double radius, int longitudeSegments = 8, int latitudeSegments = 8)
         {
-            ValidateRadius(radius);
+            ValidatePositiveFinite(radius, nameof(radius));
 
             int southPole = AddVertex(FixedVector<Dim3>.Builder.Dense(0, 0, -radius));
             int[,] rings = new int[latitudeSegments - 1, longitudeSegments];

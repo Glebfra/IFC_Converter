@@ -3,8 +3,12 @@ using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Mesh.Builders
 {
-    public class ConeMeshBuilder : MeshBuilder
+    public sealed class ConeMeshBuilder : MeshBuilder
     {
+        public FixedVector<Dim3>[] Ring { get; }
+        
+        public int[] RingIndices { get; }
+        
         public ConeMeshBuilder(double radius, double height, int radialSegments = 16)
         {
             ValidatePositiveFinite(radius, nameof(radius));
@@ -13,7 +17,8 @@ namespace IFCConverter.Geometry.Mesh.Builders
             if (radialSegments < 3)
                 throw new ArgumentOutOfRangeException(nameof(radialSegments), "At least 3 radius segments are required.");
 
-            int[] ring = new int[radialSegments];
+            Ring = new FixedVector<Dim3>[radialSegments];
+            RingIndices = new int[radialSegments];
 
             for (int i = 0; i < radialSegments; i++)
             {
@@ -22,7 +27,8 @@ namespace IFCConverter.Geometry.Mesh.Builders
                 double x = radius * Math.Cos(angle);
                 double y = radius * Math.Sin(angle);
 
-                ring[i] = AddVertex(FixedVector<Dim3>.Builder.Dense(x, y, 0));
+                Ring[i] = FixedVector<Dim3>.Builder.Dense(x, y, 0);
+                RingIndices[i] = AddVertex(Ring[i]);
             }
 
             int apex = AddVertex(FixedVector<Dim3>.Builder.Dense(0, 0, height));
@@ -30,7 +36,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
             for (int i = 0; i < radialSegments; i++)
             {
                 int next = (i + 1) % radialSegments;
-                AddTriangle(new Triangle(ring[i], ring[next], apex));
+                AddTriangle(new Triangle(RingIndices[i], RingIndices[next], apex));
             }
         }
         

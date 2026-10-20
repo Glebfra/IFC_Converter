@@ -51,11 +51,11 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
             FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
 
             Segment segment = SegmentCreator.CreateSegment(
-                reducer.Position,
                 portPosition,
+                reducer.Position,
                 diameter,
                 $"{reducer.Metadata.Name}_connection",
-                (portPosition - reducer.Position).Dot(reducerAxis) * reducerAxis
+                (reducer.Position - portPosition).Dot(reducerAxis) * reducerAxis
             );
             model.Add(segment);
         }

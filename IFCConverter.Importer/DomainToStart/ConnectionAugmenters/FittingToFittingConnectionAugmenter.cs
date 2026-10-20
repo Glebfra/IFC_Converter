@@ -46,11 +46,11 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
                 FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
 
                 yield return SegmentCreator.CreateSegment(
-                    reducer.Position,
                     portPosition,
+                    reducer.Position,
                     diameter,
                     $"{reducer.Metadata.Name}_connection",
-                    (portPosition - reducer.Position).Dot(reducerAxis) * reducerAxis
+                    (reducer.Position - portPosition).Dot(reducerAxis) * reducerAxis
                 );
             }
         }
@@ -63,11 +63,11 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
             FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
             
             yield return SegmentCreator.CreateSegment(
-                reducer.Position, 
                 abstractFitting.Position, 
+                reducer.Position, 
                 diameter, 
                 $"{fittings[0].Metadata.Name}_{fittings[1].Metadata.Name}_connection",
-                (abstractFitting.Position - reducer.Position).Dot(reducerAxis) * reducerAxis
+                (reducer.Position - abstractFitting.Position).Dot(reducerAxis) * reducerAxis
             );
         }
 

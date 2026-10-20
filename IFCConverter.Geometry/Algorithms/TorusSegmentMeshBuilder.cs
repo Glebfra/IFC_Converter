@@ -44,8 +44,7 @@ namespace IFCConverter.Geometry.Algorithms
 
             for (int i = 0; i <= _arcSegments; i++)
             {
-                double theta =
-                    angle * i / _arcSegments;
+                double theta = angle * i / _arcSegments;
 
                 double cosTheta = Math.Cos(theta);
                 double sinTheta = Math.Sin(theta);

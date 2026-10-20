@@ -1,5 +1,6 @@
 ﻿using System;
 using IFCConverter.Domain.Entities;
+using IFCConverter.Exporter.Geometries;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
@@ -26,14 +27,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
                 elbow.PortB.Metadata.Diameter
             );
 
-            IIfcGeometry geometry = BendTriangulatedGeometry.CreateGeometry(model, new BendTriangulatedGeometryProperties
-            {
-                PipeDiameter = diameter,
-
-                Position = CalculateLocalArcCenter(elbow.PortA.Direction, elbow.PortB.Direction, elbow.Radius),
-                StartArcPosition = elbow.PortA.Position - elbow.Position,
-                EndArcPosition = elbow.PortB.Position - elbow.Position
-            });
+            IIfcGeometry geometry = ElbowIfcGeometry.Create(model, elbow);
             geometry.AssignColor(Color.FromHEX(entity.Metadata.Color));
 
             FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(elbow.Position);

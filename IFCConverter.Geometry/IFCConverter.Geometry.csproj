@@ -68,10 +68,15 @@
         <Compile Include="Curves\Line3D.cs" />
         <Compile Include="Edge.cs" />
         <Compile Include="IGeometry.cs" />
+        <Compile Include="Mesh\Builders\ClippedConeMeshBuilder.cs" />
         <Compile Include="Mesh\Builders\ConeMeshBuilder.cs" />
+        <Compile Include="Mesh\Builders\EarClippingAlgorithmBuilder.cs" />
+        <Compile Include="Mesh\Builders\ExtrudedAreaMeshBuilder.cs" />
         <Compile Include="Mesh\Builders\IMeshBuilder.cs" />
         <Compile Include="Mesh\Builders\MeshBuilder.cs" />
         <Compile Include="Mesh\Builders\SphereMeshBuilder.cs" />
+        <Compile Include="Mesh\Builders\TorusMeshBuilder.cs" />
+        <Compile Include="Mesh\Builders\TorusSegmentMeshBuilder.cs" />
         <Compile Include="Mesh\IMesh.cs" />
         <Compile Include="Mesh\Mesh.cs" />
         <Compile Include="PlanarRegion.cs" />

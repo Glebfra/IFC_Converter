@@ -194,6 +194,11 @@
         <Compile Include="DomainToIfc\PropertySetAugmenters\MetadataPropertySetAugmenter.cs" />
         <Compile Include="DomainToIfc\PropertySetAugmenters\PipeSegmentPropertySetAugmenter.cs" />
         <Compile Include="DomainToIfc\PropertySetAugmenters\PropertySetAugmenterRegistry.cs" />
+        <Compile Include="Geometries\AxialCouplingJointIfcGeometry.cs" />
+        <Compile Include="Geometries\AxialExpansionJointIfcGeometry.cs" />
+        <Compile Include="Geometries\ElbowIfcGeometry.cs" />
+        <Compile Include="Geometries\ReducerIfcGeometry.cs" />
+        <Compile Include="Geometries\ValveIfcGeometry.cs" />
         <Compile Include="StartToDomain\ConnectionResolverRegistry.cs" />
         <Compile Include="StartToDomain\ConnectionResolvers\IConnectionResolver.cs" />
         <Compile Include="StartToDomain\ConnectionResolvers\ConnectionResolver.cs" />
