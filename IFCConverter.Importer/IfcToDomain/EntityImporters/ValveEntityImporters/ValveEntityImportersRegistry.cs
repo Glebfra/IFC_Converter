@@ -1,4 +1,5 @@
-﻿using IFCConverter.Utils.Reflection;
+﻿using IFCConverter.Domain;
+using IFCConverter.Utils.Reflection;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ValveEntityImporters
@@ -9,14 +10,14 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ValveEntityImporters
         {
         }
 
-        public IValveEntityImporter Resolve(IIfcProduct product)
+        public IValveEntityImporter Resolve(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            return Resolve(importer => importer.CanImport(product));
+            return Resolve(importer => importer.CanImport(product, model, context));
         }
 
-        public bool TryResolve(IIfcProduct product, out IValveEntityImporter importer)
+        public bool TryResolve(IIfcProduct product, EngineeringModel model, ImportContext context, out IValveEntityImporter importer)
         {
-            return TryResolve(imp => imp.CanImport(product), out importer);
+            return TryResolve(imp => imp.CanImport(product, model, context), out importer);
         }
     }
 }

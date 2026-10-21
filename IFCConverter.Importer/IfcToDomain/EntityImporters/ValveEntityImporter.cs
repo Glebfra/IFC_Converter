@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
 
         public void Import(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            if (_registry.TryResolve(product, out IValveEntityImporter importer))
+            if (_registry.TryResolve(product, model, context, out IValveEntityImporter importer))
                 importer.Import(product, model, context);
         }
     }

@@ -326,6 +326,34 @@ namespace IFCConverter.Utils.Mathematics
             IReadOnlyCollection<FixedVector<TDimension>> vectorsArr = vectors.ToArray();
             return vectorsArr.Sum() * (1.0 / vectorsArr.Count);
         }
+
+        public static bool IsBetween<TDimension>(
+            this FixedVector<TDimension> point, 
+            FixedVector<TDimension> start, 
+            FixedVector<TDimension> end, 
+            double tolerance = 1e-6)
+            where TDimension : struct, IDimension
+        {
+            FixedVector<TDimension> ab = end - start;
+            FixedVector<TDimension> ap = point - start;
+
+            double lengthSquared = ab.Dot(ab);
+            if (lengthSquared <= tolerance * tolerance)
+                return false;
+
+            double t = ap.Dot(ab) / lengthSquared;
+            if (t < 0.0 || t > 1.0)
+                return false;
+
+            FixedVector<TDimension> projection = start.Lerp(end, t);
+            return (point - projection).L2Norm() <= tolerance;
+        }
+
+        public static FixedVector<TDimension> Lerp<TDimension>(this FixedVector<TDimension> start, FixedVector<TDimension> end, double t)
+            where TDimension : struct, IDimension
+        {
+            return start + (end - start) * t;
+        }
     }
 
     public static class FixedVector2Extensions

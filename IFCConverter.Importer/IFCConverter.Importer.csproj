@@ -161,6 +161,7 @@
         <Compile Include="DomainToStart\EntityExporters\ReducerEntityExporter.cs" />
         <Compile Include="DomainToStart\EntityExporters\SegmentEntityExporter.cs" />
         <Compile Include="DomainToStart\EntityExporters\TeeEntityExporter.cs" />
+        <Compile Include="DomainToStart\EntityExporters\ValveEntityExporter.cs" />
         <Compile Include="DomainToStart\ExportContext.cs" />
         <Compile Include="DomainToStart\MissingConnectionsAugmenters\ElbowMissingConnectionsAugmenter.cs" />
         <Compile Include="DomainToStart\MissingConnectionsAugmenters\IMissingConnectionsAugmenter.cs" />
@@ -204,17 +205,15 @@
         <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ISegmentEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ISegmentEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\SegmentEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\TriangulatedFaceSetSegmentEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ExtrudedAreaSolidTeeEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\TeeEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\AvevaValveNearestSegmentsEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\NearestSegmentsValveEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\TriangulatedFaceSetValveEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\ValveEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityMetadataAugmenters\AvevaEntityMetadataAugmenter.cs" />
         <Compile Include="IfcToDomain\EntityMetadataAugmenters\EntityMetadataAugmenter.cs" />
