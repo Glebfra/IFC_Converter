@@ -5,7 +5,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ValveEntityImporters
 {
     internal interface IValveEntityImporter
     {
-        bool CanImport(IIfcProduct product);
+        bool CanImport(IIfcProduct product, EngineeringModel model, ImportContext context);
         void Import(IIfcProduct product, EngineeringModel model, ImportContext context);
     }
 }
