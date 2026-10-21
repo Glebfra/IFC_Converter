@@ -1,21 +1,31 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
+using IFCConverter.Domain.Identity;
 using IFCConverter.Start.Interfaces;
 
 namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
 {
     internal sealed class EntityMetadataMaterialAugmenter : IEntityMetadataAugmenter
     {
+        private EntityId _id;
+        private IStartMaterializedEntity _startMaterializedEntity;
+        
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            return context.TryGetEntityId(source, out _) && source is IStartMaterializedEntity;
+            if (!context.TryGetEntityId(source, out _id))
+                return false;
+
+            if (!(source is IStartMaterializedEntity startMaterializedEntity))
+                return false;
+            _startMaterializedEntity = startMaterializedEntity;
+
+            return true;
         }
 
         public void Augment(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            Entity entity = model.GetEntity(context.GetEntityId(source));
-            IStartMaterializedEntity materializedEntity = (IStartMaterializedEntity)source;
-            entity.Metadata.MaterialName = materializedEntity.MaterialName;
+            Entity entity = model.GetEntity(_id);
+            entity.Metadata.MaterialName = _startMaterializedEntity.MaterialName;
         }
     }
 }

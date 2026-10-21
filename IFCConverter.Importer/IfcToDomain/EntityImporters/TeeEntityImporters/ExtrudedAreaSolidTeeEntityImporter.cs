@@ -14,21 +14,28 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
     {
         private const double DoubleTolerance = 1e-6;
 
+        private IIfcLocalPlacement _localPlacement;
+        private IIfcExtrudedAreaSolid[] _extrudedAreaSolids;
+
         public bool CanImport(IIfcProduct product)
         {
-            if (!(product.ObjectPlacement is IIfcLocalPlacement))
+            if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
-            IIfcRepresentationItem[] representationItems =
-                product.GetRepresentationItems().ToArray();
+            _localPlacement = localPlacement;
+            
+            IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 2)
                 return false;
-            
+
+            _extrudedAreaSolids = new IIfcExtrudedAreaSolid[2];
+            int i = 0;
             foreach (IIfcRepresentationItem representationItem in representationItems)
             {
                 if (!(representationItem is IIfcExtrudedAreaSolid extrudedAreaSolid))
                     return false;
+                _extrudedAreaSolids[i++] = extrudedAreaSolid;
 
-                if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef))
+                if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef circleProfileDef))
                     return false;
             }
 
@@ -37,13 +44,10 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
 
         public void Import(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            IIfcLocalPlacement localPlacement = (IIfcLocalPlacement)product.ObjectPlacement;
-            IIfcExtrudedAreaSolid[] extrudedAreaSolids = product.GetRepresentationItems().Cast<IIfcExtrudedAreaSolid>().ToArray();
-
             double lengthPower = product.Model.GetLengthPower();
-            FixedMatrix<Dim4> globalMatrix = localPlacement.GetGlobalMatrix();
+            FixedMatrix<Dim4> globalMatrix = _localPlacement.GetGlobalMatrix();
             
-            SolidGeometry[] solids = extrudedAreaSolids.Select(solid => CreateSolidGeometry(solid, globalMatrix)).ToArray();
+            SolidGeometry[] solids = _extrudedAreaSolids.Select(solid => CreateSolidGeometry(solid, globalMatrix)).ToArray();
             
             if (!TryGetIntersection(solids[0].Axis.Origin, solids[0].Axis.Direction, solids[1].Axis.Origin, solids[1].Axis.Direction, DoubleTolerance, 
                     out FixedVector<Dim3> centerIfc))

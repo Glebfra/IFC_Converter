@@ -6,7 +6,6 @@ using IFCConverter.Domain.Identity;
 using IFCConverter.Domain.Topology;
 using IFCConverter.Start.Entities;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Exporter.StartToDomain.ConnectionResolvers
 {

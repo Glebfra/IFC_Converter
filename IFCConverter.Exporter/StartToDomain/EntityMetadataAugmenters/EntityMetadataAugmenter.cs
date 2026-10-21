@@ -1,6 +1,7 @@
 ﻿using System;
 using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
+using IFCConverter.Domain.Identity;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
@@ -10,14 +11,19 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
 {
     internal sealed class EntityMetadataAugmenter : IEntityMetadataAugmenter
     {
+        private EntityId _id;
+        
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            return context.TryGetEntityId(source, out _);
+            if (!context.TryGetEntityId(source, out _id))
+                return false;
+
+            return true;
         }
 
         public void Augment(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            Entity entity = model.GetEntity(context.GetEntityId(source));
+            Entity entity = model.GetEntity(_id);
             StartElementTypeEnum startType = source.GetStartElementAttribute().Type;
 
             entity.Metadata.Type = startType.ToString();

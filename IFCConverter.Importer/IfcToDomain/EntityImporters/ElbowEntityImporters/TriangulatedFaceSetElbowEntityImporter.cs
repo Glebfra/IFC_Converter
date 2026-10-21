@@ -19,31 +19,34 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
 {
     internal sealed class TriangulatedFaceSetElbowEntityImporter : IElbowEntityImporter
     {
+        private IIfcLocalPlacement _localPlacement;
+        private IIfcTriangulatedFaceSet _triangulatedFaceSet;
+        
         public bool CanImport(IIfcProduct product)
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
+            _localPlacement = localPlacement;
+            
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 return false;
-            if (!(representationItems[0] is IIfcTriangulatedFaceSet faceSet))
+            if (!(representationItems[0] is IIfcTriangulatedFaceSet triangulatedFaceSet))
                 return false;
+            _triangulatedFaceSet = triangulatedFaceSet;
 
             return true;
         }
 
         public void Import(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            IIfcLocalPlacement localPlacement = (IIfcLocalPlacement)product.ObjectPlacement;
-            IIfcTriangulatedFaceSet faceSet = (IIfcTriangulatedFaceSet)product.GetRepresentationItems().First();
-            
             double lengthPower = product.Model.GetLengthPower();
 
-            FixedMatrix<Dim4> globalMatrix = localPlacement.GetGlobalMatrix();
+            FixedMatrix<Dim4> globalMatrix = _localPlacement.GetGlobalMatrix();
             FixedVector<Dim3> position = globalMatrix.GetTranslation() * lengthPower;
             FixedMatrix<Dim3> rotation = globalMatrix.GetRotation();
 
-            IMesh mesh = faceSet.GetMesh();
+            IMesh mesh = _triangulatedFaceSet.GetMesh();
             FixedVector<Dim3>[][] boundariesVertices = GetBoundaryVertices(mesh)
                 .Select(vertices => vertices
                     .Select(vertex => vertex * rotation + position)

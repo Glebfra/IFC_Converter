@@ -13,39 +13,44 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
 {
     internal sealed class RevolvedAreaSolidElbowEntityImporter : IElbowEntityImporter
     {
+        private IIfcLocalPlacement _localPlacement;
+        private IIfcRevolvedAreaSolid _revolvedAreaSolid;
+        private IIfcCircleProfileDef _circleProfileDef;
+        
         public bool CanImport(IIfcProduct product)
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
+            _localPlacement = localPlacement;
+            
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 return false;
             if (!(representationItems[0] is IIfcRevolvedAreaSolid revolvedAreaSolid))
                 return false;
+            _revolvedAreaSolid = revolvedAreaSolid;
+            
             if (!(revolvedAreaSolid.SweptArea is IIfcCircleProfileDef circleProfileDef))
                 return false;
+            _circleProfileDef = circleProfileDef;
 
             return true;
         }
 
         public void Import(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            IIfcLocalPlacement localPlacement = (IIfcLocalPlacement)product.ObjectPlacement;
-            IIfcRevolvedAreaSolid revolvedAreaSolid = (IIfcRevolvedAreaSolid)product.GetRepresentationItems().First();
-            IIfcCircleProfileDef circleProfileDef = (IIfcCircleProfileDef)revolvedAreaSolid.SweptArea;
-
             double lengthPower = product.Model.GetLengthPower();
-            double angle = revolvedAreaSolid.Angle;
-            double circleDiameter = circleProfileDef.Radius * 2 * lengthPower;
+            double angle = _revolvedAreaSolid.Angle;
+            double circleDiameter = _circleProfileDef.Radius * 2 * lengthPower;
 
-            FixedMatrix<Dim4> globalMatrix = localPlacement.GetGlobalMatrix();
-            globalMatrix = globalMatrix * revolvedAreaSolid.Position.ToFixedMatrix();
+            FixedMatrix<Dim4> globalMatrix = _localPlacement.GetGlobalMatrix();
+            globalMatrix = globalMatrix * _revolvedAreaSolid.Position.ToFixedMatrix();
 
             FixedVector<Dim3> globalPosition = globalMatrix.GetTranslation() * lengthPower;
             FixedMatrix<Dim3> globalRotation = globalMatrix.GetRotation();
             
-            FixedVector<Dim3> axisDirection = globalRotation * revolvedAreaSolid.Axis.Axis.ToFixedVector();
-            FixedVector<Dim3> axisPosition = globalPosition + globalRotation * revolvedAreaSolid.Axis.Location.ToFixedVector<Dim3>() * lengthPower;
+            FixedVector<Dim3> axisDirection = globalRotation * _revolvedAreaSolid.Axis.Axis.ToFixedVector();
+            FixedVector<Dim3> axisPosition = globalPosition + globalRotation * _revolvedAreaSolid.Axis.Location.ToFixedVector<Dim3>() * lengthPower;
 
             double radius = (axisPosition - globalPosition).L2Norm();
             double displacement = CalculateDisplacement(radius, angle);
@@ -62,11 +67,11 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
                 Position = center
             };
 
-            FixedVector<Dim3> localAxisPosition = revolvedAreaSolid.Axis.Location.ToFixedVector<Dim3>() * lengthPower;
+            FixedVector<Dim3> localAxisPosition = _revolvedAreaSolid.Axis.Location.ToFixedVector<Dim3>() * lengthPower;
             FixedVector<Dim3> globalAxisPosition = globalRotation * localAxisPosition + globalPosition;
             
-            FixedVector<Dim3> localAxisDirection = revolvedAreaSolid.Axis.Axis.ToFixedVector();
-            FixedMatrix<Dim3> localAngleRotation = FixedMatrix<Dim3>.Builder.CreateRotationAroundVector(localAxisDirection, revolvedAreaSolid.Angle);
+            FixedVector<Dim3> localAxisDirection = _revolvedAreaSolid.Axis.Axis.ToFixedVector();
+            FixedMatrix<Dim3> localAngleRotation = FixedMatrix<Dim3>.Builder.CreateRotationAroundVector(localAxisDirection, _revolvedAreaSolid.Angle);
 
             FixedVector<Dim3> localFirstPosition = localAxisPosition.Negate();
             FixedVector<Dim3> localSecondPosition = localAngleRotation * localFirstPosition;
