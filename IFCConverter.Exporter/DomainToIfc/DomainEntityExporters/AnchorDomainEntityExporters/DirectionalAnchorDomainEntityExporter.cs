@@ -29,7 +29,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
             if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
                 return;
 
-            FixedMatrix<Dim4> segmentMatrix = (FixedMatrix<Dim4>)anchor.Metadata.Meta["SegmentMatrix"];
+            FixedMatrix<Dim4> segmentMatrix = anchor.TypedMetadata.SegmentMatrix;
             double diameter = anchor.Port.Metadata.Diameter;
 
             FixedVector<Dim3>[] directions = CreateDirections(segmentMatrix, type);

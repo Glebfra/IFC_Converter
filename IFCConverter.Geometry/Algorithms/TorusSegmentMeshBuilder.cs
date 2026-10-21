@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Algorithms
 {
     public sealed class TorusSegmentMeshBuilder : MeshBuilder
     {
-
         private readonly int _arcSegments;
         private readonly FixedVector<Dim3> _center;
         private readonly FixedVector<Dim3> _end;
@@ -33,9 +33,9 @@ namespace IFCConverter.Geometry.Algorithms
 
             double torusRadius = startVector.L2Norm();
 
-            FixedVector<Dim3> u = startVector.Normalize();
-            FixedVector<Dim3> n = startVector.CrossProduct(endVector).Normalize();
-            FixedVector<Dim3> v = n.CrossProduct(u).Normalize();
+            FixedVector<Dim3> u = startVector.SafeNormalize();
+            FixedVector<Dim3> n = startVector.CrossProduct(endVector).SafeNormalize();
+            FixedVector<Dim3> v = n.CrossProduct(u).SafeNormalize();
 
             double angle = Math.Atan2(endVector.Dot(v), endVector.Dot(u));
 
@@ -44,8 +44,7 @@ namespace IFCConverter.Geometry.Algorithms
 
             for (int i = 0; i <= _arcSegments; i++)
             {
-                double theta =
-                    angle * i / _arcSegments;
+                double theta = angle * i / _arcSegments;
 
                 double cosTheta = Math.Cos(theta);
                 double sinTheta = Math.Sin(theta);

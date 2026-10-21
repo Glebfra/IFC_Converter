@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Geometry.Triangulators;
 using IFCConverter.Utils.Mathematics;
 

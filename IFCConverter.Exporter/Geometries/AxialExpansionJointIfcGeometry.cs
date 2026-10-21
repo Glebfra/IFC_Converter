@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Attributes;
 using IFCConverter.IFC.Builders.Geometry.ProfileDef;
 using IFCConverter.IFC.Builders.Geometry.SolidModel;
+using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.ProfileDef;
 using IFCConverter.IFC.Interfaces.Geometry.SolidModel;
@@ -13,62 +15,52 @@ using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.ProfileResource;
 
-namespace IFCConverter.IFC.Geometries
+namespace IFCConverter.Exporter.Geometries
 {
-    public struct DoubleExtrudedJointGeometryProperties
-    {
-        public FixedVector<Dim3> Position;
-        public FixedVector<Dim3>[] Points;
-        public double Diameter;
-    }
-
     [IfcRepresentationIdentifier(IfcRepresentationIdentifier.Body)]
     [IfcRepresentationType(IfcRepresentationType.Brep)]
-    public class AxialExpansionJointGeometry : IfcGeometry
+    internal sealed class AxialExpansionJointIfcGeometry : IfcGeometry
     {
         private const double DiameterToFirstDiameterFactor = 1.0;
         private const double DiameterToSecondDiameterFactor = 0.75;
-
-        public AxialExpansionJointGeometry(IIfcBuilder geometryBuilder,
-            IIfcRepresentationContext representationContext = null)
+        
+        public AxialExpansionJointIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null) 
             : base(geometryBuilder, representationContext)
         {
         }
 
-        public AxialExpansionJointGeometry(IEnumerable<IIfcBuilder> geometryBuilders,
-            IIfcRepresentationContext representationContext = null)
+        public AxialExpansionJointIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null) 
             : base(geometryBuilders, representationContext)
         {
         }
 
-        public static AxialExpansionJointGeometry CreateGeometry(IModel model,
-            DoubleExtrudedJointGeometryProperties properties)
+        public static AxialCouplingJointIfcGeometry Create(IModel model, Joint joint)
         {
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
 
-            double length = (properties.Points[1] - properties.Points[0]).L2Norm();
-            FixedVector<Dim3>[] directions = properties.Points
-                .Select(point => point - properties.Position)
-                .ToArray();
+            double diameter = joint.Ports.Max(port => port.Metadata.Diameter);
+            FixedVector<Dim3>[] points = joint.Ports.Select(port => port.Position - joint.Position).ToArray();
+            
+            double length = (points[1] - points[0]).L2Norm();
             double[] diameters =
             {
-                properties.Diameter * DiameterToFirstDiameterFactor, properties.Diameter * DiameterToSecondDiameterFactor
+                diameter * DiameterToFirstDiameterFactor, diameter * DiameterToSecondDiameterFactor
             };
 
-            for (int i = 0; i < directions.Length; i++)
+            for (int i = 0; i < points.Length; i++)
             {
-                FixedVector<Dim3> direction = directions[i];
+                FixedVector<Dim3> direction = points[i];
                 FixedVector<Dim3> zAxis = direction;
                 FixedVector<Dim3> xAxis = zAxis.CreateNormalVector();
                 FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
 
                 FixedMatrix<Dim4> profileDefMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros());
-                FixedMatrix<Dim4> extrudedAreaMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(properties.Position, xAxis, yAxis, zAxis);
+                FixedMatrix<Dim4> extrudedAreaMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros(), xAxis, yAxis, zAxis);
 
                 IIfcCircleProfileDefBuilder<IfcCircleProfileDef> profileDefBuilder =
                     new IfcCircleProfileDefBuilder<IfcCircleProfileDef>(
                         diameters[i] / 2, IfcProfileTypeEnum.AREA,
-                        $"{nameof(AxialExpansionJointGeometry)} {nameof(IfcCircleProfileDef)}"
+                        $"{nameof(AxialCouplingJointIfcGeometry)} {nameof(IfcCircleProfileDef)}"
                     );
                 profileDefBuilder.CreatePosition(model, profileDefMatrix);
                 IfcCircleProfileDef profileDef = profileDefBuilder.CreateProfileDef(model);
@@ -80,7 +72,7 @@ namespace IFCConverter.IFC.Geometries
                 builders.Add(extrudedAreaSolidBuilder);
             }
 
-            return new AxialExpansionJointGeometry(builders);
+            return new AxialCouplingJointIfcGeometry(builders);
         }
     }
 }

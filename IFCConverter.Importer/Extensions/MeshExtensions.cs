@@ -4,6 +4,7 @@ using System.Linq;
 using IFCConverter.Geometry;
 using IFCConverter.Geometry.Algorithms;
 using IFCConverter.Geometry.Boundary;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Importer.Extensions

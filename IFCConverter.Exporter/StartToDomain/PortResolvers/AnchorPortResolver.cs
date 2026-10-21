@@ -35,7 +35,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             switch (source)
             {
                 case StartFixedAnchorEntity _:
-                    return segments.First().GetProjectionFromPoint(position).Normalize();
+                    return segments.First().GetProjectionFromPoint(position).SafeNormalize();
                 case StartAbstractAnchorEntity _:
                     return FixedVector<Dim3>.Builder.Z();
             }

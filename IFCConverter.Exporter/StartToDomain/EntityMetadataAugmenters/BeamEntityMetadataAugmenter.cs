@@ -1,5 +1,6 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
+using IFCConverter.Domain.Identity;
 using IFCConverter.Start.Entities.Segments;
 using IFCConverter.Start.Interfaces;
 
@@ -7,17 +8,20 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
 {
     internal sealed class BeamEntityMetadataAugmenter : IEntityMetadataAugmenter
     {
-        public bool CanResolve(IStartEntity source, StartMappingContext context)
+        public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            return context.TryGetEntityId(source, out _) && source is StartBeamEntity;
+            if (!context.TryGetEntityId(source, out EntityId id))
+                return false;
+            Entity entity = model.GetEntity(id);
+            return entity is Beam;
         }
 
         public void Augment(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            StartBeamEntity start = (StartBeamEntity)source;
-            Entity entity = model.GetEntity(context.GetEntityId(source));
-            entity.Metadata.Meta.Add("TransformationMatrix", start.TransformationMatrix);
-            entity.Metadata.Meta.Add("BeamType", start.BeamType.EnumValue.ToString());
+            StartBeamEntity startBeamEntity = (StartBeamEntity)source;
+            Beam beam = (Beam)model.GetEntity(context.GetEntityId(source));
+            beam.TypedMetadata.TransformationMatrix = startBeamEntity.TransformationMatrix;
+            beam.TypedMetadata.BeamType = startBeamEntity.BeamType.EnumValue.ToString();
         }
     }
 }

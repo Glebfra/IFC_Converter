@@ -117,7 +117,7 @@ namespace IFCConverter.Tests.Mathematics
         public void Normalize_ZeroVector_ThrowsInvalidOperationException()
         {
             Assert.Throws<InvalidOperationException>(
-                () => FixedVector<Dim3>.Zeros().Normalize());
+                () => FixedVector<Dim3>.Zeros().SafeNormalize());
         }
 
         [Test]
@@ -309,7 +309,7 @@ namespace IFCConverter.Tests.Mathematics
         public void Normalize_ReturnsUnitVector()
         {
             FixedVector<Dim3> vector = FixedVector<Dim3>.Builder.Dense(3.0, 0.0, 4.0);
-            FixedVector<Dim3> normalized = vector.Normalize();
+            FixedVector<Dim3> normalized = vector.SafeNormalize();
             
             Assert.That(normalized.L2Norm(), Is.EqualTo(1.0).Within(Tolerance));
             AssertVector(normalized, 0.6, 0.0, 0.8);
@@ -320,7 +320,7 @@ namespace IFCConverter.Tests.Mathematics
         {
             FixedVector<Dim3> vector = FixedVector<Dim3>.Zeros();
             
-            Assert.That(() => vector.Normalize(), Throws.TypeOf<InvalidOperationException>());
+            Assert.That(() => vector.SafeNormalize(), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]

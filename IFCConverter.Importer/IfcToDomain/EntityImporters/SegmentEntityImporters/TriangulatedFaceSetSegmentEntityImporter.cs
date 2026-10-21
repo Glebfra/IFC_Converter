@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using IFCConverter.Domain;
 using IFCConverter.Geometry;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Utils.Mathematics;

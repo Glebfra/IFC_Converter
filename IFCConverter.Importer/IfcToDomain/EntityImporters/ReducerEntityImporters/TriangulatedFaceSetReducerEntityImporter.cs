@@ -7,6 +7,7 @@ using IFCConverter.Domain.Identity;
 using IFCConverter.Geometry;
 using IFCConverter.Geometry.Algorithms;
 using IFCConverter.Geometry.Boundary;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Utils.Mathematics;
@@ -96,7 +97,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
             DiametersData diametersData = FilterCenters(boundaryCenters, diameters);
             FixedVector<Dim3> reducerDirection = diametersData.MaxDiameterCenter - diametersData.MinDiameterCenter;
             FixedVector<Dim3> reducerAxisProjection = reducerDirection.Dot(normals[0]) * normals[0];
-            FixedVector<Dim3> reducerAxisDirection = reducerAxisProjection.Normalize();
+            FixedVector<Dim3> reducerAxisDirection = reducerAxisProjection.SafeNormalize();
             
             Reducer reducer = new Reducer(EntityId.New())
             {
@@ -105,8 +106,8 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
             };
             
             bool isEccentric = !reducerDirection.IsParallel(reducerAxisDirection);
-            reducer.Metadata.Meta.Add("IsEccentric", isEccentric);
-            reducer.Metadata.Meta.Add("Axis", reducerAxisDirection);
+            reducer.TypedMetadata.Axis = reducerAxisDirection;
+            reducer.TypedMetadata.IsEccentric = isEccentric;
             
             reducer.PortA.SetGeometry(diametersData.MinDiameterCenter, reducerAxisDirection.Negate());
             reducer.PortB.SetGeometry(diametersData.MaxDiameterCenter, reducerAxisDirection);

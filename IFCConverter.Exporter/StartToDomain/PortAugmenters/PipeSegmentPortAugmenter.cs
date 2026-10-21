@@ -58,7 +58,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
 
         private static void ResolveReducerPort(AbstractSegment segment, Reducer reducer)
         {
-            FixedVector<Dim3> reducerDirection = (reducer.PortB.Position - reducer.PortA.Position).Normalize();
+            FixedVector<Dim3> reducerDirection = (reducer.PortB.Position - reducer.PortA.Position).SafeNormalize();
             FixedVector<Dim3> segmentDirection = segment.GetDirectionFromPoint(reducer.Position);
 
             if (reducerDirection.Dot(segmentDirection) < 0)

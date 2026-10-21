@@ -19,13 +19,12 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             StartPipeEntity pipe = new StartPipeEntity();
             pipe.Diameter.CreateFromSI(segment.Diameter);
 
-            FixedVector<Dim3> projection = segment.EndPort.Position - segment.StartPort.Position;
-            if (segment.Metadata.Meta.TryGetValue("Projection", out object projectionValue))
-                projection =  (FixedVector<Dim3>)projectionValue;
-            
+            FixedVector<Dim3> projection = segment.TypedMetadata.Projection ?? 
+                                           segment.EndPort.Position - segment.StartPort.Position;
             pipe.ProjectionAlongOXAxis.CreateFromSI(projection[0]);
             pipe.ProjectionAlongOYAxis.CreateFromSI(projection[1]);
             pipe.ProjectionAlongOZAxis.CreateFromSI(projection[2]);
+            pipe.Name = segment.Metadata.Name;
 
             context.Register(entity, pipe);
         }

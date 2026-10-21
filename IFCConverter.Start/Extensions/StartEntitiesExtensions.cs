@@ -78,8 +78,8 @@ namespace IFCConverter.Start.Extensions
             FixedVector<Dim3> position)
         {
             return segmentEntity.IsStartPosition(position)
-                ? segmentEntity.Projection.Normalize()
-                : segmentEntity.Projection.Normalize().Negate();
+                ? segmentEntity.Projection.SafeNormalize()
+                : segmentEntity.Projection.SafeNormalize().Negate();
         }
 
         [Pure]

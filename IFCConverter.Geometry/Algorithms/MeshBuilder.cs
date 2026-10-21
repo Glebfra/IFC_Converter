@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Algorithms
@@ -8,20 +9,6 @@ namespace IFCConverter.Geometry.Algorithms
     {
         [Pure]
         public abstract IMesh Build();
-
-        protected static void AddRectangle(List<int[]> triangles, int a, int b, int c, int d)
-        {
-            AddTriangle(triangles, a, b, c);
-            AddTriangle(triangles, b, d, c);
-        }
-
-        protected static void AddTriangle(List<int[]> triangles, int a, int b, int c)
-        {
-            triangles.Add(new[]
-            {
-                a, b, c
-            });
-        }
 
         [Pure]
         protected static FixedVector<Dim3>[] CreateNormals(FixedVector<Dim3>[] vertices, Triangle[] triangles)
@@ -44,7 +31,7 @@ namespace IFCConverter.Geometry.Algorithms
         protected static IMesh BuildMesh(FixedVector<Dim3>[] vertices, Triangle[] triangles)
         {
             FixedVector<Dim3>[] normals = CreateNormals(vertices, triangles);
-            return new Mesh(vertices, triangles, normals);
+            return new Mesh.Mesh(vertices, triangles, normals);
         }
     }
 }

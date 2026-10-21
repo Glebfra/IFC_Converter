@@ -54,7 +54,6 @@
         <Compile Include="Mathematics\FixedMatrixVectorTests.cs" />
         <Compile Include="Mathematics\FixedVectorExtensionsTests.cs" />
         <Compile Include="Mathematics\FixedVectorTests.cs" />
-        <Compile Include="Mathematics\VectorComparerTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using IFCConverter.Geometry;
 using IFCConverter.Geometry.Algorithms;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 using NUnit.Framework;
 

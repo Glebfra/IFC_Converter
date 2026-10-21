@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Algorithms
@@ -33,7 +34,7 @@ namespace IFCConverter.Geometry.Algorithms
 
         public static FixedVector<Dim3> GetFaceNormal(FixedVector<Dim3> a, FixedVector<Dim3> b, FixedVector<Dim3> c)
         {
-            return (b - a).CrossProduct(c - a).Normalize();
+            return (b - a).CrossProduct(c - a).SafeNormalize();
         }
     }
 }

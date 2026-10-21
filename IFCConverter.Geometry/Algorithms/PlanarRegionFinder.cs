@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Algorithms
@@ -27,7 +28,7 @@ namespace IFCConverter.Geometry.Algorithms
                 double doubleArea = cross.L2Norm();
 
                 Area = doubleArea * 0.5;
-                Normal = cross.Normalize();
+                Normal = cross.SafeNormalize();
                 Centroid = (a + b + c) * (1.0 / 3.0);
             }
         }

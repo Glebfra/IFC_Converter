@@ -10,35 +10,38 @@ namespace IFCConverter.Utils.Mathematics
 
         public VectorComparer(double tolerance)
         {
+            if (double.IsNaN(tolerance) || double.IsInfinity(tolerance) || tolerance <= 0)
+                throw new ArgumentOutOfRangeException(nameof(tolerance), "Tolerance must be a positive number.");
+            
             _tolerance = tolerance;
         }
 
         [Pure]
         public bool Equals(FixedVector<Dim3> x, FixedVector<Dim3> y)
         {
+            if (ReferenceEquals(x, y))
+                return true;
+            
             if (x == null || y == null)
                 return false;
 
-            return
-                Math.Abs(x[0] - y[0]) <= _tolerance &&
-                Math.Abs(x[1] - y[1]) <= _tolerance &&
-                Math.Abs(x[2] - y[2]) <= _tolerance;
+            return Quantize(x[0]) == Quantize(y[0]) &&
+                   Quantize(x[1]) == Quantize(y[1]) &&
+                   Quantize(x[2]) == Quantize(y[2]);
         }
 
         [Pure]
         public int GetHashCode(FixedVector<Dim3> obj)
         {
-            long x = Quantize(obj[0]);
-            long y = Quantize(obj[1]);
-            long z = Quantize(obj[2]);
+            if (obj == null)
+                return 0;
 
             unchecked
             {
                 int hash = 17;
-
-                hash = hash * 23 + x.GetHashCode();
-                hash = hash * 23 + y.GetHashCode();
-                hash = hash * 23 + z.GetHashCode();
+                hash = hash * 23 + Quantize(obj[0]).GetHashCode();
+                hash = hash * 23 + Quantize(obj[1]).GetHashCode();
+                hash = hash * 23 + Quantize(obj[2]).GetHashCode();
 
                 return hash;
             }
@@ -47,7 +50,14 @@ namespace IFCConverter.Utils.Mathematics
         [Pure]
         private long Quantize(double value)
         {
-            return (long)Math.Round(value / _tolerance);
+            if (double.IsNaN(value) || double.IsInfinity(value))
+                throw new ArgumentOutOfRangeException(nameof(value), "Value must be finite.");
+
+            double quantized = Math.Floor(value / _tolerance);
+            if (quantized < long.MinValue || quantized >= long.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(value));
+
+            return (long)quantized;
         }
     }
 }

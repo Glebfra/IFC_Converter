@@ -19,6 +19,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             startTee.Position = tee.Position;
             startTee.HeaderLength.CreateFromSI((tee.PortB.Position - tee.PortA.Position).L2Norm());
             startTee.CrotchHeight.CreateFromSI((tee.PortC.Position - tee.Position).L2Norm() - tee.PortA.Metadata.Diameter / 2);
+            startTee.Name = tee.Metadata.Name;
 
             context.Register(tee, startTee);
         }

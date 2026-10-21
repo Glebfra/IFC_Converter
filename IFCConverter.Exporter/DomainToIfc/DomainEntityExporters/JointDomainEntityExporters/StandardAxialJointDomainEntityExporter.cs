@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IFCConverter.Domain.Entities;
+using IFCConverter.Exporter.Geometries;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
@@ -22,15 +23,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
 
         override protected IIfcGeometry CreateGeometry(Joint joint, IModel model)
         {
-            double diameter = joint.Ports.Max(port => port.Metadata.Diameter);
-            FixedVector<Dim3>[] points = joint.Ports.Select(port => port.Position - joint.Position).ToArray();
-
-            return AxialExpansionJointGeometry.CreateGeometry(model, new DoubleExtrudedJointGeometryProperties
-            {
-                Position = FixedVector<Dim3>.Zeros(),
-                Diameter = diameter,
-                Points = points
-            });
+            return AxialExpansionJointIfcGeometry.Create(model, joint);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace IFCConverter.Geometry.Curves
         public Line3D(FixedVector<Dim3> origin, FixedVector<Dim3> direction)
         {
             Origin = origin;
-            Direction = direction.Normalize();
+            Direction = direction.SafeNormalize();
         }
         
         [Pure]

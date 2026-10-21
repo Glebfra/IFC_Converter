@@ -45,7 +45,7 @@ namespace IFCConverter.IFC.Geometries
         {
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
 
-            FixedVector<Dim3> direction = (properties.Points[0] - properties.Position).Normalize();
+            FixedVector<Dim3> direction = (properties.Points[0] - properties.Position).SafeNormalize();
             double length = (properties.Points[1] - properties.Points[0]).L2Norm();
 
             FixedVector<Dim3> extrudedPoint = properties.Position - direction * (length / 2);

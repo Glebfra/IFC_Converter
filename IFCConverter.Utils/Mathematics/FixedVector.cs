@@ -107,9 +107,14 @@ namespace IFCConverter.Utils.Mathematics
             return IsNormal(this, b, maximumAbsoluteError);
         }
 
-        public FixedVector<TDimension> Normalize()
+        public FixedVector<TDimension> Normalize(double tolerance = 1e-6)
         {
-            return Normalize(this);
+            return Normalize(this, tolerance);
+        }
+
+        public FixedVector<TDimension> SafeNormalize(double tolerance = 1e-6)
+        {
+            return SafeNormalize(this, tolerance);
         }
 
         public FixedVector<TDimension> Negate()
@@ -235,12 +240,24 @@ namespace IFCConverter.Utils.Mathematics
             return Math.Abs(a.Dot(b)) < maximumAbsoluteError;
         }
 
-        public static FixedVector<TDimension> Normalize(FixedVector<TDimension> vector)
+        public static FixedVector<TDimension> Normalize(FixedVector<TDimension> vector, double tolerance = 1e-6)
         {
-            if (vector.L2Norm().AlmostEqual(0.0, 1e-6))
+            if (vector.L2Norm().AlmostEqual(0.0, tolerance))
                 throw new InvalidOperationException();
             
             return new FixedVector<TDimension>(vector.Vector.Normalize(2));
+        }
+
+        public static FixedVector<TDimension> SafeNormalize(FixedVector<TDimension> vector, double tolerance = 1e-6)
+        {
+            try
+            {
+                return Normalize(vector, tolerance);
+            }
+            catch (InvalidOperationException)
+            {
+                return Zeros();
+            }
         }
 
         public static FixedVector<TDimension> Negate(FixedVector<TDimension> vector)

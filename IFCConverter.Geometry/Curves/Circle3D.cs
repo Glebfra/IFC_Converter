@@ -16,8 +16,8 @@ namespace IFCConverter.Geometry.Curves
         public Circle3D(FixedVector<Dim3> center, FixedVector<Dim3> basisX, FixedVector<Dim3> basisY, double radius)
         {
             Center = center;
-            BasisX = basisX.Normalize();
-            BasisY = basisY.Normalize();
+            BasisX = basisX.SafeNormalize();
+            BasisY = basisY.SafeNormalize();
             Radius = radius;
         }
         
@@ -30,7 +30,7 @@ namespace IFCConverter.Geometry.Curves
         [Pure]
         public FixedVector<Dim3> GetTangent(double parameter)
         {
-            return (BasisX * -Math.Sin(parameter) + BasisY * Math.Cos(parameter)).Normalize();
+            return (BasisX * -Math.Sin(parameter) + BasisY * Math.Cos(parameter)).SafeNormalize();
         }
     }
 }

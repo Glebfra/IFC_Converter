@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using IFCConverter.Geometry;
+using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
@@ -61,8 +62,8 @@ namespace IFCConverter.IFC.Extensions
         {
             FixedVector<Dim3> position = axis2Placement2D.Location.ToFixedVector<Dim3>();
             FixedVector<Dim3> refDirection = axis2Placement2D.RefDirection.ToFixedVector();
-            FixedVector<Dim3> upDirection = refDirection.CreateNormalVector().Normalize();
-            FixedVector<Dim3> axis = refDirection.CrossProduct(upDirection).Normalize();
+            FixedVector<Dim3> upDirection = refDirection.CreateNormalVector().SafeNormalize();
+            FixedVector<Dim3> axis = refDirection.CrossProduct(upDirection).SafeNormalize();
 
             return FixedMatrix<Dim4>.Builder.CreateTransition(position, refDirection, upDirection, axis);
         }
@@ -108,9 +109,23 @@ namespace IFCConverter.IFC.Extensions
         [Pure]
         public static IEnumerable<IIfcRepresentationItem> GetRepresentationItems(this IIfcProduct source)
         {
+            if (!source.TryGetRepresentationItems(out IEnumerable<IIfcRepresentationItem> items))
+                return Array.Empty<IIfcRepresentationItem>();
+            return items;
+        }
+
+        [Pure]
+        public static bool TryGetRepresentationItems(this IIfcProduct source, out IEnumerable<IIfcRepresentationItem> items)
+        {
+            items = null;
+            
             IIfcProductRepresentation representation = source.Representation;
+            if (representation == null)
+                return false;
+            
             IEnumerable<IIfcRepresentation> representations = representation.Representations;
-            return representations.SelectMany(ifcRepresentation => ifcRepresentation.Items);
+            items = representations.SelectMany(ifcRepresentation => ifcRepresentation.Items);
+            return true;
         }
 
         [Pure]

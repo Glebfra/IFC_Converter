@@ -275,8 +275,8 @@ namespace IFCConverter.IFC.Geometries
             FixedVector<Dim3>[] points = new FixedVector<Dim3>[numPoints];
             double radius = properties.Diameter / 2;
 
-            FixedVector<Dim3> xHeightNorm = xHeight.Normalize();
-            FixedVector<Dim3> yWidthNorm = yWidth.Normalize();
+            FixedVector<Dim3> xHeightNorm = xHeight.SafeNormalize();
+            FixedVector<Dim3> yWidthNorm = yWidth.SafeNormalize();
 
             for (int i = 0; i < numPoints; i++)
             {

@@ -16,7 +16,8 @@ namespace IFCConverter.Domain.Entities
         }
 
         public EntityId Id { get; }
-        public EntityMetadata Metadata { get; } = new EntityMetadata();
+        public abstract EntityMetadata Metadata { get; }
+        
         public IReadOnlyCollection<Port> Ports => _ports;
         public abstract IReadOnlyCollection<FixedVector<Dim3>> Positions { get; }
 
@@ -30,5 +31,17 @@ namespace IFCConverter.Domain.Entities
 
             return port;
         }
+    }
+
+    public abstract class Entity<TMetadata> : Entity
+        where TMetadata : EntityMetadata
+    {
+        protected Entity(EntityId id) : base(id)
+        {
+        }
+
+        public abstract TMetadata TypedMetadata { get; }
+
+        public override EntityMetadata Metadata => TypedMetadata;
     }
 }

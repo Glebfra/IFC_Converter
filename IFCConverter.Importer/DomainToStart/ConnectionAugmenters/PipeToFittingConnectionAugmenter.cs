@@ -36,26 +36,26 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
             if (fitting is Reducer reducer)
             {
                 double diameter = ports.Max(port => port.Metadata.Diameter);
-                AugmentReducer(model, reducer, ports.First(), diameter);
+                AugmentReducer(model, reducer, ports.First().Position, diameter);
                 return;
             }
 
             Augment(fitting, segment);
         }
 
-        private static void AugmentReducer(EngineeringModel model, Reducer reducer, Port port, double diameter)
+        private static void AugmentReducer(EngineeringModel model, Reducer reducer, FixedVector<Dim3> portPosition, double diameter)
         {
-            if (reducer.Position.AlmostEqual(port.Position))
+            if (reducer.Position.AlmostEqual(portPosition))
                 return;
             
-            FixedVector<Dim3> reducerAxis = (FixedVector<Dim3>)reducer.Metadata.Meta["Axis"];
+            FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
 
             Segment segment = SegmentCreator.CreateSegment(
+                portPosition,
                 reducer.Position,
-                port.Position,
                 diameter,
                 $"{reducer.Metadata.Name}_connection",
-                (port.Position - reducer.Position).Dot(reducerAxis) * reducerAxis
+                (reducer.Position - portPosition).Dot(reducerAxis) * reducerAxis
             );
             model.Add(segment);
         }

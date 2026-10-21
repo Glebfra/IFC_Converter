@@ -13,7 +13,6 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
     internal sealed class ExtrudedAreaSolidTeeEntityImporter : ITeeEntityImporter
     {
         private const double DoubleTolerance = 1e-6;
-        private readonly VectorComparer _comparer = new VectorComparer(DoubleTolerance);
 
         public bool CanImport(IIfcProduct product)
         {
@@ -80,16 +79,16 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
             if (branchStartDistance > branchEndDistance)
             {
                 branchPortPosition = branchStart;
-                branchDirection = (branchStart - center).Normalize();
+                branchDirection = (branchStart - center).SafeNormalize();
             }
             else
             {
                 branchPortPosition = branchEnd;
-                branchDirection = (branchEnd - center).Normalize();
+                branchDirection = (branchEnd - center).SafeNormalize();
             }
             
-            FixedVector<Dim3> portADirection = (mainStart - center).Normalize();
-            FixedVector<Dim3> portBDirection = (mainEnd - center).Normalize();
+            FixedVector<Dim3> portADirection = (mainStart - center).SafeNormalize();
+            FixedVector<Dim3> portBDirection = (mainEnd - center).SafeNormalize();
 
             double mainDiameter = main.Diameter * lengthPower;
             double branchDiameter = branch.Diameter * lengthPower;
@@ -125,7 +124,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
             FixedMatrix<Dim3> rotation = matrix.GetRotation();
             FixedVector<Dim3> origin = matrix.GetTranslation();
 
-            FixedVector<Dim3> direction = (rotation * solid.ExtrudedDirection.ToFixedVector()).Normalize();
+            FixedVector<Dim3> direction = (rotation * solid.ExtrudedDirection.ToFixedVector()).SafeNormalize();
             FixedVector<Dim3> end = origin + direction * solid.Depth;
 
             IIfcCircleProfileDef profile = (IIfcCircleProfileDef)solid.SweptArea;
@@ -184,7 +183,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
 
         private static double GetProjectionParameter(FixedVector<Dim3> point, FixedVector<Dim3> start, FixedVector<Dim3> end)
         {
-            FixedVector<Dim3> direction = (end - start).Normalize();
+            FixedVector<Dim3> direction = (end - start).SafeNormalize();
             return (point - start).Dot(direction);
         }
 
@@ -237,8 +236,8 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
         {
             intersection = default(FixedVector<Dim3>);
 
-            FixedVector<Dim3> d1 = firstDirection.Normalize();
-            FixedVector<Dim3> d2 = secondDirection.Normalize();
+            FixedVector<Dim3> d1 = firstDirection.SafeNormalize();
+            FixedVector<Dim3> d2 = secondDirection.SafeNormalize();
             FixedVector<Dim3> r = firstOrigin - secondOrigin;
 
             double a = d1.Dot(d1);

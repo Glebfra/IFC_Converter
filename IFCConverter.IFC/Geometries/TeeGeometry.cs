@@ -62,7 +62,7 @@ namespace IFCConverter.IFC.Geometries
                 properties.MainDirection, properties.HeadDirection
             };
             FixedVector<Dim3>[] xs = zs.Select(z => z.CreateNormalVector()).ToArray();
-            FixedVector<Dim3>[] ys = zs.Select((z, index) => z.CreateNormalVector(xs[index]).Normalize()).ToArray();
+            FixedVector<Dim3>[] ys = zs.Select((z, index) => z.CreateNormalVector(xs[index]).SafeNormalize()).ToArray();
 
             FixedVector<Dim3>[] positions =
             {

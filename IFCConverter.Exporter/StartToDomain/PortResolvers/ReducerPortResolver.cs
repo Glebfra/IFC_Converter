@@ -29,7 +29,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             IStartSegmentEntity maxSegment = segments[1];
 
             FixedVector<Dim3> directionToMinSegment = minSegment.GetProjectionFromPoint(reducer.Position);
-            FixedVector<Dim3> directionToMaxSegment = maxSegment.GetProjectionFromPoint(maxSegment.GetNearestPosition(reducer.Position)).Normalize();
+            FixedVector<Dim3> directionToMaxSegment = maxSegment.GetProjectionFromPoint(maxSegment.GetNearestPosition(reducer.Position)).SafeNormalize();
             FixedVector<Dim3> maxPosition = reducer.Position + directionToMaxSegment * reducer.Length;
 
             reducer.PortA.SetGeometry(reducer.Position, directionToMinSegment);

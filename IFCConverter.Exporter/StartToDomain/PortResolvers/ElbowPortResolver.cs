@@ -35,8 +35,8 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             IStartSegmentEntity firstSegment = segments[0];
             IStartSegmentEntity secondSegment = segments[1];
 
-            FixedVector<Dim3> firstDirection = firstSegment.GetProjectionFromPoint(elbow.Position).Normalize();
-            FixedVector<Dim3> secondDirection = secondSegment.GetProjectionFromPoint(elbow.Position).Normalize();
+            FixedVector<Dim3> firstDirection = firstSegment.GetProjectionFromPoint(elbow.Position).SafeNormalize();
+            FixedVector<Dim3> secondDirection = secondSegment.GetProjectionFromPoint(elbow.Position).SafeNormalize();
             double angle = Math.PI - firstDirection.Angle(secondDirection);
             double torusSegmentLength = MathExtensions.CalculateTorusSegmentLength(elbow.Radius, angle);
 
