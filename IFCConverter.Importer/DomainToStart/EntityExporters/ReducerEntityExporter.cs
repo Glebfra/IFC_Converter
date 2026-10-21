@@ -6,24 +6,28 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
 {
     internal sealed class ReducerEntityExporter : IEntityExporter
     {
+        private Reducer _reducer;
+        
         public bool CanExport(Entity entity)
         {
-            return entity is Reducer;
+            if (!(entity is Reducer reducer))
+                return false;
+            _reducer = reducer;
+
+            return true;
         }
 
         public void Export(Entity entity, EngineeringModel model, ExportContext context)
         {
-            Reducer reducer = (Reducer)entity;
-            
-            StartAbstractReducerEntity startReducer = reducer.TypedMetadata.IsEccentric
+            StartAbstractReducerEntity startReducer = _reducer.TypedMetadata.IsEccentric
                 ? (StartAbstractReducerEntity)new StartReducerEccentricEntity()
                 : new StartReducerConcentricEntity();
 
-            startReducer.LengthOfConicalPart.CreateFromSI(reducer.Length);
-            startReducer.Position = reducer.Position;
-            startReducer.Name = reducer.Metadata.Name;
+            startReducer.LengthOfConicalPart.CreateFromSI(_reducer.Length);
+            startReducer.Position = _reducer.Position;
+            startReducer.Name = _reducer.Metadata.Name;
             
-            context.Register(reducer, startReducer);
+            context.Register(_reducer, startReducer);
         }
     }
 }

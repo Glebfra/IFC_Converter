@@ -3,7 +3,6 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Exporter.Geometries;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
-using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
@@ -38,18 +37,6 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 
             IfcPipeFitting instance = builder.CreateInstance(model);
             context.Register(entity, instance);
-        }
-
-        private static FixedVector<Dim3> CalculateLocalArcCenter(FixedVector<Dim3> directionA, FixedVector<Dim3> directionB, double radius)
-        {
-            FixedVector<Dim3> firstDirection = directionA.SafeNormalize();
-            FixedVector<Dim3> secondDirection = directionB.SafeNormalize();
-
-            double angle = firstDirection.Angle(secondDirection);
-
-            double displacementLength = radius / Math.Sin(angle / 2);
-            FixedVector<Dim3> bisector = (firstDirection + secondDirection).SafeNormalize();
-            return bisector * displacementLength;
         }
     }
 }

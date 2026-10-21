@@ -11,42 +11,47 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.SegmentEntityImporte
 {
     internal sealed class ExtrudedAreaSolidSegmentEntityImporter : ISegmentEntityImporter
     {
+        private IIfcLocalPlacement _localPlacement;
+        private IIfcExtrudedAreaSolid _extrudedAreaSolid;
+        private IIfcCircleProfileDef _circleProfileDef;
+        
         public bool CanImport(IIfcProduct product)
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
+            _localPlacement = localPlacement;
+            
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 return false;
             if (!(representationItems.First() is IIfcExtrudedAreaSolid extrudedAreaSolid))
                 return false;
-            if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef))
+            _extrudedAreaSolid = extrudedAreaSolid;
+            
+            if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef circleProfileDef))
                 return false;
+            _circleProfileDef = circleProfileDef;
 
             return true;
         }
 
         public void Import(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            IIfcLocalPlacement localPlacement = (IIfcLocalPlacement)product.ObjectPlacement;
-            IIfcExtrudedAreaSolid extrudedAreaSolid = (IIfcExtrudedAreaSolid)product.GetRepresentationItems().First();
-            IIfcCircleProfileDef circleProfileDef = (IIfcCircleProfileDef)extrudedAreaSolid.SweptArea;
-
             double lengthPower = product.Model.GetLengthPower();
-            double diameter = circleProfileDef.Radius * 2 * lengthPower;
+            double diameter = _circleProfileDef.Radius * 2 * lengthPower;
             Segment segment = new Segment(EntityId.New())
             {
                 Diameter = diameter
             };
 
-            FixedMatrix<Dim4> globalMatrix = localPlacement.GetGlobalMatrix();
-            globalMatrix = globalMatrix * extrudedAreaSolid.Position.ToFixedMatrix();
+            FixedMatrix<Dim4> globalMatrix = _localPlacement.GetGlobalMatrix();
+            globalMatrix = globalMatrix * _extrudedAreaSolid.Position.ToFixedMatrix();
 
             FixedVector<Dim3> position = globalMatrix.GetTranslation();
             FixedMatrix<Dim3> rotation = globalMatrix.GetRotation();
 
-            FixedVector<Dim3> direction = rotation * extrudedAreaSolid.ExtrudedDirection.ToFixedVector();
-            double length = extrudedAreaSolid.Depth;
+            FixedVector<Dim3> direction = rotation * _extrudedAreaSolid.ExtrudedDirection.ToFixedVector();
+            double length = _extrudedAreaSolid.Depth;
             
             FixedVector<Dim3> startPos = position * lengthPower;
             FixedVector<Dim3> endPos = startPos + direction * (lengthPower * length);

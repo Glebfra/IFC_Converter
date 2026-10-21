@@ -7,24 +7,28 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
 {
     internal sealed class SegmentEntityExporter : IEntityExporter
     {
+        private Segment _segment;
+        
         public bool CanExport(Entity entity)
         {
-            return entity is Segment;
+            if (!(entity is Segment segment))
+                return false;
+            _segment = segment;
+
+            return true;
         }
 
         public void Export(Entity entity, EngineeringModel model, ExportContext context)
         {
-            Segment segment = (Segment)entity;
-
             StartPipeEntity pipe = new StartPipeEntity();
-            pipe.Diameter.CreateFromSI(segment.Diameter);
+            pipe.Diameter.CreateFromSI(_segment.Diameter);
 
-            FixedVector<Dim3> projection = segment.TypedMetadata.Projection ?? 
-                                           segment.EndPort.Position - segment.StartPort.Position;
+            FixedVector<Dim3> projection = _segment.TypedMetadata.Projection ?? 
+                                           _segment.EndPort.Position - _segment.StartPort.Position;
             pipe.ProjectionAlongOXAxis.CreateFromSI(projection[0]);
             pipe.ProjectionAlongOYAxis.CreateFromSI(projection[1]);
             pipe.ProjectionAlongOZAxis.CreateFromSI(projection[2]);
-            pipe.Name = segment.Metadata.Name;
+            pipe.Name = _segment.Metadata.Name;
 
             context.Register(entity, pipe);
         }

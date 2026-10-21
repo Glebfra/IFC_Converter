@@ -1,5 +1,6 @@
 ﻿using IFCConverter.Domain;
 using IFCConverter.Domain.Entities;
+using IFCConverter.Domain.Identity;
 using IFCConverter.Start.Entities.Anchors;
 using IFCConverter.Start.Entities.Equipments;
 using IFCConverter.Start.Entities.Fittings;
@@ -11,14 +12,19 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
 {
     public class EntityMetadataColorAugmenter : IEntityMetadataAugmenter
     {
+        private EntityId _id;
+        
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            return context.TryGetEntityId(source, out _);
+            if (!context.TryGetEntityId(source, out _id))
+                return false;
+
+            return true;
         }
 
         public void Augment(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            Entity entity = model.GetEntity(context.GetEntityId(source));
+            Entity entity = model.GetEntity(_id);
             entity.Metadata.Color = GenerateHexColor(source);
         }
 

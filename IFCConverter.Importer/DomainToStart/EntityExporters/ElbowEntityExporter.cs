@@ -6,21 +6,27 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
 {
     internal sealed class ElbowEntityExporter : IEntityExporter
     {
+        private Elbow _elbow;
+        
         public bool CanExport(Entity entity)
         {
-            return entity is Elbow;
+            if (!(entity is Elbow elbow))
+                return false;
+            _elbow = elbow;
+            
+            return true;
         }
 
         public void Export(Entity entity, EngineeringModel model, ExportContext context)
         {
-            Elbow elbow = (Elbow)entity;
+            StartElbowEntity startElbowEntity = new StartElbowEntity
+            {
+                Position = _elbow.Position,
+                Name = _elbow.Metadata.Name
+            };
+            startElbowEntity.Radius.CreateFromStart(_elbow.Radius);
 
-            StartElbowEntity startElbowEntity = new StartElbowEntity();
-            startElbowEntity.Position = elbow.Position;
-            startElbowEntity.Radius.CreateFromStart(elbow.Radius);
-            startElbowEntity.Name = elbow.Metadata.Name;
-
-            context.Register(elbow, startElbowEntity);
+            context.Register(_elbow, startElbowEntity);
         }
     }
 }

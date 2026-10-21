@@ -17,6 +17,9 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
 {
     internal sealed class TriangulatedFaceSetReducerEntityImporter : IReducerEntityImporter
     {
+        private IIfcLocalPlacement _localPlacement;
+        private IIfcTriangulatedFaceSet _triangulatedFaceSet;
+        
         private readonly struct DiametersData
         {
             public readonly FixedVector<Dim3> MinDiameterCenter;
@@ -38,27 +41,27 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
+            _localPlacement = localPlacement;
+            
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 return false;
-            if (!(representationItems[0] is IIfcTriangulatedFaceSet faceSet))
+            if (!(representationItems[0] is IIfcTriangulatedFaceSet triangulatedFaceSet))
                 return false;
+            _triangulatedFaceSet = triangulatedFaceSet;
 
             return true;
         }
 
         public void Import(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            IIfcLocalPlacement localPlacement = (IIfcLocalPlacement)product.ObjectPlacement;
-            IIfcTriangulatedFaceSet faceSet = (IIfcTriangulatedFaceSet)product.GetRepresentationItems().First();
-            
             double lengthPower = product.Model.GetLengthPower();
 
-            FixedMatrix<Dim4> globalMatrix = localPlacement.GetGlobalMatrix();
+            FixedMatrix<Dim4> globalMatrix = _localPlacement.GetGlobalMatrix();
             FixedVector<Dim3> position = globalMatrix.GetTranslation() * lengthPower;
             FixedMatrix<Dim3> rotation = globalMatrix.GetRotation();
             
-            IMesh mesh = faceSet.GetMesh();
+            IMesh mesh = _triangulatedFaceSet.GetMesh();
             PlanarRegion[] endRegions = PlanarRegionFinder
                 .Find(mesh, distanceTolerance: 1e-3)
                 .Where(region => region.TriangleCount >= 3 && region.BoundaryEdges.Count >= 3)
