@@ -6,8 +6,7 @@ namespace IFCConverter.Domain.Entities
 {
     public class Equipment : AbstractFitting<EquipmentMetadata>
     {
-
-        public Equipment(EntityId id) : base(id)
+        public Equipment(Id<EntityId> id) : base(id)
         {
             PortA = CreatePort();
             PortB = CreatePort();

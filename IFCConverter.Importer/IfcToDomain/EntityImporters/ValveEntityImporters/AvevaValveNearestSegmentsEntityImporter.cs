@@ -40,7 +40,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ValveEntityImporters
 
         public void Import(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            Valve valve = new Valve(EntityId.New())
+            Valve valve = new Valve(Id<EntityId>.New())
             {
                 Position = _position,
                 Length = (_distinctPorts[1].Position - _distinctPorts[0].Position).L2Norm()

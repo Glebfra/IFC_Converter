@@ -21,14 +21,14 @@ namespace IFCConverter.Exporter.StartToDomain.PortAugmenters
 
         public void Augment(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            if (!context.TryGetEntityId(source, out EntityId id))
+            if (!context.TryGetEntityId(source, out Id<EntityId> id))
                 return;
 
             AbstractSegment entity = (AbstractSegment)model.GetEntity(id);
 
             foreach (IStartFittingEntity startConnectedEntity in source.ConnectedEntities.OfType<IStartFittingEntity>())
             {
-                if (!context.TryGetEntityId(startConnectedEntity, out EntityId connectedId))
+                if (!context.TryGetEntityId(startConnectedEntity, out Id<EntityId> connectedId))
                     continue;
 
                 AbstractFitting connectedEntity = (AbstractFitting)model.GetEntity(connectedId);

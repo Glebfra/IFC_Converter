@@ -8,7 +8,7 @@ namespace IFCConverter.Domain.Entities
 {
     public abstract class AbstractSegment : Entity
     {
-        protected AbstractSegment(EntityId id) : base(id)
+        protected AbstractSegment(Id<EntityId> id) : base(id)
         {
             StartPort = CreatePort();
             EndPort = CreatePort();
@@ -26,7 +26,7 @@ namespace IFCConverter.Domain.Entities
     public abstract class AbstractSegment<TMetadata> : AbstractSegment, IEntityTypedMetadata<TMetadata>
         where TMetadata : EntityMetadata
     {
-        protected AbstractSegment(EntityId id) : base(id)
+        protected AbstractSegment(Id<EntityId> id) : base(id)
         {
         }
         

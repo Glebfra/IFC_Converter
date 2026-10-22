@@ -17,7 +17,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         {
             StartAbstractReducerEntity start = (StartAbstractReducerEntity)source;
 
-            Reducer reducer = new Reducer(EntityId.New())
+            Reducer reducer = new Reducer(Id<EntityId>.New())
             {
                 Position = start.Position,
                 Length = start.LengthOfConicalPart.SIProperty

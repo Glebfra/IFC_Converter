@@ -7,7 +7,7 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Anchor : AbstractFitting<AnchorMetadata>
     {
-        public Anchor(EntityId id) : base(id)
+        public Anchor(Id<EntityId> id) : base(id)
         {
             Port = CreatePort();
         }

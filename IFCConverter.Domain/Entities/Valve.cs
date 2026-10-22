@@ -6,8 +6,7 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Valve : AbstractFitting<ValveMetadata>
     {
-
-        public Valve(EntityId id) : base(id)
+        public Valve(Id<EntityId> id) : base(id)
         {
             PortA = CreatePort();
             PortB = CreatePort();

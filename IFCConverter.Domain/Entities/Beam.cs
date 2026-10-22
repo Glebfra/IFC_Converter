@@ -5,8 +5,7 @@ namespace IFCConverter.Domain.Entities
 {
     public class Beam : AbstractSegment<BeamMetadata>
     {
-
-        public Beam(EntityId id) : base(id)
+        public Beam(Id<EntityId> id) : base(id)
         {
         }
 

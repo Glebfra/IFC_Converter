@@ -16,7 +16,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         public void Import(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             StartBeamEntity start = (StartBeamEntity)source;
-            Beam beam = new Beam(EntityId.New())
+            Beam beam = new Beam(Id<EntityId>.New())
             {
                 Width = start.Width.SIProperty,
                 Height = start.Height.SIProperty,

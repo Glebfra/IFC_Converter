@@ -6,7 +6,7 @@ namespace IFCConverter.Domain.Entities
     public class Segment : AbstractSegment<SegmentMetadata>
     {
 
-        public Segment(EntityId id) : base(id)
+        public Segment(Id<EntityId> id) : base(id)
         {
         }
 

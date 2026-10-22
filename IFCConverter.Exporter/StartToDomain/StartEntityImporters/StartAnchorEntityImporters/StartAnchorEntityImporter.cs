@@ -14,7 +14,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEn
 
         public void Import(StartAbstractAnchorEntity start, EngineeringModel model, StartMappingContext context)
         {
-            Anchor anchor = new Anchor(EntityId.New())
+            Anchor anchor = new Anchor(Id<EntityId>.New())
             {
                 Position = start.Position
             };

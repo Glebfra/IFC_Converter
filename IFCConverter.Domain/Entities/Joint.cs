@@ -6,8 +6,7 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Joint : AbstractFitting<JointMetadata>
     {
-
-        public Joint(EntityId id) : base(id)
+        public Joint(Id<EntityId> id) : base(id)
         {
             PortA = CreatePort();
             PortB = CreatePort();

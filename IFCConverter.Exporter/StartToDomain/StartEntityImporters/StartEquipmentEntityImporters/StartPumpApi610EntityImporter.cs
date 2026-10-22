@@ -16,7 +16,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartEquipmen
         {
             StartPumpApi610Entity start = (StartPumpApi610Entity)source;
 
-            PumpApi610 equipment = new PumpApi610(EntityId.New())
+            PumpApi610 equipment = new PumpApi610(Id<EntityId>.New())
             {
                 Position = start.Position,
                 SecondPosition = start.SecondPosition

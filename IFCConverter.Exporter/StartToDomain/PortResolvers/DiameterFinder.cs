@@ -15,7 +15,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
             double diameter = 0.0;
             foreach (IStartSegmentEntity startSegment in segments)
             {
-                if (!context.TryGetEntityId(startSegment, out EntityId id))
+                if (!context.TryGetEntityId(startSegment, out Id<EntityId> id))
                     continue;
 
                 switch (model.GetEntity(id))
@@ -34,7 +34,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 
         public static double GetDiameter(IStartSegmentEntity segment, EngineeringModel model, StartMappingContext context)
         {
-            if (!context.TryGetEntityId(segment, out EntityId id))
+            if (!context.TryGetEntityId(segment, out Id<EntityId> id))
                 return 0.0;
             if (model.GetEntity(id) is Beam beam)
                 return GetMaxDiameter(beam);

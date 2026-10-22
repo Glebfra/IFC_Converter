@@ -12,7 +12,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
         
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            if (!context.TryGetEntityId(source, out EntityId id))
+            if (!context.TryGetEntityId(source, out Id<EntityId> id))
                 return false;
             Entity entity = model.GetEntity(id);
             if (!(entity is Beam beam))

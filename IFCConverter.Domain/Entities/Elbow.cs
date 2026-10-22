@@ -6,8 +6,7 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Elbow : AbstractFitting<ElbowMetadata>
     {
-
-        public Elbow(EntityId id) : base(id)
+        public Elbow(Id<EntityId> id) : base(id)
         {
             PortA = CreatePort();
             PortB = CreatePort();

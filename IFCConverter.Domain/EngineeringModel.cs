@@ -10,9 +10,9 @@ namespace IFCConverter.Domain
 {
     public class EngineeringModel
     {
-        private readonly Dictionary<ConnectionId, Connection> _connections = new Dictionary<ConnectionId, Connection>();
-        private readonly Dictionary<EntityId, Entity> _entities = new Dictionary<EntityId, Entity>();
-        private readonly Dictionary<PortId, Port> _ports = new Dictionary<PortId, Port>();
+        private readonly Dictionary<Id<ConnectionId>, Connection> _connections = new Dictionary<Id<ConnectionId>, Connection>();
+        private readonly Dictionary<Id<EntityId>, Entity> _entities = new Dictionary<Id<EntityId>, Entity>();
+        private readonly Dictionary<Id<PortId>, Port> _ports = new Dictionary<Id<PortId>, Port>();
 
         public IReadOnlyCollection<Entity> Entities => _entities.Values;
         public IReadOnlyCollection<Port> Ports => _ports.Values;
@@ -40,32 +40,32 @@ namespace IFCConverter.Domain
             if (a.Owner == b.Owner)
                 throw new InvalidOperationException("An entity cannot be connected to itself");
 
-            Connection connection = new Connection(ConnectionId.New(), a, b, type);
+            Connection connection = new Connection(Id<ConnectionId>.New(), a, b, type);
             _connections.Add(connection.Id, connection);
 
             return connection;
         }
 
         [Pure]
-        public Entity GetEntity(EntityId id)
+        public Entity GetEntity(Id<EntityId> id)
         {
             return _entities[id];
         }
 
         [Pure]
-        public Port GetPort(PortId id)
+        public Port GetPort(Id<PortId> id)
         {
             return _ports[id];
         }
 
         [Pure]
-        public Connection GetConnection(ConnectionId id)
+        public Connection GetConnection(Id<ConnectionId> id)
         {
             return _connections[id];
         }
 
         [Pure]
-        public IEnumerable<Connection> GetConnections(PortId id)
+        public IEnumerable<Connection> GetConnections(Id<PortId> id)
         {
             return _connections
                 .Where(connection => connection.Value.PortA.Id == id || connection.Value.PortB.Id == id)
@@ -73,7 +73,7 @@ namespace IFCConverter.Domain
         }
 
         [Pure]
-        public IEnumerable<Connection> GetConnections(EntityId id)
+        public IEnumerable<Connection> GetConnections(Id<EntityId> id)
         {
             return GetEntity(id).Ports.SelectMany(port => GetConnections(port.Id));
         }

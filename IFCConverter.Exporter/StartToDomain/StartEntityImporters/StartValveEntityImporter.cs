@@ -20,7 +20,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
             StartValveEntity start = (StartValveEntity)source;
             StartElementTypeEnum startType = start.GetStartElementAttribute().Type;
 
-            Valve valve = new Valve(EntityId.New())
+            Valve valve = new Valve(Id<EntityId>.New())
             {
                 Position = start.Position,
                 Length = start.Length.SIProperty

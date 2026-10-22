@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityMetadataAugmenters
     {
         public bool CanAugment(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
-            if (!context.TryGetEntityId(product, out EntityId id))
+            if (!context.TryGetEntityId(product, out Id<EntityId> id))
                 return false;
             
             StartPset startPset = ((IfcProduct)product).GetPropertySets().OfType<StartPset>().FirstOrDefault();

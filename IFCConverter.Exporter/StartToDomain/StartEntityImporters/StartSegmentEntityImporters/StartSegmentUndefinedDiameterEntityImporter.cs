@@ -20,7 +20,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
             if (diameter == null)
                 throw new NullReferenceException($"Cannot find diameter for {segment.StartNode.Name}_{segment.EndNode.Name} segment");
 
-            Segment pipe = new Segment(EntityId.New())
+            Segment pipe = new Segment(Id<EntityId>.New())
             {
                 Diameter = diameter.Value
             };

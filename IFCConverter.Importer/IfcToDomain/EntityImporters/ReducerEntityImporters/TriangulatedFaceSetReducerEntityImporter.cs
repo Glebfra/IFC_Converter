@@ -102,7 +102,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
             FixedVector<Dim3> reducerAxisProjection = reducerDirection.Dot(normals[0]) * normals[0];
             FixedVector<Dim3> reducerAxisDirection = reducerAxisProjection.SafeNormalize();
             
-            Reducer reducer = new Reducer(EntityId.New())
+            Reducer reducer = new Reducer(Id<EntityId>.New())
             {
                 Position = diametersData.MinDiameterCenter,
                 Length = reducerAxisProjection.L2Norm()

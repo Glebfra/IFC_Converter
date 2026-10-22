@@ -17,7 +17,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityMetadataAugmenters
             if (context.ImportType != ImportType.AVEVA)
                 return false;
 
-            if (!context.TryGetEntityId(product, out EntityId id))
+            if (!context.TryGetEntityId(product, out Id<EntityId> id))
                 return false;
 
             Entity entity = model.GetEntity(id);
