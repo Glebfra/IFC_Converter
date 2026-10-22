@@ -53,6 +53,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
                 case "REDUCER":
                     return EntityType.REDUCER;
                 case "VALVE":
+                case "INSTRUMENT":
                     return EntityType.VALVE;
                 case "PCOMPONENT":
                     return EntityType.PCOM;

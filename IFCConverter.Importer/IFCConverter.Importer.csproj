@@ -211,7 +211,9 @@
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\TeeEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\AbstractValveNearestSegmentsEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\AvevaValveNearestSegmentsEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\DefaultValveNearestSegmentsEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\ValveEntityImportersRegistry.cs" />
