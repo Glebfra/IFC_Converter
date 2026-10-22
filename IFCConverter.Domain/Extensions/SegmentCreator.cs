@@ -14,7 +14,7 @@ namespace IFCConverter.Domain.Extensions
         {
             FixedVector<Dim3> direction = (end - start).SafeNormalize();
 
-            Segment segment = new Segment(EntityId.New())
+            Segment segment = new Segment(Id<EntityId>.New())
             {
                 Diameter = diameter
             };

@@ -22,7 +22,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEn
         {
             StartNonstandardAnchorEntity nonstandardStart = (StartNonstandardAnchorEntity)start;
 
-            Anchor anchor = new Anchor(EntityId.New())
+            Anchor anchor = new Anchor(Id<EntityId>.New())
             {
                 Position = start.Position
             };

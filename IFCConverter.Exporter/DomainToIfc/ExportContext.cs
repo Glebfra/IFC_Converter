@@ -8,7 +8,7 @@ namespace IFCConverter.Exporter.DomainToIfc
 {
     public sealed class ExportContext
     {
-        private readonly Dictionary<EntityId, IIfcProduct> _products = new Dictionary<EntityId, IIfcProduct>();
+        private readonly Dictionary<Id<EntityId>, IIfcProduct> _products = new Dictionary<Id<EntityId>, IIfcProduct>();
         private readonly Dictionary<string, IIfcMaterial> _materials = new Dictionary<string, IIfcMaterial>();
 
         public IReadOnlyCollection<IIfcProduct> Products => _products.Values;
@@ -39,7 +39,7 @@ namespace IFCConverter.Exporter.DomainToIfc
             _materials.Add(materialName, material);
         }
 
-        public IIfcProduct Get(EntityId entityId)
+        public IIfcProduct Get(Id<EntityId> entityId)
         {
             IIfcProduct product;
             if (!_products.TryGetValue(entityId, out product))
@@ -48,7 +48,7 @@ namespace IFCConverter.Exporter.DomainToIfc
             return product;
         }
 
-        public bool TryGet(EntityId entityId, out IIfcProduct result)
+        public bool TryGet(Id<EntityId> entityId, out IIfcProduct result)
         {
             return _products.TryGetValue(entityId, out result);
         }

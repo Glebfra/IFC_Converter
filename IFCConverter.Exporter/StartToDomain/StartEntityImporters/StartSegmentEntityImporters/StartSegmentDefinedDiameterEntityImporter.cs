@@ -16,7 +16,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartSegmentE
 
         public void Import(StartAbstractSegmentEntity segment, EngineeringModel model, StartMappingContext context)
         {
-            Segment pipe = new Segment(EntityId.New())
+            Segment pipe = new Segment(Id<EntityId>.New())
             {
                 Diameter = segment.Diameter.SIProperty
             };

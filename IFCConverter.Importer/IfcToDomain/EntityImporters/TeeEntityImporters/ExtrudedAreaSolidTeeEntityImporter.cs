@@ -97,7 +97,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
             double mainDiameter = main.Diameter * lengthPower;
             double branchDiameter = branch.Diameter * lengthPower;
 
-            Tee tee = new Tee(EntityId.New())
+            Tee tee = new Tee(Id<EntityId>.New())
             {
                 Position = center
             };

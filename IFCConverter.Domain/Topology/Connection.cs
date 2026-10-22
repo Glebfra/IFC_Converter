@@ -5,7 +5,7 @@ namespace IFCConverter.Domain.Topology
 {
     public sealed class Connection
     {
-        internal Connection(ConnectionId id, Port portA, Port portB, ConnectionType type)
+        internal Connection(Id<ConnectionId> id, Port portA, Port portB, ConnectionType type)
         {
             Id = id;
             PortA = portA;
@@ -13,7 +13,7 @@ namespace IFCConverter.Domain.Topology
             Type = type;
         }
 
-        public ConnectionId Id { get; }
+        public Id<ConnectionId> Id { get; }
         public ConnectionType Type { get; }
 
         public Port PortA { get; }

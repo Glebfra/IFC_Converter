@@ -58,7 +58,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
             if (boundaryCenters.Length != 2)
                 throw new Exception("The given boundary centers are not equal to 2 centroids.");
 
-            Elbow elbow = new Elbow(EntityId.New())
+            Elbow elbow = new Elbow(Id<EntityId>.New())
             {
                 Position = position,
                 Radius = CalculateRadius(boundaryCenters, position)

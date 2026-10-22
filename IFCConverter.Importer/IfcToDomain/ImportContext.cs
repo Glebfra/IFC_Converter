@@ -8,8 +8,8 @@ namespace IFCConverter.Importer.IfcToDomain
 {
     public sealed class ImportContext
     {
-        private readonly Dictionary<EntityId, IIfcProduct> _entities = new Dictionary<EntityId, IIfcProduct>();
-        private readonly Dictionary<IIfcProduct, EntityId> _entitiesReversed = new Dictionary<IIfcProduct, EntityId>();
+        private readonly Dictionary<Id<EntityId>, IIfcProduct> _entities = new Dictionary<Id<EntityId>, IIfcProduct>();
+        private readonly Dictionary<IIfcProduct, Id<EntityId>> _entitiesReversed = new Dictionary<IIfcProduct, Id<EntityId>>();
 
         public ImportContext(ImportType importType)
         {
@@ -28,27 +28,27 @@ namespace IFCConverter.Importer.IfcToDomain
             RegisterEntity(entity.Id, product);
         }
 
-        public EntityId GetEntityId(IIfcProduct product)
+        public Id<EntityId> GetEntityId(IIfcProduct product)
         {
             return _entitiesReversed[product];
         }
 
-        public bool TryGetEntityId(IIfcProduct product, out EntityId result)
+        public bool TryGetEntityId(IIfcProduct product, out Id<EntityId> result)
         {
             return _entitiesReversed.TryGetValue(product, out result);
         }
 
-        public IIfcProduct GetProduct(EntityId id)
+        public IIfcProduct GetProduct(Id<EntityId> id)
         {
             return _entities[id];
         }
 
-        public bool TryGetProduct(IIfcProduct product, out EntityId result)
+        public bool TryGetProduct(IIfcProduct product, out Id<EntityId> result)
         {
             return _entitiesReversed.TryGetValue(product, out result);
         }
 
-        private void RegisterEntity(EntityId id, IIfcProduct product)
+        private void RegisterEntity(Id<EntityId> id, IIfcProduct product)
         {
             _entities.Add(id, product);
             _entitiesReversed.Add(product, id);

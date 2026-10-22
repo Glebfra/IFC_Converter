@@ -6,14 +6,14 @@ namespace IFCConverter.Domain.Topology
 {
     public sealed class Port
     {
-        internal Port(PortId id, EntityId owner)
+        internal Port(Id<PortId> id, Id<EntityId> owner)
         {
             Id = id;
             Owner = owner;
         }
 
-        public PortId Id { get; }
-        public EntityId Owner { get; }
+        public Id<PortId> Id { get; }
+        public Id<EntityId> Owner { get; }
         public FixedVector<Dim3> Position { get; internal set; }
         public FixedVector<Dim3> Direction { get; internal set; }
         public PortRole Role { get; internal set; } = PortRole.Connection;

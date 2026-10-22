@@ -18,13 +18,13 @@ namespace IFCConverter.Exporter.StartToDomain.ConnectionResolvers
 
         public void Resolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            if (!context.TryGetEntityId(source, out EntityId id))
+            if (!context.TryGetEntityId(source, out Id<EntityId> id))
                 return;
 
             Entity entity = model.GetEntity(id);
-            IEnumerable<PortId> entityPortIds = entity.Ports.Select(port => port.Id);
+            IEnumerable<Id<PortId>> entityPortIds = entity.Ports.Select(port => port.Id);
 
-            foreach (PortId entityPortId in entityPortIds)
+            foreach (Id<PortId> entityPortId in entityPortIds)
             {
                 Port entityPort = model.GetPort(entityPortId);
                 IEnumerable<Port> connectiblePorts = model.Ports

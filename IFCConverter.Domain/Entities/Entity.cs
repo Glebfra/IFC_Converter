@@ -10,12 +10,12 @@ namespace IFCConverter.Domain.Entities
     {
         private readonly List<Port> _ports = new List<Port>();
 
-        protected Entity(EntityId id)
+        protected Entity(Id<EntityId> id)
         {
             Id = id;
         }
 
-        public EntityId Id { get; }
+        public Id<EntityId> Id { get; }
         public abstract EntityMetadata Metadata { get; }
         
         public IReadOnlyCollection<Port> Ports => _ports;
@@ -23,7 +23,7 @@ namespace IFCConverter.Domain.Entities
 
         protected Port CreatePort(FixedVector<Dim3> position = null, FixedVector<Dim3> direction = null, PortRole role = PortRole.Connection)
         {
-            Port port = new Port(PortId.New(), Id);
+            Port port = new Port(Id<PortId>.New(), Id);
             port.Position = position ?? FixedVector<Dim3>.Zeros();
             port.Direction = direction ?? FixedVector<Dim3>.Zeros();
             port.Role = role;
@@ -36,7 +36,7 @@ namespace IFCConverter.Domain.Entities
     public abstract class Entity<TMetadata> : Entity
         where TMetadata : EntityMetadata
     {
-        protected Entity(EntityId id) : base(id)
+        protected Entity(Id<EntityId> id) : base(id)
         {
         }
 

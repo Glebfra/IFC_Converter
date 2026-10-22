@@ -20,7 +20,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
             StartAbstractBendEntity start = (StartAbstractBendEntity)source;
             StartElementTypeEnum startType = start.GetStartElementAttribute().Type;
 
-            Elbow elbow = new Elbow(EntityId.New())
+            Elbow elbow = new Elbow(Id<EntityId>.New())
             {
                 Position = start.Position,
                 Radius = start.Radius.SIProperty

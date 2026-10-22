@@ -6,7 +6,7 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Reducer : AbstractFitting<ReducerMetadata>
     {
-        public Reducer(EntityId id) : base(id)
+        public Reducer(Id<EntityId> id) : base(id)
         {
             PortA = CreatePort();
             PortB = CreatePort();

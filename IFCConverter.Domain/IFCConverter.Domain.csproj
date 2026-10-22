@@ -65,9 +65,7 @@
         <Compile Include="Entities\Valve.cs"/>
         <Compile Include="Extensions\EntityExtensions.cs"/>
         <Compile Include="Extensions\SegmentCreator.cs" />
-        <Compile Include="Identity\ConnectionId.cs"/>
-        <Compile Include="Identity\EntityId.cs"/>
-        <Compile Include="Identity\PortId.cs"/>
+        <Compile Include="Identity\Id.cs" />
         <Compile Include="Metadata\AnchorMetadata.cs" />
         <Compile Include="Metadata\BeamMetadata.cs" />
         <Compile Include="Metadata\ElbowMetadata.cs" />

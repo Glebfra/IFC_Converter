@@ -7,7 +7,7 @@ namespace IFCConverter.Domain.Entities
 {
     public abstract class AbstractFitting : Entity
     {
-        protected AbstractFitting(EntityId id) : base(id)
+        protected AbstractFitting(Id<EntityId> id) : base(id)
         {
         }
         
@@ -22,7 +22,7 @@ namespace IFCConverter.Domain.Entities
     public abstract class AbstractFitting<TMetadata> : AbstractFitting
         where TMetadata : EntityMetadata
     {
-        protected AbstractFitting(EntityId id) : base(id)
+        protected AbstractFitting(Id<EntityId> id) : base(id)
         {
         }
         

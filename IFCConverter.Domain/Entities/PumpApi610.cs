@@ -7,8 +7,7 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class PumpApi610 : Equipment
     {
-
-        public PumpApi610(EntityId id) : base(id)
+        public PumpApi610(Id<EntityId> id) : base(id)
         {
             SecondPortA = CreatePort();
             SecondPortB = CreatePort();

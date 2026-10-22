@@ -39,7 +39,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.SegmentEntityImporte
         {
             double lengthPower = product.Model.GetLengthPower();
             double diameter = _circleProfileDef.Radius * 2 * lengthPower;
-            Segment segment = new Segment(EntityId.New())
+            Segment segment = new Segment(Id<EntityId>.New())
             {
                 Diameter = diameter
             };

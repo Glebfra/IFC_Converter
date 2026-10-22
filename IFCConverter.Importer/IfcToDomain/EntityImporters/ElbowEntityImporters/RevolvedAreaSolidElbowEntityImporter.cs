@@ -61,7 +61,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
 
             FixedVector<Dim3> center = axisPosition + OC;
 
-            Elbow elbow = new Elbow(EntityId.New())
+            Elbow elbow = new Elbow(Id<EntityId>.New())
             {
                 Radius = radius,
                 Position = center

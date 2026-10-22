@@ -16,7 +16,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartEquipmen
         {
             StartVesselEntity start = (StartVesselEntity)source;
 
-            Equipment equipment = new Equipment(EntityId.New())
+            Equipment equipment = new Equipment(Id<EntityId>.New())
             {
                 Position = start.Position
             };

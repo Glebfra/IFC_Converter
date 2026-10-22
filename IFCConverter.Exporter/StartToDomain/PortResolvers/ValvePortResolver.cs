@@ -19,7 +19,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 
         public void Resolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            if (!context.TryGetEntityId(source, out EntityId id))
+            if (!context.TryGetEntityId(source, out Id<EntityId> id))
                 return;
 
             Valve valve = (Valve)model.GetEntity(id);

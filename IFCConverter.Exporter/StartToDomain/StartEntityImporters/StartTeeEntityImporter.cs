@@ -17,7 +17,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         {
             StartAbstractTeeEntity start = (StartAbstractTeeEntity)source;
 
-            Tee tee = new Tee(EntityId.New())
+            Tee tee = new Tee(Id<EntityId>.New())
             {
                 Position = start.Position
             };

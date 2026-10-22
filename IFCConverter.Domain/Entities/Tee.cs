@@ -6,8 +6,7 @@ namespace IFCConverter.Domain.Entities
 {
     public sealed class Tee : AbstractFitting<TeeMetadata>
     {
-
-        public Tee(EntityId id) : base(id)
+        public Tee(Id<EntityId> id) : base(id)
         {
             PortA = CreatePort();
             PortB = CreatePort();

@@ -17,7 +17,7 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters
         {
             StartAbstractExpansionJointEntity start = (StartAbstractExpansionJointEntity)source;
 
-            Joint joint = new Joint(EntityId.New())
+            Joint joint = new Joint(Id<EntityId>.New())
             {
                 Position = start.Position,
                 Length = start.Length.SIProperty

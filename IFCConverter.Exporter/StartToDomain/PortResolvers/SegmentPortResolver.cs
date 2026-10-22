@@ -17,7 +17,7 @@ namespace IFCConverter.Exporter.StartToDomain.PortResolvers
 
         public void Resolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
-            if (!context.TryGetEntityId(source, out EntityId id))
+            if (!context.TryGetEntityId(source, out Id<EntityId> id))
                 return;
             StartAbstractSegmentEntity start = (StartAbstractSegmentEntity)source;
             AbstractSegment entity = (AbstractSegment)model.GetEntity(id);
