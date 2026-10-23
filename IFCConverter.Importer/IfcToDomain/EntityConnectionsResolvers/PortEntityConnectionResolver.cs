@@ -41,6 +41,12 @@ namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
 
         private static ConnectionType ResolveConnectionType(Entity first, Entity second)
         {
+            if (first is AbstractAnchor && second is AbstractSegment ||
+                first is AbstractSegment && second is AbstractAnchor)
+                return ConnectionType.PipeToAnchor;
+            if (first is AbstractAnchor && second is AbstractFitting ||
+                first is AbstractFitting && second is AbstractAnchor)
+                return ConnectionType.FittingToAnchor;
             if (first is AbstractSegment && second is AbstractFitting ||
                 first is AbstractFitting && second is AbstractSegment)
                 return ConnectionType.PipeToFitting;

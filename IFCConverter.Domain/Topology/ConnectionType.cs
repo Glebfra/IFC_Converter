@@ -5,6 +5,8 @@
         Undefined,
         PipeToFitting,
         PipeToPipe,
-        FittingToFitting
+        FittingToFitting,
+        PipeToAnchor,
+        FittingToAnchor,
     }
 }
