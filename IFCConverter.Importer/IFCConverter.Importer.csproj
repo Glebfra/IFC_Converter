@@ -154,6 +154,7 @@
         <Compile Include="DomainToStart\ConnectionAugmenters\IConnectionAugmentersRegistry.cs" />
         <Compile Include="DomainToStart\ConnectionAugmenters\PipeToFittingConnectionAugmenter.cs" />
         <Compile Include="DomainToStart\ConnectionAugmenters\PipeToPipeConnectionAugmenter.cs" />
+        <Compile Include="DomainToStart\EntityExporters\AnchorEntityExporter.cs" />
         <Compile Include="DomainToStart\EntityExporters\ElbowEntityExporter.cs" />
         <Compile Include="DomainToStart\EntityExporters\EntityExportersRegistry.cs" />
         <Compile Include="DomainToStart\EntityExporters\IEntityExporter.cs" />
@@ -182,6 +183,11 @@
         <Compile Include="IfcToDomain\EntityConnectionsResolvers\IEntityConnectionResolver.cs" />
         <Compile Include="IfcToDomain\EntityConnectionsResolvers\IEntityConnectionResolversRegistry.cs" />
         <Compile Include="IfcToDomain\EntityConnectionsResolvers\PortEntityConnectionResolver.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\AnchorEntityImportersRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\AvevaAnchorImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\IAnchorEntityImporter.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\IAnchorEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\ElbowEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\IElbowEntityImporter.cs" />
@@ -231,6 +237,11 @@
         <Compile Include="IfcToDomain\Phases\EntityMetadataAugmentPhase.cs" />
         <Compile Include="IfcToDomain\Phases\IfcToDomainPhaseRegistry.cs" />
         <Compile Include="IfcToDomain\Phases\IIfcToDomainPhase.cs" />
+        <Compile Include="IfcToDomain\Phases\SegmentSplitPhase.cs" />
+        <Compile Include="IfcToDomain\SegmentSplitters\AnchorSegmentSplitter.cs" />
+        <Compile Include="IfcToDomain\SegmentSplitters\ISegmentSplitter.cs" />
+        <Compile Include="IfcToDomain\SegmentSplitters\ISegmentSplittersRegistry.cs" />
+        <Compile Include="IfcToDomain\SegmentSplitters\SegmentSplittersRegistry.cs" />
         <Compile Include="IfcToStartConverter.cs" />
         <Compile Include="Pipeline\DomainToStartPipeline.cs" />
         <Compile Include="Pipeline\IfcToDomainPipeline.cs" />

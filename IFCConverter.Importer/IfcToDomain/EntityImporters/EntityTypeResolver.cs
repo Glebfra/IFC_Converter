@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
         REDUCER,
         VALVE,
         PCOM,
-        ATTACHMENT,
+        ANCHOR,
         UNKNOWN
     }
     
@@ -58,7 +58,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
                 case "PCOMPONENT":
                     return EntityType.PCOM;
                 case "ATTACHMENT":
-                    return EntityType.ATTACHMENT;
+                    return EntityType.ANCHOR;
                 default:
                     return EntityType.UNKNOWN;
             }

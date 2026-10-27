@@ -46,6 +46,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="EngineeringModel.cs"/>
+        <Compile Include="Entities\AbstractAnchor.cs" />
         <Compile Include="Entities\AbstractSegment.cs"/>
         <Compile Include="Entities\Anchor.cs"/>
         <Compile Include="Entities\AnchorRestraint.cs">
@@ -65,6 +66,7 @@
         <Compile Include="Entities\Valve.cs"/>
         <Compile Include="Extensions\EntityExtensions.cs"/>
         <Compile Include="Extensions\SegmentCreator.cs" />
+        <Compile Include="Extensions\SegmentSplitter.cs" />
         <Compile Include="Identity\Id.cs" />
         <Compile Include="Metadata\AnchorMetadata.cs" />
         <Compile Include="Metadata\BeamMetadata.cs" />

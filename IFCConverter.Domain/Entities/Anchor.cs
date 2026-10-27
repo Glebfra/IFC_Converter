@@ -5,7 +5,7 @@ using IFCConverter.Domain.Topology;
 
 namespace IFCConverter.Domain.Entities
 {
-    public sealed class Anchor : AbstractFitting<AnchorMetadata>
+    public sealed class Anchor : AbstractAnchor<AnchorMetadata>
     {
         public Anchor(Id<EntityId> id) : base(id)
         {
