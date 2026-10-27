@@ -116,8 +116,13 @@ namespace IFCConverter.Tests.Mathematics
         [Test]
         public void Normalize_ZeroVector_ThrowsInvalidOperationException()
         {
-            Assert.Throws<InvalidOperationException>(
-                () => FixedVector<Dim3>.Zeros().SafeNormalize());
+            Assert.Throws<InvalidOperationException>(() => FixedVector<Dim3>.Zeros().Normalize());
+        }
+
+        [Test]
+        public void SafeNormalize_ZeroVector_EqualsZeros()
+        {
+            AssertVectorEqual(FixedVector<Dim3>.Zeros().SafeNormalize(), 0, 0, 0);
         }
 
         [Test]
@@ -320,7 +325,7 @@ namespace IFCConverter.Tests.Mathematics
         {
             FixedVector<Dim3> vector = FixedVector<Dim3>.Zeros();
             
-            Assert.That(() => vector.SafeNormalize(), Throws.TypeOf<InvalidOperationException>());
+            Assert.That(() => vector.Normalize(), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]

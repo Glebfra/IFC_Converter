@@ -133,7 +133,7 @@ namespace IFCConverter.Tests.Mathematics
         {
             FixedVector<Dim4> vector = FixedVector<Dim4>.Builder.Dense(2, 4, 6, 0);
 
-            AssertVectorEqual(vector.ToCartesian(), 2, 4, 6);
+            Assert.Throws<InvalidOperationException>(() => vector.ToCartesian());
         }
 
         [Test]

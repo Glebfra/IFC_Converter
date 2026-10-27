@@ -131,8 +131,8 @@ namespace IFCConverter.Tests.Geometry
             FixedVector<Dim3> a = Vector(0, 0, 0);
             FixedVector<Dim3> b = Vector(1, 1, 1);
             FixedVector<Dim3> c = Vector(2, 2, 2);
-
-            Assert.Throws<InvalidOperationException>(() => MeshGeometry.GetFaceNormal(a, b, c));
+            
+            AssertVectorEqual(MeshGeometry.GetFaceNormal(a, b, c), FixedVector<Dim3>.Zeros());
         }
 
         [Test]
@@ -141,8 +141,8 @@ namespace IFCConverter.Tests.Geometry
             FixedVector<Dim3> a = Vector(1, 1, 1);
             FixedVector<Dim3> b = Vector(1, 1, 1);
             FixedVector<Dim3> c = Vector(2, 2, 2);
-
-            Assert.Throws<InvalidOperationException>(() => MeshGeometry.GetFaceNormal(a, b, c));
+            
+            AssertVectorEqual(MeshGeometry.GetFaceNormal(a, b, c), FixedVector<Dim3>.Zeros());
         }
 
         private static Mesh CreateMesh(params Triangle[] triangles)
