@@ -97,6 +97,11 @@ namespace IFCConverter.Utils.Mathematics
             return L2Norm(this);
         }
 
+        public double L1Norm()
+        {
+            return L1Norm(this);
+        }
+
         public bool IsParallel(FixedVector<TDimension> vector, double maximumAbsoluteError = 1e-6)
         {
             return IsParallel(this, vector, maximumAbsoluteError);
@@ -127,6 +132,16 @@ namespace IFCConverter.Utils.Mathematics
             return AlmostEqual(this, other, maximumAbsoluteError);
         }
 
+        public bool IsZero(double tolerance = 1e-6)
+        {
+            return IsZero(this, tolerance);
+        }
+
+        public bool IsFinite()
+        {
+            return IsFinite(this);
+        }
+
         public bool IsLessThan(FixedVector<TDimension> other)
         {
             return IsLessThan(this, other);
@@ -150,6 +165,16 @@ namespace IFCConverter.Utils.Mathematics
         public double Angle(FixedVector<TDimension> other)
         {
             return Angle(this, other);
+        }
+
+        public double DistanceTo(FixedVector<TDimension> other)
+        {
+            return DistanceTo(this, other);
+        }
+
+        public double DistanceSquaredTo(FixedVector<TDimension> other)
+        {
+            return DistanceSquaredTo(this, other);
         }
 
         public override string ToString()
@@ -222,6 +247,11 @@ namespace IFCConverter.Utils.Mathematics
             return vector.Vector.L2Norm();
         }
 
+        public static double L1Norm(FixedVector<TDimension> vector)
+        {
+            return vector.Vector.L1Norm();
+        }
+
         public static bool IsParallel(FixedVector<TDimension> a, FixedVector<TDimension> b, double maximumAbsoluteError = 1e-6)
         {
             double aLength = a.L2Norm();
@@ -237,12 +267,12 @@ namespace IFCConverter.Utils.Mathematics
 
         public static bool IsNormal(FixedVector<TDimension> a, FixedVector<TDimension> b, double maximumAbsoluteError = 1e-6)
         {
-            return Math.Abs(a.Dot(b)) < maximumAbsoluteError;
+            return Math.Abs(a.Dot(b) / (a.L2Norm() * b.L2Norm())) < maximumAbsoluteError;
         }
 
         public static FixedVector<TDimension> Normalize(FixedVector<TDimension> vector, double tolerance = 1e-6)
         {
-            if (vector.L2Norm().AlmostEqual(0.0, tolerance))
+            if (vector.L2Norm() <= tolerance)
                 throw new InvalidOperationException();
             
             return new FixedVector<TDimension>(vector.Vector.Normalize(2));
@@ -270,6 +300,16 @@ namespace IFCConverter.Utils.Mathematics
             return a.Vector.AlmostEqual(b.Vector, maximumAbsoluteError);
         }
 
+        public static bool IsZero(FixedVector<TDimension> vector, double tolerance = 1e-6)
+        {
+            return vector.L2Norm().AlmostEqual(0.0, tolerance);
+        }
+
+        public static bool IsFinite(FixedVector<TDimension> vector)
+        {
+            return vector.Vector.All(coord => coord.IsFinite());
+        }
+
         public static bool IsLessThan(FixedVector<TDimension> a, FixedVector<TDimension> b)
         {
             return a.L2Norm() < b.L2Norm();
@@ -290,9 +330,29 @@ namespace IFCConverter.Utils.Mathematics
             return (a - origin).L2Norm() >= (b - origin).L2Norm();
         }
 
-        public static double Angle(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        public static double Angle(FixedVector<TDimension> a, FixedVector<TDimension> b, double tolerance = 1e-6)
         {
-            return Math.Acos(a.Vector.Normalize(2).DotProduct(b.Vector.Normalize(2)));
+            double lengthA = a.L2Norm();
+            double lengthB = b.L2Norm();
+            
+            if (lengthA <= tolerance || lengthB <= tolerance)
+                throw new InvalidOperationException("Cannot calculate angle for zero-length vector");
+
+            double cos = a.Dot(b) / (lengthA * lengthB);
+            cos = Math.Max(-1.0, Math.Min(1.0, cos));
+            
+            return Math.Acos(cos);
+        }
+
+        public static double DistanceTo(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        {
+            return Math.Sqrt(DistanceSquaredTo(a, b));
+        }
+
+        public static double DistanceSquaredTo(FixedVector<TDimension> a, FixedVector<TDimension> b)
+        {
+            FixedVector<TDimension> delta = b - a;
+            return delta.Dot(delta);
         }
 
         public override bool Equals(object obj)
@@ -529,10 +589,13 @@ namespace IFCConverter.Utils.Mathematics
             vector[3] = value;
         }
 
-        public static FixedVector<Dim3> ToCartesian(this FixedVector<Dim4> vector)
+        public static FixedVector<Dim3> ToCartesian(this FixedVector<Dim4> vector, double tolerance = 1e-12)
         {
-            double delimiter = vector[3] == 0 ? 1 : vector[3];
-            return FixedVector<Dim3>.Builder.Dense(vector[0] / delimiter, vector[1] / delimiter, vector[2] / delimiter);
+            double w = vector[3];
+            if (Math.Abs(w) <= tolerance)
+                throw new InvalidOperationException("Cannot convert homogenous coordinates with W is zero.");
+            
+            return FixedVector<Dim3>.Builder.Dense(vector[0] / w, vector[1] / w, vector[2] / w);
         }
 
         public static FixedVector<Dim4> X(this FixedVectorBuilder<Dim4> builder)
