@@ -93,10 +93,6 @@
             <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
             <Name>IFCConverter.Geometry</Name>
         </ProjectReference>
-        <ProjectReference Include="..\IFCConverter.GUI\IFCConverter.GUI.csproj">
-            <Project>{1e4d34b3-2c04-4816-a9b3-9c78e2d29d85}</Project>
-            <Name>IFCConverter.GUI</Name>
-        </ProjectReference>
         <ProjectReference Include="..\IFCConverter.Importer\IFCConverter.Importer.csproj">
             <Project>{e14e0ebb-9d95-4d9b-a6bc-36b7e192be77}</Project>
             <Name>IFCConverter.Importer</Name>

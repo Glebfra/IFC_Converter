@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace IFCConverter.GUI.GUI
+namespace IFCConverter.Importer.GUI
 {
     public partial class ImportWindowForm
     {
