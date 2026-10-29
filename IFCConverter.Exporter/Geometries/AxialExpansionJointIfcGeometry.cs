@@ -23,13 +23,13 @@ namespace IFCConverter.Exporter.Geometries
     {
         private const double DiameterToFirstDiameterFactor = 1.0;
         private const double DiameterToSecondDiameterFactor = 0.75;
-        
-        public AxialExpansionJointIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null) 
+
+        public AxialExpansionJointIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilder, representationContext)
         {
         }
 
-        public AxialExpansionJointIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null) 
+        public AxialExpansionJointIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilders, representationContext)
         {
         }
@@ -40,7 +40,7 @@ namespace IFCConverter.Exporter.Geometries
 
             double diameter = joint.Ports.Max(port => port.Metadata.Diameter);
             FixedVector<Dim3>[] points = joint.Ports.Select(port => port.Position - joint.Position).ToArray();
-            
+
             double length = (points[1] - points[0]).L2Norm();
             double[] diameters =
             {

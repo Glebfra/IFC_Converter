@@ -19,30 +19,13 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
     {
         private IIfcLocalPlacement _localPlacement;
         private IIfcTriangulatedFaceSet _triangulatedFaceSet;
-        
-        private readonly struct DiametersData
-        {
-            public readonly FixedVector<Dim3> MinDiameterCenter;
-            public readonly FixedVector<Dim3> MaxDiameterCenter;
-            
-            public readonly double MinDiameter;
-            public readonly double MaxDiameter;
 
-            public DiametersData(FixedVector<Dim3> minDiameterCenter, FixedVector<Dim3> maxDiameterCenter, double minDiameter, double maxDiameter)
-            {
-                MinDiameterCenter = minDiameterCenter;
-                MaxDiameterCenter = maxDiameterCenter;
-                MinDiameter = minDiameter;
-                MaxDiameter = maxDiameter;
-            }
-        }
-        
         public bool CanImport(IIfcProduct product)
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
             _localPlacement = localPlacement;
-            
+
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 return false;
@@ -60,10 +43,10 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
             FixedMatrix<Dim4> globalMatrix = _localPlacement.GetGlobalMatrix();
             FixedVector<Dim3> position = globalMatrix.GetTranslation() * lengthPower;
             FixedMatrix<Dim3> rotation = globalMatrix.GetRotation();
-            
+
             IMesh mesh = _triangulatedFaceSet.GetMesh();
             PlanarRegion[] endRegions = PlanarRegionFinder
-                .Find(mesh, distanceTolerance: 1e-3)
+                .Find(mesh, 1e-3)
                 .Where(region => region.TriangleCount >= 3 && region.BoundaryEdges.Count >= 3)
                 .OrderByDescending(region => region.Score)
                 .Take(2)
@@ -83,11 +66,11 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
                     .Select(vertex => vertex * rotation * lengthPower + position)
                     .ToArray();
             }).ToArray();
-            
+
             FixedVector<Dim3>[] boundaryCenters = boundariesVertices
                 .Select(boundaryVertices => boundaryVertices.Mean())
                 .ToArray();
-            
+
             if (boundaryCenters.Length != 2)
                 throw new Exception("The given boundary centers are not equal to 2 centroids.");
 
@@ -101,23 +84,23 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
             FixedVector<Dim3> reducerDirection = diametersData.MaxDiameterCenter - diametersData.MinDiameterCenter;
             FixedVector<Dim3> reducerAxisProjection = reducerDirection.Dot(normals[0]) * normals[0];
             FixedVector<Dim3> reducerAxisDirection = reducerAxisProjection.SafeNormalize();
-            
+
             Reducer reducer = new Reducer(Id<EntityId>.New())
             {
                 Position = diametersData.MinDiameterCenter,
                 Length = reducerAxisProjection.L2Norm()
             };
-            
+
             bool isEccentric = !reducerDirection.IsParallel(reducerAxisDirection);
             reducer.TypedMetadata.Axis = reducerAxisDirection;
             reducer.TypedMetadata.IsEccentric = isEccentric;
-            
+
             reducer.PortA.SetGeometry(diametersData.MinDiameterCenter, reducerAxisDirection.Negate());
             reducer.PortB.SetGeometry(diametersData.MaxDiameterCenter, reducerAxisDirection);
 
             reducer.PortA.Metadata.Diameter = diametersData.MinDiameter;
             reducer.PortB.Metadata.Diameter = diametersData.MaxDiameter;
-            
+
             model.Add(reducer);
             context.Register(reducer, product);
         }
@@ -126,7 +109,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
         {
             double minDiameter = double.MaxValue, maxDiameter = double.MinValue;
             int minDiameterIndex = 0, maxDiameterIndex = 0;
-            
+
             for (int i = 0; i < diameters.Length; i++)
             {
                 if (diameters[i] < minDiameter)
@@ -146,6 +129,23 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporte
                 boundaryCenters[minDiameterIndex], boundaryCenters[maxDiameterIndex],
                 minDiameter, maxDiameter
             );
+        }
+
+        private readonly struct DiametersData
+        {
+            public readonly FixedVector<Dim3> MinDiameterCenter;
+            public readonly FixedVector<Dim3> MaxDiameterCenter;
+
+            public readonly double MinDiameter;
+            public readonly double MaxDiameter;
+
+            public DiametersData(FixedVector<Dim3> minDiameterCenter, FixedVector<Dim3> maxDiameterCenter, double minDiameter, double maxDiameter)
+            {
+                MinDiameterCenter = minDiameterCenter;
+                MaxDiameterCenter = maxDiameterCenter;
+                MinDiameter = minDiameter;
+                MaxDiameter = maxDiameter;
+            }
         }
     }
 }

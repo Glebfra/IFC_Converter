@@ -15,7 +15,7 @@ namespace IFCConverter.Importer.DomainToStart.Phases
         public void Execute(EngineeringModel model, ExportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<EntityExportPhase>();
-            
+
             foreach (Entity entity in model.Entities)
             {
                 if (_registry.TryResolve(entity, out IEntityExporter exporter))
@@ -29,7 +29,7 @@ namespace IFCConverter.Importer.DomainToStart.Phases
                     exporter.Export(entity, model, context);
                 }
             }
-            
+
             logger.LogInformation("Converted {count} to start entities", context.StartEntities.Count());
         }
     }

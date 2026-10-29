@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
@@ -11,11 +10,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
 {
     internal sealed class SegmentedExpansionJointDomainEntityExporter : AbstractJointDomainEntityExporter
     {
-        public override bool CanExport(Joint joint)
+        public override bool CanExport(StartElementTypeEnum type)
         {
-            if (!Enum.TryParse(joint.Metadata.Type, out StartElementTypeEnum type))
-                return false;
-
             return type == StartElementTypeEnum.UNIVERSAL_EXPANSION_JOINT ||
                    type == StartElementTypeEnum.NONSTANDARD_EXPANSION_JOINT;
         }

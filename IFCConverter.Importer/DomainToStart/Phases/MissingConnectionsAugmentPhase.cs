@@ -11,11 +11,11 @@ namespace IFCConverter.Importer.DomainToStart.Phases
     public sealed class MissingConnectionsAugmentPhase : IDomainToStartPhase
     {
         private readonly IMissingConnectionsAugmentersRegistry _registry = new MissingConnectionsAugmentersRegistry();
-        
+
         public void Execute(EngineeringModel model, ExportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<MissingConnectionsAugmentPhase>();
-            
+
             foreach (Entity entity in model.Entities.ToArray())
             {
                 if (_registry.TryResolve(entity, model, context, out IMissingConnectionsAugmenter augmenter))

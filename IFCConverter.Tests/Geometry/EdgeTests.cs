@@ -75,7 +75,7 @@ namespace IFCConverter.Tests.Geometry
         {
             Edge edge = new Edge(2, 5);
 
-            Assert.That(edge.Equals((object)null), Is.False);
+            Assert.That(edge.Equals(null), Is.False);
         }
 
         [Test]

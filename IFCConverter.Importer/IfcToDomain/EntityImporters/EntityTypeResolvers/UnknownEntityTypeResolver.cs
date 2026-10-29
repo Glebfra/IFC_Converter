@@ -21,7 +21,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.EntityTypeResolvers
                     return EntityType.UNKNOWN;
             }
         }
-        
+
         private static EntityType ResolvePipeFittingType(IIfcPipeFitting fitting)
         {
             if (TryResolveObjectType(fitting.ObjectType, out EntityType type))
@@ -41,7 +41,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.EntityTypeResolvers
                     return EntityType.UNKNOWN;
             }
         }
-        
+
         private static bool TryResolveObjectType(string objectType, out EntityType entityType)
         {
             switch (objectType?.Trim())

@@ -8,13 +8,13 @@ namespace IFCConverter.Importer.Pipeline
 {
     internal sealed class IfcToDomainPipeline
     {
-        private readonly IfcToDomainPhaseRegistry _registry = new IfcToDomainPhaseRegistry();
         private readonly ImportTypeResolver _importTypeResolver = new ImportTypeResolver();
+        private readonly IfcToDomainPhaseRegistry _registry = new IfcToDomainPhaseRegistry();
 
         public EngineeringModel Execute(IModel model, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<IfcToDomainPipeline>();
-            
+
             ImportType type = _importTypeResolver.ResolveImportType(model);
             logger.LogInformation("Resolved import type: {type}", type.ToString());
 

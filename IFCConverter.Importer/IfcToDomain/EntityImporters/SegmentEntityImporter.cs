@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class SegmentEntityImporter : IIfcEntityImporter
     {
         private readonly ISegmentEntityImportersRegistry _registry = new SegmentEntityImportersRegistry();
-        
+
         public bool CanImport(EntityType type)
         {
             return type == EntityType.SEGMENT;

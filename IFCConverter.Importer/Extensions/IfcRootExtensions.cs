@@ -42,7 +42,7 @@ namespace IFCConverter.Importer.Extensions
         public static FixedMatrix<Dim4> GetGlobalMatrix(this IIfcLocalPlacement localPlacement)
         {
             IIfcLocalPlacement tempLocalPlacement = localPlacement;
-            
+
             FixedMatrix<Dim4> globalMatrix = FixedMatrix<Dim4>.Identity();
             while (tempLocalPlacement != null)
             {

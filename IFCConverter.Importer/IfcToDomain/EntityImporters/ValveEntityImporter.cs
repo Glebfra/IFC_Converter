@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class ValveEntityImporter : IIfcPostEntityImporter
     {
         private readonly IValveEntityImportersRegistry _registry = new ValveEntityImportersRegistry();
-        
+
         public bool CanImport(EntityType type)
         {
             return type == EntityType.VALVE;

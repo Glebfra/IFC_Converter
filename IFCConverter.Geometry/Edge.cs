@@ -20,7 +20,7 @@ namespace IFCConverter.Geometry
                 B = a;
             }
         }
-        
+
         public bool Equals(Edge other)
         {
             return A == other.A && B == other.B;
@@ -35,7 +35,7 @@ namespace IFCConverter.Geometry
         {
             unchecked
             {
-                return (A * 397) ^ B;
+                return A * 397 ^ B;
             }
         }
 

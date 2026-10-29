@@ -69,7 +69,10 @@ namespace IFCConverter.Tests.Geometry
         {
             List<FixedVector<Dim3>> vertices = new List<FixedVector<Dim3>>(TriangleVertices());
 
-            List<Triangle> triangles = new List<Triangle> { new Triangle(0, 1, 2) };
+            List<Triangle> triangles = new List<Triangle>
+            {
+                new Triangle(0, 1, 2)
+            };
 
             Mesh mesh = new Mesh(vertices, triangles);
 
@@ -161,7 +164,10 @@ namespace IFCConverter.Tests.Geometry
 
         private static Mesh CreateTriangleMesh()
         {
-            return new Mesh(TriangleVertices(), new[] { new Triangle(0, 1, 2) });
+            return new Mesh(TriangleVertices(), new[]
+            {
+                new Triangle(0, 1, 2)
+            });
         }
 
         private static Mesh CreateMesh(params FixedVector<Dim3>[] vertices)

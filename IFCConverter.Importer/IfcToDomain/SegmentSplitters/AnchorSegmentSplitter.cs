@@ -9,7 +9,7 @@ namespace IFCConverter.Importer.IfcToDomain.SegmentSplitters
     internal sealed class AnchorSegmentSplitter : ISegmentSplitter
     {
         private Anchor _anchor;
-        
+
         public bool CanSplit(Entity entity, EngineeringModel model, ImportContext context)
         {
             if (!(entity is Anchor anchor))
@@ -27,19 +27,19 @@ namespace IFCConverter.Importer.IfcToDomain.SegmentSplitters
                 return;
 
             double diameter = segment.StartPort.Metadata.Diameter;
-            
+
             FixedVector<Dim3> endPos = segment.EndPort.Position;
             FixedVector<Dim3> endDir = segment.EndPort.Direction;
-            
+
             segment.EndPort.SetGeometry(position, endDir);
-            
+
             AbstractSegment newSegment = SegmentCreator.CreateSegment(
                 position,
                 endPos,
                 diameter,
                 $"{segment.Metadata.Name}_splitted"
             );
-            
+
             model.Add(newSegment);
         }
 

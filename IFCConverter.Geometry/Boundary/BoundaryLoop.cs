@@ -6,7 +6,7 @@ namespace IFCConverter.Geometry.Boundary
     public readonly struct BoundaryLoop
     {
         private readonly List<int> _vertices;
-        
+
         public IReadOnlyList<int> Vertices => _vertices;
         public int Count => _vertices.Count;
 

@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class ElbowEntityImporter : IIfcEntityImporter
     {
         private readonly IElbowEntityImportersRegistry _registry = new ElbowEntityImportersRegistry();
-        
+
         public bool CanImport(EntityType type)
         {
             return type == EntityType.ELBOW;

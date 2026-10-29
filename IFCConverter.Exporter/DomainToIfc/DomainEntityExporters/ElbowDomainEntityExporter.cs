@@ -34,6 +34,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
                 new IfcPipeFittingBuilder<IfcPipeFitting>(elbow.Metadata.Name, elbow.Metadata.Type, IfcPipeFittingTypeEnum.BEND);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(entity.Metadata.Type);
 
             IfcPipeFitting instance = builder.CreateInstance(model);
             context.Register(entity, instance);

@@ -12,7 +12,7 @@ namespace IFCConverter.Tests.Geometry
     public sealed class MeshGeometryTests
     {
         private const double Tolerance = 1e-10;
-        
+
         [Test]
         public void GetFaceNormal_FromThreeVertices_ReturnsExpectedNormal()
         {
@@ -131,7 +131,7 @@ namespace IFCConverter.Tests.Geometry
             FixedVector<Dim3> a = Vector(0, 0, 0);
             FixedVector<Dim3> b = Vector(1, 1, 1);
             FixedVector<Dim3> c = Vector(2, 2, 2);
-            
+
             AssertVectorEqual(MeshGeometry.GetFaceNormal(a, b, c), FixedVector<Dim3>.Zeros());
         }
 
@@ -141,7 +141,7 @@ namespace IFCConverter.Tests.Geometry
             FixedVector<Dim3> a = Vector(1, 1, 1);
             FixedVector<Dim3> b = Vector(1, 1, 1);
             FixedVector<Dim3> c = Vector(2, 2, 2);
-            
+
             AssertVectorEqual(MeshGeometry.GetFaceNormal(a, b, c), FixedVector<Dim3>.Zeros());
         }
 
@@ -149,9 +149,7 @@ namespace IFCConverter.Tests.Geometry
         {
             FixedVector<Dim3>[] vertices =
             {
-                Vector(0, 0, 0),
-                Vector(1, 0, 0),
-                Vector(0, 1, 0)
+                Vector(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0)
             };
 
             return new Mesh(vertices, triangles);

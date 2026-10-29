@@ -37,7 +37,10 @@ namespace IFCConverter.Tests.Geometry
         [Test]
         public void GetEnumerator_ReturnsVerticesInOrder()
         {
-            Assert.That(Triangle.ToArray(), Is.EqualTo(new[] { 4, 2, 7 }));
+            Assert.That(Triangle.ToArray(), Is.EqualTo(new[]
+            {
+                4, 2, 7
+            }));
         }
 
         [Test]

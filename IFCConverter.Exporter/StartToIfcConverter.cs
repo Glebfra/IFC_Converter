@@ -15,8 +15,8 @@ namespace IFCConverter.Exporter
 {
     public class StartToIfcConverter
     {
-        private readonly ILoggerFactory _factory;
         private readonly ExportDataContainer _exportDataContainer;
+        private readonly ILoggerFactory _factory;
 
         private readonly StartToIfcPipeline _pipeline = new StartToIfcPipeline();
 
@@ -29,7 +29,7 @@ namespace IFCConverter.Exporter
         public void Convert(StartDocument startDocument)
         {
             ILogger logger = _factory.CreateLogger<StartToIfcConverter>();
-            
+
             if (startDocument == null)
                 throw new ArgumentNullException(nameof(startDocument));
 

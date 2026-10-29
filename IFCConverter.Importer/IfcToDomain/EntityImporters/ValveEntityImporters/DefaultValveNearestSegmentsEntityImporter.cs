@@ -10,13 +10,13 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ValveEntityImporters
 {
     internal sealed class DefaultValveNearestSegmentsEntityImporter : AbstractValveNearestSegmentsEntityImporter
     {
-        private FixedVector<Dim3> _position;
         private Port[] _distinctPorts;
-        
+        private FixedVector<Dim3> _position;
+
         public override bool CanImport(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             double lengthPower = product.Model.GetLengthPower();
-            
+
             if (context.ImportType != ImportType.UNKNOWN)
                 return false;
 

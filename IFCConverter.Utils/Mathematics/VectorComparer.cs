@@ -12,7 +12,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             if (double.IsNaN(tolerance) || double.IsInfinity(tolerance) || tolerance <= 0)
                 throw new ArgumentOutOfRangeException(nameof(tolerance), "Tolerance must be a positive number.");
-            
+
             _tolerance = tolerance;
         }
 
@@ -21,7 +21,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             if (ReferenceEquals(x, y))
                 return true;
-            
+
             if (x == null || y == null)
                 return false;
 

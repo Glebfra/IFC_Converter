@@ -13,16 +13,16 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
     internal sealed class ExtrudedAreaSolidTeeEntityImporter : ITeeEntityImporter
     {
         private const double DoubleTolerance = 1e-6;
+        private IIfcExtrudedAreaSolid[] _extrudedAreaSolids;
 
         private IIfcLocalPlacement _localPlacement;
-        private IIfcExtrudedAreaSolid[] _extrudedAreaSolids;
 
         public bool CanImport(IIfcProduct product)
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
             _localPlacement = localPlacement;
-            
+
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 2)
                 return false;
@@ -46,17 +46,17 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
         {
             double lengthPower = product.Model.GetLengthPower();
             FixedMatrix<Dim4> globalMatrix = _localPlacement.GetGlobalMatrix();
-            
+
             SolidGeometry[] solids = _extrudedAreaSolids.Select(solid => CreateSolidGeometry(solid, globalMatrix)).ToArray();
-            
-            if (!TryGetIntersection(solids[0].Axis.Origin, solids[0].Axis.Direction, solids[1].Axis.Origin, solids[1].Axis.Direction, DoubleTolerance, 
+
+            if (!TryGetIntersection(solids[0].Axis.Origin, solids[0].Axis.Direction, solids[1].Axis.Origin, solids[1].Axis.Direction, DoubleTolerance,
                     out FixedVector<Dim3> centerIfc))
             {
                 return;
             }
-            
+
             FixedVector<Dim3> center = centerIfc * lengthPower;
-            
+
             int mainIndex;
             int branchIndex;
 
@@ -67,10 +67,10 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
 
             SolidGeometry main = solids[mainIndex];
             SolidGeometry branch = solids[branchIndex];
-            
+
             FixedVector<Dim3> mainStart = main.Start * lengthPower;
             FixedVector<Dim3> mainEnd = main.End * lengthPower;
-            
+
             FixedVector<Dim3> branchStart = branch.Start * lengthPower;
             FixedVector<Dim3> branchEnd = branch.End * lengthPower;
 
@@ -90,7 +90,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
                 branchPortPosition = branchEnd;
                 branchDirection = (branchEnd - center).SafeNormalize();
             }
-            
+
             FixedVector<Dim3> portADirection = (mainStart - center).SafeNormalize();
             FixedVector<Dim3> portBDirection = (mainEnd - center).SafeNormalize();
 
@@ -149,7 +149,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
 
             bool firstContainsCenter = IsInsideSegment(firstPosition);
             bool secondContainsCenter = IsInsideSegment(secondPosition);
-            
+
             if (firstContainsCenter && !secondContainsCenter)
             {
                 mainIndex = 0;
@@ -163,7 +163,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
                 branchIndex = 0;
                 return true;
             }
-            
+
             if (firstContainsCenter && secondContainsCenter)
             {
                 double firstDistance = Math.Min((center - solids[0].Start).L2Norm(), (center - solids[0].End).L2Norm());
@@ -182,6 +182,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
 
                 return true;
             }
+
             return false;
         }
 
@@ -194,6 +195,44 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
         private static bool IsInsideSegment(double position)
         {
             return position >= -DoubleTolerance;
+        }
+
+        private static bool TryGetIntersection(
+            FixedVector<Dim3> firstOrigin,
+            FixedVector<Dim3> firstDirection,
+            FixedVector<Dim3> secondOrigin,
+            FixedVector<Dim3> secondDirection,
+            double tolerance,
+            out FixedVector<Dim3> intersection)
+        {
+            intersection = default;
+
+            FixedVector<Dim3> d1 = firstDirection.SafeNormalize();
+            FixedVector<Dim3> d2 = secondDirection.SafeNormalize();
+            FixedVector<Dim3> r = firstOrigin - secondOrigin;
+
+            double a = d1.Dot(d1);
+            double b = d1.Dot(d2);
+            double c = d2.Dot(d2);
+            double d = d1.Dot(r);
+            double e = d2.Dot(r);
+
+            double denominator = a * c - b * b;
+            if (Math.Abs(denominator) <= 1e-12)
+                return false;
+
+            double t = (b * e - c * d) / denominator;
+            double s = (a * e - b * d) / denominator;
+
+            FixedVector<Dim3> firstPoint = firstOrigin + d1 * t;
+            FixedVector<Dim3> secondPoint = secondOrigin + d2 * s;
+
+            double distance = (firstPoint - secondPoint).L2Norm();
+            if (distance > tolerance)
+                return false;
+
+            intersection = (firstPoint + secondPoint) * 0.5;
+            return true;
         }
 
         private readonly struct SolidGeometry
@@ -228,44 +267,6 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.TeeEntityImporters
                 Origin = origin;
                 Direction = direction;
             }
-        }
-
-        private static bool TryGetIntersection(
-            FixedVector<Dim3> firstOrigin,
-            FixedVector<Dim3> firstDirection,
-            FixedVector<Dim3> secondOrigin,
-            FixedVector<Dim3> secondDirection,
-            double tolerance,
-            out FixedVector<Dim3> intersection)
-        {
-            intersection = default(FixedVector<Dim3>);
-
-            FixedVector<Dim3> d1 = firstDirection.SafeNormalize();
-            FixedVector<Dim3> d2 = secondDirection.SafeNormalize();
-            FixedVector<Dim3> r = firstOrigin - secondOrigin;
-
-            double a = d1.Dot(d1);
-            double b = d1.Dot(d2);
-            double c = d2.Dot(d2);
-            double d = d1.Dot(r);
-            double e = d2.Dot(r);
-
-            double denominator = a * c - b * b;
-            if (Math.Abs(denominator) <= 1e-12)
-                return false;
-
-            double t = (b * e - c * d) / denominator;
-            double s = (a * e - b * d) / denominator;
-
-            FixedVector<Dim3> firstPoint = firstOrigin + d1 * t;
-            FixedVector<Dim3> secondPoint = secondOrigin + d2 * s;
-
-            double distance = (firstPoint - secondPoint).L2Norm();
-            if (distance > tolerance)
-                return false;
-
-            intersection = (firstPoint + secondPoint) * 0.5;
-            return true;
         }
     }
 }

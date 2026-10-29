@@ -17,20 +17,20 @@ namespace IFCConverter.Importer.IfcToDomain.EntityConnectionsResolvers
         public void Resolve(EngineeringModel model, ImportContext context)
         {
             List<Port> ports = new List<Port>(model.Ports);
-            
+
             for (int i = 0; i < ports.Count; i++)
             {
                 Port firstPort = ports[i];
                 Entity firstPortOwner = model.GetEntity(firstPort.Owner);
-                
+
                 for (int j = i + 1; j < ports.Count; j++)
                 {
                     Port secondPort = ports[j];
                     Entity secondPortOwner = model.GetEntity(secondPort.Owner);
-                    
+
                     if (firstPort.Owner == secondPort.Owner)
                         continue;
-                    
+
                     if (!firstPort.Position.AlmostEqual(secondPort.Position, DoubleTolerance))
                         continue;
 

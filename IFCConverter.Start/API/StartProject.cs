@@ -8,7 +8,6 @@ using IFCConverter.Start.Entities;
 using IFCConverter.Start.Entities.Equipments;
 using IFCConverter.Start.Extensions;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Utils.Reflection;
 using Newtonsoft.Json;
 

@@ -13,11 +13,11 @@ namespace IFCConverter.Importer.IfcToDomain.Phases
     public sealed class SegmentSplitPhase : IIfcToDomainPhase
     {
         private readonly ISegmentSplittersRegistry _registry = new SegmentSplittersRegistry();
-        
+
         public void Execute(IModel model, EngineeringModel domain, ImportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<SegmentSplitPhase>();
-            
+
             foreach (Entity entity in domain.Entities.ToArray())
             {
                 try

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
@@ -11,17 +10,13 @@ using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
 using Xbim.Ifc4.Interfaces;
 
-namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
+namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.SegmentDomainExporters
 {
-    internal sealed class ConeSegmentDomainEntityExporter : IDomainEntityExporter
+    internal sealed class ConeElementDomainEntityExporter : ISegmentDomainEntityExporter
     {
-        public bool CanExport(Entity entity)
+        public bool CanExport(StartElementTypeEnum type)
         {
-            if (!Enum.TryParse(entity.Metadata.Type, out StartElementTypeEnum type))
-                return false;
-
-            return entity is Segment &&
-                   type == StartElementTypeEnum.CONE_ELEMENT;
+            return type == StartElementTypeEnum.CONE_ELEMENT;
         }
 
         public void Export(Entity entity, IModel model, ExportContext context)
@@ -43,6 +38,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
                 new IfcPipeSegmentBuilder<IfcPipeSegment>(entity.Metadata.Name, entity.Metadata.Type, IfcPipeSegmentTypeEnum.RIGIDSEGMENT);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(entity.Metadata.Type);
 
             IfcPipeSegment instance = builder.CreateInstance(model);
             context.Register(entity, instance);

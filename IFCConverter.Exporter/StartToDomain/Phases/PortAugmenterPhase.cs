@@ -3,7 +3,6 @@ using IFCConverter.Domain;
 using IFCConverter.Exporter.Attributes;
 using IFCConverter.Exporter.StartToDomain.PortAugmenters;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.StartToDomain.Phases

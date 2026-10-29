@@ -18,7 +18,7 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
         {
             Port[] ports = connection.Ports.ToArray();
             Entity[] entities = ports.Select(port => model.GetEntity(port.Owner)).ToArray();
-            
+
             AbstractSegment segment;
             AbstractFitting fitting;
             if (entities[0] is Segment)
@@ -46,7 +46,7 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
         {
             if (reducer.Position.AlmostEqual(portPosition))
                 return;
-            
+
             FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
 
             Segment segment = SegmentCreator.CreateSegment(

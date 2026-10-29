@@ -7,13 +7,13 @@ namespace IFCConverter.Geometry.Curves
     {
         public FixedVector<Dim3> Origin { get; }
         public FixedVector<Dim3> Direction { get; }
-        
+
         public Line3D(FixedVector<Dim3> origin, FixedVector<Dim3> direction)
         {
             Origin = origin;
             Direction = direction.SafeNormalize();
         }
-        
+
         [Pure]
         public FixedVector<Dim3> GetPoint(double parameter)
         {

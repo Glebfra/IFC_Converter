@@ -17,7 +17,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityMetadataAugmenters
         {
             if (!context.TryGetEntityId(product, out Id<EntityId> id))
                 return false;
-            
+
             StartPset startPset = ((IfcProduct)product).GetPropertySets().OfType<StartPset>().FirstOrDefault();
             return startPset != null;
         }

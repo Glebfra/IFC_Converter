@@ -68,6 +68,7 @@
         <Compile Include="API\StartConnectionTypeEnum.cs"/>
         <Compile Include="API\StartDataArrayItem.cs"/>
         <Compile Include="API\StartDocument.cs"/>
+        <Compile Include="API\StartElementsRegistry.cs"/>
         <Compile Include="API\StartEntityProxy.cs"/>
         <Compile Include="API\StartElementTypeEnum.cs"/>
         <Compile Include="API\StartLeakageCheckEnum.cs"/>

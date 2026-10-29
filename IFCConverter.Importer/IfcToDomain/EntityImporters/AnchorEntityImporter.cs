@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class AnchorEntityImporter : IIfcEntityImporter
     {
         private readonly IAnchorEntityImportersRegistry _registry = new AnchorEntityImportersRegistry();
-        
+
         public bool CanImport(EntityType type)
         {
             return type == EntityType.ANCHOR;

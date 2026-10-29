@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class IfcPostEntityImportersRegistry : ReflectionRegistry<IIfcPostEntityImporter>, IIfcPostEntityImportersRegistry
     {
         private readonly IEntityTypeResolversRegistry _registry = new EntityTypeResolversRegistry();
-        
+
         public IfcPostEntityImportersRegistry() : base(typeof(IfcPostEntityImportersRegistry).Assembly)
         {
         }

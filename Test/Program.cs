@@ -6,7 +6,6 @@ using IFCConverter.Geometry.Mesh.Builders;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Builders.Geometry.Tessellated;
-using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.IFC.Interfaces.Geometry.Tessellated;
 using IFCConverter.Utils.Mathematics;
@@ -26,7 +25,7 @@ namespace Test
                 .Select(indices => new Triangle(indices[0], indices[1], indices[2]))
                 .ToArray();
         }
-        
+
         public static void Main(string[] args)
         {
             IMeshBuilder meshBuilder = new MeshBuilder();
@@ -36,7 +35,7 @@ namespace Test
             FixedVector<Dim3> direction = FixedVector<Dim3>.Builder.Dense(1.0, 1.0, 1.0).SafeNormalize();
             FixedVector<Dim3> rightDirection = direction.CreateNormalVector().SafeNormalize();
             FixedVector<Dim3> upDirection = direction.CreateNormalVector(rightDirection).SafeNormalize();
-            
+
             meshBuilder
                 .Add(clippedConeMeshBuilder)
                 .Transform(FixedMatrix<Dim3>.Builder.CreateTransition(
@@ -57,13 +56,13 @@ namespace Test
                 geometryBuilder.AssignTriangleIndices(triangles.Cast<IEnumerable<int>>());
                 geometryBuilder.AssignNormals(mesh.FaceNormals);
 
-                IIfcPipeFittingBuilder<IfcPipeFitting> pipeFittingBuilder = 
+                IIfcPipeFittingBuilder<IfcPipeFitting> pipeFittingBuilder =
                     new IfcPipeFittingBuilder<IfcPipeFitting>("Test", "", IfcPipeFittingTypeEnum.NOTDEFINED);
                 pipeFittingBuilder.CreateObjectPlacement(model, FixedMatrix<Dim4>.Identity());
 
                 IfcPipeFitting pipeFitting = pipeFittingBuilder.CreateInstance(model);
                 project.AddEntityRaw(pipeFitting);
-                
+
                 project.SaveAs(@"C:\Users\glebf\Documents\Work\Projects Files\GeometryTest.ifc");
             }
         }

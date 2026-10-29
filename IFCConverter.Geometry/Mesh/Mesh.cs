@@ -7,28 +7,28 @@ namespace IFCConverter.Geometry.Mesh
 {
     public class Mesh : IMesh
     {
-        private readonly List<FixedVector<Dim3>> _vertices;
-        private readonly List<Triangle> _triangles;
         private readonly List<FixedVector<Dim3>> _normals;
-
-        public IReadOnlyList<FixedVector<Dim3>> Vertices => _vertices;
-        public IReadOnlyList<Triangle> Triangles => _triangles;
-        public IReadOnlyList<FixedVector<Dim3>> FaceNormals => _normals;
-        
-        public int VertexCount => _vertices.Count;
-        public int TriangleCount => _triangles.Count;
-        public int FaceNormalCount => _normals.Count;
+        private readonly List<Triangle> _triangles;
+        private readonly List<FixedVector<Dim3>> _vertices;
 
         public Mesh(IEnumerable<FixedVector<Dim3>> vertices, IEnumerable<Triangle> triangles, IEnumerable<FixedVector<Dim3>> normals = null)
         {
             List<FixedVector<Dim3>> verticesList = vertices.ToList();
             _vertices = verticesList;
             _triangles = triangles.ToList();
-            
+
             _normals = normals?.ToList() ?? _triangles
                 .Select(triangle => MeshGeometry.GetFaceNormal(triangle.Select(triangleIndex => verticesList[triangleIndex]).ToArray()))
                 .ToList();
         }
+
+        public IReadOnlyList<FixedVector<Dim3>> Vertices => _vertices;
+        public IReadOnlyList<Triangle> Triangles => _triangles;
+        public IReadOnlyList<FixedVector<Dim3>> FaceNormals => _normals;
+
+        public int VertexCount => _vertices.Count;
+        public int TriangleCount => _triangles.Count;
+        public int FaceNormalCount => _normals.Count;
 
         public int AddVertex(FixedVector<Dim3> vertex)
         {

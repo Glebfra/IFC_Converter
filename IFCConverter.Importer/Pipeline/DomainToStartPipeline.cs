@@ -13,7 +13,7 @@ namespace IFCConverter.Importer.Pipeline
         public void Execute(EngineeringModel model, IStartProject startProject, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<DomainToStartPipeline>();
-            
+
             ExportContext context = new ExportContext(startProject);
             foreach (IDomainToStartPhase phase in _registry.GetPhases())
             {

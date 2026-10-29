@@ -12,7 +12,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
     internal sealed class EntityMetadataAugmenter : IEntityMetadataAugmenter
     {
         private Id<EntityId> _id;
-        
+
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             if (!context.TryGetEntityId(source, out _id))

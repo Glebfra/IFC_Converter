@@ -15,7 +15,7 @@ namespace IFCConverter.Exporter.DomainToIfc.Phases
         public void Execute(EngineeringModel domain, IModel model, ExportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<EntityExportPhase>();
-            
+
             foreach (Entity domainEntity in domain.Entities)
             {
                 if (_domainEntityExporterRegistry.TryResolve(domainEntity, out IDomainEntityExporter exporter))

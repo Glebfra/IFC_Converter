@@ -23,13 +23,13 @@ namespace IFCConverter.Exporter.Geometries
     {
         private const double DiameterToLengthFactor = 0.1;
         private const double DiameterToOuterDiameterFactor = 1.1;
-        
-        public AxialCouplingJointIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null) 
+
+        public AxialCouplingJointIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilder, representationContext)
         {
         }
 
-        public AxialCouplingJointIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null) 
+        public AxialCouplingJointIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilders, representationContext)
         {
         }
@@ -38,7 +38,7 @@ namespace IFCConverter.Exporter.Geometries
         {
             FixedVector<Dim3> direction = joint.PortA.Direction.Negate();
             double diameter = joint.Ports.Max(port => port.Metadata.Diameter);
-            
+
             double length = diameter * DiameterToLengthFactor;
             double innerDiameter = diameter;
             double outerDiameter = diameter * DiameterToOuterDiameterFactor;

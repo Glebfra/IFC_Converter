@@ -22,16 +22,16 @@ namespace IFCConverter.Domain.Entities
             StartPort.Position, EndPort.Position
         };
     }
-    
+
     public abstract class AbstractSegment<TMetadata> : AbstractSegment, IEntityTypedMetadata<TMetadata>
         where TMetadata : EntityMetadata
     {
         protected AbstractSegment(Id<EntityId> id) : base(id)
         {
         }
-        
-        public abstract TMetadata TypedMetadata { get; }
 
         public override EntityMetadata Metadata => TypedMetadata;
+
+        public abstract TMetadata TypedMetadata { get; }
     }
 }

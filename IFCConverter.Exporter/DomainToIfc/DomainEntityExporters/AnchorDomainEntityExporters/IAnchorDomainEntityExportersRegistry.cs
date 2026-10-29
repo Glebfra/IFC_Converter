@@ -4,7 +4,6 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 {
     internal interface IAnchorDomainEntityExportersRegistry
     {
-        IAnchorDomainEntityExporter Resolve(Anchor anchor);
         bool TryResolve(Anchor anchor, out IAnchorDomainEntityExporter exporter);
     }
 }

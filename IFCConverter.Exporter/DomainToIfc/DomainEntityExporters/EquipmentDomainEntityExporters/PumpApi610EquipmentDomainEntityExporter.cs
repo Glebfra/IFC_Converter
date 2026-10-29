@@ -44,6 +44,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.EquipmentDomai
             IIfcPumpBuilder<IIfcPump> builder = new IfcPumpBuilder<IfcPump>(equipment.Metadata.Name, equipment.Metadata.Type, IfcPumpTypeEnum.NOTDEFINED);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(equipment.Metadata.Type);
 
             IIfcProduct instance = builder.CreateInstance(model);
             context.Register(equipment, instance);

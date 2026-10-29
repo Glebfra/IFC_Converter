@@ -12,15 +12,15 @@ namespace IFCConverter.Importer.IfcToDomain.Phases
     [IfcToDomainPhase(1)]
     public sealed class EntityImportPhase : IIfcToDomainPhase
     {
-        private readonly IIfcEntityImportersRegistry _registry = new IfcEntityImportersRegistry();
         private readonly IIfcPostEntityImportersRegistry _postRegistry = new IfcPostEntityImportersRegistry();
-        
+        private readonly IIfcEntityImportersRegistry _registry = new IfcEntityImportersRegistry();
+
         public void Execute(IModel model, EngineeringModel domain, ImportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<EntityImportPhase>();
-            
+
             List<IIfcProduct> notImportedProducts = new List<IIfcProduct>();
-            
+
             foreach (IIfcProduct product in model.Instances.OfType<IIfcProduct>())
             {
                 try

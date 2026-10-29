@@ -7,13 +7,13 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
     internal sealed class ElbowEntityExporter : IEntityExporter
     {
         private Elbow _elbow;
-        
+
         public bool CanExport(Entity entity)
         {
             if (!(entity is Elbow elbow))
                 return false;
             _elbow = elbow;
-            
+
             return true;
         }
 

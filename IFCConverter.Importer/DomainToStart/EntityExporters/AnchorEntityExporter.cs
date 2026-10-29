@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
     internal sealed class AnchorEntityExporter : IEntityExporter
     {
         private Anchor _anchor;
-        
+
         public bool CanExport(Entity entity)
         {
             if (!(entity is Anchor anchor))
@@ -19,12 +19,12 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
 
         public void Export(Entity entity, EngineeringModel model, ExportContext context)
         {
-            StartMomentFreeAnchorEntity anchorEntity = new StartMomentFreeAnchorEntity()
+            StartMomentFreeAnchorEntity anchorEntity = new StartMomentFreeAnchorEntity
             {
                 Position = _anchor.Position,
                 Name = entity.Metadata.Name
             };
-            
+
             context.Register(entity, anchorEntity);
         }
     }

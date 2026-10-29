@@ -162,7 +162,8 @@ namespace IFCConverter.Tests.Geometry
                 });
         }
 
-        private static Mesh CreateMesh(IEnumerable<FixedVector<Dim3>> vertices, IEnumerable<Triangle> triangles, IEnumerable<FixedVector<Dim3>> normals = null)
+        private static Mesh CreateMesh(IEnumerable<FixedVector<Dim3>> vertices, IEnumerable<Triangle> triangles,
+            IEnumerable<FixedVector<Dim3>> normals = null)
         {
             return new Mesh(vertices, triangles, normals);
         }

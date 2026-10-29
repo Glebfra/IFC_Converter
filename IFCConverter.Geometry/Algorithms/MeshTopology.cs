@@ -24,14 +24,14 @@ namespace IFCConverter.Geometry.Algorithms
         {
             return GetBoundaryVertices(mesh.Triangles);
         }
-        
+
         [Pure]
         private static IEnumerable<Edge> GetBoundaryEdges(IEnumerable<Triangle> triangles)
         {
             IDictionary<Edge, int> edgeUsage = GetEdgeUsage(triangles);
             return edgeUsage.Where(pair => pair.Value == 1).Select(pair => pair.Key);
         }
-        
+
         [Pure]
         private static IDictionary<Edge, int> GetEdgeUsage(IEnumerable<Triangle> triangles)
         {
@@ -43,14 +43,14 @@ namespace IFCConverter.Geometry.Algorithms
                 {
                     if (edgeUsage.TryGetValue(edge, out int count))
                         edgeUsage[edge] = count + 1;
-                    else 
+                    else
                         edgeUsage.Add(edge, 1);
                 }
             }
 
             return edgeUsage;
         }
-        
+
         [Pure]
         private static IEnumerable<int> GetBoundaryVertices(IEnumerable<Triangle> triangles)
         {

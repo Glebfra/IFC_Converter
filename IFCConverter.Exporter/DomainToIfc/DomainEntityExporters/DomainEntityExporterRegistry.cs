@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IFCConverter.Domain.Entities;
 using IFCConverter.Utils.Reflection;
 
@@ -6,23 +7,25 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 {
     internal sealed class DomainEntityExporterRegistry : ReflectionRegistry<IDomainEntityExporter>, IDomainEntityExporterRegistry
     {
+        private readonly IDictionary<Type, IDomainEntityExporter> _exportersMapCache = new Dictionary<Type, IDomainEntityExporter>();
+
         public DomainEntityExporterRegistry() : base(typeof(DomainEntityExporterRegistry).Assembly)
         {
         }
 
-        public IDomainEntityExporter Resolve(Entity entity)
-        {
-            return Resolve(exporter => exporter.CanExport(entity));
-        }
-
-        public IEnumerable<IDomainEntityExporter> ResolveAll(Entity source)
-        {
-            return ResolveAll(exporter => exporter.CanExport(source));
-        }
-
         public bool TryResolve(Entity entity, out IDomainEntityExporter exporter)
         {
-            return TryResolve(exp => exp.CanExport(entity), out exporter);
+            Type type = entity.GetType();
+            if (_exportersMapCache.TryGetValue(type, out exporter))
+                return true;
+
+            if (TryResolve(exp => exp.CanExport(entity), out exporter))
+            {
+                _exportersMapCache.Add(type, exporter);
+                return true;
+            }
+
+            return false;
         }
     }
 }

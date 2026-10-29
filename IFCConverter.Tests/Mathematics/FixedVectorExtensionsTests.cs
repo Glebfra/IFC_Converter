@@ -30,11 +30,9 @@ namespace IFCConverter.Tests.Mathematics
         [Test]
         public void Sum_ReturnsSumOfVectors()
         {
-            FixedVector<Dim3>[] vectors = new[]
+            FixedVector<Dim3>[] vectors =
             {
-                FixedVector<Dim3>.Builder.Dense(1, 2, 3),
-                FixedVector<Dim3>.Builder.Dense(4, 5, 6),
-                FixedVector<Dim3>.Builder.Dense(7, 8, 9)
+                FixedVector<Dim3>.Builder.Dense(1, 2, 3), FixedVector<Dim3>.Builder.Dense(4, 5, 6), FixedVector<Dim3>.Builder.Dense(7, 8, 9)
             };
 
             AssertVectorEqual(vectors.Sum(), 12, 15, 18);
@@ -51,10 +49,9 @@ namespace IFCConverter.Tests.Mathematics
         [Test]
         public void Mean_ReturnsAverageVector()
         {
-            FixedVector<Dim3>[] vectors = new[]
+            FixedVector<Dim3>[] vectors =
             {
-                FixedVector<Dim3>.Builder.Dense(2, 4, 6),
-                FixedVector<Dim3>.Builder.Dense(4, 6, 8)
+                FixedVector<Dim3>.Builder.Dense(2, 4, 6), FixedVector<Dim3>.Builder.Dense(4, 6, 8)
             };
 
             AssertVectorEqual(vectors.Mean(), 3, 5, 7);

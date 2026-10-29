@@ -9,7 +9,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
     {
         private Id<EntityId> _id;
         private IStartMaterializedEntity _startMaterializedEntity;
-        
+
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             if (!context.TryGetEntityId(source, out _id))

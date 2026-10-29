@@ -7,7 +7,7 @@ namespace IFCConverter.Geometry.Profiles
     {
         public IReadOnlyList<FixedVector<Dim2>> Points { get; }
         public bool IsHole { get; }
-        
+
         public ProfileLoop(IReadOnlyList<FixedVector<Dim2>> points, bool isHole)
         {
             Points = points;

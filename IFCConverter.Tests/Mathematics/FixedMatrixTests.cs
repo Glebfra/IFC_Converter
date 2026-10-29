@@ -13,8 +13,12 @@ namespace IFCConverter.Tests.Mathematics
         {
             return FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
         }
 
@@ -33,14 +37,18 @@ namespace IFCConverter.Tests.Mathematics
                 }
             }
         }
-        
+
         [Test]
         public void Multiply_MatrixByVector_ReturnsCorrectVector()
         {
             FixedMatrix<Dim2> matrix = FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
 
             FixedVector<Dim2> vector = FixedVector<Dim2>.Builder.Dense(5, 6);
@@ -56,8 +64,12 @@ namespace IFCConverter.Tests.Mathematics
         {
             FixedMatrix<Dim2> matrix = FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
 
             FixedVector<Dim2> vector = FixedVector<Dim2>.Builder.Dense(5, 6);
@@ -86,9 +98,15 @@ namespace IFCConverter.Tests.Mathematics
         {
             FixedMatrix<Dim3> matrix = FixedMatrix<Dim3>.Builder.Dense(new[,]
             {
-                { 1.0, 2.0, 3.0 },
-                { 4.0, 5.0, 6.0 },
-                { 7.0, 8.0, 9.0 }
+                {
+                    1.0, 2.0, 3.0
+                },
+                {
+                    4.0, 5.0, 6.0
+                },
+                {
+                    7.0, 8.0, 9.0
+                }
             });
 
             FixedVector<Dim3> column = matrix.GetColumn(1);
@@ -104,8 +122,12 @@ namespace IFCConverter.Tests.Mathematics
             FixedMatrix<Dim3> matrix = FixedMatrix<Dim3>.Builder.Dense();
             FixedMatrix<Dim2> subMatrix = FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
 
             matrix.SetSubMatrix(subMatrix, 1, 1);
@@ -115,7 +137,7 @@ namespace IFCConverter.Tests.Mathematics
             Assert.That(matrix[2, 1], Is.EqualTo(3));
             Assert.That(matrix[2, 2], Is.EqualTo(4));
         }
-        
+
         [Test]
         public void BuilderDense_WithoutValues_CreatesZeroMatrix()
         {
@@ -123,11 +145,15 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(matrix, new[,]
             {
-                { 0.0, 0.0 },
-                { 0.0, 0.0 }
+                {
+                    0.0, 0.0
+                },
+                {
+                    0.0, 0.0
+                }
             });
         }
-        
+
         [Test]
         public void BuilderDense_WithArray_CreatesMatrix()
         {
@@ -135,27 +161,35 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(matrix, new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
         }
-        
+
         [Test]
         public void BuilderDense_WithIncorrectNumberOfValues_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => FixedMatrix<Dim2>.Builder.Dense(1.0, 2.0, 3.0));
         }
-        
+
         [Test]
         public void BuilderDense_WithIncorrectArrayDimensions_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 1.0, 2.0, 3.0 },
-                { 4.0, 5.0, 6.0 }
+                {
+                    1.0, 2.0, 3.0
+                },
+                {
+                    4.0, 5.0, 6.0
+                }
             }));
         }
-        
+
         [Test]
         public void Indexer_CanReadAndWriteValues()
         {
@@ -163,58 +197,82 @@ namespace IFCConverter.Tests.Mathematics
             matrix[0, 1] = 12.5;
             Assert.That(matrix[0, 1], Is.EqualTo(12.5));
         }
-        
+
         [Test]
         public void Add_ReturnsElementwiseSum()
         {
             FixedMatrix<Dim2> a = CreateMatrix2x2();
             FixedMatrix<Dim2> b = FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 5.0, 6.0 },
-                { 7.0, 8.0 }
+                {
+                    5.0, 6.0
+                },
+                {
+                    7.0, 8.0
+                }
             });
 
             AssertMatrixEqual(a + b, new[,]
             {
-                { 6.0, 8.0 },
-                { 10.0, 12.0 }
+                {
+                    6.0, 8.0
+                },
+                {
+                    10.0, 12.0
+                }
             });
         }
-        
+
         [Test]
         public void Subtract_ReturnsElementwiseDifference()
         {
             FixedMatrix<Dim2> a = FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 5.0, 6.0 },
-                { 7.0, 8.0 }
+                {
+                    5.0, 6.0
+                },
+                {
+                    7.0, 8.0
+                }
             });
             FixedMatrix<Dim2> b = CreateMatrix2x2();
 
             AssertMatrixEqual(a - b, new[,]
             {
-                { 4.0, 4.0 },
-                { 4.0, 4.0 }
+                {
+                    4.0, 4.0
+                },
+                {
+                    4.0, 4.0
+                }
             });
         }
-        
+
         [Test]
         public void MultiplyMatrix_ReturnsMatrixProduct()
         {
             FixedMatrix<Dim2> a = CreateMatrix2x2();
             FixedMatrix<Dim2> b = FixedMatrix<Dim2>.Builder.Dense(new[,]
             {
-                { 5.0, 6.0 },
-                { 7.0, 8.0 }
+                {
+                    5.0, 6.0
+                },
+                {
+                    7.0, 8.0
+                }
             });
 
             AssertMatrixEqual(a * b, new[,]
             {
-                { 19.0, 22.0 },
-                { 43.0, 50.0 }
+                {
+                    19.0, 22.0
+                },
+                {
+                    43.0, 50.0
+                }
             });
         }
-        
+
         [Test]
         public void Transpose_SwapsRowsAndColumns()
         {
@@ -222,48 +280,64 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(matrix.Transpose(), new[,]
             {
-                { 1.0, 3.0 },
-                { 2.0, 4.0 }
+                {
+                    1.0, 3.0
+                },
+                {
+                    2.0, 4.0
+                }
             });
         }
-        
+
         [Test]
         public void Identity_ReturnsIdentityMatrix()
         {
             AssertMatrixEqual(FixedMatrix<Dim2>.Identity(), new[,]
             {
-                { 1.0, 0.0 },
-                { 0.0, 1.0 }
+                {
+                    1.0, 0.0
+                },
+                {
+                    0.0, 1.0
+                }
             });
         }
-        
+
         [Test]
         public void Ones_ReturnsMatrixFilledWithOnes()
         {
             AssertMatrixEqual(FixedMatrix<Dim2>.Ones(), new[,]
             {
-                { 1.0, 1.0 },
-                { 1.0, 1.0 }
+                {
+                    1.0, 1.0
+                },
+                {
+                    1.0, 1.0
+                }
             });
         }
-        
+
         [Test]
         public void Zeros_ReturnsZeroMatrix()
         {
             AssertMatrixEqual(FixedMatrix<Dim2>.Zeros(), new[,]
             {
-                { 0.0, 0.0 },
-                { 0.0, 0.0 }
+                {
+                    0.0, 0.0
+                },
+                {
+                    0.0, 0.0
+                }
             });
         }
-        
+
         [Test]
         public void Determinant_ReturnsCorrectValue()
         {
             FixedMatrix<Dim2> matrix = CreateMatrix2x2();
             Assert.That(matrix.Determinant(), Is.EqualTo(-2.0).Within(Tolerance));
         }
-        
+
         [Test]
         public void Inverse_ReturnsInverseMatrix()
         {
@@ -271,11 +345,15 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(matrix.Inverse(), new[,]
             {
-                { -2.0, 1.0 },
-                { 1.5, -0.5 }
+                {
+                    -2.0, 1.0
+                },
+                {
+                    1.5, -0.5
+                }
             });
         }
-        
+
         [Test]
         public void Inverse_MultipliedByOriginal_ReturnsIdentity()
         {
@@ -283,11 +361,15 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(matrix * matrix.Inverse(), new[,]
             {
-                { 1.0, 0.0 },
-                { 0.0, 1.0 }
+                {
+                    1.0, 0.0
+                },
+                {
+                    0.0, 1.0
+                }
             });
         }
-        
+
         [Test]
         public void Clone_CopiesValues()
         {
@@ -296,11 +378,15 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(clone, new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
         }
-        
+
         [Test]
         public void Clone_ModifyingClone_DoesNotModifyOriginal()
         {
@@ -312,7 +398,7 @@ namespace IFCConverter.Tests.Mathematics
             Assert.That(original[0, 0], Is.EqualTo(1.0));
             Assert.That(clone[0, 0], Is.EqualTo(100.0));
         }
-        
+
         [Test]
         public void Identity_MultipliedByMatrix_ReturnsOriginalMatrix()
         {
@@ -320,11 +406,15 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(FixedMatrix<Dim2>.Identity() * matrix, new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
         }
-        
+
         [Test]
         public void Matrix_MultipliedByIdentity_ReturnsOriginalMatrix()
         {
@@ -332,8 +422,12 @@ namespace IFCConverter.Tests.Mathematics
 
             AssertMatrixEqual(matrix * FixedMatrix<Dim2>.Identity(), new[,]
             {
-                { 1.0, 2.0 },
-                { 3.0, 4.0 }
+                {
+                    1.0, 2.0
+                },
+                {
+                    3.0, 4.0
+                }
             });
         }
     }

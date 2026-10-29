@@ -14,7 +14,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ValveEntityImporters
     {
         public abstract bool CanImport(IIfcProduct product, EngineeringModel model, ImportContext context);
         public abstract void Import(IIfcProduct product, EngineeringModel model, ImportContext context);
-        
+
         protected static Port[] FindNearestDistinctPorts(IEnumerable<Port> ports, FixedVector<Dim3> position, double tolerance = 1e-6)
         {
             Port[] candidates = ports
@@ -27,17 +27,20 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ValveEntityImporters
                 {
                     Port a = candidates[i];
                     Port b = candidates[j];
-                    
+
                     if (a.Owner.Equals(b.Owner))
                         continue;
-                    
+
                     if ((a.Position - b.Position).L2Norm() <= tolerance)
                         continue;
-                    
+
                     if (!position.IsBetween(a.Position, b.Position, tolerance))
                         continue;
 
-                    return new Port[] { a, b };
+                    return new[]
+                    {
+                        a, b
+                    };
                 }
             }
 

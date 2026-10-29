@@ -1,5 +1,4 @@
-﻿using System;
-using IFCConverter.Domain.Entities;
+﻿using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;
@@ -14,11 +13,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 {
     internal sealed class RigidHangerAnchorDomainEntityExporter : IAnchorDomainEntityExporter
     {
-        public bool CanExport(Anchor anchor)
+        public bool CanExport(StartElementTypeEnum type)
         {
-            if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
-                return false;
-
             return type == StartElementTypeEnum.RIGID_HANGER;
         }
 
@@ -56,6 +52,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
                 new IfcDiscreteAccessoryBuilder<IfcDiscreteAccessory>(anchor.Metadata.Name, anchor.Metadata.Type, IfcDiscreteAccessoryTypeEnum.USERDEFINED);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(anchor.Metadata.Type);
 
             IIfcProduct instance = builder.CreateInstance(model);
             context.Register(anchor, instance);

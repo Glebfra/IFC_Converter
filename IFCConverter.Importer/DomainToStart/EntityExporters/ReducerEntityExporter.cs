@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
     internal sealed class ReducerEntityExporter : IEntityExporter
     {
         private Reducer _reducer;
-        
+
         public bool CanExport(Entity entity)
         {
             if (!(entity is Reducer reducer))
@@ -26,7 +26,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             startReducer.LengthOfConicalPart.CreateFromSI(_reducer.Length);
             startReducer.Position = _reducer.Position;
             startReducer.Name = _reducer.Metadata.Name;
-            
+
             context.Register(_reducer, startReducer);
         }
     }

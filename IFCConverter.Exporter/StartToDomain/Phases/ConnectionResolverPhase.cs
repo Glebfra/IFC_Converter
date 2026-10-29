@@ -2,7 +2,6 @@
 using IFCConverter.Domain;
 using IFCConverter.Exporter.StartToDomain.ConnectionResolvers;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.StartToDomain.Phases
@@ -15,7 +14,7 @@ namespace IFCConverter.Exporter.StartToDomain.Phases
         public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<ConnectionResolverPhase>();
-            
+
             foreach (IStartEntity startEntity in source)
             {
                 if (_connectionResolverRegistry.TryResolve(startEntity, out IConnectionResolver connectionResolver))

@@ -43,28 +43,28 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Geometry\ClosedMeshTopologyTests.cs" />
-        <Compile Include="Geometry\EdgeTests.cs" />
-        <Compile Include="Geometry\MeshGeometryTests.cs" />
-        <Compile Include="Geometry\MeshTests.cs" />
-        <Compile Include="Geometry\MeshTopologyTests.cs" />
-        <Compile Include="Geometry\TriangleTests.cs" />
-        <Compile Include="Mathematics\FixedMatrixExtensionsTests.cs" />
-        <Compile Include="Mathematics\FixedMatrixTests.cs" />
-        <Compile Include="Mathematics\FixedMatrixVectorTests.cs" />
-        <Compile Include="Mathematics\FixedVectorExtensionsTests.cs" />
-        <Compile Include="Mathematics\FixedVectorTests.cs" />
+        <Compile Include="Geometry\ClosedMeshTopologyTests.cs"/>
+        <Compile Include="Geometry\EdgeTests.cs"/>
+        <Compile Include="Geometry\MeshGeometryTests.cs"/>
+        <Compile Include="Geometry\MeshTests.cs"/>
+        <Compile Include="Geometry\MeshTopologyTests.cs"/>
+        <Compile Include="Geometry\TriangleTests.cs"/>
+        <Compile Include="Mathematics\FixedMatrixExtensionsTests.cs"/>
+        <Compile Include="Mathematics\FixedMatrixTests.cs"/>
+        <Compile Include="Mathematics\FixedMatrixVectorTests.cs"/>
+        <Compile Include="Mathematics\FixedVectorExtensionsTests.cs"/>
+        <Compile Include="Mathematics\FixedVectorTests.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\IFCConverter.Geometry\IFCConverter.Geometry.csproj">
-        <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
-        <Name>IFCConverter.Geometry</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
-        <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
-        <Name>IFCConverter.Utils</Name>
-      </ProjectReference>
+        <ProjectReference Include="..\IFCConverter.Geometry\IFCConverter.Geometry.csproj">
+            <Project>{3d0baee1-928d-4cd0-bd14-d17d5b2bc54d}</Project>
+            <Name>IFCConverter.Geometry</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\IFCConverter.Utils\IFCConverter.Utils.csproj">
+            <Project>{d42bca7c-f354-4a86-8d87-aaa142de9bec}</Project>
+            <Name>IFCConverter.Utils</Name>
+        </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

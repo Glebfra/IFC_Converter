@@ -8,7 +8,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
     internal sealed class SegmentEntityExporter : IEntityExporter
     {
         private Segment _segment;
-        
+
         public bool CanExport(Entity entity)
         {
             if (!(entity is Segment segment))
@@ -23,7 +23,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
             StartPipeEntity pipe = new StartPipeEntity();
             pipe.Diameter.CreateFromSI(_segment.Diameter);
 
-            FixedVector<Dim3> projection = _segment.TypedMetadata.Projection ?? 
+            FixedVector<Dim3> projection = _segment.TypedMetadata.Projection ??
                                            _segment.EndPort.Position - _segment.StartPort.Position;
             pipe.ProjectionAlongOXAxis.CreateFromSI(projection[0]);
             pipe.ProjectionAlongOYAxis.CreateFromSI(projection[1]);

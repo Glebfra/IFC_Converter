@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class TeeEntityImporter : IIfcEntityImporter
     {
         private readonly ITeeEntityImportersRegistry _registry = new TeeEntityImportersRegistry();
-        
+
         public bool CanImport(EntityType type)
         {
             return type == EntityType.TEE;

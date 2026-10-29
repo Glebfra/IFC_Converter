@@ -15,7 +15,7 @@ namespace IFCConverter.Exporter.DomainToIfc.Phases
         public void Execute(EngineeringModel domain, IModel model, ExportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<PropertySetAugmentPhase>();
-            
+
             foreach (Entity domainEntity in domain.Entities)
             {
                 foreach (IPropertySetAugmenter propertySetAugmenter in _propertySetAugmentersRegistry.ResolveAll(domainEntity, context))

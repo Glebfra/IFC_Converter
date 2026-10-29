@@ -21,7 +21,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
             {
                 vertexIndices[i] = AddVertex(vertices[i]);
             }
-            
+
             foreach (Triangle triangle in triangles)
             {
                 AddTriangle(new Triangle(

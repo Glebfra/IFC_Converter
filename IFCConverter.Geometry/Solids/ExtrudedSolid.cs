@@ -8,7 +8,7 @@ namespace IFCConverter.Geometry.Solids
         public Profile2D Profile { get; }
         public FixedVector<Dim3> Direction { get; }
         public double Depth { get; }
-        
+
         public ExtrudedSolid(Profile2D profile, FixedVector<Dim3> direction, double depth)
         {
             Profile = profile;

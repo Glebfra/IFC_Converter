@@ -18,7 +18,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
                 throw new ArgumentOutOfRangeException(nameof(minorSegments), "At least 3 minor segments are required.");
 
             int[,] vertices = new int[majorSegments, minorSegments];
-            
+
             for (int i = 0; i < majorSegments; i++)
             {
                 double u = 2.0 * Math.PI * i / majorSegments;
@@ -43,7 +43,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
                     vertices[i, j] = AddVertex(FixedVector<Dim3>.Builder.Dense(x, y, z));
                 }
             }
-            
+
             for (int i = 0; i < majorSegments; i++)
             {
                 int nextI = (i + 1) % majorSegments;

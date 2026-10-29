@@ -115,7 +115,10 @@ namespace IFCConverter.Tests.Geometry
 
             IEnumerable<int> result = MeshTopology.GetBoundaryVertices(mesh);
 
-            CollectionAssert.AreEquivalent(new[] { 0, 1, 2 }, result);
+            CollectionAssert.AreEquivalent(new[]
+            {
+                0, 1, 2
+            }, result);
         }
 
         [Test]
@@ -125,7 +128,10 @@ namespace IFCConverter.Tests.Geometry
 
             IEnumerable<int> result = MeshTopology.GetBoundaryVertices(mesh);
 
-            CollectionAssert.AreEquivalent(new[] { 0, 1, 2, 3 }, result);
+            CollectionAssert.AreEquivalent(new[]
+            {
+                0, 1, 2, 3
+            }, result);
         }
 
         private static Mesh CreateMesh(params Triangle[] triangles)

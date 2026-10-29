@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.API;
@@ -16,11 +15,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 {
     internal sealed class NonstandardAnchorDomainEntityExporter : IAnchorDomainEntityExporter
     {
-        public bool CanExport(Anchor anchor)
+        public bool CanExport(StartElementTypeEnum type)
         {
-            if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
-                return false;
-
             return type == StartElementTypeEnum.NONSTANDARD_RESTRAINT;
         }
 
@@ -58,6 +54,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
                 new IfcDiscreteAccessoryBuilder<IfcDiscreteAccessory>(anchor.Metadata.Name, anchor.Metadata.Type, IfcDiscreteAccessoryTypeEnum.NOTDEFINED);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(anchor.Metadata.Type);
 
             IIfcProduct instance = builder.CreateInstance(model);
             context.Register(anchor, instance);

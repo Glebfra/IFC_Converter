@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using IFCConverter.IFC.Interfaces;
-using IFCConverter.Utils.Diagnostics;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MaterialResource;

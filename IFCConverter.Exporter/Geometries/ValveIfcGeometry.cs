@@ -24,12 +24,12 @@ namespace IFCConverter.Exporter.Geometries
     {
         private const double RadiusFactor = 1.5 * 0.5;
 
-        public ValveIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null) 
+        public ValveIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilder, representationContext)
         {
         }
 
-        public ValveIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null) 
+        public ValveIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilders, representationContext)
         {
         }
@@ -37,9 +37,9 @@ namespace IFCConverter.Exporter.Geometries
         public static ValveIfcGeometry Create(IModel model, Valve valve)
         {
             List<IIfcBuilder> builders = new List<IIfcBuilder>();
-            
+
             double radius = valve.Ports.Max(port => port.Metadata.Diameter * RadiusFactor);
-            
+
             foreach (Port port in valve.Ports)
             {
                 FixedVector<Dim3> projection = valve.Position - port.Position;
@@ -52,12 +52,12 @@ namespace IFCConverter.Exporter.Geometries
                 ConeMeshBuilder meshBuilder = new ConeMeshBuilder(radius, height);
                 meshBuilder
                     .Transform(FixedMatrix<Dim4>.Builder.CreateTransition(
-                        projection.Negate(), 
+                        projection.Negate(),
                         rightDirection,
                         upDirection,
                         direction))
                     .AddPolygon(meshBuilder.RingIndices);
-                
+
                 IMesh mesh = meshBuilder.Build();
                 Triangle[] changedTriangles = ChangeTriangleIndexation(mesh.Triangles).ToArray();
 
@@ -65,10 +65,10 @@ namespace IFCConverter.Exporter.Geometries
                 builder.CreateCoordinates(model, mesh.Vertices);
                 builder.AssignTriangleIndices(changedTriangles.Cast<IEnumerable<int>>());
                 builder.AssignNormals(mesh.FaceNormals);
-                
+
                 builders.Add(builder);
             }
-            
+
             return new ValveIfcGeometry(builders);
         }
     }

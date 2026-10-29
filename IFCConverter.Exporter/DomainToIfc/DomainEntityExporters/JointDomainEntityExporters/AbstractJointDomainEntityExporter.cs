@@ -2,6 +2,7 @@
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Interfaces;
+using IFCConverter.Start.API;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.HvacDomain;
@@ -11,7 +12,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
 {
     internal abstract class AbstractJointDomainEntityExporter : IJointDomainEntityExporter
     {
-        public abstract bool CanExport(Joint joint);
+        public abstract bool CanExport(StartElementTypeEnum type);
 
         public void Export(Joint joint, IModel model, ExportContext context)
         {
@@ -23,7 +24,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
                 new IfcPipeFittingBuilder<IfcPipeFitting>(joint.Metadata.Name, joint.Metadata.Type, IfcPipeFittingTypeEnum.USERDEFINED);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
-            builder.AssignObjectType("ExpansionJoint");
+            builder.AssignObjectType(joint.Metadata.Type);
 
             IIfcProduct instance = builder.CreateInstance(model);
             context.Register(joint, instance);
