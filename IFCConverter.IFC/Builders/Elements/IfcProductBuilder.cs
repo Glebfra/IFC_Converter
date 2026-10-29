@@ -8,6 +8,7 @@ using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.RepresentationResource;
 
@@ -16,24 +17,19 @@ namespace IFCConverter.IFC.Builders.Elements
     public class IfcProductBuilder<T> : IIfcProductBuilder<T>
         where T : IfcProduct, IInstantiableEntity
     {
-        private readonly Logger _logger = Logger.GetInstance();
         public bool IsCreated { get; private set; }
         public T Instance { get; private set; }
         public IIfcObjectPlacement ObjectPlacement { get; private set; }
         public IIfcGeometry Geometry { get; private set; }
         public IIfcProductRepresentation Representation { get; private set; }
         public IIfcMaterial Material { get; private set; }
+        public IfcLabel? ObjectType { get; private set; }
 
         public List<IIfcPropertySet> PropertySets { get; } = new List<IIfcPropertySet>();
 
         public IIfcObjectPlacement CreateObjectPlacement(IModel model, FixedMatrix<Dim4> matrix)
         {
-            string transactionName = $"{nameof(IfcProductBuilder<T>)}: {nameof(CreateObjectPlacement)}";
-            _logger.Info($"Begin transaction: {transactionName}");
-
             ObjectPlacement = matrix.ToIfcObjectPlacement(model);
-            _logger.Info($"Created object placement with matrix: {matrix}");
-
             return ObjectPlacement;
         }
 
@@ -46,7 +42,6 @@ namespace IFCConverter.IFC.Builders.Elements
             }
 
             string transactionName = $"{nameof(IfcProductBuilder<T>)}: {nameof(CreateInstance)}";
-            _logger.Info($"Begin transaction: {transactionName}");
 
             Instance = model.Instances.New<T>(product =>
             {
@@ -54,14 +49,12 @@ namespace IFCConverter.IFC.Builders.Elements
                     product.ObjectPlacement = (IfcObjectPlacement)ObjectPlacement;
                 if (Representation != null)
                     product.Representation = (IfcProductRepresentation)Representation;
+                product.ObjectType = ObjectType;
             });
-            _logger.Info($"Created instance with type: {typeof(T).Name}");
 
             if (Material != null)
             {
                 RelateMaterial(model);
-                _logger.Info(
-                    $"Added relation between material with id: {Material.EntityLabel} and product instance with id: {Instance.EntityLabel}");
             }
 
             foreach (IIfcPropertySet ifcPropertySet in PropertySets)
@@ -72,8 +65,6 @@ namespace IFCConverter.IFC.Builders.Elements
                     properties.RelatedObjects.Add(Instance);
                     properties.RelatingPropertyDefinition = ifcPropertySet;
                 });
-                _logger.Info(
-                    $"Added property set with name: {ifcPropertySet.Name} to product instance with id: {Instance.EntityLabel}");
             }
 
             IsCreated = true;
@@ -87,7 +78,6 @@ namespace IFCConverter.IFC.Builders.Elements
                 throw new IfcEntityCreatedException(
                     $"{GetType().Name} entity already created. Cannot call {nameof(AssignPlacement)} method!");
             ObjectPlacement = ifcObjectPlacement;
-            _logger.Info($"Assigned object placement with id: {ifcObjectPlacement.EntityLabel}");
         }
 
         public void AssignGeometry(IIfcGeometry geometry)
@@ -96,7 +86,6 @@ namespace IFCConverter.IFC.Builders.Elements
                 throw new IfcEntityCreatedException(
                     $"{GetType().Name} entity already created. Cannot call {nameof(AssignGeometry)} method!");
             Geometry = geometry;
-            _logger.Info($"Assigned geometry with type: {geometry.GetType().Name}");
         }
 
         public void AssignMaterial(IIfcMaterial material)
@@ -105,7 +94,11 @@ namespace IFCConverter.IFC.Builders.Elements
                 throw new IfcEntityCreatedException(
                     $"{GetType().Name} entity already create. Cannot call {nameof(AssignMaterial)} method!");
             Material = material;
-            _logger.Info($"Assigned material with id: {material.EntityLabel}, name: {material.Name}");
+        }
+
+        public void AssignObjectType(string type)
+        {
+            ObjectType = type;
         }
 
         private void RelateMaterial(IModel model)

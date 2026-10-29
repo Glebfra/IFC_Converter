@@ -3,27 +3,31 @@ using IFCConverter.Domain;
 using IFCConverter.Exporter.Attributes;
 using IFCConverter.Exporter.StartToDomain.StartEntityImporters;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.StartToDomain.Phases
 {
     [StartToDomainPhase(1)]
     public sealed class EntityImportPhase : IStartToDomainPhase
     {
-        private readonly Logger _logger = Logger.GetInstance();
         private readonly IStartEntityImporterRegistry _startEntityImporterRegistry = new StartEntityImporterRegistry();
 
-        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context)
+        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context, ILoggerFactory factory)
         {
-            _logger.Info($"Starting '{nameof(EntityImportPhase)}'.");
-
+            ILogger logger = factory.CreateLogger<EntityImportPhase>();
+            
             foreach (IStartEntity startEntity in source)
             {
                 if (_startEntityImporterRegistry.TryResolve(startEntity, out IStartEntityImporter importer))
+                {
+                    logger.LogInformation(
+                        "Found importer {importer} for start entity {entity} with name {name}",
+                        importer.GetType().Name,
+                        startEntity.GetType().Name, startEntity.Name
+                    );
                     importer.Import(startEntity, model, context);
+                }
             }
-
-            _logger.Info($"Finished '{nameof(EntityImportPhase)}'.");
         }
     }
 }

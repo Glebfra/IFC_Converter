@@ -32,14 +32,14 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 
             double diameter = anchor.Port.Metadata.Diameter;
 
-            bool isDoubleSided = segmentMatrix.GetZ().ToCartesian().IsParallel(FixedVector<Dim3>.Builder.Z());
+            bool isDoubleSided = segmentMatrix.GetZ().ToFixedVectorDim3().IsParallel(FixedVector<Dim3>.Builder.Z());
             FixedVector<Dim3> direction = GetDirection(type);
 
             FixedVector<Dim3> position, doubleSidedDisplacement;
             if (isDoubleSided)
             {
                 position = FixedVector<Dim3>.Zeros();
-                doubleSidedDisplacement = segmentMatrix.GetX().ToCartesian() * diameter;
+                doubleSidedDisplacement = segmentMatrix.GetX().ToFixedVectorDim3() * diameter;
             }
             else
             {

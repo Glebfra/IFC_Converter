@@ -23,5 +23,6 @@ namespace IFCConverter.IFC.Interfaces
         void AssignPlacement(IIfcObjectPlacement ifcObjectPlacement);
         void AssignGeometry(IIfcGeometry geometry);
         void AssignMaterial(IIfcMaterial material);
+        void AssignObjectType(string type);
     }
 }

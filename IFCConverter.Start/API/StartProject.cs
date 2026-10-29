@@ -42,8 +42,6 @@ namespace IFCConverter.Start.API
     /// </remarks>
     public class StartProject : IStartProject
     {
-        private static readonly Logger _logger = Logger.GetInstance();
-
         private static readonly Dictionary<StartElementTypeEnum, Type> _startEntityTypesByElementType =
             AttributeFinder.GetClassesWithAttribute<StartElementAttribute>().SelectMany(type =>
                 type.GetCustomAttributes<StartElementAttribute>()
@@ -337,7 +335,6 @@ namespace IFCConverter.Start.API
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e.ToString());
                 }
             }
         }
@@ -352,9 +349,6 @@ namespace IFCConverter.Start.API
                 return;
             if (!(JsonConvert.DeserializeObject(dataArrayItem.Data.ToString(), startEntityType) is IStartEntity entity))
                 return;
-
-            _logger.Info($"Found object with type: {dataArrayItem.Type}, id: {dataArrayItem.DataArrayIndex}. " +
-                         $"Added entity of type {startEntityType.Name} to data array item.");
 
             dataArrayItem.Entity = entity;
             dataArrayItem.Entity.ID = dataArrayItem.Type == StartElementTypeEnum.NODE

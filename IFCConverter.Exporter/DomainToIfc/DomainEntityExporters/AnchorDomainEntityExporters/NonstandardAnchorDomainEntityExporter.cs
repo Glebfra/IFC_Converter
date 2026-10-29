@@ -67,8 +67,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
         private static FixedVector<Dim3> CalculatePosition(FixedMatrix<Dim4> segmentMatrix, FixedVector<Dim3> direction,
             double diameter)
         {
-            if (direction.IsParallel(segmentMatrix.GetZ().ToCartesian(), 1e-3))
-                return segmentMatrix.GetY().ToCartesian() * (diameter / 2);
+            if (direction.IsParallel(segmentMatrix.GetZ().ToFixedVectorDim3(), 1e-3))
+                return segmentMatrix.GetY().ToFixedVectorDim3() * (diameter / 2);
 
             return direction.Negate() * MathExtensions.CalculateAnchorDisplacement(segmentMatrix, diameter);
         }
