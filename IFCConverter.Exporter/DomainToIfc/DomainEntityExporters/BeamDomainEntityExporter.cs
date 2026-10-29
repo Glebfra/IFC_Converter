@@ -54,6 +54,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
             IIfcBeamBuilder<IIfcBeam> builder = new IfcBeamBuilder<IfcBeam>(entity.Metadata.Name, entity.Metadata.Type, IfcBeamTypeEnum.BEAM);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(beam.Metadata.Type);
 
             IIfcProduct instance = builder.CreateInstance(model);
             context.Register(entity, instance);

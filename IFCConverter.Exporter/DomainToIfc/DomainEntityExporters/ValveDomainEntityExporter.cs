@@ -29,6 +29,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
                 new IfcPipeFittingBuilder<IfcPipeFitting>(valve.Metadata.Name, valve.Metadata.Type, IfcPipeFittingTypeEnum.CONNECTOR);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(entity.Metadata.Type);
 
             IIfcPipeFitting instance = builder.CreateInstance(model);
             context.Register(entity, instance);

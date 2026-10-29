@@ -15,11 +15,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
 {
     internal sealed class DirectionalAnchorDomainEntityExporter : IAnchorDomainEntityExporter
     {
-        public bool CanExport(Anchor anchor)
+        public bool CanExport(StartElementTypeEnum type)
         {
-            if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
-                return false;
-
             return type == StartElementTypeEnum.GUIDE_SINGLE_DIRECTION_SUPPORT ||
                    type == StartElementTypeEnum.GUIDE_DOUBLE_DIRECTION_SUPPORT;
         }
@@ -50,6 +47,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
                 new IfcDiscreteAccessoryBuilder<IfcDiscreteAccessory>(anchor.Metadata.Name, anchor.Metadata.Type, IfcDiscreteAccessoryTypeEnum.USERDEFINED);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType(anchor.Metadata.Type);
 
             IIfcDiscreteAccessory instance = builder.CreateInstance(model);
             context.Register(anchor, instance);

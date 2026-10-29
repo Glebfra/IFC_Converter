@@ -11,11 +11,8 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
 {
     internal sealed class TorsionExpansionJointDomainEntityExporter : AbstractJointDomainEntityExporter
     {
-        public override bool CanExport(Joint joint)
+        public override bool CanExport(StartElementTypeEnum type)
         {
-            if (!Enum.TryParse(joint.Metadata.Type, out StartElementTypeEnum type))
-                return false;
-
             return type == StartElementTypeEnum.TORSION_EXPANSION_JOINT;
         }
 

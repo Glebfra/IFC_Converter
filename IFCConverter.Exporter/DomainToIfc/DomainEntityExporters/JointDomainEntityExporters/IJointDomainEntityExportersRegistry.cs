@@ -4,7 +4,6 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
 {
     internal interface IJointDomainEntityExportersRegistry
     {
-        IJointDomainEntityExporter Resolve(Joint joint);
         bool TryResolve(Joint joint, out IJointDomainEntityExporter exporter);
     }
 }

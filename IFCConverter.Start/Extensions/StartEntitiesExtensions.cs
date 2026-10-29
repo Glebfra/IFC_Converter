@@ -13,64 +13,18 @@ namespace IFCConverter.Start.Extensions
 {
     public static class StartEntitiesExtensions
     {
-        private const double EQUALS_TOLERANCE = 1e-6;
-
-        private static readonly Dictionary<Type, StartElementTypeEnum> _elementTypesCache = new Dictionary<Type, StartElementTypeEnum>();
-        private static readonly Dictionary<Type, StartElementAttribute> StartElementCache = new Dictionary<Type, StartElementAttribute>();
+        private static readonly StartElementsRegistry ElementsRegistry = new StartElementsRegistry();
 
         [Pure]
         public static StartElementAttribute GetStartElementAttribute(this IStartEntity entity)
         {
-            Type type = entity.GetType();
-            return StartElementCache.GetOrAdd(type, t => t.GetCustomAttribute<StartElementAttribute>());
+            return ElementsRegistry.GetStartElementAttribute(entity);
         }
-
+        
         [Pure]
-        public static bool IsConnectedTo(this IStartEntity startEntity, IStartEntity otherEntity)
+        public static StartElementTypeEnum GetElementType(this IStartEntity entity)
         {
-            IEnumerable<FixedVector<Dim3>> startEntityPositions = startEntity.GetPositions();
-            IEnumerable<FixedVector<Dim3>> otherEntityPositions = otherEntity.GetPositions();
-
-            return (
-                from startEntityPosition in startEntityPositions
-                from otherEntityPosition in otherEntityPositions
-                where startEntityPosition.AlmostEqual(otherEntityPosition)
-                select startEntityPosition
-            ).Any();
-        }
-
-        [Pure]
-        public static IEnumerable<FixedVector<Dim3>> GetPositions(this IStartEntity startEntity)
-        {
-            switch (startEntity)
-            {
-                case IStartOneNodeEntity oneNodeEntity:
-                    return new[]
-                    {
-                        oneNodeEntity.Position
-                    };
-                case IStartTwoNodeEntity twoNodeEntity:
-                    return new[]
-                    {
-                        twoNodeEntity.StartPosition, twoNodeEntity.EndPosition
-                    };
-                default:
-                    throw new Exception("Unsupported type");
-            }
-        }
-
-        [Pure]
-        public static IEnumerable<T> GetConnectedEntities<T>(this IStartEntity startEntity,
-            IEnumerable<T> otherEntities)
-            where T : IStartEntity
-        {
-            return otherEntities.Where(entity => startEntity.IsConnectedTo(entity));
-        }
-
-        [Pure]
-        public static FixedVector<Dim3> GetDirectionToEntity(this IStartEntity startEntity, FixedVector<Dim3> position)
-        {
-            return startEntity.GetNearestPosition(position) - position;
+            return ElementsRegistry.GetElementType(entity);
         }
 
         [Pure]
@@ -94,15 +48,6 @@ namespace IFCConverter.Start.Extensions
                 default:
                     throw new ArgumentException($"Unsupported entity type {startEntity.GetType().Name}");
             }
-        }
-
-        [Pure]
-        public static StartElementTypeEnum GetElementType(this IStartEntity entity)
-        {
-            return _elementTypesCache.GetOrAdd(
-                entity.GetType(),
-                type => type.GetCustomAttribute<StartElementAttribute>().Type
-            );
         }
     }
 }
