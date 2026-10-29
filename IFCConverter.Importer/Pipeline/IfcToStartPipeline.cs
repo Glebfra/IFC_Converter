@@ -14,7 +14,7 @@ namespace IFCConverter.Importer.Pipeline
         {
             ILogger logger = factory.CreateLogger<IfcToStartPipeline>();
             logger.LogInformation("Starting {pipeline}", nameof(IfcToStartPipeline));
-            
+
             logger.LogInformation("Starting {pipeline}", nameof(IfcToDomainPipeline));
             EngineeringModel domain = _ifcToDomainPipeline.Execute(model, factory);
             logger.LogInformation("Finished {pipeline}", nameof(IfcToDomainPipeline));
@@ -24,7 +24,7 @@ namespace IFCConverter.Importer.Pipeline
                 domain.Ports.Count,
                 domain.Connections.Count
             );
-            
+
             logger.LogInformation("Starting {pipeline}", nameof(DomainToStartPipeline));
             _domainToStartPipeline.Execute(domain, startProject, factory);
             logger.LogInformation("Finished {pipeline}", nameof(DomainToStartPipeline));

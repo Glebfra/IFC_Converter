@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
 using IFCConverter.Geometry.Mesh;
 using IFCConverter.Utils.Mathematics;
 

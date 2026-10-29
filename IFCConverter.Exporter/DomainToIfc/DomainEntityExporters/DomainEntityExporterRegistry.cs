@@ -8,11 +8,11 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
     internal sealed class DomainEntityExporterRegistry : ReflectionRegistry<IDomainEntityExporter>, IDomainEntityExporterRegistry
     {
         private readonly IDictionary<Type, IDomainEntityExporter> _exportersMapCache = new Dictionary<Type, IDomainEntityExporter>();
-        
+
         public DomainEntityExporterRegistry() : base(typeof(DomainEntityExporterRegistry).Assembly)
         {
         }
-        
+
         public bool TryResolve(Entity entity, out IDomainEntityExporter exporter)
         {
             Type type = entity.GetType();

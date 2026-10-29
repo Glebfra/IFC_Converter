@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
     {
         private readonly IDictionary<StartElementTypeEnum, IAnchorDomainEntityExporter> _exportersMapCache =
             new Dictionary<StartElementTypeEnum, IAnchorDomainEntityExporter>();
-        
+
         public AnchorDomainEntityExportersRegistry() : base(typeof(AnchorDomainEntityExportersRegistry).Assembly)
         {
         }
@@ -18,7 +18,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
         public bool TryResolve(Anchor anchor, out IAnchorDomainEntityExporter exporter)
         {
             exporter = null;
-            
+
             if (!Enum.TryParse(anchor.Metadata.Type, out StartElementTypeEnum type))
                 return false;
             if (_exportersMapCache.TryGetValue(type, out exporter))

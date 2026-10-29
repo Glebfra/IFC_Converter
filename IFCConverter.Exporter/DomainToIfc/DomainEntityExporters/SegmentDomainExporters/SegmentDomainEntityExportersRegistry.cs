@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.SegmentDomainE
     {
         private readonly IDictionary<StartElementTypeEnum, ISegmentDomainEntityExporter> _exportersMapCache =
             new Dictionary<StartElementTypeEnum, ISegmentDomainEntityExporter>();
-        
+
         public SegmentDomainEntityExportersRegistry() : base(typeof(SegmentDomainEntityExportersRegistry).Assembly)
         {
         }
@@ -18,7 +18,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.SegmentDomainE
         public bool TryResolve(Entity entity, out ISegmentDomainEntityExporter exporter)
         {
             exporter = null;
-            
+
             if (!Enum.TryParse(entity.Metadata.Type, out StartElementTypeEnum type))
                 return false;
             if (_exportersMapCache.TryGetValue(type, out exporter))

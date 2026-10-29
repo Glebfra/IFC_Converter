@@ -24,7 +24,11 @@ namespace IFCConverter.Importer.PropertySets
         {
             return GetType()
                 .GetFields()
-                .Select(info => new { Info = info, Value = info.GetValue(this) })
+                .Select(info => new
+                {
+                    Info = info,
+                    Value = info.GetValue(this)
+                })
                 .Where(obj => obj.Value != null)
                 .ToDictionary(obj => GetFieldName(obj.Info), obj => obj.Value);
         }

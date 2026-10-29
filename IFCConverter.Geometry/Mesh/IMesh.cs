@@ -8,7 +8,7 @@ namespace IFCConverter.Geometry.Mesh
         IReadOnlyList<FixedVector<Dim3>> Vertices { get; }
         IReadOnlyList<Triangle> Triangles { get; }
         IReadOnlyList<FixedVector<Dim3>> FaceNormals { get; }
-        
+
         int VertexCount { get; }
         int TriangleCount { get; }
         int FaceNormalCount { get; }

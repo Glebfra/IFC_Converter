@@ -5,7 +5,7 @@ namespace IFCConverter.Domain.Identity
     public interface IId
     {
     }
-    
+
     public readonly struct PortId : IId
     {
     }
@@ -17,7 +17,7 @@ namespace IFCConverter.Domain.Identity
     public readonly struct ConnectionId : IId
     {
     }
-    
+
     public readonly struct Id<TId> : IEquatable<Id<TId>>
         where TId : IId
     {

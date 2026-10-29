@@ -13,7 +13,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
     public class EntityMetadataColorAugmenter : IEntityMetadataAugmenter
     {
         private Id<EntityId> _id;
-        
+
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             if (!context.TryGetEntityId(source, out _id))

@@ -17,7 +17,7 @@ namespace IFCConverter.Domain.Entities
 
         public Id<EntityId> Id { get; }
         public abstract EntityMetadata Metadata { get; }
-        
+
         public IReadOnlyCollection<Port> Ports => _ports;
         public abstract IReadOnlyCollection<FixedVector<Dim3>> Positions { get; }
 

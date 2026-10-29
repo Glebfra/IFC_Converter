@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters
     internal sealed class ReducerEntityImporter : IIfcEntityImporter
     {
         private readonly IReducerEntityImportersRegistry _registry = new ReducerEntityImportersRegistry();
-        
+
         public bool CanImport(EntityType type)
         {
             return type == EntityType.REDUCER;

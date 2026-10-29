@@ -32,7 +32,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
             }
 
             int northPole = AddVertex(FixedVector<Dim3>.Builder.Dense(0, 0, radius));
-            
+
             // Южная шапка.
             for (int longitude = 0; longitude < longitudeSegments; longitude++)
             {
@@ -65,7 +65,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
                 AddTriangle(new Triangle(northPole, rings[lastRing, longitude], rings[lastRing, next]));
             }
         }
-        
+
         private static void ValidateRadius(double radius)
         {
             if (double.IsNaN(radius) || double.IsInfinity(radius) || radius <= 0)

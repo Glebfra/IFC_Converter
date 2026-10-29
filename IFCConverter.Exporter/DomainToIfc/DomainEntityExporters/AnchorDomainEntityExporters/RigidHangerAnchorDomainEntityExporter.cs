@@ -1,5 +1,4 @@
-﻿using System;
-using IFCConverter.Domain.Entities;
+﻿using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.API;
 using IFCConverter.IFC.Builders.Elements;
 using IFCConverter.IFC.Geometries;

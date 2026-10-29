@@ -6,10 +6,10 @@ namespace IFCConverter.Geometry.Curves
     public readonly struct Arc3D : ICurve3D
     {
         public Circle3D Circle { get; }
-        
+
         public double StartAngle { get; }
         public double EndAngle { get; }
-        
+
         public Arc3D(Circle3D circle, double startAngle, double endAngle)
         {
             Circle = circle;
@@ -22,7 +22,7 @@ namespace IFCConverter.Geometry.Curves
         {
             return StartAngle + (EndAngle - StartAngle) * parameter;
         }
-        
+
         [Pure]
         public FixedVector<Dim3> GetPoint(double parameter)
         {

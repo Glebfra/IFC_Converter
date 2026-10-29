@@ -24,8 +24,8 @@ namespace IFCConverter.Importer.DomainToStart.MissingConnectionsAugmenters
                     continue;
 
                 Segment segment = SegmentCreator.CreateSegment(
-                    tee.Position, 
-                    port.Position, 
+                    tee.Position,
+                    port.Position,
                     port.Metadata.Diameter,
                     $"{tee.Metadata.Name}_connection");
                 model.Add(segment);

@@ -10,13 +10,13 @@ namespace IFCConverter.Geometry.Algorithms
     {
         public FixedVector<Dim3>[] PolygonPoints;
     }
-    
+
     public sealed class TriangulatedMeshBuilder : MeshBuilder
     {
         private const int NumSegments = 16;
+        private readonly List<Triangle> _triangles = new List<Triangle>();
 
         private readonly List<FixedVector<Dim3>> _vertices = new List<FixedVector<Dim3>>();
-        private readonly List<Triangle> _triangles = new List<Triangle>();
 
         public int AddVertex(FixedVector<Dim3> vertex)
         {
@@ -39,7 +39,7 @@ namespace IFCConverter.Geometry.Algorithms
             AddTriangle(a, b, c);
             AddTriangle(b, d, c);
         }
-        
+
         [Pure]
         public override IMesh Build()
         {
@@ -58,7 +58,7 @@ namespace IFCConverter.Geometry.Algorithms
 
             ITriangulator triangulator = new EarClippingTriangulator();
             Triangle[] triangles = triangulator.Triangulate(properties.PolygonPoints);
-            
+
             foreach (Triangle triangle in triangles)
                 builder.AddTriangle(triangle);
 

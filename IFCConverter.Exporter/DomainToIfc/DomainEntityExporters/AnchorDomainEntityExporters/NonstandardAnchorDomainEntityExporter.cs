@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.API;

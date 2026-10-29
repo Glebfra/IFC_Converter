@@ -7,18 +7,22 @@ namespace IFCConverter.Utils.Diagnostics
 {
     public sealed class FileLoggerProvider : ILoggerProvider
     {
+        private readonly string _filePath;
         private readonly object _lock = new object();
         private readonly List<string> _messages = new List<string>();
-        private readonly string _filePath;
 
         public FileLoggerProvider(string filePath)
         {
             _filePath = filePath;
         }
-        
+
         public ILogger CreateLogger(string categoryName)
         {
             return new FileLogger(this, categoryName);
+        }
+
+        public void Dispose()
+        {
         }
 
         internal void Write(LogLevel level, string category, string message, Exception exception)
@@ -40,15 +44,11 @@ namespace IFCConverter.Utils.Diagnostics
                 File.WriteAllLines(_filePath, _messages);
             }
         }
-        
-        public void Dispose()
-        {
-        }
-        
+
         private sealed class FileLogger : ILogger
         {
-            private readonly FileLoggerProvider _provider;
             private readonly string _category;
+            private readonly FileLoggerProvider _provider;
 
             public FileLogger(FileLoggerProvider provider, string category)
             {
@@ -63,7 +63,7 @@ namespace IFCConverter.Utils.Diagnostics
 
                 if (formatter == null)
                     throw new ArgumentNullException(nameof(formatter));
-                
+
                 _provider.Write(logLevel, _category, formatter(state, exception), exception);
             }
 

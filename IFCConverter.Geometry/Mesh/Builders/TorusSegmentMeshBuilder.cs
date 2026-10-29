@@ -6,9 +6,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
 {
     public sealed class TorusSegmentMeshBuilder : MeshBuilder
     {
-        public int[] StartCapIndices { get; }
-        public int[] EndCapIndices { get; }
-        
+
         public TorusSegmentMeshBuilder(
             double majorRadius, double minorRadius,
             double startAngle, double endAngle,
@@ -31,7 +29,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
                 throw new ArgumentOutOfRangeException(nameof(minorSegments), "At least 3 minor segments are required.");
 
             int[,] vertices = new int[majorSegments + 1, minorSegments];
-            
+
             for (int i = 0; i <= majorSegments; i++)
             {
                 double u = startAngle + (endAngle - startAngle) * i / majorSegments;
@@ -55,7 +53,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
                     vertices[i, j] = AddVertex(FixedVector<Dim3>.Builder.Dense(x, y, z));
                 }
             }
-            
+
             StartCapIndices = Enumerable.Range(0, minorSegments)
                 .Select(j => vertices[0, j])
                 .ToArray();
@@ -63,7 +61,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
             EndCapIndices = Enumerable.Range(0, minorSegments)
                 .Select(j => vertices[majorSegments, j])
                 .ToArray();
-            
+
             for (int i = 0; i < majorSegments; i++)
             {
                 int nextI = i + 1;
@@ -74,5 +72,8 @@ namespace IFCConverter.Geometry.Mesh.Builders
                 }
             }
         }
+
+        public int[] StartCapIndices { get; }
+        public int[] EndCapIndices { get; }
     }
 }

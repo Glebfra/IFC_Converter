@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
     internal sealed class AnchorEntityMetadataAugmenter : IEntityMetadataAugmenter
     {
         private Anchor _anchor;
-        
+
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             if (!context.TryGetEntityId(source, out Id<EntityId> id))

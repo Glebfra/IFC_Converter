@@ -20,9 +20,9 @@ namespace IFCConverter.Exporter.DomainToIfc.MaterialAugmenters
         {
             if (!context.TryGet(entity.Id, out IIfcProduct product))
                 return;
-            
+
             string materialName = entity.Metadata.MaterialName;
-            
+
             if (!context.TryGetMaterial(materialName, out IIfcMaterial material))
             {
                 IIfcMaterialBuilder materialBuilder = new IfcMaterialBuilder(materialName, $"START material: {materialName}", "START");

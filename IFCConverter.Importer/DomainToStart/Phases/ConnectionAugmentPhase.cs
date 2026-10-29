@@ -10,11 +10,11 @@ namespace IFCConverter.Importer.DomainToStart.Phases
     public sealed class ConnectionAugmentPhase : IDomainToStartPhase
     {
         private readonly IConnectionAugmentersRegistry _registry = new ConnectionAugmentersRegistry();
-        
+
         public void Execute(EngineeringModel model, ExportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<ConnectionAugmentPhase>();
-            
+
             foreach (Connection connection in model.Connections)
             {
                 if (_registry.TryResolve(connection, out IConnectionAugmenter augmenter))

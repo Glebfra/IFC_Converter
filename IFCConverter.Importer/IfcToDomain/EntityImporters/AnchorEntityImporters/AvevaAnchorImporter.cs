@@ -14,7 +14,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AnchorEntityImporter
     internal sealed class AvevaAnchorImporter : IAnchorEntityImporter
     {
         private AvevaPset _avevaPset;
-        
+
         public bool CanImport(IIfcProduct product, EngineeringModel model, ImportContext context)
         {
             if (context.ImportType != ImportType.AVEVA)
@@ -22,12 +22,12 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AnchorEntityImporter
 
             if (!((IfcProduct)product).TryGetRepresentationItems(out _))
                 return false;
-            
+
             AvevaPset avevaPset = ((IfcProduct)product).GetPropertySets().OfType<AvevaPset>().FirstOrDefault();
             if (avevaPset == null)
                 return false;
             _avevaPset = avevaPset;
-            
+
             return true;
         }
 
@@ -35,14 +35,14 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.AnchorEntityImporter
         {
             double lengthPower = product.Model.GetLengthPower();
             FixedVector<Dim3> position = _avevaPset.Pos * lengthPower;
-            
+
             Anchor anchor = new Anchor(Id<EntityId>.New())
             {
                 Position = position
             };
-            
+
             anchor.Port.SetGeometry(position, FixedVector<Dim3>.Builder.Z());
-            
+
             model.Add(anchor);
             context.Register(anchor, product);
         }

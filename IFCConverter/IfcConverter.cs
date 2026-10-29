@@ -49,7 +49,7 @@ namespace IFCConverter
                     dialogResult = exportWindowForm.ShowDialog();
                 }
 
-                if (dialogResult == DialogResult.Cancel) 
+                if (dialogResult == DialogResult.Cancel)
                     return (int)ConversionResult.Canceled;
 
                 FileLoggerProvider provider = new FileLoggerProvider(exportDataContainer.OutputFilePath + ".log");
@@ -58,14 +58,14 @@ namespace IFCConverter
                     factory.AddProvider(provider);
 
                     ILogger logger = factory.CreateLogger<IfcConverter>();
-                    
+
                     try
                     {
                         logger.LogInformation("Converting started at {DateTime}", DateTime.Now);
                         StartToIfcConverter converter = new StartToIfcConverter(exportDataContainer, factory);
                         converter.Convert(startDocument);
                         logger.LogInformation("Converting ended at {DateTime}", DateTime.Now);
-                        
+
                         provider.Save();
                         return (int)ConversionResult.Success;
                     }
@@ -160,14 +160,14 @@ namespace IFCConverter
                 factory.AddProvider(provider);
 
                 ILogger logger = factory.CreateLogger<IfcConverter>();
-                
+
                 try
                 {
                     logger.LogInformation("Converting start at {DateTime}", DateTime.Now);
                     IfcToStartConverter startGenerator = new IfcToStartConverter(importDataContainer, factory);
                     startGenerator.Convert(startDocument);
                     logger.LogInformation("Convert is successfully ended at {DateTime}", DateTime.Now);
-                    
+
                     provider.Save();
                     return (int)ConversionResult.Success;
                 }

@@ -9,7 +9,7 @@ namespace IFCConverter.Tests.Mathematics
     public sealed class FixedVectorTests
     {
         private const double Tolerance = 1e-10;
-        
+
         private static FixedVector<Dim2> Vector2(double x, double y)
         {
             return FixedVector<Dim2>.Builder.Dense(x, y);
@@ -74,7 +74,10 @@ namespace IFCConverter.Tests.Mathematics
         [Test]
         public void Enumeration_ReturnsComponentsInOrder()
         {
-            Assert.That(Vector3(4, 5, 6).ToArray(), Is.EqualTo(new[] { 4.0, 5.0, 6.0 }));
+            Assert.That(Vector3(4, 5, 6).ToArray(), Is.EqualTo(new[]
+            {
+                4.0, 5.0, 6.0
+            }));
         }
 
         [Test]
@@ -112,7 +115,7 @@ namespace IFCConverter.Tests.Mathematics
         {
             Assert.That(Vector3(1, 2, 3).Dot(Vector3(4, 5, 6)), Is.EqualTo(32).Within(Tolerance));
         }
-        
+
         [Test]
         public void Normalize_ZeroVector_ThrowsInvalidOperationException()
         {
@@ -170,13 +173,13 @@ namespace IFCConverter.Tests.Mathematics
         [Test]
         public void AlmostEqual_ReturnsTrueWithinTolerance()
         {
-            Assert.That(Vector2(1, 2).AlmostEqual(Vector2(1 + 1e-8, 2), 1e-6), Is.True);
+            Assert.That(Vector2(1, 2).AlmostEqual(Vector2(1 + 1e-8, 2)), Is.True);
         }
 
         [Test]
         public void AlmostEqual_ReturnsFalseOutsideTolerance()
         {
-            Assert.That(Vector2(1, 2).AlmostEqual(Vector2(1.01, 2), 1e-6), Is.False);
+            Assert.That(Vector2(1, 2).AlmostEqual(Vector2(1.01, 2)), Is.False);
         }
 
         [Test]
@@ -296,7 +299,7 @@ namespace IFCConverter.Tests.Mathematics
             FixedVector<Dim3> b = FixedVector<Dim3>.Builder.Dense(0.0, 1.0, 0.0);
 
             double result = a.Dot(b);
-            
+
             Assert.That(result, Is.EqualTo(0.0).Within(Tolerance));
         }
 
@@ -306,7 +309,7 @@ namespace IFCConverter.Tests.Mathematics
             FixedVector<Dim3> vector = FixedVector<Dim3>.Builder.Dense(3.0, 4.0, 12.0);
 
             double result = vector.L2Norm();
-            
+
             Assert.That(result, Is.EqualTo(13.0).Within(Tolerance));
         }
 
@@ -315,7 +318,7 @@ namespace IFCConverter.Tests.Mathematics
         {
             FixedVector<Dim3> vector = FixedVector<Dim3>.Builder.Dense(3.0, 0.0, 4.0);
             FixedVector<Dim3> normalized = vector.SafeNormalize();
-            
+
             Assert.That(normalized.L2Norm(), Is.EqualTo(1.0).Within(Tolerance));
             AssertVector(normalized, 0.6, 0.0, 0.8);
         }
@@ -324,7 +327,7 @@ namespace IFCConverter.Tests.Mathematics
         public void Normalize_ZeroVector_FollowedDefinedContract()
         {
             FixedVector<Dim3> vector = FixedVector<Dim3>.Zeros();
-            
+
             Assert.That(() => vector.Normalize(), Throws.TypeOf<InvalidOperationException>());
         }
 
@@ -332,16 +335,22 @@ namespace IFCConverter.Tests.Mathematics
         public void Indexer_NegativeIndex_Throws()
         {
             FixedVector<Dim3> vector = FixedVector<Dim3>.Builder.Dense(1.0, 2.0, 3.0);
-            Assert.Throws<ArgumentOutOfRangeException>(() => { double unused = vector[-1]; });
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                double unused = vector[-1];
+            });
         }
 
         [Test]
         public void Indexer_IndexEqualToDimension_Throws()
         {
             FixedVector<Dim3> vector = FixedVector<Dim3>.Builder.Dense(1.0, 2.0, 3.0);
-            Assert.Throws<ArgumentOutOfRangeException>(() => { double unused = vector[3]; });
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                double unused = vector[3];
+            });
         }
-        
+
         private static void AssertVector(FixedVector<Dim3> actual, double x, double y, double z)
         {
             Assert.That(actual[0], Is.EqualTo(x).Within(Tolerance));

@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
     internal sealed class TeeEntityExporter : IEntityExporter
     {
         private Tee _tee;
-        
+
         public bool CanExport(Entity entity)
         {
             if (!(entity is Tee tee))

@@ -32,7 +32,7 @@ namespace IFCConverter.Importer.PropertySets
         {
             if (!TryRead(ifcPropertySet, out T pSet))
                 throw new Exception($"Property set with name {ifcPropertySet.Name} is not registered.");
-            
+
             return pSet;
         }
 
@@ -41,7 +41,7 @@ namespace IFCConverter.Importer.PropertySets
             where T : IPropertySet
         {
             propertySet = default;
-            
+
             string propertySetName = ifcPropertySet.Name ?? string.Empty;
             Type propertySetType = _propertySetsList
                 .FirstOrDefault(type => type.GetCustomAttribute<PropertySetAttribute>().IsMatch(propertySetName));

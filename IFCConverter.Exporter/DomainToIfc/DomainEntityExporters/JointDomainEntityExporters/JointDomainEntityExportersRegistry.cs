@@ -10,7 +10,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
     {
         private readonly IDictionary<StartElementTypeEnum, IJointDomainEntityExporter> _exportersMapCache =
             new Dictionary<StartElementTypeEnum, IJointDomainEntityExporter>();
-        
+
         public JointDomainEntityExportersRegistry() : base(typeof(JointDomainEntityExportersRegistry).Assembly)
         {
         }
@@ -18,7 +18,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
         public bool TryResolve(Joint joint, out IJointDomainEntityExporter exporter)
         {
             exporter = null;
-            
+
             if (!Enum.TryParse(joint.Metadata.Type, out StartElementTypeEnum type))
                 return false;
             if (_exportersMapCache.TryGetValue(type, out exporter))

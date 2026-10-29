@@ -1,11 +1,7 @@
-﻿using System;
-using System.Linq;
-using IFCConverter.Domain.Entities;
+﻿using IFCConverter.Domain.Entities;
 using IFCConverter.Exporter.Geometries;
-using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using IFCConverter.Start.API;
-using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 
 namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEntityExporters

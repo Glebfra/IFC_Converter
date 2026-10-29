@@ -11,9 +11,9 @@ namespace IFCConverter.Geometry.Algorithms
         {
             if (mesh == null)
                 throw new ArgumentNullException(nameof(mesh));
-            
+
             Triangle triangle = mesh.Triangles[triangleIndex];
-            
+
             FixedVector<Dim3> a = mesh.Vertices[triangle.A];
             FixedVector<Dim3> b = mesh.Vertices[triangle.B];
             FixedVector<Dim3> c = mesh.Vertices[triangle.C];

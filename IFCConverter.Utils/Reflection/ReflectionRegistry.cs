@@ -25,7 +25,11 @@ namespace IFCConverter.Utils.Reflection
             return assembly
                 .GetTypes()
                 .Where(IsValidImplementation)
-                .Select(type => new { Type = type, Instance = ParameterlessConstructorRegistry<TContract>.Create(type) })
+                .Select(type => new
+                {
+                    Type = type,
+                    Instance = ParameterlessConstructorRegistry<TContract>.Create(type)
+                })
                 .ToDictionary(x => x.Type, x => x.Instance);
         }
 

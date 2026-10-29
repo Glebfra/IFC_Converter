@@ -20,16 +20,16 @@ namespace IFCConverter.Domain.Extensions
                 throw new ArgumentNullException(nameof(segment));
             if (splitPoint == null)
                 throw new ArgumentNullException(nameof(splitPoint));
-            
+
             result = null;
-            
+
             FixedVector<Dim3> startPoint = segment.StartPort.Position;
             FixedVector<Dim3> endPoint = segment.EndPort.Position;
             if (!splitPoint.IsBetween(startPoint, endPoint))
                 return false;
-            
+
             segment.EndPort.SetGeometry(splitPoint, segment.EndPort.Direction);
-            
+
             result = SegmentCreator.CreateSegment(splitPoint, endPoint, segment.Diameter, $"Splitter part of {segment.Metadata.Name}");
             return true;
         }

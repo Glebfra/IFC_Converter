@@ -11,7 +11,7 @@ namespace IFCConverter.Geometry.Algorithms
     {
         private const double DoubleTolerance = 1e-6;
         private static readonly VectorComparer Comparer = new VectorComparer(DoubleTolerance);
-        
+
         public static void AnalyzeEdgeUsage(IMesh mesh)
         {
             Dictionary<Edge, int> usage = new Dictionary<Edge, int>();
@@ -36,7 +36,7 @@ namespace IFCConverter.Geometry.Algorithms
             Console.WriteLine($"Edges used twice: {manifold}");
             Console.WriteLine($"Non-manifold edges: {nonManifold}");
         }
-        
+
         [Pure]
         public static IEnumerable<Edge> GetBoundaryEdges(IMesh mesh)
         {
@@ -56,7 +56,7 @@ namespace IFCConverter.Geometry.Algorithms
                 {
                     if (edgeUsage.TryGetValue(edge, out int count))
                         edgeUsage[edge] = count + 1;
-                    else 
+                    else
                         edgeUsage.Add(edge, 1);
                 }
             }
@@ -78,6 +78,7 @@ namespace IFCConverter.Geometry.Algorithms
                     triangles = new List<int>();
                     result.Add(normal, triangles);
                 }
+
                 triangles.Add(index);
             }
 

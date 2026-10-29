@@ -8,31 +8,7 @@ namespace IFCConverter.Geometry.Algorithms
 {
     public static class PlanarRegionFinder
     {
-        private readonly struct TriangleData
-        {
-            public FixedVector<Dim3> A { get; }
-            public FixedVector<Dim3> B { get; }
-            public FixedVector<Dim3> C { get; }
-            
-            public FixedVector<Dim3> Normal { get; }
-            public FixedVector<Dim3> Centroid { get; }
-            public double Area { get; }
-            
-            public TriangleData(FixedVector<Dim3> a, FixedVector<Dim3> b, FixedVector<Dim3> c)
-            {
-                A = a;
-                B = b;
-                C = c;
 
-                FixedVector<Dim3> cross = (b - a).CrossProduct(c - a);
-                double doubleArea = cross.L2Norm();
-
-                Area = doubleArea * 0.5;
-                Normal = cross.SafeNormalize();
-                Centroid = (a + b + c) * (1.0 / 3.0);
-            }
-        }
-        
         public static IReadOnlyList<PlanarRegion> Find(IMesh mesh, double distanceTolerance = 1e-3, double normalAngleToleranceDegrees = 3.0)
         {
             if (mesh == null)
@@ -55,7 +31,7 @@ namespace IFCConverter.Geometry.Algorithms
                 TriangleData data = new TriangleData(mesh.Vertices[triangle.A], mesh.Vertices[triangle.B], mesh.Vertices[triangle.C]);
 
                 triangles[i] = data;
-                
+
                 foreach (Edge edge in triangle.GetEdges())
                 {
                     if (!edgeToTriangles.TryGetValue(edge, out List<int> adjacent))
@@ -71,7 +47,7 @@ namespace IFCConverter.Geometry.Algorithms
             List<int>[] adjacency = new List<int>[triangleCount];
             for (int i = 0; i < triangleCount; i++)
                 adjacency[i] = new List<int>();
-            
+
             foreach (List<int> adjacent in edgeToTriangles.Values)
             {
                 for (int i = 0; i < adjacent.Count; i++)
@@ -110,27 +86,27 @@ namespace IFCConverter.Geometry.Algorithms
                 {
                     int current = queue.Dequeue();
                     regionTriangles.Add(current);
-                    
+
                     foreach (int neighbour in adjacency[current])
                     {
                         if (visited[neighbour])
                             continue;
 
-                        if (!IsCompatible(seedData, triangles[neighbour], distanceTolerance, minNormalDot)) 
+                        if (!IsCompatible(seedData, triangles[neighbour], distanceTolerance, minNormalDot))
                             continue;
 
                         visited[neighbour] = true;
                         queue.Enqueue(neighbour);
                     }
                 }
-                
+
                 if (regionTriangles.Count == 0)
                     continue;
 
                 PlanarRegion region = BuildRegion(mesh, triangles, regionTriangles, distanceTolerance);
                 if (region.TriangleCount < 3)
                     continue;
-                
+
                 regions.Add(region);
             }
 
@@ -147,9 +123,9 @@ namespace IFCConverter.Geometry.Algorithms
             double normalDot = Math.Abs(plane.Normal.Dot(candidate.Normal));
             if (normalDot < minNormalDot)
                 return false;
-            
-            return DistanceToPlane(plane, candidate.A) <= distanceTolerance && 
-                   DistanceToPlane(plane, candidate.B) <= distanceTolerance && 
+
+            return DistanceToPlane(plane, candidate.A) <= distanceTolerance &&
+                   DistanceToPlane(plane, candidate.B) <= distanceTolerance &&
                    DistanceToPlane(plane, candidate.C) <= distanceTolerance;
         }
 
@@ -162,12 +138,12 @@ namespace IFCConverter.Geometry.Algorithms
         {
             Dictionary<Edge, int> edgeUsage = new Dictionary<Edge, int>();
             double area = 0;
-            
+
             foreach (int index in triangleIndices)
             {
                 Triangle triangle = mesh.Triangles[index];
                 area += triangles[index].Area;
-                
+
                 foreach (Edge edge in triangle.GetEdges())
                 {
                     if (edgeUsage.TryGetValue(edge, out int count))
@@ -190,12 +166,15 @@ namespace IFCConverter.Geometry.Algorithms
             double sumSquaredDeviation = 0;
             double maxDeviation = 0;
             int vertexSamples = 0;
-            
+
             foreach (int index in triangleIndices)
             {
                 TriangleData triangle = triangles[index];
-                FixedVector<Dim3>[] vertices = new FixedVector<Dim3>[]{ triangle.A, triangle.B, triangle.C };
-                
+                FixedVector<Dim3>[] vertices =
+                {
+                    triangle.A, triangle.B, triangle.C
+                };
+
                 foreach (FixedVector<Dim3> vertex in vertices)
                 {
                     double deviation = DistanceToPlane(seed, vertex);
@@ -218,7 +197,7 @@ namespace IFCConverter.Geometry.Algorithms
 
             double maxArea = regions.Max(region => region.Area);
             int maxTriangleCount = regions.Max(region => region.TriangleCount);
-            
+
             foreach (PlanarRegion region in regions)
             {
                 double areaScore = maxArea > 0 ? Math.Sqrt(region.Area / maxArea) : 0;
@@ -230,6 +209,31 @@ namespace IFCConverter.Geometry.Algorithms
                                0.25 * triangleScore +
                                0.25 * compactnessScore +
                                0.15 * planarityScore;
+            }
+        }
+
+        private readonly struct TriangleData
+        {
+            public FixedVector<Dim3> A { get; }
+            public FixedVector<Dim3> B { get; }
+            public FixedVector<Dim3> C { get; }
+
+            public FixedVector<Dim3> Normal { get; }
+            public FixedVector<Dim3> Centroid { get; }
+            public double Area { get; }
+
+            public TriangleData(FixedVector<Dim3> a, FixedVector<Dim3> b, FixedVector<Dim3> c)
+            {
+                A = a;
+                B = b;
+                C = c;
+
+                FixedVector<Dim3> cross = (b - a).CrossProduct(c - a);
+                double doubleArea = cross.L2Norm();
+
+                Area = doubleArea * 0.5;
+                Normal = cross.SafeNormalize();
+                Centroid = (a + b + c) * (1.0 / 3.0);
             }
         }
     }

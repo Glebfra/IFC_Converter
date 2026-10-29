@@ -1,17 +1,11 @@
-﻿
-using System;
+﻿using System;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Geometry.Mesh.Builders
 {
     public sealed class ClippedConeMeshBuilder : MeshBuilder
     {
-        public FixedVector<Dim3>[] BottomRing { get; }
-        public FixedVector<Dim3>[] TopRing { get; }
-        
-        public int[] BottomRingIndices { get; }
-        public int[] TopRingIndices { get; }
-        
+
         public ClippedConeMeshBuilder(double minRadius, double maxRadius, double height, int radialSegments = 16)
         {
             ValidatePositiveFinite(minRadius, nameof(minRadius));
@@ -30,7 +24,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
 
             BottomRing = new FixedVector<Dim3>[radialSegments];
             TopRing = new FixedVector<Dim3>[radialSegments];
-            
+
             BottomRingIndices = new int[radialSegments];
             TopRingIndices = new int[radialSegments];
 
@@ -43,7 +37,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
 
                 BottomRing[i] = FixedVector<Dim3>.Builder.Dense(maxRadius * cos, maxRadius * sin, 0);
                 TopRing[i] = FixedVector<Dim3>.Builder.Dense(minRadius * cos, minRadius * sin, height);
-                
+
                 BottomRingIndices[i] = AddVertex(BottomRing[i]);
                 TopRingIndices[i] = AddVertex(TopRing[i]);
             }
@@ -54,5 +48,11 @@ namespace IFCConverter.Geometry.Mesh.Builders
                 AddRectangle(BottomRingIndices[i], BottomRingIndices[next], TopRingIndices[i], TopRingIndices[next]);
             }
         }
+
+        public FixedVector<Dim3>[] BottomRing { get; }
+        public FixedVector<Dim3>[] TopRing { get; }
+
+        public int[] BottomRingIndices { get; }
+        public int[] TopRingIndices { get; }
     }
 }

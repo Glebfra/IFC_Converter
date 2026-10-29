@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Reflection;
 using IFCConverter.Start.API;
 using IFCConverter.Start.Attributes;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Collections;
 using IFCConverter.Utils.Mathematics;
 
 namespace IFCConverter.Start.Extensions
@@ -20,7 +16,7 @@ namespace IFCConverter.Start.Extensions
         {
             return ElementsRegistry.GetStartElementAttribute(entity);
         }
-        
+
         [Pure]
         public static StartElementTypeEnum GetElementType(this IStartEntity entity)
         {

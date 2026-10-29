@@ -4,7 +4,6 @@ using IFCConverter.Domain.Entities;
 using IFCConverter.Domain.Identity;
 using IFCConverter.Importer.Extensions;
 using IFCConverter.Importer.PropertySets;
-using IFCConverter.Importer.PropertySets.Aveva;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 

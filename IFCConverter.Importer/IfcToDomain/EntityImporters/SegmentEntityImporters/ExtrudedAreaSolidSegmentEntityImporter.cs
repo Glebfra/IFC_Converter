@@ -11,23 +11,23 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.SegmentEntityImporte
 {
     internal sealed class ExtrudedAreaSolidSegmentEntityImporter : ISegmentEntityImporter
     {
-        private IIfcLocalPlacement _localPlacement;
-        private IIfcExtrudedAreaSolid _extrudedAreaSolid;
         private IIfcCircleProfileDef _circleProfileDef;
-        
+        private IIfcExtrudedAreaSolid _extrudedAreaSolid;
+        private IIfcLocalPlacement _localPlacement;
+
         public bool CanImport(IIfcProduct product)
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
             _localPlacement = localPlacement;
-            
+
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 return false;
             if (!(representationItems.First() is IIfcExtrudedAreaSolid extrudedAreaSolid))
                 return false;
             _extrudedAreaSolid = extrudedAreaSolid;
-            
+
             if (!(extrudedAreaSolid.SweptArea is IIfcCircleProfileDef circleProfileDef))
                 return false;
             _circleProfileDef = circleProfileDef;
@@ -52,7 +52,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.SegmentEntityImporte
 
             FixedVector<Dim3> direction = rotation * _extrudedAreaSolid.ExtrudedDirection.ToFixedVector();
             double length = _extrudedAreaSolid.Depth;
-            
+
             FixedVector<Dim3> startPos = position * lengthPower;
             FixedVector<Dim3> endPos = startPos + direction * (lengthPower * length);
 

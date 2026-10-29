@@ -20,7 +20,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.EntityTypeResolvers
             AvevaEntityParameters parameters = propertySets.OfType<AvevaEntityParameters>().FirstOrDefault();
             if (parameters == null)
                 return EntityType.UNKNOWN;
-            
+
             switch (parameters.E3DType)
             {
                 case "TUBING":

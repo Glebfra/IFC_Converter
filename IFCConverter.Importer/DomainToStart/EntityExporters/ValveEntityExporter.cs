@@ -7,7 +7,7 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
     internal sealed class ValveEntityExporter : IEntityExporter
     {
         private Valve _valve;
-        
+
         public bool CanExport(Entity entity)
         {
             if (!(entity is Valve valve))
@@ -19,13 +19,13 @@ namespace IFCConverter.Importer.DomainToStart.EntityExporters
 
         public void Export(Entity entity, EngineeringModel model, ExportContext context)
         {
-            StartValveEntity startValveEntity = new StartValveEntity()
+            StartValveEntity startValveEntity = new StartValveEntity
             {
                 Position = _valve.Position,
                 Name = _valve.Metadata.Name
             };
             startValveEntity.Length.CreateFromSI(_valve.Length);
-            
+
             context.Register(_valve, startValveEntity);
         }
     }

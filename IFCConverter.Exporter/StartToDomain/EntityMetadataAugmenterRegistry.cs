@@ -22,7 +22,7 @@ namespace IFCConverter.Exporter.StartToDomain
             return ResolveAll(augmenter => augmenter.CanResolve(source, model, context));
         }
 
-        public bool TryResolve(IStartEntity entity,  EngineeringModel model, StartMappingContext context, out IEntityMetadataAugmenter registration)
+        public bool TryResolve(IStartEntity entity, EngineeringModel model, StartMappingContext context, out IEntityMetadataAugmenter registration)
         {
             return TryResolve(augmenter => augmenter.CanResolve(entity, model, context), out registration);
         }

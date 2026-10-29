@@ -16,14 +16,15 @@ namespace IFCConverter.Importer.IfcToDomain.Phases
         public void Execute(IModel model, EngineeringModel domain, ImportContext context, ILoggerFactory factory)
         {
             ILogger logger = factory.CreateLogger<EntityMetadataAugmentPhase>();
-            
+
             foreach (IIfcProduct product in model.Instances.OfType<IIfcProduct>())
             {
                 foreach (IEntityMetadataAugmenter augmenter in _registry.ResolveAll(product, domain, context))
                 {
                     try
                     {
-                        logger.LogInformation("Found entity metadata augmenter {augmenter} for product with id {id}", augmenter.GetType().Name, product.GlobalId);
+                        logger.LogInformation("Found entity metadata augmenter {augmenter} for product with id {id}", augmenter.GetType().Name,
+                            product.GlobalId);
                         augmenter.Augment(product, domain, context);
                     }
                     catch (Exception e)

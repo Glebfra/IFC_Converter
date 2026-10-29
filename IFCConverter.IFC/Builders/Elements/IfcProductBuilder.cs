@@ -2,7 +2,6 @@
 using IFCConverter.IFC.Exceptions;
 using IFCConverter.IFC.Extensions;
 using IFCConverter.IFC.Interfaces;
-using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Utils.Mathematics;
 using Xbim.Common;
 using Xbim.Ifc4.GeometricConstraintResource;
@@ -17,13 +16,13 @@ namespace IFCConverter.IFC.Builders.Elements
     public class IfcProductBuilder<T> : IIfcProductBuilder<T>
         where T : IfcProduct, IInstantiableEntity
     {
+        public IfcLabel? ObjectType { get; private set; }
         public bool IsCreated { get; private set; }
         public T Instance { get; private set; }
         public IIfcObjectPlacement ObjectPlacement { get; private set; }
         public IIfcGeometry Geometry { get; private set; }
         public IIfcProductRepresentation Representation { get; private set; }
         public IIfcMaterial Material { get; private set; }
-        public IfcLabel? ObjectType { get; private set; }
 
         public List<IIfcPropertySet> PropertySets { get; } = new List<IIfcPropertySet>();
 

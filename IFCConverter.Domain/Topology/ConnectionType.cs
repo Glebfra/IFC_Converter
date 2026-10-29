@@ -7,6 +7,6 @@
         PipeToPipe,
         FittingToFitting,
         PipeToAnchor,
-        FittingToAnchor,
+        FittingToAnchor
     }
 }

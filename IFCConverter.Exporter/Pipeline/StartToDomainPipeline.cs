@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using IFCConverter.Domain;
 using IFCConverter.Exporter.StartToDomain;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.Pipeline
@@ -18,7 +17,7 @@ namespace IFCConverter.Exporter.Pipeline
                 throw new ArgumentNullException(nameof(source));
 
             ILogger logger = factory.CreateLogger<StartToDomainPipeline>();
-            
+
             EngineeringModel model = new EngineeringModel();
             StartMappingContext context = new StartMappingContext();
 
@@ -27,7 +26,7 @@ namespace IFCConverter.Exporter.Pipeline
                 logger.LogInformation("Executing phase {phase}", startToDomainPhase.GetType().Name);
                 startToDomainPhase.Execute(source, model, context, factory);
             }
-            
+
             return model;
         }
     }

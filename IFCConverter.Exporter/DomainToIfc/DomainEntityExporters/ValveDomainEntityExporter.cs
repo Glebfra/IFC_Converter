@@ -23,7 +23,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
 
             IIfcGeometry geometry = ValveIfcGeometry.Create(model, valve);
             geometry.AssignColor(Color.FromHEX(valve.Metadata.Color));
-            
+
             FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(valve.Position);
             IIfcPipeFittingBuilder<IIfcPipeFitting> builder =
                 new IfcPipeFittingBuilder<IfcPipeFitting>(valve.Metadata.Name, valve.Metadata.Type, IfcPipeFittingTypeEnum.CONNECTOR);

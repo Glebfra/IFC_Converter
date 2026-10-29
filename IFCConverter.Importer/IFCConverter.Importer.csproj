@@ -116,7 +116,7 @@
         <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
             <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
         </Reference>
-        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Windows.Forms"/>
         <Reference Include="System.Xml"/>
         <Reference Include="System.Xml.Linq"/>
         <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -149,135 +149,135 @@
         <Compile Include="Attributes\PropertySetAttribute.cs">
             <DependentUpon>AbstractPropertyItemAttribute.cs</DependentUpon>
         </Compile>
-        <Compile Include="DomainToStart\ConnectionAugmenters\ConnectionAugmentersRegistry.cs" />
-        <Compile Include="DomainToStart\ConnectionAugmenters\FittingToFittingConnectionAugmenter.cs" />
-        <Compile Include="DomainToStart\ConnectionAugmenters\IConnectionAugmenter.cs" />
-        <Compile Include="DomainToStart\ConnectionAugmenters\IConnectionAugmentersRegistry.cs" />
-        <Compile Include="DomainToStart\ConnectionAugmenters\PipeToFittingConnectionAugmenter.cs" />
-        <Compile Include="DomainToStart\ConnectionAugmenters\PipeToPipeConnectionAugmenter.cs" />
-        <Compile Include="DomainToStart\EntityExporters\AnchorEntityExporter.cs" />
-        <Compile Include="DomainToStart\EntityExporters\ElbowEntityExporter.cs" />
-        <Compile Include="DomainToStart\EntityExporters\EntityExportersRegistry.cs" />
-        <Compile Include="DomainToStart\EntityExporters\IEntityExporter.cs" />
-        <Compile Include="DomainToStart\EntityExporters\IEntityExportersRegistry.cs" />
-        <Compile Include="DomainToStart\EntityExporters\ReducerEntityExporter.cs" />
-        <Compile Include="DomainToStart\EntityExporters\SegmentEntityExporter.cs" />
-        <Compile Include="DomainToStart\EntityExporters\TeeEntityExporter.cs" />
-        <Compile Include="DomainToStart\EntityExporters\ValveEntityExporter.cs" />
-        <Compile Include="DomainToStart\ExportContext.cs" />
-        <Compile Include="DomainToStart\MissingConnectionsAugmenters\ElbowMissingConnectionsAugmenter.cs" />
-        <Compile Include="DomainToStart\MissingConnectionsAugmenters\IMissingConnectionsAugmenter.cs" />
-        <Compile Include="DomainToStart\MissingConnectionsAugmenters\IMissingConnectionsAugmentersRegistry.cs" />
-        <Compile Include="DomainToStart\MissingConnectionsAugmenters\MissingConnectionsAugmentersRegistry.cs" />
-        <Compile Include="DomainToStart\MissingConnectionsAugmenters\ReducerMissingConnectionsAugmenter.cs" />
-        <Compile Include="DomainToStart\MissingConnectionsAugmenters\TeeMissingConnectionsAugmenter.cs" />
-        <Compile Include="DomainToStart\Phases\ConnectionAugmentPhase.cs" />
-        <Compile Include="DomainToStart\Phases\DomainToStartPhaseRegistry.cs" />
-        <Compile Include="DomainToStart\Phases\EntityExportPhase.cs" />
-        <Compile Include="DomainToStart\Phases\IDomainToStartPhase.cs" />
-        <Compile Include="DomainToStart\Phases\MissingConnectionsAugmentPhase.cs" />
-        <Compile Include="DomainToStart\Phases\StartProjectEntityCreationPhase.cs" />
-        <Compile Include="Extensions\EngineeringModelExtensions.cs" />
-        <Compile Include="Extensions\IfcRootExtensions.cs" />
-        <Compile Include="Extensions\MeshExtensions.cs" />
+        <Compile Include="DomainToStart\ConnectionAugmenters\ConnectionAugmentersRegistry.cs"/>
+        <Compile Include="DomainToStart\ConnectionAugmenters\FittingToFittingConnectionAugmenter.cs"/>
+        <Compile Include="DomainToStart\ConnectionAugmenters\IConnectionAugmenter.cs"/>
+        <Compile Include="DomainToStart\ConnectionAugmenters\IConnectionAugmentersRegistry.cs"/>
+        <Compile Include="DomainToStart\ConnectionAugmenters\PipeToFittingConnectionAugmenter.cs"/>
+        <Compile Include="DomainToStart\ConnectionAugmenters\PipeToPipeConnectionAugmenter.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\AnchorEntityExporter.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\ElbowEntityExporter.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\EntityExportersRegistry.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\IEntityExporter.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\IEntityExportersRegistry.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\ReducerEntityExporter.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\SegmentEntityExporter.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\TeeEntityExporter.cs"/>
+        <Compile Include="DomainToStart\EntityExporters\ValveEntityExporter.cs"/>
+        <Compile Include="DomainToStart\ExportContext.cs"/>
+        <Compile Include="DomainToStart\MissingConnectionsAugmenters\ElbowMissingConnectionsAugmenter.cs"/>
+        <Compile Include="DomainToStart\MissingConnectionsAugmenters\IMissingConnectionsAugmenter.cs"/>
+        <Compile Include="DomainToStart\MissingConnectionsAugmenters\IMissingConnectionsAugmentersRegistry.cs"/>
+        <Compile Include="DomainToStart\MissingConnectionsAugmenters\MissingConnectionsAugmentersRegistry.cs"/>
+        <Compile Include="DomainToStart\MissingConnectionsAugmenters\ReducerMissingConnectionsAugmenter.cs"/>
+        <Compile Include="DomainToStart\MissingConnectionsAugmenters\TeeMissingConnectionsAugmenter.cs"/>
+        <Compile Include="DomainToStart\Phases\ConnectionAugmentPhase.cs"/>
+        <Compile Include="DomainToStart\Phases\DomainToStartPhaseRegistry.cs"/>
+        <Compile Include="DomainToStart\Phases\EntityExportPhase.cs"/>
+        <Compile Include="DomainToStart\Phases\IDomainToStartPhase.cs"/>
+        <Compile Include="DomainToStart\Phases\MissingConnectionsAugmentPhase.cs"/>
+        <Compile Include="DomainToStart\Phases\StartProjectEntityCreationPhase.cs"/>
+        <Compile Include="Extensions\EngineeringModelExtensions.cs"/>
+        <Compile Include="Extensions\IfcRootExtensions.cs"/>
+        <Compile Include="Extensions\MeshExtensions.cs"/>
         <Compile Include="GUI\ImportWindowForm.cs">
-          <SubType>Form</SubType>
+            <SubType>Form</SubType>
         </Compile>
         <Compile Include="GUI\ImportWindowForm.Designer.cs">
-          <DependentUpon>ImportWindowForm.cs</DependentUpon>
+            <DependentUpon>ImportWindowForm.cs</DependentUpon>
         </Compile>
         <Compile Include="GUI\Localization\LocalizationResource.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>LocalizationResource.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>LocalizationResource.resx</DependentUpon>
         </Compile>
-        <Compile Include="IfcToDomain\EntityConnectionsResolvers\EntityConnectionsResolversRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityConnectionsResolvers\IEntityConnectionResolver.cs" />
-        <Compile Include="IfcToDomain\EntityConnectionsResolvers\IEntityConnectionResolversRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityConnectionsResolvers\PortEntityConnectionResolver.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\AnchorEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\AvevaAnchorImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\IAnchorEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\IAnchorEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\ElbowEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\IElbowEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\IElbowEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\RevolvedAreaSolidElbowEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\TriangulatedFaceSetElbowEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\EntityType.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\AvevaEntityTypeResolver.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\EntityTypeResolversRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\IEntityTypeResolver.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\IEntityTypeResolversRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\UnknownEntityTypeResolver.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\IfcEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\IIfcPostEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\IIfcPostEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\IfcPostEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\IReducerEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\IReducerEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\ReducerEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\TriangulatedFaceSetReducerEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ExtrudedAreaSolidSegmentEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ISegmentEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ISegmentEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\SegmentEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ExtrudedAreaSolidTeeEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\TeeEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\AbstractValveNearestSegmentsEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\AvevaValveNearestSegmentsEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\DefaultValveNearestSegmentsEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\ValveEntityImportersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityMetadataAugmenters\AvevaEntityMetadataAugmenter.cs" />
-        <Compile Include="IfcToDomain\EntityMetadataAugmenters\EntityMetadataAugmenter.cs" />
-        <Compile Include="IfcToDomain\EntityMetadataAugmenters\EntityMetadataAugmentersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityMetadataAugmenters\IEntityMetadataAugmenter.cs" />
-        <Compile Include="IfcToDomain\EntityMetadataAugmenters\IEntityMetadataAugmentersRegistry.cs" />
-        <Compile Include="IfcToDomain\EntityMetadataAugmenters\StartPsetMetadataAugmenter.cs" />
-        <Compile Include="IfcToDomain\ImportContext.cs" />
-        <Compile Include="IfcToDomain\ImportType.cs" />
-        <Compile Include="IfcToDomain\ImportTypeResolver.cs" />
-        <Compile Include="IfcToDomain\Phases\EntityConnectionResolvePhase.cs" />
-        <Compile Include="IfcToDomain\Phases\EntityImportPhase.cs" />
-        <Compile Include="IfcToDomain\Phases\EntityMetadataAugmentPhase.cs" />
-        <Compile Include="IfcToDomain\Phases\IfcToDomainPhaseRegistry.cs" />
-        <Compile Include="IfcToDomain\Phases\IIfcToDomainPhase.cs" />
-        <Compile Include="IfcToDomain\Phases\SegmentSplitPhase.cs" />
-        <Compile Include="IfcToDomain\SegmentSplitters\AnchorSegmentSplitter.cs" />
-        <Compile Include="IfcToDomain\SegmentSplitters\ISegmentSplitter.cs" />
-        <Compile Include="IfcToDomain\SegmentSplitters\ISegmentSplittersRegistry.cs" />
-        <Compile Include="IfcToDomain\SegmentSplitters\SegmentSplittersRegistry.cs" />
-        <Compile Include="IfcToStartConverter.cs" />
-        <Compile Include="ImportDataContainer.cs" />
-        <Compile Include="Pipeline\DomainToStartPipeline.cs" />
-        <Compile Include="Pipeline\IfcToDomainPipeline.cs" />
-        <Compile Include="Pipeline\IfcToStartPipeline.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="PropertySets\AbstractPropertySet.cs" />
-        <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs" />
-        <Compile Include="PropertySets\Aveva\AvevaPset.cs" />
-        <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaBoolPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\EnumPropertyConverter.cs" />
-        <Compile Include="PropertySets\Converters\StartPropertyConverter.cs" />
-        <Compile Include="PropertySets\IPropertyConverter.cs" />
-        <Compile Include="PropertySets\IPropertySet.cs" />
-        <Compile Include="PropertySets\PropertySetRegistry.cs" />
-        <Compile Include="PropertySets\Start\StartPset.cs" />
+        <Compile Include="IfcToDomain\EntityConnectionsResolvers\EntityConnectionsResolversRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityConnectionsResolvers\IEntityConnectionResolver.cs"/>
+        <Compile Include="IfcToDomain\EntityConnectionsResolvers\IEntityConnectionResolversRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityConnectionsResolvers\PortEntityConnectionResolver.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\AnchorEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\AvevaAnchorImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\IAnchorEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\AnchorEntityImporters\IAnchorEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\ElbowEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\IElbowEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\IElbowEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\RevolvedAreaSolidElbowEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\TriangulatedFaceSetElbowEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\EntityType.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\AvevaEntityTypeResolver.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\EntityTypeResolversRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\IEntityTypeResolver.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\IEntityTypeResolversRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\UnknownEntityTypeResolver.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\IfcEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\IIfcPostEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\IIfcPostEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\IfcPostEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\IReducerEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\IReducerEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\ReducerEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ReducerEntityImporters\TriangulatedFaceSetReducerEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ExtrudedAreaSolidSegmentEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ISegmentEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\ISegmentEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\SegmentEntityImporters\SegmentEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ExtrudedAreaSolidTeeEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\ITeeEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\TeeEntityImporters\TeeEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\AbstractValveNearestSegmentsEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\AvevaValveNearestSegmentsEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\DefaultValveNearestSegmentsEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImporter.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\IValveEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityImporters\ValveEntityImporters\ValveEntityImportersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityMetadataAugmenters\AvevaEntityMetadataAugmenter.cs"/>
+        <Compile Include="IfcToDomain\EntityMetadataAugmenters\EntityMetadataAugmenter.cs"/>
+        <Compile Include="IfcToDomain\EntityMetadataAugmenters\EntityMetadataAugmentersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityMetadataAugmenters\IEntityMetadataAugmenter.cs"/>
+        <Compile Include="IfcToDomain\EntityMetadataAugmenters\IEntityMetadataAugmentersRegistry.cs"/>
+        <Compile Include="IfcToDomain\EntityMetadataAugmenters\StartPsetMetadataAugmenter.cs"/>
+        <Compile Include="IfcToDomain\ImportContext.cs"/>
+        <Compile Include="IfcToDomain\ImportType.cs"/>
+        <Compile Include="IfcToDomain\ImportTypeResolver.cs"/>
+        <Compile Include="IfcToDomain\Phases\EntityConnectionResolvePhase.cs"/>
+        <Compile Include="IfcToDomain\Phases\EntityImportPhase.cs"/>
+        <Compile Include="IfcToDomain\Phases\EntityMetadataAugmentPhase.cs"/>
+        <Compile Include="IfcToDomain\Phases\IfcToDomainPhaseRegistry.cs"/>
+        <Compile Include="IfcToDomain\Phases\IIfcToDomainPhase.cs"/>
+        <Compile Include="IfcToDomain\Phases\SegmentSplitPhase.cs"/>
+        <Compile Include="IfcToDomain\SegmentSplitters\AnchorSegmentSplitter.cs"/>
+        <Compile Include="IfcToDomain\SegmentSplitters\ISegmentSplitter.cs"/>
+        <Compile Include="IfcToDomain\SegmentSplitters\ISegmentSplittersRegistry.cs"/>
+        <Compile Include="IfcToDomain\SegmentSplitters\SegmentSplittersRegistry.cs"/>
+        <Compile Include="IfcToStartConverter.cs"/>
+        <Compile Include="ImportDataContainer.cs"/>
+        <Compile Include="Pipeline\DomainToStartPipeline.cs"/>
+        <Compile Include="Pipeline\IfcToDomainPipeline.cs"/>
+        <Compile Include="Pipeline\IfcToStartPipeline.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="PropertySets\AbstractPropertySet.cs"/>
+        <Compile Include="PropertySets\Aveva\AvevaEntityParameters.cs"/>
+        <Compile Include="PropertySets\Aveva\AvevaPset.cs"/>
+        <Compile Include="PropertySets\Converters\AbstractPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaBoolPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaMatrixPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\AvevaVectorPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\EnumPropertyConverter.cs"/>
+        <Compile Include="PropertySets\Converters\StartPropertyConverter.cs"/>
+        <Compile Include="PropertySets\IPropertyConverter.cs"/>
+        <Compile Include="PropertySets\IPropertySet.cs"/>
+        <Compile Include="PropertySets\PropertySetRegistry.cs"/>
+        <Compile Include="PropertySets\Start\StartPset.cs"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\IFCConverter.Domain\IFCConverter.Domain.csproj">
@@ -302,28 +302,28 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config" />
+        <None Include="App.config"/>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="GUI\ImportWindowForm.resx">
-        <DependentUpon>ImportWindowForm.cs</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="GUI\ImportWindowForm.ru.resx">
-        <DependentUpon>ImportWindowForm.cs</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="GUI\ImportWindowForm.zh.resx">
-        <DependentUpon>ImportWindowForm.cs</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="GUI\Localization\LocalizationResource.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Include="GUI\Localization\LocalizationResource.ru.resx">
-        <DependentUpon>LocalizationResource.resx</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="GUI\Localization\LocalizationResource.zh.resx">
-        <DependentUpon>LocalizationResource.resx</DependentUpon>
-      </EmbeddedResource>
+        <EmbeddedResource Include="GUI\ImportWindowForm.resx">
+            <DependentUpon>ImportWindowForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="GUI\ImportWindowForm.ru.resx">
+            <DependentUpon>ImportWindowForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="GUI\ImportWindowForm.zh.resx">
+            <DependentUpon>ImportWindowForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="GUI\Localization\LocalizationResource.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>LocalizationResource.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Include="GUI\Localization\LocalizationResource.ru.resx">
+            <DependentUpon>LocalizationResource.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="GUI\Localization\LocalizationResource.zh.resx">
+            <DependentUpon>LocalizationResource.resx</DependentUpon>
+        </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

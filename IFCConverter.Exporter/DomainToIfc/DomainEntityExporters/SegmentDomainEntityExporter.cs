@@ -7,7 +7,7 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters
     internal sealed class SegmentDomainEntityExporter : IDomainEntityExporter
     {
         private readonly ISegmentDomainEntityExportersRegistry _registry = new SegmentDomainEntityExportersRegistry();
-        
+
         public bool CanExport(Entity entity)
         {
             return entity is Segment;

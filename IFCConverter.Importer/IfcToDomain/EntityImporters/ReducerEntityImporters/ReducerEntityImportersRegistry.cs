@@ -1,5 +1,4 @@
-﻿using IFCConverter.Importer.IfcToDomain.EntityImporters.SegmentEntityImporters;
-using IFCConverter.Utils.Reflection;
+﻿using IFCConverter.Utils.Reflection;
 using Xbim.Ifc4.Interfaces;
 
 namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ReducerEntityImporters

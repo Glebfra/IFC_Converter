@@ -274,7 +274,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             if (vector.L2Norm() <= tolerance)
                 throw new InvalidOperationException();
-            
+
             return new FixedVector<TDimension>(vector.Vector.Normalize(2));
         }
 
@@ -334,13 +334,13 @@ namespace IFCConverter.Utils.Mathematics
         {
             double lengthA = a.L2Norm();
             double lengthB = b.L2Norm();
-            
+
             if (lengthA <= tolerance || lengthB <= tolerance)
                 throw new InvalidOperationException("Cannot calculate angle for zero-length vector");
 
             double cos = a.Dot(b) / (lengthA * lengthB);
             cos = Math.Max(-1.0, Math.Min(1.0, cos));
-            
+
             return Math.Acos(cos);
         }
 
@@ -388,9 +388,9 @@ namespace IFCConverter.Utils.Mathematics
         }
 
         public static bool IsBetween<TDimension>(
-            this FixedVector<TDimension> point, 
-            FixedVector<TDimension> start, 
-            FixedVector<TDimension> end, 
+            this FixedVector<TDimension> point,
+            FixedVector<TDimension> start,
+            FixedVector<TDimension> end,
             double tolerance = 1e-6)
             where TDimension : struct, IDimension
         {
@@ -437,7 +437,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             vector[1] = value;
         }
-        
+
         public static FixedVector<Dim2> X(this FixedVectorBuilder<Dim2> builder)
         {
             return builder.Dense(1, 0);
@@ -447,7 +447,7 @@ namespace IFCConverter.Utils.Mathematics
         {
             return builder.Dense(0, 1);
         }
-        
+
         public static FixedVector<Dim2> Dense(this FixedVectorBuilder<Dim2> builder, double x)
         {
             return builder.Dense(x, 0);
@@ -594,7 +594,7 @@ namespace IFCConverter.Utils.Mathematics
             double w = vector[3];
             if (Math.Abs(w) <= tolerance)
                 throw new InvalidOperationException("Cannot convert homogenous coordinates with W is zero.");
-            
+
             return FixedVector<Dim3>.Builder.Dense(vector[0] / w, vector[1] / w, vector[2] / w);
         }
 

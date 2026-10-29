@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using IFCConverter.Domain.Entities;
-using IFCConverter.Geometry.Mesh.Builders;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;
 using Xbim.Common;
@@ -12,12 +11,12 @@ namespace IFCConverter.Exporter.Geometries
 {
     internal sealed class ReducerIfcGeometry : IfcGeometry
     {
-        public ReducerIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null) 
+        public ReducerIfcGeometry(IIfcBuilder geometryBuilder, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilder, representationContext)
         {
         }
 
-        public ReducerIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null) 
+        public ReducerIfcGeometry(IEnumerable<IIfcBuilder> geometryBuilders, IIfcRepresentationContext representationContext = null)
             : base(geometryBuilders, representationContext)
         {
         }

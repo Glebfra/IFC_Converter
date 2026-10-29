@@ -9,11 +9,11 @@ namespace IFCConverter.Utils.Collections
         {
             if (dict.ContainsKey(key))
                 return false;
-            
+
             dict.Add(key, value);
             return true;
         }
-        
+
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> factory)
         {
             if (dict.TryGetValue(key, out TValue value))

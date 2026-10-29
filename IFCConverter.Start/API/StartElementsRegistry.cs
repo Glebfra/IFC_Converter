@@ -12,14 +12,14 @@ namespace IFCConverter.Start.API
     {
         private readonly IDictionary<Type, StartElementTypeEnum> _elementTypesCache = new Dictionary<Type, StartElementTypeEnum>();
         private readonly IDictionary<Type, StartElementAttribute> _startElementCache = new Dictionary<Type, StartElementAttribute>();
-        
+
         [Pure]
         public StartElementAttribute GetStartElementAttribute(IStartEntity entity)
         {
             Type type = entity.GetType();
             return _startElementCache.GetOrAdd(type, GetStartElementAttribute);
         }
-        
+
         [Pure]
         public StartElementTypeEnum GetElementType(IStartEntity entity)
         {

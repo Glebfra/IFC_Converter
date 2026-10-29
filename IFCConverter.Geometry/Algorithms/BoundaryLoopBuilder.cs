@@ -45,7 +45,7 @@ namespace IFCConverter.Geometry.Algorithms
                 neighbours = new List<int>();
                 adjacency.Add(vertex, neighbours);
             }
-            
+
             neighbours.Add(neighbour);
         }
 
@@ -63,7 +63,7 @@ namespace IFCConverter.Geometry.Algorithms
 
                 List<int> neighbours = adjacency[currentVertex];
                 int nextVertex = FindNextVertex(currentVertex, previousVertex, neighbours, unusedEdges);
-                
+
                 if (nextVertex == -1)
                     break;
 
@@ -71,7 +71,7 @@ namespace IFCConverter.Geometry.Algorithms
 
                 previousVertex = currentVertex;
                 currentVertex = nextVertex;
-                
+
                 if (currentVertex == startVertex)
                     break;
             }

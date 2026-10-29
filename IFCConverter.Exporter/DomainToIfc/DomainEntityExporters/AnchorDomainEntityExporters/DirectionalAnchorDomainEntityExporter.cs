@@ -60,13 +60,14 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.AnchorDomainEn
                 case StartElementTypeEnum.GUIDE_SINGLE_DIRECTION_SUPPORT:
                     return new[]
                     {
-                        segmentMatrix.GetX().ToFixedVectorDim3(), segmentMatrix.GetX().Negate().ToFixedVectorDim3(), segmentMatrix.GetY().ToFixedVectorDim3()
+                        segmentMatrix.GetX().ToFixedVectorDim3(), segmentMatrix.GetX().Negate().ToFixedVectorDim3(),
+                        segmentMatrix.GetY().ToFixedVectorDim3()
                     };
                 case StartElementTypeEnum.GUIDE_DOUBLE_DIRECTION_SUPPORT:
                     return new[]
                     {
-                        segmentMatrix.GetX().ToFixedVectorDim3(), segmentMatrix.GetX().Negate().ToFixedVectorDim3(), segmentMatrix.GetY().ToFixedVectorDim3(),
-                        segmentMatrix.GetY().Negate().ToFixedVectorDim3()
+                        segmentMatrix.GetX().ToFixedVectorDim3(), segmentMatrix.GetX().Negate().ToFixedVectorDim3(),
+                        segmentMatrix.GetY().ToFixedVectorDim3(), segmentMatrix.GetY().Negate().ToFixedVectorDim3()
                     };
                 default:
                     return Array.Empty<FixedVector<Dim3>>();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using IFCConverter.Domain.Entities;
 using IFCConverter.IFC.Geometries;
 using IFCConverter.IFC.Interfaces;

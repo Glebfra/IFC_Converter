@@ -4,6 +4,19 @@ namespace IFCConverter.Geometry
 {
     public class PlanarRegion
     {
+
+        public PlanarRegion(IReadOnlyList<int> triangleIndices, IReadOnlyList<Edge> boundaryEdges, double area, double perimeter, double maxDeviation,
+            double rmsDeviation, double compactness)
+        {
+            TriangleIndices = triangleIndices;
+            BoundaryEdges = boundaryEdges;
+            Area = area;
+            Perimeter = perimeter;
+            MaxDeviation = maxDeviation;
+            RmsDeviation = rmsDeviation;
+            Compactness = compactness;
+        }
+
         public IReadOnlyList<int> TriangleIndices { get; }
         public IReadOnlyList<Edge> BoundaryEdges { get; }
 
@@ -14,18 +27,7 @@ namespace IFCConverter.Geometry
         public double Compactness { get; }
 
         public double Score { get; internal set; }
-        
-        public int TriangleCount => TriangleIndices.Count;
 
-        public PlanarRegion(IReadOnlyList<int> triangleIndices, IReadOnlyList<Edge> boundaryEdges, double area, double perimeter, double maxDeviation, double rmsDeviation, double compactness)
-        {
-            TriangleIndices = triangleIndices;
-            BoundaryEdges = boundaryEdges;
-            Area = area;
-            Perimeter = perimeter;
-            MaxDeviation = maxDeviation;
-            RmsDeviation = rmsDeviation;
-            Compactness = compactness;
-        }
+        public int TriangleCount => TriangleIndices.Count;
     }
 }

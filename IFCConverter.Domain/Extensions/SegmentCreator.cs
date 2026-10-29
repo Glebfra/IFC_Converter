@@ -8,7 +8,7 @@ namespace IFCConverter.Domain.Extensions
     public static class SegmentCreator
     {
         public static Segment CreateSegment(
-            FixedVector<Dim3> start, FixedVector<Dim3> end, 
+            FixedVector<Dim3> start, FixedVector<Dim3> end,
             double diameter, string name = null,
             FixedVector<Dim3> projection = null)
         {
@@ -19,9 +19,15 @@ namespace IFCConverter.Domain.Extensions
                 Diameter = diameter
             };
 
-            FixedVector<Dim3>[] positions = new FixedVector<Dim3>[] { start, end };
-            FixedVector<Dim3>[] directions = new FixedVector<Dim3>[] { direction, direction.Negate() };
-            
+            FixedVector<Dim3>[] positions =
+            {
+                start, end
+            };
+            FixedVector<Dim3>[] directions =
+            {
+                direction, direction.Negate()
+            };
+
             segment.StartPort.SetGeometry(start, direction);
             segment.EndPort.SetGeometry(end, direction.Negate());
 
@@ -36,7 +42,7 @@ namespace IFCConverter.Domain.Extensions
 
             if (projection != null)
                 segment.TypedMetadata.Projection = projection;
-            
+
             return segment;
         }
     }

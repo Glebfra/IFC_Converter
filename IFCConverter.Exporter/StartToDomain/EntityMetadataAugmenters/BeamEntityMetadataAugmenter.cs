@@ -9,7 +9,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
     internal sealed class BeamEntityMetadataAugmenter : IEntityMetadataAugmenter
     {
         private Beam _beam;
-        
+
         public bool CanResolve(IStartEntity source, EngineeringModel model, StartMappingContext context)
         {
             if (!context.TryGetEntityId(source, out Id<EntityId> id))
@@ -18,7 +18,7 @@ namespace IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters
             if (!(entity is Beam beam))
                 return false;
             _beam = beam;
-            
+
             return true;
         }
 

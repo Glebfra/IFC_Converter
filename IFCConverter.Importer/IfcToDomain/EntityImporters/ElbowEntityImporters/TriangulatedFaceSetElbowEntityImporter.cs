@@ -21,13 +21,13 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
     {
         private IIfcLocalPlacement _localPlacement;
         private IIfcTriangulatedFaceSet _triangulatedFaceSet;
-        
+
         public bool CanImport(IIfcProduct product)
         {
             if (!(product.ObjectPlacement is IIfcLocalPlacement localPlacement))
                 return false;
             _localPlacement = localPlacement;
-            
+
             IIfcRepresentationItem[] representationItems = product.GetRepresentationItems().ToArray();
             if (representationItems.Length != 1)
                 return false;
@@ -63,7 +63,7 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
                 Position = position,
                 Radius = CalculateRadius(boundaryCenters, position)
             };
-            
+
             double[] diameters = boundariesVertices
                 .Select((vertices, index) => vertices
                     .Select(vertex => (vertex - boundaryCenters[index]).L2Norm() * 2)
@@ -76,14 +76,14 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
                 FixedVector<Dim3> direction = (boundaryCenters[idx] - elbow.Position).SafeNormalize();
                 port.SetGeometry(boundaryCenters[idx], direction);
                 port.Metadata.Diameter = diameters[idx];
-                
+
                 idx++;
             }
-            
+
             model.Add(elbow);
             context.Register(elbow, product);
         }
-        
+
         [Pure]
         private static FixedVector<Dim3>[][] GetBoundaryVertices(IMesh mesh)
         {
@@ -100,16 +100,16 @@ namespace IFCConverter.Importer.IfcToDomain.EntityImporters.ElbowEntityImporters
             FixedVector<Dim3> A = boundaryCenters[0];
             FixedVector<Dim3> B = position;
             FixedVector<Dim3> C = boundaryCenters[1];
-            
+
             FixedVector<Dim3> BA = A - B;
             FixedVector<Dim3> BC = C - B;
 
             double ABNormSquared = BA.Dot(BA);
             double BCNormSquared = BC.Dot(BC);
-            
+
             double ABNorm = Math.Sqrt(ABNormSquared);
             double BCNorm = Math.Sqrt(BCNormSquared);
-            
+
             double cosAngle = BA.Dot(BC) / (ABNorm * BCNorm);
 
             double nominator = ABNormSquared + BCNormSquared - 2 * ABNorm * BCNorm * cosAngle;

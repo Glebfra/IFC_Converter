@@ -9,40 +9,17 @@ namespace IFCConverter.Geometry.Mesh.Builders
 {
     public class MeshBuilder : IMeshBuilder
     {
+
+        private readonly List<IMeshBuilder> _children = new List<IMeshBuilder>();
+        private readonly List<Func<Triangle, Triangle>> _forEachTriangles = new List<Func<Triangle, Triangle>>();
+        private readonly List<Func<FixedVector<Dim3>, FixedVector<Dim3>>> _forEachVertices = new List<Func<FixedVector<Dim3>, FixedVector<Dim3>>>();
+        private readonly List<Func<FixedVector<Dim3>, FixedVector<Dim3>>> _transforms = new List<Func<FixedVector<Dim3>, FixedVector<Dim3>>>();
         public List<FixedVector<Dim3>> Vertices { get; } = new List<FixedVector<Dim3>>();
         public List<Triangle> Triangles { get; } = new List<Triangle>();
-        
-        private readonly List<IMeshBuilder> _children = new List<IMeshBuilder>();
-        private readonly List<Func<FixedVector<Dim3>, FixedVector<Dim3>>> _transforms = new List<Func<FixedVector<Dim3>, FixedVector<Dim3>>>();
-        private readonly List<Func<FixedVector<Dim3>, FixedVector<Dim3>>> _forEachVertices = new List<Func<FixedVector<Dim3>, FixedVector<Dim3>>>();
-        private readonly List<Func<Triangle, Triangle>> _forEachTriangles = new List<Func<Triangle, Triangle>>();
 
         public int VertexCount => Vertices.Count;
         public int TriangleCount => Triangles.Count;
         public int ChildCount => _children.Count;
-
-        public int AddVertex(FixedVector<Dim3> vertex)
-        {
-            Vertices.Add(vertex);
-            return Vertices.Count - 1;
-        }
-
-        public int AddTriangle(Triangle triangle)
-        {
-            Triangles.Add(triangle);
-            return Triangles.Count - 1;
-        }
-
-        public void AddTriangles(IEnumerable<Triangle> triangles)
-        {
-            Triangles.AddRange(triangles);
-        }
-
-        public void AddRectangle(int a, int b, int c, int d)
-        {
-            AddTriangle(new Triangle(a, b, c));
-            AddTriangle(new Triangle(b, d, c));
-        }
 
         public IMeshBuilder AddPolygon(params int[] vertexIndices)
         {
@@ -110,7 +87,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
         {
             if (transform == null)
                 throw new ArgumentNullException(nameof(transform));
-            
+
             _transforms.Add(transform);
             return this;
         }
@@ -119,7 +96,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
-         
+
             _forEachVertices.Add(action);
             return this;
         }
@@ -128,7 +105,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
-            
+
             _forEachTriangles.Add(action);
             return this;
         }
@@ -138,12 +115,12 @@ namespace IFCConverter.Geometry.Mesh.Builders
         {
             List<FixedVector<Dim3>> vertices = new List<FixedVector<Dim3>>(Vertices);
             List<Triangle> triangles = new List<Triangle>(Triangles);
-            
+
             foreach (IMeshBuilder child in _children)
             {
                 IMesh mesh = child.Build();
                 int offset = vertices.Count;
-                
+
                 vertices.AddRange(mesh.Vertices);
                 triangles.AddRange(mesh.Triangles.Select(triangle => new Triangle(triangle.A + offset, triangle.B + offset, triangle.C + offset)));
             }
@@ -161,7 +138,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
 
             FixedVector<Dim3>[] vertexArr = vertices.ToArray();
             Triangle[] trianglesArr = triangles.ToArray();
-            
+
             foreach (Func<FixedVector<Dim3>, FixedVector<Dim3>> forEachVertex in _forEachVertices)
             {
                 for (int i = 0; i < vertexArr.Length; i++)
@@ -169,7 +146,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
                     vertexArr[i] = forEachVertex(vertexArr[i]);
                 }
             }
-            
+
             foreach (Func<Triangle, Triangle> forEachTriangle in _forEachTriangles)
             {
                 for (int i = 0; i < trianglesArr.Length; i++)
@@ -177,11 +154,34 @@ namespace IFCConverter.Geometry.Mesh.Builders
                     trianglesArr[i] = forEachTriangle(trianglesArr[i]);
                 }
             }
-            
+
             ValidateTriangles(vertexArr.Length, trianglesArr);
             return new Mesh(vertexArr, trianglesArr);
         }
-        
+
+        public int AddVertex(FixedVector<Dim3> vertex)
+        {
+            Vertices.Add(vertex);
+            return Vertices.Count - 1;
+        }
+
+        public int AddTriangle(Triangle triangle)
+        {
+            Triangles.Add(triangle);
+            return Triangles.Count - 1;
+        }
+
+        public void AddTriangles(IEnumerable<Triangle> triangles)
+        {
+            Triangles.AddRange(triangles);
+        }
+
+        public void AddRectangle(int a, int b, int c, int d)
+        {
+            AddTriangle(new Triangle(a, b, c));
+            AddTriangle(new Triangle(b, d, c));
+        }
+
         protected static void ValidatePositiveFinite(double value, string parameterName)
         {
             if (double.IsNaN(value) || double.IsInfinity(value) || value <= 0)
@@ -197,7 +197,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
                 throw new ArgumentOutOfRangeException(parameterName, "Value must be finite.");
             }
         }
-        
+
         private static void ValidateTriangles(int vertexCount, Triangle[] triangles)
         {
             foreach (Triangle triangle in triangles)

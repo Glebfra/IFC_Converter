@@ -21,7 +21,7 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
             FixedVector<Dim3> portPosition = ports.First().Position;
             double diameter = ports.Max(port => port.Metadata.Diameter);
             AbstractFitting[] fittings = ports.Select(port => model.GetEntity(port.Owner)).Cast<AbstractFitting>().ToArray();
-            
+
             IEnumerable<Segment> segments;
             if (fittings.All(fitting => fitting is Reducer))
                 segments = AugmentReducers(fittings.Cast<Reducer>().ToArray(), diameter, portPosition);
@@ -29,7 +29,7 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
                 segments = AugmentReducer(fittings, diameter, portPosition);
             else
                 segments = Augment(fittings, diameter);
-            
+
             foreach (Segment segment in segments)
             {
                 model.Add(segment);
@@ -61,11 +61,11 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
             AbstractFitting abstractFitting = fittings.First(fitting => fitting != reducer);
 
             FixedVector<Dim3> reducerAxis = reducer.TypedMetadata.Axis;
-            
+
             yield return SegmentCreator.CreateSegment(
-                abstractFitting.Position, 
-                reducer.Position, 
-                diameter, 
+                abstractFitting.Position,
+                reducer.Position,
+                diameter,
                 $"{fittings[0].Metadata.Name}_{fittings[1].Metadata.Name}_connection",
                 (reducer.Position - abstractFitting.Position).Dot(reducerAxis) * reducerAxis
             );
@@ -74,7 +74,8 @@ namespace IFCConverter.Importer.DomainToStart.ConnectionAugmenters
         private static IEnumerable<Segment> Augment(AbstractFitting[] fittings, double diameter)
         {
             FixedVector<Dim3>[] fittingPositions = fittings.Select(fitting => fitting.Position).ToArray();
-            yield return SegmentCreator.CreateSegment(fittingPositions[0], fittingPositions[1], diameter, $"{fittings[0].Metadata.Name}_{fittings[1].Metadata.Name}_connection");
+            yield return SegmentCreator.CreateSegment(fittingPositions[0], fittingPositions[1], diameter,
+                $"{fittings[0].Metadata.Name}_{fittings[1].Metadata.Name}_connection");
         }
     }
 }

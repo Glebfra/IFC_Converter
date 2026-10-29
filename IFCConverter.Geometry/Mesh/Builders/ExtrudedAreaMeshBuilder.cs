@@ -6,7 +6,7 @@ namespace IFCConverter.Geometry.Mesh.Builders
     {
         public ExtrudedAreaMeshBuilder(double height, params FixedVector<Dim3>[] vertices)
         {
-            
+
         }
     }
 }
