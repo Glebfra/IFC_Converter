@@ -12,8 +12,8 @@ namespace IFCConverter.IFC.Extensions
         public static IfcAxis2Placement3D ToAxis2Placement3D(this FixedMatrix<Dim4> matrix, IModel model)
         {
             IfcCartesianPoint location = matrix.GetTranslation().ToCartesianPoint(model);
-            IfcDirection axis = matrix.GetZ().ToCartesian().ToIfcDirection(model);
-            IfcDirection refDirection = matrix.GetX().ToCartesian().ToIfcDirection(model);
+            IfcDirection axis = matrix.GetZ().ToFixedVectorDim3().ToIfcDirection(model);
+            IfcDirection refDirection = matrix.GetX().ToFixedVectorDim3().ToIfcDirection(model);
 
             return model.Instances.New<IfcAxis2Placement3D>(placement3D =>
             {
@@ -27,7 +27,7 @@ namespace IFCConverter.IFC.Extensions
         public static IfcAxis2Placement2D ToAxis2Placement2D(this FixedMatrix<Dim4> matrix, IModel model)
         {
             IfcCartesianPoint location = matrix.GetTranslation().ToCartesianPoint(model);
-            IfcDirection refDirection = matrix.GetX().ToCartesian().ToIfcDirection(model);
+            IfcDirection refDirection = matrix.GetX().ToFixedVectorDim3().ToIfcDirection(model);
 
             return model.Instances.New<IfcAxis2Placement2D>(placement2D =>
             {

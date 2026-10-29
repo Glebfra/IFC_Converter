@@ -10,8 +10,6 @@ namespace IFCConverter.IFC.Builders
 {
     public class IfcMaterialBuilder : IIfcMaterialBuilder
     {
-        private readonly Logger _logger = Logger.GetInstance();
-
         public IfcMaterialBuilder(IfcLabel materialName, IfcText description, IfcLabel category)
         {
             MaterialName = materialName;

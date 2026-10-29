@@ -20,9 +20,10 @@ namespace IFCConverter.Exporter.DomainToIfc.DomainEntityExporters.JointDomainEnt
 
             FixedMatrix<Dim4> placement = FixedMatrix<Dim4>.Builder.CreateTransition(joint.Position);
             IIfcPipeFittingBuilder<IIfcPipeFitting> builder =
-                new IfcPipeFittingBuilder<IfcPipeFitting>(joint.Metadata.Name, joint.Metadata.Type, IfcPipeFittingTypeEnum.CONNECTOR);
+                new IfcPipeFittingBuilder<IfcPipeFitting>(joint.Metadata.Name, joint.Metadata.Type, IfcPipeFittingTypeEnum.USERDEFINED);
             builder.AssignGeometry(geometry);
             builder.CreateObjectPlacement(model, placement);
+            builder.AssignObjectType("ExpansionJoint");
 
             IIfcProduct instance = builder.CreateInstance(model);
             context.Register(joint, instance);

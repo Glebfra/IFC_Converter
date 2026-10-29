@@ -598,6 +598,11 @@ namespace IFCConverter.Utils.Mathematics
             return FixedVector<Dim3>.Builder.Dense(vector[0] / w, vector[1] / w, vector[2] / w);
         }
 
+        public static FixedVector<Dim3> ToFixedVectorDim3(this FixedVector<Dim4> vector)
+        {
+            return FixedVector<Dim3>.Builder.Dense(vector[0], vector[1], vector[2]);
+        }
+
         public static FixedVector<Dim4> X(this FixedVectorBuilder<Dim4> builder)
         {
             return builder.Dense(1, 0, 0, 0);

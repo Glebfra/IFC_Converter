@@ -80,9 +80,7 @@ namespace IFCConverter.Exporter.Geometries
                     center - elbow.Position,
                     u,
                     v,
-                    normal))
-                .AddPolygon(meshBuilder.StartCapIndices)
-                .AddPolygon(meshBuilder.EndCapIndices);
+                    normal));
             
             IMesh mesh = meshBuilder.Build();
             Triangle[] changedTriangles = ChangeTriangleIndexation(mesh.Triangles).ToArray();

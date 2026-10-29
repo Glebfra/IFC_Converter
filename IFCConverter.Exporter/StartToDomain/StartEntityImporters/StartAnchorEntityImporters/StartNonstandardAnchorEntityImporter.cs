@@ -74,9 +74,9 @@ namespace IFCConverter.Exporter.StartToDomain.StartEntityImporters.StartAnchorEn
                 FixedVector<Dim3> yAxis = zAxis.CreateNormalVector(xAxis);
 
                 FixedMatrix<Dim4> transitionMatrix = FixedMatrix<Dim4>.Builder.CreateTransition(FixedVector<Dim3>.Zeros(), xAxis, yAxis, zAxis);
-                return transitionMatrix.GetZ().ToCartesian() * restraintX +
-                       transitionMatrix.GetX().ToCartesian() * restraintY +
-                       transitionMatrix.GetY().ToCartesian() * restraintZ;
+                return transitionMatrix.GetZ().ToFixedVectorDim3() * restraintX +
+                       transitionMatrix.GetX().ToFixedVectorDim3() * restraintY +
+                       transitionMatrix.GetY().ToFixedVectorDim3() * restraintZ;
             }
 
             throw new Exception("Cannot calculate direction for anchor restraint module");

@@ -3,6 +3,7 @@ using IFCConverter.Domain;
 using IFCConverter.Exporter.StartToDomain.ConnectionResolvers;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.StartToDomain.Phases
 {
@@ -10,19 +11,24 @@ namespace IFCConverter.Exporter.StartToDomain.Phases
     public sealed class ConnectionResolverPhase : IStartToDomainPhase
     {
         private readonly IConnectionResolverRegistry _connectionResolverRegistry = new ConnectionResolverRegistry();
-        private readonly Logger _logger = Logger.GetInstance();
 
-        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context)
+        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context, ILoggerFactory factory)
         {
-            _logger.Info($"Starting '{nameof(ConnectionResolverPhase)}'.");
-
+            ILogger logger = factory.CreateLogger<ConnectionResolverPhase>();
+            
             foreach (IStartEntity startEntity in source)
             {
                 if (_connectionResolverRegistry.TryResolve(startEntity, out IConnectionResolver connectionResolver))
+                {
+                    logger.LogInformation(
+                        "Found connection resolver {resolver} for start entity {entity} with name {name}",
+                        connectionResolver.GetType().Name,
+                        startEntity.GetType().Name,
+                        startEntity.Name
+                    );
                     connectionResolver.Resolve(startEntity, model, context);
+                }
             }
-
-            _logger.Info($"Finished '{nameof(ConnectionResolverPhase)}'.");
         }
     }
 }

@@ -11,6 +11,7 @@ using IFCConverter.Start.API;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Diagnostics;
 using IFCConverter.Utils.Pipeline;
+using Microsoft.Extensions.Logging;
 
 namespace IFCConverter
 {
@@ -32,7 +33,6 @@ namespace IFCConverter
             try
             {
                 Application.EnableVisualStyles();
-                Logger logger = Logger.GetInstance();
 
                 Localize(languageId);
 
@@ -49,35 +49,32 @@ namespace IFCConverter
                     dialogResult = exportWindowForm.ShowDialog();
                 }
 
-                if (dialogResult == DialogResult.Cancel) return (int)ConversionResult.Canceled;
+                if (dialogResult == DialogResult.Cancel) 
+                    return (int)ConversionResult.Canceled;
 
-                try
+                FileLoggerProvider provider = new FileLoggerProvider(exportDataContainer.OutputFilePath + ".log");
+                using (ILoggerFactory factory = new LoggerFactory())
                 {
-                    logger.System($"Converting started at {DateTime.Now}");
-                    StartToIfcConverter converter = new StartToIfcConverter(exportDataContainer);
-                    converter.Convert(startDocument);
-                    logger.System($"Converting ended at {DateTime.Now}");
+                    factory.AddProvider(provider);
 
-                    #if DEBUG
-                    logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
-                    #else
-                    if (logger.HasErrors())
+                    ILogger logger = factory.CreateLogger<IfcConverter>();
+                    
+                    try
                     {
-                        logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
+                        logger.LogInformation("Converting started at {DateTime}", DateTime.Now);
+                        StartToIfcConverter converter = new StartToIfcConverter(exportDataContainer, factory);
+                        converter.Convert(startDocument);
+                        logger.LogInformation("Converting ended at {DateTime}", DateTime.Now);
+                        
+                        provider.Save();
+                        return (int)ConversionResult.Success;
                     }
-                    else
+                    catch (Exception e)
                     {
-                        logger.Flush();
+                        logger.LogError(e.ToString());
+                        provider.Save();
+                        return (int)ConversionResult.Fail;
                     }
-                    #endif
-
-                    return (int)ConversionResult.Success;
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex.ToString());
-                    logger.SaveAs(exportDataContainer.OutputFilePath + ".log");
-                    return (int)ConversionResult.Fail;
                 }
             }
             catch (Exception)
@@ -156,35 +153,30 @@ namespace IFCConverter
 
         private int Import(IStartDocument startDocument, ImportDataContainer importDataContainer)
         {
-            Logger logger = Logger.GetInstance();
+            FileLoggerProvider provider = new FileLoggerProvider(importDataContainer.InputFilePath + ".log");
 
-            try
+            using (ILoggerFactory factory = new LoggerFactory())
             {
-                logger.Info($"Converting start at {DateTime.Now}");
-                IfcToStartConverter startGenerator = new IfcToStartConverter(importDataContainer);
-                startGenerator.Convert(startDocument);
-                logger.Info($"Convert is successfully ended at {DateTime.Now}");
+                factory.AddProvider(provider);
 
-                #if DEBUG
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                #else
-                if (logger.HasErrors())
+                ILogger logger = factory.CreateLogger<IfcConverter>();
+                
+                try
                 {
-                    logger.SaveAs(importDataContainer.InputFilePath + ".log");
+                    logger.LogInformation("Converting start at {DateTime}", DateTime.Now);
+                    IfcToStartConverter startGenerator = new IfcToStartConverter(importDataContainer, factory);
+                    startGenerator.Convert(startDocument);
+                    logger.LogInformation("Convert is successfully ended at {DateTime}", DateTime.Now);
+                    
+                    provider.Save();
+                    return (int)ConversionResult.Success;
                 }
-                else
+                catch (Exception e)
                 {
-                    logger.Flush();
+                    logger.LogError(e.ToString());
+                    provider.Save();
+                    return (int)ConversionResult.Fail;
                 }
-                #endif
-
-                return (int)ConversionResult.Success;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.ToString());
-                logger.SaveAs(importDataContainer.InputFilePath + ".log");
-                return (int)ConversionResult.Fail;
             }
         }
 

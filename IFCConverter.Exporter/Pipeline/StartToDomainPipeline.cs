@@ -4,31 +4,30 @@ using IFCConverter.Domain;
 using IFCConverter.Exporter.StartToDomain;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.Pipeline
 {
     internal sealed class StartToDomainPipeline
     {
-        private readonly Logger _logger = Logger.GetInstance();
         private readonly StartToDomainPhaseRegistry _phaseRegistry = new StartToDomainPhaseRegistry();
 
-        public EngineeringModel Execute(IReadOnlyCollection<IStartEntity> source)
+        public EngineeringModel Execute(IReadOnlyCollection<IStartEntity> source, ILoggerFactory factory)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            _logger.Info($"Starting '{nameof(StartToDomainPipeline)}'.");
-
+            ILogger logger = factory.CreateLogger<StartToDomainPipeline>();
+            
             EngineeringModel model = new EngineeringModel();
             StartMappingContext context = new StartMappingContext();
 
             foreach (IStartToDomainPhase startToDomainPhase in _phaseRegistry.GetPhases())
             {
-                startToDomainPhase.Execute(source, model, context);
+                logger.LogInformation("Executing phase {phase}", startToDomainPhase.GetType().Name);
+                startToDomainPhase.Execute(source, model, context, factory);
             }
-
-            _logger.Info($"Finished '{nameof(StartToDomainPipeline)}'.");
-
+            
             return model;
         }
     }

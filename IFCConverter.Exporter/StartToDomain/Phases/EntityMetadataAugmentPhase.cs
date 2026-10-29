@@ -3,7 +3,7 @@ using IFCConverter.Domain;
 using IFCConverter.Exporter.Attributes;
 using IFCConverter.Exporter.StartToDomain.EntityMetadataAugmenters;
 using IFCConverter.Start.Interfaces;
-using IFCConverter.Utils.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.StartToDomain.Phases
 {
@@ -11,21 +11,24 @@ namespace IFCConverter.Exporter.StartToDomain.Phases
     public class EntityMetadataAugmentPhase : IStartToDomainPhase
     {
         private readonly IEntityMetadataAugmenterRegistry _augmenterRegistry = new EntityMetadataAugmenterRegistry();
-        private readonly Logger _logger = Logger.GetInstance();
 
-        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context)
+        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context, ILoggerFactory factory)
         {
-            _logger.Info($"Starting '{nameof(EntityMetadataAugmentPhase)}'.");
+            ILogger logger = factory.CreateLogger<EntityMetadataAugmentPhase>();
 
             foreach (IStartEntity startEntity in source)
             {
                 foreach (IEntityMetadataAugmenter entityMetadataAugmenter in _augmenterRegistry.ResolveAll(startEntity, model, context))
                 {
+                    logger.LogInformation(
+                        "Found metadata augmenter {augmenter} for start entity {entity} with name {name}",
+                        entityMetadataAugmenter.GetType().Name,
+                        startEntity.GetType().Name,
+                        startEntity.Name
+                    );
                     entityMetadataAugmenter.Augment(startEntity, model, context);
                 }
             }
-
-            _logger.Info($"Finished '{nameof(EntityMetadataAugmentPhase)}'.");
         }
     }
 }

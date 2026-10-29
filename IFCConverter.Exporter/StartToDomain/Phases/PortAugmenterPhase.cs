@@ -4,26 +4,32 @@ using IFCConverter.Exporter.Attributes;
 using IFCConverter.Exporter.StartToDomain.PortAugmenters;
 using IFCConverter.Start.Interfaces;
 using IFCConverter.Utils.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace IFCConverter.Exporter.StartToDomain.Phases
 {
     [StartToDomainPhase(1, typeof(PortResolvePhase))]
     public sealed class PortAugmenterPhase : IStartToDomainPhase
     {
-        private readonly Logger _logger = Logger.GetInstance();
         private readonly IPortAugmenterRegistry _portAugmenterRegistry = new PortAugmenterRegistry();
 
-        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context)
+        public void Execute(IReadOnlyCollection<IStartEntity> source, EngineeringModel model, StartMappingContext context, ILoggerFactory factory)
         {
-            _logger.Info($"Starting '{nameof(PortAugmenterPhase)}'.");
+            ILogger logger = factory.CreateLogger<PortAugmenterPhase>();
 
             foreach (IStartEntity startEntity in source)
             {
                 if (_portAugmenterRegistry.TryResolve(startEntity, out IPortAugmenter portAugmenter))
+                {
+                    logger.LogInformation(
+                        "Found port augmenter {augmenter} for start entity {entity} with name {name}",
+                        portAugmenter.GetType().Name,
+                        startEntity.GetType().Name,
+                        startEntity.Name
+                    );
                     portAugmenter.Augment(startEntity, model, context);
+                }
             }
-
-            _logger.Info($"Finished '{nameof(PortAugmenterPhase)}'.");
         }
     }
 }

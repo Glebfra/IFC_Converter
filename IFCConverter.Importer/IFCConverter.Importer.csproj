@@ -206,7 +206,12 @@
         <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\IElbowEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\RevolvedAreaSolidElbowEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\ElbowEntityImporters\TriangulatedFaceSetElbowEntityImporter.cs" />
-        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolver.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\EntityType.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\AvevaEntityTypeResolver.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\EntityTypeResolversRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\IEntityTypeResolver.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\IEntityTypeResolversRegistry.cs" />
+        <Compile Include="IfcToDomain\EntityImporters\EntityTypeResolvers\UnknownEntityTypeResolver.cs" />
         <Compile Include="IfcToDomain\EntityImporters\IfcEntityImportersRegistry.cs" />
         <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImporter.cs" />
         <Compile Include="IfcToDomain\EntityImporters\IIfcEntityImportersRegistry.cs" />
